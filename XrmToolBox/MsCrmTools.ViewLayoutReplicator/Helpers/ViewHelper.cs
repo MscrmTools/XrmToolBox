@@ -1,0 +1,321 @@
+﻿// PROJECT : MsCrmTools.ViewLayoutReplicator
+// This project was developed by Tanguy Touzard
+// CODEPLEX: http://xrmtoolbox.codeplex.com
+// BLOG: http://mscrmtools.blogspot.com
+
+using System;
+using System.Collections.Generic;
+using System.Xml;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Query;
+
+namespace MsCrmTools.ViewLayoutReplicator.Helpers
+{
+    /// <summary>
+    /// Helps to interact with Crm views
+    /// </summary>
+    class ViewHelper
+    {
+        #region Constants
+
+        public const int VIEW_BASIC = 0;
+        public const int VIEW_ADVANCEDFIND = 1;
+        public const int VIEW_ASSOCIATED = 2;
+        public const int VIEW_QUICKFIND = 4;
+        public const int VIEW_SEARCH = 64;
+
+        #endregion
+
+        /// <summary>
+        /// Retrieve the list of views for a specific entity
+        /// </summary>
+        /// <param name="entityDisplayName">Logical name of the entity</param>
+        /// <param name="entitiesCache">Entities cache</param>
+        /// <param name="service">Organization Service</param>
+        /// <returns>List of views</returns>
+        public static List<Entity> RetrieveViews(string entityLogicalName, List<EntityMetadata> entitiesCache, IOrganizationService service)
+        {
+            try
+            {
+                EntityMetadata currentEmd = entitiesCache.Find(delegate(EntityMetadata emd) { return emd.LogicalName == entityLogicalName; });
+
+                QueryByAttribute qba = new QueryByAttribute
+                                           {
+                    EntityName = "savedquery",
+                    ColumnSet = new ColumnSet(true)
+                };
+
+                qba.Attributes.Add("returnedtypecode");
+                qba.Values.Add(currentEmd.ObjectTypeCode.Value);
+
+                EntityCollection views = service.RetrieveMultiple(qba);
+
+                List<Entity> viewsList = new List<Entity>();
+
+                foreach (Entity entity in views.Entities)
+                {
+                    viewsList.Add(entity);
+                }
+
+                return viewsList;
+            }
+            catch (Exception error)
+            {
+                string errorMessage = CrmExceptionHelper.GetErrorMessage(error, false);
+                throw new Exception("Error while retrieving views: " + errorMessage);
+            }
+        }
+
+        /// <summary>
+        /// Copy view layout form source view to all specified target views
+        /// </summary>
+        /// <param name="sourceView">Source view</param>
+        /// <param name="targetViews">List of target views</param>
+        /// <param name="service">Crm organization service</param>
+        /// <returns>Indicates if all views have been updated</returns>
+        public static bool PropagateLayout(Entity sourceView, List<Entity> targetViews, IOrganizationService service)
+        {
+            string multiObjectAttribute = string.Empty;
+
+            try
+            {
+                bool doneWithoutAdaptation = true;
+
+                foreach (Entity targetView in targetViews)
+                {
+                    if ((Guid)targetView["savedqueryid"] != (Guid)sourceView["savedqueryid"])
+                    {
+                        bool canUpdateLinkedAttributes = true;
+
+                        if (sourceView["layoutxml"].ToString().Contains(".") && (int)targetView["querytype"] == VIEW_ASSOCIATED)
+                        {
+                            doneWithoutAdaptation = false;
+                            canUpdateLinkedAttributes = false;
+                        }
+
+                        // Update grid cells
+                        XmlDocument targetLayout = new XmlDocument();
+                        targetLayout.LoadXml(targetView["layoutxml"].ToString());
+
+                        XmlAttribute multiAttr = targetLayout.SelectSingleNode("grid/row").Attributes["multiobjectidfield"];
+                        if (multiAttr != null)
+                            multiObjectAttribute = multiAttr.Value;
+
+                        // We empty the existing cells
+                        for (int i = targetLayout.SelectSingleNode("grid/row").ChildNodes.Count; i > 0; i--)
+                        {
+                            XmlNode toDelete = targetLayout.SelectSingleNode("grid/row").ChildNodes[i - 1];
+                            targetLayout.SelectSingleNode("grid/row").RemoveChild(toDelete);
+                        }
+
+                        XmlDocument sourceLayout = new XmlDocument();
+                        sourceLayout.LoadXml(sourceView["layoutxml"].ToString());
+
+                        XmlNodeList sourceCellNodes = sourceLayout.SelectNodes("grid/row/cell");
+
+                        foreach (XmlNode cellNode in sourceCellNodes)
+                        {
+                            if (!cellNode.Attributes["name"].Value.Contains(".") || (int)targetView["querytype"] != VIEW_ASSOCIATED)
+                            {
+                                XmlNode nodeDest = targetLayout.ImportNode(cellNode.Clone(), true);
+                                targetLayout.SelectSingleNode("grid/row").AppendChild(nodeDest);
+                            }
+                        }
+
+                        targetView["layoutxml"] = targetLayout.OuterXml;
+
+                        // Retrieve target fetch data
+                        if (targetView.Contains("fetchxml"))
+                        {
+                            XmlDocument targetFetchDoc = new XmlDocument();
+                            targetFetchDoc.LoadXml(targetView["fetchxml"].ToString());
+
+                            // Apply same sorting
+                            XmlNodeList targetSortNodes = targetFetchDoc.SelectNodes("fetch/entity/order");
+
+                            // Removes existing sorting
+                            for (int i = targetSortNodes.Count; i > 0; i--)
+                            {
+                                XmlNode toDelete = targetSortNodes[i - 1];
+                                targetSortNodes[i - 1].ParentNode.RemoveChild(toDelete);
+                            }
+
+                            XmlDocument sourceFetchDoc = new XmlDocument();
+                            sourceFetchDoc.LoadXml(sourceView["fetchxml"].ToString());
+
+                            XmlNodeList sourceAttrNodes = sourceFetchDoc.SelectNodes("fetch/entity/attribute");
+
+                            foreach (XmlNode attrNode in sourceAttrNodes)
+                            {
+                                if (targetFetchDoc.SelectSingleNode("fetch/entity/attribute[@name='" + attrNode.Attributes["name"].Value + "']") == null)
+                                {
+                                    XmlNode attrNodeToAdd = targetFetchDoc.ImportNode(attrNode, true);
+                                    targetFetchDoc.SelectSingleNode("fetch/entity").AppendChild(attrNodeToAdd);
+                                }
+                            }
+
+                            foreach (XmlNode cellNode in sourceCellNodes)
+                            {
+                                string name = cellNode.Attributes["name"].Value;
+                                if (!name.Contains(".") && targetFetchDoc.SelectSingleNode("fetch/entity/attribute[@name='" + name + "']") == null)
+                                {
+                                    XmlElement attrNodeToAdd = targetFetchDoc.CreateElement("attribute");
+                                    attrNodeToAdd.SetAttribute("name", name);
+                                    targetFetchDoc.SelectSingleNode("fetch/entity").AppendChild(attrNodeToAdd);
+                                }
+                            }
+
+                            XmlNodeList sourceSortNodes = sourceFetchDoc.SelectNodes("fetch/entity/order");
+
+                            // Removes existing sorting
+                            foreach (XmlNode orderNode in sourceSortNodes)
+                            {
+                                XmlNode orderNodeToAdd = targetFetchDoc.ImportNode(orderNode, true);
+                                targetFetchDoc.SelectSingleNode("fetch/entity").AppendChild(orderNodeToAdd);
+                            }
+
+                            if (canUpdateLinkedAttributes)
+                            {
+                                // Retrieve source fetch data
+                                if (sourceView.Contains("fetchxml"))
+                                {
+                                    //XmlDocument sourceFetchDoc = new XmlDocument();
+                                    //sourceFetchDoc.LoadXml(sourceView["fetchxml"].ToString());
+
+                                    XmlNodeList linkNodes = sourceFetchDoc.SelectNodes("fetch/entity/link-entity");
+
+                                    foreach (XmlNode sourceLinkNode in linkNodes)
+                                    {
+                                        XmlNode targetLinkNode = targetFetchDoc.SelectSingleNode("fetch/entity/link-entity[@alias=\"" + sourceLinkNode.Attributes["alias"].Value + "\"]");
+
+                                        // Adds the missing link-entity node
+                                        if (targetLinkNode == null)
+                                        {
+                                            XmlNode nodeDest = targetFetchDoc.ImportNode(sourceLinkNode.Clone(), true);
+                                            targetFetchDoc.SelectSingleNode("fetch/entity").AppendChild(nodeDest);
+                                        }
+
+                                        // Retrieves node again (if it was added)
+                                        targetLinkNode = targetFetchDoc.SelectSingleNode("fetch/entity/link-entity[@alias=\"" + sourceLinkNode.Attributes["alias"].Value + "\"]");
+
+                                        // Removes existing attributes
+                                        for (int i = targetLinkNode.ChildNodes.Count; i > 0; i--)
+                                        {
+                                            XmlNode toDelete = targetLinkNode.ChildNodes[i - 1];
+                                            targetLinkNode.RemoveChild(toDelete);
+                                        }
+
+                                        // Adds the attribute nodes from the source node
+                                        foreach (XmlNode node in sourceLinkNode.ChildNodes)
+                                        {
+                                            if (node.Name == "attribute")
+                                            {
+                                                XmlNode attributeNode = targetLinkNode.SelectSingleNode("attribute[@name='" + node.Attributes["name"].Value + "']");
+
+                                                if (attributeNode == null)
+                                                {
+                                                    XmlNode nodeDest = targetFetchDoc.ImportNode(node.Clone(), true);
+                                                    targetLinkNode.AppendChild(nodeDest);
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                }
+
+                                // Suppression des éléments Attribute inutiles dans la requête
+                                List<string> attributesToRemove = new List<string>();
+
+                                foreach (XmlNode attributeNode in targetFetchDoc.SelectNodes("//attribute"))
+                                {
+
+                                    if (attributeNode.Attributes["name"].Value == multiObjectAttribute)
+                                        break;
+
+                                    bool isFoundInCell = false;
+
+                                    foreach (XmlNode cellNode in sourceLayout.SelectNodes("grid/row/cell"))
+                                    {
+                                        if (attributeNode.ParentNode.Name == "link-entity")
+                                        {
+                                            if (cellNode.Attributes["name"].Value == attributeNode.ParentNode.Attributes["alias"].Value + "." + attributeNode.Attributes["name"].Value)
+                                            {
+                                                isFoundInCell = true;
+                                                break;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (attributeNode.Attributes["name"].Value == (attributeNode.ParentNode.Attributes["name"].Value + "id") || cellNode.Attributes["name"].Value == attributeNode.Attributes["name"].Value)
+                                            {
+                                                isFoundInCell = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    if (!isFoundInCell)
+                                    {
+                                        if (attributeNode.ParentNode.Name == "link-entity")
+                                        {
+                                            attributesToRemove.Add(attributeNode.ParentNode.Attributes["alias"].Value + "." + attributeNode.Attributes["name"].Value);
+                                        }
+                                        else
+                                        {
+                                            attributesToRemove.Add(attributeNode.Attributes["name"].Value);
+                                        }
+                                    }
+                                }
+
+                                foreach (string attributeName in attributesToRemove)
+                                {
+                                    XmlNode node = null;
+
+                                    if (attributeName.Contains("."))
+                                    {
+                                        node = targetFetchDoc.SelectSingleNode("fetch/entity/link-entity[@alias='" + attributeName.Split('.')[0] + "']/attribute[@name='" + attributeName.Split('.')[1] + "']");
+                                        targetFetchDoc.SelectSingleNode("fetch/entity/link-entity[@alias='" + node.ParentNode.Attributes["alias"].Value + "']").RemoveChild(node);
+                                    }
+                                    else
+                                    {
+                                        node = targetFetchDoc.SelectSingleNode("fetch/entity/attribute[@name='" + attributeName + "']");
+                                        targetFetchDoc.SelectSingleNode("fetch/entity").RemoveChild(node);
+                                    }
+                                }
+
+                                foreach (XmlNode linkentityNode in targetFetchDoc.SelectNodes("fetch/entity/link-entity"))
+                                {
+                                    if (linkentityNode != null && linkentityNode.ChildNodes.Count == 0)
+                                    {
+                                        targetFetchDoc.SelectSingleNode("fetch/entity").RemoveChild(linkentityNode);
+                                    }
+                                }
+
+                                targetView["fetchxml"] = targetFetchDoc.OuterXml;
+                            }
+                        }
+
+                        try
+                        {
+                            service.Update(targetView);
+                        }
+                        catch (Exception error)
+                        {
+                            string errorMessage = CrmExceptionHelper.GetErrorMessage(error, false);
+                            throw new Exception(errorMessage);
+                        }
+                    }
+                }
+
+                return doneWithoutAdaptation;
+            }
+            catch (Exception error)
+            {
+                string errorMessage = CrmExceptionHelper.GetErrorMessage(error, false);
+
+                throw new Exception("Error while copying layout to target views: " + errorMessage);
+            }
+        }
+    }
+}

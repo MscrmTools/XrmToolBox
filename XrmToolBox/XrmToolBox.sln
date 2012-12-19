@@ -1,0 +1,110 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox", "XrmToolBox\XrmToolBox.csproj", "{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.SiteMapEditor", "MsCrmTools.SiteMapEditor\MsCrmTools.SiteMapEditor.csproj", "{5DD2E91B-6431-4391-AC45-205BD1B67818}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.Iconator", "MsCrmTools.Iconator\MsCrmTools.Iconator.csproj", "{A2A4C130-454A-4F40-9B06-8CD77CC557D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.ViewLayoutReplicator", "MsCrmTools.ViewLayoutReplicator\MsCrmTools.ViewLayoutReplicator.csproj", "{4C976A6C-F6A2-4E58-B52C-5CF701C97E50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.AttributeBulkUpdater", "MsCrmTools.AttributeBulkUpdater\MsCrmTools.AttributeBulkUpdater.csproj", "{693DDB30-8E8E-43E9-AE13-EE2010F46C96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.ScriptsFinder", "MsCrmTools.ScriptsFinder\MsCrmTools.ScriptsFinder.csproj", "{838CD437-FEC6-478F-A5CB-8DA6E60E70C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.WebResourcesManager", "MsCrmTools.WebResourcesManager\MsCrmTools.WebResourcesManager.csproj", "{71737D43-3B0A-4709-93F2-ED9C62C836B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.SampleTool", "MsCrmTools.SampleTool\MsCrmTools.SampleTool.csproj", "{5BF1E228-F898-40CF-B8FB-8412D8C81CFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.SolutionImport", "MsCrmTools.SolutionImport\MsCrmTools.SolutionImport.csproj", "{33322CD9-27B3-4C2F-BFC4-D44EEFE8A976}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.RoleUpdater", "MsCrmTools.RoleUpdater\MsCrmTools.RoleUpdater.csproj", "{22CDF25B-D751-4ABC-BFA2-EC754C9937EF}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 11
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs24
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = MsCrmTools.AttributeBulkUpdater\\MsCrmTools.AttributeBulkUpdater.csproj
+		SccProjectName1 = MsCrmTools.AttributeBulkUpdater
+		SccLocalPath1 = MsCrmTools.AttributeBulkUpdater
+		SccProjectUniqueName2 = MsCrmTools.Iconator\\MsCrmTools.Iconator.csproj
+		SccProjectName2 = MsCrmTools.Iconator
+		SccLocalPath2 = MsCrmTools.Iconator
+		SccProjectUniqueName3 = MsCrmTools.RoleUpdater\\MsCrmTools.RoleUpdater.csproj
+		SccProjectName3 = MsCrmTools.RoleUpdater
+		SccLocalPath3 = MsCrmTools.RoleUpdater
+		SccProjectUniqueName4 = MsCrmTools.SampleTool\\MsCrmTools.SampleTool.csproj
+		SccProjectName4 = MsCrmTools.SampleTool
+		SccLocalPath4 = MsCrmTools.SampleTool
+		SccProjectUniqueName5 = MsCrmTools.ScriptsFinder\\MsCrmTools.ScriptsFinder.csproj
+		SccProjectName5 = MsCrmTools.ScriptsFinder
+		SccLocalPath5 = MsCrmTools.ScriptsFinder
+		SccProjectUniqueName6 = MsCrmTools.SiteMapEditor\\MsCrmTools.SiteMapEditor.csproj
+		SccProjectName6 = MsCrmTools.SiteMapEditor
+		SccLocalPath6 = MsCrmTools.SiteMapEditor
+		SccProjectUniqueName7 = MsCrmTools.SolutionImport\\MsCrmTools.SolutionImport.csproj
+		SccProjectName7 = MsCrmTools.SolutionImport
+		SccLocalPath7 = MsCrmTools.SolutionImport
+		SccProjectUniqueName8 = MsCrmTools.ViewLayoutReplicator\\MsCrmTools.ViewLayoutReplicator.csproj
+		SccProjectName8 = MsCrmTools.ViewLayoutReplicator
+		SccLocalPath8 = MsCrmTools.ViewLayoutReplicator
+		SccProjectUniqueName9 = MsCrmTools.WebResourcesManager\\MsCrmTools.WebResourcesManager.csproj
+		SccProjectName9 = MsCrmTools.WebResourcesManager
+		SccLocalPath9 = MsCrmTools.WebResourcesManager
+		SccProjectUniqueName10 = XrmToolBox\\XrmToolBox.csproj
+		SccProjectName10 = XrmToolBox
+		SccLocalPath10 = XrmToolBox
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DD2E91B-6431-4391-AC45-205BD1B67818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DD2E91B-6431-4391-AC45-205BD1B67818}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DD2E91B-6431-4391-AC45-205BD1B67818}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DD2E91B-6431-4391-AC45-205BD1B67818}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2A4C130-454A-4F40-9B06-8CD77CC557D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2A4C130-454A-4F40-9B06-8CD77CC557D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2A4C130-454A-4F40-9B06-8CD77CC557D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2A4C130-454A-4F40-9B06-8CD77CC557D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C976A6C-F6A2-4E58-B52C-5CF701C97E50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C976A6C-F6A2-4E58-B52C-5CF701C97E50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C976A6C-F6A2-4E58-B52C-5CF701C97E50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C976A6C-F6A2-4E58-B52C-5CF701C97E50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{693DDB30-8E8E-43E9-AE13-EE2010F46C96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{693DDB30-8E8E-43E9-AE13-EE2010F46C96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{693DDB30-8E8E-43E9-AE13-EE2010F46C96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{693DDB30-8E8E-43E9-AE13-EE2010F46C96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{838CD437-FEC6-478F-A5CB-8DA6E60E70C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{838CD437-FEC6-478F-A5CB-8DA6E60E70C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{838CD437-FEC6-478F-A5CB-8DA6E60E70C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{838CD437-FEC6-478F-A5CB-8DA6E60E70C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71737D43-3B0A-4709-93F2-ED9C62C836B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71737D43-3B0A-4709-93F2-ED9C62C836B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71737D43-3B0A-4709-93F2-ED9C62C836B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71737D43-3B0A-4709-93F2-ED9C62C836B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BF1E228-F898-40CF-B8FB-8412D8C81CFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BF1E228-F898-40CF-B8FB-8412D8C81CFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BF1E228-F898-40CF-B8FB-8412D8C81CFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BF1E228-F898-40CF-B8FB-8412D8C81CFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33322CD9-27B3-4C2F-BFC4-D44EEFE8A976}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33322CD9-27B3-4C2F-BFC4-D44EEFE8A976}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33322CD9-27B3-4C2F-BFC4-D44EEFE8A976}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33322CD9-27B3-4C2F-BFC4-D44EEFE8A976}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22CDF25B-D751-4ABC-BFA2-EC754C9937EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22CDF25B-D751-4ABC-BFA2-EC754C9937EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22CDF25B-D751-4ABC-BFA2-EC754C9937EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22CDF25B-D751-4ABC-BFA2-EC754C9937EF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
