@@ -62,25 +62,33 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         private void Icon_Load(object sender, EventArgs e)
         {
-            Icon ic = null;
-
-            byte[] imageBytes = Convert.FromBase64String(innerContent);
-            using (MemoryStream ms = new MemoryStream(imageBytes))
+            try
             {
-                ic = new Icon(ms);
+                Icon ic = null;
+
+                byte[] imageBytes = Convert.FromBase64String(innerContent);
+                using (MemoryStream ms = new MemoryStream(imageBytes))
+                {
+                    ic = new Icon(ms);
+                }
+
+                pictureBox1.Image = ic.ToBitmap();
+
+                pictureBox1.Height = pictureBox1.Image.Size.Height;
+                pictureBox1.Width = pictureBox1.Image.Size.Width;
+
+                if (pictureBox1.Width > panel1.Width)
+                    pictureBox1.Width = panel1.Width;
+
+                pictureBox1.Location = new Point(
+                    Width/2 - pictureBox1.Width/2,
+                    Height/2 - pictureBox1.Height/2);
             }
-
-            pictureBox1.Image = ic.ToBitmap();
-
-            pictureBox1.Height = pictureBox1.Image.Size.Height;
-            pictureBox1.Width = pictureBox1.Image.Size.Width;
-
-            if (pictureBox1.Width > panel1.Width)
-                pictureBox1.Width = panel1.Width;
-
-            pictureBox1.Location = new Point(
-                Width / 2 - pictureBox1.Width / 2,
-                Height / 2 - pictureBox1.Height / 2);
+            catch (Exception error)
+            {
+                MessageBox.Show("An error occured while loading this web resource: " + error.Message, "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         #endregion Handlers

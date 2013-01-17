@@ -52,7 +52,9 @@ namespace XrmToolBox
             welcomeWorker.RunWorkerAsync();
             
             MouseWheel += MainFormMouseWheel;
-            
+
+            Text = string.Format("{0} (v{1})", Text, Assembly.GetExecutingAssembly().GetName().Version);
+
             cManager = new ConnectionManager();
             cManager.ConnectionFailed += CManagerConnectionFailed;
             cManager.ConnectionSucceed += CManagerConnectionSucceed;
@@ -172,10 +174,11 @@ namespace XrmToolBox
         private void DisplayPlugins()
         {
             var top = 4;
+            int lastWidth = HomePageTab.Width - 28;
 
             HomePageTab.Controls.Clear();
 
-            foreach (var plugin in pManager.Plugins.OrderBy(p => p.Name))
+            foreach (var plugin in pManager.Plugins.OrderBy(p => ((AssemblyTitleAttribute)GetAssemblyAttribute(p.Assembly, typeof(AssemblyTitleAttribute))).Title))
             {
                 var title = ((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyTitleAttribute))).Title;
                 var desc = ((AssemblyDescriptionAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyDescriptionAttribute))).Description;
@@ -189,8 +192,7 @@ namespace XrmToolBox
                     {
                         Left = 4,
                         Top = top,
-                        Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right,
-                        Width = HomePageTab.Width - 8,
+                        Width = lastWidth,
                         Tag = plugin
                     };
 
@@ -213,6 +215,11 @@ namespace XrmToolBox
                     HomePageTab.Controls.Add(pm);
                     top += 54;
                 }
+            }
+
+            foreach (Control ctrl in HomePageTab.Controls)
+            {
+                ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             }
         }
 

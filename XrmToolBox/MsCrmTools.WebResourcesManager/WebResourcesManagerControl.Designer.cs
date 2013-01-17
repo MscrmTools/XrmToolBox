@@ -69,6 +69,8 @@
             this.xSLTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.updateFromDiskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToCRMServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAndPublishToCRMServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.savePublishAndAddToSolutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -403,6 +405,8 @@
             this.addNewEmptyWebResourceToolStripMenuItem,
             this.addNewFolderToolStripMenuItem,
             this.toolStripSeparator1,
+            this.updateFromDiskToolStripMenuItem,
+            this.toolStripSeparator4,
             this.saveToCRMServerToolStripMenuItem,
             this.saveAndPublishToCRMServerToolStripMenuItem,
             this.savePublishAndAddToSolutionToolStripMenuItem,
@@ -411,13 +415,13 @@
             this.toolStripSeparator5,
             this.propertiesToolStripMenuItem});
             this.contextMenuStripTreeView.Name = "contextMenuStripTreeView";
-            this.contextMenuStripTreeView.Size = new System.Drawing.Size(274, 220);
+            this.contextMenuStripTreeView.Size = new System.Drawing.Size(338, 226);
             // 
             // addNewWebResourceToolStripMenuItem
             // 
             this.addNewWebResourceToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("addNewWebResourceToolStripMenuItem.Image")));
             this.addNewWebResourceToolStripMenuItem.Name = "addNewWebResourceToolStripMenuItem";
-            this.addNewWebResourceToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.addNewWebResourceToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
             this.addNewWebResourceToolStripMenuItem.Text = "Add existing file(s) as Web resource(s)";
             this.addNewWebResourceToolStripMenuItem.Click += new System.EventHandler(this.AddNewWebResourceToolStripMenuItemClick);
             // 
@@ -431,7 +435,7 @@
             this.xSLTToolStripMenuItem});
             this.addNewEmptyWebResourceToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("addNewEmptyWebResourceToolStripMenuItem.Image")));
             this.addNewEmptyWebResourceToolStripMenuItem.Name = "addNewEmptyWebResourceToolStripMenuItem";
-            this.addNewEmptyWebResourceToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.addNewEmptyWebResourceToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
             this.addNewEmptyWebResourceToolStripMenuItem.Text = "Add new empty web resource";
             // 
             // hTMLToolStripMenuItem
@@ -473,20 +477,32 @@
             // 
             this.addNewFolderToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("addNewFolderToolStripMenuItem.Image")));
             this.addNewFolderToolStripMenuItem.Name = "addNewFolderToolStripMenuItem";
-            this.addNewFolderToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.addNewFolderToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
             this.addNewFolderToolStripMenuItem.Text = "Add new folder";
             this.addNewFolderToolStripMenuItem.Click += new System.EventHandler(this.AddNewFolderToolStripMenuItemClick);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(270, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(334, 6);
+            // 
+            // updateFromDiskToolStripMenuItem
+            // 
+            this.updateFromDiskToolStripMenuItem.Name = "updateFromDiskToolStripMenuItem";
+            this.updateFromDiskToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.updateFromDiskToolStripMenuItem.Text = "Update web resources in this folder with local files";
+            this.updateFromDiskToolStripMenuItem.Click += new System.EventHandler(this.UpdateFromDiskToolStripMenuItemClick);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(334, 6);
             // 
             // saveToCRMServerToolStripMenuItem
             // 
             this.saveToCRMServerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveToCRMServerToolStripMenuItem.Image")));
             this.saveToCRMServerToolStripMenuItem.Name = "saveToCRMServerToolStripMenuItem";
-            this.saveToCRMServerToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.saveToCRMServerToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
             this.saveToCRMServerToolStripMenuItem.Text = "Save to CRM server";
             this.saveToCRMServerToolStripMenuItem.Click += new System.EventHandler(this.SaveToCrmServerToolStripMenuItemClick);
             // 
@@ -494,7 +510,7 @@
             // 
             this.saveAndPublishToCRMServerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveAndPublishToCRMServerToolStripMenuItem.Image")));
             this.saveAndPublishToCRMServerToolStripMenuItem.Name = "saveAndPublishToCRMServerToolStripMenuItem";
-            this.saveAndPublishToCRMServerToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.saveAndPublishToCRMServerToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
             this.saveAndPublishToCRMServerToolStripMenuItem.Text = "Save and Publish to CRM server";
             this.saveAndPublishToCRMServerToolStripMenuItem.Click += new System.EventHandler(this.SaveAndPublishToCrmServerToolStripMenuItemClick);
             // 
@@ -502,33 +518,33 @@
             // 
             this.savePublishAndAddToSolutionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("savePublishAndAddToSolutionToolStripMenuItem.Image")));
             this.savePublishAndAddToSolutionToolStripMenuItem.Name = "savePublishAndAddToSolutionToolStripMenuItem";
-            this.savePublishAndAddToSolutionToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.savePublishAndAddToSolutionToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
             this.savePublishAndAddToSolutionToolStripMenuItem.Text = "Save, publish and add to solution";
             this.savePublishAndAddToSolutionToolStripMenuItem.Click += new System.EventHandler(this.SavePublishAndAddToSolutionToolStripMenuItemClick);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(270, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(334, 6);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deleteToolStripMenuItem.Image")));
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteToolStripMenuItemClick);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(270, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(334, 6);
             // 
             // propertiesToolStripMenuItem
             // 
             this.propertiesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("propertiesToolStripMenuItem.Image")));
             this.propertiesToolStripMenuItem.Name = "propertiesToolStripMenuItem";
-            this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(273, 22);
+            this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.PropertiesToolStripMenuItemClick);
             // 
@@ -603,5 +619,7 @@
         private System.Windows.Forms.ToolStripButton tsbCloseThisTab;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.ToolStripMenuItem updateFromDiskToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
     }
 }

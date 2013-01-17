@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Microsoft.Xrm.Sdk;
 using MsCrmTools.WebResourcesManager.Forms;
@@ -96,7 +97,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
             foreach (FileInfo fiChild in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
             {
-                if (WebResource.IsInvalidName(fiChild.Name))
+                if (WebResource.IsInvalidName(fiChild.Name) || !WebResource.ValidExtensions.Contains(fiChild.Extension.Remove(0, 1)))
                 {
                     invalidFilenames.Add(fiChild.FullName);
                     continue;
@@ -489,5 +490,67 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             return false;
         }
 
+        internal static string UpdateNodesContentWithLocalFiles(TreeNodeCollection nodes)
+        {
+            var fbDialog = new FolderBrowserDialog();
+            if (fbDialog.ShowDialog() == DialogResult.OK)
+            {
+                var sBuilder = new StringBuilder();
+
+                UpdateNodesContentWithLocalFiles(nodes, fbDialog.SelectedPath, new DirectoryInfo(fbDialog.SelectedPath).Name, sBuilder);
+
+                if (sBuilder.Length == 0)
+                {
+                    sBuilder.AppendLine("No files were updated!");
+                }
+
+                return string.Format("The following web resources have been updated with local files content:\r\n{0}", sBuilder.ToString());
+            }
+
+            return string.Empty;
+        }
+        
+        private static void UpdateNodesContentWithLocalFiles(TreeNodeCollection nodes, string folderPath, string initialFolderName, StringBuilder sBuilder)
+        {
+            var folder = new DirectoryInfo(folderPath);
+            var files = new List<FileInfo>(folder.GetFiles());
+            var directories = new List<DirectoryInfo>(folder.GetDirectories());
+
+            foreach (TreeNode node in nodes)
+            {
+                var name = node.Text;
+
+                if (node.ImageIndex == 0 || node.ImageIndex == 1)
+                {
+                    var di = directories.FirstOrDefault(d => d.Name == name);
+                    if (di != null)
+                    {
+                        UpdateNodesContentWithLocalFiles(node.Nodes, di.FullName, initialFolderName, sBuilder);
+                    }
+                }
+                else
+                {
+                    var file = files.FirstOrDefault(f => f.Name.ToLower() == name.ToLower());
+                    if (file != null)
+                    {
+                        var bytes = File.ReadAllBytes(file.FullName);
+                        var content = Convert.ToBase64String(bytes);
+
+                        ((WebResource)node.Tag).WebResourceEntity["content"] = content;
+
+                        string nameToDisplay = name;
+                        var currentDirectory = file.Directory;
+
+                        while (initialFolderName != currentDirectory.Name)
+                        {
+                            nameToDisplay = currentDirectory.Name + "\\" + nameToDisplay;
+                            currentDirectory = currentDirectory.Parent;
+                        }
+
+                        sBuilder.AppendLine(" - " + nameToDisplay);
+                    }
+                }
+            }
+        }
     }
 }

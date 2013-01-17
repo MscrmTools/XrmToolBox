@@ -55,6 +55,11 @@
   <ItemGroup>
     <Compile Include="ListViewItemComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Script.cs" />
     <Compile Include="ScriptsFinder.cs">
       <SubType>UserControl</SubType>
@@ -71,6 +76,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="ScriptsFinder.resx">
       <DependentUpon>ScriptsFinder.cs</DependentUpon>
     </EmbeddedResource>
@@ -79,6 +88,11 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.ScriptsFinder.dll" "$(SolutionDir)XrmToolBox\bin\Debug"</PostBuildEvent>
   </PropertyGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+    </VisualStudio>
+  </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

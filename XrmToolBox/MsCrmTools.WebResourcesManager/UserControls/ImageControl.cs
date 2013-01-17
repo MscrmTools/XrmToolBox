@@ -69,24 +69,31 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         private void ImageControl_Load(object sender, EventArgs e)
         {
-
-            string imageBase64 = innerContent;
-            byte[] imageBytes = Convert.FromBase64String(imageBase64);
-
-            using (MemoryStream ms = new MemoryStream(imageBytes))
+            try
             {
-                pictureBox1.Image = Image.FromStream(ms, true, true);
+                string imageBase64 = innerContent;
+                byte[] imageBytes = Convert.FromBase64String(imageBase64);
+
+                using (MemoryStream ms = new MemoryStream(imageBytes))
+                {
+                    pictureBox1.Image = Image.FromStream(ms, true, true);
+                }
+
+                pictureBox1.Height = pictureBox1.Image.Size.Height;
+                pictureBox1.Width = pictureBox1.Image.Size.Width;
+
+                if (pictureBox1.Width > panel1.Width)
+                    pictureBox1.Width = panel1.Width;
+
+                pictureBox1.Location = new Point(
+                    panel1.Width/2 - pictureBox1.Width/2,
+                    panel1.Height/2 - pictureBox1.Height/2);
             }
-
-            pictureBox1.Height = pictureBox1.Image.Size.Height;
-            pictureBox1.Width = pictureBox1.Image.Size.Width;
-
-            if (pictureBox1.Width > panel1.Width)
-                pictureBox1.Width = panel1.Width;
-
-            pictureBox1.Location = new Point(
-                panel1.Width / 2 - pictureBox1.Width / 2,
-                panel1.Height / 2 - pictureBox1.Height / 2);
+            catch (Exception error)
+            {
+                MessageBox.Show("An error occured while loading this web resource: " + error.Message, "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         #endregion Handlers

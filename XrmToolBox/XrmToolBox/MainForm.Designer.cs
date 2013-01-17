@@ -39,12 +39,12 @@
             this.tsbView = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbAbout = new System.Windows.Forms.ToolStripButton();
-            this.tsbDonate = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbReportBug = new System.Windows.Forms.ToolStripButton();
-            this.tsbDiscuss = new System.Windows.Forms.ToolStripButton();
             this.tsbRate = new System.Windows.Forms.ToolStripButton();
+            this.tsbDiscuss = new System.Windows.Forms.ToolStripButton();
+            this.tsbReportBug = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbDonate = new System.Windows.Forms.ToolStripButton();
             this.tabControl1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -142,42 +142,10 @@
             this.tsbAbout.Text = "About";
             this.tsbAbout.Click += new System.EventHandler(this.TsbAboutClick);
             // 
-            // tsbDonate
-            // 
-            this.tsbDonate.Image = ((System.Drawing.Image)(resources.GetObject("tsbDonate.Image")));
-            this.tsbDonate.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbDonate.Name = "tsbDonate";
-            this.tsbDonate.Size = new System.Drawing.Size(65, 22);
-            this.tsbDonate.Text = "Donate";
-            this.tsbDonate.ToolTipText = "Make a donation using Paypal.\r\n\r\nSupport my work for the community by making a do" +
-    "nation on Paypal.\r\n\r\nThank you!";
-            this.tsbDonate.Click += new System.EventHandler(this.TsbDonateClick);
-            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
-            // 
-            // tsbReportBug
-            // 
-            this.tsbReportBug.Image = ((System.Drawing.Image)(resources.GetObject("tsbReportBug.Image")));
-            this.tsbReportBug.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbReportBug.Name = "tsbReportBug";
-            this.tsbReportBug.Size = new System.Drawing.Size(95, 22);
-            this.tsbReportBug.Text = "Report a bug";
-            this.tsbReportBug.ToolTipText = "Report a bug for this tool on CodePlex.\r\n\r\nReport a bug help to have a better too" +
-    "l!";
-            this.tsbReportBug.Click += new System.EventHandler(this.TsbReportBugClick);
-            // 
-            // tsbDiscuss
-            // 
-            this.tsbDiscuss.Image = ((System.Drawing.Image)(resources.GetObject("tsbDiscuss.Image")));
-            this.tsbDiscuss.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbDiscuss.Name = "tsbDiscuss";
-            this.tsbDiscuss.Size = new System.Drawing.Size(118, 22);
-            this.tsbDiscuss.Text = "Start a discussion";
-            this.tsbDiscuss.ToolTipText = "Start a discussion about this tool on CodePlex";
-            this.tsbDiscuss.Click += new System.EventHandler(this.TsbDiscussClick);
             // 
             // tsbRate
             // 
@@ -190,10 +158,42 @@
     "ther you like it or not, please review this tool!";
             this.tsbRate.Click += new System.EventHandler(this.TsbRateClick);
             // 
+            // tsbDiscuss
+            // 
+            this.tsbDiscuss.Image = ((System.Drawing.Image)(resources.GetObject("tsbDiscuss.Image")));
+            this.tsbDiscuss.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbDiscuss.Name = "tsbDiscuss";
+            this.tsbDiscuss.Size = new System.Drawing.Size(118, 22);
+            this.tsbDiscuss.Text = "Start a discussion";
+            this.tsbDiscuss.ToolTipText = "Start a discussion about this tool on CodePlex";
+            this.tsbDiscuss.Click += new System.EventHandler(this.TsbDiscussClick);
+            // 
+            // tsbReportBug
+            // 
+            this.tsbReportBug.Image = ((System.Drawing.Image)(resources.GetObject("tsbReportBug.Image")));
+            this.tsbReportBug.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbReportBug.Name = "tsbReportBug";
+            this.tsbReportBug.Size = new System.Drawing.Size(95, 22);
+            this.tsbReportBug.Text = "Report a bug";
+            this.tsbReportBug.ToolTipText = "Report a bug for this tool on CodePlex.\r\n\r\nReport a bug help to have a better too" +
+    "l!";
+            this.tsbReportBug.Click += new System.EventHandler(this.TsbReportBugClick);
+            // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsbDonate
+            // 
+            this.tsbDonate.Image = ((System.Drawing.Image)(resources.GetObject("tsbDonate.Image")));
+            this.tsbDonate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbDonate.Name = "tsbDonate";
+            this.tsbDonate.Size = new System.Drawing.Size(65, 22);
+            this.tsbDonate.Text = "Donate";
+            this.tsbDonate.ToolTipText = "Make a donation using Paypal.\r\n\r\nSupport my work for the community by making a do" +
+    "nation on Paypal.\r\n\r\nThank you!";
+            this.tsbDonate.Click += new System.EventHandler(this.TsbDonateClick);
             // 
             // MainForm
             // 

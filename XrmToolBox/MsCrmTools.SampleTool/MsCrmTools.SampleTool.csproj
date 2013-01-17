@@ -34,11 +34,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="microsoft.crm.sdk.proxy">
-      <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK UR10\bin\microsoft.crm.sdk.proxy.dll</HintPath>
+    <Reference Include="microsoft.crm.sdk.proxy, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK 5.0.13\bin\microsoft.crm.sdk.proxy.dll</HintPath>
     </Reference>
-    <Reference Include="microsoft.xrm.sdk">
-      <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK UR10\bin\microsoft.xrm.sdk.dll</HintPath>
+    <Reference Include="microsoft.xrm.sdk, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK 5.0.13\bin\microsoft.xrm.sdk.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -74,7 +76,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.SampleTool.dll" "$(SolutionDir)XrmToolBox\bin\Debug"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.SampleTool.dll" "$(SolutionDir)XrmToolBox\bin\Debug"
+xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.SampleTool.pdb" "$(SolutionDir)XrmToolBox\bin\Debug"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

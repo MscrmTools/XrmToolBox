@@ -449,7 +449,7 @@ namespace MsCrmTools.WebResourcesManager
 
                 foreach (FileInfo fiChild in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
                 {
-                    if (WebResource.IsInvalidName(fiChild.Name))
+                    if (WebResource.IsInvalidName(fiChild.Name) || !WebResource.ValidExtensions.Contains(fiChild.Extension.Remove(0,1)))
                     {
                         invalidFilenames.Add(fiChild.FullName);
                         continue;
@@ -663,6 +663,22 @@ namespace MsCrmTools.WebResourcesManager
         private void AddNewWebResourceToolStripMenuItemClick(object sender, EventArgs e)
         {
             TreeViewHelper.AddExistingWebResource(tvWebResources, this);
+        }
+
+        private void UpdateFromDiskToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            if (DialogResult.OK ==
+                MessageBox.Show(this,
+                                "You will now have to select a directory. Each web resources in the selected folder with a corresponding file in the directory selected (same name) will be updated with the local file content",
+                                "Information", MessageBoxButtons.OKCancel, MessageBoxIcon.Information))
+            {
+                string message = TreeViewHelper.UpdateNodesContentWithLocalFiles(tvWebResources.SelectedNode.Nodes);
+
+                if (message.Length > 0)
+                {
+                    MessageBox.Show(this, message, "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                } 
+            }
         }
 
         private void PropertiesToolStripMenuItemClick(object sender, EventArgs e)
@@ -906,6 +922,8 @@ namespace MsCrmTools.WebResourcesManager
                                 saveToCRMServerToolStripMenuItem.Enabled = false;
                                 saveAndPublishToCRMServerToolStripMenuItem.Enabled = false;
                                 propertiesToolStripMenuItem.Enabled = false;
+                                updateFromDiskToolStripMenuItem.Enabled = true;
+
                             }
                             break;
                         case 1:
@@ -917,6 +935,7 @@ namespace MsCrmTools.WebResourcesManager
                                 saveToCRMServerToolStripMenuItem.Enabled = false;
                                 saveAndPublishToCRMServerToolStripMenuItem.Enabled = false;
                                 propertiesToolStripMenuItem.Enabled = false;
+                                updateFromDiskToolStripMenuItem.Enabled = true;
                             }
                             break;
                         default:
@@ -928,6 +947,7 @@ namespace MsCrmTools.WebResourcesManager
                                 saveToCRMServerToolStripMenuItem.Enabled = true;
                                 saveAndPublishToCRMServerToolStripMenuItem.Enabled = true;
                                 propertiesToolStripMenuItem.Enabled = true;
+                                updateFromDiskToolStripMenuItem.Enabled = false;
                             }
                             break;
                     }
@@ -979,5 +999,7 @@ namespace MsCrmTools.WebResourcesManager
         }
 
         #endregion
+
+       
     }
 }

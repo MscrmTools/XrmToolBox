@@ -37,6 +37,8 @@
             this.chkValidForAudit = new System.Windows.Forms.CheckBox();
             this.chkValidForAdvancedFind = new System.Windows.Forms.CheckBox();
             this.tsMain = new System.Windows.Forms.ToolStrip();
+            this.tsbCloseThisTab = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbLoadEntities = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbSaveAttributes = new System.Windows.Forms.ToolStripButton();
@@ -55,8 +57,6 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbCloseThisTab = new System.Windows.Forms.ToolStripButton();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.gbPropertySelection.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -149,6 +149,21 @@
             this.tsMain.Size = new System.Drawing.Size(911, 25);
             this.tsMain.TabIndex = 89;
             this.tsMain.Text = "toolStrip1";
+            // 
+            // tsbCloseThisTab
+            // 
+            this.tsbCloseThisTab.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbCloseThisTab.Image = ((System.Drawing.Image)(resources.GetObject("tsbCloseThisTab.Image")));
+            this.tsbCloseThisTab.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbCloseThisTab.Name = "tsbCloseThisTab";
+            this.tsbCloseThisTab.Size = new System.Drawing.Size(23, 22);
+            this.tsbCloseThisTab.Text = "Close this tab";
+            this.tsbCloseThisTab.Click += new System.EventHandler(this.TsbCloseThisTabClick);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbLoadEntities
             // 
@@ -326,21 +341,6 @@
             // columnHeader6
             // 
             this.columnHeader6.Text = "On Form";
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
-            // 
-            // tsbCloseThisTab
-            // 
-            this.tsbCloseThisTab.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbCloseThisTab.Image = ((System.Drawing.Image)(resources.GetObject("tsbCloseThisTab.Image")));
-            this.tsbCloseThisTab.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbCloseThisTab.Name = "tsbCloseThisTab";
-            this.tsbCloseThisTab.Size = new System.Drawing.Size(23, 22);
-            this.tsbCloseThisTab.Text = "Close this tab";
-            this.tsbCloseThisTab.Click += new System.EventHandler(this.TsbCloseThisTabClick);
             // 
             // imageList1
             // 
