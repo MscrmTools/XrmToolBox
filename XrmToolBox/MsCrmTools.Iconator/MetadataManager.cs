@@ -63,6 +63,7 @@ namespace MsCrmTools.Iconator
         public static void ResetIcons(EntityMetadata emd, IOrganizationService service)
         {
             emd.IconSmallName = "";
+            emd.IconMediumName = "";
             emd.IconLargeName = "";
             var request = new UpdateEntityRequest { Entity = emd };
             service.Execute(request);
