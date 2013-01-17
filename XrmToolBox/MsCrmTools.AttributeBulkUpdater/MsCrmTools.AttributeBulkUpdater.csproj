@@ -98,10 +98,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Images\notif_icn_crit16.png" />
-    <Content Include="Images\notif_icn_info16.png" />
-    <Content Include="Images\notif_icn_warn16.png" />
-    <Content Include="Images\solidgreentick.gif" />
+    <EmbeddedResource Include="Images\notif_icn_crit16.png" />
+    <EmbeddedResource Include="Images\notif_icn_info16.png" />
+    <EmbeddedResource Include="Images\notif_icn_warn16.png" />
+    <EmbeddedResource Include="Images\solidgreentick.gif" />
     <Content Include="Images\Title.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -110,7 +110,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

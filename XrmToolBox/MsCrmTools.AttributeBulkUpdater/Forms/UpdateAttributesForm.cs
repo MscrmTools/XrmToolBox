@@ -239,7 +239,7 @@ namespace MsCrmTools.AttributeBulkUpdater.Forms
             Bitmap warningImage;
             Bitmap errorImage;
 
-            using (Stream myStream = myAssembly.GetManifestResourceStream("AttributeBulkUpdater.Images.solidgreentick.gif"))
+            using (Stream myStream = myAssembly.GetManifestResourceStream("MsCrmTools.AttributeBulkUpdater.Images.solidgreentick.gif"))
             {
                 successImage = new Bitmap(myStream);
                 if (successImage != null)
@@ -248,7 +248,7 @@ namespace MsCrmTools.AttributeBulkUpdater.Forms
                 }
             }
 
-            using (Stream myStream = myAssembly.GetManifestResourceStream("AttributeBulkUpdater.Images.notif_icn_warn16.png"))
+            using (Stream myStream = myAssembly.GetManifestResourceStream("MsCrmTools.AttributeBulkUpdater.Images.notif_icn_warn16.png"))
             {
                 warningImage = new Bitmap(myStream);
                 if (warningImage != null)
@@ -256,7 +256,7 @@ namespace MsCrmTools.AttributeBulkUpdater.Forms
                     ListViewDelegates.AddImageToImageList(lvInformation, warningImage);
                 }
             }
-            using (Stream myStream = myAssembly.GetManifestResourceStream("AttributeBulkUpdater.Images.notif_icn_crit16.png"))
+            using (Stream myStream = myAssembly.GetManifestResourceStream("MsCrmTools.AttributeBulkUpdater.Images.notif_icn_crit16.png"))
             {
                 errorImage = new Bitmap(myStream);
                 if (errorImage != null)
