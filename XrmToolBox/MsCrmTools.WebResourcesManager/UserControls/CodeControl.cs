@@ -72,35 +72,44 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         private void CodeControl_Load(object sender, EventArgs e)
         {
-            tecCode.Text = innerContent;
-
-            switch (innerType)
+            try
             {
-                case Enumerations.WebResourceType.Script:
-                    {
-                        tecCode.SetHighlighting("JavaScript");
-                    }
-                    break;
-                case Enumerations.WebResourceType.Data:
-                    {
-                        tecCode.SetHighlighting("XML");
-                    }
-                    break;
-                case Enumerations.WebResourceType.WebPage:
-                    {
-                        tecCode.SetHighlighting("HTML");
-                    }
-                    break;
-                case Enumerations.WebResourceType.Css:
-                    {
-                        tecCode.SetHighlighting("HTML");
-                    }
-                    break;
-                case Enumerations.WebResourceType.Xsl:
-                    {
-                        tecCode.SetHighlighting("HTML");
-                    }
-                    break;
+                tecCode.Text = innerContent;
+
+
+                switch (innerType)
+                {
+                    case Enumerations.WebResourceType.Script:
+                        {
+                            tecCode.SetHighlighting("JavaScript");
+                        }
+                        break;
+                    case Enumerations.WebResourceType.Data:
+                        {
+                            tecCode.SetHighlighting("XML");
+                        }
+                        break;
+                    case Enumerations.WebResourceType.WebPage:
+                        {
+                            tecCode.SetHighlighting("HTML");
+                        }
+                        break;
+                    case Enumerations.WebResourceType.Css:
+                        {
+                            tecCode.SetHighlighting("HTML");
+                        }
+                        break;
+                    case Enumerations.WebResourceType.Xsl:
+                        {
+                            tecCode.SetHighlighting("HTML");
+                        }
+                        break;
+                }
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show("An error occured while loading this web resource: " + error.Message, "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

@@ -200,8 +200,14 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"C:\Program Files (x86)\Microsoft\ILMerge\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(TargetDir)MsCrmTools.WebResourcesManager.dll" MsCrmTools.WebResourcesManager.dll ICSharpCode.TextEditor.dll Yahoo.Yui.Compressor.dll EcmaScript.NET.modified.dll
-xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.WebResourcesManager.dll" "$(SolutionDir)XrmToolBox\bin\Debug"</PostBuildEvent>
+xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.WebResourcesManager.dll" "$(SolutionDir)XrmToolBox\bin\Debug"
+xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.WebResourcesManager.pdb" "$(SolutionDir)XrmToolBox\bin\Debug"</PostBuildEvent>
   </PropertyGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+    </VisualStudio>
+  </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

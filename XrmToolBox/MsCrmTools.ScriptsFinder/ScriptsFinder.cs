@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using Microsoft.Xrm.Sdk;
 using XrmToolBox;
@@ -66,6 +67,7 @@ namespace MsCrmTools.ScriptsFinder
         {
             lvScripts.Items.Clear();
             tsbMainFindScripts.Enabled = false;
+            tsbExportToCsv.Enabled = false;
 
             infoPanel = InformationPanel.GetInformationPanel(this, "Loading scripts (this can take a while...)", 340,
                                                              100);
@@ -108,6 +110,7 @@ namespace MsCrmTools.ScriptsFinder
             }
 
             tsbMainFindScripts.Enabled = true;
+            tsbExportToCsv.Enabled = true;
             infoPanel.Dispose();
             Controls.Remove(infoPanel);
         }
@@ -136,6 +139,39 @@ namespace MsCrmTools.ScriptsFinder
             if(actionName == "FindScripts")
             {
                 FindScripts(); 
+            }
+        }
+
+        private void TsbExportToCsvClick(object sender, EventArgs e)
+        {
+            var sfd = new SaveFileDialog
+                          {
+                              Filter = "CSV file (*.csv)|*.csv",
+                              Title = "Select a file where to save the list of scripts"
+                          };
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                using (var writer = new StreamWriter(sfd.FileName, false))
+                {
+                    writer.WriteLine("Entity Display Name,Entity Logical Name,Form,Event,Attribute Display Name,Attribute Logical Name,Script Location,Method Called");
+
+                    foreach (ListViewItem item in lvScripts.Items)
+                    {
+                        writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7}",
+                            item.SubItems[0].Text,
+                            item.SubItems[1].Text,
+                            item.SubItems[2].Text,
+                            item.SubItems[3].Text,
+                            item.SubItems[4].Text,
+                            item.SubItems[5].Text,
+                            item.SubItems[6].Text,
+                            item.SubItems[7].Text);
+                    }
+
+                    MessageBox.Show(this, string.Format("File saved to '{0}'!", sfd.FileName), "Information",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
         }
     }

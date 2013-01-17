@@ -3,6 +3,7 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Microsoft.Xrm.Sdk;
@@ -13,6 +14,13 @@ namespace MsCrmTools.WebResourcesManager
     class WebResource
     {
         private static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant));
+
+        private static readonly List<string> validExtensions = new List<string>{"htm","html","css","js","xml","jpg","jpeg","png","gif","ico","xap","xslt"};
+
+        public static List<string> ValidExtensions
+        {
+            get { return validExtensions; }
+        }
 
         public string FilePath { get; set; }
         public Entity WebResourceEntity { get; set; }
