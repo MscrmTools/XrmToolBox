@@ -183,6 +183,7 @@
             this.imageList1.Images.SetKeyName(3, "ico_16_1039_default.gif");
             this.imageList1.Images.SetKeyName(4, "ico_16_1039_lookup.gif");
             this.imageList1.Images.SetKeyName(5, "ico_16_1039_quickFind.gif");
+            this.imageList1.Images.SetKeyName(6, "userquery.png");
             // 
             // gbSourceViews
             // 

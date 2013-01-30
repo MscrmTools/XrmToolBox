@@ -12,6 +12,7 @@ using System.Xml;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
+using MsCrmTools.ViewLayoutReplicator.Forms;
 using MsCrmTools.ViewLayoutReplicator.Helpers;
 using Tanguy.WinForm.Utilities.DelegatesHelpers;
 using XrmToolBox;
@@ -208,10 +209,10 @@ namespace MsCrmTools.ViewLayoutReplicator
 
             Controls.Remove(informationPanel);
 
-            if ((bool) e.Result == false)
+            if (((List<Tuple<string, string>>) e.Result).Count > 0)
             {
-                MessageBox.Show(this, "Checked target views updated!\n\nThe associated view has not been updated because of related attributes",
-                                                  "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                var errorDialog = new ErrorList((List<Tuple<string, string>>) e.Result);
+                errorDialog.ShowDialog();
             }
 
             tsbPublishEntity.Enabled = true;
@@ -313,6 +314,7 @@ namespace MsCrmTools.ViewLayoutReplicator
             string entityLogicalName = e.Argument.ToString();
 
             List<Entity> viewsList = ViewHelper.RetrieveViews(entityLogicalName, entitiesCache, service);
+            viewsList.AddRange(ViewHelper.RetrieveUserViews(entityLogicalName, entitiesCache, service));
 
             foreach (Entity view in viewsList)
             {
@@ -323,19 +325,28 @@ namespace MsCrmTools.ViewLayoutReplicator
 
                 #region Gestion de l'image associée à la vue
 
-                switch ((int) view["querytype"])
+               switch ((int) view["querytype"])
                 {
                     case ViewHelper.VIEW_BASIC:
                         {
-                            if ((bool) view["isdefault"])
+                            if (view.LogicalName == "savedquery")
                             {
-                                item.SubItems.Add("Default public view");
-                                item.ImageIndex = 3;
+                                if ((bool) view["isdefault"])
+                                {
+                                    item.SubItems.Add("Default public view");
+                                    item.ImageIndex = 3;
+                                }
+                                else
+
+                                {
+                                    item.SubItems.Add("Public view");
+                                    item.ImageIndex = 0;
+                                }
                             }
                             else
                             {
-                                item.SubItems.Add("Public view");
-                                item.ImageIndex = 0;
+                                item.SubItems.Add("User view");
+                                item.ImageIndex = 6;
                             }
                         }
                         break;
@@ -365,6 +376,7 @@ namespace MsCrmTools.ViewLayoutReplicator
                         break;
                     default:
                         {
+                            //item.SubItems.Add(view["name"].ToString());
                             display = false;
                         }
                         break;
@@ -392,11 +404,14 @@ namespace MsCrmTools.ViewLayoutReplicator
 
         private void BwFillViewsRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (e.Error == null && !e.Cancelled)
+            Cursor = Cursors.Default;
+            gbSourceViews.Enabled = true;
+            gbTargetViews.Enabled = true;
+            
+            if (e.Error != null)
             {
-                Cursor = Cursors.Default;
-                gbSourceViews.Enabled = true;
-                gbTargetViews.Enabled = true;
+                MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
             }
 
             if (lvSourceViews.Items.Count == 0)
