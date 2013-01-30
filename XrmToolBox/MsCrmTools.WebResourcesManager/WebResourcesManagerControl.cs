@@ -299,30 +299,38 @@ namespace MsCrmTools.WebResourcesManager
 
         private void DoUpdateWebResources(bool publish, bool addToSolution)
         {
-            // Retrieve checked web resources
-            var nodesList = new List<TreeNode>();
-            TreeViewHelper.GetNodes(nodesList, tvWebResources, true);
-
-            if (nodesList.Count == 0)
+            try
             {
-                MessageBox.Show(this, "Please check at least one web resource before using this function", "Warning",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                // Retrieve checked web resources
+                var nodesList = new List<TreeNode>();
+                TreeViewHelper.GetNodes(nodesList, tvWebResources, true);
 
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
+                if (nodesList.Count == 0)
                 {
-                    string action = addToSolution ? "UpdateAndPublishAndAdd" : publish ? "UpdateAndPublish" : "Update";
+                    MessageBox.Show(this, "Please check at least one web resource before using this function", "Warning",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-                    var args = new RequestConnectionEventArgs { ActionName = action, Control = this };
-                    OnRequestConnection(this, args);
+                if (service == null)
+                {
+                    if (OnRequestConnection != null)
+                    {
+                        string action = addToSolution ? "UpdateAndPublishAndAdd" : publish ? "UpdateAndPublish" : "Update";
+
+                        var args = new RequestConnectionEventArgs { ActionName = action, Control = this };
+                        OnRequestConnection(this, args);
+                    }
+                }
+                else
+                {
+                    UpdateWebResources(publish, nodesList, addToSolution);
                 }
             }
-            else
+            catch (Exception error)
             {
-                UpdateWebResources(publish, nodesList, addToSolution);
+                MessageBox.Show(this, "An error occured: " + error.ToString(), "error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
             }
         }
 
