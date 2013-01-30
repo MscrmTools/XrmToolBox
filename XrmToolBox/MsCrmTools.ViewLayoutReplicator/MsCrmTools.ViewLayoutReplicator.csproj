@@ -68,6 +68,12 @@
     <Compile Include="DelegatesHelpers\RadioButtonDelegates.cs" />
     <Compile Include="DelegatesHelpers\TextBoxDelegates.cs" />
     <Compile Include="DelegatesHelpers\ToolStripStatusDelegates.cs" />
+    <Compile Include="Forms\ErrorList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ErrorList.Designer.cs">
+      <DependentUpon>ErrorList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\MetadataHelper.cs" />
     <Compile Include="Helpers\ViewHelper.cs" />
     <Compile Include="Helpers\XmlHelper.cs" />
@@ -95,6 +101,9 @@
     <None Include="Images\Thumbs.db" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\ErrorList.resx">
+      <DependentUpon>ErrorList.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ViewLayoutReplicatorControl.resx">
       <DependentUpon>ViewLayoutReplicatorControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -111,7 +120,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

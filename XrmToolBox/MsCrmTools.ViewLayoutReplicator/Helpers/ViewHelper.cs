@@ -67,6 +67,39 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
             }
         }
 
+        internal static IEnumerable<Entity> RetrieveUserViews(string entityLogicalName, List<EntityMetadata> entitiesCache, IOrganizationService service)
+        {
+            try
+            {
+                EntityMetadata currentEmd = entitiesCache.Find(e => e.LogicalName == entityLogicalName);
+
+                QueryByAttribute qba = new QueryByAttribute
+                {
+                    EntityName = "userquery",
+                    ColumnSet = new ColumnSet(true)
+                };
+
+                qba.Attributes.AddRange("returnedtypecode", "querytype");
+                qba.Values.AddRange(currentEmd.ObjectTypeCode.Value, 0);
+
+                EntityCollection views = service.RetrieveMultiple(qba);
+
+                List<Entity> viewsList = new List<Entity>();
+
+                foreach (Entity entity in views.Entities)
+                {
+                    viewsList.Add(entity);
+                }
+
+                return viewsList;
+            }
+            catch (Exception error)
+            {
+                string errorMessage = CrmExceptionHelper.GetErrorMessage(error, false);
+                throw new Exception("Error while retrieving user views: " + errorMessage);
+            }
+        }
+
         /// <summary>
         /// Copy view layout form source view to all specified target views
         /// </summary>
@@ -74,24 +107,24 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
         /// <param name="targetViews">List of target views</param>
         /// <param name="service">Crm organization service</param>
         /// <returns>Indicates if all views have been updated</returns>
-        public static bool PropagateLayout(Entity sourceView, List<Entity> targetViews, IOrganizationService service)
+        public static List<Tuple<string, string>> PropagateLayout(Entity sourceView, List<Entity> targetViews, IOrganizationService service)
         {
+            var errors = new List<Tuple<string, string>>();
             string multiObjectAttribute = string.Empty;
 
             try
             {
-                bool doneWithoutAdaptation = true;
-
                 foreach (Entity targetView in targetViews)
                 {
-                    if ((Guid)targetView["savedqueryid"] != (Guid)sourceView["savedqueryid"])
+                    if (targetView.Id != sourceView.Id)
                     {
                         bool canUpdateLinkedAttributes = true;
 
                         if (sourceView["layoutxml"].ToString().Contains(".") && (int)targetView["querytype"] == VIEW_ASSOCIATED)
                         {
-                            doneWithoutAdaptation = false;
-                            canUpdateLinkedAttributes = false;
+                            errors.Add(new Tuple<string, string>(targetView["name"].ToString(), "The associated view has not been updated because of related attributes"));
+                            //canUpdateLinkedAttributes = false;
+                            continue;
                         }
 
                         // Update grid cells
@@ -302,13 +335,12 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
                         }
                         catch (Exception error)
                         {
-                            string errorMessage = CrmExceptionHelper.GetErrorMessage(error, false);
-                            throw new Exception(errorMessage);
+                            errors.Add(new Tuple<string, string>(targetView["name"].ToString(), error.Message));
                         }
                     }
                 }
 
-                return doneWithoutAdaptation;
+                return errors;
             }
             catch (Exception error)
             {
