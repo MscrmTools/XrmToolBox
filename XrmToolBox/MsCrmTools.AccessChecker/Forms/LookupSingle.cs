@@ -127,8 +127,11 @@ namespace MsCrmTools.AccessChecker.Forms
                 var resultsDoc = new XmlDocument();
                 resultsDoc.LoadXml(results);
 
+                
                 foreach (XmlNode node in resultsDoc.SelectNodes("//result"))
                 {
+                    bool isFirstCell = true;
+                    
                     var item = new ListViewItem();
                     item.Tag = node.SelectSingleNode(metadata.PrimaryIdAttribute).InnerText;
 
@@ -137,17 +140,41 @@ namespace MsCrmTools.AccessChecker.Forms
                         var attributeNode = node.SelectSingleNode(cell.Attributes["name"].Value);
                         if (attributeNode == null)
                         {
-                            item.SubItems.Add("");
+                            if (isFirstCell)
+                            {
+                                item.Text = "";
+                                isFirstCell = false;
+                            }
+                            else
+                            {
+                                item.SubItems.Add("");
+                            }
                         }
                         else
                         {
                             if (attributeNode.Attributes["name"] != null)
                             {
-                                item.SubItems.Add(attributeNode.Attributes["name"].Value);
+                                if (isFirstCell)
+                                {
+                                    item.Text = attributeNode.Attributes["name"].Value;
+                                    isFirstCell = false;
+                                }
+                                else
+                                {
+                                    item.SubItems.Add(attributeNode.Attributes["name"].Value);
+                                }
                             }
                             else
                             {
-                                item.SubItems.Add(attributeNode.InnerText);
+                                if (isFirstCell)
+                                {
+                                    item.Text = attributeNode.InnerText;
+                                    isFirstCell = false;
+                                }
+                                else
+                                {
+                                    item.SubItems.Add(attributeNode.InnerText);
+                                }
                             }
                         }
                     }

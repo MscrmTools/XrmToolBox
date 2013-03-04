@@ -37,6 +37,9 @@
             this.tsbConnect = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbView = new System.Windows.Forms.ToolStripButton();
+            this.tsbManageTabs = new System.Windows.Forms.ToolStripDropDownButton();
+            this.closeAllTabsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeAllTabsExceptActiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbAbout = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -87,6 +90,7 @@
             this.tsbConnect,
             this.toolStripSeparator1,
             this.tsbView,
+            this.tsbManageTabs,
             this.toolStripSeparator2,
             this.tsbAbout,
             this.toolStripSeparator3,
@@ -126,11 +130,35 @@
             this.tsbView.Visible = false;
             this.tsbView.Click += new System.EventHandler(this.TsbViewClick);
             // 
+            // tsbManageTabs
+            // 
+            this.tsbManageTabs.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.closeAllTabsToolStripMenuItem,
+            this.closeAllTabsExceptActiveToolStripMenuItem});
+            this.tsbManageTabs.Image = ((System.Drawing.Image)(resources.GetObject("tsbManageTabs.Image")));
+            this.tsbManageTabs.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbManageTabs.Name = "tsbManageTabs";
+            this.tsbManageTabs.Size = new System.Drawing.Size(61, 22);
+            this.tsbManageTabs.Text = "Tabs";
+            // 
+            // closeAllTabsToolStripMenuItem
+            // 
+            this.closeAllTabsToolStripMenuItem.Name = "closeAllTabsToolStripMenuItem";
+            this.closeAllTabsToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.closeAllTabsToolStripMenuItem.Text = "Close all";
+            this.closeAllTabsToolStripMenuItem.Click += new System.EventHandler(this.CloseAllTabsToolStripMenuItemClick);
+            // 
+            // closeAllTabsExceptActiveToolStripMenuItem
+            // 
+            this.closeAllTabsExceptActiveToolStripMenuItem.Name = "closeAllTabsExceptActiveToolStripMenuItem";
+            this.closeAllTabsExceptActiveToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.closeAllTabsExceptActiveToolStripMenuItem.Text = "Close all except active tab";
+            this.closeAllTabsExceptActiveToolStripMenuItem.Click += new System.EventHandler(this.CloseAllTabsExceptActiveToolStripMenuItemClick);
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            this.toolStripSeparator2.Visible = false;
             // 
             // tsbAbout
             // 
@@ -231,6 +259,9 @@
         private System.Windows.Forms.ToolStripButton tsbReportBug;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton tsbDonate;
+        private System.Windows.Forms.ToolStripDropDownButton tsbManageTabs;
+        private System.Windows.Forms.ToolStripMenuItem closeAllTabsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem closeAllTabsExceptActiveToolStripMenuItem;
     }
 }
 

@@ -126,59 +126,76 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         public string GetBase64WebResourceContent()
         {
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(tecCode.Text);
-
+         
             return Convert.ToBase64String(bytes);
         }
 
         public void MinifyJs()
         {
-            tecCode.Text = Yahoo.Yui.Compressor.JavaScriptCompressor.Compress(tecCode.Text, false, true, false, false, 200);
-            tecCode.Refresh();
+            try
+            {
+                tecCode.Text = Yahoo.Yui.Compressor.JavaScriptCompressor.Compress(tecCode.Text, false, true, false,
+                                                                                  false, 200);
+                tecCode.Refresh();
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(ParentForm, "Error while minifying code: " + error.Message, "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         public void ReplaceWithNewFile()
         {
-            using (OpenFileDialog ofd = new OpenFileDialog())
+            try
             {
-                switch (innerType)
+                using (OpenFileDialog ofd = new OpenFileDialog())
                 {
-                    case Enumerations.WebResourceType.Script:
-                        {
-                            ofd.Title = string.Format(OPENFILE_TITLE_MASK, "script file");
-                        }
-                        break;
-                    case Enumerations.WebResourceType.WebPage:
-                        {
-                            ofd.Title = string.Format(OPENFILE_TITLE_MASK, "web page");
-                        }
-                        break;
-                    case Enumerations.WebResourceType.Css:
-                        {
-                            ofd.Title = string.Format(OPENFILE_TITLE_MASK, "css file");
-                        }
-                        break;
-                    case Enumerations.WebResourceType.Xsl:
-                        {
-                            ofd.Title = string.Format(OPENFILE_TITLE_MASK, "xsl file");
-                        }
-                        break;
+                    switch (innerType)
+                    {
+                        case Enumerations.WebResourceType.Script:
+                            {
+                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "script file");
+                            }
+                            break;
+                        case Enumerations.WebResourceType.WebPage:
+                            {
+                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "web page");
+                            }
+                            break;
+                        case Enumerations.WebResourceType.Css:
+                            {
+                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "css file");
+                            }
+                            break;
+                        case Enumerations.WebResourceType.Xsl:
+                            {
+                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "xsl file");
+                            }
+                            break;
+                    }
+
+                    if (ofd.ShowDialog(ParentForm) == DialogResult.OK)
+                    {
+                        string newContent = Convert.ToBase64String(File.ReadAllBytes(ofd.FileName));
+                        innerContent = new StreamReader(ofd.FileName).ReadToEnd();
+
+                        CodeControl_Load(null, null);
+
+                        SendSavedMessage();
+                    }
                 }
-
-                if (ofd.ShowDialog(ParentForm) == DialogResult.OK)
-                {
-                    string newContent = Convert.ToBase64String(File.ReadAllBytes(ofd.FileName));
-                    innerContent = new StreamReader(ofd.FileName).ReadToEnd();
-
-                    CodeControl_Load(null, null);
-
-                    SendSavedMessage();
-                }
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(ParentForm, "Error while updating file: " + error.Message, "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void SendSavedMessage()
         {
-            WebResourceUpdatedEventArgs wrueArgs = new WebResourceUpdatedEventArgs
+            var wrueArgs = new WebResourceUpdatedEventArgs
                                                        {
                 Base64Content = innerContent,
                 IsDirty = (innerContent != originalContent),

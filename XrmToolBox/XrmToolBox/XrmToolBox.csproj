@@ -42,8 +42,9 @@
     <Reference Include="McTools.Xrm.Connection">
       <HintPath>..\..\..\DYNAMICS CRM 2011\TOOLS\_PERSO\McTools.Xrm.Connection\McTools.Xrm.Connection.WinForms\bin\Release\McTools.Xrm.Connection.dll</HintPath>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection.WinForms">
-      <HintPath>..\..\..\DYNAMICS CRM 2011\TOOLS\_PERSO\McTools.Xrm.Connection\McTools.Xrm.Connection.WinForms\bin\Release\McTools.Xrm.Connection.WinForms.dll</HintPath>
+    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\McTools.Xrm.Connection\McTools.Xrm.Connection.WinForms\bin\Release\McTools.Xrm.Connection.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="microsoft.crm.sdk.proxy">
       <HintPath>..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK UR10\bin\microsoft.crm.sdk.proxy.dll</HintPath>
@@ -154,7 +155,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

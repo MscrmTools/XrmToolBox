@@ -426,61 +426,70 @@ namespace MsCrmTools.WebResourcesManager
 
         private void LoadWebResourcesToolStripMenuItem1Click(object sender, EventArgs e)
         {
-            // Let the user decides where to find files
-            var fbd = new FolderBrowserDialog
+            try
             {
-                Description = "Select the folder where the scripts files are located",
-                ShowNewFolderButton = true
-            };
-
-            if (fbd.ShowDialog() == DialogResult.OK)
-            {
-                tvWebResources.Nodes.Clear();
-                invalidFilenames = new List<string>();
-
-                var di = new DirectoryInfo(fbd.SelectedPath);
-
-                foreach (DirectoryInfo diChild in di.GetDirectories("*_", SearchOption.TopDirectoryOnly))
+                // Let the user decides where to find files
+                var fbd = new FolderBrowserDialog
                 {
-                    if (WebResource.IsInvalidName(diChild.Name))
+                    Description = "Select the folder where the scripts files are located",
+                    ShowNewFolderButton = true
+                };
+
+                if (fbd.ShowDialog() == DialogResult.OK)
+                {
+                    tvWebResources.Nodes.Clear();
+                    invalidFilenames = new List<string>();
+
+                    var di = new DirectoryInfo(fbd.SelectedPath);
+
+                    foreach (DirectoryInfo diChild in di.GetDirectories("*_", SearchOption.TopDirectoryOnly))
                     {
-                        invalidFilenames.Add(diChild.FullName);
-                        continue;
+                        if (WebResource.IsInvalidName(diChild.Name))
+                        {
+                            invalidFilenames.Add(diChild.FullName);
+                            continue;
+                        }
+
+                        var rootFolderNode = new TreeNode(diChild.Name) { ImageIndex = 0 };
+
+                        tvWebResources.Nodes.Add(rootFolderNode);
+
+                        TreeViewHelper.CreateFolderStructure(rootFolderNode, diChild, invalidFilenames);
                     }
 
-                    var rootFolderNode = new TreeNode(diChild.Name) { ImageIndex = 0 };
-
-                    tvWebResources.Nodes.Add(rootFolderNode);
-
-                    TreeViewHelper.CreateFolderStructure(rootFolderNode, diChild, invalidFilenames);
-                }
-
-                foreach (FileInfo fiChild in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
-                {
-                    if (WebResource.IsInvalidName(fiChild.Name) || !WebResource.ValidExtensions.Contains(fiChild.Extension.Remove(0,1)))
+                    foreach (FileInfo fiChild in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
                     {
-                        invalidFilenames.Add(fiChild.FullName);
-                        continue;
+                        if (WebResource.IsInvalidName(fiChild.Name) || !WebResource.ValidExtensions.Contains(fiChild.Extension.Remove(0, 1)))
+                        {
+                            invalidFilenames.Add(fiChild.FullName);
+                            continue;
+                        }
+
+                        TreeViewHelper.CreateWebResourceNode(fiChild, tvWebResources);
                     }
 
-                    TreeViewHelper.CreateWebResourceNode(fiChild, tvWebResources);
-                }
+                    tvWebResources.ExpandAll();
 
-                tvWebResources.ExpandAll();
+                    tvWebResources.TreeViewNodeSorter = new NodeSorter();
+                    tvWebResources.Sort();
 
-                tvWebResources.TreeViewNodeSorter = new NodeSorter();
-                tvWebResources.Sort();
-
-                if (invalidFilenames.Count > 0)
-                {
-                    var errorDialog = new InvalidFileListDialog(invalidFilenames)
+                    if (invalidFilenames.Count > 0)
                     {
-                        StartPosition =
-                            FormStartPosition.CenterParent
-                    };
-                    errorDialog.ShowDialog(this);
+                        var errorDialog = new InvalidFileListDialog(invalidFilenames)
+                        {
+                            StartPosition =
+                                FormStartPosition.CenterParent
+                        };
+                        errorDialog.ShowDialog(this);
+                    }
                 }
             }
+            catch (Exception error)
+            {
+                MessageBox.Show(this, "Error while loading web resources: " + error.Message, "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+           
         }
 
         #endregion DISK - Load web resources
@@ -489,18 +498,34 @@ namespace MsCrmTools.WebResourcesManager
 
         private void SaveCheckedWebResourcesToDiskToolStripMenuItemClick(object sender, EventArgs e)
         {
-            var nodes = new List<TreeNode>();
-            TreeViewHelper.GetNodes(nodes, tvWebResources, true);
+            try
+            {
+                var nodes = new List<TreeNode>();
+                TreeViewHelper.GetNodes(nodes, tvWebResources, true);
 
-            SaveWebResourcesToDisk(nodes);
+                SaveWebResourcesToDisk(nodes);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(this, "Error while saving web resources: " + error.Message, "Error",
+                             MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void SaveAllWebResourcesToDiskToolStripMenuItemClick(object sender, EventArgs e)
         {
-            var nodes = new List<TreeNode>();
-            TreeViewHelper.GetNodes(nodes, tvWebResources, false);
+            try
+            {
+                var nodes = new List<TreeNode>();
+                TreeViewHelper.GetNodes(nodes, tvWebResources, false);
 
-            SaveWebResourcesToDisk(nodes);
+                SaveWebResourcesToDisk(nodes);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(this, "Error while saving web resources: " + error.Message, "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void SaveWebResourcesToDisk(IEnumerable<TreeNode> nodes)
@@ -543,56 +568,63 @@ namespace MsCrmTools.WebResourcesManager
 
         private void DeleteToolStripMenuItemClick(object sender, EventArgs e)
         {
-            if (TreeViewHelper.CheckOnlyThisNode(tvWebResources))
-                return;
-
-            TreeNode selectedNode = tvWebResources.SelectedNode;
-
-            if (selectedNode.ImageIndex > 1)
+            try
             {
-                if (DialogResult.Yes == MessageBox.Show(this,
-                    "This web resource will be deleted from the Crm server if you are connected and this web resource exists.\r\nAre you sure you want to delete this web resource?",
-                    "Question",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question))
+                if (TreeViewHelper.CheckOnlyThisNode(tvWebResources))
+                    return;
+
+                TreeNode selectedNode = tvWebResources.SelectedNode;
+
+                if (selectedNode.ImageIndex > 1)
                 {
-                    var wr = selectedNode.Tag as WebResource;
-
-                    if (wr != null && wr.WebResourceEntity != null && wr.WebResourceEntity.Id != Guid.Empty)
+                    if (DialogResult.Yes == MessageBox.Show(this,
+                                                            "This web resource will be deleted from the Crm server if you are connected and this web resource exists.\r\nAre you sure you want to delete this web resource?",
+                                                            "Question",
+                                                            MessageBoxButtons.YesNo,
+                                                            MessageBoxIcon.Question))
                     {
-                        var nodesList = new List<TreeNode> { selectedNode };
+                        var wr = selectedNode.Tag as WebResource;
 
-                        if (service == null)
+                        if (wr != null && wr.WebResourceEntity != null && wr.WebResourceEntity.Id != Guid.Empty)
                         {
-                            if (OnRequestConnection != null)
+                            var nodesList = new List<TreeNode> {selectedNode};
+
+                            if (service == null)
                             {
-                                var args = new RequestConnectionEventArgs { ActionName = "Delete", Control = this };
-                                OnRequestConnection(this, args);
+                                if (OnRequestConnection != null)
+                                {
+                                    var args = new RequestConnectionEventArgs {ActionName = "Delete", Control = this};
+                                    OnRequestConnection(this, args);
+                                }
+                            }
+                            else
+                            {
+                                DeleteWebResource(nodesList);
+                                tvWebResources.Nodes.Remove(selectedNode);
                             }
                         }
                         else
                         {
-                            DeleteWebResource(nodesList);
                             tvWebResources.Nodes.Remove(selectedNode);
                         }
                     }
-                    else
-                    {
-                        tvWebResources.Nodes.Remove(selectedNode);
-                    }
+                }
+                else
+                {
+                    tvWebResources.Nodes.Remove(selectedNode);
                 }
             }
-            else
+            catch (Exception error)
             {
-                tvWebResources.Nodes.Remove(selectedNode);
+                MessageBox.Show(this, "Error while deleting web resource: " + error.Message, "Error",
+                             MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void DeleteWebResource(List<TreeNode> nodes)
         {
             SetWorkingState(true);
-            //Todo ccsb.SetMessage("Deleting web resource...");
-
+            
             infoPanel = InformationPanel.GetInformationPanel(this, "Deleting web resource...", 340, 100);
 
             var bwDelete = new BackgroundWorker();
@@ -603,11 +635,7 @@ namespace MsCrmTools.WebResourcesManager
 
         private void BwDeleteRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (e.Error == null)
-            {
-                //Todo ccsb.SetMessage("");
-            }
-            else
+            if (e.Error != null)
             {
                 MessageBox.Show(this, "An error occured: " + e.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -696,6 +724,26 @@ namespace MsCrmTools.WebResourcesManager
 
             tvWebResources.SelectedNode.Tag = ((WebResource) tvWebResources.SelectedNode.Tag).ShowProperties(service,
                                                                                                              this);
+        }
+
+        private void CopyWebResourceNameToClipboardToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            string name = tvWebResources.SelectedNode.Text;
+            TreeNode parentNode = tvWebResources.SelectedNode.Parent;
+
+            while (parentNode != null)
+            {
+                name = parentNode.Text + "/" + name;
+                parentNode = parentNode.Parent;
+            }
+            
+            Clipboard.SetText(name);
+
+            MessageBox.Show(this,
+                            string.Format("Web resource name ({0}) copied to clipboard", name),
+                            "Information",
+                            MessageBoxButtons.OK, 
+                            MessageBoxIcon.Information);
         }
 
         #endregion TREEVIEW - Manage content
@@ -929,9 +977,10 @@ namespace MsCrmTools.WebResourcesManager
                                 deleteToolStripMenuItem.Enabled = tvWebResources.SelectedNode.Nodes.Count == 0;
                                 saveToCRMServerToolStripMenuItem.Enabled = false;
                                 saveAndPublishToCRMServerToolStripMenuItem.Enabled = false;
+                                savePublishAndAddToSolutionToolStripMenuItem.Enabled = false;
                                 propertiesToolStripMenuItem.Enabled = false;
                                 updateFromDiskToolStripMenuItem.Enabled = true;
-
+                                copyWebResourceNameToClipboardToolStripMenuItem.Enabled = false;
                             }
                             break;
                         case 1:
@@ -942,8 +991,10 @@ namespace MsCrmTools.WebResourcesManager
                                 deleteToolStripMenuItem.Enabled = tvWebResources.SelectedNode.Nodes.Count == 0;
                                 saveToCRMServerToolStripMenuItem.Enabled = false;
                                 saveAndPublishToCRMServerToolStripMenuItem.Enabled = false;
+                                savePublishAndAddToSolutionToolStripMenuItem.Enabled = false;
                                 propertiesToolStripMenuItem.Enabled = false;
                                 updateFromDiskToolStripMenuItem.Enabled = true;
+                                copyWebResourceNameToClipboardToolStripMenuItem.Enabled = false;
                             }
                             break;
                         default:
@@ -956,6 +1007,7 @@ namespace MsCrmTools.WebResourcesManager
                                 saveAndPublishToCRMServerToolStripMenuItem.Enabled = true;
                                 propertiesToolStripMenuItem.Enabled = true;
                                 updateFromDiskToolStripMenuItem.Enabled = false;
+                                copyWebResourceNameToClipboardToolStripMenuItem.Enabled = true;
                             }
                             break;
                     }
@@ -1008,6 +1060,5 @@ namespace MsCrmTools.WebResourcesManager
 
         #endregion
 
-       
     }
 }
