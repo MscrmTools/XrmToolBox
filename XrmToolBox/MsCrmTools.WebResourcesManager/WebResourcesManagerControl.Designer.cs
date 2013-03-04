@@ -77,6 +77,8 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.copyWebResourceNameToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -413,9 +415,11 @@
             this.toolStripSeparator3,
             this.deleteToolStripMenuItem,
             this.toolStripSeparator5,
+            this.copyWebResourceNameToClipboardToolStripMenuItem,
+            this.toolStripSeparator7,
             this.propertiesToolStripMenuItem});
             this.contextMenuStripTreeView.Name = "contextMenuStripTreeView";
-            this.contextMenuStripTreeView.Size = new System.Drawing.Size(338, 226);
+            this.contextMenuStripTreeView.Size = new System.Drawing.Size(338, 254);
             // 
             // addNewWebResourceToolStripMenuItem
             // 
@@ -540,6 +544,19 @@
             this.toolStripSeparator5.Name = "toolStripSeparator5";
             this.toolStripSeparator5.Size = new System.Drawing.Size(334, 6);
             // 
+            // copyWebResourceNameToClipboardToolStripMenuItem
+            // 
+            this.copyWebResourceNameToClipboardToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copyWebResourceNameToClipboardToolStripMenuItem.Image")));
+            this.copyWebResourceNameToClipboardToolStripMenuItem.Name = "copyWebResourceNameToClipboardToolStripMenuItem";
+            this.copyWebResourceNameToClipboardToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.copyWebResourceNameToClipboardToolStripMenuItem.Text = "Copy web resource name to clipboard ";
+            this.copyWebResourceNameToClipboardToolStripMenuItem.Click += new System.EventHandler(this.CopyWebResourceNameToClipboardToolStripMenuItemClick);
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(334, 6);
+            // 
             // propertiesToolStripMenuItem
             // 
             this.propertiesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("propertiesToolStripMenuItem.Image")));
@@ -621,5 +638,7 @@
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ToolStripMenuItem updateFromDiskToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem copyWebResourceNameToClipboardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
     }
 }

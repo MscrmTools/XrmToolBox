@@ -66,26 +66,37 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         public void ReplaceWithNewFile()
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Title = "Select a file to replace the existing web resource";
-            ofd.Filter = "Silverlight application file (*.xap)|*.xap";
-
-            if (ofd.ShowDialog() == DialogResult.OK)
+            try
             {
-                innerContent = Convert.ToBase64String(File.ReadAllBytes(ofd.FileName));
+                var ofd = new OpenFileDialog
+                              {
+                                  Title = "Select a file to replace the existing web resource",
+                                  Filter = "Silverlight application file (*.xap)|*.xap"
+                              };
 
-                SendSavedMessage();
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    innerContent = Convert.ToBase64String(File.ReadAllBytes(ofd.FileName));
+
+                    SendSavedMessage();
+                }
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(ParentForm, "Error while updating file: " + error.Message, "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void SendSavedMessage()
         {
-            WebResourceUpdatedEventArgs wrueArgs = new WebResourceUpdatedEventArgs
-                                                       {
-                Base64Content = innerContent,
-                IsDirty = (innerContent != originalContent),
-                Type = Enumerations.WebResourceType.Silverlight
-            };
+            var wrueArgs = new WebResourceUpdatedEventArgs
+                               {
+                                   Base64Content = innerContent,
+                                   IsDirty = (innerContent != originalContent),
+                                   Type = Enumerations.WebResourceType.Silverlight
+                               };
 
             if (WebResourceUpdated != null)
             {

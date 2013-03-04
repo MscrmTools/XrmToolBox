@@ -102,22 +102,32 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         public void ReplaceWithNewFile()
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Title = "Select a file to replace the existing web resource";
-            ofd.Filter = "ICO file (*.ico)|*.ico";
-
-            if (ofd.ShowDialog() == DialogResult.OK)
+            try
             {
-                innerContent = Convert.ToBase64String(File.ReadAllBytes(ofd.FileName));
-                Icon_Load(null, null);
+                var ofd = new OpenFileDialog
+                              {
+                                  Title = "Select a file to replace the existing web resource",
+                                  Filter = "ICO file (*.ico)|*.ico"
+                              };
 
-                SendSavedMessage();
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    innerContent = Convert.ToBase64String(File.ReadAllBytes(ofd.FileName));
+                    Icon_Load(null, null);
+
+                    SendSavedMessage();
+                }
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(ParentForm, "Error while updating file: " + error.Message, "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void SendSavedMessage()
         {
-            WebResourceUpdatedEventArgs wrueArgs = new WebResourceUpdatedEventArgs
+            var wrueArgs = new WebResourceUpdatedEventArgs
                                                        {
                 Base64Content = innerContent,
                 IsDirty = (innerContent != originalContent),

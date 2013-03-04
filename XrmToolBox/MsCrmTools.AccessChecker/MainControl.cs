@@ -125,6 +125,8 @@ namespace MsCrmTools.AccessChecker
         {
             infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving entities...", 340, 100);
 
+            cBoxEntities.Items.Clear();
+
             var worker = new BackgroundWorker();
             worker.DoWork += WorkerDoWork;
             worker.RunWorkerCompleted += WorkerRunWorkerCompleted;

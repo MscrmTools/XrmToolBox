@@ -389,5 +389,22 @@ namespace XrmToolBox
 
             Process.Start(url);
         }
+
+        private void CloseAllTabsToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            for (int i = tabControl1.TabPages.Count - 1; i > 0; i--)
+            {
+                tabControl1.TabPages.RemoveAt(i);
+            }
+        }
+
+        private void CloseAllTabsExceptActiveToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            for (int i = tabControl1.TabPages.Count - 1; i > 0; i--)
+            {
+                if(tabControl1.SelectedTab.TabIndex != i)
+                    tabControl1.TabPages.RemoveAt(i);
+            }
+        }
     }
 }

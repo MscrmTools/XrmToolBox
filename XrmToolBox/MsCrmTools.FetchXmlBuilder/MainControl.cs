@@ -4,12 +4,15 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.FetchXmlBuilder.UserControls;
 using XrmToolBox;
 
@@ -31,6 +34,8 @@ namespace MsCrmTools.FetchXmlBuilder
 
         private XmlDocument fetchDoc;
 
+        public Dictionary<string, EntityMetadata> EntityCache;
+
         #endregion Variables
 
         #region Constructor
@@ -41,6 +46,8 @@ namespace MsCrmTools.FetchXmlBuilder
         public MainControl()
         {
             InitializeComponent();
+
+            EntityCache = new Dictionary<string, EntityMetadata>();
         }
 
         #endregion Constructor
@@ -91,62 +98,58 @@ namespace MsCrmTools.FetchXmlBuilder
         {
             service = newService;
 
-            if (actionName == "WhoAmI")
+            if (actionName == "LoadMetadata")
             {
-                ProcessWhoAmI();
+                LoadMetadata();
             }
         }
 
-        private void BtnWhoAmIClick(object sender, EventArgs e)
+        private void TsbLoadMetadataClick(object sender, EventArgs e)
         {
             if (service == null)
             {
                 if (OnRequestConnection != null)
                 {
-                    var args = new RequestConnectionEventArgs { ActionName = "WhoAmI", Control = this, Parameter = null };
+                    var args = new RequestConnectionEventArgs { ActionName = "LoadMetadata", Control = this, Parameter = null };
                     OnRequestConnection(this, args);
                 }
             }
             else
             {
-                ProcessWhoAmI();
+                LoadMetadata();
             }
         }
 
-        private void ProcessWhoAmI()
+        private void LoadMetadata()
         {
-            infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving your user id...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Loading metadata...", 340, 100);
 
             var worker = new BackgroundWorker();
             worker.DoWork += WorkerDoWork;
-            worker.ProgressChanged += WorkerProgressChanged;
             worker.RunWorkerCompleted += WorkerRunWorkerCompleted;
-            worker.WorkerReportsProgress = true;
             worker.RunWorkerAsync();
-        }
-
-        private void WorkerProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            InformationPanel.ChangeInformationPanelMessage(infoPanel, e.UserState.ToString());
         }
 
         private void WorkerDoWork(object sender, DoWorkEventArgs e)
         {
-            var request = new WhoAmIRequest();
-            var response = (WhoAmIResponse)service.Execute(request);
+            var request = new RetrieveAllEntitiesRequest
+                              {
+                                  EntityFilters = EntityFilters.Attributes | EntityFilters.Relationships
+                              };
 
-            ((BackgroundWorker)sender).ReportProgress(0, "Your used id has been retrieved!");
+            var response = (RetrieveAllEntitiesResponse) service.Execute(request);
 
-            e.Result = response.UserId;
+            foreach (var emd in response.EntityMetadata)
+            {
+                EntityCache.Add(emd.LogicalName, emd);
+            }
         }
 
         private void WorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             infoPanel.Dispose();
-            infoPanel.Dispose();
             Controls.Remove(infoPanel);
 
-            MessageBox.Show(string.Format("You are {0}", (Guid)e.Result));
         }
 
         private void TsbCloseClick(object sender, EventArgs e)
@@ -209,7 +212,7 @@ namespace MsCrmTools.FetchXmlBuilder
                     break;
                 case "entity":
                     {
-                        var ctrl = new EntityControl((XmlNode)e.Node.Tag);
+                        var ctrl = new EntityControl((XmlNode)e.Node.Tag, EntityCache);
                         pnlProperties.Controls.Add(ctrl);
                     }
                     break;
@@ -370,5 +373,7 @@ namespace MsCrmTools.FetchXmlBuilder
             xmlNode.ParentNode.RemoveChild(xmlNode);
             currentNode.Remove();
         }
+
+        
     }
 }
