@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using MsCrmTools.WebResourcesManager.AppCode;
+using MsCrmTools.WebResourcesManager.Forms;
 
 namespace MsCrmTools.WebResourcesManager.UserControls
 {
@@ -15,8 +16,6 @@ namespace MsCrmTools.WebResourcesManager.UserControls
     /// </summary>
     public partial class CodeControl : UserControl, IWebResourceControl
     {
-        const string OPENFILE_TITLE_MASK = "Select the {0} to include in the web resource";
-
         #region Variables
 
         /// <summary>
@@ -34,6 +33,8 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         /// </summary>
         string innerContent;
 
+        readonly FindAndReplaceForm findForm = new FindAndReplaceForm();
+               
         #endregion Variables
 
         #region Delegates
@@ -66,6 +67,12 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             innerType = type;
         }
 
+        public void Find(bool replace, IWin32Window owner)
+        {
+            findForm.StartPosition = FormStartPosition.CenterParent;
+            findForm.ShowFor(tecCode, replace, owner);
+        }
+
         #endregion Constructor
 
         #region Handlers
@@ -96,7 +103,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                         break;
                     case Enumerations.WebResourceType.Css:
                         {
-                            tecCode.SetHighlighting("HTML");
+                            tecCode.SetHighlighting("CSS");
                         }
                         break;
                     case Enumerations.WebResourceType.Xsl:
@@ -145,52 +152,27 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             }
         }
 
-        public void ReplaceWithNewFile()
+        public void ReplaceWithNewFile(string filename)
         {
             try
             {
-                using (OpenFileDialog ofd = new OpenFileDialog())
-                {
-                    switch (innerType)
-                    {
-                        case Enumerations.WebResourceType.Script:
-                            {
-                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "script file");
-                            }
-                            break;
-                        case Enumerations.WebResourceType.WebPage:
-                            {
-                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "web page");
-                            }
-                            break;
-                        case Enumerations.WebResourceType.Css:
-                            {
-                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "css file");
-                            }
-                            break;
-                        case Enumerations.WebResourceType.Xsl:
-                            {
-                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "xsl file");
-                            }
-                            break;
-                    }
+                string newContent = Convert.ToBase64String(File.ReadAllBytes(filename));
+                innerContent = new StreamReader(filename).ReadToEnd();
 
-                    if (ofd.ShowDialog(ParentForm) == DialogResult.OK)
-                    {
-                        string newContent = Convert.ToBase64String(File.ReadAllBytes(ofd.FileName));
-                        innerContent = new StreamReader(ofd.FileName).ReadToEnd();
+                CodeControl_Load(null, null);
 
-                        CodeControl_Load(null, null);
-
-                        SendSavedMessage();
-                    }
-                }
+                SendSavedMessage();
             }
             catch (Exception error)
             {
                 MessageBox.Show(ParentForm, "Error while updating file: " + error.Message, "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        public Enumerations.WebResourceType GetWebResourceType()
+        {
+            return innerType;
         }
 
         private void SendSavedMessage()

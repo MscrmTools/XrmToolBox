@@ -38,6 +38,7 @@
   <PropertyGroup>
     <ApplicationIcon>favicon3Fr.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="McTools.Xrm.Connection">
       <HintPath>..\..\..\DYNAMICS CRM 2011\TOOLS\_PERSO\McTools.Xrm.Connection\McTools.Xrm.Connection.WinForms\bin\Release\McTools.Xrm.Connection.dll</HintPath>
@@ -155,7 +156,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

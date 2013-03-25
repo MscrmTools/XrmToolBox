@@ -1,6 +1,6 @@
 ﻿namespace XrmToolBox
 {
-    partial class MainForm
+    sealed partial class MainForm
     {
         /// <summary>
         /// Variable nécessaire au concepteur.
@@ -35,17 +35,18 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbConnect = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbView = new System.Windows.Forms.ToolStripButton();
             this.tsbManageTabs = new System.Windows.Forms.ToolStripDropDownButton();
             this.closeAllTabsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeAllTabsExceptActiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbAbout = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbRate = new System.Windows.Forms.ToolStripButton();
-            this.tsbDiscuss = new System.Windows.Forms.ToolStripButton();
-            this.tsbReportBug = new System.Windows.Forms.ToolStripButton();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.reportABugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.startADiscussionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rateThisToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbDonate = new System.Windows.Forms.ToolStripButton();
             this.tabControl1.SuspendLayout();
@@ -88,15 +89,13 @@
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbConnect,
-            this.toolStripSeparator1,
+            this.toolStripSeparator2,
             this.tsbView,
             this.tsbManageTabs,
-            this.toolStripSeparator2,
+            this.toolStripSeparator5,
             this.tsbAbout,
             this.toolStripSeparator3,
-            this.tsbRate,
-            this.tsbDiscuss,
-            this.tsbReportBug,
+            this.toolStripDropDownButton1,
             this.toolStripSeparator4,
             this.tsbDonate});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
@@ -114,10 +113,10 @@
             this.tsbConnect.Text = "Connect to CRM";
             this.tsbConnect.Click += new System.EventHandler(this.TsbConnectClick);
             // 
-            // toolStripSeparator1
+            // toolStripSeparator2
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbView
             // 
@@ -155,10 +154,10 @@
             this.closeAllTabsExceptActiveToolStripMenuItem.Text = "Close all except active tab";
             this.closeAllTabsExceptActiveToolStripMenuItem.Click += new System.EventHandler(this.CloseAllTabsExceptActiveToolStripMenuItemClick);
             // 
-            // toolStripSeparator2
+            // toolStripSeparator5
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbAbout
             // 
@@ -175,37 +174,41 @@
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
-            // tsbRate
+            // toolStripDropDownButton1
             // 
-            this.tsbRate.Image = ((System.Drawing.Image)(resources.GetObject("tsbRate.Image")));
-            this.tsbRate.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbRate.Name = "tsbRate";
-            this.tsbRate.Size = new System.Drawing.Size(96, 22);
-            this.tsbRate.Text = "Rate this tool";
-            this.tsbRate.ToolTipText = "Rate this tool on CodePlex and make this tool more visible to the community\r\n\r\nWe" +
-    "ther you like it or not, please review this tool!";
-            this.tsbRate.Click += new System.EventHandler(this.TsbRateClick);
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.reportABugToolStripMenuItem,
+            this.startADiscussionToolStripMenuItem,
+            this.rateThisToolToolStripMenuItem});
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(85, 22);
+            this.toolStripDropDownButton1.Text = "CodePlex";
             // 
-            // tsbDiscuss
+            // reportABugToolStripMenuItem
             // 
-            this.tsbDiscuss.Image = ((System.Drawing.Image)(resources.GetObject("tsbDiscuss.Image")));
-            this.tsbDiscuss.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbDiscuss.Name = "tsbDiscuss";
-            this.tsbDiscuss.Size = new System.Drawing.Size(118, 22);
-            this.tsbDiscuss.Text = "Start a discussion";
-            this.tsbDiscuss.ToolTipText = "Start a discussion about this tool on CodePlex";
-            this.tsbDiscuss.Click += new System.EventHandler(this.TsbDiscussClick);
+            this.reportABugToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("reportABugToolStripMenuItem.Image")));
+            this.reportABugToolStripMenuItem.Name = "reportABugToolStripMenuItem";
+            this.reportABugToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.reportABugToolStripMenuItem.Text = "Report a bug";
+            this.reportABugToolStripMenuItem.Click += new System.EventHandler(this.TsbReportBugClick);
             // 
-            // tsbReportBug
+            // startADiscussionToolStripMenuItem
             // 
-            this.tsbReportBug.Image = ((System.Drawing.Image)(resources.GetObject("tsbReportBug.Image")));
-            this.tsbReportBug.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbReportBug.Name = "tsbReportBug";
-            this.tsbReportBug.Size = new System.Drawing.Size(95, 22);
-            this.tsbReportBug.Text = "Report a bug";
-            this.tsbReportBug.ToolTipText = "Report a bug for this tool on CodePlex.\r\n\r\nReport a bug help to have a better too" +
-    "l!";
-            this.tsbReportBug.Click += new System.EventHandler(this.TsbReportBugClick);
+            this.startADiscussionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("startADiscussionToolStripMenuItem.Image")));
+            this.startADiscussionToolStripMenuItem.Name = "startADiscussionToolStripMenuItem";
+            this.startADiscussionToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.startADiscussionToolStripMenuItem.Text = "Start a discussion";
+            this.startADiscussionToolStripMenuItem.Click += new System.EventHandler(this.TsbDiscussClick);
+            // 
+            // rateThisToolToolStripMenuItem
+            // 
+            this.rateThisToolToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("rateThisToolToolStripMenuItem.Image")));
+            this.rateThisToolToolStripMenuItem.Name = "rateThisToolToolStripMenuItem";
+            this.rateThisToolToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.rateThisToolToolStripMenuItem.Text = "Rate this tool";
+            this.rateThisToolToolStripMenuItem.Click += new System.EventHandler(this.TsbRateClick);
             // 
             // toolStripSeparator4
             // 
@@ -249,19 +252,20 @@
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton tsbConnect;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton tsbAbout;
         private System.Windows.Forms.ToolStripButton tsbView;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripButton tsbRate;
-        private System.Windows.Forms.ToolStripButton tsbDiscuss;
-        private System.Windows.Forms.ToolStripButton tsbReportBug;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton tsbDonate;
         private System.Windows.Forms.ToolStripDropDownButton tsbManageTabs;
         private System.Windows.Forms.ToolStripMenuItem closeAllTabsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeAllTabsExceptActiveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripMenuItem reportABugToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem startADiscussionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rateThisToolToolStripMenuItem;
     }
 }
 

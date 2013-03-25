@@ -19,7 +19,7 @@ using XrmToolBox.UserControls;
 
 namespace XrmToolBox
 {
-    public partial class MainForm : Form
+    public sealed partial class MainForm : Form
     {
         #region Variables
 
@@ -61,6 +61,7 @@ namespace XrmToolBox
             cManager.RequestPassword += CManagerRequestPassword;
             cManager.StepChanged += CManagerStepChanged;
 
+
             fHelper = new FormHelper(this, cManager);
 
             ccsb = new CrmConnectionStatusBar(cManager, fHelper);
@@ -70,6 +71,7 @@ namespace XrmToolBox
             Show();
         }
 
+       
         void welcomeWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Error != null)
@@ -149,14 +151,6 @@ namespace XrmToolBox
             service = null;
             ccsb.SetConnectionStatus(false, null);
             ccsb.SetMessage(e.FailureReason);
-        }
-
-        private void ApplyConnectionToOpenedPlugins()
-        {
-            foreach (var page in tabControl1.TabPages.Cast<TabPage>().Where(page => page.TabIndex != 0))
-            {
-                ((IMsCrmToolsPluginUserControl) page.Controls[0]).UpdateConnection(service);
-            }
         }
 
         #endregion Connection methods
@@ -406,5 +400,7 @@ namespace XrmToolBox
                     tabControl1.TabPages.RemoveAt(i);
             }
         }
+
+       
     }
 }

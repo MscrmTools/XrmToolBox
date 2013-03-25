@@ -234,6 +234,7 @@ namespace MsCrmTools.RoleUpdater
                                 AnchorStyles.Right |
                                 AnchorStyles.Top
                         };
+                        ctrl.SettingsApplied += CtrlSettingsApplied;
                         pnlSteps.Controls.Add(ctrl);
                         currentStep = 3;
                     }
@@ -247,6 +248,8 @@ namespace MsCrmTools.RoleUpdater
 
                         ((PrivilegeLevelSelectionControl) pnlSteps.Controls[0]).ApplyChanges();
 
+                       
+
                         //settings.Actions = ((PrivilegeLevelSelectionControl)pnlSteps.Controls[0]).Actions;
                         //pnlSteps.Controls.Clear();
 
@@ -256,6 +259,11 @@ namespace MsCrmTools.RoleUpdater
                     }
                     break;
             }
+        }
+
+        void CtrlSettingsApplied(object sender, EventArgs e)
+        {
+            btnNext.Enabled = true;
         }
 
         private void BtnPreviousClick(object sender, EventArgs e)

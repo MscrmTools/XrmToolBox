@@ -432,7 +432,7 @@ namespace MsCrmTools.ViewLayoutReplicator
             if (lvSourceViews.SelectedItems.Count > 0)
             {
                 lvSourceViews.SelectedIndexChanged -= LvSourceViewsSelectedIndexChanged;
-
+                lvSourceViewLayoutPreview.Items.Clear();
                 lvSourceViews.Enabled = false;
                 Cursor = Cursors.WaitCursor;
 
@@ -473,8 +473,7 @@ namespace MsCrmTools.ViewLayoutReplicator
                 EntityMetadata emdWithItems = MetadataHelper.RetrieveEntity(currentEmd.LogicalName, service);
 
                 ListViewItem item = new ListViewItem();
-                item.Text = "preview";
-
+                
                 foreach (XmlNode columnNode in layoutDoc.SelectNodes("grid/row/cell"))
                 {
                     ColumnHeader header = new ColumnHeader();
@@ -486,7 +485,10 @@ namespace MsCrmTools.ViewLayoutReplicator
 
                     ListViewDelegates.AddColumn(lvSourceViewLayoutPreview, header);
 
-                    item.SubItems.Add("preview");
+                    if(string.IsNullOrEmpty(item.Text))//item.SubItems.Add("preview");
+                        item.Text = columnNode.Attributes["width"].Value + "px";
+                    else
+                        item.SubItems.Add(columnNode.Attributes["width"].Value + "px");
                 }
 
                 ListViewDelegates.AddItem(lvSourceViewLayoutPreview, item);

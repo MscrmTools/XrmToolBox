@@ -38,10 +38,14 @@
             this.lblResourceName = new System.Windows.Forms.Label();
             this.panelControl = new System.Windows.Forms.Panel();
             this.toolStripScriptContent = new System.Windows.Forms.ToolStrip();
-            this.tsbSaveContent = new System.Windows.Forms.ToolStripButton();
-            this.tsbUpload = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbPublish = new System.Windows.Forms.ToolStripButton();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.fileMenuSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.fileMenuReplace = new System.Windows.Forms.ToolStripMenuItem();
+            this.fileMenuUpdateAndPublish = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsSeparatorEdit = new System.Windows.Forms.ToolStripSeparator();
+            this.tsddbEdit = new System.Windows.Forms.ToolStripDropDownButton();
+            this.findToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.replaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparatorMinifyJS = new System.Windows.Forms.ToolStripSeparator();
             this.tsbMinifyJS = new System.Windows.Forms.ToolStripButton();
             this.tsbPreviewHtml = new System.Windows.Forms.ToolStripButton();
@@ -77,6 +81,7 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.openWebResourceRecordInCRMApplicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyWebResourceNameToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -191,10 +196,9 @@
             this.toolStripScriptContent.AutoSize = false;
             this.toolStripScriptContent.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStripScriptContent.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsbSaveContent,
-            this.tsbUpload,
-            this.toolStripSeparator8,
-            this.tsbPublish,
+            this.toolStripDropDownButton1,
+            this.tsSeparatorEdit,
+            this.tsddbEdit,
             this.toolStripSeparatorMinifyJS,
             this.tsbMinifyJS,
             this.tsbPreviewHtml});
@@ -205,43 +209,87 @@
             this.toolStripScriptContent.Text = "toolStripScriptContent";
             this.toolStripScriptContent.Visible = false;
             // 
-            // tsbSaveContent
+            // toolStripDropDownButton1
             // 
-            this.tsbSaveContent.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbSaveContent.Enabled = false;
-            this.tsbSaveContent.Image = ((System.Drawing.Image)(resources.GetObject("tsbSaveContent.Image")));
-            this.tsbSaveContent.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbSaveContent.Name = "tsbSaveContent";
-            this.tsbSaveContent.Size = new System.Drawing.Size(23, 22);
-            this.tsbSaveContent.Text = "Save Web Resource";
-            this.tsbSaveContent.Click += new System.EventHandler(this.TsbSaveContentClick);
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileMenuSave,
+            this.fileMenuReplace,
+            this.fileMenuUpdateAndPublish});
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(38, 22);
+            this.toolStripDropDownButton1.Text = "File";
             // 
-            // tsbUpload
+            // fileMenuSave
             // 
-            this.tsbUpload.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbUpload.Enabled = false;
-            this.tsbUpload.Image = ((System.Drawing.Image)(resources.GetObject("tsbUpload.Image")));
-            this.tsbUpload.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbUpload.Name = "tsbUpload";
-            this.tsbUpload.Size = new System.Drawing.Size(23, 22);
-            this.tsbUpload.Text = "Replace with new file";
-            this.tsbUpload.Click += new System.EventHandler(this.TsbUploadClick);
+            this.fileMenuSave.Enabled = false;
+            this.fileMenuSave.Image = ((System.Drawing.Image)(resources.GetObject("fileMenuSave.Image")));
+            this.fileMenuSave.Name = "fileMenuSave";
+            this.fileMenuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.fileMenuSave.Size = new System.Drawing.Size(226, 22);
+            this.fileMenuSave.Text = "Save";
+            this.fileMenuSave.ToolTipText = "Save this content in memory. This does not update the web resource content of the" +
+    " connected organization";
+            this.fileMenuSave.Click += new System.EventHandler(this.FileMenuSaveClick);
             // 
-            // toolStripSeparator8
+            // fileMenuReplace
             // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
+            this.fileMenuReplace.Enabled = false;
+            this.fileMenuReplace.Image = ((System.Drawing.Image)(resources.GetObject("fileMenuReplace.Image")));
+            this.fileMenuReplace.Name = "fileMenuReplace";
+            this.fileMenuReplace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.fileMenuReplace.Size = new System.Drawing.Size(226, 22);
+            this.fileMenuReplace.Text = "Replace with new file";
+            this.fileMenuReplace.ToolTipText = "Replace this web resource content with content of a local file";
+            this.fileMenuReplace.Click += new System.EventHandler(this.FileMenuReplaceClick);
             // 
-            // tsbPublish
+            // fileMenuUpdateAndPublish
             // 
-            this.tsbPublish.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbPublish.Enabled = false;
-            this.tsbPublish.Image = ((System.Drawing.Image)(resources.GetObject("tsbPublish.Image")));
-            this.tsbPublish.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbPublish.Name = "tsbPublish";
-            this.tsbPublish.Size = new System.Drawing.Size(23, 22);
-            this.tsbPublish.Text = "Publish this web resource";
-            this.tsbPublish.Click += new System.EventHandler(this.TsbPublishClick);
+            this.fileMenuUpdateAndPublish.Enabled = false;
+            this.fileMenuUpdateAndPublish.Image = ((System.Drawing.Image)(resources.GetObject("fileMenuUpdateAndPublish.Image")));
+            this.fileMenuUpdateAndPublish.Name = "fileMenuUpdateAndPublish";
+            this.fileMenuUpdateAndPublish.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
+            this.fileMenuUpdateAndPublish.Size = new System.Drawing.Size(226, 22);
+            this.fileMenuUpdateAndPublish.Text = "Update and publish";
+            this.fileMenuUpdateAndPublish.ToolTipText = "Update the web resource content of the connected organization and publish it";
+            this.fileMenuUpdateAndPublish.Click += new System.EventHandler(this.FileMenuUpdateAndPublishClick);
+            // 
+            // tsSeparatorEdit
+            // 
+            this.tsSeparatorEdit.Name = "tsSeparatorEdit";
+            this.tsSeparatorEdit.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsddbEdit
+            // 
+            this.tsddbEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsddbEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.findToolStripMenuItem,
+            this.replaceToolStripMenuItem});
+            this.tsddbEdit.Image = ((System.Drawing.Image)(resources.GetObject("tsddbEdit.Image")));
+            this.tsddbEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsddbEdit.Name = "tsddbEdit";
+            this.tsddbEdit.Size = new System.Drawing.Size(40, 22);
+            this.tsddbEdit.Text = "Edit";
+            // 
+            // findToolStripMenuItem
+            // 
+            this.findToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("findToolStripMenuItem.Image")));
+            this.findToolStripMenuItem.Name = "findToolStripMenuItem";
+            this.findToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
+            this.findToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.findToolStripMenuItem.Text = "Find";
+            this.findToolStripMenuItem.Click += new System.EventHandler(this.FindToolStripMenuItemClick);
+            // 
+            // replaceToolStripMenuItem
+            // 
+            this.replaceToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("replaceToolStripMenuItem.Image")));
+            this.replaceToolStripMenuItem.Name = "replaceToolStripMenuItem";
+            this.replaceToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
+            this.replaceToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.replaceToolStripMenuItem.Text = "Replace";
+            this.replaceToolStripMenuItem.Click += new System.EventHandler(this.ReplaceToolStripMenuItemClick);
             // 
             // toolStripSeparatorMinifyJS
             // 
@@ -415,11 +463,12 @@
             this.toolStripSeparator3,
             this.deleteToolStripMenuItem,
             this.toolStripSeparator5,
+            this.openWebResourceRecordInCRMApplicationToolStripMenuItem,
             this.copyWebResourceNameToClipboardToolStripMenuItem,
             this.toolStripSeparator7,
             this.propertiesToolStripMenuItem});
             this.contextMenuStripTreeView.Name = "contextMenuStripTreeView";
-            this.contextMenuStripTreeView.Size = new System.Drawing.Size(338, 254);
+            this.contextMenuStripTreeView.Size = new System.Drawing.Size(338, 276);
             // 
             // addNewWebResourceToolStripMenuItem
             // 
@@ -544,6 +593,14 @@
             this.toolStripSeparator5.Name = "toolStripSeparator5";
             this.toolStripSeparator5.Size = new System.Drawing.Size(334, 6);
             // 
+            // openWebResourceRecordInCRMApplicationToolStripMenuItem
+            // 
+            this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openWebResourceRecordInCRMApplicationToolStripMenuItem.Image")));
+            this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Name = "openWebResourceRecordInCRMApplicationToolStripMenuItem";
+            this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Text = "Open web resource record in CRM application";
+            this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Click += new System.EventHandler(this.OpenWebResourceRecordInCrmApplicationToolStripMenuItemClick);
+            // 
             // copyWebResourceNameToClipboardToolStripMenuItem
             // 
             this.copyWebResourceNameToClipboardToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copyWebResourceNameToClipboardToolStripMenuItem.Image")));
@@ -597,10 +654,6 @@
         private System.Windows.Forms.Label lblResourceName;
         private System.Windows.Forms.Panel panelControl;
         private System.Windows.Forms.ToolStrip toolStripScriptContent;
-        private System.Windows.Forms.ToolStripButton tsbSaveContent;
-        private System.Windows.Forms.ToolStripButton tsbUpload;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
-        private System.Windows.Forms.ToolStripButton tsbPublish;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparatorMinifyJS;
         private System.Windows.Forms.ToolStripButton tsbMinifyJS;
         private System.Windows.Forms.ToolStripButton tsbPreviewHtml;
@@ -640,5 +693,14 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem copyWebResourceNameToClipboardToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ToolStripSeparator tsSeparatorEdit;
+        private System.Windows.Forms.ToolStripDropDownButton tsddbEdit;
+        private System.Windows.Forms.ToolStripMenuItem findToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem replaceToolStripMenuItem;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripMenuItem fileMenuSave;
+        private System.Windows.Forms.ToolStripMenuItem fileMenuReplace;
+        private System.Windows.Forms.ToolStripMenuItem fileMenuUpdateAndPublish;
+        private System.Windows.Forms.ToolStripMenuItem openWebResourceRecordInCRMApplicationToolStripMenuItem;
     }
 }

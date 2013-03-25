@@ -100,29 +100,25 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             return innerContent;
         }
 
-        public void ReplaceWithNewFile()
+        public void ReplaceWithNewFile(string filename)
         {
             try
             {
-                var ofd = new OpenFileDialog
-                              {
-                                  Title = "Select a file to replace the existing web resource",
-                                  Filter = "ICO file (*.ico)|*.ico"
-                              };
+                innerContent = Convert.ToBase64String(File.ReadAllBytes(filename));
+                Icon_Load(null, null);
 
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    innerContent = Convert.ToBase64String(File.ReadAllBytes(ofd.FileName));
-                    Icon_Load(null, null);
-
-                    SendSavedMessage();
-                }
+                SendSavedMessage();
             }
             catch (Exception error)
             {
                 MessageBox.Show(ParentForm, "Error while updating file: " + error.Message, "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        public Enumerations.WebResourceType GetWebResourceType()
+        {
+            return Enumerations.WebResourceType.Ico;
         }
 
         private void SendSavedMessage()
