@@ -51,8 +51,8 @@ namespace MsCrmTools.WebResourcesManager
             try
             {
                 var qba = new QueryByAttribute("webresource") {ColumnSet = new ColumnSet(true)};
-                qba.Attributes.AddRange(new[] { "ishidden", "ismanaged" });
-                qba.Values.AddRange(new object[] { false, false });
+                qba.Attributes.AddRange(new[] { "ishidden", "iscustomizable" });
+                qba.Values.AddRange(new object[] { false , true });
 
                 return innerService.RetrieveMultiple(qba);
             }

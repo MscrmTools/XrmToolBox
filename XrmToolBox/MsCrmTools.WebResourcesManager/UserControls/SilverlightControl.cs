@@ -64,29 +64,23 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             return innerContent;
         }
 
-        public void ReplaceWithNewFile()
+        public void ReplaceWithNewFile(string filename)
         {
             try
             {
-                var ofd = new OpenFileDialog
-                              {
-                                  Title = "Select a file to replace the existing web resource",
-                                  Filter = "Silverlight application file (*.xap)|*.xap"
-                              };
-
-
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    innerContent = Convert.ToBase64String(File.ReadAllBytes(ofd.FileName));
-
-                    SendSavedMessage();
-                }
+                innerContent = Convert.ToBase64String(File.ReadAllBytes(filename));
+                SendSavedMessage();
             }
             catch (Exception error)
             {
                 MessageBox.Show(ParentForm, "Error while updating file: " + error.Message, "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        public Enumerations.WebResourceType GetWebResourceType()
+        {
+            throw new NotImplementedException();
         }
 
         private void SendSavedMessage()

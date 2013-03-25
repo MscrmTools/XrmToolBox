@@ -41,6 +41,8 @@ namespace MsCrmTools.RoleUpdater.Controls
 
         private Panel infoPanel;
 
+        public delegate void SettingsAppliedHandler(object sender, EventArgs e);
+        public event SettingsAppliedHandler SettingsApplied;
 
         #endregion Variables
 
@@ -309,6 +311,8 @@ namespace MsCrmTools.RoleUpdater.Controls
     
         public void ApplyChanges()
         {
+            settings.Actions = actions;
+
             if (settings.Actions.Count == 0)
             {
                 MessageBox.Show(this, "Please select at least one privilege", "Warning", MessageBoxButtons.OK,
@@ -373,6 +377,11 @@ namespace MsCrmTools.RoleUpdater.Controls
         {
             infoPanel.Dispose();
             Controls.Remove(infoPanel);
+
+            if (SettingsApplied != null)
+            {
+                SettingsApplied(this, null);
+            }
         }
     }
 }

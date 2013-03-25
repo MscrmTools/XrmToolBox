@@ -100,32 +100,20 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         #region Methods
 
-        public void ReplaceWithNewFile()
+       
+        public string GetBase64WebResourceContent()
+        {
+            return innerContent;
+        }
+
+        public void ReplaceWithNewFile(string filename)
         {
             try
             {
-                var ofd = new OpenFileDialog {Title = "Select a file to replace the existing web resource"};
+                innerContent = Convert.ToBase64String(File.ReadAllBytes(filename));
+                ImageControl_Load(null, null);
 
-                switch (innerType)
-                {
-                    case Enumerations.WebResourceType.Png:
-                        ofd.Filter = "PNG image (*.png)|*.png";
-                        break;
-                    case Enumerations.WebResourceType.Jpg:
-                        ofd.Filter = "JPG image (*.jpg)|*.jpg";
-                        break;
-                    case Enumerations.WebResourceType.Gif:
-                        ofd.Filter = "GIF image (*.gif)|*.gif";
-                        break;
-                }
-
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    innerContent = Convert.ToBase64String(File.ReadAllBytes(ofd.FileName));
-                    ImageControl_Load(null, null);
-
-                    SendSavedMessage();
-                }
+                SendSavedMessage();
             }
             catch (Exception error)
             {
@@ -134,9 +122,9 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             }
         }
 
-        public string GetBase64WebResourceContent()
+        public Enumerations.WebResourceType GetWebResourceType()
         {
-            return innerContent;
+            return innerType;
         }
 
         private void SendSavedMessage()

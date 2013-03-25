@@ -6,10 +6,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
 using MsCrmTools.WebResourcesManager.AppCode;
 using MsCrmTools.WebResourcesManager.DelegatesHelpers;
 using MsCrmTools.WebResourcesManager.Forms;
@@ -42,6 +45,8 @@ namespace MsCrmTools.WebResourcesManager
         /// Information panel
         /// </summary>
         private Panel infoPanel;
+
+        const string OPENFILE_TITLE_MASK = "Select the {0} to replace the existing web resource";
 
         #endregion Variables
 
@@ -750,22 +755,105 @@ namespace MsCrmTools.WebResourcesManager
 
         #region WEBRESOURCE CONTENT - Actions
 
-        private void TsbUploadClick(object sender, EventArgs e)
-        {
-            ((IWebResourceControl)panelControl.Controls[0]).ReplaceWithNewFile();
-        }
-
-        private void TsbSaveContentClick(object sender, EventArgs e)
+        private void FileMenuSaveClick(object sender, EventArgs e)
         {
             string content = ((IWebResourceControl)panelControl.Controls[0]).GetBase64WebResourceContent();
 
             ((WebResource)tvWebResources.SelectedNode.Tag).WebResourceEntity["content"] = content;
 
-            tsbSaveContent.Enabled = false;
-            TvWebResourcesAfterSelect(null, null);
+            fileMenuSave.Enabled = false;
+            //TvWebResourcesAfterSelect(null, null);
+
+            if (lblResourceName.Text.Contains(" "))
+            {
+                lblResourceName.ForeColor = Color.Black;
+                lblResourceName.Text = lblResourceName.Text.Split(' ')[0];
+            }
         }
 
-        private void TsbPublishClick(object sender, EventArgs e)
+        private void FileMenuReplaceClick(object sender, EventArgs e)
+        {
+            try
+            {
+                var ctrl = ((IWebResourceControl)panelControl.Controls[0]);
+
+                using (var ofd = new OpenFileDialog())
+                {
+                    #region OpenFileDialog properties
+
+                    switch (ctrl.GetWebResourceType())
+                    {
+                        case Enumerations.WebResourceType.Gif:
+                            {
+                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "image");
+                                ofd.Filter = "Gif file (*.gif)|*.gif";
+                            }
+                            break;
+                        case Enumerations.WebResourceType.Jpg:
+                            {
+                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "image");
+                                ofd.Filter = "JPG file (*.jpg)|*.jpg";
+                            }
+                            break;
+                        case Enumerations.WebResourceType.Png:
+                            {
+                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "image");
+                                ofd.Filter = "PNG file (*.png)|*.png";
+                            }
+                            break;
+                        case Enumerations.WebResourceType.Ico:
+                            {
+                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "icon");
+                                ofd.Filter = "ICO file (*.ico)|*.ico";
+                            }
+                            break;
+                        case Enumerations.WebResourceType.Script:
+                            {
+                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "script file");
+                                ofd.Filter = "Javascript file (*.js)|*.js";
+                            }
+                            break;
+                        case Enumerations.WebResourceType.WebPage:
+                            {
+                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "web page");
+                                ofd.Filter = "Web page (*.html,*.htm)|*.html,*.htm";
+                            }
+                            break;
+                        case Enumerations.WebResourceType.Css:
+                            {
+                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "css file");
+                                ofd.Filter = "Stylesheet (*.css)|*.css";
+                            }
+                            break;
+                        case Enumerations.WebResourceType.Xsl:
+                            {
+                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "xslt file");
+                                ofd.Filter = "Transformation file (*.xslt)|*.xslt";
+                            }
+                            break;
+                        case Enumerations.WebResourceType.Silverlight:
+                            {
+                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "Silverlight application");
+                                ofd.Filter = "Silverlight application file (*.xap)|*.xap";
+                            }
+                            break;
+                    }
+
+                    #endregion OpenFileDialog properties
+
+                    if (ofd.ShowDialog() == DialogResult.OK)
+                    {
+                        ctrl.ReplaceWithNewFile(ofd.FileName);
+                    }
+                }
+            }
+            catch (AccessViolationException error)
+            {
+                MessageBox.Show(error.ToString());
+            }
+        }
+
+        private void FileMenuUpdateAndPublishClick(object sender, EventArgs e)
         {
             if (tvWebResources.SelectedNode != null)
             {
@@ -786,6 +874,7 @@ namespace MsCrmTools.WebResourcesManager
             }
         }
 
+
         private void TsbMinifyJsClick(object sender, EventArgs e)
         {
             if (DialogResult.Yes ==
@@ -801,6 +890,22 @@ namespace MsCrmTools.WebResourcesManager
 
             var wpDialog = new WebPreviewDialog(content);
             wpDialog.ShowDialog();
+        }
+
+        private void FindToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            var control = ((IWebResourceControl) panelControl.Controls[0]);
+            if (!(control is CodeControl)) return;
+
+            ((CodeControl)control).Find(false, this);
+        }
+
+        private void ReplaceToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            var control = ((IWebResourceControl)panelControl.Controls[0]);
+            if (!(control is CodeControl)) return;
+
+            ((CodeControl)control).Find(true, this);
         }
 
         #endregion WEBRESOURCE CONTENT - Actions
@@ -839,83 +944,103 @@ namespace MsCrmTools.WebResourcesManager
 
                 if (script.Contains("content") && script["content"] != null)
                 {
-                    switch (((OptionSetValue)script["webresourcetype"]).Value)
+                    switch (((OptionSetValue) script["webresourcetype"]).Value)
                     {
                         case 1:
                             ctrl = new CodeControl(script["content"].ToString(),
                                                    Enumerations.WebResourceType.WebPage);
-                            ((CodeControl)ctrl).WebResourceUpdated +=
+                            ((CodeControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
                             toolStripSeparatorMinifyJS.Visible = true;
                             tsbMinifyJS.Visible = false;
                             tsbPreviewHtml.Visible = true;
+                            tsSeparatorEdit.Visible = true;
+                            tsddbEdit.Visible = true;
                             break;
 
                         case 2:
                             ctrl = new CodeControl(script["content"].ToString(),
                                                    Enumerations.WebResourceType.Css);
-                            ((CodeControl)ctrl).WebResourceUpdated += MainFormWebResourceUpdated;
+                            ((CodeControl) ctrl).WebResourceUpdated += MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
                             tsbPreviewHtml.Visible = false;
+                            tsSeparatorEdit.Visible = true;
+                            tsddbEdit.Visible = true;
                             break;
                         case 3:
                             ctrl = new CodeControl(script["content"].ToString(),
                                                    Enumerations.WebResourceType.Script);
-                            ((CodeControl)ctrl).WebResourceUpdated +=
+                            ((CodeControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
                             toolStripSeparatorMinifyJS.Visible = true;
                             tsbMinifyJS.Visible = true;
                             tsbPreviewHtml.Visible = false;
+                            tsSeparatorEdit.Visible = true;
+                            tsddbEdit.Visible = true;
                             break;
                         case 4:
                             ctrl = new CodeControl(script["content"].ToString(),
                                                    Enumerations.WebResourceType.Data);
-                            ((CodeControl)ctrl).WebResourceUpdated +=
+                            ((CodeControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
                             tsbPreviewHtml.Visible = false;
+                            tsSeparatorEdit.Visible = true;
+                            tsddbEdit.Visible = true;
                             break;
                         case 5:
                             ctrl = new ImageControl(script["content"].ToString(),
                                                     Enumerations.WebResourceType.Png);
-                            ((ImageControl)ctrl).WebResourceUpdated +=
+                            ((ImageControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
                             tsbPreviewHtml.Visible = false;
+                            tsSeparatorEdit.Visible = false;
+                            tsddbEdit.Visible = false;
                             break;
                         case 6:
                             ctrl = new ImageControl(script["content"].ToString(),
                                                     Enumerations.WebResourceType.Jpg);
-                            ((ImageControl)ctrl).WebResourceUpdated +=
+                            ((ImageControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
                             tsbPreviewHtml.Visible = false;
+                            tsSeparatorEdit.Visible = false;
+                            tsddbEdit.Visible = false;
                             break;
                         case 7:
                             ctrl = new ImageControl(script["content"].ToString(),
                                                     Enumerations.WebResourceType.Gif);
-                            ((ImageControl)ctrl).WebResourceUpdated +=
+                            ((ImageControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
                             tsbPreviewHtml.Visible = false;
+                            tsSeparatorEdit.Visible = false;
+                            tsddbEdit.Visible = false;
                             break;
                         case 8:
                             ctrl = new UserControl();
+                            tsSeparatorEdit.Visible = false;
+                            tsddbEdit.Visible = false;
                             break;
                         case 9:
                             ctrl = new CodeControl(script["content"].ToString(),
                                                    Enumerations.WebResourceType.Xsl);
-                            ((CodeControl)ctrl).WebResourceUpdated +=
+                            ((CodeControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
                             tsbPreviewHtml.Visible = false;
+                            tsSeparatorEdit.Visible = true;
+                            tsddbEdit.Visible = true;
                             break;
                         case 10:
                             ctrl = new IconControl(script["content"].ToString());
-                            ((IconControl)ctrl).WebResourceUpdated +=
+                            ((IconControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
                             tsbPreviewHtml.Visible = false;
+                            tsSeparatorEdit.Visible = false;
+                            tsddbEdit.Visible = false;
                             break;
                     }
                 }
@@ -926,17 +1051,17 @@ namespace MsCrmTools.WebResourcesManager
                     ctrl.Anchor = AnchorStyles.Bottom | AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
                     panelControl.Controls.Add(ctrl);
 
-                    tsbSaveContent.Enabled = false;
-                    tsbUpload.Enabled = true;
-                    tsbPublish.Enabled = true;
+                    fileMenuSave.Enabled = false;
+                    fileMenuReplace.Enabled = true;
+                    fileMenuUpdateAndPublish.Enabled = true;
 
                     lblResourceName.Text = script["name"].ToString();
                 }
                 else
                 {
-                    tsbSaveContent.Enabled = false;
-                    tsbUpload.Enabled = false;
-                    tsbPublish.Enabled = false;
+                    fileMenuSave.Enabled = false;
+                    fileMenuReplace.Enabled = false;
+                    fileMenuUpdateAndPublish.Enabled = false;
 
                     toolStripSeparatorMinifyJS.Visible = false;
                     tsbMinifyJS.Visible = false;
@@ -950,9 +1075,9 @@ namespace MsCrmTools.WebResourcesManager
                 // Clear script content
                 if (tvWebResources.SelectedNode != null) tvWebResources.SelectedNode.ContextMenuStrip = null;
 
-                tsbSaveContent.Enabled = false;
-                tsbUpload.Enabled = false;
-                tsbPublish.Enabled = false;
+                fileMenuSave.Enabled = false;
+                fileMenuReplace.Enabled = false;
+                fileMenuUpdateAndPublish.Enabled = false;
                 toolStripScriptContent.Visible = false;
                 lblResourceName.Visible = false;
             }
@@ -1024,7 +1149,21 @@ namespace MsCrmTools.WebResourcesManager
 
         void MainFormWebResourceUpdated(object sender, WebResourceUpdatedEventArgs e)
         {
-            tsbSaveContent.Enabled = e.IsDirty;
+            fileMenuSave.Enabled = e.IsDirty;
+
+            if (e.IsDirty)
+            {
+                if (!lblResourceName.Text.Contains(" (not saved)"))
+                {
+                    lblResourceName.ForeColor = Color.Red;
+                    lblResourceName.Text += " (not saved)";
+                }
+            }
+            else
+            {
+                lblResourceName.ForeColor = Color.Black;
+                lblResourceName.Text = lblResourceName.Text.Split(' ')[0];
+            }
         }
 
         void SetWorkingState(bool working)
@@ -1036,12 +1175,12 @@ namespace MsCrmTools.WebResourcesManager
             chkSelectAll.Enabled = !working;
             toolStripScriptContent.Enabled = !working;
 
-            tsbSaveContent.Enabled = false;
+            fileMenuSave.Enabled = false;
             var selectedNode = tvWebResources.SelectedNode;
             if (selectedNode != null)
             {
-                tsbUpload.Enabled = selectedNode.Tag != null;
-                tsbPublish.Enabled = selectedNode.Tag != null;
+                fileMenuReplace.Enabled = selectedNode.Tag != null;
+                fileMenuUpdateAndPublish.Enabled = selectedNode.Tag != null;
             }
 
             Cursor = working ? Cursors.WaitCursor : Cursors.Default;
@@ -1060,5 +1199,25 @@ namespace MsCrmTools.WebResourcesManager
 
         #endregion
 
+        private void OpenWebResourceRecordInCrmApplicationToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            var wr = ((WebResource) tvWebResources.SelectedNode.Tag).WebResourceEntity;
+
+            if (wr.Id != Guid.Empty)
+            {
+                var url = ((OrganizationServiceProxy) service).ServiceConfiguration.CurrentServiceEndpoint.Address.Uri
+                                                              .AbsoluteUri.Replace(
+                                                                  "/XRMServices/2011/Organization.svc",
+                                                                  "/main.aspx?id=" + wr.Id.ToString("B") + "&etc=9333&pagetype=webresourceedit")
+                                                              .Replace(".api", "");
+
+                Process.Start(url);
+            }
+            else
+            {
+                MessageBox.Show(this, "This web resource does not exist on the CRM organization yet", "Warning",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
     }
 }

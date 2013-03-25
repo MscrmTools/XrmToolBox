@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppCode\Enumerations.cs" />
+    <Compile Include="AppCode\Globals.cs" />
     <Compile Include="AppCode\SolutionComponentType.cs" />
     <Compile Include="AppCode\TreeViewHelper.cs" />
     <Compile Include="DelegatesHelpers\CommonDelegates.cs" />
@@ -71,6 +72,12 @@
     <Compile Include="DelegatesHelpers\ProgressBarDelegates.cs" />
     <Compile Include="DelegatesHelpers\TextBoxDelegates.cs" />
     <Compile Include="DelegatesHelpers\TreeViewDelegates.cs" />
+    <Compile Include="Forms\FindAndReplaceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FindAndReplaceForm.designer.cs">
+      <DependentUpon>FindAndReplaceForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\InvalidFileListDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -165,6 +172,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\FindAndReplaceForm.resx">
+      <DependentUpon>FindAndReplaceForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\InvalidFileListDialog.resx">
       <DependentUpon>InvalidFileListDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -214,7 +224,7 @@ xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.WebResourcesManager.pdb" "$(Solution
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="False" BuildVersion_UpdateFileVersion="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
