@@ -5,8 +5,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using MsCrmTools.WebResourcesManager.AppCode;
 
@@ -46,15 +48,33 @@ namespace MsCrmTools.WebResourcesManager
         /// Retrieves all web resources that are customizable
         /// </summary>
         /// <returns>List of web resources</returns>
-        internal EntityCollection RetrieveWebResources()
+        internal EntityCollection RetrieveWebResources(Guid solutionId)
         {
             try
             {
-                var qba = new QueryByAttribute("webresource") {ColumnSet = new ColumnSet(true)};
-                qba.Attributes.AddRange(new[] { "ishidden", "iscustomizable" });
-                qba.Values.AddRange(new object[] { false , true });
+                if (solutionId == Guid.Empty)
+                {
+                    var qba = new QueryByAttribute("webresource") {ColumnSet = new ColumnSet(true)};
+                    qba.Attributes.AddRange(new[] {"ishidden", "iscustomizable"});
+                    qba.Values.AddRange(new object[] {false, true});
+                    qba.Orders.Add(new OrderExpression("name", OrderType.Ascending));
 
-                return innerService.RetrieveMultiple(qba);
+                    return innerService.RetrieveMultiple(qba);
+                }
+                else
+                {
+                    var qba = new QueryByAttribute("solutioncomponent") {ColumnSet = new ColumnSet(true)};
+                    qba.Attributes.AddRange(new[] { "solutionid", "componenttype" });
+                    qba.Values.AddRange(new object[] { solutionId, 61 });
+
+                    var components = innerService.RetrieveMultiple(qba).Entities;
+
+                    var list = components.Select(component => component.GetAttributeValue<Guid>("objectid").ToString("B")).ToList();
+
+                    var qe = new QueryExpression("webresource") {ColumnSet = new ColumnSet(true)};
+                    qe.Criteria.AddCondition("webresourceid", ConditionOperator.In, list.ToArray());
+                    return innerService.RetrieveMultiple(qe);
+                }
             }
             catch (Exception error)
             {
@@ -231,6 +251,18 @@ namespace MsCrmTools.WebResourcesManager
         {
             byte[] byt = System.Text.Encoding.UTF8.GetBytes(content);
             return Convert.ToBase64String(byt);
+        }
+
+        internal bool HasDependencies(Guid webresourceId)
+        {
+            var request = new RetrieveDependenciesForDeleteRequest
+                              {
+                                  ComponentType = SolutionComponentType.WebResource,
+                                  ObjectId = webresourceId
+                              };
+
+            var response = (RetrieveDependenciesForDeleteResponse)innerService.Execute(request);
+            return response.EntityCollection.Entities.Count != 0;
         }
 
         #endregion

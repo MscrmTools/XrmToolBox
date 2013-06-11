@@ -63,6 +63,9 @@
             this.saveAllWebResourcesToDiskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbNewRoot = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.findUnusedWebResourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStripTreeView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addNewWebResourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewEmptyWebResourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,6 +88,8 @@
             this.copyWebResourceNameToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -331,7 +336,9 @@
             this.tsddCrmMenu,
             this.tsddFileMenu,
             this.toolStripSeparator6,
-            this.tsbNewRoot});
+            this.tsbNewRoot,
+            this.toolStripSeparator8,
+            this.toolStripDropDownButton2});
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
             this.tsMain.Size = new System.Drawing.Size(900, 25);
@@ -357,6 +364,8 @@
             // 
             this.tsddCrmMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.loadWebResourcesToolStripMenuItem,
+            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem,
+            this.toolStripSeparator9,
             this.updateCheckedWebResourcesToolStripMenuItem,
             this.updateAndPublishCheckedWebResourcesToolStripMenuItem,
             this.updatePublishAndAddToSolutionToolStripMenuItem});
@@ -447,6 +456,29 @@
             this.tsbNewRoot.Size = new System.Drawing.Size(76, 22);
             this.tsbNewRoot.Text = "New root";
             this.tsbNewRoot.Click += new System.EventHandler(this.TsbNewRootClick);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripDropDownButton2
+            // 
+            this.toolStripDropDownButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripDropDownButton2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.findUnusedWebResourcesToolStripMenuItem});
+            this.toolStripDropDownButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton2.Image")));
+            this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
+            this.toolStripDropDownButton2.Size = new System.Drawing.Size(49, 22);
+            this.toolStripDropDownButton2.Text = "Tools";
+            // 
+            // findUnusedWebResourcesToolStripMenuItem
+            // 
+            this.findUnusedWebResourcesToolStripMenuItem.Name = "findUnusedWebResourcesToolStripMenuItem";
+            this.findUnusedWebResourcesToolStripMenuItem.Size = new System.Drawing.Size(287, 22);
+            this.findUnusedWebResourcesToolStripMenuItem.Text = "Find web resources without dependency";
+            this.findUnusedWebResourcesToolStripMenuItem.Click += new System.EventHandler(this.findUnusedWebResourcesToolStripMenuItem_Click);
             // 
             // contextMenuStripTreeView
             // 
@@ -622,6 +654,18 @@
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.PropertiesToolStripMenuItemClick);
             // 
+            // loadWebResourcesFromASpecificSolutionToolStripMenuItem
+            // 
+            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem.Name = "loadWebResourcesFromASpecificSolutionToolStripMenuItem";
+            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem.Size = new System.Drawing.Size(388, 22);
+            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem.Text = "Load Web resources from a specific solution";
+            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem.Click += new System.EventHandler(this.LoadWebResourcesFromASpecificSolutionToolStripMenuItemClick);
+            // 
+            // toolStripSeparator9
+            // 
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(385, 6);
+            // 
             // WebResourcesManagerControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -702,5 +746,10 @@
         private System.Windows.Forms.ToolStripMenuItem fileMenuReplace;
         private System.Windows.Forms.ToolStripMenuItem fileMenuUpdateAndPublish;
         private System.Windows.Forms.ToolStripMenuItem openWebResourceRecordInCRMApplicationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton2;
+        private System.Windows.Forms.ToolStripMenuItem findUnusedWebResourcesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadWebResourcesFromASpecificSolutionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
     }
 }

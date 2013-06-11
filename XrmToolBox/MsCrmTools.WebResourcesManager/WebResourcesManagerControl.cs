@@ -86,7 +86,16 @@ namespace MsCrmTools.WebResourcesManager
             {
                 case "LoadWebResources":
                     {
-                        RetrieveWebResources();
+                        RetrieveWebResources(Guid.Empty);
+                    }
+                    break;
+                case "LoadWebResourcesFromSolution":
+                    {
+                        var sPicker = new SolutionPicker(service) {StartPosition = FormStartPosition.CenterParent};
+                        if (sPicker.ShowDialog(this) == DialogResult.OK)
+                        {
+                            RetrieveWebResources(sPicker.SelectedSolution.Id);
+                        }
                     }
                     break;
                 case "Update":
@@ -146,9 +155,42 @@ namespace MsCrmTools.WebResourcesManager
             }
         }
 
+        private void LoadWebResourcesFromASpecificSolutionToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            if (service == null)
+            {
+                tvWebResources.Nodes.Clear();
+
+                if (OnRequestConnection != null)
+                {
+                    var args = new RequestConnectionEventArgs { ActionName = "LoadWebResourcesFromSolution", Control = this };
+                    OnRequestConnection(this, args);
+                }
+            }
+            else
+            {
+                var sPicker = new SolutionPicker(service) {StartPosition = FormStartPosition.CenterParent};
+                if (sPicker.ShowDialog(this) == DialogResult.OK)
+                {
+                    tvWebResources.Nodes.Clear();
+
+                    SetWorkingState(true);
+
+                    infoPanel = InformationPanel.GetInformationPanel(this, "Loading web resources...", 340, 100);
+
+                    var bwFillWebResources = new BackgroundWorker();
+                    bwFillWebResources.DoWork += BwFillWebResourcesDoWork;
+                    bwFillWebResources.RunWorkerCompleted += BwFillWebResourcesRunWorkerCompleted;
+                    bwFillWebResources.RunWorkerAsync(sPicker.SelectedSolution.Id);
+                }
+            }
+        }
+
         private void BwFillWebResourcesDoWork(object sender, DoWorkEventArgs e)
         {
-            RetrieveWebResources();
+            Guid solutionId = e.Argument != null ? (Guid)e.Argument : Guid.Empty;
+
+            RetrieveWebResources(solutionId);
         }
 
         private void BwFillWebResourcesRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -163,14 +205,18 @@ namespace MsCrmTools.WebResourcesManager
                 tvWebResources.Enabled = true;
             }
 
+            tvWebResources.ExpandAll();
+            tvWebResources.TreeViewNodeSorter = new NodeSorter();
+            tvWebResources.Sort();
+
             infoPanel.Dispose();
             Controls.Remove(infoPanel);
             SetWorkingState(false);
         }
 
-        private void RetrieveWebResources()
+        private void RetrieveWebResources(Guid solutionId)
         {
-            EntityCollection scripts = wrManager.RetrieveWebResources();
+            EntityCollection scripts = wrManager.RetrieveWebResources(solutionId);
 
             //Todo ccsb.SetMessage(string.Empty);
 
@@ -185,8 +231,7 @@ namespace MsCrmTools.WebResourcesManager
                 AddNode(nameParts, 0, tvWebResources, wrObject);
             }
 
-            TreeViewDelegates.Sort(tvWebResources, new NodeSorter());
-            TreeViewDelegates.ExpandAll(tvWebResources);
+            
         }
 
         private void AddNode(string[] nameParts, int index, object parent, WebResource wrObject)
@@ -1174,6 +1219,7 @@ namespace MsCrmTools.WebResourcesManager
             tvWebResources.Enabled = !working;
             chkSelectAll.Enabled = !working;
             toolStripScriptContent.Enabled = !working;
+            findUnusedWebResourcesToolStripMenuItem.Enabled = !working;
 
             fileMenuSave.Enabled = false;
             var selectedNode = tvWebResources.SelectedNode;
@@ -1219,5 +1265,62 @@ namespace MsCrmTools.WebResourcesManager
                                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
+        private void findUnusedWebResourcesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var nodes = new List<TreeNode>();
+            TreeViewHelper.GetNodes(nodes, tvWebResources, false);
+
+            infoPanel = InformationPanel.GetInformationPanel(this, "Starting analysis...", 500, 100);
+
+            var bwFindUnunsedResources = new BackgroundWorker();
+            bwFindUnunsedResources.DoWork += BwFindUnunsedResourcesDoWork;
+            bwFindUnunsedResources.ProgressChanged += BwFindUnunsedResourcesProgressChanged;
+            bwFindUnunsedResources.RunWorkerCompleted += BwFindUnunsedResourcesRunWorkerCompleted;
+            bwFindUnunsedResources.WorkerReportsProgress = true;
+            bwFindUnunsedResources.RunWorkerAsync(nodes);
+        }
+
+        void BwFindUnunsedResourcesDoWork(object sender, DoWorkEventArgs e)
+        {
+            var bw = (BackgroundWorker) sender;
+            var nodes = (List<TreeNode>) e.Argument;
+
+            var unusedWebResources = new List<Entity>();
+            int i = 1;
+            foreach (TreeNode node in nodes)
+            {
+                var wr = ((WebResource)node.Tag).WebResourceEntity;
+
+                bw.ReportProgress((i*100)/nodes.Count, "Analyzing web resource " + wr["name"] + "...");
+
+                if (!wrManager.HasDependencies(wr.Id))
+                {
+                    unusedWebResources.Add(wr);
+                }
+                i++;
+            }
+
+            e.Result = unusedWebResources;
+        }
+
+        void BwFindUnunsedResourcesProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            InformationPanel.ChangeInformationPanelMessage(infoPanel, 
+                string.Format("{0}% - {1}", e.ProgressPercentage, e.UserState));
+        }
+
+        void BwFindUnunsedResourcesRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            infoPanel.Dispose();
+            Controls.Remove(infoPanel);
+
+            var dialog = new UnusedWebResourcesListDialog((List<Entity>) e.Result, service);
+            dialog.ShowInTaskbar = true;
+            dialog.StartPosition = FormStartPosition.CenterParent;
+            dialog.ShowDialog(this);
+        }
+
+        
     }
 }

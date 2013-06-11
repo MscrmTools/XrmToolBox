@@ -51,28 +51,34 @@ namespace XrmToolBox
 
                 foreach (var file in files)
                 {
-                    var assembly = Assembly.LoadFrom(file);
-
-                    foreach (var type in assembly.GetTypes())
+                    try
                     {
-                        if (type.IsPublic)
-                        {
-                            if ((type.Attributes & TypeAttributes.Abstract) != TypeAttributes.Abstract)
-                            {
-                                var iConnector = type.GetInterface("IMsCrmToolsPluginUserControl", true);
+                        var assembly = Assembly.LoadFrom(file);
 
-                                if (iConnector != null)
+                        foreach (var type in assembly.GetTypes())
+                        {
+                            if (type.IsPublic)
+                            {
+                                if ((type.Attributes & TypeAttributes.Abstract) != TypeAttributes.Abstract)
                                 {
-                                    try
+                                    var iConnector = type.GetInterface("IMsCrmToolsPluginUserControl", true);
+
+                                    if (iConnector != null)
                                     {
-                                        Plugins.Add(type);
-                                    }
-                                    catch
-                                    {
+                                        try
+                                        {
+                                            Plugins.Add(type);
+                                        }
+                                        catch
+                                        {
+                                        }
                                     }
                                 }
                             }
                         }
+                    }
+                    catch (Exception)
+                    {
                     }
                 }
             }
