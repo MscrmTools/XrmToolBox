@@ -72,6 +72,12 @@
     <Compile Include="DelegatesHelpers\ProgressBarDelegates.cs" />
     <Compile Include="DelegatesHelpers\TextBoxDelegates.cs" />
     <Compile Include="DelegatesHelpers\TreeViewDelegates.cs" />
+    <Compile Include="Forms\UnusedWebResourcesListDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UnusedWebResourcesListDialog.Designer.cs">
+      <DependentUpon>UnusedWebResourcesListDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FindAndReplaceForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,6 +178,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\UnusedWebResourcesListDialog.resx">
+      <DependentUpon>UnusedWebResourcesListDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FindAndReplaceForm.resx">
       <DependentUpon>FindAndReplaceForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -224,7 +233,7 @@ xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.WebResourcesManager.pdb" "$(Solution
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="False" BuildVersion_UpdateFileVersion="False" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

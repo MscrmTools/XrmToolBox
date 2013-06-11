@@ -44,8 +44,9 @@ namespace XrmToolBox
                                 AutoSize = false,
                                 TextAlign = ContentAlignment.MiddleCenter,
                                 Width = panel.Width,
+                                Height = panel.Height/2,
                                 Text = message,
-                                Location = new Point(0, panel.Height/4),
+                                Location = new Point(0, 10),
                                 Font = new Font("Segoe UI", 11F)
                             };
 
