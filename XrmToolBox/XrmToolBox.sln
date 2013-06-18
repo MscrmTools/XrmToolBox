@@ -29,9 +29,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.PrivDiscover", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.MetadataDocumentGenerator", "MsCrmTools.MetadataDocumentGenerator\MsCrmTools.MetadataDocumentGenerator.csproj", "{AEB54313-C622-49F4-8D9A-2D75BFA54901}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamSim.SolutionTransferTool", "DamSim.SolutionTransferTool\DamSim.SolutionTransferTool.csproj", "{2DA068AE-5B32-46B4-864D-0D8507A6D981}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 15
+		SccNumberOfProjects = 16
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs24
 		SccLocalPath0 = .
@@ -77,6 +79,9 @@ Global
 		SccProjectUniqueName14 = MsCrmTools.MetadataDocumentGenerator\\MsCrmTools.MetadataDocumentGenerator.csproj
 		SccProjectName14 = MsCrmTools.MetadataDocumentGenerator
 		SccLocalPath14 = MsCrmTools.MetadataDocumentGenerator
+		SccProjectUniqueName15 = DamSim.SolutionTransferTool\\DamSim.SolutionTransferTool.csproj
+		SccProjectName15 = DamSim.SolutionTransferTool
+		SccLocalPath15 = DamSim.SolutionTransferTool
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,7 +89,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5DD2E91B-6431-4391-AC45-205BD1B67818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -139,6 +143,10 @@ Global
 		{AEB54313-C622-49F4-8D9A-2D75BFA54901}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEB54313-C622-49F4-8D9A-2D75BFA54901}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEB54313-C622-49F4-8D9A-2D75BFA54901}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DA068AE-5B32-46B4-864D-0D8507A6D981}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DA068AE-5B32-46B4-864D-0D8507A6D981}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DA068AE-5B32-46B4-864D-0D8507A6D981}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DA068AE-5B32-46B4-864D-0D8507A6D981}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

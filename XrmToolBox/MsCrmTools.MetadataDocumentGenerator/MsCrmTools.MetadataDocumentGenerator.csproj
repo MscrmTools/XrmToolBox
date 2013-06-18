@@ -63,7 +63,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="XrmToolBox">
+    <Reference Include="XrmToolBox, Version=1.2013.6.11, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\XrmToolBox\bin\Debug\XrmToolBox.exe</HintPath>
     </Reference>
   </ItemGroup>
@@ -81,11 +82,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="MainControl.cs">
+    <Compile Include="MetadataDocumentGenerator.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MainControl.Designer.cs">
-      <DependentUpon>MainControl.cs</DependentUpon>
+    <Compile Include="MetadataDocumentGenerator.Designer.cs">
+      <DependentUpon>MetadataDocumentGenerator.cs</DependentUpon>
     </Compile>
     <Compile Include="XmlSerializerHelper.cs" />
   </ItemGroup>
@@ -94,8 +95,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainControl.resx">
-      <DependentUpon>MainControl.cs</DependentUpon>
+    <EmbeddedResource Include="MetadataDocumentGenerator.resx">
+      <DependentUpon>MetadataDocumentGenerator.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

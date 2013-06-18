@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.picture = new System.Windows.Forms.PictureBox();
-            this.lblTitle = new System.Windows.Forms.Label();
+            this.lblTitle = new XrmToolBox.UserControls.SmallPluginLabel();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,15 +47,13 @@
             // 
             this.lblTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblTitle.AutoEllipsis = true;
-            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitle.Location = new System.Drawing.Point(48, 14);
+            this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 14F);
+            this.lblTitle.Location = new System.Drawing.Point(47, 9);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(393, 23);
-            this.lblTitle.TabIndex = 1;
+            this.lblTitle.Size = new System.Drawing.Size(450, 30);
+            this.lblTitle.TabIndex = 2;
             this.lblTitle.Text = "[Label]";
-            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblTitle.Click += new System.EventHandler(this.MouseClick);
+            this.lblTitle.Click += new System.EventHandler(this.LblTitleClick);
             // 
             // SmallPluginModel
             // 
@@ -77,6 +75,6 @@
         #endregion
 
         private System.Windows.Forms.PictureBox picture;
-        private System.Windows.Forms.Label lblTitle;
+        private SmallPluginLabel lblTitle;
     }
 }

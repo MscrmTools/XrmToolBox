@@ -1,6 +1,6 @@
 ﻿namespace MsCrmTools.FetchXmlTester
 {
-    partial class MainControl
+    partial class FetchXmlTester
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FetchXmlTester));
             CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings5 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
             CSRichTextBoxSyntaxHighlighting.XMLViewerSettings xmlViewerSettings6 = new CSRichTextBoxSyntaxHighlighting.XMLViewerSettings();
             this.toolStripMenu = new System.Windows.Forms.ToolStrip();

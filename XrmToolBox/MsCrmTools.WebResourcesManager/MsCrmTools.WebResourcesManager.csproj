@@ -164,11 +164,11 @@
     <Compile Include="UserControls\WebResourceUpdatedEventArgs.cs" />
     <Compile Include="WebResource.cs" />
     <Compile Include="WebResourceManager.cs" />
-    <Compile Include="WebResourcesManagerControl.cs">
+    <Compile Include="WebResourcesManager.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="WebResourcesManagerControl.Designer.cs">
-      <DependentUpon>WebResourcesManagerControl.cs</DependentUpon>
+    <Compile Include="WebResourcesManager.Designer.cs">
+      <DependentUpon>WebResourcesManager.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -221,8 +221,8 @@
     <EmbeddedResource Include="UserControls\SilverlightControl.resx">
       <DependentUpon>SilverlightControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WebResourcesManagerControl.resx">
-      <DependentUpon>WebResourcesManagerControl.cs</DependentUpon>
+    <EmbeddedResource Include="WebResourcesManager.resx">
+      <DependentUpon>WebResourcesManager.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -233,7 +233,7 @@ xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.WebResourcesManager.pdb" "$(Solution
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

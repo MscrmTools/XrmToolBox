@@ -31,7 +31,7 @@ namespace XrmToolBox.UserControls
             InitializeComponent();
         }
 
-        public PluginModel(Image image, string title, string description, string company, string version)
+        public PluginModel(Image image, string title, string description, string company, string version, Color backColor, Color primaryColor)
         {
             InitializeComponent();
 
@@ -40,9 +40,16 @@ namespace XrmToolBox.UserControls
             lblDescription.Text = description;
             lblAuthor.Text = "Author: " + company;
             lblVersion.Text = "Version: " + version;
+
+            lblTitle.ForeColor = primaryColor;
+            lblDescription.ForeColor = primaryColor;
+            lblAuthor.ForeColor = primaryColor;
+            lblVersion.ForeColor = primaryColor;
+                
+            BackColor = backColor;
         }
 
-        public PluginModel(Stream imageStream, string title, string description, string company, string version)
+        public PluginModel(Stream imageStream, string title, string description, string company, string version, Color backColor, Color primaryColor)
         {
             InitializeComponent();
          
@@ -51,6 +58,13 @@ namespace XrmToolBox.UserControls
             lblDescription.Text = description;
             lblAuthor.Text = "Author: " + company;
             lblVersion.Text = "Version: " + version;
+
+            lblTitle.ForeColor = primaryColor;
+            lblDescription.ForeColor = primaryColor;
+            lblAuthor.ForeColor = primaryColor;
+            lblVersion.ForeColor = primaryColor;
+
+            BackColor = backColor;
         }
 
         #endregion Constructors

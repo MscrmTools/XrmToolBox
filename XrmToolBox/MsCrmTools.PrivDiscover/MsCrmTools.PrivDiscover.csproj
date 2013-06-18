@@ -71,11 +71,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="MainControl.cs">
+    <Compile Include="PrivDiscover.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MainControl.Designer.cs">
-      <DependentUpon>MainControl.cs</DependentUpon>
+    <Compile Include="PrivDiscover.Designer.cs">
+      <DependentUpon>PrivDiscover.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -83,8 +83,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="MainControl.resx">
-      <DependentUpon>MainControl.cs</DependentUpon>
+    <EmbeddedResource Include="PrivDiscover.resx">
+      <DependentUpon>PrivDiscover.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

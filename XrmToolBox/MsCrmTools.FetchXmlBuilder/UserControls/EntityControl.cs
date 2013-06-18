@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using Microsoft.Xrm.Sdk.Metadata;
 
 namespace MsCrmTools.FetchXmlBuilder.UserControls
 {
@@ -14,16 +15,19 @@ namespace MsCrmTools.FetchXmlBuilder.UserControls
     {
         private readonly XmlNode entityNode;
 
-        public EntityControl(XmlNode node)
+        private readonly Dictionary<string, EntityMetadata> cache;
+
+        public EntityControl(XmlNode node, Dictionary<string, EntityMetadata> cache)
         {
             InitializeComponent();
 
             entityNode = node;
+            this.cache = cache;
         }
 
         public XmlNode GetNode()
         {
-            if (txtEntityName.Text.Length != 0)
+            if (cbbEntities.SelectedItem != null)
             {
                 if (entityNode.Attributes["name"] == null)
                 {
@@ -31,7 +35,9 @@ namespace MsCrmTools.FetchXmlBuilder.UserControls
                     entityNode.Attributes.Append(page);
                 }
 
-                entityNode.Attributes["name"].Value = txtEntityName.Text;
+                entityNode.Attributes["name"].Value = cbbEntities.SelectedItem.ToString().StartsWith("N/A") ?
+                    cbbEntities.SelectedItem.ToString().Split('(')[1].Split(')')[0]
+                    : cbbEntities.SelectedItem.ToString();
             }
 
             return entityNode;
@@ -39,9 +45,37 @@ namespace MsCrmTools.FetchXmlBuilder.UserControls
 
         private void EntityControlLoad(object sender, EventArgs e)
         {
+            // Loads entity picklist
+            foreach (var emdKey in cache.Keys)
+            {
+                var displayName = cache[emdKey].DisplayName != null && cache[emdKey].DisplayName.UserLocalizedLabel != null
+                                      ? cache[emdKey].DisplayName.UserLocalizedLabel.Label
+                                      : string.Format("N/A ({0})", emdKey);
+
+                cbbEntities.Items.Add(displayName);
+            }
+
+
             if (entityNode != null && entityNode.Attributes != null)
             {
-                txtEntityName.Text = entityNode.Attributes["name"] != null ? entityNode.Attributes["name"].Value : "";
+                var currentEntityLogicalName = entityNode.Attributes["name"] != null
+                                                   ? entityNode.Attributes["name"].Value
+                                                   : "";
+
+                if (currentEntityLogicalName.Length > 0)
+                {
+                    var emd = cache.FirstOrDefault(x => x.Key == currentEntityLogicalName).Value;
+                    if (emd != null)
+                    {
+                        var displayName = emd.DisplayName != null
+                            ? emd.DisplayName.UserLocalizedLabel.Label
+                            : string.Format("N/A ({0})", currentEntityLogicalName);
+
+                        txtEntityName.Text = currentEntityLogicalName;
+
+                        cbbEntities.SelectedItem = displayName;
+                    }
+                }
             }
         }
     }

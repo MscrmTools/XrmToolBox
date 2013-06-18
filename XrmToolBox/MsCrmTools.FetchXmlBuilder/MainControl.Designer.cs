@@ -44,6 +44,8 @@
             this.tsmiAddLinkEntity = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbLoadMetadata = new System.Windows.Forms.ToolStripButton();
             this.toolStripMenu.SuspendLayout();
             this.cmsTree.SuspendLayout();
             this.SuspendLayout();
@@ -51,7 +53,9 @@
             // toolStripMenu
             // 
             this.toolStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsbClose});
+            this.tsbClose,
+            this.toolStripSeparator2,
+            this.tsbLoadMetadata});
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
             this.toolStripMenu.Size = new System.Drawing.Size(911, 25);
@@ -158,6 +162,20 @@
             this.tsmiDelete.Text = "Delete";
             this.tsmiDelete.Click += new System.EventHandler(this.TsmiDeleteClick);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsbLoadMetadata
+            // 
+            this.tsbLoadMetadata.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadMetadata.Image")));
+            this.tsbLoadMetadata.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbLoadMetadata.Name = "tsbLoadMetadata";
+            this.tsbLoadMetadata.Size = new System.Drawing.Size(106, 22);
+            this.tsbLoadMetadata.Text = "Load Metadata";
+            this.tsbLoadMetadata.Click += new System.EventHandler(this.TsbLoadMetadataClick);
+            // 
             // MainControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -194,5 +212,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiAddLinkEntity;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem tsmiDelete;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton tsbLoadMetadata;
     }
 }
