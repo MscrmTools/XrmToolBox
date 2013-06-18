@@ -59,11 +59,11 @@
     <Compile Include="AppCode\SolutionObject.cs" />
     <Compile Include="Delegates\CheckBoxDelegates.cs" />
     <Compile Include="Delegates\ListViewDelegates.cs" />
-    <Compile Include="IconatorControl.cs">
+    <Compile Include="Iconator.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="IconatorControl.Designer.cs">
-      <DependentUpon>IconatorControl.cs</DependentUpon>
+    <Compile Include="Iconator.Designer.cs">
+      <DependentUpon>Iconator.cs</DependentUpon>
     </Compile>
     <Compile Include="ImageCreationForm.cs">
       <SubType>Form</SubType>
@@ -93,8 +93,8 @@
     <Compile Include="WebResourcesManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="IconatorControl.resx">
-      <DependentUpon>IconatorControl.cs</DependentUpon>
+    <EmbeddedResource Include="Iconator.resx">
+      <DependentUpon>Iconator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -132,7 +132,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

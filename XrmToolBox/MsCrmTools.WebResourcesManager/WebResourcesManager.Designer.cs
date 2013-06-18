@@ -1,6 +1,6 @@
 ﻿namespace MsCrmTools.WebResourcesManager
 {
-    partial class WebResourcesManagerControl
+    partial class WebResourcesManager
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebResourcesManagerControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebResourcesManager));
             this.imageList2 = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.chkSelectAll = new System.Windows.Forms.CheckBox();

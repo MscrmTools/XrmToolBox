@@ -31,29 +31,47 @@ namespace XrmToolBox.UserControls
             InitializeComponent();
         }
 
-        public SmallPluginModel(Image image, string title, string description, string company, string version)
+        public SmallPluginModel(Image image, string title, string description, string company, string version, Color backColor, Color primaryColor, Color secondaryColor)
         {
             InitializeComponent();
 
             picture.Image = image;
+            lblTitle.PrimaryFontColor = primaryColor;
+            lblTitle.SecondaryFontColor = secondaryColor;
             lblTitle.Text = string.Format("{0} by {1} - {2}", title, company, version);
+
+            var tip = new ToolTip();
+            tip.SetToolTip(lblTitle, description);
+
+                BackColor = backColor;
         }
 
-        public SmallPluginModel(Stream imageStream, string title, string description, string company, string version)
+        public SmallPluginModel(Stream imageStream, string title, string description, string company, string version, Color backColor, Color primaryColor, Color secondaryColor)
         {
             InitializeComponent();
-         
+
             picture.Image = Image.FromStream(imageStream);
-            lblTitle.Text = title;
+            lblTitle.PrimaryFontColor = primaryColor;
+            lblTitle.SecondaryFontColor = secondaryColor;
             lblTitle.Text = string.Format("{0} by {1} - {2}", title, company, version);
+
+            var tip = new ToolTip();
+            tip.SetToolTip(lblTitle, description);
+
+            BackColor = backColor;
         }
 
         #endregion Constructors
 
-        private void MouseClick(object sender, EventArgs e)
+        private new void MouseClick(object sender, EventArgs e)
         {
             if(Clicked != null)
                 Clicked(this, new EventArgs());
+        }
+
+        private void LblTitleClick(object sender, EventArgs e)
+        {
+            MouseClick(null, null);
         }
     }
 }

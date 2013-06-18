@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.txtEntityName = new System.Windows.Forms.TextBox();
+            this.cbbEntities = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // txtEntityName
@@ -38,10 +39,20 @@
             this.txtEntityName.Size = new System.Drawing.Size(172, 20);
             this.txtEntityName.TabIndex = 0;
             // 
+            // cbbEntities
+            // 
+            this.cbbEntities.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbEntities.FormattingEnabled = true;
+            this.cbbEntities.Location = new System.Drawing.Point(133, 41);
+            this.cbbEntities.Name = "cbbEntities";
+            this.cbbEntities.Size = new System.Drawing.Size(172, 21);
+            this.cbbEntities.TabIndex = 1;
+            // 
             // EntityControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.cbbEntities);
             this.Controls.Add(this.txtEntityName);
             this.Name = "EntityControl";
             this.Size = new System.Drawing.Size(571, 484);
@@ -54,5 +65,6 @@
         #endregion
 
         private System.Windows.Forms.TextBox txtEntityName;
+        private System.Windows.Forms.ComboBox cbbEntities;
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace MsCrmTools.ViewLayoutReplicator
 {
-    partial class ViewLayoutReplicatorControl
+    partial class ViewLayoutReplicator
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewLayoutReplicatorControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewLayoutReplicator));
             this.gbEntities = new System.Windows.Forms.GroupBox();
             this.lvEntities = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -217,6 +217,7 @@
             this.lvSourceViews.UseCompatibleStateImageBehavior = false;
             this.lvSourceViews.View = System.Windows.Forms.View.Details;
             this.lvSourceViews.SelectedIndexChanged += new System.EventHandler(this.LvSourceViewsSelectedIndexChanged);
+            this.lvSourceViews.DoubleClick += new System.EventHandler(this.LvSourceViewsDoubleClick);
             // 
             // allViewName
             // 

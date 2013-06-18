@@ -74,16 +74,22 @@
     <Compile Include="Forms\ErrorList.Designer.cs">
       <DependentUpon>ErrorList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\XmlContentDisplayDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\XmlContentDisplayDialog.designer.cs">
+      <DependentUpon>XmlContentDisplayDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\MetadataHelper.cs" />
     <Compile Include="Helpers\ViewHelper.cs" />
     <Compile Include="Helpers\XmlHelper.cs" />
     <Compile Include="ListViewItemComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewLayoutReplicatorControl.cs">
+    <Compile Include="ViewLayoutReplicator.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ViewLayoutReplicatorControl.Designer.cs">
-      <DependentUpon>ViewLayoutReplicatorControl.cs</DependentUpon>
+    <Compile Include="ViewLayoutReplicator.Designer.cs">
+      <DependentUpon>ViewLayoutReplicator.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -104,8 +110,11 @@
     <EmbeddedResource Include="Forms\ErrorList.resx">
       <DependentUpon>ErrorList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ViewLayoutReplicatorControl.resx">
-      <DependentUpon>ViewLayoutReplicatorControl.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\XmlContentDisplayDialog.resx">
+      <DependentUpon>XmlContentDisplayDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ViewLayoutReplicator.resx">
+      <DependentUpon>ViewLayoutReplicator.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -120,7 +129,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
