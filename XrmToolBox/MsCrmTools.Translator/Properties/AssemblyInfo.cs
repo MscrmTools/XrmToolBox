@@ -1,4 +1,4 @@
-﻿// PROJECT : MsCrmTools.RolePrivilegeAnalyzer
+﻿// PROJECT : MsCrmTools.Translator
 // This project was developed by Tanguy Touzard
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
@@ -6,12 +6,12 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Privileges Discovery")]
-[assembly: AssemblyDescription("Find Roles that implements specific privileges")]
+[assembly: AssemblyTitle("Easy Translator")]
+[assembly: AssemblyDescription("Exports and Imports translations with contextual information")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MscrmTools")]
-[assembly: AssemblyProduct("MsCrmTools.PrivDiscover")]
-[assembly: AssemblyCopyright("Copyright © MscrmTools 2012")]
+[assembly: AssemblyProduct("Easy Translator")]
+[assembly: AssemblyCopyright("Copyright © MscrmTools 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
