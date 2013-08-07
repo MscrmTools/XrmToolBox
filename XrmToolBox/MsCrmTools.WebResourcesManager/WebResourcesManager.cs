@@ -11,6 +11,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using MsCrmTools.WebResourcesManager.AppCode;
@@ -1258,7 +1259,7 @@ namespace MsCrmTools.WebResourcesManager
 
             if (wr.Id != Guid.Empty)
             {
-                var url = ((OrganizationServiceProxy) service).ServiceConfiguration.CurrentServiceEndpoint.Address.Uri
+                var url = ((OrganizationServiceProxy) ((OrganizationService)service).InnerService).ServiceConfiguration.CurrentServiceEndpoint.Address.Uri
                                                               .AbsoluteUri.Replace(
                                                                   "/XRMServices/2011/Organization.svc",
                                                                   "/main.aspx?id=" + wr.Id.ToString("B") + "&etc=9333&pagetype=webresourceedit")

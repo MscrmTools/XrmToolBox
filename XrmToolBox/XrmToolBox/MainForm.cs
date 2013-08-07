@@ -199,7 +199,7 @@ namespace XrmToolBox
 
                 foreach (var plugin in pManager.Plugins.OrderBy(p => ((AssemblyTitleAttribute)GetAssemblyAttribute(p.Assembly, typeof(AssemblyTitleAttribute))).Title))
                 {
-                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.Name))
+                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.FullName))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth);
                     }
