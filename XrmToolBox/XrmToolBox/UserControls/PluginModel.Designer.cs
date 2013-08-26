@@ -33,6 +33,7 @@
             this.lblDescription = new System.Windows.Forms.Label();
             this.lblVersion = new System.Windows.Forms.Label();
             this.lblAuthor = new System.Windows.Forms.Label();
+            this.lblCount = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -54,7 +55,7 @@
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.Location = new System.Drawing.Point(104, 2);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(393, 23);
+            this.lblTitle.Size = new System.Drawing.Size(354, 23);
             this.lblTitle.TabIndex = 1;
             this.lblTitle.Text = "[Label]";
             this.lblTitle.Click += new System.EventHandler(this.MouseClick);
@@ -101,12 +102,25 @@
             this.lblAuthor.TabIndex = 4;
             this.lblAuthor.Text = "[Author]";
             // 
+            // lblCount
+            // 
+            this.lblCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblCount.AutoEllipsis = true;
+            this.lblCount.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCount.Location = new System.Drawing.Point(454, 2);
+            this.lblCount.Name = "lblCount";
+            this.lblCount.Size = new System.Drawing.Size(43, 23);
+            this.lblCount.TabIndex = 5;
+            this.lblCount.Text = "[NB]";
+            this.lblCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
             // PluginModel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.lblCount);
             this.Controls.Add(this.lblAuthor);
             this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.lblDescription);
@@ -129,5 +143,6 @@
         private System.Windows.Forms.Label lblDescription;
         private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.Label lblAuthor;
+        private System.Windows.Forms.Label lblCount;
     }
 }
