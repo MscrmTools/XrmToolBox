@@ -31,7 +31,7 @@ namespace XrmToolBox.UserControls
             InitializeComponent();
         }
 
-        public SmallPluginModel(Image image, string title, string description, string company, string version, Color backColor, Color primaryColor, Color secondaryColor)
+        public SmallPluginModel(Image image, string title, string description, string company, string version, Color backColor, Color primaryColor, Color secondaryColor, int count)
         {
             InitializeComponent();
 
@@ -39,6 +39,16 @@ namespace XrmToolBox.UserControls
             lblTitle.PrimaryFontColor = primaryColor;
             lblTitle.SecondaryFontColor = secondaryColor;
             lblTitle.Text = string.Format("{0} by {1} - {2}", title, company, version);
+
+            if (count > 0)
+            {
+                lblCount.Text = count.ToString();
+                lblCount.ForeColor = secondaryColor;
+            }
+            else
+            {
+                lblCount.Visible = false;
+            }
 
             var tip = new ToolTip();
             tip.SetToolTip(lblTitle, description);
@@ -72,6 +82,12 @@ namespace XrmToolBox.UserControls
         private void LblTitleClick(object sender, EventArgs e)
         {
             MouseClick(null, null);
+        }
+
+        public void UpdateCount(int count)
+        {
+            lblCount.Text = count.ToString();
+            Refresh();
         }
     }
 }

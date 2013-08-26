@@ -31,7 +31,7 @@ namespace XrmToolBox.UserControls
             InitializeComponent();
         }
 
-        public PluginModel(Image image, string title, string description, string company, string version, Color backColor, Color primaryColor)
+        public PluginModel(Image image, string title, string description, string company, string version, Color backColor, Color primaryColor, int count)
         {
             InitializeComponent();
 
@@ -47,9 +47,18 @@ namespace XrmToolBox.UserControls
             lblVersion.ForeColor = primaryColor;
                 
             BackColor = backColor;
+
+            if (count > 0)
+            {
+                lblCount.Text = count.ToString();
+            }
+            else
+            {
+                lblCount.Visible = false;
+            }
         }
 
-        public PluginModel(Stream imageStream, string title, string description, string company, string version, Color backColor, Color primaryColor)
+        public PluginModel(Stream imageStream, string title, string description, string company, string version, Color backColor, Color primaryColor, int count)
         {
             InitializeComponent();
          
@@ -65,6 +74,16 @@ namespace XrmToolBox.UserControls
             lblVersion.ForeColor = primaryColor;
 
             BackColor = backColor;
+
+            if (count > 0)
+            {
+                lblCount.Text = count.ToString();
+                lblCount.ForeColor = Color.Gainsboro;
+            }
+            else
+            {
+                lblCount.Visible = false;
+            }
         }
 
         #endregion Constructors
@@ -73,6 +92,11 @@ namespace XrmToolBox.UserControls
         {
             if(Clicked != null)
                 Clicked(this, new EventArgs());
+        }
+
+        public void UpdateCount(int count)
+        {
+            lblCount.Text = count.ToString();
         }
     }
 }
