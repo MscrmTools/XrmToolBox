@@ -35,6 +35,8 @@ namespace MsCrmTools.SolutionImport
         public SolutionImport()
         {
             InitializeComponent();
+
+            gbImportSolution.AllowDrop = true;
         }
 
         public IOrganizationService Service
