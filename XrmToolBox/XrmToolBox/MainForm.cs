@@ -193,7 +193,7 @@ namespace XrmToolBox
                     var plugin = pManager.Plugins.FirstOrDefault(x => x.FullName == item.Name);
                     if (plugin != null)
                     {
-                        DisplayOnePlugin(plugin, ref top, lastWidth);
+                        DisplayOnePlugin(plugin, ref top, lastWidth, item.Count);
                     }
                 }
 
@@ -250,7 +250,7 @@ namespace XrmToolBox
             return logo;
         }
 
-        private void DisplayOnePlugin(Type plugin, ref int top, int width)
+        private void DisplayOnePlugin(Type plugin, ref int top, int width, int count = -1)
         {
 
             var title = ((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyTitleAttribute))).Title;
@@ -264,7 +264,7 @@ namespace XrmToolBox
 
             if (currentOptions.DisplayLargeIcons)
             {
-                var pm = new PluginModel(GetImage(plugin), title, desc, author, version, backColor, primaryColor)
+                var pm = new PluginModel(GetImage(plugin), title, desc, author, version, backColor, primaryColor, count)
                 {
                     Left = 4,
                     Top = top,
@@ -278,7 +278,7 @@ namespace XrmToolBox
             }
             else
             {
-                var pm = new SmallPluginModel(GetImage(plugin, true), title, desc, author, version, backColor, primaryColor, secondaryColor)
+                var pm = new SmallPluginModel(GetImage(plugin, true), title, desc, author, version, backColor, primaryColor, secondaryColor, count)
                 {
                     Left = 4,
                     Top = top,
@@ -294,17 +294,14 @@ namespace XrmToolBox
 
         private void PluginClicked(object sender, EventArgs e)
         {
-            var plugin = (UserControl)sender;
-            var controlType = (Type)plugin.Tag;
-            var pluginControl = (UserControl)PluginManager.CreateInstance(controlType.Assembly.Location, controlType.FullName);
-
+           
             if (service == null && MessageBox.Show(this, "Do you want to connect to an organization first?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                fHelper.AskForConnection(pluginControl);
+                fHelper.AskForConnection(sender);
             }
             else
             {
-                DisplayPluginControl(pluginControl);
+                DisplayPluginControl((UserControl)sender);
             }
         }
 
@@ -330,8 +327,11 @@ namespace XrmToolBox
         
         #endregion Plugin information retriever
 
-        private void DisplayPluginControl(UserControl pluginControl)
+        private void DisplayPluginControl(UserControl plugin)
         {
+            var controlType = (Type)plugin.Tag;
+            var pluginControl = (UserControl)PluginManager.CreateInstance(controlType.Assembly.Location, controlType.FullName);
+
             if (service != null)
             {
                 var clonedService = new OrganizationService(CrmConnection.Parse(currentConnectionDetail.GetOrganizationCrmConnectionString()));
@@ -361,11 +361,22 @@ namespace XrmToolBox
             var pluginInOption = currentOptions.MostUsedList.FirstOrDefault(i => i.Name == pluginControl.GetType().FullName);
             if (pluginInOption == null)
             {
-                currentOptions.MostUsedList.Add(new PluginUseCount { Name = pluginControl.GetType().FullName, Count = 1 });
+                pluginInOption = new PluginUseCount {Name = pluginControl.GetType().FullName, Count = 0};
+                currentOptions.MostUsedList.Add(pluginInOption);
             }
+           
+            pluginInOption.Count++;
+
+            var p1 = plugin as SmallPluginModel;
+            if(p1 != null)
+                p1.UpdateCount(pluginInOption.Count);
             else
             {
-                pluginInOption.Count++;
+                var p2 = plugin as PluginModel;
+                if (p2 != null)
+                {
+                    p2.UpdateCount(pluginInOption.Count);
+                }
             }
 
             currentOptions.Save();
