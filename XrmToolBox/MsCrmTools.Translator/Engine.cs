@@ -262,6 +262,14 @@ namespace MsCrmTools.Translator
                     ft.ImportFormsContent(service, forms);
                 }
             }
+
+            if (worker != null && worker.WorkerReportsProgress)
+            {
+                worker.ReportProgress(0, "Publishing customizations...");
+            }
+
+            var paxRequest = new PublishAllXmlRequest();
+            service.Execute(paxRequest);
         }
     }
 }
