@@ -869,7 +869,7 @@ namespace MsCrmTools.WebResourcesManager
                         case Enumerations.WebResourceType.WebPage:
                             {
                                 ofd.Title = string.Format(OPENFILE_TITLE_MASK, "web page");
-                                ofd.Filter = "Web page (*.html,*.htm)|*.html,*.htm";
+                                ofd.Filter = "Web page (*.html,*.htm)|*.html;*.htm";
                             }
                             break;
                         case Enumerations.WebResourceType.Css:

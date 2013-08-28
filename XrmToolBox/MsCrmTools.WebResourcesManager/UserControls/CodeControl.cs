@@ -157,7 +157,11 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             try
             {
                 string newContent = Convert.ToBase64String(File.ReadAllBytes(filename));
-                innerContent = new StreamReader(filename).ReadToEnd();
+
+                using (var reader = new StreamReader(filename))
+                {
+                    innerContent = reader.ReadToEnd();
+                }
 
                 CodeControl_Load(null, null);
 
