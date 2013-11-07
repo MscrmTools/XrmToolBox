@@ -103,6 +103,7 @@ namespace MsCrmTools.ViewLayoutReplicator
             lvEntities.Items.Clear();
             gbEntities.Enabled = false;
             tsbPublishEntity.Enabled = false;
+            tsbPublishAll.Enabled = false;
             tsbSaveViews.Enabled = false;
 
             lvSourceViews.Items.Clear();
@@ -139,6 +140,9 @@ namespace MsCrmTools.ViewLayoutReplicator
             else
             {
                 gbEntities.Enabled = true;
+                tsbPublishEntity.Enabled = true;
+                tsbPublishAll.Enabled = true;
+                tsbSaveViews.Enabled = true;
             }
 
             Controls.Remove(informationPanel);
@@ -176,6 +180,7 @@ namespace MsCrmTools.ViewLayoutReplicator
         private void TsbSaveViewsClick(object sender, EventArgs e)
         {
             tsbPublishEntity.Enabled = false;
+            tsbPublishAll.Enabled = false;
             tsbSaveViews.Enabled = false;
             tsbLoadEntities.Enabled = false;
 
@@ -226,6 +231,7 @@ namespace MsCrmTools.ViewLayoutReplicator
             }
 
             tsbPublishEntity.Enabled = true;
+            tsbPublishAll.Enabled = true;
             tsbSaveViews.Enabled = true;
             tsbLoadEntities.Enabled = true;
         }
@@ -239,6 +245,7 @@ namespace MsCrmTools.ViewLayoutReplicator
             if (lvEntities.SelectedItems.Count > 0)
             {
                 tsbPublishEntity.Enabled = false;
+                tsbPublishAll.Enabled = false;
                 tsbSaveViews.Enabled = false;
                 tsbLoadEntities.Enabled = false;
 
@@ -286,6 +293,7 @@ namespace MsCrmTools.ViewLayoutReplicator
             Controls.Remove(informationPanel);
 
             tsbPublishEntity.Enabled = true;
+            tsbPublishAll.Enabled = true;
             tsbSaveViews.Enabled = true;
             tsbLoadEntities.Enabled = true;
         }
@@ -584,6 +592,48 @@ namespace MsCrmTools.ViewLayoutReplicator
 
             var dialog = new XmlContentDisplayDialog(view["layoutxml"].ToString());
             dialog.ShowDialog(this);
+        }
+
+        private void TsbPublishAllClick(object sender, EventArgs e)
+        {
+            tsbPublishEntity.Enabled = false;
+            tsbPublishAll.Enabled = false;
+            tsbSaveViews.Enabled = false;
+            tsbLoadEntities.Enabled = false;
+
+            Cursor = Cursors.WaitCursor;
+
+            informationPanel = InformationPanel.GetInformationPanel(this, "Publishing all customizations...", 340, 100);
+
+            var bwPublishAll = new BackgroundWorker();
+            bwPublishAll.DoWork += BwPublishAllDoWork;
+            bwPublishAll.RunWorkerCompleted += BwPublishAllRunWorkerCompleted;
+            bwPublishAll.RunWorkerAsync();
+        }
+
+        private void BwPublishAllDoWork(object sender, DoWorkEventArgs e)
+        {
+            var pubRequest = new PublishAllXmlRequest();
+            service.Execute(pubRequest);
+        }
+
+        private void BwPublishAllRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Cursor = Cursors.Default;
+
+            if (e.Error != null)
+            {
+                string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, false);
+                MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK,
+                                                  MessageBoxIcon.Error);
+            }
+
+            Controls.Remove(informationPanel);
+
+            tsbPublishEntity.Enabled = true;
+            tsbPublishAll.Enabled = true;
+            tsbSaveViews.Enabled = true;
+            tsbLoadEntities.Enabled = true;
         }
     }
 }

@@ -70,6 +70,7 @@
             this.lblOutputFilePath = new System.Windows.Forms.Label();
             this.lblOutputType = new System.Windows.Forms.Label();
             this.cbbOutputType = new System.Windows.Forms.ComboBox();
+            this.chkSelectAll = new System.Windows.Forms.CheckBox();
             this.toolStripMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.gbOptions.SuspendLayout();
@@ -268,6 +269,7 @@
             // 
             this.gbAttributeSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbAttributeSelection.Controls.Add(this.chkSelectAll);
             this.gbAttributeSelection.Controls.Add(this.lblSubSelect);
             this.gbAttributeSelection.Controls.Add(this.lblEntities);
             this.gbAttributeSelection.Controls.Add(this.lvEntities);
@@ -512,13 +514,24 @@
             this.cbbOutputType.TabIndex = 0;
             this.cbbOutputType.SelectedIndexChanged += new System.EventHandler(this.CbbOutputTypeSelectedIndexChanged);
             // 
-            // MainControl
+            // chkSelectAll
+            // 
+            this.chkSelectAll.AutoSize = true;
+            this.chkSelectAll.Location = new System.Drawing.Point(283, 51);
+            this.chkSelectAll.Name = "chkSelectAll";
+            this.chkSelectAll.Size = new System.Drawing.Size(116, 17);
+            this.chkSelectAll.TabIndex = 85;
+            this.chkSelectAll.Text = "Select/Unselect all";
+            this.chkSelectAll.UseVisualStyleBackColor = true;
+            this.chkSelectAll.CheckedChanged += new System.EventHandler(this.chkSelectAll_CheckedChanged);
+            // 
+            // MetadataDocumentGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStripMenu);
-            this.Name = "MainControl";
+            this.Name = "MetadataDocumentGenerator";
             this.Size = new System.Drawing.Size(911, 600);
             this.toolStripMenu.ResumeLayout(false);
             this.toolStripMenu.PerformLayout();
@@ -576,5 +589,6 @@
         private System.Windows.Forms.ToolStripDropDownButton settingsToolStripDropDownButton;
         private System.Windows.Forms.ToolStripMenuItem saveCurrentSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadSettingsToolStripMenuItem;
+        private System.Windows.Forms.CheckBox chkSelectAll;
     }
 }

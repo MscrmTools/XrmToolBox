@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
@@ -570,6 +571,20 @@ namespace MsCrmTools.AuditCenter
 
                 ai.Action = ActionState.None;
             }
+
+            InformationPanel.ChangeInformationPanelMessage(infoPanel, "Publishing changes...");
+
+            var publishRequest = new PublishXmlRequest{ParameterXml = "<importexportxml><entities>"};
+
+            foreach (EntityInfo ei in entityInfos.OrderBy(entity => entity.Emd.LogicalName))
+            {
+                publishRequest.ParameterXml += string.Format("<entity>{0}</entity>", ei.Emd.LogicalName);
+            }
+
+            publishRequest.ParameterXml +=
+                "</entities><securityroles/><settings/><workflows/></importexportxml>";
+
+            service.Execute(publishRequest);
         }
 
         private void ApplyBwRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

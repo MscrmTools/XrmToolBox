@@ -85,7 +85,7 @@
             this.tsbMainFindScripts.Name = "tsbMainFindScripts";
             this.tsbMainFindScripts.Size = new System.Drawing.Size(87, 22);
             this.tsbMainFindScripts.Text = "Find scripts";
-            this.tsbMainFindScripts.ToolTipText = "Load the SiteMap from a CRM Server\r\n\r\nRequires a connection to a CRM server";
+            this.tsbMainFindScripts.ToolTipText = "Loads the list of custom registered scripts";
             this.tsbMainFindScripts.Click += new System.EventHandler(this.TsbMainFindScriptsClick);
             // 
             // toolStripSeparator1

@@ -170,22 +170,32 @@ namespace MsCrmTools.SiteMapEditor
 
         private void ResetSiteMapToDefaultToolStripMenuItemClick(object sender, EventArgs e)
         {
+            ResetSiteMap(true);
+        }
+
+        private void resetCRM2013SiteMapToDefaultToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ResetSiteMap(false);
+        }
+
+        private void ResetSiteMap(bool isCrm2011)
+        {
             if (DialogResult.Yes ==
-                MessageBox.Show(this,
-                                "Are your sure you want to reset the SiteMap?\r\n\r\nChanges will take effect only if you update the SiteMap.",
-                                "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+               MessageBox.Show(this,
+                               "Are your sure you want to reset the SiteMap?\r\n\r\nChanges will take effect only if you update the SiteMap.",
+                               "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
             {
                 Assembly myAssembly = Assembly.GetExecutingAssembly();
                 using (
                     var reader =
                         new StreamReader(
-                            myAssembly.GetManifestResourceStream("MsCrmTools.SiteMapEditor.Resources.sitemap.xml")))
+                            myAssembly.GetManifestResourceStream(string.Format("MsCrmTools.SiteMapEditor.Resources.{0}.xml", isCrm2011 ? "sitemap" : "sitemap2013"))))
                 {
                     var doc = new XmlDocument();
                     doc.LoadXml(reader.ReadToEnd());
 
                     siteMapDoc = new XmlDocument();
-                    siteMapDoc.LoadXml(doc.SelectSingleNode("ImportExportXml/SiteMap/SiteMap").OuterXml);
+                    siteMapDoc.LoadXml(doc.DocumentElement.OuterXml);
                 }
 
                 DisplaySiteMap();
@@ -959,5 +969,7 @@ namespace MsCrmTools.SiteMapEditor
                 DialogResult.Yes)
                 OnCloseTool(this, null);
         }
+
+       
     }
 }

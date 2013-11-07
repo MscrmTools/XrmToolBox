@@ -79,6 +79,7 @@
             this.treeviewMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addRuleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.resetCRM2013SiteMapToDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gbProperties.SuspendLayout();
             this.toolStripItem.SuspendLayout();
             this.gbSiteMap.SuspendLayout();
@@ -343,7 +344,8 @@
             // 
             this.toolStripDropDownButtonMoreActions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripDropDownButtonMoreActions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.resetSiteMapToDefaultToolStripMenuItem});
+            this.resetSiteMapToDefaultToolStripMenuItem,
+            this.resetCRM2013SiteMapToDefaultToolStripMenuItem});
             this.toolStripDropDownButtonMoreActions.Enabled = false;
             this.toolStripDropDownButtonMoreActions.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButtonMoreActions.Image")));
             this.toolStripDropDownButtonMoreActions.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -354,8 +356,8 @@
             // resetSiteMapToDefaultToolStripMenuItem
             // 
             this.resetSiteMapToDefaultToolStripMenuItem.Name = "resetSiteMapToDefaultToolStripMenuItem";
-            this.resetSiteMapToDefaultToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.resetSiteMapToDefaultToolStripMenuItem.Text = "Reset SiteMap to default";
+            this.resetSiteMapToDefaultToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.resetSiteMapToDefaultToolStripMenuItem.Text = "Reset CRM 2011 SiteMap to default";
             this.resetSiteMapToDefaultToolStripMenuItem.ToolTipText = "Reset the current SiteMap to the default (post installation) SiteMap\r\n\r\nThis does" +
     " not apply to the SiteMap on the CRM server until you use the \"Import Solution\" " +
     "action";
@@ -533,6 +535,13 @@
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "Icon.png");
             // 
+            // resetCRM2013SiteMapToDefaultToolStripMenuItem
+            // 
+            this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Name = "resetCRM2013SiteMapToDefaultToolStripMenuItem";
+            this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Text = "Reset CRM 2013 SiteMap to default";
+            this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Click += new System.EventHandler(this.resetCRM2013SiteMapToDefaultToolStripMenuItem_Click);
+            // 
             // SiteMapEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -607,5 +616,6 @@
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ToolStripButton tsbCloseThisTab;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem resetCRM2013SiteMapToDefaultToolStripMenuItem;
     }
 }

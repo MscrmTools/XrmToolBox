@@ -52,6 +52,8 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbSaveViews = new System.Windows.Forms.ToolStripButton();
             this.tsbPublishEntity = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbPublishAll = new System.Windows.Forms.ToolStripButton();
             this.imageList2 = new System.Windows.Forms.ImageList(this.components);
             this.gbEntities.SuspendLayout();
             this.gbSourceViewLayout.SuspendLayout();
@@ -238,7 +240,9 @@
             this.tsbLoadEntities,
             this.toolStripSeparator1,
             this.tsbSaveViews,
-            this.tsbPublishEntity});
+            this.tsbPublishEntity,
+            this.toolStripSeparator3,
+            this.tsbPublishAll});
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
             this.tsMain.Size = new System.Drawing.Size(911, 25);
@@ -294,13 +298,28 @@
             this.tsbPublishEntity.Text = "Publish entity";
             this.tsbPublishEntity.Click += new System.EventHandler(this.TsbPublishEntityClick);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsbPublishAll
+            // 
+            this.tsbPublishAll.Enabled = false;
+            this.tsbPublishAll.Image = ((System.Drawing.Image)(resources.GetObject("tsbPublishAll.Image")));
+            this.tsbPublishAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbPublishAll.Name = "tsbPublishAll";
+            this.tsbPublishAll.Size = new System.Drawing.Size(81, 22);
+            this.tsbPublishAll.Text = "Publish all";
+            this.tsbPublishAll.Click += new System.EventHandler(this.TsbPublishAllClick);
+            // 
             // imageList2
             // 
             this.imageList2.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList2.ImageStream")));
             this.imageList2.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList2.Images.SetKeyName(0, "Icon.png");
             // 
-            // ViewLayoutReplicatorControl
+            // ViewLayoutReplicator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -309,7 +328,7 @@
             this.Controls.Add(this.gbTargetViews);
             this.Controls.Add(this.gbSourceViews);
             this.Controls.Add(this.tsMain);
-            this.Name = "ViewLayoutReplicatorControl";
+            this.Name = "ViewLayoutReplicator";
             this.Size = new System.Drawing.Size(911, 600);
             this.gbEntities.ResumeLayout(false);
             this.gbSourceViewLayout.ResumeLayout(false);
@@ -346,5 +365,7 @@
         private System.Windows.Forms.ImageList imageList2;
         private System.Windows.Forms.ToolStripButton tsbCloseThisTab;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripButton tsbPublishAll;
     }
 }

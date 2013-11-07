@@ -56,6 +56,8 @@ namespace MsCrmTools.WebResourcesManager
 
         const string OPENFILE_TITLE_MASK = "Select the {0} to replace the existing web resource";
 
+        private string currentFolderForFiles;
+
         #endregion Variables
 
         #region Constructor
@@ -493,8 +495,15 @@ namespace MsCrmTools.WebResourcesManager
                     ShowNewFolderButton = true
                 };
 
+
+                if (!string.IsNullOrEmpty(currentFolderForFiles))
+                {
+                    fbd.SelectedPath = currentFolderForFiles;
+                }
+
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
+                    currentFolderForFiles = fbd.SelectedPath;
                     tvWebResources.Nodes.Clear();
                     invalidFilenames = new List<string>();
 
