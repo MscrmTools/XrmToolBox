@@ -122,7 +122,7 @@ namespace XrmToolBox
 
             //ApplyConnectionToOpenedPlugins();
 
-            if(e.Parameter != null)
+            if (e.Parameter != null)
             {
                 var control = e.Parameter as UserControl;
                 if (control != null)
@@ -130,7 +130,7 @@ namespace XrmToolBox
                     var realUserControl = control;
                     DisplayPluginControl(realUserControl);
                 }
-                else if(e.Parameter.ToString() == "ApplyConnectionToTabs" && tabControl1.TabPages.Count > 1)
+                else if (e.Parameter.ToString() == "ApplyConnectionToTabs" && tabControl1.TabPages.Count > 1)
                 {
                     ApplyConnectionToTabs();
                 }
@@ -144,10 +144,14 @@ namespace XrmToolBox
                         args.Control.UpdateConnection(e.OrganizationService, args.ActionName);
 
                         userControl.Parent.Text = string.Format("{0} ({1})",
-                                                                userControl.Parent.Text.Split(' ')[0],
-                                                                e.ConnectionDetail.ConnectionName);
+                            userControl.Parent.Text.Split(' ')[0],
+                            e.ConnectionDetail.ConnectionName);
                     }
                 }
+            }
+            else if (tabControl1.TabPages.Count > 1)
+            {
+                ApplyConnectionToTabs();
             }
         }
 

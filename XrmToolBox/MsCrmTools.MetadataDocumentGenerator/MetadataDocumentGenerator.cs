@@ -143,6 +143,9 @@ namespace MsCrmTools.MetadataDocumentGenerator
         {
             infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving entities...", 340, 100);
 
+            lvEntities.Items.Clear();
+            cbbLcid.Items.Clear();
+
             var worker = new BackgroundWorker();
             worker.DoWork += WorkerDoWork;
             worker.ProgressChanged += WorkerProgressChanged;
@@ -652,5 +655,13 @@ namespace MsCrmTools.MetadataDocumentGenerator
         }
 
         #endregion Settings
+
+        private void chkSelectAll_CheckedChanged(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in lvEntities.Items)
+            {
+                item.Checked = chkSelectAll.Checked;
+            }
+        }
     }
 }

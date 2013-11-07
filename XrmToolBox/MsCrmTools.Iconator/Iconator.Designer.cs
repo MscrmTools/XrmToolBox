@@ -30,9 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Iconator));
-            this.panelWaiting = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.lblWaiting = new System.Windows.Forms.Label();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.gbWebResources = new System.Windows.Forms.GroupBox();
             this.tabControlWebResource = new System.Windows.Forms.TabControl();
@@ -70,8 +67,6 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbApply = new System.Windows.Forms.ToolStripButton();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.panelWaiting.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -88,39 +83,6 @@
             this.gbEntities.SuspendLayout();
             this.mainMenu.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // panelWaiting
-            // 
-            this.panelWaiting.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.panelWaiting.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelWaiting.Controls.Add(this.pictureBox1);
-            this.panelWaiting.Controls.Add(this.lblWaiting);
-            this.panelWaiting.Location = new System.Drawing.Point(289, 252);
-            this.panelWaiting.Name = "panelWaiting";
-            this.panelWaiting.Size = new System.Drawing.Size(340, 100);
-            this.panelWaiting.TabIndex = 20;
-            this.panelWaiting.Visible = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(160, 54);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(32, 32);
-            this.pictureBox1.TabIndex = 1;
-            this.pictureBox1.TabStop = false;
-            // 
-            // lblWaiting
-            // 
-            this.lblWaiting.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblWaiting.Font = new System.Drawing.Font("Segoe UI", 11F);
-            this.lblWaiting.Location = new System.Drawing.Point(-1, 22);
-            this.lblWaiting.Name = "lblWaiting";
-            this.lblWaiting.Size = new System.Drawing.Size(340, 20);
-            this.lblWaiting.TabIndex = 0;
-            this.lblWaiting.Text = "Applying images to entities. Please wait...";
-            this.lblWaiting.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // splitContainer1
             // 
@@ -539,20 +501,16 @@
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "Icon.png");
             // 
-            // IconatorControl
+            // Iconator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panelWaiting);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.groupBoxCurrentIcon);
             this.Controls.Add(this.gbEntities);
             this.Controls.Add(this.mainMenu);
-            this.Name = "IconatorControl";
+            this.Name = "Iconator";
             this.Size = new System.Drawing.Size(911, 600);
-            this.Resize += new System.EventHandler(this.MainFormResize);
-            this.panelWaiting.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -577,9 +535,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel panelWaiting;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label lblWaiting;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.GroupBox gbWebResources;
         private System.Windows.Forms.TabControl tabControlWebResource;

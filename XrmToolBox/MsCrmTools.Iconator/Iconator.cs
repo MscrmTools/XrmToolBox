@@ -35,6 +35,8 @@ namespace MsCrmTools.Iconator
 
         private readonly List<Entity> webResourceRetrivedList;
 
+        private Panel infoPanel;
+
         #endregion Variables
 
         #region Constructor
@@ -144,97 +146,135 @@ namespace MsCrmTools.Iconator
 
         private void DoAction()
         {
-            try
+            infoPanel = InformationPanel.GetInformationPanel(this, "Loading Entities...", 340, 100);
+
+            listViewEntities.Items.Clear();
+            listViewWebRessources16.Items.Clear();
+            listViewWebRessources32.Items.Clear();
+            listViewWebRessourcesOther.Items.Clear();
+
+            var bwLoadItems = new BackgroundWorker {WorkerReportsProgress = true};
+            bwLoadItems.RunWorkerCompleted += bwLoadItems_RunWorkerCompleted;
+            bwLoadItems.ProgressChanged += bwLoadItems_ProgressChanged;
+            bwLoadItems.DoWork += bwLoadItems_DoWork;
+            bwLoadItems.RunWorkerAsync();
+        }
+
+        void bwLoadItems_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var bw = (BackgroundWorker) sender;
+
+            var cc = new CrmComponents();
+
+            // Display retrieved entities
+            var queryEntities = from entityList in MetadataManager.GetEntitiesList(service)
+                                orderby entityList.DisplayName.UserLocalizedLabel.Label
+                                select entityList;
+
+            foreach (var entity in queryEntities)
             {
-                listViewEntities.Items.Clear();
+                var lvi = new ListViewItem(entity.DisplayName.UserLocalizedLabel.Label) { Tag = entity };
+                lvi.SubItems.Add(entity.LogicalName);
+                cc.Entities.Add(lvi);
+            }
 
-                // Display retrieved entities
-                var queryEntities = from entityList in MetadataManager.GetEntitiesList(service)
-                                    orderby entityList.DisplayName.UserLocalizedLabel.Label
-                                    select entityList;
+            bw.ReportProgress(0,"Loading Web resources...");
 
-                foreach (var entity in queryEntities)
+            var queryWebResources = from webResourceList in WebResourcesManager.GetWebResourcesOnSolution(service).Entities
+                                    orderby webResourceList.Attributes["name"]
+                                    select webResourceList;
+
+            foreach (var webResource in queryWebResources)
+            {
+                var imageConverted = ImageHelper.ConvertWebResContent(webResource.Attributes["content"].ToString());
+
+                if (imageConverted.Size.Height == 32 && imageConverted.Size.Width == 32)
                 {
-                    var lvi = new ListViewItem(entity.DisplayName.UserLocalizedLabel.Label) { Tag = entity };
-                    lvi.SubItems.Add(entity.LogicalName);
-                    listViewEntities.Items.Add(lvi);
+                    var lvi = new ListViewItem(webResource.Attributes["name"].ToString())
+                    {
+                        Tag = webResource,
+                        ImageIndex = cc.Images32.Count
+                    };
+                    cc.Icons32.Add(lvi);
+                    cc.Images32.Add(imageConverted);
+                }
+                else if (imageConverted.Size.Height == 16 && imageConverted.Size.Width == 16)
+                {
+                    var lvi = new ListViewItem(webResource.Attributes["name"].ToString())
+                    {
+                        Tag = webResource,
+                        ImageIndex = cc.Images16.Count
+                    };
+                    cc.Icons16.Add(lvi);
+                    cc.Images16.Add(imageConverted);
+                }
+                else
+                {
+                    var listWrImage = new WebResourcesManager.WebResourceAndImage
+                    {
+                        Image = imageConverted,
+                        Webresource = webResource
+                    };
+                    var lvi = new ListViewItem(webResource.Attributes["name"].ToString())
+                    {
+                        Tag = listWrImage,
+                        ImageIndex = cc.ImagesOthers.Count,
+                    };
+                    cc.IconsOthers.Add(lvi);
+                    cc.ImagesOthers.Add(imageConverted);
                 }
 
-                // Display retrieved web resources
-                listViewWebRessources16.Items.Clear();
-                listViewWebRessources32.Items.Clear();
-                listViewWebRessourcesOther.Items.Clear();
+                webResourceRetrivedList.Add(webResource);
+            }
 
-                var queryWebResources = from webResourceList in WebResourcesManager.GetWebResourcesOnSolution(service).Entities
-                                        orderby webResourceList.Attributes["name"]
-                                        select webResourceList;
+            e.Result = cc;
+        }
 
+        void bwLoadItems_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            InformationPanel.ChangeInformationPanelMessage(infoPanel, e.UserState.ToString());
+        }
 
-                var imageList16 = new ImageList { ImageSize = new Size(16, 16), ColorDepth = ColorDepth.Depth32Bit };
-                var imageList32 = new ImageList { ImageSize = new Size(32, 32), ColorDepth = ColorDepth.Depth32Bit };
-                var imageListOther = new ImageList { ColorDepth = ColorDepth.Depth32Bit };
+        void bwLoadItems_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Controls.Remove(infoPanel);
+            infoPanel.Dispose();
 
-                foreach (var webResource in queryWebResources)
-                {
-                    var imageConverted = ImageHelper.ConvertWebResContent(webResource.Attributes["content"].ToString());
+            if (e.Error != null)
+            {
+                MessageBox.Show(this, "Error while loading Crm components: " + e.Error.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                var cc = (CrmComponents) e.Result;
 
-                    if (imageConverted.Size.Height == 32 && imageConverted.Size.Width == 32)
-                    {
-                        var lvi = new ListViewItem(webResource.Attributes["name"].ToString())
-                        {
-                            Tag = webResource,
-                            ImageIndex = imageList32.Images.Count
-                        };
-                        listViewWebRessources32.Items.Add(lvi);
-                        imageList32.Images.Add(imageConverted);
-                    }
-                    else if (imageConverted.Size.Height == 16 && imageConverted.Size.Width == 16)
-                    {
-                        var lvi = new ListViewItem(webResource.Attributes["name"].ToString())
-                        {
-                            Tag = webResource,
-                            ImageIndex = imageList16.Images.Count
-                        };
-                        listViewWebRessources16.Items.Add(lvi);
-                        imageList16.Images.Add(imageConverted);
-                    }
-                    else
-                    {
-                        var listWrImage = new WebResourcesManager.WebResourceAndImage
-                                              {
-                            Image = imageConverted,
-                            Webresource = webResource
-                        };
-                        var lvi = new ListViewItem(webResource.Attributes["name"].ToString())
-                        {
-                            Tag = listWrImage,
-                            ImageIndex = imageListOther.Images.Count,
-                        };
-                        listViewWebRessourcesOther.Items.Add(lvi);
-                        imageListOther.Images.Add(imageConverted);
-                    }
-                    webResourceRetrivedList.Add(webResource);
-                }
+                var imageList16 = new ImageList {ImageSize = new Size(16, 16), ColorDepth = ColorDepth.Depth32Bit};
+                var imageList32 = new ImageList {ImageSize = new Size(32, 32), ColorDepth = ColorDepth.Depth32Bit};
+                var imageListOther = new ImageList {ColorDepth = ColorDepth.Depth32Bit};
 
-                listViewWebRessources32.LargeImageList = imageList32;
+                imageList16.Images.AddRange(cc.Images16.ToArray());
+                imageList32.Images.AddRange(cc.Images32.ToArray());
+                imageListOther.Images.AddRange(cc.ImagesOthers.ToArray());
+
                 listViewWebRessources16.LargeImageList = imageList16;
+                listViewWebRessources32.LargeImageList = imageList32;
                 listViewWebRessourcesOther.LargeImageList = imageListOther;
 
-                tsbAddIcon.Enabled = true;
-                tsbApply.Enabled = true;
+                listViewEntities.Items.AddRange(cc.Entities.ToArray());
+                listViewWebRessources16.Items.AddRange(cc.Icons16.ToArray());
+                listViewWebRessources32.Items.AddRange(cc.Icons32.ToArray());
+                listViewWebRessourcesOther.Items.AddRange(cc.IconsOthers.ToArray());
+            }
+            tsbAddIcon.Enabled = true;
+            tsbApply.Enabled = true;
 
-                SetEnableState(true);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(String.Format("Error on DoAction method : {0}", ex.InnerException.Message));
-            }
+            SetEnableState(true);
         }
 
         private void TsbAddIconClick(object sender, EventArgs e)
         {
             var icForm = new ImageCreationForm(service);
-            icForm.StartPosition = FormStartPosition.CenterParent;
             icForm.ShowDialog();
 
             if (icForm.WebResourcesCreated.Count > 0)
@@ -299,13 +339,13 @@ namespace MsCrmTools.Iconator
 
             var mappingList = (from ListViewItem item in lvMappings.Items select (EntityImageMap)item.Tag).ToList();
 
+            infoPanel = InformationPanel.GetInformationPanel(this, "Applying images to entities. Please wait...", 340,100);
+
             var bWorker = new BackgroundWorker();
             bWorker.DoWork += BWorkerDoWork;
             bWorker.RunWorkerCompleted += BWorkerRunWorkerCompleted;
             bWorker.RunWorkerAsync(mappingList);
 
-            lblWaiting.Text = "Applying images to entities. Please wait...";
-            panelWaiting.Visible = true;
             Cursor = Cursors.WaitCursor;
             SetEnableState(false);
         }
@@ -317,7 +357,9 @@ namespace MsCrmTools.Iconator
 
         private void BWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            panelWaiting.Visible = false;
+            Controls.Remove(infoPanel);
+            infoPanel.Dispose();
+           
             Cursor = Cursors.Default;
             SetEnableState(true);
 
@@ -329,6 +371,7 @@ namespace MsCrmTools.Iconator
             else
             {
                 lvMappings.Items.Clear();
+                LvEntitiesSelectedIndexChanged(null, null);
             }
         }
 
@@ -428,13 +471,13 @@ namespace MsCrmTools.Iconator
             {
                 if (DialogResult.Yes == MessageBox.Show(this, "Are you sure you want to reset icons for this entity?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                 {
+                    infoPanel = InformationPanel.GetInformationPanel(this, "Reseting icons for entity. Please wait...", 340, 100);
+
                     var bResetWorker = new BackgroundWorker();
                     bResetWorker.DoWork += BResetWorkerDoWork;
                     bResetWorker.RunWorkerCompleted += BResetWorkerRunWorkerCompleted;
                     bResetWorker.RunWorkerAsync(listViewEntities.SelectedItems[0].Tag);
 
-                    lblWaiting.Text = "Reseting icons for entity. Please wait...";
-                    panelWaiting.Visible = true;
                     Cursor = Cursors.WaitCursor;
                     SetEnableState(false);
                 }
@@ -453,7 +496,9 @@ namespace MsCrmTools.Iconator
 
         private void BResetWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            panelWaiting.Visible = false;
+            Controls.Remove(infoPanel);
+            infoPanel.Dispose();
+
             Cursor = Cursors.Default;
             SetEnableState(true);
 
@@ -501,12 +546,6 @@ namespace MsCrmTools.Iconator
 
 
         #endregion Others
-
-        private void MainFormResize(object sender, EventArgs e)
-        {
-            panelWaiting.Left = Width / 2 - panelWaiting.Width / 2;
-            panelWaiting.Top = Height / 2 - panelWaiting.Height / 2;
-        }
 
         public IOrganizationService Service
         {

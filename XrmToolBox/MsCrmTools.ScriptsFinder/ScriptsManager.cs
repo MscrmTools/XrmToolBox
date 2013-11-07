@@ -47,7 +47,7 @@ namespace MsCrmTools.ScriptsFinder
                 var doc = new XmlDocument();
                 doc.LoadXml(form["formxml"].ToString());
 
-                foreach (XmlNode eventNode in doc.SelectNodes("//event"))
+                foreach (XmlNode eventNode in doc.SelectNodes("//event[@application='false']"))
                 {
 
                     string eventName = eventNode.Attributes["name"].Value;

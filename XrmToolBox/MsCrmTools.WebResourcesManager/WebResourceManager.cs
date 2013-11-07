@@ -71,9 +71,16 @@ namespace MsCrmTools.WebResourcesManager
 
                     var list = components.Select(component => component.GetAttributeValue<Guid>("objectid").ToString("B")).ToList();
 
-                    var qe = new QueryExpression("webresource") {ColumnSet = new ColumnSet(true)};
-                    qe.Criteria.AddCondition("webresourceid", ConditionOperator.In, list.ToArray());
-                    return innerService.RetrieveMultiple(qe);
+                    if (list.Count > 0)
+                    {
+                        var qe = new QueryExpression("webresource") {ColumnSet = new ColumnSet(true)};
+                        qe.Criteria.AddCondition("webresourceid", ConditionOperator.In, list.ToArray());
+                        return innerService.RetrieveMultiple(qe);
+                    }
+                    else
+                    {
+                        return new EntityCollection();
+                    }
                 }
             }
             catch (Exception error)

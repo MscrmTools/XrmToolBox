@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
@@ -128,12 +129,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
 
                 var displayNameLabel = emd.DisplayName.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
 
-                string name = string.Format("{0} ({1})",
-                                            displayNameLabel == null ? "N/A" : displayNameLabel.Label,
-                                            emd.SchemaName);
-
-            
-                var sheet = AddWorkSheet(name);
+                var sheet = AddWorkSheet(displayNameLabel == null ? "N/A" : displayNameLabel.Label, emd.SchemaName);
 
                 if (!settings.AddEntitiesSummary)
                 {
@@ -204,10 +200,31 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
         /// </summary>
         /// <param name="sheetName">Name of the worksheet</param>
         /// <returns></returns>
-        public ExcelWorksheet AddWorkSheet(string sheetName)
+        public ExcelWorksheet AddWorkSheet(string displayName, string logicalName = null)
         {
-           
-            sheetName = sheetName
+            string name;
+
+            if (logicalName != null)
+            {
+                if (logicalName.Length >= 26)
+                {
+                    name = logicalName;
+                }
+                else
+                {
+                            var remainingLength = 31 - 3 - 3 - logicalName.Length;
+                name = string.Format("{0} ({1})",
+                    remainingLength == 0
+                        ? "..."
+                        : (displayName.Length > remainingLength
+                            ? displayName.Substring(0, remainingLength)
+                            : displayName),
+                    logicalName);
+                }
+            }
+            else
+                name = displayName;
+            name = name
                 .Replace(":", " ")
                 .Replace("\\", " ")
                 .Replace("/", " ")
@@ -216,12 +233,27 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                 .Replace("[", " ")
                 .Replace("]", " ");
 
-            if (sheetName.Length > 31)
-                sheetName = sheetName.Substring(0, 31);
+            if (name.Length > 31)
+                name = name.Substring(0, 31);
 
             attributesHeaderAdded = false;
 
-            return innerWorkBook.Worksheets.Add(sheetName);
+            ExcelWorksheet sheet=null;
+            int i = 1;
+            do
+            {
+                try
+                {
+                    sheet = innerWorkBook.Worksheets.Add(name);
+                }
+                catch (Exception)
+                {
+                    name = name.Substring(0, name.Length - 2) + "_" + i;
+                    i++;
+                }
+            } while (sheet == null);
+
+            return sheet;
         }
 
         /// <summary>
@@ -591,12 +623,27 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                         break;
                     case AttributeTypeCode.String:
                         {
-                            var samd = (StringAttributeMetadata)amd;
+                            var samd = amd as StringAttributeMetadata;
+                            if (samd != null)
+                            {
+                                sheet.Cells[x, y].Value = (string.Format(
+                                    "Format: {0}\r\nMax length: {1}",
+                                    samd.Format.HasValue ? samd.Format.Value.ToString() : "N/A",
+                                    samd.MaxLength.HasValue
+                                        ? samd.MaxLength.Value.ToString(CultureInfo.InvariantCulture)
+                                        : "N/A"));
+                            }
 
-                            sheet.Cells[x, y].Value = (string.Format(
-                                "Format: {0}\r\nMax length: {1}",
-                                samd.Format.HasValue ? samd.Format.Value.ToString() : "N/A",
-                                samd.MaxLength.HasValue ? samd.MaxLength.Value.ToString(CultureInfo.InvariantCulture) : "N/A"));
+                            var mamd = amd as MemoAttributeMetadata;
+                            if (mamd != null)
+                            {
+                                sheet.Cells[x, y].Value = (string.Format(
+                                    "Format: {0}\r\nMax length: {1}",
+                                    mamd.Format.HasValue ? mamd.Format.Value.ToString() : "N/A",
+                                    mamd.MaxLength.HasValue
+                                        ? mamd.MaxLength.Value.ToString(CultureInfo.InvariantCulture)
+                                        : "N/A"));
+                            }
                         }
                         break;
                     case AttributeTypeCode.Uniqueidentifier:
