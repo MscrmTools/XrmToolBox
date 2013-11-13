@@ -279,7 +279,7 @@ namespace XrmToolBox
             this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
-            this.Text = "ToolBox for Microsoft Dynamics CRM 2011";
+            this.Text = "ToolBox for Microsoft Dynamics CRM 2011/2013";
             this.Load += new System.EventHandler(this.Form1Load);
             this.tabControl1.ResumeLayout(false);
             this.HomePageTab.ResumeLayout(false);

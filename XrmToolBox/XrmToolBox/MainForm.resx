@@ -130,7 +130,7 @@ Or, there is no plugin file in the same directory where is this application.</va
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABA
-        PQAAAk1TRnQBSQFMAgEBAwEAAdABAAHQAQABYAEAAWABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        PQAAAk1TRnQBSQFMAgEBAwEAAdgBAAHYAQABYAEAAWABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABgAEBAgABYAMAAQEBAAEIBgABkBgAAYACAAGAAwACgAEAAYADAAGAAQABgAEAAoACAAPAAQABwAHc
         AcABAAHwAcoBpgEAATMFAAEzAQABMwEAATMBAAIzAgADFgEAAxwBAAMiAQADKQEAA1UBAANNAQADQgEA
         AzkBAAGAAXwB/wEAAlAB/wEAAZMBAAHWAQAB/wHsAcwBAAHGAdYB7wEAAdYC5wEAAZABqQGtAgAB/wEz
@@ -426,17 +426,17 @@ Or, there is no plugin file in the same directory where is this application.</va
   <data name="tsbOptions.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAItSURBVDhPfVLfT1JxHOWt/yN778EHt7aefevfMFKQi4J3
-        zLxACrvxQ0K2yh9ZrYfWLAyaKBIYClljgGaCWjFmm2tmrH/A0z1fLrecs7N9du75fM757n5/mC5CMBxB
-        IDQJst76P1Q1mPDfDcV1afKrARwd/QBZb5l8Pv+JGggu6vIvfKqaiL9OYOFVHJ47E8fecR/uP5hGKp0R
-        TK0o7lPO6aNfj7YxpnjTj58+Q62+j/xGEc3D76jtHSCby2Pnc03o/EZBzOmjX48a6JJd3tbzFwtYL7xH
-        ankVS6m04E6xz7ns8rTob8f+weiYG/W9faysZpFaySB8L4bQZBSTGi8mkqJf1/6KPj3Shts7LprRWAyl
-        chW5tXUtNAWrJL3s6bl2gxyJTok+5/TRz5xY4LbiQaN5iPr+F+QLRWwUN8X19fb2XtfGl8jU7HNOH/3M
-        GQvIrlE8nJnD5oeSKP6BY8Q1KyvKZTJ1Z0Yf/cYCGrpZw04Z5eo2PpbKSGeyCEeiUAMhwdTsc05fJ8Ow
-        AbvDeZpMplDRTJXKFqpbn4yiZp9zacjBWzgLpyyfzMzN4+BrA2+WlsUb2NmtY3tnVzA1+5zT5xxxGS9W
-        wGyx5Obmn2B69hH6zLaWZVDChF/Ft0ZTMLXVZj9lmD6LVXqrRw103ewfeGc2D+S076tadTN0/POXCFOz
-        bPbh3323+te07ytanQObxgvT9opBaYh7Nk5bAxc//wovQOekz572GZhMfwAeeclCyZCAAAAAAABJRU5E
-        rkJggg==
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIsSURBVDhPfVLfT1JxHOWt/yN778EHt7aeeevfUFIQUH7o
+        zCuksBsghGyVilbroTULgyaKBIZA1piikSBWjtnmmhnrH/B0z5fLLebsbJ+dez6fc7673x+6y+CfDsEX
+        CIKstv4PWfbHvfcCMVXqvLIPJyc/QFZbOo/Hcyb7/Muq/AuPLMdjr+NYehWD6+7UqXvSgwcPZ5FMpQVT
+        S5J0zjl99KvRFsYld+rx02eo1urI5YtoHH9H9eAQmWwOlc9VoXP5gpjTR78a1dDlGHE3n79YwmbhPZKr
+        61hJpgS3i33OHSOuJv2t2D8YG59A7aCOtfUMkmtpTN+PIBAMI6jwcjwh+jXlr+hTIy1MuCdFMxyJoLRd
+        RnZjUwnNwGSxvOzpuXGLHArPiD7n9NHPnFjgjuTCUeMYtfoX5ApF5Itb4vr0ev1NZXyFTM0+5/TRz5y2
+        gHN0DI/motj6UBLFP7A5RuedknSVTN2e0Ue/toCCbtaw3Ynt8h4+lraRSmcwHQpD9gUEU7PPOX3tDMMa
+        rDb7eSKRxI5i2tnZRXn3k1bU7HNuGbLxFjphdzrP5qKLOPx6hDcrq+INVPZr2KvsC6Zmn3P67I5R7cUK
+        GIzGbHTxCWbnF9DbZ24aBy2Y8sr4dtQQTG0yW88Zps9osrxVoxq6+voH3hkMA1nl+7pS3Qyd/vwlwtQs
+        s3X4d+/t/g3l+5pSF8Cm9sKUvWLQMsQ9a6etgItffIWXoH3SnafdAZ3uDwrKyTu9o9wlAAAAAElFTkSu
+        QmCC
 </value>
   </data>
   <data name="tsbAbout.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -451,19 +451,6 @@ Or, there is no plugin file in the same directory where is this application.</va
         bkEimNnw8jvDIAALlD5OKAOJCEbCcJjYP7siESBgJJ4IfyB2xa2oWUEarLf66T78Rl3jjkywGPgXQIJb
         IBV7I1GjB/CAZTM3WAz1hJslYk/cjkSN3q9gMcZWd9kkOI0vMmvnvwmZ7AsMJdi9nMVyZgAAAABJRU5E
         rkJggg==
-</value>
-  </data>
-  <data name="toolStripDropDownButton1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAF4SURBVDhPY6Aq2PU3q639aND7th2+/5Fxy3bP/41bXf+3
-        bXd5v/5vcBtUOSrY8S/HrHWHz/+IuZz/g2YyoODQ2Sz/I4HiiYtE/5euM/m/8p+TGVQbAuz6mz2/aI0+
-        Ts2xCwT+Jy0S/5+7UuP/4r+W86HaIGDXv6yw5m0eBDWnL5P/n7NS7X/mMsX/s/6phUG1MzBs/Jq6P3O5
-        ElGai9bo/c9bpfm/9qrkfrDmnf9yyuq3OBGtuXy92f+aTbb/ExaK/u/7x1PGAArluAVCJGlu2Oryv3Kj
-        1f8QoFoUA4jVDIrWqo02YD1gL9RutidJM8jSyLnc/zv+MZSBw2HNxxhgICoSrTl/lfb/3LMMkEAEgS3/
-        osMqNpgTpRmEQ2ezgmxHRCMIrP7rPR+USAhpTlsq97/5KwNqQgIBUPIEaS5crYNTc8MWl//BMxlBtmMm
-        ZRCY/9ewLX25+Pv4hcL/o+fx/g+fwwGOKlgUhy9meN/5lwF7ZiIPMDAAAIl1oHiUdgUhAAAAAElFTkSu
-        QmCC
 </value>
   </data>
   <data name="reportABugToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -509,6 +496,19 @@ Or, there is no plugin file in the same directory where is this application.</va
         2gc/c0DYD2M3gp/rPlBH1O0A5alnTMs+ZO84hRPptoD4edZzU6i8e0AfcEzU7YBC1BOtFuZw8v4m1PQI
         yslBbso00/PT2F5wRUXdDiivjRa1j0H8WB1C4bHn88W2FjeZMs203H2UXg4XRd0O+P76BkrPvbXFu533
         2NFZn3I5aVZODtSOXlyzFmwApl7hS/zUKJr9ueeyAP9vOH4DmJ3YSuhgnyQAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="toolStripDropDownButton1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAF4SURBVDhPY6Aq2PU3q639aND7th2+/5Fxy3bP/41bXf+3
+        bXd5v/5vcBtUOSrY8S/HrHWHz/+IuZz/g2YyoODQ2Sz/I4HiiYtE/5euM/m/8p+TGVQbAuz6mz2/aI0+
+        Ts2xCwT+Jy0S/5+7UuP/4r+W86HaIGDXv6yw5m0eBDWnL5P/n7NS7X/mMsX/s/6phUG1MzBs/Jq6P3O5
+        ElGai9bo/c9bpfm/9qrkfrDmnf9yyuq3OBGtuXy92f+aTbb/ExaK/u/7x1PGAArluAVCJGlu2Oryv3Kj
+        1f8QoFoUA4jVDIrWqo02YD1gL9RutidJM8jSyLnc/zv+MZSBw2HNxxhgICoSrTl/lfb/3LMMkEAEgS3/
+        osMqNpgTpRmEQ2ezgmxHRCMIrP7rPR+USAhpTlsq97/5KwNqQgIBUPIEaS5crYNTc8MWl//BMxlBtmMm
+        ZRCY/9ewLX25+Pv4hcL/o+fx/g+fwwGOKlgUhy9meN/5lwF7ZiIPMDAAAIl1oHiUdgUhAAAAAElFTkSu
+        QmCC
 </value>
   </data>
   <data name="tsbDonate.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
