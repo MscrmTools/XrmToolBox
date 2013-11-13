@@ -87,5 +87,19 @@ namespace MsCrmTools.WebResourcesManager.Forms
             pbDelete.Value = 0;
             pbDelete.Visible = false;
         }
+
+        private void lvWebResources_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            if (lvWebResources.Sorting == SortOrder.Ascending)
+            {
+                lvWebResources.Sorting = SortOrder.Descending;
+            }
+            else
+            {
+                lvWebResources.Sorting = SortOrder.Ascending;
+            }
+
+            lvWebResources.ListViewItemSorter = new ListViewItemComparer(e.Column, lvWebResources.Sorting);
+        }
     }
 }

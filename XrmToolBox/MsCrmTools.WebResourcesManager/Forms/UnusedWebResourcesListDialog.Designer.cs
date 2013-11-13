@@ -90,9 +90,11 @@
             this.lvWebResources.Location = new System.Drawing.Point(12, 81);
             this.lvWebResources.Name = "lvWebResources";
             this.lvWebResources.Size = new System.Drawing.Size(544, 257);
+            this.lvWebResources.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvWebResources.TabIndex = 11;
             this.lvWebResources.UseCompatibleStateImageBehavior = false;
             this.lvWebResources.View = System.Windows.Forms.View.Details;
+            this.lvWebResources.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvWebResources_ColumnClick);
             // 
             // columnHeader1
             // 
@@ -133,6 +135,7 @@
             this.Name = "UnusedWebResourcesListDialog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
