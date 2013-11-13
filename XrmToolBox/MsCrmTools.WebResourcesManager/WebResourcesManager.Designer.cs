@@ -54,6 +54,8 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsddCrmMenu = new System.Windows.Forms.ToolStripDropDownButton();
             this.loadWebResourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.updateCheckedWebResourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateAndPublishCheckedWebResourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updatePublishAndAddToSolutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,8 +90,6 @@
             this.copyWebResourceNameToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -142,6 +142,7 @@
             // 
             // tvWebResources
             // 
+            this.tvWebResources.AllowDrop = true;
             this.tvWebResources.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -156,6 +157,8 @@
             this.tvWebResources.TabIndex = 83;
             this.tvWebResources.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TvWebResourcesAfterCheck);
             this.tvWebResources.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TvWebResourcesAfterSelect);
+            this.tvWebResources.DragDrop += new System.Windows.Forms.DragEventHandler(this.tvWebResources_DragDrop);
+            this.tvWebResources.DragOver += new System.Windows.Forms.DragEventHandler(this.tvWebResources_DragOver);
             this.tvWebResources.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TvWebResourcesMouseDown);
             // 
             // imageList1
@@ -382,6 +385,18 @@
             this.loadWebResourcesToolStripMenuItem.Size = new System.Drawing.Size(388, 22);
             this.loadWebResourcesToolStripMenuItem.Text = "Load Web resources";
             this.loadWebResourcesToolStripMenuItem.Click += new System.EventHandler(this.LoadWebResourcesToolStripMenuItemClick);
+            // 
+            // loadWebResourcesFromASpecificSolutionToolStripMenuItem
+            // 
+            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem.Name = "loadWebResourcesFromASpecificSolutionToolStripMenuItem";
+            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem.Size = new System.Drawing.Size(388, 22);
+            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem.Text = "Load Web resources from a specific solution";
+            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem.Click += new System.EventHandler(this.LoadWebResourcesFromASpecificSolutionToolStripMenuItemClick);
+            // 
+            // toolStripSeparator9
+            // 
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(385, 6);
             // 
             // updateCheckedWebResourcesToolStripMenuItem
             // 
@@ -654,25 +669,13 @@
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.PropertiesToolStripMenuItemClick);
             // 
-            // loadWebResourcesFromASpecificSolutionToolStripMenuItem
-            // 
-            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem.Name = "loadWebResourcesFromASpecificSolutionToolStripMenuItem";
-            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem.Size = new System.Drawing.Size(388, 22);
-            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem.Text = "Load Web resources from a specific solution";
-            this.loadWebResourcesFromASpecificSolutionToolStripMenuItem.Click += new System.EventHandler(this.LoadWebResourcesFromASpecificSolutionToolStripMenuItemClick);
-            // 
-            // toolStripSeparator9
-            // 
-            this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(385, 6);
-            // 
-            // WebResourcesManagerControl
+            // WebResourcesManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.tsMain);
-            this.Name = "WebResourcesManagerControl";
+            this.Name = "WebResourcesManager";
             this.Size = new System.Drawing.Size(900, 600);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();

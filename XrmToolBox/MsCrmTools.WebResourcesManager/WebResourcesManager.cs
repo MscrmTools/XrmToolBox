@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Xrm.Client.Services;
@@ -623,6 +624,8 @@ namespace MsCrmTools.WebResourcesManager
                             path = Path.Combine(path, partPath[partPath.Length - 1]);
                             byte[] bytes = Convert.FromBase64String(webResource["content"].ToString());
                             File.WriteAllBytes(path, bytes);
+
+                            ((WebResource) node.Tag).FilePath = path;
                         }
                     }
                 }
@@ -976,12 +979,12 @@ namespace MsCrmTools.WebResourcesManager
 
         private void ChkSelectAllCheckedChanged(object sender, EventArgs e)
         {
-            tvWebResources.AfterCheck -= TvWebResourcesAfterCheck;
+            //tvWebResources.AfterCheck -= TvWebResourcesAfterCheck;
 
             foreach (TreeNode node in tvWebResources.Nodes)
                 node.Checked = chkSelectAll.Checked;
 
-            tvWebResources.AfterCheck += TvWebResourcesAfterCheck;
+            //tvWebResources.AfterCheck += TvWebResourcesAfterCheck;
         }
 
         private void TvWebResourcesAfterCheck(object sender, TreeViewEventArgs e)
@@ -1338,6 +1341,86 @@ namespace MsCrmTools.WebResourcesManager
             dialog.ShowDialog(this);
         }
 
-        
+        private void tvWebResources_DragDrop(object sender, DragEventArgs e)
+        {
+            var errorList = new List<string>();
+            var tv = (TreeView)sender;
+            Point location = tv.PointToScreen(Point.Empty);
+            var currentNode = tvWebResources.GetNodeAt(e.X - location.X, e.Y - location.Y);
+
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            foreach (var file in files)
+            {
+                var fi = new FileInfo(file);
+
+                var tempNode = currentNode;
+                string name = tempNode.Text;
+                while (tempNode.Parent != null)
+                {
+                    name = string.Format("{0}/{1}", tempNode.Parent.Text, name);
+                    tempNode = tempNode.Parent;
+                }
+
+                //Test valid characters
+                if (WebResource.IsInvalidName(fi.Name))
+                {
+                    errorList.Add(file);
+                }
+                else
+                {
+                    var webResource = new Entity("webresource");
+                    webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(file));
+                    webResource["webresourcetype"] = new OptionSetValue(WebResource.GetTypeFromExtension(fi.Extension.Remove(0, 1)));
+                    webResource["name"] = string.Format("{0}/{1}", name, fi.Name);
+                    webResource["displayname"] = string.Format("{0}/{1}", name, fi.Name);
+                    var wr = new WebResource(webResource, file);
+
+                    var node = new TreeNode(fi.Name)
+                    {
+                        ImageIndex = WebResource.GetImageIndexFromExtension(fi.Extension.Remove(0, 1))
+                    };
+                    node.SelectedImageIndex = node.ImageIndex;
+                    node.Tag = wr;
+
+                    currentNode.Nodes.Add(node);
+
+                    currentNode.Expand();
+                }
+            }
+
+            if (errorList.Count > 0)
+            {
+                MessageBox.Show("Some file have not been added since their name does not match naming policy\r\n"
+                                + string.Join("\r\n", errorList));
+            }
+        }
+
+        private void tvWebResources_DragOver(object sender, DragEventArgs e)
+        {
+            var treeView = (TreeView)sender;
+            Point treeViewLocation = treeView.PointToScreen(Point.Empty);
+            var currentNode = treeView.GetNodeAt(e.X - treeViewLocation.X, e.Y - treeViewLocation.Y);
+
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                bool validExtensions = files.All(f => WebResource.ValidExtensions.Contains(new FileInfo(f).Extension.Remove(0, 1)));
+                bool validNode = currentNode != null && currentNode.ImageIndex <= 1;
+
+                if (validNode)
+                {
+                    treeView.SelectedNode = currentNode;
+                }
+
+                if (files.Length > 0 && validExtensions && validNode)
+                    e.Effect = DragDropEffects.All;
+                else
+                    e.Effect = DragDropEffects.None;
+            }
+            else
+                e.Effect = DragDropEffects.None;
+        }
     }
 }
