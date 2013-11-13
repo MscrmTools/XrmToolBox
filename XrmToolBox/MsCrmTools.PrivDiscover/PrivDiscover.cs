@@ -336,6 +336,8 @@ namespace MsCrmTools.RolePrivilegeAnalyzer
 
             lvRoles.Items.Clear();
 
+            var lviList = new List<ListViewItem>();
+
             foreach (SecurityRole role in roles.OrderBy(r=>r.Name))
             {
                 bool matchPrivileges = false;
@@ -346,7 +348,7 @@ namespace MsCrmTools.RolePrivilegeAnalyzer
 
                     if (currentPrivilege.IsNoDepth)
                     {
-                        matchPrivileges = !role.Privileges.Any(p => p.Id == currentPrivilege.Id);
+                        matchPrivileges = role.Privileges.All(p => p.Id != currentPrivilege.Id);
                     }
                     else if (currentPrivilege.IsAnyDepth)
                     {
@@ -361,9 +363,11 @@ namespace MsCrmTools.RolePrivilegeAnalyzer
                 if (matchPrivileges)
                 {
                     var item = new ListViewItem(role.Name) {Tag = role.Id, ImageIndex = 0};
-                    lvRoles.Items.Add(item);
+                    lviList.Add(item);
                 }
             }
+
+            lvRoles.Items.AddRange(lviList.ToArray());
         }
 
         private void TxtSearchTextChanged(object sender, EventArgs e)
@@ -396,6 +400,9 @@ namespace MsCrmTools.RolePrivilegeAnalyzer
             {
                 matchingPrivileges = privileges;
             }
+
+            var lviList = new List<ListViewItem>();
+            var lvgList = new List<ListViewGroup>();
 
             foreach (var privilege in matchingPrivileges)
             {
@@ -437,8 +444,12 @@ namespace MsCrmTools.RolePrivilegeAnalyzer
                         groupName = group.Label;
                 }
 
-                if (ListViewDelegates.GetGroup(lvPrivileges, groupName) == null)
-                    ListViewDelegates.AddGroup(lvPrivileges, groupName);
+                var lvGroup = lvgList.FirstOrDefault(f => f.Name == groupName);
+
+                if (lvGroup == null)
+                {
+                    lvgList.Add(new ListViewGroup(groupName, groupName));
+                }
 
                 var item = new ListViewItem
                 {
@@ -447,15 +458,18 @@ namespace MsCrmTools.RolePrivilegeAnalyzer
                     Tag = privilege,
                     Group =
                         groupName != null
-                            ? ListViewDelegates.GetGroup(lvPrivileges, groupName)
-                            : ListViewDelegates.GetGroup(lvPrivileges, "_Common")
+                            ? lvgList.First(f => f.Name == groupName)
+                            : lvgList.First(f => f.Name == "_Common")
                 };
 
                 if (entitySchemaName != null)
                     item.Text = item.Text.Replace(entitySchemaName, "");
 
-                ListViewDelegates.AddItem(lvPrivileges, item);
+                lviList.Add(item);
             }
+
+            ListViewDelegates.AddGroupsRange(lvPrivileges, lvgList.ToArray());
+            ListViewDelegates.AddItemsRange(lvPrivileges, lviList.ToArray());
 
             ListViewDelegates.SortGroup(lvPrivileges, true);
             ListViewDelegates.Sort(lvPrivileges, true);

@@ -27,6 +27,34 @@ namespace MsCrmTools.RolePrivilegeAnalyzer.AppCode
             }
         }
 
+        public static void AddGroupsRange(ListView listview, ListViewGroup[] groups)
+        {
+            MethodInvoker miAddItem = () => listview.Groups.AddRange(groups);
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miAddItem);
+            }
+            else
+            {
+                miAddItem();
+            }
+        }
+
+        public static void AddItemsRange(ListView listview, ListViewItem[] items)
+        {
+            MethodInvoker miAddItem = () => listview.Items.AddRange(items);
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miAddItem);
+            }
+            else
+            {
+                miAddItem();
+            }
+        }
+
         public static void AddItem(ListView listview, ListViewItem item)
         {
             MethodInvoker miAddItem = delegate
