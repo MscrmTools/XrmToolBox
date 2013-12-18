@@ -133,7 +133,7 @@ namespace MsCrmTools.RoleUpdater
             {
                 CommonDelegates.SetCursor(this, Cursors.WaitCursor);
 
-                infoPanel = InformationPanel.GetInformationPanel(this, "Loading roles...", 340, 100);
+                infoPanel = InformationPanel.GetInformationPanel(this, "Loading roles...", 340, 120);
 
                 var bwFillRolesAndPrivileges = new BackgroundWorker();
                 bwFillRolesAndPrivileges.DoWork += BwFillRolesAndPrivilegesDoWork;

@@ -276,7 +276,7 @@ namespace MsCrmTools.RolePrivilegeAnalyzer
 
         private void LoadRolesAndPrivs()
         {
-            infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving roles...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving roles...", 340, 120);
 
             lvPrivileges.Items.Clear();
             lvSelectedPrivileges.Items.Clear();

@@ -4,6 +4,7 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -34,7 +35,7 @@ namespace XrmToolBox
                                 Location = new Point(
                                     (parentControl.Width - width)/2,
                                     (parentControl.Height - height)/2),
-                                    BackColor = Color.FromArgb(255,255,192),
+                                    BackColor = Color.FromArgb(255,255,224),
                                     BorderStyle = BorderStyle.FixedSingle
                             };
 
@@ -47,9 +48,24 @@ namespace XrmToolBox
                                 Height = panel.Height/2,
                                 Text = message,
                                 Location = new Point(0, 10),
-                                Font = new Font("Segoe UI", 11F)
+                                Font = new Font("Segoe UI", 10F),
+                                Name = "InfoLabel"
                             };
 
+            var hyperlink = new LinkLabel
+            {
+                Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+                AutoEllipsis = true,
+                AutoSize = false,
+                Text = "Support MscrmTools, Donate. Click here!",
+                TextAlign = ContentAlignment.MiddleCenter,
+                Width = panel.Width,
+                Location = new Point(0, panel.Height - 20),
+                Font = new Font("Segoe UI", 9F)
+            };
+
+            hyperlink.Click += hyperlink_Click;
+            panel.Controls.Add(hyperlink);
 
             var assembly = Assembly.GetExecutingAssembly();
             var file = assembly.GetManifestResourceStream("XrmToolBox.Images.progress.gif");
@@ -57,11 +73,11 @@ namespace XrmToolBox
             {
                 var pBox = new PictureBox
                                {
-                                   Height = 32,
-                                   Width = 32,
+                                   Height = 36,
+                                   Width = 36,
                                    Location = new Point(
-                                       (panel.Width - 32)/2,
-                                       (panel.Height - 32)/4*3),
+                                       (panel.Width - 36)/2,
+                                       (panel.Height - 36)/4*3),
                                    Image = Image.FromStream(file)
                                };
 
@@ -77,6 +93,17 @@ namespace XrmToolBox
             return panel;
         }
 
+        static void hyperlink_Click(object sender, EventArgs e)
+        {
+            var url = string.Format("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business={0}&lc={1}&item_name={2}&currency_code={3}&bn=PP%2dDonationsBF",
+                "tanguy92@hotmail.com",
+                "EN",
+                "Donation%20for%20MSCRM%20Tools%20-%20Xrm%20Tool%20Box",
+                "EUR");
+
+            Process.Start(url);
+        }
+
         /// <summary>
         /// Updates the message of an existing panel
         /// </summary>
@@ -86,7 +113,10 @@ namespace XrmToolBox
         {
             foreach (var label in informationPanel.Controls.OfType<Label>())
             {
-                label.Text = message;
+                if (label.Name == "InfoLabel")
+                {
+                    label.Text = message;
+                }
             }
         }
         

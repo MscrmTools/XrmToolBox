@@ -112,7 +112,7 @@ namespace MsCrmTools.SolutionImport
         {
             CommonDelegates.SetCursor(this, Cursors.WaitCursor);
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Importing solution...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Importing solution...", 340, 120);
 
             EnableControls(false);
 

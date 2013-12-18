@@ -141,7 +141,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
 
         private void LoadEntitiesAndLanguages()
         {
-            infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving entities...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving entities...", 340, 120);
 
             lvEntities.Items.Clear();
             cbbLcid.Items.Clear();
@@ -364,7 +364,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
 
                 var entityName = lvEntities.SelectedItems[0].Tag.ToString();
 
-                infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving attributes...", 340, 100);
+                infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving attributes...", 340, 120);
                 SetWorkingState(true);
 
                 var worker = new BackgroundWorker();
@@ -379,7 +379,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
                 
                 var entityName = lvEntities.SelectedItems[0].Tag.ToString();
 
-                infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving forms...", 340, 100);
+                infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving forms...", 340, 120);
                 SetWorkingState(true);
 
                 var worker = new BackgroundWorker();

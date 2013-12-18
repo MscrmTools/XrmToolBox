@@ -53,7 +53,7 @@ namespace XrmToolBox
                 {
                     try
                     {
-                        var assembly = Assembly.LoadFrom(file);
+                        var assembly = Assembly.UnsafeLoadFrom(file);
 
                         foreach (var type in assembly.GetTypes())
                         {

@@ -41,6 +41,8 @@ namespace XrmToolBox
 
         private Options currentOptions;
 
+        private Panel infoPanel;
+
         #endregion Variables
 
         #region Constructor
@@ -115,12 +117,13 @@ namespace XrmToolBox
 
         private void CManagerConnectionSucceed(object sender, ConnectionSucceedEventArgs e)
         {
+            Controls.Remove(infoPanel);
+            if(infoPanel != null)infoPanel.Dispose();
+
             currentConnectionDetail = e.ConnectionDetail;
             service = e.OrganizationService;
             ccsb.SetConnectionStatus(true, e.ConnectionDetail);
             ccsb.SetMessage(string.Empty);
-
-            //ApplyConnectionToOpenedPlugins();
 
             if (e.Parameter != null)
             {
@@ -141,7 +144,7 @@ namespace XrmToolBox
                     {
                         var userControl = (UserControl) args.Control;
 
-                        args.Control.UpdateConnection(e.OrganizationService, args.ActionName);
+                        args.Control.UpdateConnection(e.OrganizationService, args.ActionName, args.Parameter);
 
                         userControl.Parent.Text = string.Format("{0} ({1})",
                             userControl.Parent.Text.Split(' ')[0],
@@ -157,6 +160,9 @@ namespace XrmToolBox
 
         private void CManagerConnectionFailed(object sender, ConnectionFailedEventArgs e)
         {
+            Controls.Remove(infoPanel);
+            if (infoPanel != null) infoPanel.Dispose();
+            
             MessageBox.Show(this, e.FailureReason, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             currentConnectionDetail = null;
@@ -301,7 +307,8 @@ namespace XrmToolBox
            
             if (service == null && MessageBox.Show(this, "Do you want to connect to an organization first?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                fHelper.AskForConnection(sender);
+                if(fHelper.AskForConnection(sender))
+                    infoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120);
             }
             else
             {
@@ -311,7 +318,10 @@ namespace XrmToolBox
 
         private void TsbConnectClick(object sender, EventArgs e)
         {
-            fHelper.AskForConnection("ApplyConnectionToTabs");
+            if (fHelper.AskForConnection("ApplyConnectionToTabs"))
+            {
+                infoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120);
+            }
         }
 
         private void TsbAboutClick(object sender, EventArgs e)
@@ -383,6 +393,45 @@ namespace XrmToolBox
                 }
             }
 
+            if (currentOptions.LastAdvertisementDisplay == new DateTime() ||
+                currentOptions.LastAdvertisementDisplay > DateTime.Now ||
+                currentOptions.LastAdvertisementDisplay.AddDays(7) < DateTime.Now)
+            {
+                bool displayAdvertisement = true;
+                try
+                {
+                    var assembly =
+                        Assembly.LoadFile(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory +
+                                          "\\McTools.StopAdvertisement.dll");
+                    if (assembly != null)
+                    {
+                        Type type = assembly.GetType("McTools.StopAdvertisement.LicenseManager");
+                        if (type != null)
+                        {
+                            MethodInfo methodInfo = type.GetMethod("IsValid");
+                            if (methodInfo != null)
+                            {
+                                object classInstance = Activator.CreateInstance(type, null);
+
+                                if ((bool) methodInfo.Invoke(classInstance, null))
+                                {
+                                    displayAdvertisement = false;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch(FileNotFoundException)
+                {}
+
+                if (displayAdvertisement)
+                {
+                    var sc = new SupportScreen();
+                    sc.ShowDialog(this);
+                    currentOptions.LastAdvertisementDisplay = DateTime.Now;
+                }
+            }
+
             currentOptions.Save();
         }
 
@@ -395,7 +444,10 @@ namespace XrmToolBox
 
         private void MainForm_OnRequestConnection(object sender, EventArgs e)
         {
-            fHelper.AskForConnection(e);
+            if (fHelper.AskForConnection(e))
+            {
+                infoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120);
+            }
         }
         
         private void ApplyConnectionToTabs()
@@ -445,6 +497,30 @@ namespace XrmToolBox
             Process.Start(url);
         }
 
+        private void donateInUSDollarsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var url = string.Format("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business={0}&lc={1}&item_name={2}&currency_code={3}&bn=PP%2dDonationsBF",
+               "tanguy92@hotmail.com",
+               "EN",
+               "Donation%20for%20MSCRM%20Tools%20-%20XrmToolBox",
+               "USD");
+
+            Process.Start(url);
+        }
+
+        private void donateInEuroToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var url =
+                string.Format(
+                    "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business={0}&lc={1}&item_name={2}&currency_code={3}&bn=PP%2dDonationsBF",
+                    "tanguy92@hotmail.com",
+                    "EN",
+                    "Donation%20for%20MSCRM%20Tools%20-%20XrmToolBox",
+                    "EUR");
+
+            Process.Start(url);
+        }
+
         private void CloseAllTabsToolStripMenuItemClick(object sender, EventArgs e)
         {
             for (int i = tabControl1.TabPages.Count - 1; i > 0; i--)
@@ -480,5 +556,8 @@ namespace XrmToolBox
                 }
             }
         }
+
+      
     }
 }
+

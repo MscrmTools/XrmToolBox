@@ -147,7 +147,7 @@ namespace MsCrmTools.Translator
 
                     SetState(true);
 
-                    infoPanel = InformationPanel.GetInformationPanel(this, "Exporting Translations...", 340, 100);
+                    infoPanel = InformationPanel.GetInformationPanel(this, "Exporting Translations...", 340, 120);
                     
                     var bWorker = new BackgroundWorker { WorkerReportsProgress = true };
                     bWorker.DoWork += BWorkerDoWork;
@@ -211,7 +211,7 @@ namespace MsCrmTools.Translator
         {
             lvEntities.Items.Clear();
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Loading entities...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Loading entities...", 340, 120);
 
             var bwFillEntities = new BackgroundWorker();
             bwFillEntities.DoWork += BwFillEntitiesDoWork;
@@ -300,7 +300,7 @@ namespace MsCrmTools.Translator
         private void ImportTranslations()
         {
             sw.Start();
-            infoPanel = InformationPanel.GetInformationPanel(this, "Importing translations...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Importing translations...", 340, 120);
 
             SetState(false);
 

@@ -69,7 +69,7 @@
             this.lblDescription.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDescription.Location = new System.Drawing.Point(106, 63);
             this.lblDescription.Name = "lblDescription";
-            this.lblDescription.Size = new System.Drawing.Size(391, 35);
+            this.lblDescription.Size = new System.Drawing.Size(391, 15);
             this.lblDescription.TabIndex = 2;
             this.lblDescription.Text = "[Description]";
             this.lblDescription.Click += new System.EventHandler(this.MouseClick);

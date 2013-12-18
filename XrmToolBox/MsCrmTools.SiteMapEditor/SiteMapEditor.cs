@@ -685,7 +685,7 @@ namespace MsCrmTools.SiteMapEditor
             CommonDelegates.SetCursor(this, Cursors.WaitCursor);
             EnableControls(false);
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Loading SiteMap...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Loading SiteMap...", 340, 120);
 
             var loadSiteMapWorker = new BackgroundWorker();
             loadSiteMapWorker.RunWorkerCompleted += LoadSiteMapWorkerRunWorkerCompleted;
@@ -739,7 +739,7 @@ namespace MsCrmTools.SiteMapEditor
             CommonDelegates.SetCursor(this, Cursors.WaitCursor);
             EnableControls(false);
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Updating Sitemap...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Updating Sitemap...", 340, 120);
 
             var updateWorker = new BackgroundWorker();
             updateWorker.RunWorkerCompleted += UpdateWorkerRunWorkerCompleted;

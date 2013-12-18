@@ -140,7 +140,7 @@ namespace MsCrmTools.FetchXmlTester
 
         private void ProcessFetchXml()
         {
-            infoPanel = InformationPanel.GetInformationPanel(this, "Executing request...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Executing request...", 340, 120);
 
             var worker = new BackgroundWorker();
             worker.DoWork += WorkerDoWork;

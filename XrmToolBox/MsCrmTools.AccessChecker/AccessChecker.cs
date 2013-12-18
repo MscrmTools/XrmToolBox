@@ -130,7 +130,7 @@ namespace MsCrmTools.AccessChecker
 
         private void ProcessRetrieveEntities()
         {
-            infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving entities...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving entities...", 340, 120);
 
             cBoxEntities.Items.Clear();
 
@@ -265,7 +265,7 @@ namespace MsCrmTools.AccessChecker
                 ((EntityInfo)cBoxEntities.SelectedItem).LogicalName,
             ((EntityInfo)cBoxEntities.SelectedItem).PrimaryAttribute};
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving access rights...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving access rights...", 340, 120);
 
             // Reset panel colors
 

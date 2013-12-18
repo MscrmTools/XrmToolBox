@@ -131,7 +131,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                     parentNode = parentNode.Parent;
                 }
 
-                if(parentNode != null)
+                if (parentNode != null)
                     fileName = string.Format("{0}/{1}", parentNode.Text, fileName);
             }
 
@@ -178,6 +178,13 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             // Add content
             script["content"] = Convert.ToBase64String(File.ReadAllBytes(fiChild.FullName));
 
+            // Generate display name (Credit to badhabits)
+            var lastSlash = fileName.LastIndexOf("/", StringComparison.Ordinal);
+            var displayName = lastSlash > -1
+                ? fileName.Substring(lastSlash + 1)
+                : fileName;
+            script["displayname"] = displayName;
+
             var scriptObject = new WebResource(script, fiChild.FullName);
 
             var node = new TreeNode
@@ -195,7 +202,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             }
             else
             {
-                ((TreeView)parent).Nodes.Add(node);
+                ((TreeView) parent).Nodes.Add(node);
             }
         }
 

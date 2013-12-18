@@ -88,7 +88,7 @@ namespace MsCrmTools.SampleTool
 
         private void ProcessWhoAmI()
         {
-            infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving your user id...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving your user id...", 340, 120);
 
             var worker = new BackgroundWorker();
             worker.DoWork += WorkerDoWork;

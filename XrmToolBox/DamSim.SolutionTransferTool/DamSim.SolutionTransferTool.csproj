@@ -34,22 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="McTools.Xrm.Connection, Version=1.0.1420.65, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\PROJETS\DYNAMICS CRM 2011\TOOLS\_PERSO\McTools.Xrm.Connection\McTools.Xrm.Connection.WinForms\bin\Release\McTools.Xrm.Connection.dll</HintPath>
+    <Reference Include="Microsoft.Crm.Sdk.Proxy">
+      <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2013\SDK\Bin\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>E:\PROJETS\DYNAMICS CRM 2011\TOOLS\_PERSO\McTools.Xrm.Connection\McTools.Xrm.Connection.WinForms\bin\Release\McTools.Xrm.Connection.WinForms.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Client">
+      <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2013\SDK\Bin\Microsoft.Xrm.Client.dll</HintPath>
     </Reference>
-    <Reference Include="microsoft.crm.sdk.proxy">
-      <HintPath>..\..\..\..\04_CRM Tools\CRM 2011 SDK\sdk\bin\microsoft.crm.sdk.proxy.dll</HintPath>
-    </Reference>
-    <Reference Include="microsoft.xrm.client">
-      <HintPath>E:\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK 5.0.13 (UR12)\bin\microsoft.xrm.client.dll</HintPath>
-    </Reference>
-    <Reference Include="microsoft.xrm.sdk">
-      <HintPath>..\..\..\..\04_CRM Tools\CRM 2011 SDK\sdk\bin\microsoft.xrm.sdk.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Sdk">
+      <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2013\SDK\Bin\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -62,8 +54,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="XrmToolBox, Version=1.2013.6.11, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="XrmToolBox">
       <HintPath>..\XrmToolBox\bin\Debug\XrmToolBox.exe</HintPath>
     </Reference>
   </ItemGroup>
@@ -92,7 +83,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y "$(ProjectDir)bin\debug\DamSim.SolutionTransferTool.dll" "$(SolutionDir)XrmToolBox\bin\Debug"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y "$(ProjectDir)$(OutDir)DamSim.SolutionTransferTool.dll" "$(SolutionDir)XrmToolBox\$(OutDir)"</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

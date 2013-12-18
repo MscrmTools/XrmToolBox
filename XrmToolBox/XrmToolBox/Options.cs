@@ -10,6 +10,7 @@ namespace XrmToolBox
         public bool DisplayLargeIcons { get; set; }
         public bool DisplayMostUsedFirst { get; set; }
         public List<PluginUseCount> MostUsedList { get; set; }
+        public DateTime LastAdvertisementDisplay { get; set; }
 
         public Options()
         {
@@ -42,7 +43,8 @@ namespace XrmToolBox
                                    {
                                        DisplayLargeIcons = DisplayLargeIcons,
                                        DisplayMostUsedFirst = DisplayMostUsedFirst,
-                                       MostUsedList = MostUsedList
+                                       MostUsedList = MostUsedList,
+                                       LastAdvertisementDisplay = LastAdvertisementDisplay
                                    };
         }
     }
