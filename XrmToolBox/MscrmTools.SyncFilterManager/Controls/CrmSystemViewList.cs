@@ -157,7 +157,7 @@ namespace MscrmTools.SyncFilterManager.Controls
                 }
                 else
                 {
-                    e.Result = rm.GetRules(new[] { 16, 256 }, worker: (BackgroundWorker)sender);
+                    e.Result = rm.GetRules(new[] { 16, 256 }, (List<Entity>)arguments[0], worker: (BackgroundWorker)sender);
                 }
             }
         }
