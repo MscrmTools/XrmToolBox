@@ -102,12 +102,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.AuditCenter.dll" "$(SolutionDir)XrmToolBox\bin\Debug"
+    <PostBuildEvent>xcopy /y "$(ProjectDir)$(OutDir)MsCrmTools.AuditCenter.dll" "$(SolutionDir)XrmToolBox\$(OutDir)"
 xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.AuditCenter.pdb" "$(SolutionDir)XrmToolBox\bin\Debug"</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

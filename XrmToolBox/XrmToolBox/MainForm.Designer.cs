@@ -53,7 +53,9 @@ namespace XrmToolBox
             this.startADiscussionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rateThisToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbDonate = new System.Windows.Forms.ToolStripButton();
+            this.tsddbDonate = new System.Windows.Forms.ToolStripDropDownButton();
+            this.donateInUSDollarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.donateInEuroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.HomePageTab.SuspendLayout();
             this.pnlHelp.SuspendLayout();
@@ -142,7 +144,7 @@ namespace XrmToolBox
             this.toolStripSeparator3,
             this.toolStripDropDownButton1,
             this.toolStripSeparator4,
-            this.tsbDonate});
+            this.tsddbDonate});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(884, 25);
@@ -259,16 +261,32 @@ namespace XrmToolBox
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
-            // tsbDonate
+            // tsddbDonate
             // 
-            this.tsbDonate.Image = ((System.Drawing.Image)(resources.GetObject("tsbDonate.Image")));
-            this.tsbDonate.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbDonate.Name = "tsbDonate";
-            this.tsbDonate.Size = new System.Drawing.Size(65, 22);
-            this.tsbDonate.Text = "Donate";
-            this.tsbDonate.ToolTipText = "Make a donation using Paypal.\r\n\r\nSupport my work for the community by making a do" +
-    "nation on Paypal.\r\n\r\nThank you!";
-            this.tsbDonate.Click += new System.EventHandler(this.TsbDonateClick);
+            this.tsddbDonate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.donateInUSDollarsToolStripMenuItem,
+            this.donateInEuroToolStripMenuItem});
+            this.tsddbDonate.Image = ((System.Drawing.Image)(resources.GetObject("tsddbDonate.Image")));
+            this.tsddbDonate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsddbDonate.Name = "tsddbDonate";
+            this.tsddbDonate.Size = new System.Drawing.Size(74, 22);
+            this.tsddbDonate.Text = "Donate";
+            // 
+            // donateInUSDollarsToolStripMenuItem
+            // 
+            this.donateInUSDollarsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateInUSDollarsToolStripMenuItem.Image")));
+            this.donateInUSDollarsToolStripMenuItem.Name = "donateInUSDollarsToolStripMenuItem";
+            this.donateInUSDollarsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.donateInUSDollarsToolStripMenuItem.Text = "Donate in US Dollars";
+            this.donateInUSDollarsToolStripMenuItem.Click += new System.EventHandler(this.donateInUSDollarsToolStripMenuItem_Click);
+            // 
+            // donateInEuroToolStripMenuItem
+            // 
+            this.donateInEuroToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateInEuroToolStripMenuItem.Image")));
+            this.donateInEuroToolStripMenuItem.Name = "donateInEuroToolStripMenuItem";
+            this.donateInEuroToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.donateInEuroToolStripMenuItem.Text = "Donate in Euro";
+            this.donateInEuroToolStripMenuItem.Click += new System.EventHandler(this.donateInEuroToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -302,7 +320,6 @@ namespace XrmToolBox
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripButton tsbDonate;
         private System.Windows.Forms.ToolStripDropDownButton tsbManageTabs;
         private System.Windows.Forms.ToolStripMenuItem closeAllTabsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeAllTabsExceptActiveToolStripMenuItem;
@@ -315,6 +332,9 @@ namespace XrmToolBox
         private System.Windows.Forms.Panel pnlHelp;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripDropDownButton tsddbDonate;
+        private System.Windows.Forms.ToolStripMenuItem donateInUSDollarsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem donateInEuroToolStripMenuItem;
     }
 }
 

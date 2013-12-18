@@ -146,7 +146,7 @@ namespace MsCrmTools.Iconator
 
         private void DoAction()
         {
-            infoPanel = InformationPanel.GetInformationPanel(this, "Loading Entities...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Loading Entities...", 340, 120);
 
             listViewEntities.Items.Clear();
             listViewWebRessources16.Items.Clear();
@@ -187,6 +187,8 @@ namespace MsCrmTools.Iconator
             foreach (var webResource in queryWebResources)
             {
                 var imageConverted = ImageHelper.ConvertWebResContent(webResource.Attributes["content"].ToString());
+
+
 
                 if (imageConverted.Size.Height == 32 && imageConverted.Size.Width == 32)
                 {
@@ -339,7 +341,7 @@ namespace MsCrmTools.Iconator
 
             var mappingList = (from ListViewItem item in lvMappings.Items select (EntityImageMap)item.Tag).ToList();
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Applying images to entities. Please wait...", 340,100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Applying images to entities. Please wait...", 340,120);
 
             var bWorker = new BackgroundWorker();
             bWorker.DoWork += BWorkerDoWork;
@@ -471,7 +473,7 @@ namespace MsCrmTools.Iconator
             {
                 if (DialogResult.Yes == MessageBox.Show(this, "Are you sure you want to reset icons for this entity?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                 {
-                    infoPanel = InformationPanel.GetInformationPanel(this, "Reseting icons for entity. Please wait...", 340, 100);
+                    infoPanel = InformationPanel.GetInformationPanel(this, "Reseting icons for entity. Please wait...", 340, 120);
 
                     var bResetWorker = new BackgroundWorker();
                     bResetWorker.DoWork += BResetWorkerDoWork;

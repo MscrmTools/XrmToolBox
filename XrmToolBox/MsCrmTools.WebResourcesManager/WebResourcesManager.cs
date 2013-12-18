@@ -157,7 +157,7 @@ namespace MsCrmTools.WebResourcesManager
 
                 SetWorkingState(true);
 
-                infoPanel = InformationPanel.GetInformationPanel(this, "Loading web resources...", 340, 100);
+                infoPanel = InformationPanel.GetInformationPanel(this, "Loading web resources...", 340, 120);
 
                 var bwFillWebResources = new BackgroundWorker();
                 bwFillWebResources.DoWork += BwFillWebResourcesDoWork;
@@ -187,7 +187,7 @@ namespace MsCrmTools.WebResourcesManager
 
                     SetWorkingState(true);
 
-                    infoPanel = InformationPanel.GetInformationPanel(this, "Loading web resources...", 340, 100);
+                    infoPanel = InformationPanel.GetInformationPanel(this, "Loading web resources...", 340, 120);
 
                     var bwFillWebResources = new BackgroundWorker();
                     bwFillWebResources.DoWork += BwFillWebResourcesDoWork;
@@ -422,7 +422,7 @@ namespace MsCrmTools.WebResourcesManager
             }
 
             SetWorkingState(true);
-            infoPanel = InformationPanel.GetInformationPanel(this, "Updating web resources...", 400, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Updating web resources...", 400, 120);
 
             var parameters = new object[] { webResources, publish, solutionUniqueName };
 
@@ -527,6 +527,11 @@ namespace MsCrmTools.WebResourcesManager
 
                     foreach (FileInfo fiChild in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
                     {
+                        if (fiChild.Extension.Length == 0)
+                        {
+                            continue;
+                        }
+
                         if (WebResource.IsInvalidName(fiChild.Name) || !WebResource.ValidExtensions.Contains(fiChild.Extension.Remove(0, 1)))
                         {
                             invalidFilenames.Add(fiChild.FullName);
@@ -695,7 +700,7 @@ namespace MsCrmTools.WebResourcesManager
         {
             SetWorkingState(true);
             
-            infoPanel = InformationPanel.GetInformationPanel(this, "Deleting web resource...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Deleting web resource...", 340, 120);
 
             var bwDelete = new BackgroundWorker();
             bwDelete.DoWork += BwDeleteDoWork;
@@ -1291,7 +1296,7 @@ namespace MsCrmTools.WebResourcesManager
             var nodes = new List<TreeNode>();
             TreeViewHelper.GetNodes(nodes, tvWebResources, false);
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Starting analysis...", 500, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Starting analysis...", 500, 120);
 
             var bwFindUnunsedResources = new BackgroundWorker();
             bwFindUnunsedResources.DoWork += BwFindUnunsedResourcesDoWork;

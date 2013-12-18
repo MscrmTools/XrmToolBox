@@ -180,7 +180,7 @@ namespace MsCrmTools.AuditCenter
             tsbChangeSystemAuditStatus.Image = statusImageList.Images[2];
 
             Cursor = Cursors.WaitCursor;
-            infoPanel = InformationPanel.GetInformationPanel(this, "Loading entities...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Loading entities...", 340, 120);
 
             var bwFillEntities = new BackgroundWorker();
             bwFillEntities.DoWork += BwFillEntitiesDoWork;
@@ -454,7 +454,7 @@ namespace MsCrmTools.AuditCenter
 
         private void TsbChangeSystemAuditStatusClick(object sender, EventArgs e)
         {
-            infoPanel = InformationPanel.GetInformationPanel(this, "Updating audit status...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Updating audit status...", 340, 120);
 
             var updateStatusBw = new BackgroundWorker();
             updateStatusBw.DoWork += UpdateStatusBwDoWork;
@@ -510,7 +510,7 @@ namespace MsCrmTools.AuditCenter
             toolStripMenu.Enabled = false;
 
             Cursor = Cursors.WaitCursor;
-            infoPanel = InformationPanel.GetInformationPanel(this, "Updating entities...", 500, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Updating entities...", 500, 120);
 
             var applyBw = new BackgroundWorker();
             applyBw.DoWork += ApplyBwDoWork;

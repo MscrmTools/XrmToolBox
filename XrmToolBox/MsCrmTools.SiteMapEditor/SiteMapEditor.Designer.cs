@@ -55,6 +55,7 @@
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripDropDownButtonMoreActions = new System.Windows.Forms.ToolStripDropDownButton();
             this.resetSiteMapToDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetCRM2013SiteMapToDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nodeMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addSystemAreaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addSystemGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,7 +80,6 @@
             this.treeviewMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addRuleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.resetCRM2013SiteMapToDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gbProperties.SuspendLayout();
             this.toolStripItem.SuspendLayout();
             this.gbSiteMap.SuspendLayout();
@@ -363,6 +363,13 @@
     "action";
             this.resetSiteMapToDefaultToolStripMenuItem.Click += new System.EventHandler(this.ResetSiteMapToDefaultToolStripMenuItemClick);
             // 
+            // resetCRM2013SiteMapToDefaultToolStripMenuItem
+            // 
+            this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Name = "resetCRM2013SiteMapToDefaultToolStripMenuItem";
+            this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
+            this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Text = "Reset CRM 2013 SiteMap to default";
+            this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Click += new System.EventHandler(this.resetCRM2013SiteMapToDefaultToolStripMenuItem_Click);
+            // 
             // nodeMenu
             // 
             this.nodeMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -387,7 +394,7 @@
             this.toolStripSeparator7,
             this.deleteToolStripMenuItem});
             this.nodeMenu.Name = "nodeMenu";
-            this.nodeMenu.Size = new System.Drawing.Size(233, 380);
+            this.nodeMenu.Size = new System.Drawing.Size(233, 402);
             this.nodeMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.NodeMenuItemClicked);
             // 
             // addSystemAreaToolStripMenuItem
@@ -534,13 +541,6 @@
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "Icon.png");
-            // 
-            // resetCRM2013SiteMapToDefaultToolStripMenuItem
-            // 
-            this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Name = "resetCRM2013SiteMapToDefaultToolStripMenuItem";
-            this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
-            this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Text = "Reset CRM 2013 SiteMap to default";
-            this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Click += new System.EventHandler(this.resetCRM2013SiteMapToDefaultToolStripMenuItem_Click);
             // 
             // SiteMapEditor
             // 

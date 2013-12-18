@@ -112,7 +112,7 @@ namespace MsCrmTools.ViewLayoutReplicator
 
             CommonDelegates.SetCursor(this, Cursors.WaitCursor);
 
-            informationPanel = InformationPanel.GetInformationPanel(this, "Loading entities...", 340, 100);
+            informationPanel = InformationPanel.GetInformationPanel(this, "Loading entities...", 340, 120);
 
             var bwFillEntities = new BackgroundWorker();
             bwFillEntities.DoWork += BwFillEntitiesDoWork;
@@ -187,7 +187,7 @@ namespace MsCrmTools.ViewLayoutReplicator
             //this.Cursor = Cursors.WaitCursor;
             CommonDelegates.SetCursor(this, Cursors.WaitCursor);
 
-            informationPanel = InformationPanel.GetInformationPanel(this, "Saving views...", 340, 100);
+            informationPanel = InformationPanel.GetInformationPanel(this, "Saving views...", 340, 120);
 
             var bwSaveViews = new BackgroundWorker();
             bwSaveViews.DoWork += BwSaveViewsDoWork;
@@ -251,7 +251,7 @@ namespace MsCrmTools.ViewLayoutReplicator
 
                 CommonDelegates.SetCursor(this, Cursors.WaitCursor);
 
-                informationPanel = InformationPanel.GetInformationPanel(this, "Publishing entity...", 340, 100);
+                informationPanel = InformationPanel.GetInformationPanel(this, "Publishing entity...", 340, 120);
 
                 var bwPublish = new BackgroundWorker();
                 bwPublish.DoWork += BwPublishDoWork;
@@ -603,7 +603,7 @@ namespace MsCrmTools.ViewLayoutReplicator
 
             Cursor = Cursors.WaitCursor;
 
-            informationPanel = InformationPanel.GetInformationPanel(this, "Publishing all customizations...", 340, 100);
+            informationPanel = InformationPanel.GetInformationPanel(this, "Publishing all customizations...", 340, 120);
 
             var bwPublishAll = new BackgroundWorker();
             bwPublishAll.DoWork += BwPublishAllDoWork;

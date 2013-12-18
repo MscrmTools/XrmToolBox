@@ -26,23 +26,30 @@ namespace MsCrmTools.SiteMapEditor.Forms
             {
                 doc.LoadXml(reader.ReadToEnd());
             }
-            
-            FillList(doc, componentName);
+
+            FillList(lvCrm2011SiteMap, doc, componentName);
+
+            using (StreamReader reader = new StreamReader(myAssembly.GetManifestResourceStream("MsCrmTools.SiteMapEditor.Resources.SiteMap2013.xml")))
+            {
+                doc.LoadXml(reader.ReadToEnd());
+            }
+
+            FillList(lvCrm2013SiteMap, doc, componentName);
 
             ToolTip tip = new ToolTip();
             tip.ToolTipTitle = "Information";
             tip.SetToolTip(chkAddChildComponents, "Check this control if you want to add components under the one you select (ie. Area with all child Groups and SubArea or just Area)");
         }
 
-        private void FillList(XmlDocument doc, string componentName)
+        private void FillList(ListView lv, XmlDocument doc, string componentName)
         {
             try
             {
-                XmlNodeList list = doc.SelectSingleNode("ImportExportXml/SiteMap/SiteMap").SelectNodes("//" + componentName);
+                XmlNodeList list = doc.SelectNodes("//" + componentName);
 
                 foreach (XmlNode node in list)
                 {
-                    if (!lstComponents.Items.ContainsKey(node.Attributes["Id"].Value))
+                    if (!lv.Items.ContainsKey(node.Attributes["Id"].Value))
                     {
                         ListViewItem item = new ListViewItem(node.Attributes["Id"].Value);
                         item.SubItems.Add(node.Attributes["Entity"] != null ? node.Attributes["Entity"].Value : "-");
@@ -58,19 +65,19 @@ namespace MsCrmTools.SiteMapEditor.Forms
                                 groupName += " (" + node.ParentNode.Attributes["Id"].Value + ")";
                             }
 
-                            ListViewGroup group = lstComponents.Groups[groupName.Replace(" ", "")];
+                            ListViewGroup group = lv.Groups[groupName.Replace(" ", "")];
 
                             if (group == null)
                             {
                                 group = new ListViewGroup(groupName);
                                 group.Name = groupName.Replace(" ", "");
-                                lstComponents.Groups.Add(group);
+                                lv.Groups.Add(group);
                             }
 
                             item.Group = group;
                         }
 
-                        lstComponents.Items.Add(item);
+                        lv.Items.Add(item);
                     }
                 }
             }
@@ -87,9 +94,11 @@ namespace MsCrmTools.SiteMapEditor.Forms
 
         private void btnComponentPickerValidate_Click(object sender, EventArgs e)
         {
-            if (lstComponents.SelectedItems.Count > 0)
+            var lv = tabControl1.SelectedIndex == 0 ? lvCrm2011SiteMap : lvCrm2013SiteMap;
+
+            if (lv.SelectedItems.Count > 0)
             {
-                XmlNode selectedXmlNode = (XmlNode)lstComponents.SelectedItems[0].Tag;
+                XmlNode selectedXmlNode = (XmlNode)lv.SelectedItems[0].Tag;
 
                 if (!chkAddChildComponents.Checked)
                 {

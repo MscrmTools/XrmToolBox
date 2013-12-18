@@ -321,7 +321,7 @@ namespace MsCrmTools.RoleUpdater.Controls
                 return;
             }
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Updating roles...", 500, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Updating roles...", 500, 120);
 
             var worker = new BackgroundWorker();
             worker.DoWork += WorkerDoWork;

@@ -76,8 +76,7 @@ namespace MsCrmTools.ScriptsFinder
             tsbMainFindScripts.Enabled = false;
             tsbExportToCsv.Enabled = false;
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Loading scripts (this can take a while...)", 340,
-                                                             100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Loading scripts (this can take a while...)", 340,120);
 
             var worker = new BackgroundWorker();
             worker.DoWork += WorkerDoWork;

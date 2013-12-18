@@ -113,7 +113,7 @@ namespace MsCrmTools.AttributeBulkUpdater
             tsbPublishEntity.Enabled = false;
             tsbSaveAttributes.Enabled = false;
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Loading entities...", 340, 100);
+            infoPanel = InformationPanel.GetInformationPanel(this, "Loading entities...", 340, 120);
 
             var bwFillEntities = new BackgroundWorker();
             bwFillEntities.DoWork += bwFillEntities_DoWork;
@@ -191,7 +191,7 @@ namespace MsCrmTools.AttributeBulkUpdater
                 CommonDelegates.SetCursor(this, Cursors.WaitCursor);
                 //ccsb.SetMessage("Loading attributes...");
 
-                infoPanel = InformationPanel.GetInformationPanel(this, "Loading attributes...", 340, 100);
+                infoPanel = InformationPanel.GetInformationPanel(this, "Loading attributes...", 340, 120);
 
                 var bwFillAttributes = new BackgroundWorker();
                 bwFillAttributes.DoWork += bwFillAttributes_DoWork;
@@ -321,7 +321,7 @@ namespace MsCrmTools.AttributeBulkUpdater
                 CommonDelegates.SetCursor(this, Cursors.WaitCursor);
                 //ccsb.SetMessage("Publishing entity...");
 
-                infoPanel = InformationPanel.GetInformationPanel(this, "Publishing entities...", 340, 100);
+                infoPanel = InformationPanel.GetInformationPanel(this, "Publishing entities...", 340, 120);
 
                 var bwPublish = new BackgroundWorker();
                 bwPublish.DoWork += bwPublish_DoWork;

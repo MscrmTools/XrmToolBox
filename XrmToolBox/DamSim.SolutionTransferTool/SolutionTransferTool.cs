@@ -260,7 +260,7 @@ namespace DamSim.SolutionTransferTool
             {
                 var item = lstSourceSolutions.SelectedItems[0];
 
-                infoPanel = InformationPanel.GetInformationPanel(this, "Initializing...", 340, 100);
+                infoPanel = InformationPanel.GetInformationPanel(this, "Initializing...", 340, 120);
 
                 var requests = new List<OrganizationRequest>();
                 requests.Add(new ExportSolutionRequest
