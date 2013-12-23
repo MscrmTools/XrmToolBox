@@ -857,7 +857,8 @@ namespace MsCrmTools.SiteMapEditor
         /// </summary>
         /// <param name="currentNode">TreeNode to add to the Xml</param>
         /// <param name="parentXmlNode">XmlNode where to add data</param>
-        private void AddXmlNode(TreeNode currentNode, XmlNode parentXmlNode)
+        /// <param name="hasDisabledParent">Indicates if a parent node is already disabled</param>
+        private void AddXmlNode(TreeNode currentNode, XmlNode parentXmlNode, bool hasDisabledParent = false)
         {
             XmlNode newNode = parentXmlNode.OwnerDocument.CreateElement(currentNode.Text.Split(' ')[0]);
 
@@ -889,13 +890,13 @@ namespace MsCrmTools.SiteMapEditor
             }
 
             if (titles != null)
-                AddXmlNode(titles, newNode);
+                AddXmlNode(titles, newNode, hasDisabledParent || collec.ContainsKey("_disabled"));
             if (descriptions != null)
-                AddXmlNode(descriptions, newNode);
+                AddXmlNode(descriptions, newNode, hasDisabledParent || collec.ContainsKey("_disabled"));
             foreach (TreeNode otherNode in others)
-                AddXmlNode(otherNode, newNode);
+                AddXmlNode(otherNode, newNode, hasDisabledParent || collec.ContainsKey("_disabled"));
 
-            if (collec.ContainsKey("_disabled"))
+            if (collec.ContainsKey("_disabled") && !hasDisabledParent)
             {
                 XmlComment comment = parentXmlNode.OwnerDocument.CreateComment(newNode.OuterXml);
                 parentXmlNode.AppendChild(comment);
