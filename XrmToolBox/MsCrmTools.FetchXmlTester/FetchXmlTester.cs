@@ -11,6 +11,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using CSRichTextBoxSyntaxHighlighting;
+using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using XrmToolBox;
@@ -105,7 +106,7 @@ namespace MsCrmTools.FetchXmlTester
         /// <param name="newService">Organization service</param>
         /// <param name="actionName">Action that requested a service update</param>
         /// <param name="parameter">Parameter passed when requesting a service update</param>
-        public void UpdateConnection(IOrganizationService newService, string actionName = "", object parameter = null)
+        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
         {
             service = newService;
 

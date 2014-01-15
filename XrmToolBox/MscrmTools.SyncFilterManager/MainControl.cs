@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using MscrmTools.SyncFilterManager.AppCode;
 using MscrmTools.SyncFilterManager.Controls;
@@ -96,7 +97,7 @@ namespace MscrmTools.SyncFilterManager
         /// <param name="newService">Organization service</param>
         /// <param name="actionName">Action that requested a service update</param>
         /// <param name="parameter">Parameter passed when requesting a service update</param>
-        public void UpdateConnection(IOrganizationService newService, string actionName = "", object parameter = null)
+        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
         {
             service = newService;
 

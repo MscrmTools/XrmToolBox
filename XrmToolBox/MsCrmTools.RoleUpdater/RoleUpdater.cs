@@ -8,12 +8,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.RoleUpdater.Controls;
 using MsCrmTools.RoleUpdater.DelegatesHelpers;
 using XrmToolBox;
 using XrmToolBox.Attributes;
+using CrmExceptionHelper = XrmToolBox.CrmExceptionHelper;
 
 [assembly: BackgroundColor("")]
 [assembly: PrimaryFontColor("")]
@@ -100,7 +102,7 @@ namespace MsCrmTools.RoleUpdater
 
         #region Methods
 
-        public void UpdateConnection(IOrganizationService newService, string actionName = "", object parameter = null)
+        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
         {
             service = newService;
             rManager = new RoleManager(service);

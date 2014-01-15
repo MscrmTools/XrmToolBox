@@ -81,6 +81,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Connection Projects\McTools.Xrm.Connection\McTools.Xrm.Connection.csproj">
+      <Project>{c3824c2c-6e2e-4fde-a2aa-229bbc7c3b1f}</Project>
+      <Name>McTools.Xrm.Connection</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y "$(ProjectDir)$(OutDir)DamSim.SolutionTransferTool.dll" "$(SolutionDir)XrmToolBox\$(OutDir)"</PostBuildEvent>

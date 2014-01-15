@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Client.Services;
+using Microsoft.Xrm.Client.Windows.Controls.ConnectionDialog;
 using XrmToolBox;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
@@ -56,7 +58,7 @@ namespace DamSim.SolutionTransferTool
             get { return service; }
         }
 
-        public void UpdateConnection(IOrganizationService newService, string actionName = "", object parameter = null)
+        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
         {
             if (actionName == "TargetOrganization")
             {

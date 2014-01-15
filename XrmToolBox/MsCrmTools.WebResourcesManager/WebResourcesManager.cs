@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using McTools.Xrm.Connection;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
@@ -22,6 +23,7 @@ using MsCrmTools.WebResourcesManager.Forms.Solutions;
 using MsCrmTools.WebResourcesManager.UserControls;
 using XrmToolBox;
 using XrmToolBox.Attributes;
+using CrmExceptionHelper = XrmToolBox.CrmExceptionHelper;
 
 [assembly: BackgroundColor("")]
 [assembly: PrimaryFontColor("")]
@@ -85,7 +87,7 @@ namespace MsCrmTools.WebResourcesManager
         public event EventHandler OnRequestConnection;
         public event EventHandler OnCloseTool;
 
-        void IMsCrmToolsPluginUserControl.UpdateConnection(IOrganizationService newService, string actionName, object parameter = null)
+        void IMsCrmToolsPluginUserControl.UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter = null)
         {
             service = newService;
             wrManager = new WebResourceManager(newService);

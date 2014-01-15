@@ -11,11 +11,13 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using LicenseKey;
+using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using XrmToolBox;
 using XrmToolBox.Attributes;
 using Microsoft.Xrm.Sdk.Metadata;
+using CrmExceptionHelper = XrmToolBox.CrmExceptionHelper;
 
 // If empty strings are left, default values are used
 [assembly: BackgroundColor("")]
@@ -96,7 +98,7 @@ namespace MsCrmTools.Translator
         /// <param name="newService">Organization service</param>
         /// <param name="actionName">Action that requested a service update</param>
         /// <param name="parameter">Parameter passed when requesting a service update</param>
-        public void UpdateConnection(IOrganizationService newService, string actionName = "", object parameter = null)
+        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
         {
             service = newService;
 

@@ -38,6 +38,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK 5.0.13\bin\microsoft.crm.sdk.proxy.dll</HintPath>
     </Reference>
+    <Reference Include="microsoft.xrm.client">
+      <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK 5.0.16\bin\microsoft.xrm.client.dll</HintPath>
+    </Reference>
     <Reference Include="microsoft.xrm.sdk, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK 5.0.13\bin\microsoft.xrm.sdk.dll</HintPath>
@@ -64,6 +67,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Connection Projects\McTools.Xrm.Connection\McTools.Xrm.Connection.csproj">
+      <Project>{c3824c2c-6e2e-4fde-a2aa-229bbc7c3b1f}</Project>
+      <Name>McTools.Xrm.Connection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XrmToolBox\XrmToolBox.csproj">
       <Project>{328d55be-8b9a-4087-a5c2-9fbaf623f54b}</Project>
       <Name>XrmToolBox</Name>

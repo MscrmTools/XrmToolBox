@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -18,6 +19,7 @@ using XrmToolBox;
 using XrmToolBox.Attributes;
 using Microsoft.Xrm.Sdk.Metadata;
 using System.Collections.Generic;
+using CrmExceptionHelper = XrmToolBox.CrmExceptionHelper;
 
 // If empty strings are left, default values are used
 [assembly: BackgroundColor("")]
@@ -122,7 +124,7 @@ namespace MsCrmTools.AuditCenter
         /// <param name="newService">Organization service</param>
         /// <param name="actionName">Action that requested a service update</param>
         /// <param name="parameter">Parameter passed when requesting a service update</param>
-        public void UpdateConnection(IOrganizationService newService, string actionName = "", object parameter = null)
+        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
         {
             service = newService;
 

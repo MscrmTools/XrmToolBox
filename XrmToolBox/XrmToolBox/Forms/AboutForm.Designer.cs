@@ -121,9 +121,9 @@
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblTitle.Location = new System.Drawing.Point(12, 6);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(370, 25);
+            this.lblTitle.Size = new System.Drawing.Size(417, 25);
             this.lblTitle.TabIndex = 8;
-            this.lblTitle.Text = "Toolbox for Microsoft Dynamics CRM 2011";
+            this.lblTitle.Text = "Toolbox for Microsoft Dynamics CRM 2011/2013";
             // 
             // linkClose
             // 
