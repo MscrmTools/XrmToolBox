@@ -144,7 +144,7 @@ namespace XrmToolBox
                     {
                         var userControl = (UserControl) args.Control;
 
-                        args.Control.UpdateConnection(e.OrganizationService, args.ActionName, args.Parameter);
+                        args.Control.UpdateConnection(e.OrganizationService, currentConnectionDetail, args.ActionName, args.Parameter);
 
                         userControl.Parent.Text = string.Format("{0} ({1})",
                             userControl.Parent.Text.Split(' ')[0],
@@ -349,7 +349,7 @@ namespace XrmToolBox
             if (service != null)
             {
                 var clonedService = new OrganizationService(CrmConnection.Parse(currentConnectionDetail.GetOrganizationCrmConnectionString()));
-                ((IMsCrmToolsPluginUserControl) pluginControl).UpdateConnection(clonedService);
+                ((IMsCrmToolsPluginUserControl)pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
             }
 
             ((IMsCrmToolsPluginUserControl)pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
@@ -460,7 +460,7 @@ namespace XrmToolBox
             {
                 foreach(TabPage tab in tcu.SelectedTabs)
                 {
-                    ((IMsCrmToolsPluginUserControl)tab.Controls[0]).UpdateConnection(service);
+                    ((IMsCrmToolsPluginUserControl)tab.Controls[0]).UpdateConnection(service, currentConnectionDetail);
            
                     tab.Text = string.Format("{0} ({1})",
                                         ((AssemblyTitleAttribute)GetAssemblyAttribute(tab.Controls[0].GetType().Assembly, typeof(AssemblyTitleAttribute))).Title,

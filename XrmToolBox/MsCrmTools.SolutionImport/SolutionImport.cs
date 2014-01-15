@@ -7,6 +7,7 @@ using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
+using McTools.Xrm.Connection;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
@@ -52,7 +53,7 @@ namespace MsCrmTools.SolutionImport
         public event EventHandler OnRequestConnection;
         public event EventHandler OnCloseTool;
 
-        public void UpdateConnection(IOrganizationService newService, string actionName = "", object parameter = null)
+        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
         {
             ((OrganizationServiceProxy)((OrganizationService)newService).InnerService).Timeout = new TimeSpan(0,1,0,0);
 

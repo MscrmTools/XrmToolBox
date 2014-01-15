@@ -5,6 +5,7 @@
 
 using System;
 using System.Drawing;
+using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 
 namespace XrmToolBox
@@ -35,8 +36,9 @@ namespace XrmToolBox
         /// Updates the organization service used by the tool
         /// </summary>
         /// <param name="newService">Organization service</param>
+        /// <param name="connectionDetail">Details of the connection</param>
         /// <param name="actionName">Action that requested a service update</param>
         /// <param name="parameter">Parameter passed when requesting a service update</param>
-        void UpdateConnection(IOrganizationService newService, string actionName = "", object parameter = null);
+        void UpdateConnection(IOrganizationService newService, ConnectionDetail connectionDetail, string actionName = "", object parameter = null);
     }
 }

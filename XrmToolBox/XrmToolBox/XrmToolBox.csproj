@@ -40,12 +40,6 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
-    <Reference Include="McTools.Xrm.Connection">
-      <HintPath>..\..\McTools.Xrm.Connection\McTools.Xrm.Connection.WinForms\bin\Release\McTools.Xrm.Connection.dll</HintPath>
-    </Reference>
-    <Reference Include="McTools.Xrm.Connection.WinForms">
-      <HintPath>..\..\McTools.Xrm.Connection\McTools.Xrm.Connection.WinForms\bin\Release\McTools.Xrm.Connection.WinForms.dll</HintPath>
-    </Reference>
     <Reference Include="microsoft.crm.sdk.proxy">
       <HintPath>..\..\McTools.Xrm.Connection\McTools.Xrm.Connection.WinForms\bin\Release\microsoft.crm.sdk.proxy.dll</HintPath>
     </Reference>
@@ -186,10 +180,20 @@
     <EmbeddedResource Include="Images\nologo.png" />
     <EmbeddedResource Include="Images\progress.gif" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Connection Projects\McTools.Xrm.Connection.WinForms\McTools.Xrm.Connection.WinForms.csproj">
+      <Project>{eeb5c09f-cec6-4fb5-87b5-ae61ae89c9eb}</Project>
+      <Name>McTools.Xrm.Connection.WinForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connection Projects\McTools.Xrm.Connection\McTools.Xrm.Connection.csproj">
+      <Project>{c3824c2c-6e2e-4fde-a2aa-229bbc7c3b1f}</Project>
+      <Name>McTools.Xrm.Connection</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

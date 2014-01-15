@@ -11,6 +11,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
+using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -189,7 +190,7 @@ namespace MsCrmTools.SiteMapEditor
                 using (
                     var reader =
                         new StreamReader(
-                            myAssembly.GetManifestResourceStream(string.Format("MsCrmTools.SiteMapEditor.Resources.{0}.xml", isCrm2011 ? "sitemap" : "sitemap2013"))))
+                            myAssembly.GetManifestResourceStream(string.Format("MsCrmTools.SiteMapEditor.Resources.{0}.xml", isCrm2011 ? "sitemap" : "SiteMap2013"))))
                 {
                     var doc = new XmlDocument();
                     doc.LoadXml(reader.ReadToEnd());
@@ -949,7 +950,7 @@ namespace MsCrmTools.SiteMapEditor
         public event EventHandler OnRequestConnection;
         public event EventHandler OnCloseTool;
 
-        public void UpdateConnection(IOrganizationService newService, string actionName = "", object parameter = null)
+        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
         {
             service = newService;
 

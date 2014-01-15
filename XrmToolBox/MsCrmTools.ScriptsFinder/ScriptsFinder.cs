@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using XrmToolBox;
 using XrmToolBox.Attributes;
@@ -138,7 +139,7 @@ namespace MsCrmTools.ScriptsFinder
         public event EventHandler OnRequestConnection;
         public event EventHandler OnCloseTool;
 
-        public void UpdateConnection(IOrganizationService newService, string actionName = "", object parameter = null)
+        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
         {
             service = newService;
 
