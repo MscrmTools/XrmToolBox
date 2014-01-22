@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox", "XrmToolBox\XrmToolBox.csproj", "{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.SiteMapEditor", "MsCrmTools.SiteMapEditor\MsCrmTools.SiteMapEditor.csproj", "{5DD2E91B-6431-4391-AC45-205BD1B67818}"
@@ -51,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McTools.Xrm.Connection.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "McTools.Xrm.Connection.WinForms", "Connection Projects\McTools.Xrm.Connection.WinForms\McTools.Xrm.Connection.WinForms.csproj", "{EEB5C09F-CEC6-4FB5-87B5-AE61AE89C9EB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{1A7814D2-1185-484E-92CC-7DD71DDE6488}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
 		SccNumberOfProjects = 25
@@ -58,63 +62,81 @@ Global
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs24
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = MsCrmTools.AttributeBulkUpdater\\MsCrmTools.AttributeBulkUpdater.csproj
+		SccProjectTopLevelParentUniqueName1 = XrmToolBox.sln
 		SccProjectName1 = MsCrmTools.AttributeBulkUpdater
 		SccLocalPath1 = MsCrmTools.AttributeBulkUpdater
 		SccProjectUniqueName2 = MsCrmTools.Iconator\\MsCrmTools.Iconator.csproj
+		SccProjectTopLevelParentUniqueName2 = XrmToolBox.sln
 		SccProjectName2 = MsCrmTools.Iconator
 		SccLocalPath2 = MsCrmTools.Iconator
 		SccProjectUniqueName3 = MsCrmTools.RoleUpdater\\MsCrmTools.RoleUpdater.csproj
+		SccProjectTopLevelParentUniqueName3 = XrmToolBox.sln
 		SccProjectName3 = MsCrmTools.RoleUpdater
 		SccLocalPath3 = MsCrmTools.RoleUpdater
 		SccProjectUniqueName4 = MsCrmTools.SampleTool\\MsCrmTools.SampleTool.csproj
+		SccProjectTopLevelParentUniqueName4 = XrmToolBox.sln
 		SccProjectName4 = MsCrmTools.SampleTool
 		SccLocalPath4 = MsCrmTools.SampleTool
 		SccProjectUniqueName5 = MsCrmTools.ScriptsFinder\\MsCrmTools.ScriptsFinder.csproj
+		SccProjectTopLevelParentUniqueName5 = XrmToolBox.sln
 		SccProjectName5 = MsCrmTools.ScriptsFinder
 		SccLocalPath5 = MsCrmTools.ScriptsFinder
 		SccProjectUniqueName6 = MsCrmTools.SiteMapEditor\\MsCrmTools.SiteMapEditor.csproj
+		SccProjectTopLevelParentUniqueName6 = XrmToolBox.sln
 		SccProjectName6 = MsCrmTools.SiteMapEditor
 		SccLocalPath6 = MsCrmTools.SiteMapEditor
 		SccProjectUniqueName7 = MsCrmTools.SolutionImport\\MsCrmTools.SolutionImport.csproj
+		SccProjectTopLevelParentUniqueName7 = XrmToolBox.sln
 		SccProjectName7 = MsCrmTools.SolutionImport
 		SccLocalPath7 = MsCrmTools.SolutionImport
 		SccProjectUniqueName8 = MsCrmTools.ViewLayoutReplicator\\MsCrmTools.ViewLayoutReplicator.csproj
+		SccProjectTopLevelParentUniqueName8 = XrmToolBox.sln
 		SccProjectName8 = MsCrmTools.ViewLayoutReplicator
 		SccLocalPath8 = MsCrmTools.ViewLayoutReplicator
 		SccProjectUniqueName9 = MsCrmTools.WebResourcesManager\\MsCrmTools.WebResourcesManager.csproj
+		SccProjectTopLevelParentUniqueName9 = XrmToolBox.sln
 		SccProjectName9 = MsCrmTools.WebResourcesManager
 		SccLocalPath9 = MsCrmTools.WebResourcesManager
 		SccProjectUniqueName10 = XrmToolBox\\XrmToolBox.csproj
 		SccProjectName10 = XrmToolBox
 		SccLocalPath10 = XrmToolBox
 		SccProjectUniqueName11 = MsCrmTools.FetchXmlTester\\MsCrmTools.FetchXmlTester.csproj
+		SccProjectTopLevelParentUniqueName11 = XrmToolBox.sln
 		SccProjectName11 = MsCrmTools.FetchXmlTester
 		SccLocalPath11 = MsCrmTools.FetchXmlTester
 		SccProjectUniqueName12 = MsCrmTools.AccessChecker\\MsCrmTools.AccessChecker.csproj
+		SccProjectTopLevelParentUniqueName12 = XrmToolBox.sln
 		SccProjectName12 = MsCrmTools.AccessChecker
 		SccLocalPath12 = MsCrmTools.AccessChecker
 		SccProjectUniqueName13 = MsCrmTools.PrivDiscover\\MsCrmTools.PrivDiscover.csproj
+		SccProjectTopLevelParentUniqueName13 = XrmToolBox.sln
 		SccProjectName13 = MsCrmTools.PrivDiscover
 		SccLocalPath13 = MsCrmTools.PrivDiscover
 		SccProjectUniqueName14 = MsCrmTools.MetadataDocumentGenerator\\MsCrmTools.MetadataDocumentGenerator.csproj
+		SccProjectTopLevelParentUniqueName14 = XrmToolBox.sln
 		SccProjectName14 = MsCrmTools.MetadataDocumentGenerator
 		SccLocalPath14 = MsCrmTools.MetadataDocumentGenerator
 		SccProjectUniqueName15 = DamSim.SolutionTransferTool\\DamSim.SolutionTransferTool.csproj
+		SccProjectTopLevelParentUniqueName15 = XrmToolBox.sln
 		SccProjectName15 = DamSim.SolutionTransferTool
 		SccLocalPath15 = DamSim.SolutionTransferTool
 		SccProjectUniqueName16 = MsCrmTools.Translator\\MsCrmTools.Translator.csproj
+		SccProjectTopLevelParentUniqueName16 = XrmToolBox.sln
 		SccProjectName16 = MsCrmTools.Translator
 		SccLocalPath16 = MsCrmTools.Translator
 		SccProjectUniqueName17 = Console.Test\\Console.Test.csproj
 		SccProjectName17 = Console.Test
 		SccLocalPath17 = Console.Test
 		SccProjectUniqueName18 = MsCrmTools.AuditCenter\\MsCrmTools.AuditCenter.csproj
+		SccProjectTopLevelParentUniqueName18 = XrmToolBox.sln
 		SccProjectName18 = MsCrmTools.AuditCenter
 		SccLocalPath18 = MsCrmTools.AuditCenter
 		SccProjectUniqueName19 = MscrmTools.SyncFilterManager\\MscrmTools.SyncFilterManager.csproj
+		SccProjectTopLevelParentUniqueName19 = XrmToolBox.sln
 		SccProjectName19 = MscrmTools.SyncFilterManager
 		SccLocalPath19 = MscrmTools.SyncFilterManager
 		SccProjectUniqueName20 = MsCrmTools.FormParameterManager\\MsCrmTools.FormParameterManager.csproj
+		SccProjectTopLevelParentUniqueName20 = XrmToolBox.sln
 		SccProjectName20 = MsCrmTools.FormParameterManager
 		SccLocalPath20 = MsCrmTools.FormParameterManager
 		SccProjectUniqueName21 = Connection\u0020Projects\\McTools.Xrm.Connection\\McTools.Xrm.Connection.csproj
@@ -391,5 +413,23 @@ Global
 		{D1F6E3FC-93D5-43C1-9465-25231BCC93BF} = {B6637A1A-E79E-48EF-8724-1ACE99142A8A}
 		{5093677C-F49B-4249-BEC1-E117E62255AD} = {B6637A1A-E79E-48EF-8724-1ACE99142A8A}
 		{EEB5C09F-CEC6-4FB5-87B5-AE61AE89C9EB} = {B6637A1A-E79E-48EF-8724-1ACE99142A8A}
+		{2DA068AE-5B32-46B4-864D-0D8507A6D981} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{72762706-441B-4F44-9A51-2FCEA95E1F31} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{693DDB30-8E8E-43E9-AE13-EE2010F46C96} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{B5C2C54B-804E-403E-80B1-97A1564CAE84} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{1DB58FD6-CCF8-458F-9941-312CDFB45EFA} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{8BF3FA24-62A9-44EF-A76B-ADB092E86514} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{A2A4C130-454A-4F40-9B06-8CD77CC557D6} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{AEB54313-C622-49F4-8D9A-2D75BFA54901} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{BF5E84F9-91B6-4849-8321-6C9D6B9CE9AA} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{22CDF25B-D751-4ABC-BFA2-EC754C9937EF} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{5BF1E228-F898-40CF-B8FB-8412D8C81CFF} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{838CD437-FEC6-478F-A5CB-8DA6E60E70C9} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{5DD2E91B-6431-4391-AC45-205BD1B67818} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{33322CD9-27B3-4C2F-BFC4-D44EEFE8A976} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{31D65FA3-20B7-41FC-89AA-F9EC30D5E574} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{E8A13109-B078-407A-9F6C-3711672770E2} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{4C976A6C-F6A2-4E58-B52C-5CF701C97E50} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{71737D43-3B0A-4709-93F2-ED9C62C836B3} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 	EndGlobalSection
 EndGlobal
