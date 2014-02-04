@@ -14,6 +14,8 @@ using Microsoft.Xrm.Sdk.Client;
 using Tanguy.WinForm.Utilities.DelegatesHelpers;
 using XrmToolBox;
 using XrmToolBox.Attributes;
+using Microsoft.Xrm.Sdk.Query;
+using System.Threading;
 
 [assembly: BackgroundColor("")]
 [assembly: PrimaryFontColor("")]
@@ -30,6 +32,8 @@ namespace MsCrmTools.SolutionImport
         private Panel infoPanel;
         private SolutionManager sManager;
         private IOrganizationService service;
+
+        private Guid currentOperationId;
 
         #endregion Variables
 
@@ -111,25 +115,28 @@ namespace MsCrmTools.SolutionImport
 
         private void ImportArchive(ImportSettings iSettings)
         {
+            currentOperationId = iSettings.ImportId;
+
             CommonDelegates.SetCursor(this, Cursors.WaitCursor);
 
             infoPanel = InformationPanel.GetInformationPanel(this, "Importing solution...", 340, 120);
 
             EnableControls(false);
-
-            var worker = new BackgroundWorker();
+           
+            var worker = new BackgroundWorker { WorkerReportsProgress = true };
             worker.DoWork += WorkerDoWork;
             worker.ProgressChanged += WorkerProgressChanged;
             worker.RunWorkerCompleted += WorkerRunWorkerCompleted;
-            worker.WorkerReportsProgress = true;
             worker.RunWorkerAsync(iSettings);
         }
+
+        public bool hasFinished = false;
 
         void WorkerProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             if (e.ProgressPercentage <= 100)
             {
-                InformationPanel.ChangeInformationPanelMessage(infoPanel, "Importing solution...");
+                InformationPanel.ChangeInformationPanelMessage(infoPanel, string.Format("Importing solution...", e.ProgressPercentage));
             }
             else
             {
@@ -142,6 +149,7 @@ namespace MsCrmTools.SolutionImport
             var worker = (BackgroundWorker) sender;
             var settings = (ImportSettings) e.Argument;
 
+            // Launch a new thread to monitor import status
             if (settings.IsFolder)
             {
                 sManager.ImportSolutionFolder(settings);
@@ -151,7 +159,9 @@ namespace MsCrmTools.SolutionImport
                 sManager.ImportSolutionArchive(settings.Path, settings);
             }
 
-            if (((ImportSettings) e.Argument).Publish)
+            hasFinished = true;
+            
+            if (((ImportSettings)e.Argument).Publish)
             {
                 worker.ReportProgress(101, "Publishing solution...");
                 sManager.PublishAll();

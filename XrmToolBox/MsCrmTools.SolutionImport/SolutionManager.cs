@@ -9,13 +9,14 @@ using System.ServiceModel;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace MsCrmTools.SolutionImport
 {
     internal class SolutionManager
     {
         private readonly IOrganizationService innerService;
-        private Guid importJob;
         private string importPath; //Added to allow for import log download
         private string zipFile; //moved to global so it can be reused int he import log download
 
@@ -49,8 +50,13 @@ namespace MsCrmTools.SolutionImport
             {
                 if (settings.DownloadLog)
                 {
-                    DownloadLogFile(importPath, settings);
-                } //Download the log file
+                    string filePath = DownloadLogFile(importPath, settings);
+
+                    if (MessageBox.Show("Do you want to open the log file now?\r\n\r\nThe file will also be available on disk: " + filePath, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        Process.Start("Excel.exe", "\"" + filePath + "\"");
+                    }
+                } 
             }
         }
 
@@ -81,8 +87,13 @@ namespace MsCrmTools.SolutionImport
             {
                 if (settings.DownloadLog)
                 {
-                    DownloadLogFile(zipFile, settings);
-                } //Download the log file
+                    string filePath = DownloadLogFile(importPath, settings);
+
+                    if (MessageBox.Show("Do you want to open the log file now?\r\n\r\nThe file will also be available on disk: " + filePath, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    {
+                        Process.Start("Excel.exe", "\"" + filePath + "\"");
+                    }
+                }
             }
         }
 
@@ -100,7 +111,7 @@ namespace MsCrmTools.SolutionImport
         }
 
         //Downloads the import log file
-        public void DownloadLogFile(string path, ImportSettings settings)
+        public string DownloadLogFile(string path, ImportSettings settings)
         {
             try
             {
@@ -112,12 +123,15 @@ namespace MsCrmTools.SolutionImport
                     (RetrieveFormattedImportJobResultsResponse) innerService.Execute(importLogRequest);
                 DateTime time = DateTime.Now;
                 string format = "yyyy_MM_dd__HH_mm";
-                File.WriteAllText(path.Replace(".zip", " ") + time.ToString(format) + ".xml",
-                                  importLogResponse.FormattedResults);
+                string filePath = path.Replace(".zip", "-") + time.ToString(format) + ".xml";
+                File.WriteAllText(filePath, importLogResponse.FormattedResults);
+
+                return filePath;
             }
             catch (Exception)
             {
                 // Do nothing
+                return string.Empty;
             }
         }
 
