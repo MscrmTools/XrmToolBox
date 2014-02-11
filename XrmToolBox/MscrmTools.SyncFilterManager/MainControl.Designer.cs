@@ -39,6 +39,8 @@
             this.toolStrip5 = new System.Windows.Forms.ToolStrip();
             this.tsbLoadSystemSynchronizationFilter = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbSystemFilterProperties = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbSystemRuleDelete = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbShowFetchXmlSystemRules = new System.Windows.Forms.ToolStripButton();
@@ -46,6 +48,8 @@
             this.toolStrip4 = new System.Windows.Forms.ToolStrip();
             this.tsbLoadDefaultLocalDataRules = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbTemplateFilterProperties = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbDefaultDelete = new System.Windows.Forms.ToolStripButton();
             this.tsbDefineAsDefault = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
@@ -179,6 +183,8 @@
             this.toolStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbLoadSystemSynchronizationFilter,
             this.toolStripSeparator11,
+            this.tsbSystemFilterProperties,
+            this.toolStripSeparator12,
             this.tsbSystemRuleDelete,
             this.toolStripSeparator10,
             this.tsbShowFetchXmlSystemRules});
@@ -202,6 +208,21 @@
             // 
             this.toolStripSeparator11.Name = "toolStripSeparator11";
             this.toolStripSeparator11.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsbSystemFilterProperties
+            // 
+            this.tsbSystemFilterProperties.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbSystemFilterProperties.Image = ((System.Drawing.Image)(resources.GetObject("tsbSystemFilterProperties.Image")));
+            this.tsbSystemFilterProperties.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbSystemFilterProperties.Name = "tsbSystemFilterProperties";
+            this.tsbSystemFilterProperties.Size = new System.Drawing.Size(23, 22);
+            this.tsbSystemFilterProperties.Text = "Properties";
+            this.tsbSystemFilterProperties.Click += new System.EventHandler(this.tsbSystemFilterProperties_Click);
+            // 
+            // toolStripSeparator12
+            // 
+            this.toolStripSeparator12.Name = "toolStripSeparator12";
+            this.toolStripSeparator12.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbSystemRuleDelete
             // 
@@ -245,6 +266,8 @@
             this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbLoadDefaultLocalDataRules,
             this.toolStripSeparator3,
+            this.tsbTemplateFilterProperties,
+            this.toolStripSeparator13,
             this.tsbDefaultDelete,
             this.tsbDefineAsDefault,
             this.toolStripSeparator5,
@@ -271,6 +294,21 @@
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsbTemplateFilterProperties
+            // 
+            this.tsbTemplateFilterProperties.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbTemplateFilterProperties.Image = ((System.Drawing.Image)(resources.GetObject("tsbTemplateFilterProperties.Image")));
+            this.tsbTemplateFilterProperties.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbTemplateFilterProperties.Name = "tsbTemplateFilterProperties";
+            this.tsbTemplateFilterProperties.Size = new System.Drawing.Size(23, 22);
+            this.tsbTemplateFilterProperties.Text = "Properties";
+            this.tsbTemplateFilterProperties.Click += new System.EventHandler(this.tsbTemplateFilterProperties_Click);
+            // 
+            // toolStripSeparator13
+            // 
+            this.toolStripSeparator13.Name = "toolStripSeparator13";
+            this.toolStripSeparator13.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbDefaultDelete
             // 
@@ -800,5 +838,9 @@
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton2;
         private System.Windows.Forms.ToolStripMenuItem tsmiUpdateSystemFilter;
         private System.Windows.Forms.ToolStripMenuItem tsmiUpdateFilterTemplate;
+        private System.Windows.Forms.ToolStripButton tsbSystemFilterProperties;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
+        private System.Windows.Forms.ToolStripButton tsbTemplateFilterProperties;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
     }
 }
