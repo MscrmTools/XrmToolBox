@@ -132,6 +132,12 @@
     <Compile Include="Forms\SiteMapComponentPicker.Designer.cs">
       <DependentUpon>SiteMapComponentPicker.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\DashboardPicker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DashboardPicker.Designer.cs">
+      <DependentUpon>DashboardPicker.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\WebRessources\CreateWebResourceDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -194,6 +200,9 @@
     <EmbeddedResource Include="Forms\SiteMapComponentPicker.resx">
       <DependentUpon>SiteMapComponentPicker.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DashboardPicker.resx">
+      <DependentUpon>DashboardPicker.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\WebRessources\CreateWebResourceDialog.resx">
       <DependentUpon>CreateWebResourceDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -241,7 +250,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1202,6 +1202,7 @@ namespace MsCrmTools.WebResourcesManager
                                 deleteToolStripMenuItem.Enabled = true;
                                 saveToCRMServerToolStripMenuItem.Enabled = true;
                                 saveAndPublishToCRMServerToolStripMenuItem.Enabled = true;
+                                savePublishAndAddToSolutionToolStripMenuItem.Enabled = true;
                                 propertiesToolStripMenuItem.Enabled = true;
                                 updateFromDiskToolStripMenuItem.Enabled = false;
                                 copyWebResourceNameToClipboardToolStripMenuItem.Enabled = true;

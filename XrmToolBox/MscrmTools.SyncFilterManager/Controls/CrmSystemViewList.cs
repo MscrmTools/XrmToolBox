@@ -405,31 +405,39 @@ namespace MscrmTools.SyncFilterManager.Controls
 
         #region Apply Selected Filters to Users
 
-        internal void ApplySelectedFiltersToUsers()
+        internal void ApplySelectedFiltersToUsers(bool applyToActiveUsers = false)
         {
             if (lvViews.SelectedItems.Count == 0)
             {
                 return;
             }
 
-            var usDialog = new UserSelectionDialog(service);
-            if (usDialog.ShowDialog(this) == DialogResult.OK)
+            var templates = new EntityReferenceCollection();
+            foreach (ListViewItem item in lvViews.SelectedItems)
             {
-                var templates = new EntityReferenceCollection();
-                foreach (ListViewItem item in lvViews.SelectedItems)
+                templates.Add(new EntityReference(entityName, ((Entity)item.Tag).Id));
+            }
+
+            List<Entity> users = null;
+
+            if (!applyToActiveUsers)
+            {
+                var usDialog = new UserSelectionDialog(service);
+                if (usDialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    templates.Add(new EntityReference(entityName, ((Entity)item.Tag).Id));
+                    users = usDialog.SelectedUsers;
                 }
+            }
 
-                var users = usDialog.SelectedUsers;
-
+            if (users == null || users.Count > 0)
+            {
                 loadingPanel = InformationPanel.GetInformationPanel(this, "Processing...", 340, 120);
 
                 var bwApplyFiltersToUsers = new BackgroundWorker {WorkerReportsProgress = true};
                 bwApplyFiltersToUsers.DoWork += bwApplyFiltersToUsers_DoWork;
                 bwApplyFiltersToUsers.ProgressChanged += bwApplyFiltersToUsers_ProgressChanged;
                 bwApplyFiltersToUsers.RunWorkerCompleted += bwApplyFiltersToUsers_RunWorkerCompleted;
-                bwApplyFiltersToUsers.RunWorkerAsync(new object[]{templates, users});
+                bwApplyFiltersToUsers.RunWorkerAsync(new object[] {templates, users});
             }
         }
 
@@ -437,11 +445,21 @@ namespace MscrmTools.SyncFilterManager.Controls
         {
             var bw = (BackgroundWorker) sender;
             var rm = new RuleManager("savedquery", service);
-            foreach (var user in (List<Entity>)((object[])e.Argument)[1])
+            var templates = ((EntityReferenceCollection) ((object[]) e.Argument)[0]);
+            var users = (List<Entity>) ((object[]) e.Argument)[1];
+            if (users == null)
             {
-                bw.ReportProgress(0, string.Format("Applying filter(s) for user {0}...", user.GetAttributeValue<string>("fullname")));
+                rm.ApplyRuleToActiveUsers(templates);
+            }
+            else
+            {
+                foreach (var user in users)
+                {
+                    bw.ReportProgress(0,
+                        string.Format("Applying filter(s) for user {0}...", user.GetAttributeValue<string>("fullname")));
 
-                rm.ApplyRulesToUser(((EntityReferenceCollection)((object[])e.Argument)[0]),user.Id);
+                    rm.ApplyRulesToUser(templates, user.Id);
+                }
             }
         }
 
@@ -632,6 +650,80 @@ namespace MscrmTools.SyncFilterManager.Controls
         }
 
         #endregion Update Filter From View
+
+        #region Rename view
+
+        public void RenameView()
+        {
+            if (lvViews.SelectedItems.Count == 1)
+            {
+                var item = lvViews.SelectedItems[0];
+                var entity = (Entity)item.Tag;
+                var rDialog = new ViewPropertiesDialog
+                {
+                    ViewName = entity.GetAttributeValue<string>("name"),
+                    ViewDescription = entity.GetAttributeValue<string>("description")
+                };
+                if (rDialog.ShowDialog(ParentForm) == DialogResult.OK)
+                {
+                    entity["name"] = rDialog.ViewName;
+                    entity["description"] = rDialog.ViewDescription;
+
+                    loadingPanel = InformationPanel.GetInformationPanel(this, "Updating properties...", 340, 120);
+
+                    var bwUpdateView = new BackgroundWorker { WorkerReportsProgress = true };
+                    bwUpdateView.DoWork += bwUpdateView_DoWork;
+                    bwUpdateView.ProgressChanged += bwUpdateView_ProgressChanged;
+                    bwUpdateView.RunWorkerCompleted += bwUpdateView_RunWorkerCompleted;
+                    bwUpdateView.RunWorkerAsync(entity);
+                }
+            }
+        }
+
+        private void bwUpdateView_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var bw = (BackgroundWorker) sender;
+
+            service.Update((Entity)e.Argument);
+
+            bw.ReportProgress(0, "Publishing...");
+            
+            var request = new PublishXmlRequest { ParameterXml = String.Format("<importexportxml><entities><entity>{0}</entity></entities></importexportxml>", ((Entity)e.Argument).GetAttributeValue<string>("returnedtypecode")) };
+            service.Execute(request);
+
+            e.Result = e.Argument;
+        }
+
+        private void bwUpdateView_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            InformationPanel.ChangeInformationPanelMessage(loadingPanel, e.UserState.ToString());
+        }
+
+        private void bwUpdateView_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Controls.Remove(loadingPanel);
+            loadingPanel.Dispose();
+
+            var item = lvViews.SelectedItems[0];
+            
+            item.Text = ((Entity)e.Result).GetAttributeValue<string>("name");
+            item.SubItems[3].Text = ((Entity)e.Result).GetAttributeValue<string>("description");
+
+            if (DisplayRulesTemplate)
+            {
+                if (DialogResult.Yes == MessageBox.Show(
+                    ParentForm,
+                    "Do you want to apply this change to active users?",
+                    "Question",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question))
+                {
+                    ApplySelectedFiltersToUsers(true);
+                }
+            }
+        }
+
+        #endregion Rename view
 
         private void ApplyTemplateToUsers(List<Guid> rulesIds, string question, RuleManager rm, BackgroundWorker worker)
         {

@@ -51,7 +51,7 @@
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 14F);
             this.lblTitle.Location = new System.Drawing.Point(47, 9);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(397, 30);
+            this.lblTitle.Size = new System.Drawing.Size(397, 42);
             this.lblTitle.TabIndex = 2;
             this.lblTitle.Text = "[Label]";
             this.lblTitle.Click += new System.EventHandler(this.LblTitleClick);

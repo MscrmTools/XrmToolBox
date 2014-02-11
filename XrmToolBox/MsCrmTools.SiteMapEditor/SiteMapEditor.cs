@@ -771,8 +771,16 @@ namespace MsCrmTools.SiteMapEditor
         {
             if (e.Error != null)
             {
-                CommonDelegates.DisplayMessageBox(ParentForm, "Error while updating SiteMap: " + e.Error.Message,
-                                                  "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (e.Error.Message.Contains("DefaultDashboard"))
+                {
+                    MessageBox.Show(ParentForm, "Error while updating SiteMap: Defining 'DefaultDashboard' attribute on 'SubArea' element is only available in CRM 2013 and Microsoft Dynamics CRM Online Fall '13 Service Update",
+                      "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show(ParentForm, "Error while updating SiteMap: " + e.Error.Message,
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
             infoPanel.Dispose();

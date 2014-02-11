@@ -27,7 +27,9 @@ namespace MsCrmTools.SiteMapEditor.Controls
         private string initialUrl = "";
         private string initialTitle = "";
         private string initialDescription = "";
-        
+        private string initialDefaultDashboard = "";
+        private bool isCrm2013Area = false;
+
         private bool initialAvailableOffline;
         private bool initialPassParams;
         private bool initialClientOutlook;
@@ -72,6 +74,8 @@ namespace MsCrmTools.SiteMapEditor.Controls
             tip.SetToolTip(txtSubAreaUrl, "Specifies a URL or HTML Web Resource for a page to display in the main frame of the application when this subarea is selected.");
             tip.SetToolTip(txtSubAreaTitle, "Deprecated. Use the <Titles> (SiteMap) and <Title> (SiteMap) elements.");
             tip.SetToolTip(txtSubAreaDescription, "Deprecated. Use the <Description> (SiteMap) element.");
+            tip.SetToolTip(txtDefaultDashboardId, "This functionality is introduced in Microsoft Dynamics CRM 2013 and the Microsoft Dynamics CRM Online Fall '13 Service Update. \r\nSpecifies the GUID for default dashboard to be displayed for this subarea.");
+
         }
 
         public SubAreaControl(Dictionary<string, string> collection)
@@ -97,7 +101,11 @@ namespace MsCrmTools.SiteMapEditor.Controls
             txtSubAreaDescriptionResourceId.Text = collec.ContainsKey("DescriptionResourceId") ? collec["DescriptionResourceId"] : "";
             txtSubAreaTitle.Text = collec.ContainsKey("Title") ? collec["Title"] : "";
             txtSubAreaDescription.Text = collec.ContainsKey("Description") ? collec["Description"] : "";
-
+            if (collec.ContainsKey("DefaultDashboard") && collec.ContainsKey("Url") && collec["Url"].ToLower() == "/workplace/home_dashboards.aspx")
+            {
+                txtDefaultDashboardId.Text = collec["DefaultDashboard"];
+                isCrm2013Area = true;
+            }
             initialEntity = txtSubAreaEntity.Text;
             initialGetStartedPanePath = txtSubAreaGetStartedPanePath.Text;
             initialGetStartedPanePathAdmin = txtSubAreaGetStartedPanePathAdmin.Text;
@@ -108,6 +116,11 @@ namespace MsCrmTools.SiteMapEditor.Controls
             initialUrl = txtSubAreaUrl.Text;
             initialDescription = txtSubAreaDescription.Text;
             initialTitle = txtSubAreaTitle.Text;
+            initialDefaultDashboard = txtDefaultDashboardId.Text;
+
+            //label4.Enabled = isCrm2013Area;
+            //txtDefaultDashboardId.Enabled = isCrm2013Area;
+            //btnBrowseDashboard.Enabled = isCrm2013Area;
 
             chkSubAreaAvailableOffline.Checked = collec.ContainsKey("AvailableOffline") ? collec["AvailableOffline"].ToLower() == "true" : false;
             chkSubAreaPassParams.Checked = collec.ContainsKey("PassParams") ? collec["PassParams"].ToLower() == "true" : false;
@@ -152,7 +165,8 @@ namespace MsCrmTools.SiteMapEditor.Controls
             initialSkuAll != chkSubAreaSkuAll.Checked ||
             initialSkuLive != chkSubAreaSkuLive.Checked ||
             initialSkuOnPremise != chkSubAreaSkuOnPremise.Checked ||
-            initialSkuSPLA != chkSubAreaSkuSPLA.Checked)
+            initialSkuSPLA != chkSubAreaSkuSPLA.Checked ||
+                initialDefaultDashboard != txtDefaultDashboardId.Text)
             {
                 if (MessageBox.Show("You didn't save your changes! Do you want to save them now?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
@@ -194,6 +208,10 @@ namespace MsCrmTools.SiteMapEditor.Controls
                     collection.Add("Description", txtSubAreaDescription.Text);
                 if (txtSubAreaTitle.Text.Length > 0)
                     collection.Add("Title", txtSubAreaTitle.Text);
+                if (txtDefaultDashboardId.Text.Length > 0)// && isCrm2013Area)
+                {
+                    collection.Add("DefaultDashboard", txtDefaultDashboardId.Text);
+                }
                 collection.Add("AvailableOffline", chkSubAreaAvailableOffline.Checked.ToString().ToLower());
                 collection.Add("PassParams", chkSubAreaPassParams.Checked.ToString().ToLower());
 
@@ -243,6 +261,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
                 initialUrl = txtSubAreaUrl.Text;
                 initialDescription = txtSubAreaDescription.Text;
                 initialTitle = txtSubAreaTitle.Text;
+                initialDefaultDashboard = txtDefaultDashboardId.Text;
 
                 initialAvailableOffline = chkSubAreaAvailableOffline.Checked;
                 initialPassParams = chkSubAreaPassParams.Checked;
@@ -308,6 +327,15 @@ namespace MsCrmTools.SiteMapEditor.Controls
             if (wrp.ShowDialog() == DialogResult.OK)
             {
                 txtSubAreaUrl.Text = "$webresource:" + wrp.SelectedResource;
+            }
+        }
+
+        private void btnBrowseDashboard_Click(object sender, EventArgs e)
+        {
+            var dPicker = new DashboardPicker() { StartPosition = FormStartPosition.CenterParent };
+            if (dPicker.ShowDialog(ParentForm) == DialogResult.OK)
+            {
+                txtDefaultDashboardId.Text = dPicker.SelectedDashboard.Id.ToString("B");
             }
         }
     }

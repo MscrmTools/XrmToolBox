@@ -193,6 +193,22 @@ namespace MscrmTools.SyncFilterManager.AppCode
             service.Execute(request);
         }
 
+        public void ApplyRuleToActiveUsers(EntityReferenceCollection ec)
+        {
+            var qba = new QueryByAttribute("systemuser");
+            qba.AddAttributeValue("isdisabled", false);
+            foreach (var user in service.RetrieveMultiple(qba).Entities)
+            {
+                var request = new InstantiateFiltersRequest
+                {
+                    UserId = user.Id,
+                    TemplateCollection = ec
+                };
+
+                service.Execute(request);
+            }
+        }
+
         public void UpdateRuleFromSystemView(Entity systemView, Entity rule, BackgroundWorker worker = null)
         {
             var ruleToUpdate = new Entity("savedquery") {Id = rule.Id};

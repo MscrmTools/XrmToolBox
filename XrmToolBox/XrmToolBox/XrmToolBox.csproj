@@ -40,14 +40,17 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
-    <Reference Include="microsoft.crm.sdk.proxy">
-      <HintPath>..\..\McTools.Xrm.Connection\McTools.Xrm.Connection.WinForms\bin\Release\microsoft.crm.sdk.proxy.dll</HintPath>
+    <Reference Include="microsoft.crm.sdk.proxy, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK 5.0.16\bin\microsoft.crm.sdk.proxy.dll</HintPath>
     </Reference>
-    <Reference Include="microsoft.xrm.client">
-      <HintPath>..\..\McTools.Xrm.Connection\McTools.Xrm.Connection.WinForms\bin\Release\microsoft.xrm.client.dll</HintPath>
+    <Reference Include="microsoft.xrm.client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK 5.0.16\bin\microsoft.xrm.client.dll</HintPath>
     </Reference>
-    <Reference Include="microsoft.xrm.sdk">
-      <HintPath>..\..\McTools.Xrm.Connection\McTools.Xrm.Connection.WinForms\bin\Release\microsoft.xrm.sdk.dll</HintPath>
+    <Reference Include="microsoft.xrm.sdk, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK 5.0.16\bin\microsoft.xrm.sdk.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -193,7 +196,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
