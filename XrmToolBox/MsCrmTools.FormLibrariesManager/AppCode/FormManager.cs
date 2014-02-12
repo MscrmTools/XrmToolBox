@@ -79,7 +79,14 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
                 libraryNode.Attributes.Append(libraryUniqueIdAttribute);
             }
 
-            formLibrariesNode.InsertBefore(libraryNode, formLibrariesNode.FirstChild);
+            if (formLibrariesNode.ChildNodes.Count > 0 && addFirst)
+            {
+                formLibrariesNode.InsertBefore(libraryNode, formLibrariesNode.FirstChild);
+            }
+            else
+            {
+                formLibrariesNode.AppendChild(libraryNode);
+            }
 
             // Update the form xml content
             form["formxml"] = formDoc.OuterXml;
