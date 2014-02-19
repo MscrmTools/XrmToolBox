@@ -70,8 +70,7 @@ namespace XrmToolBox
             cManager.ConnectionSucceed += CManagerConnectionSucceed;
             cManager.RequestPassword += CManagerRequestPassword;
             cManager.StepChanged += CManagerStepChanged;
-
-
+            
             fHelper = new FormHelper(this, cManager);
 
             ccsb = new CrmConnectionStatusBar(cManager, fHelper);
@@ -79,6 +78,8 @@ namespace XrmToolBox
             Controls.Add(ccsb);
 
             Show();
+
+           
         }
 
        
@@ -92,7 +93,7 @@ namespace XrmToolBox
 
         void welcomeWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            var welcomeScreen = new WelcomeScreen { StartPosition = FormStartPosition.CenterScreen };
+            var welcomeScreen = new WelcomeScreen { StartPosition = FormStartPosition.CenterScreen, MyParentForm = this};
             welcomeScreen.ShowDialog();
         }
 
@@ -557,7 +558,10 @@ namespace XrmToolBox
             }
         }
 
-      
+        private void tsbManageConnections_Click(object sender, EventArgs e)
+        {
+            fHelper.DisplayConnectionsList(this);
+        }
     }
 }
 

@@ -41,11 +41,13 @@ namespace XrmToolBox
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbConnect = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbManageConnections = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbManageTabs = new System.Windows.Forms.ToolStripDropDownButton();
             this.closeAllTabsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeAllTabsExceptActiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbOptions = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbAbout = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
@@ -137,9 +139,11 @@ namespace XrmToolBox
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbConnect,
             this.toolStripSeparator2,
+            this.tsbManageConnections,
+            this.toolStripSeparator5,
             this.tsbManageTabs,
             this.tsbOptions,
-            this.toolStripSeparator5,
+            this.toolStripSeparator1,
             this.tsbAbout,
             this.toolStripSeparator3,
             this.toolStripDropDownButton1,
@@ -164,6 +168,20 @@ namespace XrmToolBox
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsbManageConnections
+            // 
+            this.tsbManageConnections.Image = ((System.Drawing.Image)(resources.GetObject("tsbManageConnections.Image")));
+            this.tsbManageConnections.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbManageConnections.Name = "tsbManageConnections";
+            this.tsbManageConnections.Size = new System.Drawing.Size(138, 22);
+            this.tsbManageConnections.Text = "Manage connections";
+            this.tsbManageConnections.Click += new System.EventHandler(this.tsbManageConnections_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbManageTabs
             // 
@@ -200,10 +218,10 @@ namespace XrmToolBox
             this.tsbOptions.Text = "Settings";
             this.tsbOptions.Click += new System.EventHandler(this.TsbOptionsClick);
             // 
-            // toolStripSeparator5
+            // toolStripSeparator1
             // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbAbout
             // 
@@ -335,6 +353,8 @@ namespace XrmToolBox
         private System.Windows.Forms.ToolStripDropDownButton tsddbDonate;
         private System.Windows.Forms.ToolStripMenuItem donateInUSDollarsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem donateInEuroToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton tsbManageConnections;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }
 
