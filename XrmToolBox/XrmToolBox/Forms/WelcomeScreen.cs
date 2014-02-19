@@ -21,6 +21,8 @@ namespace XrmToolBox.Forms
             panel2.Visible = true;
         }
 
+        public Form MyParentForm { get; set; }
+
         private void WelcomeScreenLoad(object sender, EventArgs e)
         {
             ManageLicense();
@@ -33,6 +35,9 @@ namespace XrmToolBox.Forms
 
         void TimerTick(object sender, EventArgs e)
         {
+            MyParentForm.Activate();
+            MyParentForm.BringToFront();
+
             ((Timer) sender).Stop();
             Close();
         }
