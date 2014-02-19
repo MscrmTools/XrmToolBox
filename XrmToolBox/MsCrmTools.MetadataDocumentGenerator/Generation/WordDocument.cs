@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Xml;
 using GemBox.Document;
 using GemBox.Document.Tables;
-using LicenseKey;
+using GemBox.LicenseKey;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -55,7 +55,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
             try
             {
                 var k = new Key();
-                ComponentInfo.SetLicense(k.LicenseKey);
+                ComponentInfo.SetLicense(k.WordKey);
 
                 _innerDocument = new DocumentModel();
                 emdCache = new List<EntityMetadata>();
