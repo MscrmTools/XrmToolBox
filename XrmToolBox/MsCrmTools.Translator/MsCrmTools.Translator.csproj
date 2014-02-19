@@ -34,19 +34,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GemBox.LicenseKey">
+      <HintPath>..\..\GemBox.LicenseKey\GemBox.LicenseKey\bin\ReleaseObfuscated\GemBox.LicenseKey.dll</HintPath>
+    </Reference>
     <Reference Include="GemBox.Spreadsheet, Version=37.3.30.1030, Culture=neutral, PublicKeyToken=b1b72c69714d4847, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\GemBox Software\GemBox.Spreadsheet 3.7\Bin\NET3X4X\GemBox.Spreadsheet.DLL</HintPath>
-    </Reference>
-    <Reference Include="LicenseKey, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\MetadataDocumentationGenerator\LicenseKey\bin\Release\obfuscated\LicenseKey.dll</HintPath>
     </Reference>
     <Reference Include="microsoft.crm.sdk.proxy">
       <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK UR10\bin\microsoft.crm.sdk.proxy.dll</HintPath>
     </Reference>
     <Reference Include="microsoft.xrm.client">
-      <HintPath>..\..\McTools.Xrm.Connection\McTools.Xrm.Connection.WinForms\bin\Release\microsoft.xrm.client.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK UR10\bin\microsoft.xrm.client.dll</HintPath>
     </Reference>
     <Reference Include="microsoft.xrm.sdk">
       <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK UR10\bin\microsoft.xrm.sdk.dll</HintPath>
@@ -121,7 +120,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

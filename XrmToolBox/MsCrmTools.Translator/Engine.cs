@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Linq;
 using GemBox.Spreadsheet;
-using LicenseKey;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -17,8 +16,8 @@ namespace MsCrmTools.Translator
         {
             // The license key to use Gembox.Spreadsheet is not included in 
             // this source code. To obtain a license key, visit Gembox website
-            var key = new Key();
-            string excelKey = key.Excel3Dot7LicenseKey;
+            var key = new GemBox.LicenseKey.Key();
+            string excelKey = key.ExcelKey37;
             SpreadsheetInfo.SetLicense(excelKey);
         }
 

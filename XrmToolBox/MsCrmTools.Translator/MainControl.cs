@@ -10,9 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using LicenseKey;
 using McTools.Xrm.Connection;
-using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using XrmToolBox;
 using XrmToolBox.Attributes;
@@ -301,7 +299,7 @@ namespace MsCrmTools.Translator
 
         private void ImportTranslations()
         {
-            sw.Start();
+            //sw.Start();
             infoPanel = InformationPanel.GetInformationPanel(this, "Importing translations...", 340, 120);
 
             SetState(false);
@@ -331,11 +329,11 @@ namespace MsCrmTools.Translator
                 string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
                 MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            else
-            {
-                sw.Stop();
-                MessageBox.Show(string.Format("Processed in {0} seconds", sw.Elapsed.TotalSeconds));
-            }
+            //else
+            //{
+            //    sw.Stop();
+            //    MessageBox.Show(string.Format("Processed in {0} seconds", sw.Elapsed.TotalSeconds));
+            //}
          
             infoPanel.Dispose();
             Controls.Remove(infoPanel);

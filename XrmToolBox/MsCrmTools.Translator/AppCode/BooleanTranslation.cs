@@ -186,23 +186,31 @@ namespace MsCrmTools.Translator.AppCode
                     int columnIndex = 5;
 
 
-                    if (row.Cells[4].ToString() == "Label")
+                    if (row.Cells[4].Value.ToString() == "Label")
                     {
-                        while (row.Cells[columnIndex].Value != null)
+                        while (row.Cells.Count() > columnIndex && row.Cells[columnIndex] != null && row.Cells[columnIndex].Value != null)
                         {
-                            request.Label.LocalizedLabels.Add(
-                                new LocalizedLabel(row.Cells[columnIndex].Value.ToString(),
-                                                   int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
+                            var sLabel = row.Cells[columnIndex].Value.ToString();
+
+                            if (sLcid.Length > 0 && sLabel.Length > 0)
+                            {
+                                request.Label.LocalizedLabels.Add(new LocalizedLabel(sLabel, int.Parse(sLcid)));
+                            }
                             columnIndex++;
                         }
                     }
-                    else if (row.Cells[4].ToString() == "Description")
+                    else if (row.Cells[4].Value.ToString() == "Description")
                     {
-                        while (row.Cells[columnIndex].Value != null)
+                        while (row.Cells.Count() > columnIndex && row.Cells[columnIndex] != null && row.Cells[columnIndex].Value != null)
                         {
-                            request.Description.LocalizedLabels.Add(
-                                new LocalizedLabel(row.Cells[columnIndex].Value.ToString(),
-                                                   int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
+                            var sLabel = row.Cells[columnIndex].Value.ToString();
+
+                            if (sLcid.Length > 0 && sLabel.Length > 0)
+                            {
+                                request.Description.LocalizedLabels.Add(new LocalizedLabel(sLabel, int.Parse(sLcid)));
+                            }
                             columnIndex++;
                         }
                     }
@@ -213,19 +221,31 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     int columnIndex = 5;
 
-                    if (row.Cells[4].ToString() == "Label")
+                    if (row.Cells[4].Value.ToString() == "Label")
                     {
-                        while (row.Cells[columnIndex].Value != null)
+                        while (row.Cells.Count() > columnIndex && row.Cells[columnIndex] != null && row.Cells[columnIndex].Value != null)
                         {
-                            request.Label.LocalizedLabels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
+                            var sLabel = row.Cells[columnIndex].Value.ToString();
+
+                            if (sLcid.Length > 0 && sLabel.Length > 0)
+                            {
+                                request.Label.LocalizedLabels.Add(new LocalizedLabel(sLabel, int.Parse(sLcid)));
+                            }
                             columnIndex++;
                         }
                     }
-                    else if (row.Cells[4].ToString() == "Description")
+                    else if (row.Cells[4].Value.ToString() == "Description")
                     {
-                        while (row.Cells[columnIndex].Value != null)
+                        while (row.Cells.Count() > columnIndex && row.Cells[columnIndex] != null && row.Cells[columnIndex].Value != null)
                         {
-                            request.Description.LocalizedLabels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
+                            var sLabel = row.Cells[columnIndex].Value.ToString();
+
+                            if (sLcid.Length > 0 && sLabel.Length > 0)
+                            {
+                                request.Description.LocalizedLabels.Add(new LocalizedLabel(sLabel, int.Parse(sLcid)));
+                            }
                             columnIndex++;
                         }
                     }
