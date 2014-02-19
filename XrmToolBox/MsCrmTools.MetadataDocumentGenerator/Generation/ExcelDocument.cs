@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Xml;
 using GemBox.Spreadsheet;
-using LicenseKey;
+using GemBox.LicenseKey;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -59,7 +59,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
         public ExcelDocument()
         {
             var key = new Key();
-            SpreadsheetInfo.SetLicense(key.Excel3Dot7LicenseKey);
+            SpreadsheetInfo.SetLicense(key.ExcelKey37);
             emdCache = new List<EntityMetadata>();
             innerWorkBook = new ExcelFile();
             lineNumber = 0;
