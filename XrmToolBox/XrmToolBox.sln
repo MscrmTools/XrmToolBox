@@ -59,9 +59,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.FormLibrariesMan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.AssemblyRecoveryTool", "MsCrmTools.AssemblyRecoveryTool\MsCrmTools.AssemblyRecoveryTool.csproj", "{85B05ED2-64B0-4B74-A38A-5C675E00B5A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamSim.ViewTransferTool", "DamSim.ViewTransferTool\DamSim.ViewTransferTool.csproj", "{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 27
+		SccNumberOfProjects = 28
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs24
 		SccLocalPath0 = .
@@ -167,6 +169,10 @@ Global
 		SccProjectTopLevelParentUniqueName26 = XrmToolBox.sln
 		SccProjectName26 = MsCrmTools.AssemblyRecoveryTool
 		SccLocalPath26 = MsCrmTools.AssemblyRecoveryTool
+		SccProjectUniqueName27 = DamSim.ViewTransferTool\\DamSim.ViewTransferTool.csproj
+		SccProjectTopLevelParentUniqueName27 = XrmToolBox.sln
+		SccProjectName27 = DamSim.ViewTransferTool
+		SccLocalPath27 = DamSim.ViewTransferTool
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -436,6 +442,16 @@ Global
 		{85B05ED2-64B0-4B74-A38A-5C675E00B5A9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{85B05ED2-64B0-4B74-A38A-5C675E00B5A9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{85B05ED2-64B0-4B74-A38A-5C675E00B5A9}.Release|x86.ActiveCfg = Release|Any CPU
+		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -461,6 +477,7 @@ Global
 		{5DD2E91B-6431-4391-AC45-205BD1B67818} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{9A8FEB6A-9D87-4574-9CF4-A30FA08509A3} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{85B05ED2-64B0-4B74-A38A-5C675E00B5A9} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{C3824C2C-6E2E-4FDE-A2AA-229BBC7C3B1F} = {B6637A1A-E79E-48EF-8724-1ACE99142A8A}
 		{D1F6E3FC-93D5-43C1-9465-25231BCC93BF} = {B6637A1A-E79E-48EF-8724-1ACE99142A8A}
 		{5093677C-F49B-4249-BEC1-E117E62255AD} = {B6637A1A-E79E-48EF-8724-1ACE99142A8A}
