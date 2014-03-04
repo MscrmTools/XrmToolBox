@@ -50,6 +50,7 @@
             this.chkAddFls = new System.Windows.Forms.CheckBox();
             this.chkAddAudit = new System.Windows.Forms.CheckBox();
             this.gbAttributeSelection = new System.Windows.Forms.GroupBox();
+            this.chkSelectAll = new System.Windows.Forms.CheckBox();
             this.lblSubSelect = new System.Windows.Forms.Label();
             this.lblEntities = new System.Windows.Forms.Label();
             this.lvEntities = new System.Windows.Forms.ListView();
@@ -70,7 +71,9 @@
             this.lblOutputFilePath = new System.Windows.Forms.Label();
             this.lblOutputType = new System.Windows.Forms.Label();
             this.cbbOutputType = new System.Windows.Forms.ComboBox();
-            this.chkSelectAll = new System.Windows.Forms.CheckBox();
+            this.txtPrefixes = new System.Windows.Forms.TextBox();
+            this.btnEdit = new System.Windows.Forms.Button();
+            this.chkFilterByPrefix = new System.Windows.Forms.CheckBox();
             this.toolStripMenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.gbOptions.SuspendLayout();
@@ -269,6 +272,9 @@
             // 
             this.gbAttributeSelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbAttributeSelection.Controls.Add(this.chkFilterByPrefix);
+            this.gbAttributeSelection.Controls.Add(this.btnEdit);
+            this.gbAttributeSelection.Controls.Add(this.txtPrefixes);
             this.gbAttributeSelection.Controls.Add(this.chkSelectAll);
             this.gbAttributeSelection.Controls.Add(this.lblSubSelect);
             this.gbAttributeSelection.Controls.Add(this.lblEntities);
@@ -284,6 +290,17 @@
             this.gbAttributeSelection.TabIndex = 7;
             this.gbAttributeSelection.TabStop = false;
             this.gbAttributeSelection.Text = "Attributes Selection";
+            // 
+            // chkSelectAll
+            // 
+            this.chkSelectAll.AutoSize = true;
+            this.chkSelectAll.Location = new System.Drawing.Point(283, 51);
+            this.chkSelectAll.Name = "chkSelectAll";
+            this.chkSelectAll.Size = new System.Drawing.Size(116, 17);
+            this.chkSelectAll.TabIndex = 85;
+            this.chkSelectAll.Text = "Select/Unselect all";
+            this.chkSelectAll.UseVisualStyleBackColor = true;
+            this.chkSelectAll.CheckedChanged += new System.EventHandler(this.chkSelectAll_CheckedChanged);
             // 
             // lblSubSelect
             // 
@@ -347,8 +364,6 @@
             // 
             // cbbSelectionType
             // 
-            this.cbbSelectionType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.cbbSelectionType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbbSelectionType.FormattingEnabled = true;
             this.cbbSelectionType.Items.AddRange(new object[] {
@@ -359,7 +374,7 @@
             "Selected attributes"});
             this.cbbSelectionType.Location = new System.Drawing.Point(118, 19);
             this.cbbSelectionType.Name = "cbbSelectionType";
-            this.cbbSelectionType.Size = new System.Drawing.Size(781, 21);
+            this.cbbSelectionType.Size = new System.Drawing.Size(281, 21);
             this.cbbSelectionType.TabIndex = 2;
             this.cbbSelectionType.SelectedIndexChanged += new System.EventHandler(this.CbbSelectionTypeSelectedIndexChanged);
             // 
@@ -514,16 +529,38 @@
             this.cbbOutputType.TabIndex = 0;
             this.cbbOutputType.SelectedIndexChanged += new System.EventHandler(this.CbbOutputTypeSelectedIndexChanged);
             // 
-            // chkSelectAll
+            // txtPrefixes
             // 
-            this.chkSelectAll.AutoSize = true;
-            this.chkSelectAll.Location = new System.Drawing.Point(283, 51);
-            this.chkSelectAll.Name = "chkSelectAll";
-            this.chkSelectAll.Size = new System.Drawing.Size(116, 17);
-            this.chkSelectAll.TabIndex = 85;
-            this.chkSelectAll.Text = "Select/Unselect all";
-            this.chkSelectAll.UseVisualStyleBackColor = true;
-            this.chkSelectAll.CheckedChanged += new System.EventHandler(this.chkSelectAll_CheckedChanged);
+            this.txtPrefixes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPrefixes.Enabled = false;
+            this.txtPrefixes.Location = new System.Drawing.Point(609, 19);
+            this.txtPrefixes.Name = "txtPrefixes";
+            this.txtPrefixes.Size = new System.Drawing.Size(261, 20);
+            this.txtPrefixes.TabIndex = 87;
+            // 
+            // btnEdit
+            // 
+            this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnEdit.Enabled = false;
+            this.btnEdit.Image = ((System.Drawing.Image)(resources.GetObject("btnEdit.Image")));
+            this.btnEdit.Location = new System.Drawing.Point(876, 17);
+            this.btnEdit.Name = "btnEdit";
+            this.btnEdit.Size = new System.Drawing.Size(23, 23);
+            this.btnEdit.TabIndex = 88;
+            this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
+            // 
+            // chkFilterByPrefix
+            // 
+            this.chkFilterByPrefix.AutoSize = true;
+            this.chkFilterByPrefix.Location = new System.Drawing.Point(408, 21);
+            this.chkFilterByPrefix.Name = "chkFilterByPrefix";
+            this.chkFilterByPrefix.Size = new System.Drawing.Size(173, 17);
+            this.chkFilterByPrefix.TabIndex = 89;
+            this.chkFilterByPrefix.Text = "Filter custom attributes by prefix";
+            this.chkFilterByPrefix.UseVisualStyleBackColor = true;
+            this.chkFilterByPrefix.CheckedChanged += new System.EventHandler(this.chkFilterByPrefix_CheckedChanged);
             // 
             // MetadataDocumentGenerator
             // 
@@ -590,5 +627,8 @@
         private System.Windows.Forms.ToolStripMenuItem saveCurrentSettingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadSettingsToolStripMenuItem;
         private System.Windows.Forms.CheckBox chkSelectAll;
+        private System.Windows.Forms.Button btnEdit;
+        private System.Windows.Forms.TextBox txtPrefixes;
+        private System.Windows.Forms.CheckBox chkFilterByPrefix;
     }
 }

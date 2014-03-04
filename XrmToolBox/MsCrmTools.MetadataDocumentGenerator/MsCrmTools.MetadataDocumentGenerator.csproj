@@ -68,6 +68,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\PublisherSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PublisherSelector.Designer.cs">
+      <DependentUpon>PublisherSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="GenerationSettings.cs" />
     <Compile Include="Generation\ExcelDocument.cs" />
     <Compile Include="Generation\IDocument.cs" />
@@ -90,6 +96,9 @@
     <Compile Include="XmlSerializerHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\PublisherSelector.resx">
+      <DependentUpon>PublisherSelector.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -115,7 +124,7 @@ xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.MetadataDocumentGenerator.pdb" "$(So
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
