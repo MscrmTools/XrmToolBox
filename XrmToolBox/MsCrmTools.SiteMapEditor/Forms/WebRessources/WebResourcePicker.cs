@@ -4,11 +4,13 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using MsCrmTools.SiteMapEditor.AppCode;
 using Tanguy.WinForm.Utilities.DelegatesHelpers;
 
 namespace MsCrmTools.SiteMapEditor.Forms.WebRessources
@@ -37,6 +39,10 @@ namespace MsCrmTools.SiteMapEditor.Forms.WebRessources
         /// </summary>
         private readonly int requestedType;
 
+        private List<Entity> webResourcesImageCache;
+        private List<Entity> webResourcesHtmlCache;
+        private readonly IOrganizationService service;
+
         #endregion Variables
 
         #region Properties
@@ -54,9 +60,13 @@ namespace MsCrmTools.SiteMapEditor.Forms.WebRessources
         /// Initializes a new instance of class WebResourcePicker
         /// </summary>
         /// <param name="type">Type of web resource to select</param>
-        public WebResourcePicker(WebResourceType type)
+        public WebResourcePicker(WebResourceType type, List<Entity> webResourcesImageCache,List<Entity> webResourcesHtmlCache, IOrganizationService service)
         {
             InitializeComponent();
+
+            this.webResourcesImageCache = webResourcesImageCache;
+            this.webResourcesHtmlCache = webResourcesHtmlCache;
+            this.service = service;
 
             requestedType = (int) type;
 
@@ -109,9 +119,9 @@ namespace MsCrmTools.SiteMapEditor.Forms.WebRessources
         {
             ListViewDelegates.ClearItems(lstWebResources);
 
-            if (SiteMapEditor.webResourcesImageCache == null || SiteMapEditor.webResourcesImageCache.Count == 0)
+            if (webResourcesImageCache == null || webResourcesImageCache.Count == 0)
             {
-                SiteMapEditor.webResourcesImageCache = new List<Entity>();
+                webResourcesImageCache = new List<Entity>();
 
                 QueryExpression qe = new QueryExpression("webresource");
 
@@ -132,15 +142,15 @@ namespace MsCrmTools.SiteMapEditor.Forms.WebRessources
                 qe.Criteria.AddCondition(ce);
                 qe.ColumnSet.AllColumns = true;
 
-                EntityCollection ec = SiteMapEditor.service.RetrieveMultiple(qe);
+                EntityCollection ec = service.RetrieveMultiple(qe);
 
                 foreach (Entity webresource in ec.Entities)
                 {
-                    SiteMapEditor.webResourcesImageCache.Add(webresource);
+                    webResourcesImageCache.Add(webresource);
                 }
             }
 
-            foreach (Entity webresource in SiteMapEditor.webResourcesImageCache)
+            foreach (Entity webresource in webResourcesImageCache)
             {
                 ListViewItem item = new ListViewItem(webresource.Contains("displayname") ? webresource["displayname"].ToString() : "N/A");
                 item.SubItems.Add(webresource["name"].ToString());
@@ -161,9 +171,9 @@ namespace MsCrmTools.SiteMapEditor.Forms.WebRessources
         {
             ListViewDelegates.ClearItems(lstWebResources);
 
-            if (SiteMapEditor.webResourcesHtmlCache == null || SiteMapEditor.webResourcesHtmlCache.Count == 0)
+            if (webResourcesHtmlCache == null || webResourcesHtmlCache.Count == 0)
             {
-                SiteMapEditor.webResourcesHtmlCache = new List<Entity>();
+                webResourcesHtmlCache = new List<Entity>();
 
                 QueryExpression qe = new QueryExpression("webresource");
 
@@ -184,15 +194,15 @@ namespace MsCrmTools.SiteMapEditor.Forms.WebRessources
                 qe.Criteria.AddCondition(ce);
                 qe.ColumnSet.AllColumns = true;
 
-                EntityCollection ec = SiteMapEditor.service.RetrieveMultiple(qe);
+                EntityCollection ec = service.RetrieveMultiple(qe);
 
                 foreach (Entity webresource in ec.Entities)
                 {
-                    SiteMapEditor.webResourcesHtmlCache.Add(webresource);
+                    webResourcesHtmlCache.Add(webresource);
                 }
             }
 
-            foreach (Entity webresource in SiteMapEditor.webResourcesHtmlCache)
+            foreach (Entity webresource in webResourcesHtmlCache)
             {
                 ListViewItem item = new ListViewItem(webresource.Contains("displayname") ? webresource["displayname"].ToString() : "N/A");
                 item.SubItems.Add(webresource["name"].ToString());
@@ -211,7 +221,7 @@ namespace MsCrmTools.SiteMapEditor.Forms.WebRessources
 
         private void btnNewResource_Click(object sender, EventArgs e)
         {
-            CreateWebResourceDialog cwrDialog = new CreateWebResourceDialog((CreateWebResourceDialog.WebResourceType)requestedType);
+            CreateWebResourceDialog cwrDialog = new CreateWebResourceDialog((CreateWebResourceDialog.WebResourceType)requestedType, service);
             cwrDialog.StartPosition = FormStartPosition.CenterParent;
 
             if (cwrDialog.ShowDialog() == DialogResult.OK)
@@ -258,5 +268,12 @@ namespace MsCrmTools.SiteMapEditor.Forms.WebRessources
         }
 
         #endregion Methods
+
+        private void lstWebResources_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            lstWebResources.Sorting = lstWebResources.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            lstWebResources.ListViewItemSorter = new ListViewItemComparer(e.Column, lstWebResources.Sorting);
+       
+        }
     }
 }

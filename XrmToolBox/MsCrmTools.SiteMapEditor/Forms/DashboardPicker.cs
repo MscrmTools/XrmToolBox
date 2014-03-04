@@ -15,6 +15,8 @@ namespace MsCrmTools.SiteMapEditor.Forms
 {
     public partial class DashboardPicker : Form
     {
+        private readonly IOrganizationService service;
+
         #region Properties
 
         /// <summary>
@@ -30,10 +32,10 @@ namespace MsCrmTools.SiteMapEditor.Forms
         /// Initializes a new instance of class WebResourcePicker
         /// </summary>
         /// <param name="type">Type of web resource to select</param>
-        public DashboardPicker()
+        public DashboardPicker(IOrganizationService service)
         {
             InitializeComponent();
-
+            this.service = service;
             FillValues();
         }
 
@@ -109,7 +111,7 @@ namespace MsCrmTools.SiteMapEditor.Forms
                     ColumnSet = {AllColumns = true}
                 };
 
-           return SiteMapEditor.service.RetrieveMultiple(qe);
+           return service.RetrieveMultiple(qe);
         }
        
         private void lstWebResources_DoubleClick(object sender, EventArgs e)
