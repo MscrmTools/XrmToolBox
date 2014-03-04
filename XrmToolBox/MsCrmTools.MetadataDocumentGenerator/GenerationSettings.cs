@@ -77,6 +77,8 @@ namespace MsCrmTools.MetadataDocumentGenerator
 
         public Output OutputDocumentType { get; set; }
 
+        public List<string> Prefixes { get; set; } 
+
         #endregion Properties
 
         #region Methods
@@ -131,7 +133,8 @@ namespace MsCrmTools.MetadataDocumentGenerator
                            EntitiesToProceed = EntitiesToProceed,
                            FilePath = FilePath,
                            IncludeOnlyAttributesOnForms = IncludeOnlyAttributesOnForms,
-                           AttributesSelection = AttributesSelection
+                           AttributesSelection = AttributesSelection,
+                           Prefixes = Prefixes
                        };
         }
 

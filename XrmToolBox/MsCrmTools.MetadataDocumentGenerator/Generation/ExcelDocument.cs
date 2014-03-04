@@ -177,6 +177,18 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                         break;
                 }
 
+                if (settings.Prefixes != null && settings.Prefixes.Count > 0)
+                {
+                    var filteredAmds = new List<AttributeMetadata>();
+
+                    foreach (var prefix in settings.Prefixes)
+                    {
+                        filteredAmds.AddRange(amds.Where(a => a.LogicalName.StartsWith(prefix) || a.IsCustomAttribute.Value == false));
+                    }
+
+                    amds = filteredAmds;
+                }
+
                 if (amds.Any())
                 {
                     foreach (var amd in amds)

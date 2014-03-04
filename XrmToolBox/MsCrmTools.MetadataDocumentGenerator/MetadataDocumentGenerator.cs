@@ -17,6 +17,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using MsCrmTools.MetadataDocumentGenerator.Forms;
 using MsCrmTools.MetadataDocumentGenerator.Generation;
 using MsCrmTools.MetadataDocumentGenerator.Helper;
 using XrmToolBox;
@@ -543,6 +544,8 @@ namespace MsCrmTools.MetadataDocumentGenerator
             settings.AttributesSelection = (AttributeSelectionOption)cbbSelectionType.SelectedIndex;
             settings.IncludeOnlyAttributesOnForms = cbbSelectionType.SelectedIndex == (int)AttributeSelectionOption.AttributesOnForm;
 
+            settings.Prefixes = txtPrefixes.Text.Split(';').ToList();
+
             infoPanel = InformationPanel.GetInformationPanel(this, "Generating document...", 340, 140);
             SetWorkingState(true);
 
@@ -662,6 +665,21 @@ namespace MsCrmTools.MetadataDocumentGenerator
             foreach (ListViewItem item in lvEntities.Items)
             {
                 item.Checked = chkSelectAll.Checked;
+            }
+        }
+
+        private void chkFilterByPrefix_CheckedChanged(object sender, EventArgs e)
+        {
+            btnEdit.Enabled = chkFilterByPrefix.Checked;
+            txtPrefixes.Enabled = chkFilterByPrefix.Checked;
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            var pSelector = new PublisherSelector(service, txtPrefixes.Text);
+            if (pSelector.ShowDialog(this) == DialogResult.OK)
+            {
+                txtPrefixes.Text = string.Join(";", pSelector.SelectedPrefixes);
             }
         }
     }
