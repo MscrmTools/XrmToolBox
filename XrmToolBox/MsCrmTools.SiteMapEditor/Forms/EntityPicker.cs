@@ -14,14 +14,17 @@ namespace MsCrmTools.SiteMapEditor.Forms
 {
     public partial class EntityPicker : Form
     {
+        private List<EntityMetadata> entityCache;
+
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of class EntityPicker
         /// </summary>
-        public EntityPicker()
+        public EntityPicker(List<EntityMetadata> entityCache)
         {
             InitializeComponent();
+            this.entityCache = entityCache;
             FillEntities();
         }
 
@@ -44,25 +47,25 @@ namespace MsCrmTools.SiteMapEditor.Forms
         private void FillEntities()
         {
             // Checks the application cache and load it if needed
-            if (SiteMapEditor.entityCache == null || SiteMapEditor.entityCache.Count == 0)
-            {
-                SiteMapEditor.entityCache = new List<EntityMetadata>();
+            //if (entityCache == null || entityCache.Count == 0)
+            //{
+            //    entityCache = new List<EntityMetadata>();
 
-                var request = new RetrieveAllEntitiesRequest
-                {
-                    EntityFilters = EntityFilters.Entity
-                };
+            //    var request = new RetrieveAllEntitiesRequest
+            //    {
+            //        EntityFilters = EntityFilters.Entity
+            //    };
 
-                var response = (RetrieveAllEntitiesResponse)SiteMapEditor.service.Execute(request);
+            //    var response = (RetrieveAllEntitiesResponse)SiteMapEditor.service.Execute(request);
 
-                foreach (var emd in response.EntityMetadata)
-                {
-                    SiteMapEditor.entityCache.Add(emd);
-                }
-            }
+            //    foreach (var emd in response.EntityMetadata)
+            //    {
+            //        SiteMapEditor.entityCache.Add(emd);
+            //    }
+            //}
 
             // Displays entities
-            foreach (var emd in SiteMapEditor.entityCache)
+            foreach (var emd in entityCache)
             {
                 if (emd.IsCustomizable.Value && emd.DisplayName.UserLocalizedLabel != null)
                 {

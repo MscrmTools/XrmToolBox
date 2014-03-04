@@ -67,6 +67,7 @@
     <Compile Include="AppCode\DelegatesHelpers\RadioButtonDelegates.cs" />
     <Compile Include="AppCode\DelegatesHelpers\TextBoxDelegates.cs" />
     <Compile Include="AppCode\DelegatesHelpers\ToolStripStatusDelegates.cs" />
+    <Compile Include="AppCode\ListViewItemComparer.cs" />
     <Compile Include="AppCode\SaveEventArgs.cs" />
     <Compile Include="AppCode\TreeNodeHelper.cs" />
     <Compile Include="AppCode\XmlValidator.cs" />
@@ -250,7 +251,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -28,10 +28,12 @@ namespace MsCrmTools.SiteMapEditor.Forms.WebRessources
 
         readonly int requiredType;
 
-        public CreateWebResourceDialog(WebResourceType type)
+        private readonly IOrganizationService service;
+
+        public CreateWebResourceDialog(WebResourceType type, IOrganizationService service)
         {
             InitializeComponent();
-
+            this.service = service;
             requiredType = (int)type;
         }
     
@@ -63,7 +65,7 @@ namespace MsCrmTools.SiteMapEditor.Forms.WebRessources
                 webR["name"] = txtName.Text;
                 webR["content"] = getEncodedFileContents(txtFile.Text);
 
-                Guid wrId = SiteMapEditor.service.Create(webR);
+                Guid wrId = service.Create(webR);
 
                 webR["webresourceid"] = wrId;
 

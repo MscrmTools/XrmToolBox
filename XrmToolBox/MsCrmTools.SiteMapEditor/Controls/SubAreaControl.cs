@@ -6,9 +6,11 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.SiteMapEditor.AppCode;
 using MsCrmTools.SiteMapEditor.Forms;
 using MsCrmTools.SiteMapEditor.Forms.WebRessources;
+using Microsoft.Xrm.Sdk;
 
 namespace MsCrmTools.SiteMapEditor.Controls
 {
@@ -41,6 +43,11 @@ namespace MsCrmTools.SiteMapEditor.Controls
         private bool initialSkuOnPremise;
         private bool initialSkuSPLA;
 
+        private List<EntityMetadata> emds;
+        private List<Entity> imageCache;
+        private List<Entity> htmlCache;
+        private IOrganizationService service;
+
         #region Delegates
 
         public delegate void SaveEventHandler(object sender, SaveEventArgs e);
@@ -53,9 +60,14 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
         #endregion
 
-        public SubAreaControl()
+        public SubAreaControl(List<EntityMetadata> emds, List<Entity> imageCache, List<Entity> htmlCache, IOrganizationService service)
         {
             InitializeComponent();
+
+            this.emds = emds;
+            this.imageCache = imageCache;
+            this.htmlCache = htmlCache;
+            this.service = service;
 
             collec = new Dictionary<string, string>();
 
@@ -78,8 +90,8 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
         }
 
-        public SubAreaControl(Dictionary<string, string> collection)
-            : this()
+        public SubAreaControl(Dictionary<string, string> collection, List<EntityMetadata> emds, List<Entity> imageCache, List<Entity> htmlCache, IOrganizationService service)
+            : this(emds,imageCache,htmlCache,service)
         {
 
             collec = collection;
@@ -299,7 +311,15 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
         private void buttonSelectEntity_Click(object sender, EventArgs e)
         {
-            EntityPicker picker = new EntityPicker();
+            if (service == null)
+            {
+                MessageBox.Show(ParentForm,
+                    "You are not connected to an organization! Please connect to an organization and reopen this SubArea item",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            } 
+            
+            EntityPicker picker = new EntityPicker(emds);
             picker.StartPosition = FormStartPosition.CenterParent;
 
             if (picker.ShowDialog() == DialogResult.OK)
@@ -310,7 +330,15 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
         private void btnBrowsIcon_Click(object sender, EventArgs e)
         {
-            WebResourcePicker wrp = new WebResourcePicker(WebResourcePicker.WebResourceType.Image);
+            if (service == null)
+            {
+                MessageBox.Show(ParentForm,
+                    "You are not connected to an organization! Please connect to an organization and reopen this SubArea item",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            
+            WebResourcePicker wrp = new WebResourcePicker(WebResourcePicker.WebResourceType.Image, imageCache, htmlCache, service);
             wrp.StartPosition = FormStartPosition.CenterParent;
 
             if (wrp.ShowDialog() == DialogResult.OK)
@@ -321,7 +349,15 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
         private void buttonBrowseUrl_Click(object sender, EventArgs e)
         {
-            WebResourcePicker wrp = new WebResourcePicker(WebResourcePicker.WebResourceType.WebPage);
+            if (service == null)
+            {
+                MessageBox.Show(ParentForm,
+                    "You are not connected to an organization! Please connect to an organization and reopen this SubArea item",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            
+            WebResourcePicker wrp = new WebResourcePicker(WebResourcePicker.WebResourceType.WebPage, imageCache, htmlCache, service);
             wrp.StartPosition = FormStartPosition.CenterParent;
 
             if (wrp.ShowDialog() == DialogResult.OK)
@@ -332,7 +368,15 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
         private void btnBrowseDashboard_Click(object sender, EventArgs e)
         {
-            var dPicker = new DashboardPicker() { StartPosition = FormStartPosition.CenterParent };
+            if (service == null)
+            {
+                MessageBox.Show(ParentForm,
+                    "You are not connected to an organization! Please connect to an organization and reopen this SubArea item",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var dPicker = new DashboardPicker(service) { StartPosition = FormStartPosition.CenterParent };
             if (dPicker.ShowDialog(ParentForm) == DialogResult.OK)
             {
                 txtDefaultDashboardId.Text = dPicker.SelectedDashboard.Id.ToString("B");

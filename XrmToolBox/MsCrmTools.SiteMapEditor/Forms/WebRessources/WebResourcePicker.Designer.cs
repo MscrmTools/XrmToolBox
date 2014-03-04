@@ -28,125 +28,126 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panel1 = new System.Windows.Forms.Panel();
-            lblHeader = new System.Windows.Forms.Label();
-            btnWebResourcePickerCancel = new System.Windows.Forms.Button();
-            btnWebResourcePickerValidate = new System.Windows.Forms.Button();
-            lstWebResources = new System.Windows.Forms.ListView();
-            columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            btnNewResource = new System.Windows.Forms.Button();
-            btnRefresh = new System.Windows.Forms.Button();
-            panel1.SuspendLayout();
-            SuspendLayout();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.lblHeader = new System.Windows.Forms.Label();
+            this.btnWebResourcePickerCancel = new System.Windows.Forms.Button();
+            this.btnWebResourcePickerValidate = new System.Windows.Forms.Button();
+            this.lstWebResources = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnNewResource = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.Button();
+            this.panel1.SuspendLayout();
+            this.SuspendLayout();
             // 
             // panel1
             // 
-            panel1.BackColor = System.Drawing.Color.White;
-            panel1.Controls.Add(lblHeader);
-            panel1.Location = new System.Drawing.Point(0, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new System.Drawing.Size(500, 60);
-            panel1.TabIndex = 2;
+            this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.Controls.Add(this.lblHeader);
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(500, 60);
+            this.panel1.TabIndex = 2;
             // 
             // lblHeader
             // 
-            lblHeader.AutoSize = true;
-            lblHeader.Font = new System.Drawing.Font("Tahoma", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            lblHeader.Location = new System.Drawing.Point(3, 9);
-            lblHeader.Name = "lblHeader";
-            lblHeader.Size = new System.Drawing.Size(181, 22);
-            lblHeader.TabIndex = 1;
-            lblHeader.Text = "Select a web resource";
+            this.lblHeader.AutoSize = true;
+            this.lblHeader.Font = new System.Drawing.Font("Tahoma", 13F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHeader.Location = new System.Drawing.Point(3, 9);
+            this.lblHeader.Name = "lblHeader";
+            this.lblHeader.Size = new System.Drawing.Size(181, 22);
+            this.lblHeader.TabIndex = 1;
+            this.lblHeader.Text = "Select a web resource";
             // 
             // btnWebResourcePickerCancel
             // 
-            btnWebResourcePickerCancel.Location = new System.Drawing.Point(413, 277);
-            btnWebResourcePickerCancel.Name = "btnWebResourcePickerCancel";
-            btnWebResourcePickerCancel.Size = new System.Drawing.Size(75, 23);
-            btnWebResourcePickerCancel.TabIndex = 5;
-            btnWebResourcePickerCancel.Text = "Cancel";
-            btnWebResourcePickerCancel.UseVisualStyleBackColor = true;
-            btnWebResourcePickerCancel.Click += new System.EventHandler(btnWebResourcePickerCancel_Click);
+            this.btnWebResourcePickerCancel.Location = new System.Drawing.Point(413, 277);
+            this.btnWebResourcePickerCancel.Name = "btnWebResourcePickerCancel";
+            this.btnWebResourcePickerCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnWebResourcePickerCancel.TabIndex = 5;
+            this.btnWebResourcePickerCancel.Text = "Cancel";
+            this.btnWebResourcePickerCancel.UseVisualStyleBackColor = true;
+            this.btnWebResourcePickerCancel.Click += new System.EventHandler(this.btnWebResourcePickerCancel_Click);
             // 
             // btnWebResourcePickerValidate
             // 
-            btnWebResourcePickerValidate.Location = new System.Drawing.Point(332, 277);
-            btnWebResourcePickerValidate.Name = "btnWebResourcePickerValidate";
-            btnWebResourcePickerValidate.Size = new System.Drawing.Size(75, 23);
-            btnWebResourcePickerValidate.TabIndex = 4;
-            btnWebResourcePickerValidate.Text = "OK";
-            btnWebResourcePickerValidate.UseVisualStyleBackColor = true;
-            btnWebResourcePickerValidate.Click += new System.EventHandler(btnWebResourcePickerValidate_Click);
+            this.btnWebResourcePickerValidate.Location = new System.Drawing.Point(332, 277);
+            this.btnWebResourcePickerValidate.Name = "btnWebResourcePickerValidate";
+            this.btnWebResourcePickerValidate.Size = new System.Drawing.Size(75, 23);
+            this.btnWebResourcePickerValidate.TabIndex = 4;
+            this.btnWebResourcePickerValidate.Text = "OK";
+            this.btnWebResourcePickerValidate.UseVisualStyleBackColor = true;
+            this.btnWebResourcePickerValidate.Click += new System.EventHandler(this.btnWebResourcePickerValidate_Click);
             // 
             // lstWebResources
             // 
-            lstWebResources.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            columnHeader1,
-            columnHeader2});
-            lstWebResources.FullRowSelect = true;
-            lstWebResources.GridLines = true;
-            lstWebResources.Location = new System.Drawing.Point(7, 66);
-            lstWebResources.MultiSelect = false;
-            lstWebResources.Name = "lstWebResources";
-            lstWebResources.Size = new System.Drawing.Size(481, 179);
-            lstWebResources.TabIndex = 6;
-            lstWebResources.UseCompatibleStateImageBehavior = false;
-            lstWebResources.View = System.Windows.Forms.View.Details;
-            lstWebResources.DoubleClick += new System.EventHandler(lstWebResources_DoubleClick);
+            this.lstWebResources.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2});
+            this.lstWebResources.FullRowSelect = true;
+            this.lstWebResources.GridLines = true;
+            this.lstWebResources.Location = new System.Drawing.Point(7, 66);
+            this.lstWebResources.MultiSelect = false;
+            this.lstWebResources.Name = "lstWebResources";
+            this.lstWebResources.Size = new System.Drawing.Size(481, 179);
+            this.lstWebResources.TabIndex = 6;
+            this.lstWebResources.UseCompatibleStateImageBehavior = false;
+            this.lstWebResources.View = System.Windows.Forms.View.Details;
+            this.lstWebResources.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstWebResources_ColumnClick);
+            this.lstWebResources.DoubleClick += new System.EventHandler(this.lstWebResources_DoubleClick);
             // 
             // columnHeader1
             // 
-            columnHeader1.Text = "Display Name";
-            columnHeader1.Width = 175;
+            this.columnHeader1.Text = "Display Name";
+            this.columnHeader1.Width = 175;
             // 
             // columnHeader2
             // 
-            columnHeader2.Text = "Name";
-            columnHeader2.Width = 250;
+            this.columnHeader2.Text = "Name";
+            this.columnHeader2.Width = 250;
             // 
             // btnNewResource
             // 
-            btnNewResource.Location = new System.Drawing.Point(7, 251);
-            btnNewResource.Name = "btnNewResource";
-            btnNewResource.Size = new System.Drawing.Size(100, 23);
-            btnNewResource.TabIndex = 7;
-            btnNewResource.Text = "New resource";
-            btnNewResource.UseVisualStyleBackColor = true;
-            btnNewResource.Click += new System.EventHandler(btnNewResource_Click);
+            this.btnNewResource.Location = new System.Drawing.Point(7, 251);
+            this.btnNewResource.Name = "btnNewResource";
+            this.btnNewResource.Size = new System.Drawing.Size(100, 23);
+            this.btnNewResource.TabIndex = 7;
+            this.btnNewResource.Text = "New resource";
+            this.btnNewResource.UseVisualStyleBackColor = true;
+            this.btnNewResource.Click += new System.EventHandler(this.btnNewResource_Click);
             // 
             // btnRefresh
             // 
-            btnRefresh.Enabled = false;
-            btnRefresh.Location = new System.Drawing.Point(113, 251);
-            btnRefresh.Name = "btnRefresh";
-            btnRefresh.Size = new System.Drawing.Size(100, 23);
-            btnRefresh.TabIndex = 8;
-            btnRefresh.Text = "Refresh list";
-            btnRefresh.UseVisualStyleBackColor = true;
-            btnRefresh.Click += new System.EventHandler(BtnRefreshClick);
+            this.btnRefresh.Enabled = false;
+            this.btnRefresh.Location = new System.Drawing.Point(113, 251);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(100, 23);
+            this.btnRefresh.TabIndex = 8;
+            this.btnRefresh.Text = "Refresh list";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.BtnRefreshClick);
             // 
             // WebResourcePicker
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(500, 312);
-            Controls.Add(btnRefresh);
-            Controls.Add(btnNewResource);
-            Controls.Add(lstWebResources);
-            Controls.Add(btnWebResourcePickerCancel);
-            Controls.Add(btnWebResourcePickerValidate);
-            Controls.Add(panel1);
-            FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-            MaximizeBox = false;
-            MinimizeBox = false;
-            Name = "WebResourcePicker";
-            ShowIcon = false;
-            ShowInTaskbar = false;
-            Text = "Web Resource Picker";
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
-            ResumeLayout(false);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(500, 312);
+            this.Controls.Add(this.btnRefresh);
+            this.Controls.Add(this.btnNewResource);
+            this.Controls.Add(this.lstWebResources);
+            this.Controls.Add(this.btnWebResourcePickerCancel);
+            this.Controls.Add(this.btnWebResourcePickerValidate);
+            this.Controls.Add(this.panel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "WebResourcePicker";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.Text = "Web Resource Picker";
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.ResumeLayout(false);
 
         }
 

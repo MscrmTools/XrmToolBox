@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Microsoft.Xrm.Sdk;
 using MsCrmTools.SiteMapEditor.AppCode;
 using MsCrmTools.SiteMapEditor.Forms.WebRessources;
 
@@ -22,6 +23,10 @@ namespace MsCrmTools.SiteMapEditor.Controls
         private string initialDescription = "";
         private bool initialShowGroups;
 
+        private List<Entity> webResourcesImageCache;
+        private List<Entity> webResourcesHtmlCache;
+        private IOrganizationService service;
+
         #region Delegates
 
         public delegate void SaveEventHandler(object sender, SaveEventArgs e);
@@ -34,9 +39,12 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
         #endregion
 
-        public AreaControl()
+        public AreaControl(List<Entity> webResourcesImageCache, List<Entity> webResourcesHtmlCache, IOrganizationService service)
         {
             InitializeComponent();
+            this.webResourcesImageCache = webResourcesImageCache;
+            this.webResourcesHtmlCache = webResourcesHtmlCache;
+            this.service = service;
 
             collec = new Dictionary<string, string>();
 
@@ -50,7 +58,8 @@ namespace MsCrmTools.SiteMapEditor.Controls
             tip.SetToolTip(txtAreaDescription, "Deprecated. Use the <Description> (SiteMap) element.");
         }
 
-        public AreaControl(Dictionary<string, string> collection):this()
+        public AreaControl(Dictionary<string, string> collection, List<Entity> webResourcesImageCache, List<Entity> webResourcesHtmlCache, IOrganizationService service)
+            : this(webResourcesImageCache, webResourcesHtmlCache, service)
         {
             collec = collection;
 
@@ -150,7 +159,15 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
         private void btnBrowsIcon_Click(object sender, EventArgs e)
         {
-            WebResourcePicker wrp = new WebResourcePicker(WebResourcePicker.WebResourceType.Image);
+            if (service == null)
+            {
+                MessageBox.Show(ParentForm,
+                    "You are not connected to an organization! Please connect to an organization and reopen this Area item",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            WebResourcePicker wrp = new WebResourcePicker(WebResourcePicker.WebResourceType.Image, webResourcesImageCache,webResourcesHtmlCache, service );
             wrp.StartPosition = FormStartPosition.CenterParent;
 
             if (wrp.ShowDialog() == DialogResult.OK)
@@ -161,7 +178,15 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
         private void buttonBrowseUrl_Click(object sender, EventArgs e)
         {
-            WebResourcePicker wrp = new WebResourcePicker(WebResourcePicker.WebResourceType.WebPage);
+            if (service == null)
+            {
+                MessageBox.Show(ParentForm,
+                    "You are not connected to an organization! Please connect to an organization and reopen this Area item",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            } 
+            
+            WebResourcePicker wrp = new WebResourcePicker(WebResourcePicker.WebResourceType.WebPage, webResourcesImageCache, webResourcesHtmlCache, service);
             wrp.StartPosition = FormStartPosition.CenterParent;
 
             if (wrp.ShowDialog() == DialogResult.OK)

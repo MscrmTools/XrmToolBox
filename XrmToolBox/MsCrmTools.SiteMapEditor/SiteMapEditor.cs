@@ -14,11 +14,13 @@ using System.Xml;
 using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using MsCrmTools.SiteMapEditor.AppCode;
 using MsCrmTools.SiteMapEditor.Controls;
 using MsCrmTools.SiteMapEditor.Forms;
+using MsCrmTools.SiteMapEditor.Forms.WebRessources;
 using SiteMapEditor.Controls;
 using Tanguy.WinForm.Utilities.DelegatesHelpers;
 using XrmToolBox;
@@ -35,10 +37,10 @@ namespace MsCrmTools.SiteMapEditor
 {
     public partial class SiteMapEditor : UserControl, IMsCrmToolsPluginUserControl
     {
-        internal static IOrganizationService service;
-        internal static List<EntityMetadata> entityCache;
-        internal static List<Entity> webResourcesHtmlCache;
-        internal static List<Entity> webResourcesImageCache;
+        internal IOrganizationService service;
+        internal List<EntityMetadata> entityCache;
+        internal List<Entity> webResourcesHtmlCache;
+        internal List<Entity> webResourcesImageCache;
         internal Clipboard clipboard = new Clipboard();
 
         private Panel infoPanel;
@@ -423,7 +425,7 @@ namespace MsCrmTools.SiteMapEditor
                 case "Area":
                     {
                         if (collec.Count == 0) collec.Add("Id", string.Format("tempId_{0}", DateTime.Now.Ticks));
-                        var ctrl = new AreaControl(collec);
+                        var ctrl = new AreaControl(collec, webResourcesImageCache, webResourcesHtmlCache, service);
                         ctrl.Saved += CtrlSaved;
 
                         panelContainer.Controls.Add(ctrl);
@@ -435,7 +437,7 @@ namespace MsCrmTools.SiteMapEditor
                 case "SubArea":
                     {
                         if (collec.Count == 0) collec.Add("Id", string.Format("tempId_{0}", DateTime.Now.Ticks));
-                        var ctrl = new SubAreaControl(collec);
+                        var ctrl = new SubAreaControl(collec, entityCache, webResourcesImageCache, webResourcesHtmlCache, service);
                         ctrl.Saved += CtrlSaved;
 
                         panelContainer.Controls.Add(ctrl);
@@ -706,6 +708,49 @@ namespace MsCrmTools.SiteMapEditor
             siteMapDoc.LoadXml(ec[0]["sitemapxml"].ToString());
 
             DisplaySiteMap();
+
+            InformationPanel.ChangeInformationPanelMessage(infoPanel, "Loading Entities...");
+
+            // Recherche des métadonnées
+            entityCache = new List<EntityMetadata>();
+
+            var request = new RetrieveAllEntitiesRequest
+            {
+                EntityFilters = EntityFilters.Entity
+            };
+
+            var response = (RetrieveAllEntitiesResponse)service.Execute(request);
+
+            foreach (var emd in response.EntityMetadata)
+            {
+                entityCache.Add(emd);
+            }
+            // Fin Recherche des métadonnées
+
+            InformationPanel.ChangeInformationPanelMessage(infoPanel, "Loading web resources...");
+            // Rercherche des images
+
+            webResourcesImageCache = new List<Entity>();
+
+            var wrQuery = new QueryExpression("webresource");
+            wrQuery.Criteria.AddCondition("webresourcetype", ConditionOperator.In, new[] { 2, 5, 6, 7 });
+            wrQuery.ColumnSet.AllColumns = true;
+
+            EntityCollection results = service.RetrieveMultiple(wrQuery);
+
+            foreach (Entity webresource in results.Entities)
+            {
+                if (webresource.GetAttributeValue<OptionSetValue>("webresourcetype").Value == 2)
+                {
+                    webResourcesHtmlCache.Add(webresource);    
+                }
+                else
+                {
+                    webResourcesImageCache.Add(webresource);
+                }
+            }
+
+            // Fin recherche des images
 
             CommonDelegates.SetCursor(this, Cursors.Default);
             EnableControls(true);
