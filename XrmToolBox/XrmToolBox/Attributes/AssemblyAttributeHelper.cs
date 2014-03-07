@@ -51,7 +51,7 @@ namespace XrmToolBox.Attributes
                     switch (property.Name)
                     {
                         case "Color":
-                            colorName = property.GetValue(untypedAttribute).ToString();
+                            colorName = property.GetValue(untypedAttribute) != null ? property.GetValue(untypedAttribute).ToString() : "";
                             break;
                         case "ColorR":
                             colorR = (int)property.GetValue(untypedAttribute);
