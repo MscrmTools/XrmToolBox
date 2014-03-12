@@ -34,8 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GemBox.Document">
-      <HintPath>..\..\..\..\..\ASSEMBLIES\GemBox\Document\GemBox.Document.dll</HintPath>
+    <Reference Include="GemBox.Document, Version=23.3.30.1039, Culture=neutral, PublicKeyToken=b1b72c69714d4847, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\GemBox Software\GemBox.Document 2.3\Bin\GemBox.Document.dll</HintPath>
     </Reference>
     <Reference Include="GemBox.LicenseKey">
       <HintPath>..\..\GemBox.LicenseKey\GemBox.LicenseKey\bin\ReleaseObfuscated\GemBox.LicenseKey.dll</HintPath>
@@ -124,7 +125,7 @@ xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.MetadataDocumentGenerator.pdb" "$(So
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
