@@ -430,6 +430,13 @@ namespace MsCrmTools.AccessChecker
 
         private void BtnSearchRecordIdClick(object sender, EventArgs e)
         {
+            if (cBoxEntities.SelectedIndex < 0)
+            {
+                MessageBox.Show(ParentForm, "Please select an entity in the list before using the search action",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             var lp = new LookupSingle(((EntityInfo)cBoxEntities.SelectedItem).LogicalName, service);
             lp.StartPosition = FormStartPosition.CenterParent;
             if (lp.ShowDialog() == DialogResult.OK)
