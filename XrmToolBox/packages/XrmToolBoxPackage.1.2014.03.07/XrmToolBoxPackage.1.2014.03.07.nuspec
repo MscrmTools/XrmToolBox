@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>XrmToolBoxPackage</id>
+    <version>1.2014.03.07</version>
+    <title>XrmToolBox Development Libraries</title>
+    <authors>MscrmTools</authors>
+    <owners>MscrmTools</owners>
+    <projectUrl>http://xrmtoolbox.codeplex.com/</projectUrl>
+    <iconUrl>https://download-codeplex.sec.s-msft.com/Download?ProjectName=xrmtoolbox&amp;DownloadId=579949&amp;Build=20841</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Add the references required to develop a XrmToolBox plugin</description>
+    <summary>Add the references required to develop a XrmToolBox plugin</summary>
+    <releaseNotes>1.2014.03.07 : Fix problems when specifying RGB color for Text or Background color of a plugin</releaseNotes>
+    <copyright>MscrmTools</copyright>
+    <language />
+    <tags>Xrm 'Crm 2011' 2013' XrmToolBox</tags>
+  </metadata>
+</package>

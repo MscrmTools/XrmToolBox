@@ -40,17 +40,51 @@
   </PropertyGroup>
   <PropertyGroup />
   <ItemGroup>
+    <Reference Include="antixsslibrary">
+      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\antixsslibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="microsoft.crm.outlook.sdk">
+      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.crm.outlook.sdk.dll</HintPath>
+    </Reference>
     <Reference Include="microsoft.crm.sdk.proxy, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK 5.0.16\bin\microsoft.crm.sdk.proxy.dll</HintPath>
+      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.crm.sdk.proxy.dll</HintPath>
+    </Reference>
+    <Reference Include="microsoft.crm.tools.emailproviders">
+      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.crm.tools.emailproviders.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\Microsoft.IdentityModel.dll</HintPath>
     </Reference>
     <Reference Include="microsoft.xrm.client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK 5.0.16\bin\microsoft.xrm.client.dll</HintPath>
+      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.xrm.client.dll</HintPath>
+    </Reference>
+    <Reference Include="microsoft.xrm.client.codegeneration">
+      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.xrm.client.codegeneration.dll</HintPath>
+    </Reference>
+    <Reference Include="microsoft.xrm.portal">
+      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.xrm.portal.dll</HintPath>
+    </Reference>
+    <Reference Include="microsoft.xrm.portal.files">
+      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.xrm.portal.files.dll</HintPath>
     </Reference>
     <Reference Include="microsoft.xrm.sdk, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\DOCUMENTS\Documents CRM\Dynamics CRM 2011\SDK 5.0.16\bin\microsoft.xrm.sdk.dll</HintPath>
+      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.xrm.sdk.dll</HintPath>
+    </Reference>
+    <Reference Include="microsoft.xrm.sdk.deployment">
+      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.xrm.sdk.deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="microsoft.xrm.sdk.workflow">
+      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.xrm.sdk.workflow.dll</HintPath>
+    </Reference>
+    <Reference Include="pluginprofiler.library">
+      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\pluginprofiler.library.dll</HintPath>
+    </Reference>
+    <Reference Include="pluginprofiler.plugins">
+      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\pluginprofiler.plugins.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -167,6 +201,7 @@
     <EmbeddedResource Include="UserControls\PluginModel.resx">
       <DependentUpon>PluginModel.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -196,7 +231,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

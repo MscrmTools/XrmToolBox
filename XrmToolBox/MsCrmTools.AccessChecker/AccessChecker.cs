@@ -296,7 +296,7 @@ namespace MsCrmTools.AccessChecker
             
             // Get primary attribute value for the current record
             Entity de = crmAccess.RetrieveDynamicWithPrimaryAttr(recordId, entityName, primaryAttribute);
-            result.RecordName = de[primaryAttribute].ToString();
+            result.RecordName = de.GetAttributeValue<string>(primaryAttribute);
 
             // Check Privileges
             foreach (string privlegeName in privileges.Keys)
