@@ -13,7 +13,7 @@ namespace MsCrmTools.WebResourcesManager
 {
     class WebResource
     {
-        private static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant));
+        private static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
 
         private static readonly List<string> validExtensions = new List<string>{"htm","html","css","js","xml","jpg","jpeg","png","gif","ico","xap","xslt"};
 
@@ -37,7 +37,7 @@ namespace MsCrmTools.WebResourcesManager
 
         public static int GetTypeFromExtension(string ext)
         {
-            switch (ext)
+            switch (ext.ToLower())
             {
                 case "htm":
                 case "html":
@@ -58,6 +58,7 @@ namespace MsCrmTools.WebResourcesManager
                 case "xap":
                     return 8;
                 case "xsl":
+                case "xslt":
                     return 9;
                 default:
                     return 10;
@@ -66,7 +67,7 @@ namespace MsCrmTools.WebResourcesManager
 
         public static int GetImageIndexFromExtension(string ext)
         {
-            switch (ext)
+            switch (ext.ToLower())
             {
                 case "htm":
                 case "html":
@@ -87,6 +88,7 @@ namespace MsCrmTools.WebResourcesManager
                 case "xap":
                     return 9;
                 case "xsl":
+                case "xslt":
                     return 10;
                 default:
                     return 11;
@@ -95,7 +97,21 @@ namespace MsCrmTools.WebResourcesManager
 
         public static bool IsInvalidName(string name)
         {
-            return InValidWrNameRegex.IsMatch(name);
+            var isInvalidName = InValidWrNameRegex.IsMatch(name);
+
+             const string pattern = "*.config .* _* *.bin";
+            
+            // insert backslash before regex special characters that may appear in filenames
+            var regexPattern = Regex.Replace(pattern, @"([\+\(\)\[\]\{\$\^\.])", @"\$1");
+            
+            // apply regex syntax
+            regexPattern = string.Format("^{0}$", regexPattern.Replace(" ", "$|^").Replace("*", ".*"));
+
+            var regex = new Regex(regexPattern, RegexOptions.IgnoreCase);
+
+            var isInvalidName2 = regex.IsMatch(name);
+
+            return isInvalidName || isInvalidName2;
         }
 
         public WebResource ShowProperties(IOrganizationService service, Control mainControl)

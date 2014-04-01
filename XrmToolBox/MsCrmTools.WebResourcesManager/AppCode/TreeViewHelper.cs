@@ -97,7 +97,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
             foreach (FileInfo fiChild in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
             {
-                if (WebResource.IsInvalidName(fiChild.Name) || !WebResource.ValidExtensions.Contains(fiChild.Extension.Remove(0, 1)))
+                if (WebResource.IsInvalidName(fiChild.Name) || !WebResource.ValidExtensions.Contains(fiChild.Extension.Remove(0, 1).ToLower()))
                 {
                     invalidFilenames.Add(fiChild.FullName);
                     continue;
