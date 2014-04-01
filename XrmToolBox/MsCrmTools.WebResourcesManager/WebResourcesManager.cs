@@ -99,7 +99,7 @@ namespace MsCrmTools.WebResourcesManager
             {
                 case "LoadWebResources":
                     {
-                        RetrieveWebResources(Guid.Empty);
+                        LoadWebResourcesGeneral(Guid.Empty);
                     }
                     break;
                 case "LoadWebResourcesFromSolution":
@@ -107,7 +107,7 @@ namespace MsCrmTools.WebResourcesManager
                         var sPicker = new SolutionPicker(service) {StartPosition = FormStartPosition.CenterParent};
                         if (sPicker.ShowDialog(this) == DialogResult.OK)
                         {
-                            RetrieveWebResources(sPicker.SelectedSolution.Id);
+                            LoadWebResourcesGeneral(sPicker.SelectedSolution.Id);
                         }
                     }
                     break;
@@ -155,16 +155,7 @@ namespace MsCrmTools.WebResourcesManager
             }
             else
             {
-                tvWebResources.Nodes.Clear();
-
-                SetWorkingState(true);
-
-                infoPanel = InformationPanel.GetInformationPanel(this, "Loading web resources...", 340, 120);
-
-                var bwFillWebResources = new BackgroundWorker();
-                bwFillWebResources.DoWork += BwFillWebResourcesDoWork;
-                bwFillWebResources.RunWorkerCompleted += BwFillWebResourcesRunWorkerCompleted;
-                bwFillWebResources.RunWorkerAsync();
+                LoadWebResourcesGeneral(Guid.Empty);
             }
         }
 
@@ -185,17 +176,32 @@ namespace MsCrmTools.WebResourcesManager
                 var sPicker = new SolutionPicker(service) {StartPosition = FormStartPosition.CenterParent};
                 if (sPicker.ShowDialog(this) == DialogResult.OK)
                 {
-                    tvWebResources.Nodes.Clear();
-
-                    SetWorkingState(true);
-
-                    infoPanel = InformationPanel.GetInformationPanel(this, "Loading web resources...", 340, 120);
-
-                    var bwFillWebResources = new BackgroundWorker();
-                    bwFillWebResources.DoWork += BwFillWebResourcesDoWork;
-                    bwFillWebResources.RunWorkerCompleted += BwFillWebResourcesRunWorkerCompleted;
-                    bwFillWebResources.RunWorkerAsync(sPicker.SelectedSolution.Id);
+                    LoadWebResourcesGeneral(sPicker.SelectedSolution.Id);
                 }
+            }
+        }
+
+        private void LoadWebResourcesGeneral(Guid specificSolutionId)
+        {
+            tvWebResources.Nodes.Clear();
+
+            var dialog = new WebResourceTypeSelectorDialog();
+            if (dialog.ShowDialog(ParentForm) == DialogResult.OK)
+            {
+                var settings = new LoadCrmResourcesSettings
+                {
+                    SolutionId = specificSolutionId,
+                    Types = dialog.TypesToLoad
+                };
+
+                SetWorkingState(true);
+
+                infoPanel = InformationPanel.GetInformationPanel(this, "Loading web resources...", 340, 120);
+
+                var bwFillWebResources = new BackgroundWorker();
+                bwFillWebResources.DoWork += BwFillWebResourcesDoWork;
+                bwFillWebResources.RunWorkerCompleted += BwFillWebResourcesRunWorkerCompleted;
+                bwFillWebResources.RunWorkerAsync(settings);
             }
         }
 
@@ -492,25 +498,26 @@ namespace MsCrmTools.WebResourcesManager
             try
             {
                 // Let the user decides where to find files
-                var fbd = new FolderBrowserDialog
-                {
-                    Description = "Select the folder where the scripts files are located",
-                    ShowNewFolderButton = true
-                };
-
+                // Let the user decides where to find files
+                var fbd = new CustomFolderBrowserDialog(true);
 
                 if (!string.IsNullOrEmpty(currentFolderForFiles))
                 {
-                    fbd.SelectedPath = currentFolderForFiles;
+                    fbd.FolderPath = currentFolderForFiles;
+                }
+                
+                if (!string.IsNullOrEmpty(currentFolderForFiles))
+                {
+                    fbd.FolderPath = currentFolderForFiles;
                 }
 
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
-                    currentFolderForFiles = fbd.SelectedPath;
+                    currentFolderForFiles = fbd.FolderPath;
                     tvWebResources.Nodes.Clear();
                     invalidFilenames = new List<string>();
 
-                    var di = new DirectoryInfo(fbd.SelectedPath);
+                    var di = new DirectoryInfo(fbd.FolderPath);
 
                     foreach (DirectoryInfo diChild in di.GetDirectories("*_", SearchOption.TopDirectoryOnly))
                     {
@@ -531,10 +538,11 @@ namespace MsCrmTools.WebResourcesManager
                     {
                         if (fiChild.Extension.Length == 0)
                         {
+                            invalidFilenames.Add(fiChild.FullName);
                             continue;
                         }
 
-                        if (WebResource.IsInvalidName(fiChild.Name) || !WebResource.ValidExtensions.Contains(fiChild.Extension.Remove(0, 1)))
+                        if (WebResource.IsInvalidName(fiChild.Name) || !WebResource.ValidExtensions.Contains(fiChild.Extension.Remove(0, 1).ToLower()))
                         {
                             invalidFilenames.Add(fiChild.FullName);
                             continue;
@@ -1414,7 +1422,7 @@ namespace MsCrmTools.WebResourcesManager
             {
                 var files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
-                bool validExtensions = files.All(f => WebResource.ValidExtensions.Contains(new FileInfo(f).Extension.Remove(0, 1)));
+                bool validExtensions = files.All(f => WebResource.ValidExtensions.Contains(new FileInfo(f).Extension.Remove(0, 1).ToLower()));
                 bool validNode = currentNode != null && currentNode.ImageIndex <= 1;
 
                 if (validNode)

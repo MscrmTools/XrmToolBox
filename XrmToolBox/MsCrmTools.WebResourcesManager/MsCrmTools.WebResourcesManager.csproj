@@ -111,6 +111,7 @@
   <ItemGroup>
     <Compile Include="AppCode\Enumerations.cs" />
     <Compile Include="AppCode\Globals.cs" />
+    <Compile Include="AppCode\LoadCrmResourcesSettings.cs" />
     <Compile Include="AppCode\SolutionComponentType.cs" />
     <Compile Include="AppCode\TreeViewHelper.cs" />
     <Compile Include="DelegatesHelpers\CommonDelegates.cs" />
@@ -119,6 +120,12 @@
     <Compile Include="DelegatesHelpers\ProgressBarDelegates.cs" />
     <Compile Include="DelegatesHelpers\TextBoxDelegates.cs" />
     <Compile Include="DelegatesHelpers\TreeViewDelegates.cs" />
+    <Compile Include="Forms\CustomFolderBrowserDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CustomFolderBrowserDialog.Designer.cs">
+      <DependentUpon>CustomFolderBrowserDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\UnusedWebResourcesListDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -173,6 +180,12 @@
     <Compile Include="Forms\WebPreviewDialog.Designer.cs">
       <DependentUpon>WebPreviewDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\WebResourceTypeSelectorDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WebResourceTypeSelectorDialog.Designer.cs">
+      <DependentUpon>WebResourceTypeSelectorDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="ListViewItemComparer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -208,6 +221,12 @@
     <Compile Include="UserControls\SilverlightControl.Designer.cs">
       <DependentUpon>SilverlightControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\WebResourceTypePicker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\WebResourceTypePicker.Designer.cs">
+      <DependentUpon>WebResourceTypePicker.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\WebResourceUpdatedEventArgs.cs" />
     <Compile Include="WebResource.cs" />
     <Compile Include="WebResourceManager.cs" />
@@ -219,6 +238,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\CustomFolderBrowserDialog.resx">
+      <DependentUpon>CustomFolderBrowserDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\UnusedWebResourcesListDialog.resx">
       <DependentUpon>UnusedWebResourcesListDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -246,6 +268,9 @@
     <EmbeddedResource Include="Forms\WebPreviewDialog.resx">
       <DependentUpon>WebPreviewDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WebResourceTypeSelectorDialog.resx">
+      <DependentUpon>WebResourceTypeSelectorDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -262,6 +287,9 @@
     <EmbeddedResource Include="UserControls\SilverlightControl.resx">
       <DependentUpon>SilverlightControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\WebResourceTypePicker.resx">
+      <DependentUpon>WebResourceTypePicker.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="WebResourcesManager.resx">
       <DependentUpon>WebResourcesManager.cs</DependentUpon>
     </EmbeddedResource>
@@ -277,7 +305,7 @@ xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.WebResourcesManager.pdb" "$(Solution
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
