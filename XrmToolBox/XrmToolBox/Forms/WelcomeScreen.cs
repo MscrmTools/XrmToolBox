@@ -35,9 +35,12 @@ namespace XrmToolBox.Forms
 
         void TimerTick(object sender, EventArgs e)
         {
-            MyParentForm.Activate();
-            MyParentForm.BringToFront();
-
+            try
+            {
+                MyParentForm.Activate();
+                MyParentForm.BringToFront();
+            }
+            catch { }
             ((Timer) sender).Stop();
             Close();
         }

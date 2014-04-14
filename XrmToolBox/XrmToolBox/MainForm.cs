@@ -344,96 +344,111 @@ namespace XrmToolBox
 
         private void DisplayPluginControl(UserControl plugin)
         {
-            var controlType = (Type)plugin.Tag;
-            var pluginControl = (UserControl)PluginManager.CreateInstance(controlType.Assembly.Location, controlType.FullName);
-
-            if (service != null)
+            try
             {
-                var clonedService = new OrganizationService(CrmConnection.Parse(currentConnectionDetail.GetOrganizationCrmConnectionString()));
-                ((IMsCrmToolsPluginUserControl)pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
-            }
+                var controlType = (Type) plugin.Tag;
+                var pluginControl =
+                    (UserControl) PluginManager.CreateInstance(controlType.Assembly.Location, controlType.FullName);
 
-            ((IMsCrmToolsPluginUserControl)pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
-            ((IMsCrmToolsPluginUserControl)pluginControl).OnCloseTool += MainForm_OnCloseTool;
-           
-            string name = string.Format("{0} ({1})",
-                                        ((AssemblyTitleAttribute)GetAssemblyAttribute(pluginControl.GetType().Assembly, typeof(AssemblyTitleAttribute))).Title,
-                                        currentConnectionDetail != null
-                                            ? currentConnectionDetail.ConnectionName
-                                            : "Not connected");
-
-            var newTab = new TabPage(name);
-            tabControl1.TabPages.Add(newTab);
-
-            pluginControl.Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Top | AnchorStyles.Right;
-            pluginControl.Width = newTab.Width;
-            pluginControl.Height = newTab.Height;
-
-            newTab.Controls.Add(pluginControl);
-
-            tabControl1.SelectTab(tabControl1.TabPages.Count - 1);
-
-            var pluginInOption = currentOptions.MostUsedList.FirstOrDefault(i => i.Name == pluginControl.GetType().FullName);
-            if (pluginInOption == null)
-            {
-                pluginInOption = new PluginUseCount {Name = pluginControl.GetType().FullName, Count = 0};
-                currentOptions.MostUsedList.Add(pluginInOption);
-            }
-           
-            pluginInOption.Count++;
-
-            var p1 = plugin as SmallPluginModel;
-            if(p1 != null)
-                p1.UpdateCount(pluginInOption.Count);
-            else
-            {
-                var p2 = plugin as PluginModel;
-                if (p2 != null)
+                if (service != null)
                 {
-                    p2.UpdateCount(pluginInOption.Count);
+                    var clonedService =
+                        new OrganizationService(
+                            CrmConnection.Parse(currentConnectionDetail.GetOrganizationCrmConnectionString()));
+                    ((IMsCrmToolsPluginUserControl) pluginControl).UpdateConnection(clonedService,
+                        currentConnectionDetail);
                 }
-            }
 
-            if (currentOptions.LastAdvertisementDisplay == new DateTime() ||
-                currentOptions.LastAdvertisementDisplay > DateTime.Now ||
-                currentOptions.LastAdvertisementDisplay.AddDays(7) < DateTime.Now)
-            {
-                bool displayAdvertisement = true;
-                try
+                ((IMsCrmToolsPluginUserControl) pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
+                ((IMsCrmToolsPluginUserControl) pluginControl).OnCloseTool += MainForm_OnCloseTool;
+
+                string name = string.Format("{0} ({1})",
+                    ((AssemblyTitleAttribute)
+                        GetAssemblyAttribute(pluginControl.GetType().Assembly, typeof (AssemblyTitleAttribute))).Title,
+                    currentConnectionDetail != null
+                        ? currentConnectionDetail.ConnectionName
+                        : "Not connected");
+
+                var newTab = new TabPage(name);
+                tabControl1.TabPages.Add(newTab);
+
+                pluginControl.Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Top | AnchorStyles.Right;
+                pluginControl.Width = newTab.Width;
+                pluginControl.Height = newTab.Height;
+
+                newTab.Controls.Add(pluginControl);
+
+                tabControl1.SelectTab(tabControl1.TabPages.Count - 1);
+
+                var pluginInOption =
+                    currentOptions.MostUsedList.FirstOrDefault(i => i.Name == pluginControl.GetType().FullName);
+                if (pluginInOption == null)
                 {
-                    var assembly =
-                        Assembly.LoadFile(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory +
-                                          "\\McTools.StopAdvertisement.dll");
-                    if (assembly != null)
-                    {
-                        Type type = assembly.GetType("McTools.StopAdvertisement.LicenseManager");
-                        if (type != null)
-                        {
-                            MethodInfo methodInfo = type.GetMethod("IsValid");
-                            if (methodInfo != null)
-                            {
-                                object classInstance = Activator.CreateInstance(type, null);
+                    pluginInOption = new PluginUseCount {Name = pluginControl.GetType().FullName, Count = 0};
+                    currentOptions.MostUsedList.Add(pluginInOption);
+                }
 
-                                if ((bool) methodInfo.Invoke(classInstance, null))
+                pluginInOption.Count++;
+
+                var p1 = plugin as SmallPluginModel;
+                if (p1 != null)
+                    p1.UpdateCount(pluginInOption.Count);
+                else
+                {
+                    var p2 = plugin as PluginModel;
+                    if (p2 != null)
+                    {
+                        p2.UpdateCount(pluginInOption.Count);
+                    }
+                }
+
+                if (currentOptions.LastAdvertisementDisplay == new DateTime() ||
+                    currentOptions.LastAdvertisementDisplay > DateTime.Now ||
+                    currentOptions.LastAdvertisementDisplay.AddDays(7) < DateTime.Now)
+                {
+                    bool displayAdvertisement = true;
+                    try
+                    {
+                        var assembly =
+                            Assembly.LoadFile(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory +
+                                              "\\McTools.StopAdvertisement.dll");
+                        if (assembly != null)
+                        {
+                            Type type = assembly.GetType("McTools.StopAdvertisement.LicenseManager");
+                            if (type != null)
+                            {
+                                MethodInfo methodInfo = type.GetMethod("IsValid");
+                                if (methodInfo != null)
                                 {
-                                    displayAdvertisement = false;
+                                    object classInstance = Activator.CreateInstance(type, null);
+
+                                    if ((bool) methodInfo.Invoke(classInstance, null))
+                                    {
+                                        displayAdvertisement = false;
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                catch(FileNotFoundException)
-                {}
+                    catch (FileNotFoundException)
+                    {
+                    }
 
-                if (displayAdvertisement)
-                {
-                    var sc = new SupportScreen();
-                    sc.ShowDialog(this);
-                    currentOptions.LastAdvertisementDisplay = DateTime.Now;
+                    if (displayAdvertisement)
+                    {
+                        var sc = new SupportScreen();
+                        sc.ShowDialog(this);
+                        currentOptions.LastAdvertisementDisplay = DateTime.Now;
+                    }
                 }
+
+                currentOptions.Save();
             }
-
-            currentOptions.Save();
+            catch (Exception error)
+            {
+                MessageBox.Show(this, "An error occured when trying to display this plugin: " + error.Message, "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         void MainForm_OnCloseTool(object sender, EventArgs e)
