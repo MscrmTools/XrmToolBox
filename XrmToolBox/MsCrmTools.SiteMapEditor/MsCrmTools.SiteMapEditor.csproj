@@ -34,56 +34,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="antixsslibrary">
-      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\antixsslibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="McTools.Xrm.Connection">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2014.03.07\lib\net\McTools.Xrm.Connection.dll</HintPath>
-    </Reference>
-    <Reference Include="McTools.Xrm.Connection.WinForms">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2014.03.07\lib\net\McTools.Xrm.Connection.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="microsoft.crm.outlook.sdk">
-      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.crm.outlook.sdk.dll</HintPath>
-    </Reference>
-    <Reference Include="microsoft.crm.sdk.proxy, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.crm.sdk.proxy.dll</HintPath>
+      <HintPath>..\Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
-    <Reference Include="microsoft.crm.tools.emailproviders">
-      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.crm.tools.emailproviders.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\Microsoft.IdentityModel.dll</HintPath>
-    </Reference>
-    <Reference Include="microsoft.xrm.client">
-      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.xrm.client.dll</HintPath>
-    </Reference>
-    <Reference Include="microsoft.xrm.client.codegeneration">
-      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.xrm.client.codegeneration.dll</HintPath>
-    </Reference>
-    <Reference Include="microsoft.xrm.portal">
-      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.xrm.portal.dll</HintPath>
-    </Reference>
-    <Reference Include="microsoft.xrm.portal.files">
-      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.xrm.portal.files.dll</HintPath>
-    </Reference>
-    <Reference Include="microsoft.xrm.sdk, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Xrm.Client, Version=5.0.9689.2166, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.xrm.sdk.dll</HintPath>
+      <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Client.dll</HintPath>
     </Reference>
-    <Reference Include="microsoft.xrm.sdk.deployment">
-      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.xrm.sdk.deployment.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Sdk, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
-    <Reference Include="microsoft.xrm.sdk.workflow">
-      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\microsoft.xrm.sdk.workflow.dll</HintPath>
-    </Reference>
-    <Reference Include="pluginprofiler.library">
-      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\pluginprofiler.library.dll</HintPath>
-    </Reference>
-    <Reference Include="pluginprofiler.plugins">
-      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net40\pluginprofiler.plugins.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Sdk.Deployment">
+      <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -97,9 +61,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="XrmToolBox">
-      <HintPath>..\packages\XrmToolBoxPackage.1.2014.03.07\lib\net\XrmToolBox.exe</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppCode\Clipboard.cs" />
@@ -281,7 +242,18 @@
     <EmbeddedResource Include="Resources\SiteMap2013.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\Connection Projects\McTools.Xrm.Connection.WinForms\McTools.Xrm.Connection.WinForms.csproj">
+      <Project>{eeb5c09f-cec6-4fb5-87b5-ae61ae89c9eb}</Project>
+      <Name>McTools.Xrm.Connection.WinForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connection Projects\McTools.Xrm.Connection\McTools.Xrm.Connection.csproj">
+      <Project>{c3824c2c-6e2e-4fde-a2aa-229bbc7c3b1f}</Project>
+      <Name>McTools.Xrm.Connection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XrmToolBox\XrmToolBox.csproj">
+      <Project>{328d55be-8b9a-4087-a5c2-9fbaf623f54b}</Project>
+      <Name>XrmToolBox</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

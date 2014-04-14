@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using System.Xml;
 using GemBox.Spreadsheet;
 using Microsoft.Xrm.Sdk;
@@ -57,12 +58,12 @@ namespace MsCrmTools.Translator.AppCode
 
                     foreach (var form in forms)
                     {
-                        var crmForm = crmForms.FirstOrDefault(f => f.Id == form.Id);
+                        var crmForm = crmForms.FirstOrDefault(f => f.Id == form.GetAttributeValue<Guid>("formidunique"));
                         if (crmForm == null)
                         {
                             crmForm = new CrmForm
                                           {
-                                              Id = form.Id,
+                                              Id = form.GetAttributeValue<Guid>("formidunique"),
                                               Entity = entity.LogicalName,
                                               Names = new Dictionary<int, string>(),
                                               Descriptions = new Dictionary<int, string>()
@@ -323,14 +324,16 @@ namespace MsCrmTools.Translator.AppCode
             if (controlNode == null || controlNode.Attributes == null)
                 return;
 
-            var crmFormField = crmFormLabels.FirstOrDefault(f => f.Id == new Guid(cellIdAttr.Value) && f.FormId == form.Id);
+            //var crmFormField = crmFormLabels.FirstOrDefault(f => f.Id == new Guid(cellIdAttr.Value) && f.FormId == form.Id);
+            var crmFormField = crmFormLabels.FirstOrDefault(f => f.Id == new Guid(cellIdAttr.Value) && f.FormId == form.GetAttributeValue<Guid>("formidunique"));
             if (crmFormField == null)
             {
                 crmFormField = new CrmFormLabel
                                    {
                                        Id = new Guid(cellIdAttr.Value),
                                        Form = form.GetAttributeValue<string>("name"),
-                                       FormId = form.Id,
+                                       //FormId = form.Id,
+                                       FormId = form.GetAttributeValue<Guid>("formidunique"),
                                        Tab = tabName,
                                        Section = sectionName,
                                        Entity = entity.LogicalName,
@@ -343,6 +346,11 @@ namespace MsCrmTools.Translator.AppCode
             var labelNode = cellNode.SelectSingleNode("labels/label[@languagecode='" + lcid + "']");
             var labelNodeAttributes = labelNode == null ? null : labelNode.Attributes;
             var labelDescription = labelNodeAttributes == null ? null : labelNodeAttributes["description"];
+
+            if (crmFormField.Names.ContainsKey(lcid))
+            {
+                return;
+            }
 
             crmFormField.Names.Add(lcid, labelDescription == null ? string.Empty : labelDescription.Value);
         }
@@ -362,13 +370,13 @@ namespace MsCrmTools.Translator.AppCode
                 return string.Empty;
             var sectionName = sectionNameAttr.Value;
 
-            var crmFormSection = crmFormSections.FirstOrDefault(f => f.Id == new Guid(sectionId) && f.FormId == form.Id);
+            var crmFormSection = crmFormSections.FirstOrDefault(f => f.Id == new Guid(sectionId) && f.FormId == form.GetAttributeValue<Guid>("formidunique"));
             if (crmFormSection == null)
             {
                 crmFormSection = new CrmFormSection
                                  {
                                      Id = new Guid(sectionId),
-                                     FormId = form.Id,
+                                     FormId = form.GetAttributeValue<Guid>("formidunique"),
                                      Form = form.GetAttributeValue<string>("name"),
                                      Tab = tabName,
                                      Entity = entity.LogicalName,
@@ -376,7 +384,10 @@ namespace MsCrmTools.Translator.AppCode
                                  };
                 crmFormSections.Add(crmFormSection);
             }
-
+            if (crmFormSection.Names.ContainsKey(lcid))
+            {
+                return sectionName;
+            }
             crmFormSection.Names.Add(lcid, sectionName);
             return sectionName;
         }
@@ -398,18 +409,23 @@ namespace MsCrmTools.Translator.AppCode
 
             var tabName = tabLabelDescAttr.Value;
 
-            var crmFormTab = crmFormTabs.FirstOrDefault(f => f.Id == new Guid(tabId) && f.FormId == form.Id);
+            var crmFormTab = crmFormTabs.FirstOrDefault(f => f.Id == new Guid(tabId) && f.FormId == form.GetAttributeValue<Guid>("formidunique"));
             if (crmFormTab == null)
             {
                 crmFormTab = new CrmFormTab
                                  {
                                      Id = new Guid(tabId),
-                                     FormId = form.Id,
+                                     FormId = form.GetAttributeValue<Guid>("formidunique"),
                                      Form = form.GetAttributeValue<string>("name"),
                                      Entity = entity.LogicalName,
                                      Names = new Dictionary<int, string>()
                                  };
                 crmFormTabs.Add(crmFormTab);
+            }
+
+            if (crmFormTab.Names.ContainsKey(lcid))
+            {
+                return tabName;
             }
 
             crmFormTab.Names.Add(lcid, tabName);
