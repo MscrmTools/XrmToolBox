@@ -102,8 +102,8 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
         {
             var qba = new QueryByAttribute("workflow")
             {
-                Attributes = {"mode", "type"},
-                Values = {1, 1},
+                Attributes = {"mode", "type", "iscrmuiworkflow"},
+                Values = {1, 1, false},
                 ColumnSet = new ColumnSet(true)
             };
 
