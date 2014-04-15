@@ -207,7 +207,7 @@ namespace MsCrmTools.WebResourcesManager
 
         private void BwFillWebResourcesDoWork(object sender, DoWorkEventArgs e)
         {
-            Guid solutionId = e.Argument != null ? (Guid)e.Argument : Guid.Empty;
+            Guid solutionId = e.Argument != null ? ((LoadCrmResourcesSettings)e.Argument).SolutionId : Guid.Empty;
 
             RetrieveWebResources(solutionId);
         }
