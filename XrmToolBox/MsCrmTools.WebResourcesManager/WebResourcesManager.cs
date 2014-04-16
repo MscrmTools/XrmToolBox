@@ -209,7 +209,7 @@ namespace MsCrmTools.WebResourcesManager
         {
             Guid solutionId = e.Argument != null ? ((LoadCrmResourcesSettings)e.Argument).SolutionId : Guid.Empty;
 
-            RetrieveWebResources(solutionId);
+            RetrieveWebResources(solutionId, ((LoadCrmResourcesSettings)e.Argument).Types);
         }
 
         private void BwFillWebResourcesRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -233,9 +233,9 @@ namespace MsCrmTools.WebResourcesManager
             SetWorkingState(false);
         }
 
-        private void RetrieveWebResources(Guid solutionId)
+        private void RetrieveWebResources(Guid solutionId, List<int> types)
         {
-            EntityCollection scripts = wrManager.RetrieveWebResources(solutionId);
+            EntityCollection scripts = wrManager.RetrieveWebResources(solutionId, types);
 
             //Todo ccsb.SetMessage(string.Empty);
 
