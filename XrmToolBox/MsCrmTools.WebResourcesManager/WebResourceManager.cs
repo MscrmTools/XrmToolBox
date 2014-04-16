@@ -48,39 +48,62 @@ namespace MsCrmTools.WebResourcesManager
         /// Retrieves all web resources that are customizable
         /// </summary>
         /// <returns>List of web resources</returns>
-        internal EntityCollection RetrieveWebResources(Guid solutionId)
+        internal EntityCollection RetrieveWebResources(Guid solutionId, List<int> types)
         {
             try
             {
                 if (solutionId == Guid.Empty)
                 {
-                    var qba = new QueryByAttribute("webresource") {ColumnSet = new ColumnSet(true)};
-                    qba.Attributes.AddRange(new[] {"ishidden", "iscustomizable"});
-                    qba.Values.AddRange(new object[] {false, true});
-                    qba.Orders.Add(new OrderExpression("name", OrderType.Ascending));
+                    var qe = new QueryExpression("webresource")
+                    {
+                        ColumnSet = new ColumnSet(true),
+                        Criteria = new FilterExpression
+                        {
+                            Conditions =
+                            {
+                                new ConditionExpression("ishidden", ConditionOperator.Equal, false),
+                                new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
+                                new ConditionExpression("webresourcetype", ConditionOperator.In, types.ToArray()),
+                            }
+                        },
+                        Orders = { new OrderExpression("name", OrderType.Ascending) }
+                    };
 
-                    return innerService.RetrieveMultiple(qba);
+                    return innerService.RetrieveMultiple(qe);
                 }
                 else
                 {
-                    var qba = new QueryByAttribute("solutioncomponent") {ColumnSet = new ColumnSet(true)};
+                    var qba = new QueryByAttribute("solutioncomponent") { ColumnSet = new ColumnSet(true) };
                     qba.Attributes.AddRange(new[] { "solutionid", "componenttype" });
                     qba.Values.AddRange(new object[] { solutionId, 61 });
 
                     var components = innerService.RetrieveMultiple(qba).Entities;
 
-                    var list = components.Select(component => component.GetAttributeValue<Guid>("objectid").ToString("B")).ToList();
+                    var list =
+                        components.Select(component => component.GetAttributeValue<Guid>("objectid").ToString("B"))
+                            .ToList();
 
                     if (list.Count > 0)
                     {
-                        var qe = new QueryExpression("webresource") {ColumnSet = new ColumnSet(true)};
-                        qe.Criteria.AddCondition("webresourceid", ConditionOperator.In, list.ToArray());
+                        var qe = new QueryExpression("webresource")
+                        {
+                            ColumnSet = new ColumnSet(true),
+                            Criteria = new FilterExpression
+                            {
+                                Conditions =
+                                {
+                                    new ConditionExpression("webresourceid", ConditionOperator.In, list.ToArray()),
+                                    new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
+                                    new ConditionExpression("webresourcetype", ConditionOperator.In, types.ToArray()),
+                                }
+                            },
+                            Orders = { new OrderExpression("name", OrderType.Ascending) }
+                        };
+
                         return innerService.RetrieveMultiple(qe);
                     }
-                    else
-                    {
-                        return new EntityCollection();
-                    }
+
+                    return new EntityCollection();
                 }
             }
             catch (Exception error)
@@ -88,6 +111,7 @@ namespace MsCrmTools.WebResourcesManager
                 throw new Exception("Error while retrieving web resources: " + error.Message);
             }
         }
+
 
         /// <summary>
         /// Retrieves a specific web resource from its unique identifier
