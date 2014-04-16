@@ -14,5 +14,6 @@ namespace MsCrmTools.Translator.AppCode
         public Dictionary<int, string> Names { get; set; }
         public Dictionary<int, string> Descriptions { get; set; }
         public Guid FormId { get; set; }
+        public Guid FormUniqueId { get; set; }
     }
 }
