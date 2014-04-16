@@ -58,12 +58,13 @@ namespace MsCrmTools.Translator.AppCode
 
                     foreach (var form in forms)
                     {
-                        var crmForm = crmForms.FirstOrDefault(f => f.Id == form.GetAttributeValue<Guid>("formidunique"));
+                        var crmForm = crmForms.FirstOrDefault(f => f.FormUniqueId == form.GetAttributeValue<Guid>("formidunique"));
                         if (crmForm == null)
                         {
                             crmForm = new CrmForm
                                           {
-                                              Id = form.GetAttributeValue<Guid>("formidunique"),
+                                              FormUniqueId = form.GetAttributeValue<Guid>("formidunique"),
+                                              Id = form.GetAttributeValue<Guid>("formid"),
                                               Entity = entity.LogicalName,
                                               Names = new Dictionary<int, string>(),
                                               Descriptions = new Dictionary<int, string>()
@@ -135,7 +136,7 @@ namespace MsCrmTools.Translator.AppCode
             }
 
             // Applying style to cells
-            for (int i = 0; i < (3 + languages.Count); i++)
+            for (int i = 0; i < (4 + languages.Count); i++)
             {
                 formSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
                 formSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
@@ -143,7 +144,7 @@ namespace MsCrmTools.Translator.AppCode
 
             for (int i = 1; i < line; i++)
             {
-                for (int j = 0; j < 3; j++)
+                for (int j = 0; j < 4; j++)
                 {
                     formSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
                 }
@@ -158,7 +159,7 @@ namespace MsCrmTools.Translator.AppCode
             }
 
             // Applying style to cells
-            for (int i = 0; i < (4 + languages.Count); i++)
+            for (int i = 0; i < (5 + languages.Count); i++)
             {
                 tabSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
                 tabSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
@@ -166,7 +167,7 @@ namespace MsCrmTools.Translator.AppCode
 
             for (int i = 1; i < line; i++)
             {
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < 5; j++)
                 {
                     tabSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
                 }
@@ -181,7 +182,7 @@ namespace MsCrmTools.Translator.AppCode
             }
 
             // Applying style to cells
-            for (int i = 0; i < (5 + languages.Count); i++)
+            for (int i = 0; i < (6 + languages.Count); i++)
             {
                 sectionSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
                 sectionSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
@@ -189,7 +190,7 @@ namespace MsCrmTools.Translator.AppCode
 
             for (int i = 1; i < line; i++)
             {
-                for (int j = 0; j < 5; j++)
+                for (int j = 0; j < 6; j++)
                 {
                     sectionSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
                 }
@@ -204,7 +205,7 @@ namespace MsCrmTools.Translator.AppCode
             }
 
             // Applying style to cells
-            for (int i = 0; i < (7 + languages.Count); i++)
+            for (int i = 0; i < (8 + languages.Count); i++)
             {
                 labelSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
                 labelSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
@@ -212,7 +213,7 @@ namespace MsCrmTools.Translator.AppCode
 
             for (int i = 1; i < line; i++)
             {
-                for (int j = 0; j < 7; j++)
+                for (int j = 0; j < 8; j++)
                 {
                     labelSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
                 }
@@ -226,6 +227,7 @@ namespace MsCrmTools.Translator.AppCode
             labelSheet.Cells[line, cell++].Value = crmFormLabel.Id.ToString("B");
             labelSheet.Cells[line, cell++].Value = crmFormLabel.Entity;
             labelSheet.Cells[line, cell++].Value = crmFormLabel.Form;
+            labelSheet.Cells[line, cell++].Value = crmFormLabel.FormUniqueId.ToString("B");
             labelSheet.Cells[line, cell++].Value = crmFormLabel.FormId.ToString("B");
             labelSheet.Cells[line, cell++].Value = crmFormLabel.Tab;
             labelSheet.Cells[line, cell++].Value = crmFormLabel.Section;
@@ -248,6 +250,7 @@ namespace MsCrmTools.Translator.AppCode
             sectionSheet.Cells[line, cell++].Value = crmFormSection.Id.ToString("B");
             sectionSheet.Cells[line, cell++].Value = crmFormSection.Entity;
             sectionSheet.Cells[line, cell++].Value = crmFormSection.Form;
+            sectionSheet.Cells[line, cell++].Value = crmFormSection.FormUniqueId.ToString("B");
             sectionSheet.Cells[line, cell++].Value = crmFormSection.FormId.ToString("B");
             sectionSheet.Cells[line, cell++].Value = crmFormSection.Tab;
 
@@ -268,6 +271,7 @@ namespace MsCrmTools.Translator.AppCode
             tabSheet.Cells[line, cell++].Value = crmFormTab.Id.ToString("B");
             tabSheet.Cells[line, cell++].Value = crmFormTab.Entity;
             tabSheet.Cells[line, cell++].Value = crmFormTab.Form;
+            tabSheet.Cells[line, cell++].Value = crmFormTab.FormUniqueId.ToString("B");
             tabSheet.Cells[line, cell++].Value = crmFormTab.FormId.ToString("B");
 
             foreach (var lcid in languages)
@@ -284,6 +288,7 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
+            formSheet.Cells[line, cell++].Value = crmForm.FormUniqueId.ToString("B");
             formSheet.Cells[line, cell++].Value = crmForm.Id.ToString("B");
             formSheet.Cells[line, cell++].Value = crmForm.Entity;
             formSheet.Cells[line, cell++].Value = "Name";
@@ -296,6 +301,7 @@ namespace MsCrmTools.Translator.AppCode
             line++;
             cell = 0;
 
+            formSheet.Cells[line, cell++].Value = crmForm.FormUniqueId.ToString("B");
             formSheet.Cells[line, cell++].Value = crmForm.Id.ToString("B");
             formSheet.Cells[line, cell++].Value = crmForm.Entity;
             formSheet.Cells[line, cell++].Value = "Description";
@@ -325,15 +331,15 @@ namespace MsCrmTools.Translator.AppCode
                 return;
 
             //var crmFormField = crmFormLabels.FirstOrDefault(f => f.Id == new Guid(cellIdAttr.Value) && f.FormId == form.Id);
-            var crmFormField = crmFormLabels.FirstOrDefault(f => f.Id == new Guid(cellIdAttr.Value) && f.FormId == form.GetAttributeValue<Guid>("formidunique"));
+            var crmFormField = crmFormLabels.FirstOrDefault(f => f.Id == new Guid(cellIdAttr.Value) && f.FormUniqueId == form.GetAttributeValue<Guid>("formidunique"));
             if (crmFormField == null)
             {
                 crmFormField = new CrmFormLabel
                                    {
                                        Id = new Guid(cellIdAttr.Value),
                                        Form = form.GetAttributeValue<string>("name"),
-                                       //FormId = form.Id,
-                                       FormId = form.GetAttributeValue<Guid>("formidunique"),
+                                       FormUniqueId = form.GetAttributeValue<Guid>("formidunique"),
+                                       FormId = form.GetAttributeValue<Guid>("formid"),
                                        Tab = tabName,
                                        Section = sectionName,
                                        Entity = entity.LogicalName,
@@ -370,13 +376,14 @@ namespace MsCrmTools.Translator.AppCode
                 return string.Empty;
             var sectionName = sectionNameAttr.Value;
 
-            var crmFormSection = crmFormSections.FirstOrDefault(f => f.Id == new Guid(sectionId) && f.FormId == form.GetAttributeValue<Guid>("formidunique"));
+            var crmFormSection = crmFormSections.FirstOrDefault(f => f.Id == new Guid(sectionId) && f.FormUniqueId == form.GetAttributeValue<Guid>("formidunique"));
             if (crmFormSection == null)
             {
                 crmFormSection = new CrmFormSection
                                  {
                                      Id = new Guid(sectionId),
-                                     FormId = form.GetAttributeValue<Guid>("formidunique"),
+                                     FormUniqueId = form.GetAttributeValue<Guid>("formidunique"),
+                                     FormId = form.GetAttributeValue<Guid>("formid"),
                                      Form = form.GetAttributeValue<string>("name"),
                                      Tab = tabName,
                                      Entity = entity.LogicalName,
@@ -409,13 +416,14 @@ namespace MsCrmTools.Translator.AppCode
 
             var tabName = tabLabelDescAttr.Value;
 
-            var crmFormTab = crmFormTabs.FirstOrDefault(f => f.Id == new Guid(tabId) && f.FormId == form.GetAttributeValue<Guid>("formidunique"));
+            var crmFormTab = crmFormTabs.FirstOrDefault(f => f.Id == new Guid(tabId) && f.FormUniqueId == form.GetAttributeValue<Guid>("formidunique"));
             if (crmFormTab == null)
             {
                 crmFormTab = new CrmFormTab
                                  {
                                      Id = new Guid(tabId),
-                                     FormId = form.GetAttributeValue<Guid>("formidunique"),
+                                     FormUniqueId = form.GetAttributeValue<Guid>("formidunique"),
+                                     FormId = form.GetAttributeValue<Guid>("formid"),
                                      Form = form.GetAttributeValue<string>("name"),
                                      Entity = entity.LogicalName,
                                      Names = new Dictionary<int, string>()
@@ -438,8 +446,8 @@ namespace MsCrmTools.Translator.AppCode
 
             foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
             {
-                var currentFormId = new Guid(row.Cells[0].Value.ToString());
-                var columnIndex = 3;
+                var currentFormId = new Guid(row.Cells[1].Value.ToString());
+                var columnIndex = 4;
                 while (row.Cells[columnIndex].Value != null)
                 {
                     var currentLcid = int.Parse(sheet.Cells[0, columnIndex].Value.ToString());
@@ -506,7 +514,7 @@ namespace MsCrmTools.Translator.AppCode
             foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
             {
                 var tabId = row.Cells[0].Value.ToString();
-                var formId = new Guid(row.Cells[3].Value.ToString());
+                var formId = new Guid(row.Cells[4].Value.ToString());
 
                 var form = forms.FirstOrDefault(f => f.Id == formId);
                 if (form == null)
@@ -523,7 +531,7 @@ namespace MsCrmTools.Translator.AppCode
                 var tabNode = docXml.DocumentElement.SelectSingleNode(string.Format("tabs/tab[@id='{0}']", tabId));
                 if (tabNode != null)
                 {
-                    var columnIndex = 4;
+                    var columnIndex = 5;
                     while (row.Cells[columnIndex].Value != null)
                     {
                         UpdateXmlNode(tabNode, sheet.Cells[0, columnIndex].Value.ToString(), row.Cells[columnIndex].Value.ToString());
@@ -540,7 +548,7 @@ namespace MsCrmTools.Translator.AppCode
             foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
             {
                 var sectionId = row.Cells[0].Value.ToString();
-               var formId = new Guid(row.Cells[3].Value.ToString());
+               var formId = new Guid(row.Cells[4].Value.ToString());
 
                 var form = forms.FirstOrDefault(f => f.Id == formId);
                 if (form == null)
@@ -557,7 +565,7 @@ namespace MsCrmTools.Translator.AppCode
                 var sectionNode = docXml.DocumentElement.SelectSingleNode(string.Format("tabs/tab/columns/column/sections/section[@id='{0}']",sectionId));
                 if (sectionNode != null)
                 {
-                    var columnIndex = 5;
+                    var columnIndex = 6;
                     while (row.Cells[columnIndex].Value != null)
                     {
                         UpdateXmlNode(sectionNode, sheet.Cells[0, columnIndex].Value.ToString(), row.Cells[columnIndex].Value.ToString());
@@ -574,7 +582,7 @@ namespace MsCrmTools.Translator.AppCode
             foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
             {
                 var labelId =row.Cells[0].Value.ToString();
-                var formId = new Guid(row.Cells[3].Value.ToString());
+                var formId = new Guid(row.Cells[4].Value.ToString());
 
                 var form = forms.FirstOrDefault(f => f.Id == formId);
                 if (form == null)
@@ -591,7 +599,7 @@ namespace MsCrmTools.Translator.AppCode
                 var cellNode = docXml.DocumentElement.SelectSingleNode(string.Format("tabs/tab/columns/column/sections/section/rows/row/cell[@id='{0}']", labelId));
                 if (cellNode != null)
                 {
-                    var columnIndex = 7;
+                    var columnIndex = 8;
                     while (row.Cells[columnIndex].Value != null)
                     {
                         UpdateXmlNode(cellNode, sheet.Cells[0, columnIndex].Value.ToString(), row.Cells[columnIndex].Value.ToString());
@@ -652,6 +660,7 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
+            sheet.Cells[0, cell++].Value = "Form Unique Id";
             sheet.Cells[0, cell++].Value = "Form Id";
             sheet.Cells[0, cell++].Value = "Entity Logical Name";
             sheet.Cells[0, cell++].Value = "Type";
@@ -669,6 +678,7 @@ namespace MsCrmTools.Translator.AppCode
             sheet.Cells[0, cell++].Value = "Tab Id";
             sheet.Cells[0, cell++].Value = "Entity Logical Name";
             sheet.Cells[0, cell++].Value = "Form Name";
+            sheet.Cells[0, cell++].Value = "Form Unique Id";
             sheet.Cells[0, cell++].Value = "Form Id";
 
             foreach (var lcid in languages)
@@ -684,6 +694,7 @@ namespace MsCrmTools.Translator.AppCode
             sheet.Cells[0, cell++].Value = "Section Id";
             sheet.Cells[0, cell++].Value = "Entity Logical Name";
             sheet.Cells[0, cell++].Value = "Form Name";
+            sheet.Cells[0, cell++].Value = "Form Unique Id";
             sheet.Cells[0, cell++].Value = "Form Id";
             sheet.Cells[0, cell++].Value = "Tab Name";
 
@@ -700,6 +711,7 @@ namespace MsCrmTools.Translator.AppCode
             sheet.Cells[0, cell++].Value = "Label Id";
             sheet.Cells[0, cell++].Value = "Entity Logical Name";
             sheet.Cells[0, cell++].Value = "Form Name";
+            sheet.Cells[0, cell++].Value = "Form Unique Id";
             sheet.Cells[0, cell++].Value = "Form Id";
             sheet.Cells[0, cell++].Value = "Tab Name";
             sheet.Cells[0, cell++].Value = "Section Name";
