@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
+using Microsoft.Crm.Sdk.Messages;
 
 namespace McTools.Xrm.Connection.WinForms
 {
@@ -70,11 +71,33 @@ namespace McTools.Xrm.Connection.WinForms
 
             if (cs.ShowDialog(_innerAppForm) == DialogResult.OK)
             {
-                _connectionManager.ConnectToServer(cs.SelectedConnections.First(), connectionParameter);
+                var connectionDetail = cs.SelectedConnections.First();
+                if (connectionDetail.IsCustomAuth)
+                {
+                    if (string.IsNullOrEmpty(connectionDetail.UserPassword))
+                    {
+                        var pForm = new PasswordForm()
+                        {
+                            UserDomain = connectionDetail.UserDomain,
+                            UserLogin = connectionDetail.UserName
+                        };
+                        if (pForm.ShowDialog(_innerAppForm) == DialogResult.OK)
+                        {
+                            connectionDetail.UserPassword = pForm.UserPassword;
+                            connectionDetail.SavePassword = pForm.SavePassword;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                 }
+
+                _connectionManager.ConnectToServer(connectionDetail, connectionParameter);
 
                 if (cs.HadCreatedNewConnection)
                 {
-                    _connectionManager.ConnectionsList.Connections.Add(cs.SelectedConnections.First());
+                    _connectionManager.ConnectionsList.Connections.Add(connectionDetail);
                     _connectionManager.SaveConnectionsFile(_connectionManager.ConnectionsList);
                 }
 
