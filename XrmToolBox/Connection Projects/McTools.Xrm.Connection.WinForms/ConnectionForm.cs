@@ -156,6 +156,16 @@ namespace McTools.Xrm.Connection.WinForms
             detail.UseIfd = cbUseIfd.Checked;
             detail.HomeRealmUrl = (tbHomeRealmUrl.Text.Length > 0 ? tbHomeRealmUrl.Text : null);
 
+             OrganizationDetail selectedOrganization = comboBoxOrganizations.SelectedItem != null ? ((Organization)comboBoxOrganizations.SelectedItem).OrganizationDetail : null;
+            if (selectedOrganization != null)
+            {
+                detail.OrganizationServiceUrl = selectedOrganization.Endpoints[EndpointType.OrganizationService];
+                detail.Organization = selectedOrganization.UniqueName;
+                detail.OrganizationUrlName = selectedOrganization.UrlName;
+                detail.OrganizationFriendlyName = selectedOrganization.FriendlyName;
+                detail.OrganizationVersion = selectedOrganization.OrganizationVersion;
+            }
+
             try
             {
                 if (proposeToConnect || isCreationMode)
