@@ -69,18 +69,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="deviceidmanager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MsCrmTools.Translator\MsCrmTools.Translator.csproj">
+    <ProjectReference Include="..\Plugins\MsCrmTools.Translator\MsCrmTools.Translator.csproj">
       <Project>{e8a13109-b078-407a-9f6c-3711672770e2}</Project>
       <Name>MsCrmTools.Translator</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="XMLFile1.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
