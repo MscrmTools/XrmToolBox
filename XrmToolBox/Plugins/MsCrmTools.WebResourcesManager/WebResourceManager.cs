@@ -59,12 +59,28 @@ namespace MsCrmTools.WebResourcesManager
                         ColumnSet = new ColumnSet(true),
                         Criteria = new FilterExpression
                         {
-                            Conditions =
+                            Filters =
                             {
-                                new ConditionExpression("ishidden", ConditionOperator.Equal, false),
-                                new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
-                                new ConditionExpression("webresourcetype", ConditionOperator.In, types.ToArray()),
+                                new FilterExpression
+                                {
+                                    FilterOperator = LogicalOperator.And,
+                                    Conditions =
+                                    {
+                                        new ConditionExpression("ishidden", ConditionOperator.Equal, false),
+                                        new ConditionExpression("webresourcetype", ConditionOperator.In, types.ToArray()),
+                                    }
+                                },
+                                new FilterExpression
+                                {
+                                    FilterOperator = LogicalOperator.Or,
+                                     Conditions =
+                                    {
+                                        new ConditionExpression("ismanaged", ConditionOperator.Equal, false),
+                                        new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
+                                    }
+                                }
                             }
+                            
                         },
                         Orders = { new OrderExpression("name", OrderType.Ascending) }
                     };
@@ -90,12 +106,27 @@ namespace MsCrmTools.WebResourcesManager
                             ColumnSet = new ColumnSet(true),
                             Criteria = new FilterExpression
                             {
-                                Conditions =
+                                Filters =
+                            {
+                                new FilterExpression
                                 {
-                                    new ConditionExpression("webresourceid", ConditionOperator.In, list.ToArray()),
-                                    new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
-                                    new ConditionExpression("webresourcetype", ConditionOperator.In, types.ToArray()),
+                                    FilterOperator = LogicalOperator.And,
+                                    Conditions =
+                                    {
+                                        new ConditionExpression("ishidden", ConditionOperator.Equal, false),
+                                        new ConditionExpression("webresourcetype", ConditionOperator.In, types.ToArray()),
+                                    }
+                                },
+                                new FilterExpression
+                                {
+                                    FilterOperator = LogicalOperator.Or,
+                                     Conditions =
+                                    {
+                                        new ConditionExpression("ismanaged", ConditionOperator.Equal, false),
+                                        new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
+                                    }
                                 }
+                            }
                             },
                             Orders = { new OrderExpression("name", OrderType.Ascending) }
                         };

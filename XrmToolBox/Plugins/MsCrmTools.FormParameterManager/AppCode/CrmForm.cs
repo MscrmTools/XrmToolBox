@@ -79,10 +79,32 @@ namespace MsCrmTools.FormParameterManager.AppCode
                 worker.ReportProgress(0, "Retrieving forms...");
             }
 
-            var qe = new QueryByAttribute("systemform");
-            qe.ColumnSet = new ColumnSet(new[] {"name", "formxml", "objecttypecode"});
-            qe.Attributes.AddRange("type", "iscustomizable");
-            qe.Values.AddRange(2, true);
+            var qe = new QueryExpression("systemform")
+            {
+                ColumnSet = new ColumnSet(new[] { "name", "formxml", "objecttypecode" }),
+                Criteria = new FilterExpression
+                {
+                    Filters =
+                    {
+                        new FilterExpression
+                        {
+                            Conditions =
+                            {
+                                new ConditionExpression("type", ConditionOperator.Equal, 2)
+                            }
+                        },
+                        new FilterExpression
+                        {
+                            FilterOperator = LogicalOperator.Or,
+                            Conditions =
+                            {
+                                new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
+                                new ConditionExpression("ismanaged", ConditionOperator.Equal, false)
+                            }
+                        }
+                    }
+                }
+            };
 
             return service.RetrieveMultiple(qe).Entities.Select(e => new CrmForm(e));
         }

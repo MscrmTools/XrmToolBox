@@ -409,11 +409,11 @@ namespace MsCrmTools.ViewLayoutReplicator
                     ListViewItem clonedItem = (ListViewItem) item.Clone();
                     ListViewDelegates.AddItem(lvSourceViews, item);
 
-                    if (view.Contains("iscustomizable") &&
-                        ((BooleanManagedProperty) view["iscustomizable"]).Value == false)
+                    if (view.Contains("iscustomizable") && ((BooleanManagedProperty) view["iscustomizable"]).Value == false 
+                        && view.Contains("ismanaged") && (bool)view["ismanaged"])
                     {
                         clonedItem.ForeColor = Color.Gray;
-                        clonedItem.ToolTipText = "This view has not been defined as customizable";
+                        clonedItem.ToolTipText = "This managed view has not been defined as customizable";
                     }
 
                     ListViewDelegates.AddItem(lvTargetViews, clonedItem);
