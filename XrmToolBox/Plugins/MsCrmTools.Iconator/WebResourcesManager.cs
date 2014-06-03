@@ -39,10 +39,15 @@ namespace MsCrmTools.Iconator
                               {
                                   EntityName = "webresource",
                                   ColumnSet = new ColumnSet("name", "webresourcetype", "displayname", "content"),
-                                  Criteria = new FilterExpression()
+                                  Criteria = new FilterExpression
+                                  {
+                                      Conditions =
+                                      {
+                                          new ConditionExpression("webresourcetype", ConditionOperator.In, new object[] { 5, 6, 7 }),
+                                          new ConditionExpression("ishidden", ConditionOperator.Equal, false)
+                                      }
+                                  }
                               };
-
-            queryWr.Criteria.AddCondition("webresourcetype", ConditionOperator.In, new object[] { 5, 6, 7 });
 
             return service.RetrieveMultiple(queryWr);
         }
