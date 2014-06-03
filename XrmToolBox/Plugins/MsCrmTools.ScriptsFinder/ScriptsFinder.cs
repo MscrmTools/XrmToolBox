@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
@@ -159,13 +160,19 @@ namespace MsCrmTools.ScriptsFinder
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                using (var writer = new StreamWriter(sfd.FileName, false))
+                using (var fs = new FileStream(sfd.FileName, FileMode.OpenOrCreate,FileAccess.ReadWrite))
                 {
-                    writer.WriteLine("Entity Display Name,Entity Logical Name,Form,Event,Attribute Display Name,Attribute Logical Name,Script Location,Method Called");
-
+                    var preamble = new UTF8Encoding(true).GetPreamble();
+                    fs.Write(preamble,0,preamble.Length);
+                    
+                    var header = System.Text.Encoding.UTF8.GetBytes(
+                        "Entity Display Name,Entity Logical Name,Form,Event,Attribute Display Name,Attribute Logical Name,Script Location,Method Called" +
+                        Environment.NewLine);
+                    fs.Write(header, 0, header.Length);
+                    
                     foreach (ListViewItem item in lvScripts.Items)
                     {
-                        writer.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7}",
+                        var line = System.Text.Encoding.UTF8.GetBytes(string.Format("{0},{1},{2},{3},{4},{5},{6},{7}{8}",
                             item.SubItems[0].Text,
                             item.SubItems[1].Text,
                             item.SubItems[2].Text,
@@ -173,7 +180,11 @@ namespace MsCrmTools.ScriptsFinder
                             item.SubItems[4].Text,
                             item.SubItems[5].Text,
                             item.SubItems[6].Text,
-                            item.SubItems[7].Text);
+                            item.SubItems[7].Text,
+                            Environment.NewLine));
+
+                        fs.Write(line, 0, line.Length);
+                  
                     }
 
                     MessageBox.Show(this, string.Format("File saved to '{0}'!", sfd.FileName), "Information",
