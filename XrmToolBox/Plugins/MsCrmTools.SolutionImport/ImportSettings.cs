@@ -17,5 +17,7 @@ namespace MsCrmTools.SolutionImport
         public bool OverwriteUnmanagedCustomizations { get; set; }
         public bool ConvertToManaged { get; set; }
         public bool DownloadLog { get; set; }
+
+        public int MajorVersion { get; set; }
     }
 }
