@@ -1,0 +1,354 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>XrmToolBox</RootNamespace>
+    <AssemblyName>XrmToolBox</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon3Fr.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Sdk, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Sdk.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Sdk.Deployment">
+      <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Services" />
+    <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\AssemblyAttributeHelper.cs" />
+    <Compile Include="Attributes\BackgroundColorAttribute.cs" />
+    <Compile Include="Attributes\BigImageBase64Attribute.cs" />
+    <Compile Include="Attributes\SmallImageBase64Attribute.cs" />
+    <Compile Include="Attributes\SecondaryFontColorAttribute.cs" />
+    <Compile Include="Attributes\PrimaryFontColorAttribute.cs" />
+    <Compile Include="CrmExceptionHelper.cs" />
+    <Compile Include="Forms\AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SupportScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SupportScreen.Designer.cs">
+      <DependentUpon>SupportScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\OptionsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OptionsDialog.Designer.cs">
+      <DependentUpon>OptionsDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\WelcomeScreen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WelcomeScreen.Designer.cs">
+      <DependentUpon>WelcomeScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="InformationPanel.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IMsCrmToolsPlugin.cs" />
+    <Compile Include="Options.cs" />
+    <Compile Include="PluginManager.cs" />
+    <Compile Include="PluginUseCount.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RequestConnectionEventArgs.cs" />
+    <Compile Include="Forms\TabConnectionUpdater.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TabConnectionUpdater.Designer.cs">
+      <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SmallPluginLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\SmallPluginModel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\SmallPluginModel.Designer.cs">
+      <DependentUpon>SmallPluginModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\PluginModel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\PluginModel.Designer.cs">
+      <DependentUpon>PluginModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="XmlSerializerHelper.cs" />
+    <EmbeddedResource Include="Forms\AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SupportScreen.resx">
+      <DependentUpon>SupportScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OptionsDialog.resx">
+      <DependentUpon>OptionsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WelcomeScreen.resx">
+      <DependentUpon>WelcomeScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Forms\TabConnectionUpdater.resx">
+      <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\SmallPluginModel.resx">
+      <DependentUpon>SmallPluginModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\PluginModel.resx">
+      <DependentUpon>PluginModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="bin\Debug\mscrmtools2011 - Copie.config" />
+    <None Include="bin\Debug\mscrmtools2011.config" />
+    <None Include="bin\Debug\XrmToolBox.vshost.exe.manifest" />
+    <None Include="bin\Debug\XrmToolBox.zip" />
+    <None Include="bin\Release\mscrmtools2011.config" />
+    <None Include="bin\Release\XrmToolBox.vshost.exe.manifest" />
+    <None Include="bin\Release\XrmToolBox.zip" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\antixsslibrary.dll" />
+    <Content Include="bin\Debug\CraProjectImport.dll" />
+    <Content Include="bin\Debug\CRMBulkWorkflowTool.dll" />
+    <Content Include="bin\Debug\DamSim.SolutionTransferTool.dll" />
+    <Content Include="bin\Debug\DamSim.ViewTransferTool.dll" />
+    <Content Include="bin\Debug\DLaDB\DLaB.LocalToGlobalOptionSet.dll" />
+    <Content Include="bin\Debug\DLaDB\DLaB.Xrm.dll" />
+    <Content Include="bin\Debug\DLaDB\DLaB.XrmToolboxCommon.dll" />
+    <Content Include="bin\Debug\DLaDB\XrmToolBoxCommon.dll" />
+    <Content Include="bin\Debug\Javista.XrmToolBox.ImportNN.dll" />
+    <Content Include="bin\Debug\Javista.XrmToolBox.ImportNN.pdb" />
+    <Content Include="bin\Debug\McTools.StopAdv.xml" />
+    <Content Include="bin\Debug\McTools.StopAdv2.xml" />
+    <Content Include="bin\Debug\McTools.StopAdv3.xml" />
+    <Content Include="bin\Debug\McTools.StopAdvertisement.dll" />
+    <Content Include="bin\Debug\McTools.StopAdvertisement.pdb" />
+    <Content Include="bin\Debug\McTools.Xrm.Connection.dll" />
+    <Content Include="bin\Debug\McTools.Xrm.Connection.pdb" />
+    <Content Include="bin\Debug\McTools.Xrm.Connection.WinForms.dll" />
+    <Content Include="bin\Debug\McTools.Xrm.Connection.WinForms.pdb" />
+    <Content Include="bin\Debug\microsoft.crm.outlook.sdk.dll" />
+    <Content Include="bin\Debug\microsoft.crm.sdk.proxy.dll" />
+    <Content Include="bin\Debug\microsoft.crm.sdk.proxy.xml" />
+    <Content Include="bin\Debug\microsoft.crm.tools.emailproviders.dll" />
+    <Content Include="bin\Debug\Microsoft.IdentityModel.dll" />
+    <Content Include="bin\Debug\microsoft.xrm.client.codegeneration.dll" />
+    <Content Include="bin\Debug\microsoft.xrm.client.dll" />
+    <Content Include="bin\Debug\microsoft.xrm.client.xml" />
+    <Content Include="bin\Debug\microsoft.xrm.portal.dll" />
+    <Content Include="bin\Debug\microsoft.xrm.portal.files.dll" />
+    <Content Include="bin\Debug\microsoft.xrm.sdk.deployment.dll" />
+    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.Deployment.xml" />
+    <Content Include="bin\Debug\microsoft.xrm.sdk.dll" />
+    <Content Include="bin\Debug\microsoft.xrm.sdk.workflow.dll" />
+    <Content Include="bin\Debug\microsoft.xrm.sdk.xml" />
+    <Content Include="bin\Debug\MsCrmTools.AccessChecker.dll" />
+    <Content Include="bin\Debug\MsCrmTools.AssemblyRecoveryTool.dll" />
+    <Content Include="bin\Debug\MsCrmTools.AssemblyRecoveryTool.pdb" />
+    <Content Include="bin\Debug\MsCrmTools.AttributeBulkUpdater.dll" />
+    <Content Include="bin\Debug\MsCrmTools.AuditCenter.dll" />
+    <Content Include="bin\Debug\MsCrmTools.AuditCenter.pdb" />
+    <Content Include="bin\Debug\MsCrmTools.FetchXmlTester.dll" />
+    <Content Include="bin\Debug\MsCrmTools.FetchXmlTester.pdb" />
+    <Content Include="bin\Debug\MsCrmTools.FormLibrariesManager.pdb" />
+    <Content Include="bin\Debug\MsCrmTools.FormParameterManager.dll" />
+    <Content Include="bin\Debug\MsCrmTools.Iconator.dll" />
+    <Content Include="bin\Debug\MsCrmTools.MetadataDocumentGenerator.dll" />
+    <Content Include="bin\Debug\MsCrmTools.MetadataDocumentGenerator.pdb" />
+    <Content Include="bin\Debug\MsCrmTools.PrivDiscover.dll" />
+    <Content Include="bin\Debug\MsCrmTools.PrivDiscover.pdb" />
+    <Content Include="bin\Debug\MsCrmTools.RoleUpdater.dll" />
+    <Content Include="bin\Debug\MsCrmTools.SampleTool.dll" />
+    <Content Include="bin\Debug\MsCrmTools.SampleTool.pdb" />
+    <Content Include="bin\Debug\MsCrmTools.ScriptsFinder.dll" />
+    <Content Include="bin\Debug\MsCrmTools.SiteMapEditor.dll" />
+    <Content Include="bin\Debug\MsCrmTools.SolutionImport.dll" />
+    <Content Include="bin\Debug\MsCrmTools.SolutionImport.pdb" />
+    <Content Include="bin\Debug\MsCrmTools.SolutionUtilities.dll" />
+    <Content Include="bin\Debug\MscrmTools.SyncFilterManager.dll" />
+    <Content Include="bin\Debug\MscrmTools.SyncFilterManager.pdb" />
+    <Content Include="bin\Debug\MsCrmTools.Translator.dll" />
+    <Content Include="bin\Debug\MsCrmTools.ViewLayoutReplicator.dll" />
+    <Content Include="bin\Debug\MsCrmTools.WebResourcesManager.dll" />
+    <Content Include="bin\Debug\MsCrmTools.WebResourcesManager.pdb" />
+    <Content Include="bin\Debug\pluginprofiler.library.dll" />
+    <Content Include="bin\Debug\pluginprofiler.plugins.dll" />
+    <Content Include="bin\Debug\Procentrix.CleanForXRM.dll" />
+    <Content Include="bin\Debug\SandBox.dll" />
+    <Content Include="bin\Debug\SandBox.pdb" />
+    <Content Include="bin\Debug\UpdateBelgianData.dll" />
+    <Content Include="bin\Debug\UpdateBelgianData.pdb" />
+    <Content Include="bin\Debug\XrmToolBox.exe" />
+    <Content Include="bin\Debug\XrmToolBox.pdb" />
+    <Content Include="bin\Debug\XrmToolBox.Settings.xml" />
+    <Content Include="bin\Debug\XrmToolBox.vshost.exe" />
+    <Content Include="bin\Debug\XrmToolBox.zip.txt" />
+    <Content Include="bin\Release\DamSim.SolutionTransferTool.dll" />
+    <Content Include="bin\Release\DamSim.ViewTransferTool.dll" />
+    <Content Include="bin\Release\McTools.StopAdv.xml" />
+    <Content Include="bin\Release\McTools.StopAdvertisement.dll" />
+    <Content Include="bin\Release\McTools.Xrm.Connection.dll" />
+    <Content Include="bin\Release\McTools.Xrm.Connection.pdb" />
+    <Content Include="bin\Release\McTools.Xrm.Connection.WinForms.dll" />
+    <Content Include="bin\Release\McTools.Xrm.Connection.WinForms.pdb" />
+    <Content Include="bin\Release\microsoft.crm.sdk.proxy.dll" />
+    <Content Include="bin\Release\microsoft.crm.sdk.proxy.xml" />
+    <Content Include="bin\Release\microsoft.xrm.client.dll" />
+    <Content Include="bin\Release\microsoft.xrm.client.xml" />
+    <Content Include="bin\Release\Microsoft.Xrm.Sdk.Deployment.dll" />
+    <Content Include="bin\Release\Microsoft.Xrm.Sdk.Deployment.xml" />
+    <Content Include="bin\Release\microsoft.xrm.sdk.dll" />
+    <Content Include="bin\Release\microsoft.xrm.sdk.xml" />
+    <Content Include="bin\Release\MsCrmTools.AccessChecker.dll" />
+    <Content Include="bin\Release\MsCrmTools.AssemblyRecoveryTool.dll" />
+    <Content Include="bin\Release\MsCrmTools.AttributeBulkUpdater.dll" />
+    <Content Include="bin\Release\MsCrmTools.AuditCenter.dll" />
+    <Content Include="bin\Release\MsCrmTools.FetchXmlTester.dll" />
+    <Content Include="bin\Release\MsCrmTools.FormLibrariesManager.dll" />
+    <Content Include="bin\Release\MsCrmTools.FormParameterManager.dll" />
+    <Content Include="bin\Release\MsCrmTools.Iconator.dll" />
+    <Content Include="bin\Release\MsCrmTools.MetadataDocumentGenerator.dll" />
+    <Content Include="bin\Release\MsCrmTools.PrivDiscover.dll" />
+    <Content Include="bin\Release\MsCrmTools.RoleUpdater.dll" />
+    <Content Include="bin\Release\MsCrmTools.ScriptsFinder.dll" />
+    <Content Include="bin\Release\MsCrmTools.SiteMapEditor.dll" />
+    <Content Include="bin\Release\MsCrmTools.SolutionImport.dll" />
+    <Content Include="bin\Release\MscrmTools.SyncFilterManager.dll" />
+    <Content Include="bin\Release\MsCrmTools.Translator.dll" />
+    <Content Include="bin\Release\MsCrmTools.ViewLayoutReplicator.dll" />
+    <Content Include="bin\Release\MsCrmTools.WebResourcesManager.dll" />
+    <Content Include="bin\Release\XrmToolBox.exe" />
+    <Content Include="bin\Release\XrmToolBox.pdb" />
+    <Content Include="bin\Release\XrmToolBox.Settings.xml" />
+    <Content Include="bin\Release\XrmToolBox.vshost.exe" />
+    <Content Include="favicon3Fr.ico" />
+    <EmbeddedResource Include="Images\nologo32.png" />
+    <EmbeddedResource Include="Images\nologo.png" />
+    <EmbeddedResource Include="Images\progress.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Connection Projects\McTools.Xrm.Connection.WinForms\McTools.Xrm.Connection.WinForms.csproj">
+      <Project>{eeb5c09f-cec6-4fb5-87b5-ae61ae89c9eb}</Project>
+      <Name>McTools.Xrm.Connection.WinForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Connection Projects\McTools.Xrm.Connection\McTools.Xrm.Connection.csproj">
+      <Project>{c3824c2c-6e2e-4fde-a2aa-229bbc7c3b1f}</Project>
+      <Name>McTools.Xrm.Connection</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\tools\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
