@@ -113,14 +113,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"C:\Program Files (x86)\Microsoft\ILMerge\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(TargetDir)MsCrmTools.SolutionImport.dll" MsCrmTools.SolutionImport.dll ICSharpCode.SharpZipLib.dll
+    <PostBuildEvent>"C:\Program Files (x86)\Microsoft\ILMerge\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(SolutionDir)XrmToolBox\$(OutDir)" MsCrmTools.SolutionImport.dll ICSharpCode.SharpZipLib.dll
 xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.SolutionImport.pdb" "$(SolutionDir)XrmToolBox\bin\Debug"
-xcopy /y "$(ProjectDir)$(OutDir)MsCrmTools.SolutionImport.dll" "$(SolutionDir)XrmToolBox\$(OutDir)"
-rem xcopy /y "$(ProjectDir)bin\debug\ICSharpCode.SharpZipLib.dll" "$(SolutionDir)XrmToolBox\bin\Debug"</PostBuildEvent>
+</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

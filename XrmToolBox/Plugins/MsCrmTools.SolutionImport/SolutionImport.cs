@@ -32,6 +32,7 @@ namespace MsCrmTools.SolutionImport
         private Panel infoPanel;
         private SolutionManager sManager;
         private IOrganizationService service;
+        private ConnectionDetail cDetail;
 
         private Guid currentOperationId;
 
@@ -62,10 +63,12 @@ namespace MsCrmTools.SolutionImport
             ((OrganizationServiceProxy)((OrganizationService)newService).InnerService).Timeout = new TimeSpan(0,1,0,0);
 
             service = newService;
+            cDetail = detail;
             sManager= new SolutionManager(service);
 
             if (actionName == "ImportSolution")
             {
+                ((ImportSettings) parameter).MajorVersion = cDetail.OrganizationMajorVersion;
                 ImportArchive((ImportSettings) parameter);
             }
         }
@@ -96,7 +99,8 @@ namespace MsCrmTools.SolutionImport
                                     Publish = chkPublish.Checked,
                                     Activate = chkActivate.Checked,
                                     ConvertToManaged = chkConvertToManaged.Checked,
-                                    OverwriteUnmanagedCustomizations = chkOverwriteUnmanagedCustomizations.Checked
+                                    OverwriteUnmanagedCustomizations = chkOverwriteUnmanagedCustomizations.Checked,
+                                    MajorVersion = cDetail.OrganizationMajorVersion
                                 };
 
             if (service == null)
@@ -209,7 +213,8 @@ namespace MsCrmTools.SolutionImport
                                     Publish = chkPublish.Checked,
                                     Activate = chkActivate.Checked,
                                     ConvertToManaged = chkConvertToManaged.Checked,
-                                    OverwriteUnmanagedCustomizations = chkOverwriteUnmanagedCustomizations.Checked
+                                    OverwriteUnmanagedCustomizations = chkOverwriteUnmanagedCustomizations.Checked,
+                                    MajorVersion = cDetail.OrganizationMajorVersion
                                 };
 
             if (service == null)

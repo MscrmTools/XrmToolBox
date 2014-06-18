@@ -6,8 +6,10 @@
 using System;
 using System.IO;
 using System.ServiceModel;
+using System.Threading;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -31,6 +33,8 @@ namespace MsCrmTools.SolutionImport
             {
                 importPath = archivePath; //sets the global variable for the import path
 
+               
+
                 var request = new ImportSolutionRequest
                                   {
                                       ConvertToManaged = settings.ConvertToManaged,
@@ -40,7 +44,38 @@ namespace MsCrmTools.SolutionImport
                                       ImportJobId = settings.ImportId
                                   };
 
-                innerService.Execute(request);
+                if (settings.MajorVersion >= 6)
+                {
+                    var requestAsync = new ExecuteAsyncRequest
+                    {
+                        Request = request
+                    };
+
+                    innerService.Execute(requestAsync);
+
+                    bool isfinished = false;
+                    do
+                    {
+                        try
+                        {
+                            var job = innerService.Retrieve("importjob", settings.ImportId, new ColumnSet(true));
+
+                            if (job.Contains("completedon"))
+                            {
+                                isfinished = true;
+                            }
+                        }
+                        catch
+                        {
+                        }
+
+                        Thread.Sleep(2000);
+                    } while (isfinished == false);
+                }
+                else
+                {
+                    innerService.Execute(request);
+                }
             }
             catch (FaultException<OrganizationServiceFault> error)
             {
