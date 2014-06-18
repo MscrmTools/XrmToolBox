@@ -115,6 +115,7 @@ namespace MsCrmTools.WebResourcesManager
                                     {
                                         new ConditionExpression("ishidden", ConditionOperator.Equal, false),
                                         new ConditionExpression("webresourcetype", ConditionOperator.In, types.ToArray()),
+                                        new ConditionExpression("webresourceid", ConditionOperator.In, list.ToArray()),
                                     }
                                 },
                                 new FilterExpression
