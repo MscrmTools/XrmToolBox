@@ -515,24 +515,28 @@ namespace XrmToolBox
 
         private void donateInUSDollarsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var url = string.Format("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business={0}&lc={1}&item_name={2}&currency_code={3}&bn=PP%2dDonationsBF",
-               "tanguy92@hotmail.com",
-               "EN",
-               "Donation%20for%20MSCRM%20Tools%20-%20XrmToolBox",
-               "USD");
-
-            Process.Start(url);
+            donate("EN", "USD");
         }
 
         private void donateInEuroToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            donate("EN", "EUR");
+        }
+
+        private void donateInGBPToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            donate("EN", "GBP");
+        }
+
+        private void donate(string language, string currency)
+        {
             var url =
-                string.Format(
-                    "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business={0}&lc={1}&item_name={2}&currency_code={3}&bn=PP%2dDonationsBF",
-                    "tanguy92@hotmail.com",
-                    "EN",
-                    "Donation%20for%20MSCRM%20Tools%20-%20XrmToolBox",
-                    "EUR");
+               string.Format(
+                   "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business={0}&lc={1}&item_name={2}&currency_code={3}&bn=PP%2dDonationsBF",
+                   "tanguy92@hotmail.com",
+                   language,
+                   "Donation%20for%20MSCRM%20Tools%20-%20XrmToolBox",
+                   currency);
 
             Process.Start(url);
         }
@@ -577,6 +581,8 @@ namespace XrmToolBox
         {
             fHelper.DisplayConnectionsList(this);
         }
+
+        
     }
 }
 
