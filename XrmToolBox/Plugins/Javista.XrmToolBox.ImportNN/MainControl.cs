@@ -290,7 +290,7 @@ namespace Javista.XrmToolBox.ImportNN
 
         private void tsbExport_Click(object sender, EventArgs e)
         {
-            var sfd = new SaveFileDialog {Title = "Select where to save the file"};
+            var sfd = new SaveFileDialog {Title = "Select where to save the file", Filter="Csv file|*.csv"};
             if (sfd.ShowDialog(ParentForm) != DialogResult.OK)
             {
                 return;
