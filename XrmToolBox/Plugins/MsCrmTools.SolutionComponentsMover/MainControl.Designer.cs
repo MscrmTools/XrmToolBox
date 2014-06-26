@@ -37,8 +37,8 @@
             this.tsbCopyComponents = new System.Windows.Forms.ToolStripButton();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.gbSource = new System.Windows.Forms.GroupBox();
-            this.gbTarget = new System.Windows.Forms.GroupBox();
             this.sourceSolutionPicker = new MsCrmTools.SolutionComponentsMover.UserControls.SolutionPicker();
+            this.gbTarget = new System.Windows.Forms.GroupBox();
             this.targetSolutionPicker = new MsCrmTools.SolutionComponentsMover.UserControls.SolutionPicker();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
@@ -133,6 +133,16 @@
             this.gbSource.TabStop = false;
             this.gbSource.Text = "Source solutions";
             // 
+            // sourceSolutionPicker
+            // 
+            this.sourceSolutionPicker.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.sourceSolutionPicker.CanDisplayManagedSolutions = true;
+            this.sourceSolutionPicker.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sourceSolutionPicker.Location = new System.Drawing.Point(3, 18);
+            this.sourceSolutionPicker.Name = "sourceSolutionPicker";
+            this.sourceSolutionPicker.Size = new System.Drawing.Size(469, 509);
+            this.sourceSolutionPicker.TabIndex = 1;
+            // 
             // gbTarget
             // 
             this.gbTarget.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
@@ -145,18 +155,10 @@
             this.gbTarget.TabStop = false;
             this.gbTarget.Text = "Target solutions";
             // 
-            // sourceSolutionPicker
-            // 
-            this.sourceSolutionPicker.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.sourceSolutionPicker.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sourceSolutionPicker.Location = new System.Drawing.Point(3, 18);
-            this.sourceSolutionPicker.Name = "sourceSolutionPicker";
-            this.sourceSolutionPicker.Size = new System.Drawing.Size(469, 509);
-            this.sourceSolutionPicker.TabIndex = 1;
-            // 
             // targetSolutionPicker
             // 
             this.targetSolutionPicker.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.targetSolutionPicker.CanDisplayManagedSolutions = false;
             this.targetSolutionPicker.Dock = System.Windows.Forms.DockStyle.Fill;
             this.targetSolutionPicker.Location = new System.Drawing.Point(3, 18);
             this.targetSolutionPicker.Name = "targetSolutionPicker";

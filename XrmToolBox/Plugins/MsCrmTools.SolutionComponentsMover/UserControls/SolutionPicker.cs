@@ -28,13 +28,22 @@ namespace MsCrmTools.SolutionComponentsMover.UserControls
             get { return lvSolutions.SelectedItems.Cast<ListViewItem>().Select(i => (Entity) i.Tag).ToList(); }
         }
 
+        public bool CanDisplayManagedSolutions { get; set; }
+
        public void LoadSolutions(IEnumerable<Entity> solutions)
         {
             lvSolutions.Items.Clear();
 
             var list = new List<ListViewItem>();
 
-            foreach (var solution in solutions)
+            IEnumerable<Entity> solutionsToDisplay = solutions;
+
+           if (!CanDisplayManagedSolutions)
+           {
+               solutionsToDisplay = solutions.Where(s => s.GetAttributeValue<bool>("ismanaged") == false);
+           }
+
+           foreach (var solution in solutionsToDisplay)
             {
                 var item = new ListViewItem(solution.GetAttributeValue<string>("friendlyname"));
                 item.SubItems.Add(solution.GetAttributeValue<string>("uniquename"));

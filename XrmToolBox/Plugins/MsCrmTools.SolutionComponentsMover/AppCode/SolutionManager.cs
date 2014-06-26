@@ -24,13 +24,14 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
                 EntityName = "solution",
                 ColumnSet = new ColumnSet(new[]{
                                             "publisherid", "installedon", "version",
-                                            "uniquename", "friendlyname", "description"
+                                            "uniquename", "friendlyname", "description",
+                                            "ismanaged"
                                         }),
                 Criteria = new FilterExpression
                 {
                     Conditions =
                     {
-                        new ConditionExpression("ismanaged", ConditionOperator.Equal, false),
+                        //new ConditionExpression("ismanaged", ConditionOperator.Equal, false),
                         new ConditionExpression("isvisible", ConditionOperator.Equal, true),
                         new ConditionExpression("uniquename", ConditionOperator.NotEqual, "Default")
                     }
