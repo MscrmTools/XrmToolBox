@@ -12,7 +12,7 @@ namespace MsCrmTools.ViewLayoutReplicator
     /// <summary>
     /// Compares two listview items for sorting
     /// </summary>
-    class ListViewItemComparer : IComparer
+    class ListViewItemComparer : IComparer 
     {
         #region Variables
 

@@ -9,7 +9,7 @@ namespace DamSim.SolutionTransferTool
     /// </summary>
     class ListViewItemComparer : IComparer
     {
-        #region Variables
+        #region Variables 
 
         /// <summary>
         /// Index of sorting column
