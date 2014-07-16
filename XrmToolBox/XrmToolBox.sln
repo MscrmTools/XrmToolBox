@@ -75,9 +75,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.WebResourcesMana
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Javista.XrmToolBox.ImportNN", "Plugins\Javista.XrmToolBox.ImportNN\Javista.XrmToolBox.ImportNN.csproj", "{6EE0DF38-28E0-4A18-8298-F70D12A12F96}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.UserRolesManager", "Plugins\MsCrmTools.UserRolesManager\MsCrmTools.UserRolesManager.csproj", "{129B49D2-9B84-4FDF-B968-A7FAADE16F0D}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 31
+		SccNumberOfProjects = 32
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs24
 		SccLocalPath0 = .
@@ -199,6 +201,10 @@ Global
 		SccProjectTopLevelParentUniqueName30 = XrmToolBox.sln
 		SccProjectName30 = Plugins/Javista.XrmToolBox.ImportNN
 		SccLocalPath30 = Plugins\\Javista.XrmToolBox.ImportNN
+		SccProjectUniqueName31 = Plugins\\MsCrmTools.UserRolesManager\\MsCrmTools.UserRolesManager.csproj
+		SccProjectTopLevelParentUniqueName31 = XrmToolBox.sln
+		SccProjectName31 = Plugins/MsCrmTools.UserRolesManager
+		SccLocalPath31 = Plugins\\MsCrmTools.UserRolesManager
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -506,6 +512,16 @@ Global
 		{6EE0DF38-28E0-4A18-8298-F70D12A12F96}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{6EE0DF38-28E0-4A18-8298-F70D12A12F96}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6EE0DF38-28E0-4A18-8298-F70D12A12F96}.Release|x86.ActiveCfg = Release|Any CPU
+		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -539,5 +555,6 @@ Global
 		{4C976A6C-F6A2-4E58-B52C-5CF701C97E50} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{71737D43-3B0A-4709-93F2-ED9C62C836B3} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{6EE0DF38-28E0-4A18-8298-F70D12A12F96} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 	EndGlobalSection
 EndGlobal
