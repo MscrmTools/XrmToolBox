@@ -372,7 +372,7 @@ namespace XrmToolBox
                 var newTab = new TabPage(name);
                 tabControl1.TabPages.Add(newTab);
 
-                pluginControl.Anchor = AnchorStyles.Left | AnchorStyles.Bottom | AnchorStyles.Top | AnchorStyles.Right;
+                pluginControl.Dock = DockStyle.Fill;
                 pluginControl.Width = newTab.Width;
                 pluginControl.Height = newTab.Height;
 
