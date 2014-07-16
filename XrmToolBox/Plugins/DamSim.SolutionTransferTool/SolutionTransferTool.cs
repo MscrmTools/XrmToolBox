@@ -31,6 +31,7 @@ namespace DamSim.SolutionTransferTool
 
         private Panel infoPanel;
 
+        private int currentsColumnOrder;
         #endregion
 
         #region Constructor
@@ -316,6 +317,21 @@ namespace DamSim.SolutionTransferTool
             if (chkExportAsManaged.Checked)
             {
                 chkConvertToManaged.Checked = false;
+            }
+        }
+
+        private void lstSourceSolutions_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            if (e.Column == currentsColumnOrder)
+            {
+                lstSourceSolutions.Sorting = lstSourceSolutions.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+
+                lstSourceSolutions.ListViewItemSorter = new ListViewItemComparer(e.Column, lstSourceSolutions.Sorting);
+            }
+            else
+            {
+                currentsColumnOrder = e.Column;
+                lstSourceSolutions.ListViewItemSorter = new ListViewItemComparer(e.Column, SortOrder.Ascending);
             }
         }
     }
