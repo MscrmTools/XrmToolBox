@@ -191,6 +191,10 @@ namespace McTools.Xrm.Connection.WinForms
                 {
                     BValidateClick(sender, e);
                 }
+
+                if (!connectionManager.ConnectionsList.Connections.Contains(newConnection))
+                connectionManager.ConnectionsList.Connections.Add(newConnection);
+                connectionManager.SaveConnectionsFile(connectionManager.ConnectionsList);
             }
         }
 

@@ -97,7 +97,8 @@ namespace McTools.Xrm.Connection.WinForms
 
                 if (cs.HadCreatedNewConnection)
                 {
-                    _connectionManager.ConnectionsList.Connections.Add(connectionDetail);
+                    if (!_connectionManager.ConnectionsList.Connections.Contains(connectionDetail))
+                        _connectionManager.ConnectionsList.Connections.Add(connectionDetail);
                     _connectionManager.SaveConnectionsFile(_connectionManager.ConnectionsList);
                 }
 
@@ -153,7 +154,8 @@ namespace McTools.Xrm.Connection.WinForms
             {
                 if (isCreation)
                 {
-                    _connectionManager.ConnectionsList.Connections.Add(cForm.CrmConnectionDetail);
+                    if (!_connectionManager.ConnectionsList.Connections.Contains(cForm.CrmConnectionDetail))
+                        _connectionManager.ConnectionsList.Connections.Add(cForm.CrmConnectionDetail);
                 }
                 else
                 {
