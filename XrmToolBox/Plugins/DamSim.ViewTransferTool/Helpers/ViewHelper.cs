@@ -110,7 +110,7 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
                 {
                     var targetViewQuery = new QueryExpression(sourceView.LogicalName);
                     targetViewQuery.ColumnSet = new ColumnSet { AllColumns = true };
-                    targetViewQuery.Criteria.AddCondition("savedqueryid", ConditionOperator.Equal, sourceView.Id);
+                    targetViewQuery.Criteria.AddCondition(sourceView.LogicalName + "id", ConditionOperator.Equal, sourceView.Id);
                     var targetViews = targetService.RetrieveMultiple(targetViewQuery);
 
                     if (targetViews.Entities.Count > 0)
