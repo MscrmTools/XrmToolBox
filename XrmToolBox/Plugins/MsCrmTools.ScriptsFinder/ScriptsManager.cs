@@ -32,6 +32,7 @@ namespace MsCrmTools.ScriptsFinder
             foreach (var emd in response.EntityMetadata.Where(x =>(x.IsCustomizable.Value || x.IsManaged.Value == false) && x.DisplayName.UserLocalizedLabel != null))
             {
                 LoadScripts(emd);
+                LoadRibbonCommands(emd);
             }
         }
 
@@ -62,10 +63,72 @@ namespace MsCrmTools.ScriptsFinder
                         script.Event = eventName;
                         script.Attribute = eventName == "onchange" ? emd.Attributes.First(x=>x.LogicalName == eventNode.Attributes["attribute"].Value).DisplayName.UserLocalizedLabel.Label : "";
                         script.AttributeLogicalName = eventName == "onchange" ? eventNode.Attributes["attribute"].Value : "";
-                        script.Form = form["name"].ToString();
+                        script.Name = form["name"].ToString();
+                        script.Type = "Form event";
 
                         Scripts.Add(script);
                     }
+                }
+
+                foreach (XmlNode libraryNode in doc.SelectNodes("//Library"))
+                {
+                    var script = new Script();
+                    script.EntityLogicalName = emd.LogicalName;
+                    script.EntityName = emd.DisplayName.UserLocalizedLabel.Label;
+                    script.ScriptLocation = libraryNode.Attributes["name"].Value;
+                    script.MethodCalled = string.Empty;
+                    script.Event = string.Empty;
+                    script.Attribute = string.Empty;
+                    script.AttributeLogicalName = string.Empty;
+                    script.Name = form["name"].ToString();
+                    script.Type = "Form Library";
+
+                    Scripts.Add(script);
+                }
+            }
+        }
+
+        private void LoadRibbonCommands(EntityMetadata emd)
+        {
+            var commands = service.RetrieveMultiple(new QueryExpression("ribboncommand")
+            {
+                ColumnSet = new ColumnSet(true),
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("commanddefinition", ConditionOperator.Like, "%Library=\"$webresource:%"),
+                        new ConditionExpression("entity", ConditionOperator.Equal, emd.LogicalName)
+                    }
+                }
+            });
+
+            foreach (var command in commands.Entities)
+            {
+                var commandDoc = new XmlDocument();
+                commandDoc.LoadXml(command.GetAttributeValue<string>("commanddefinition"));
+
+                var actionsNode = commandDoc.SelectSingleNode("CommandDefinition/Actions");
+
+                foreach (XmlNode actionNode in actionsNode.ChildNodes)
+                {
+                    var libraryName = actionNode.Attributes["Library"].Value;
+
+                    if (libraryName.Split(':').Length == 1)
+                        continue;
+
+                    var script = new Script();
+                    script.EntityLogicalName = emd.LogicalName;
+                    script.EntityName = emd.DisplayName.UserLocalizedLabel.Label;
+                    script.ScriptLocation = libraryName.Split(':')[1];
+                    script.MethodCalled = actionNode.Attributes["FunctionName"].Value;
+                    script.Event = "";
+                    script.Attribute = "";
+                    script.AttributeLogicalName = "";
+                    script.Name = string.Empty;
+                    script.Type = "Ribbon Command";
+
+                    Scripts.Add(script);
                 }
             }
         }

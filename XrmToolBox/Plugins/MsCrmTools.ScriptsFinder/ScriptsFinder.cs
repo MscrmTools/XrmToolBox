@@ -95,9 +95,10 @@ namespace MsCrmTools.ScriptsFinder
 
             foreach (var script in sManager.Scripts)
             {
-                var item = new ListViewItem(script.EntityName);
+                var item = new ListViewItem(script.Type);
+                item.SubItems.Add(script.EntityName);
                 item.SubItems.Add(script.EntityLogicalName);
-                item.SubItems.Add(script.Form);
+                item.SubItems.Add(script.Name);
                 item.SubItems.Add(script.Event);
                 item.SubItems.Add(script.Attribute);
                 item.SubItems.Add(script.AttributeLogicalName);
@@ -166,13 +167,13 @@ namespace MsCrmTools.ScriptsFinder
                     fs.Write(preamble,0,preamble.Length);
                     
                     var header = System.Text.Encoding.UTF8.GetBytes(
-                        "Entity Display Name,Entity Logical Name,Form,Event,Attribute Display Name,Attribute Logical Name,Script Location,Method Called" +
+                        "Type,Entity Display Name,Entity Logical Name,Form name,Event,Attribute Display Name,Attribute Logical Name,Script Location,Method Called" +
                         Environment.NewLine);
                     fs.Write(header, 0, header.Length);
                     
                     foreach (ListViewItem item in lvScripts.Items)
                     {
-                        var line = System.Text.Encoding.UTF8.GetBytes(string.Format("{0},{1},{2},{3},{4},{5},{6},{7}{8}",
+                        var line = System.Text.Encoding.UTF8.GetBytes(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8}{9}",
                             item.SubItems[0].Text,
                             item.SubItems[1].Text,
                             item.SubItems[2].Text,
@@ -181,6 +182,7 @@ namespace MsCrmTools.ScriptsFinder
                             item.SubItems[5].Text,
                             item.SubItems[6].Text,
                             item.SubItems[7].Text,
+                            item.SubItems[8].Text,
                             Environment.NewLine));
 
                         fs.Write(line, 0, line.Length);
