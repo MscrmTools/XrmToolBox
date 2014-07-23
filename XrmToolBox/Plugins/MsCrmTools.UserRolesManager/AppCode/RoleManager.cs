@@ -44,7 +44,7 @@ namespace MsCrmTools.UserRolesManager.AppCode
                 {
                     if (worker != null && worker.WorkerReportsProgress)
                     {
-                        worker.ReportProgress(current * 100 / total, "Adding roles to users ({0} %)...");
+                        worker.ReportProgress(current * 100 / total, "Adding roles to principals ({0} %)...");
                     }
 
                     var roleToUse = role;
