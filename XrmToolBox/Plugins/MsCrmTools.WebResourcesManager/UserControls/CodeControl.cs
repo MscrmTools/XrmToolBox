@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
+using Jsbeautifier;
 using MsCrmTools.WebResourcesManager.AppCode;
 using MsCrmTools.WebResourcesManager.Forms;
 
@@ -195,5 +196,25 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         }
 
         #endregion Methods
+
+        internal void Beautify()
+        {
+            Beautifier b = new Beautifier(new BeautifierOptions
+            {
+                BraceStyle =BraceStyle.Expand,
+                BreakChainedMethods = false,
+                EvalCode = true,
+                IndentChar = '\t',
+                IndentSize = 1,
+                IndentWithTabs = true,
+                JslintHappy = true,
+                KeepArrayIndentation = true,
+                KeepFunctionIndentation = true,
+                MaxPreserveNewlines = 1,
+                PreserveNewlines = true
+            });
+
+            tecCode.Text = b.Beautify(tecCode.Text);
+        }
     }
 }

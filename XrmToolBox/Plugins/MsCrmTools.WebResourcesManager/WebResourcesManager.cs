@@ -968,6 +968,11 @@ namespace MsCrmTools.WebResourcesManager
                 ((CodeControl)panelControl.Controls[0]).MinifyJs();
         }
 
+        private void tsbBeautify_Click(object sender, EventArgs e)
+        {
+            ((CodeControl) panelControl.Controls[0]).Beautify();
+        }
+
         private void TsbPreviewHtmlClick(object sender, EventArgs e)
         {
             string content = ((IWebResourceControl)panelControl.Controls[0]).GetBase64WebResourceContent();
@@ -1037,6 +1042,7 @@ namespace MsCrmTools.WebResourcesManager
                                 MainFormWebResourceUpdated;
                             toolStripSeparatorMinifyJS.Visible = true;
                             tsbMinifyJS.Visible = false;
+                            tsbBeautify.Visible = false;
                             tsbPreviewHtml.Visible = true;
                             tsSeparatorEdit.Visible = true;
                             tsddbEdit.Visible = true;
@@ -1047,6 +1053,7 @@ namespace MsCrmTools.WebResourcesManager
                                                    Enumerations.WebResourceType.Css);
                             ((CodeControl) ctrl).WebResourceUpdated += MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
+                            tsbBeautify.Visible = false;
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = true;
                             tsddbEdit.Visible = true;
@@ -1058,6 +1065,7 @@ namespace MsCrmTools.WebResourcesManager
                                 MainFormWebResourceUpdated;
                             toolStripSeparatorMinifyJS.Visible = true;
                             tsbMinifyJS.Visible = true;
+                            tsbBeautify.Visible = true;
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = true;
                             tsddbEdit.Visible = true;
@@ -1068,6 +1076,7 @@ namespace MsCrmTools.WebResourcesManager
                             ((CodeControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
+                            tsbBeautify.Visible = false;
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = true;
                             tsddbEdit.Visible = true;
@@ -1078,6 +1087,7 @@ namespace MsCrmTools.WebResourcesManager
                             ((ImageControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
+                            tsbBeautify.Visible = false;
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = false;
                             tsddbEdit.Visible = false;
@@ -1088,6 +1098,7 @@ namespace MsCrmTools.WebResourcesManager
                             ((ImageControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
+                            tsbBeautify.Visible = false;
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = false;
                             tsddbEdit.Visible = false;
@@ -1098,6 +1109,7 @@ namespace MsCrmTools.WebResourcesManager
                             ((ImageControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
+                            tsbBeautify.Visible = false;
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = false;
                             tsddbEdit.Visible = false;
@@ -1113,6 +1125,7 @@ namespace MsCrmTools.WebResourcesManager
                             ((CodeControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
+                            tsbBeautify.Visible = false;
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = true;
                             tsddbEdit.Visible = true;
@@ -1122,6 +1135,7 @@ namespace MsCrmTools.WebResourcesManager
                             ((IconControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
+                            tsbBeautify.Visible = false;
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = false;
                             tsddbEdit.Visible = false;
@@ -1442,5 +1456,7 @@ namespace MsCrmTools.WebResourcesManager
             else
                 e.Effect = DragDropEffects.None;
         }
+
+       
     }
 }
