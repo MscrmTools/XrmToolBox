@@ -70,6 +70,10 @@
   <ItemGroup>
     <Compile Include="AppCode\Enumerations.cs" />
     <Compile Include="AppCode\Globals.cs" />
+    <Compile Include="AppCode\JsBeautifier\Beautifier.cs" />
+    <Compile Include="AppCode\JsBeautifier\BeautifierFlags.cs" />
+    <Compile Include="AppCode\JsBeautifier\BeautifierOptions.cs" />
+    <Compile Include="AppCode\JsBeautifier\BraceStyle.cs" />
     <Compile Include="AppCode\LoadCrmResourcesSettings.cs" />
     <Compile Include="AppCode\SolutionComponentType.cs" />
     <Compile Include="AppCode\TreeViewHelper.cs" />
@@ -278,7 +282,7 @@ xcopy /y "$(ProjectDir)$(OutDir)MsCrmTools.WebResourcesManager.dll" "$(SolutionD
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
