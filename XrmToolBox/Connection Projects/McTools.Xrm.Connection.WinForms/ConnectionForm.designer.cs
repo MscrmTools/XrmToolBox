@@ -365,6 +365,7 @@
             this.cbbOnlineEnv.FormattingEnabled = true;
             this.cbbOnlineEnv.Items.AddRange(new object[] {
             "crm.dynamics.com",
+            "crm2.dynamics.com",
             "crm4.dynamics.com",
             "crm5.dynamics.com"});
             this.cbbOnlineEnv.Location = new System.Drawing.Point(83, 42);
