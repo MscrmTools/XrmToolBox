@@ -188,13 +188,6 @@
       <DependentUpon>PluginModel.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
-    <None Include="bin\Debug\mscrmtools2011 - Copie.config" />
-    <None Include="bin\Debug\mscrmtools2011.config" />
-    <None Include="bin\Debug\XrmToolBox.vshost.exe.manifest" />
-    <None Include="bin\Debug\XrmToolBox.zip" />
-    <None Include="bin\Release\mscrmtools2011.config" />
-    <None Include="bin\Release\XrmToolBox.vshost.exe.manifest" />
-    <None Include="bin\Release\XrmToolBox.zip" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -206,120 +199,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\antixsslibrary.dll" />
-    <Content Include="bin\Debug\CraProjectImport.dll" />
-    <Content Include="bin\Debug\CRMBulkWorkflowTool.dll" />
-    <Content Include="bin\Debug\DamSim.SolutionTransferTool.dll" />
-    <Content Include="bin\Debug\DamSim.ViewTransferTool.dll" />
-    <Content Include="bin\Debug\DLaDB\DLaB.LocalToGlobalOptionSet.dll" />
-    <Content Include="bin\Debug\DLaDB\DLaB.Xrm.dll" />
-    <Content Include="bin\Debug\DLaDB\DLaB.XrmToolboxCommon.dll" />
-    <Content Include="bin\Debug\DLaDB\XrmToolBoxCommon.dll" />
-    <Content Include="bin\Debug\Javista.XrmToolBox.ImportNN.dll" />
-    <Content Include="bin\Debug\Javista.XrmToolBox.ImportNN.pdb" />
-    <Content Include="bin\Debug\McTools.StopAdv.xml" />
-    <Content Include="bin\Debug\McTools.StopAdv2.xml" />
-    <Content Include="bin\Debug\McTools.StopAdv3.xml" />
-    <Content Include="bin\Debug\McTools.StopAdvertisement.dll" />
-    <Content Include="bin\Debug\McTools.StopAdvertisement.pdb" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.dll" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.pdb" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.WinForms.dll" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.WinForms.pdb" />
-    <Content Include="bin\Debug\microsoft.crm.outlook.sdk.dll" />
-    <Content Include="bin\Debug\microsoft.crm.sdk.proxy.dll" />
-    <Content Include="bin\Debug\microsoft.crm.sdk.proxy.xml" />
-    <Content Include="bin\Debug\microsoft.crm.tools.emailproviders.dll" />
-    <Content Include="bin\Debug\Microsoft.IdentityModel.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.client.codegeneration.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.client.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.client.xml" />
-    <Content Include="bin\Debug\microsoft.xrm.portal.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.portal.files.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.sdk.deployment.dll" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.Deployment.xml" />
-    <Content Include="bin\Debug\microsoft.xrm.sdk.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.sdk.workflow.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.sdk.xml" />
-    <Content Include="bin\Debug\MsCrmTools.AccessChecker.dll" />
-    <Content Include="bin\Debug\MsCrmTools.AssemblyRecoveryTool.dll" />
-    <Content Include="bin\Debug\MsCrmTools.AssemblyRecoveryTool.pdb" />
-    <Content Include="bin\Debug\MsCrmTools.AttributeBulkUpdater.dll" />
-    <Content Include="bin\Debug\MsCrmTools.AuditCenter.dll" />
-    <Content Include="bin\Debug\MsCrmTools.AuditCenter.pdb" />
-    <Content Include="bin\Debug\MsCrmTools.FetchXmlTester.dll" />
-    <Content Include="bin\Debug\MsCrmTools.FetchXmlTester.pdb" />
-    <Content Include="bin\Debug\MsCrmTools.FormLibrariesManager.pdb" />
-    <Content Include="bin\Debug\MsCrmTools.FormParameterManager.dll" />
-    <Content Include="bin\Debug\MsCrmTools.Iconator.dll" />
-    <Content Include="bin\Debug\MsCrmTools.MetadataDocumentGenerator.dll" />
-    <Content Include="bin\Debug\MsCrmTools.MetadataDocumentGenerator.pdb" />
-    <Content Include="bin\Debug\MsCrmTools.PrivDiscover.dll" />
-    <Content Include="bin\Debug\MsCrmTools.PrivDiscover.pdb" />
-    <Content Include="bin\Debug\MsCrmTools.RoleUpdater.dll" />
-    <Content Include="bin\Debug\MsCrmTools.SampleTool.dll" />
-    <Content Include="bin\Debug\MsCrmTools.SampleTool.pdb" />
-    <Content Include="bin\Debug\MsCrmTools.ScriptsFinder.dll" />
-    <Content Include="bin\Debug\MsCrmTools.SiteMapEditor.dll" />
-    <Content Include="bin\Debug\MsCrmTools.SolutionImport.dll" />
-    <Content Include="bin\Debug\MsCrmTools.SolutionImport.pdb" />
-    <Content Include="bin\Debug\MsCrmTools.SolutionUtilities.dll" />
-    <Content Include="bin\Debug\MscrmTools.SyncFilterManager.dll" />
-    <Content Include="bin\Debug\MscrmTools.SyncFilterManager.pdb" />
-    <Content Include="bin\Debug\MsCrmTools.Translator.dll" />
-    <Content Include="bin\Debug\MsCrmTools.ViewLayoutReplicator.dll" />
-    <Content Include="bin\Debug\MsCrmTools.WebResourcesManager.dll" />
-    <Content Include="bin\Debug\MsCrmTools.WebResourcesManager.pdb" />
-    <Content Include="bin\Debug\pluginprofiler.library.dll" />
-    <Content Include="bin\Debug\pluginprofiler.plugins.dll" />
-    <Content Include="bin\Debug\Procentrix.CleanForXRM.dll" />
-    <Content Include="bin\Debug\SandBox.dll" />
-    <Content Include="bin\Debug\SandBox.pdb" />
-    <Content Include="bin\Debug\UpdateBelgianData.dll" />
-    <Content Include="bin\Debug\UpdateBelgianData.pdb" />
-    <Content Include="bin\Debug\XrmToolBox.exe" />
-    <Content Include="bin\Debug\XrmToolBox.pdb" />
-    <Content Include="bin\Debug\XrmToolBox.Settings.xml" />
-    <Content Include="bin\Debug\XrmToolBox.vshost.exe" />
-    <Content Include="bin\Debug\XrmToolBox.zip.txt" />
-    <Content Include="bin\Release\DamSim.SolutionTransferTool.dll" />
-    <Content Include="bin\Release\DamSim.ViewTransferTool.dll" />
-    <Content Include="bin\Release\McTools.StopAdv.xml" />
-    <Content Include="bin\Release\McTools.StopAdvertisement.dll" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.dll" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.pdb" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.WinForms.dll" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.WinForms.pdb" />
-    <Content Include="bin\Release\microsoft.crm.sdk.proxy.dll" />
-    <Content Include="bin\Release\microsoft.crm.sdk.proxy.xml" />
-    <Content Include="bin\Release\microsoft.xrm.client.dll" />
-    <Content Include="bin\Release\microsoft.xrm.client.xml" />
-    <Content Include="bin\Release\Microsoft.Xrm.Sdk.Deployment.dll" />
-    <Content Include="bin\Release\Microsoft.Xrm.Sdk.Deployment.xml" />
-    <Content Include="bin\Release\microsoft.xrm.sdk.dll" />
-    <Content Include="bin\Release\microsoft.xrm.sdk.xml" />
-    <Content Include="bin\Release\MsCrmTools.AccessChecker.dll" />
-    <Content Include="bin\Release\MsCrmTools.AssemblyRecoveryTool.dll" />
-    <Content Include="bin\Release\MsCrmTools.AttributeBulkUpdater.dll" />
-    <Content Include="bin\Release\MsCrmTools.AuditCenter.dll" />
-    <Content Include="bin\Release\MsCrmTools.FetchXmlTester.dll" />
-    <Content Include="bin\Release\MsCrmTools.FormLibrariesManager.dll" />
-    <Content Include="bin\Release\MsCrmTools.FormParameterManager.dll" />
-    <Content Include="bin\Release\MsCrmTools.Iconator.dll" />
-    <Content Include="bin\Release\MsCrmTools.MetadataDocumentGenerator.dll" />
-    <Content Include="bin\Release\MsCrmTools.PrivDiscover.dll" />
-    <Content Include="bin\Release\MsCrmTools.RoleUpdater.dll" />
-    <Content Include="bin\Release\MsCrmTools.ScriptsFinder.dll" />
-    <Content Include="bin\Release\MsCrmTools.SiteMapEditor.dll" />
-    <Content Include="bin\Release\MsCrmTools.SolutionImport.dll" />
-    <Content Include="bin\Release\MscrmTools.SyncFilterManager.dll" />
-    <Content Include="bin\Release\MsCrmTools.Translator.dll" />
-    <Content Include="bin\Release\MsCrmTools.ViewLayoutReplicator.dll" />
-    <Content Include="bin\Release\MsCrmTools.WebResourcesManager.dll" />
-    <Content Include="bin\Release\XrmToolBox.exe" />
-    <Content Include="bin\Release\XrmToolBox.pdb" />
-    <Content Include="bin\Release\XrmToolBox.Settings.xml" />
-    <Content Include="bin\Release\XrmToolBox.vshost.exe" />
     <Content Include="favicon3Fr.ico" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />
@@ -335,13 +214,11 @@
       <Name>McTools.Xrm.Connection</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\tools\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
