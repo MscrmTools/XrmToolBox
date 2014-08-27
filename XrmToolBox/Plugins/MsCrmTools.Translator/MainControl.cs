@@ -133,6 +133,7 @@ namespace MsCrmTools.Translator
                                            ExportAttributes = chkExportAttributes.Checked,
                                            ExportBooleans = chkExportBooleans.Checked,
                                            ExportEntities = chkExportEntity.Checked,
+                                           ExportForms = chkExportForms.Checked,
                                            ExportFormFields = chkExportFormsFields.Checked,
                                            ExportFormSections = chkExportFormsSections.Checked,
                                            ExportFormTabs = chkExportFormsTabs.Checked,
