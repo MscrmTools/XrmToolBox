@@ -153,6 +153,18 @@ namespace MsCrmTools.Translator.AppCode
                         columnIndex++;
                     }
                 }
+                else if (row.Cells[2].Value.ToString() == "DisplayCollectionName")
+                {
+                    emd.DisplayCollectionName = new Label();
+                    int columnIndex = 3;
+
+                    while (row.Cells[columnIndex].Value != null)
+                    {
+                        emd.DisplayCollectionName.LocalizedLabels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+
+                        columnIndex++;
+                    }
+                }
                 else if (row.Cells[2].Value.ToString() == "Description")
                 {
                     emd.Description = new Label();
