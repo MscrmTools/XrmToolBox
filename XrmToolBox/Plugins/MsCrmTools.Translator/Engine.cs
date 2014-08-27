@@ -131,6 +131,7 @@ namespace MsCrmTools.Translator
                 ft.Export(emds, lcids, file, service,
                           new FormExportOption
                               {
+                                  ExportForms = settings.ExportForms,
                                   ExportFormTabs = settings.ExportFormTabs,
                                   ExportFormSections = settings.ExportFormSections,
                                   ExportFormFields = settings.ExportFormFields

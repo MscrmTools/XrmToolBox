@@ -77,7 +77,7 @@ namespace MsCrmTools.Translator.AppCode
 
                         #region Tabs
 
-                        if (options.ExportFormTabs)
+                        if (options.ExportFormTabs || options.ExportFormSections || options.ExportFormFields)
                         {
                             // Load Xml definition of form
                             var sFormXml = form.GetAttributeValue<string>("formxml");
@@ -87,10 +87,10 @@ namespace MsCrmTools.Translator.AppCode
                             foreach (XmlNode tabNode in formXml.SelectNodes("//tab"))
                             {
                                 var tabName = ExtractTabName(tabNode, lcid, crmFormTabs, form, entity);
-                                
+
                                 #region Sections
 
-                                if (options.ExportFormSections)
+                                if (options.ExportFormSections || options.ExportFormFields)
                                 {
                                     foreach (XmlNode sectionNode in tabNode.SelectNodes("columns/column/sections/section"))
                                     {
@@ -126,96 +126,108 @@ namespace MsCrmTools.Translator.AppCode
                 service.Update(setting);
             }
 
-            var formSheet = file.Worksheets.Add("Forms");
             var line = 1;
-            AddFormHeader(formSheet, languages);
-
-            foreach (var crmForm in crmForms)
+            if (options.ExportForms)
             {
-                line = ExportForm(languages, formSheet, line, crmForm);
-            }
+                var formSheet = file.Worksheets.Add("Forms");
+                 AddFormHeader(formSheet, languages);
 
-            // Applying style to cells
-            for (int i = 0; i < (4 + languages.Count); i++)
-            {
-                formSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                formSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
-            }
-
-            for (int i = 1; i < line; i++)
-            {
-                for (int j = 0; j < 4; j++)
+                foreach (var crmForm in crmForms)
                 {
-                    formSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    line = ExportForm(languages, formSheet, line, crmForm);
+                }
+
+                // Applying style to cells
+                for (int i = 0; i < (4 + languages.Count); i++)
+                {
+                    formSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
+                    formSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                }
+
+                for (int i = 1; i < line; i++)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        formSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    }
                 }
             }
 
-            var tabSheet = file.Worksheets.Add("Forms Tabs");
-            line = 1;
-            AddFormTabHeader(tabSheet, languages);
-            foreach (var crmFormTab in crmFormTabs)
+            if (options.ExportFormTabs)
             {
-                line = ExportTab(languages, tabSheet, line, crmFormTab);
-            }
-
-            // Applying style to cells
-            for (int i = 0; i < (5 + languages.Count); i++)
-            {
-                tabSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                tabSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
-            }
-
-            for (int i = 1; i < line; i++)
-            {
-                for (int j = 0; j < 5; j++)
+                var tabSheet = file.Worksheets.Add("Forms Tabs");
+                line = 1;
+                AddFormTabHeader(tabSheet, languages);
+                foreach (var crmFormTab in crmFormTabs)
                 {
-                    tabSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    line = ExportTab(languages, tabSheet, line, crmFormTab);
+                }
+
+                // Applying style to cells
+                for (int i = 0; i < (5 + languages.Count); i++)
+                {
+                    tabSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
+                    tabSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                }
+
+                for (int i = 1; i < line; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        tabSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    }
                 }
             }
 
-            var sectionSheet = file.Worksheets.Add("Forms Sections");
-            line = 1;
-            AddFormSectionHeader(sectionSheet, languages);
-            foreach (var crmFormSection in crmFormSections)
+            if (options.ExportFormSections)
             {
-                line = ExportSection(languages, sectionSheet, line, crmFormSection);
-            }
-
-            // Applying style to cells
-            for (int i = 0; i < (6 + languages.Count); i++)
-            {
-                sectionSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                sectionSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
-            }
-
-            for (int i = 1; i < line; i++)
-            {
-                for (int j = 0; j < 6; j++)
+                var sectionSheet = file.Worksheets.Add("Forms Sections");
+                line = 1;
+                AddFormSectionHeader(sectionSheet, languages);
+                foreach (var crmFormSection in crmFormSections)
                 {
-                    sectionSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    line = ExportSection(languages, sectionSheet, line, crmFormSection);
+                }
+
+                // Applying style to cells
+                for (int i = 0; i < (6 + languages.Count); i++)
+                {
+                    sectionSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
+                    sectionSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                }
+
+                for (int i = 1; i < line; i++)
+                {
+                    for (int j = 0; j < 6; j++)
+                    {
+                        sectionSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    }
                 }
             }
 
-            var labelSheet = file.Worksheets.Add("Forms Fields");
-            AddFormLabelsHeader(labelSheet, languages);
-            line = 1;
-            foreach (var crmFormLabel in crmFormLabels)
+            if (options.ExportFormFields)
             {
-                line = ExportField(languages, labelSheet, line, crmFormLabel);
-            }
-
-            // Applying style to cells
-            for (int i = 0; i < (8 + languages.Count); i++)
-            {
-                labelSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                labelSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
-            }
-
-            for (int i = 1; i < line; i++)
-            {
-                for (int j = 0; j < 8; j++)
+                var labelSheet = file.Worksheets.Add("Forms Fields");
+                AddFormLabelsHeader(labelSheet, languages);
+                line = 1;
+                foreach (var crmFormLabel in crmFormLabels)
                 {
-                    labelSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    line = ExportField(languages, labelSheet, line, crmFormLabel);
+                }
+
+                // Applying style to cells
+                for (int i = 0; i < (8 + languages.Count); i++)
+                {
+                    labelSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
+                    labelSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                }
+
+                for (int i = 1; i < line; i++)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        labelSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    }
                 }
             }
         }
