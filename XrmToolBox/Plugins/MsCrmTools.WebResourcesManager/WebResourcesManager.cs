@@ -68,6 +68,8 @@ namespace MsCrmTools.WebResourcesManager
         public WebResourcesManager()
         {
             InitializeComponent();
+
+            toolStripScriptContent.Visible = false;
         }
 
         #endregion Constructor
@@ -848,10 +850,10 @@ namespace MsCrmTools.WebResourcesManager
             fileMenuSave.Enabled = false;
             //TvWebResourcesAfterSelect(null, null);
 
-            if (lblResourceName.Text.Contains(" "))
+            if (tslResourceName.Text.Contains(" "))
             {
-                lblResourceName.ForeColor = Color.Black;
-                lblResourceName.Text = lblResourceName.Text.Split(' ')[0];
+                tslResourceName.ForeColor = Color.Black;
+                tslResourceName.Text = tslResourceName.Text.Split(' ')[0];
             }
         }
 
@@ -1025,7 +1027,7 @@ namespace MsCrmTools.WebResourcesManager
             if (tvWebResources.SelectedNode != null && tvWebResources.SelectedNode.Tag != null)
             {
                 toolStripScriptContent.Visible = true;
-                lblResourceName.Visible = true;
+                tslResourceName.Visible = true;
 
                 // Displays script content
                 Entity script = ((WebResource)tvWebResources.SelectedNode.Tag).WebResourceEntity;
@@ -1153,7 +1155,7 @@ namespace MsCrmTools.WebResourcesManager
                     fileMenuReplace.Enabled = true;
                     fileMenuUpdateAndPublish.Enabled = true;
 
-                    lblResourceName.Text = script["name"].ToString();
+                    tslResourceName.Text = script["name"].ToString();
                 }
                 else
                 {
@@ -1165,7 +1167,7 @@ namespace MsCrmTools.WebResourcesManager
                     tsbMinifyJS.Visible = false;
                     tsbPreviewHtml.Visible = false;
 
-                    lblResourceName.Text = string.Empty;
+                    tslResourceName.Text = string.Empty;
                 }
             }
             else
@@ -1177,7 +1179,7 @@ namespace MsCrmTools.WebResourcesManager
                 fileMenuReplace.Enabled = false;
                 fileMenuUpdateAndPublish.Enabled = false;
                 toolStripScriptContent.Visible = false;
-                lblResourceName.Visible = false;
+                tslResourceName.Visible = false;
             }
         }
 
@@ -1252,16 +1254,16 @@ namespace MsCrmTools.WebResourcesManager
 
             if (e.IsDirty)
             {
-                if (!lblResourceName.Text.Contains(" (not saved)"))
+                if (!tslResourceName.Text.Contains(" (not saved)"))
                 {
-                    lblResourceName.ForeColor = Color.Red;
-                    lblResourceName.Text += " (not saved)";
+                    tslResourceName.ForeColor = Color.Red;
+                    tslResourceName.Text += " (not saved)";
                 }
             }
             else
             {
-                lblResourceName.ForeColor = Color.Black;
-                lblResourceName.Text = lblResourceName.Text.Split(' ')[0];
+                tslResourceName.ForeColor = Color.Black;
+                tslResourceName.Text = tslResourceName.Text.Split(' ')[0];
             }
         }
 
