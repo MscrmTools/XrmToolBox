@@ -33,7 +33,6 @@
             this.imageList2 = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.chkSelectAll = new System.Windows.Forms.CheckBox();
-            this.tvWebResources = new System.Windows.Forms.TreeView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.lblResourceName = new System.Windows.Forms.Label();
             this.panelControl = new System.Windows.Forms.Panel();
@@ -49,6 +48,7 @@
             this.toolStripSeparatorMinifyJS = new System.Windows.Forms.ToolStripSeparator();
             this.tsbMinifyJS = new System.Windows.Forms.ToolStripButton();
             this.tsbPreviewHtml = new System.Windows.Forms.ToolStripButton();
+            this.tsbBeautify = new System.Windows.Forms.ToolStripButton();
             this.tsMain = new System.Windows.Forms.ToolStrip();
             this.tsbCloseThisTab = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -90,7 +90,7 @@
             this.copyWebResourceNameToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsbBeautify = new System.Windows.Forms.ToolStripButton();
+            this.tvWebResources = new System.Windows.Forms.TreeView();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -113,13 +113,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(4, 34);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.chkSelectAll);
             this.splitContainer1.Panel1.Controls.Add(this.tvWebResources);
+            this.splitContainer1.Panel1.Controls.Add(this.chkSelectAll);
             // 
             // splitContainer1.Panel2
             // 
@@ -133,38 +133,16 @@
             // 
             // chkSelectAll
             // 
-            this.chkSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkSelectAll.AutoSize = true;
-            this.chkSelectAll.Location = new System.Drawing.Point(4, 676);
-            this.chkSelectAll.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkSelectAll.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.chkSelectAll.Location = new System.Drawing.Point(0, 679);
+            this.chkSelectAll.Margin = new System.Windows.Forms.Padding(4);
             this.chkSelectAll.Name = "chkSelectAll";
-            this.chkSelectAll.Size = new System.Drawing.Size(146, 21);
+            this.chkSelectAll.Size = new System.Drawing.Size(344, 21);
             this.chkSelectAll.TabIndex = 82;
             this.chkSelectAll.Text = "Select/Unselect all";
             this.chkSelectAll.UseVisualStyleBackColor = true;
             this.chkSelectAll.Click += new System.EventHandler(this.ChkSelectAllCheckedChanged);
-            // 
-            // tvWebResources
-            // 
-            this.tvWebResources.AllowDrop = true;
-            this.tvWebResources.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tvWebResources.CheckBoxes = true;
-            this.tvWebResources.HideSelection = false;
-            this.tvWebResources.ImageIndex = 0;
-            this.tvWebResources.ImageList = this.imageList1;
-            this.tvWebResources.Location = new System.Drawing.Point(4, 4);
-            this.tvWebResources.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tvWebResources.Name = "tvWebResources";
-            this.tvWebResources.SelectedImageIndex = 0;
-            this.tvWebResources.Size = new System.Drawing.Size(334, 664);
-            this.tvWebResources.TabIndex = 83;
-            this.tvWebResources.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TvWebResourcesAfterCheck);
-            this.tvWebResources.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TvWebResourcesAfterSelect);
-            this.tvWebResources.DragDrop += new System.Windows.Forms.DragEventHandler(this.tvWebResources_DragDrop);
-            this.tvWebResources.DragOver += new System.Windows.Forms.DragEventHandler(this.tvWebResources_DragOver);
-            this.tvWebResources.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TvWebResourcesMouseDown);
             // 
             // imageList1
             // 
@@ -199,9 +177,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelControl.Location = new System.Drawing.Point(0, 74);
-            this.panelControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelControl.Margin = new System.Windows.Forms.Padding(4);
             this.panelControl.Name = "panelControl";
-            this.panelControl.Size = new System.Drawing.Size(832, 623);
+            this.panelControl.Size = new System.Drawing.Size(831, 623);
             this.panelControl.TabIndex = 4;
             // 
             // toolStripScriptContent
@@ -220,7 +198,7 @@
             this.tsbBeautify});
             this.toolStripScriptContent.Location = new System.Drawing.Point(0, 39);
             this.toolStripScriptContent.Name = "toolStripScriptContent";
-            this.toolStripScriptContent.Size = new System.Drawing.Size(832, 31);
+            this.toolStripScriptContent.Size = new System.Drawing.Size(831, 31);
             this.toolStripScriptContent.TabIndex = 3;
             this.toolStripScriptContent.Text = "toolStripScriptContent";
             this.toolStripScriptContent.Visible = false;
@@ -337,6 +315,17 @@
     "r, so the HTML page could not render or behave as expected";
             this.tsbPreviewHtml.Visible = false;
             this.tsbPreviewHtml.Click += new System.EventHandler(this.TsbPreviewHtmlClick);
+            // 
+            // tsbBeautify
+            // 
+            this.tsbBeautify.Image = ((System.Drawing.Image)(resources.GetObject("tsbBeautify.Image")));
+            this.tsbBeautify.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbBeautify.Name = "tsbBeautify";
+            this.tsbBeautify.Size = new System.Drawing.Size(83, 28);
+            this.tsbBeautify.Text = "Beautify";
+            this.tsbBeautify.ToolTipText = "This feature make uglified JavaScript readable \r\n\r\nThanks to ghost6991 for his wo" +
+    "rk on the beautifier in C# : https://github.com/ghost6991/Jsbeautifier";
+            this.tsbBeautify.Click += new System.EventHandler(this.tsbBeautify_Click);
             // 
             // tsMain
             // 
@@ -677,16 +666,25 @@
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.PropertiesToolStripMenuItemClick);
             // 
-            // tsbBeautify
+            // tvWebResources
             // 
-            this.tsbBeautify.Image = ((System.Drawing.Image)(resources.GetObject("tsbBeautify.Image")));
-            this.tsbBeautify.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbBeautify.Name = "tsbBeautify";
-            this.tsbBeautify.Size = new System.Drawing.Size(83, 28);
-            this.tsbBeautify.Text = "Beautify";
-            this.tsbBeautify.ToolTipText = "This feature make uglified JavaScript readable \r\n\r\nThanks to ghost6991 for his wo" +
-    "rk on the beautifier in C# : https://github.com/ghost6991/Jsbeautifier";
-            this.tsbBeautify.Click += new System.EventHandler(this.tsbBeautify_Click);
+            this.tvWebResources.AllowDrop = true;
+            this.tvWebResources.CheckBoxes = true;
+            this.tvWebResources.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tvWebResources.HideSelection = false;
+            this.tvWebResources.ImageIndex = 0;
+            this.tvWebResources.ImageList = this.imageList1;
+            this.tvWebResources.Location = new System.Drawing.Point(0, 0);
+            this.tvWebResources.Margin = new System.Windows.Forms.Padding(4);
+            this.tvWebResources.Name = "tvWebResources";
+            this.tvWebResources.SelectedImageIndex = 0;
+            this.tvWebResources.Size = new System.Drawing.Size(344, 679);
+            this.tvWebResources.TabIndex = 84;
+            this.tvWebResources.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.TvWebResourcesAfterCheck);
+            this.tvWebResources.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TvWebResourcesAfterSelect);
+            this.tvWebResources.DragDrop += new System.Windows.Forms.DragEventHandler(this.tvWebResources_DragDrop);
+            this.tvWebResources.DragOver += new System.Windows.Forms.DragEventHandler(this.tvWebResources_DragOver);
+            this.tvWebResources.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TvWebResourcesMouseDown);
             // 
             // WebResourcesManager
             // 
@@ -694,7 +692,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.tsMain);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "WebResourcesManager";
             this.Size = new System.Drawing.Size(1200, 738);
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -717,7 +715,6 @@
         private System.Windows.Forms.ImageList imageList2;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.CheckBox chkSelectAll;
-        private System.Windows.Forms.TreeView tvWebResources;
         private System.Windows.Forms.Label lblResourceName;
         private System.Windows.Forms.Panel panelControl;
         private System.Windows.Forms.ToolStrip toolStripScriptContent;
@@ -775,5 +772,6 @@
         private System.Windows.Forms.ToolStripMenuItem loadWebResourcesFromASpecificSolutionToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.ToolStripButton tsbBeautify;
+        private System.Windows.Forms.TreeView tvWebResources;
     }
 }
