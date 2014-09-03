@@ -12,8 +12,11 @@ namespace XrmToolBox
         public List<PluginUseCount> MostUsedList { get; set; }
         public DateTime LastAdvertisementDisplay { get; set; }
 
+        public bool CheckUpdateOnStartup { get; set; }
+
         public Options()
         {
+            CheckUpdateOnStartup = true;
             DisplayLargeIcons = true;
             DisplayMostUsedFirst = false;
             MostUsedList = new List<PluginUseCount>();
@@ -41,6 +44,7 @@ namespace XrmToolBox
         {
             return new Options
                                    {
+                                       CheckUpdateOnStartup = CheckUpdateOnStartup,
                                        DisplayLargeIcons = DisplayLargeIcons,
                                        DisplayMostUsedFirst = DisplayMostUsedFirst,
                                        MostUsedList = MostUsedList,
