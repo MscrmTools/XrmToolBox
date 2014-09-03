@@ -5,8 +5,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Xml;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using McTools.Xrm.Connection;
@@ -118,6 +120,9 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
                         // We need to update the existing view
                         var targetView = CleanEntityForUpdate(savedQueryMetadata, sourceView);
 
+                        // Replace ObjectTypeCode in layoutXml
+                        ReplaceLayoutXmlObjectTypeCode(targetView, targetService);
+
                         try
                         {
                             targetService.Update(targetView);
@@ -131,6 +136,9 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
                     {
                         // We need to create the view
                         var targetView = CleanEntityForCreate(savedQueryMetadata, sourceView);
+
+                        // Replace ObjectTypeCode in layoutXml
+                        ReplaceLayoutXmlObjectTypeCode(targetView, targetService); 
 
                         try
                         {
@@ -176,6 +184,22 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
                 }
             }
             return recordToUpdate;
+        }
+
+        private static void ReplaceLayoutXmlObjectTypeCode(Entity view, IOrganizationService targetService)
+        {
+            // Retrieve Metadata for target entity
+            var response = (RetrieveEntityResponse) targetService.Execute(new RetrieveEntityRequest {LogicalName = view.GetAttributeValue<string>("returntypecode"),EntityFilters = EntityFilters.Entity});
+            var code = response.EntityMetadata.ObjectTypeCode.Value;
+
+            var sXml = view.GetAttributeValue<string>("layoutxml");
+            var xml = new XmlDocument();
+            xml.Load(sXml);
+
+            var gridNode = xml.SelectSingleNode("grid");
+            gridNode.Attributes["object"].Value = code.ToString(CultureInfo.InvariantCulture);
+
+            view["layoutxml"] = xml.OuterXml;
         }
 
         #endregion
