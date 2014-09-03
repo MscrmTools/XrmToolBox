@@ -93,6 +93,7 @@
     <Compile Include="Attributes\SmallImageBase64Attribute.cs" />
     <Compile Include="Attributes\SecondaryFontColorAttribute.cs" />
     <Compile Include="Attributes\PrimaryFontColorAttribute.cs" />
+    <Compile Include="CodeplexVersionChecker.cs" />
     <Compile Include="CrmExceptionHelper.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
@@ -218,7 +219,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

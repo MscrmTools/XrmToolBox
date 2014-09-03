@@ -79,7 +79,8 @@ namespace XrmToolBox
 
             Show();
 
-           
+            var cvc = new CodeplexVersionChecker(Assembly.GetExecutingAssembly().GetName().Version.ToString(), this);
+            cvc.Run();
         }
 
        
