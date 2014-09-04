@@ -35,9 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="antixsslibrary">
-      <HintPath>..\packages\MSDCRM2011SDK.1.0.0.10\lib\net45\antixsslibrary.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
@@ -119,7 +116,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

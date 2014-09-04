@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox", "XrmToolBox\XrmToolBox.csproj", "{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}"
 EndProject
@@ -77,9 +77,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Javista.XrmToolBox.ImportNN
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.UserRolesManager", "Plugins\MsCrmTools.UserRolesManager\MsCrmTools.UserRolesManager.csproj", "{129B49D2-9B84-4FDF-B968-A7FAADE16F0D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.FormAttributeManager", "Plugins\MsCrmTools.FormAttributeManager\MsCrmTools.FormAttributeManager.csproj", "{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 32
+		SccNumberOfProjects = 33
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs24
 		SccLocalPath0 = .
@@ -205,6 +207,10 @@ Global
 		SccProjectTopLevelParentUniqueName31 = XrmToolBox.sln
 		SccProjectName31 = Plugins/MsCrmTools.UserRolesManager
 		SccLocalPath31 = Plugins\\MsCrmTools.UserRolesManager
+		SccProjectUniqueName32 = Plugins\\MsCrmTools.FormAttributeManager\\MsCrmTools.FormAttributeManager.csproj
+		SccProjectTopLevelParentUniqueName32 = XrmToolBox.sln
+		SccProjectName32 = Plugins/MsCrmTools.FormAttributeManager
+		SccLocalPath32 = Plugins\\MsCrmTools.FormAttributeManager
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -522,6 +528,16 @@ Global
 		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D}.Release|x86.ActiveCfg = Release|Any CPU
+		{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -556,5 +572,6 @@ Global
 		{71737D43-3B0A-4709-93F2-ED9C62C836B3} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{6EE0DF38-28E0-4A18-8298-F70D12A12F96} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 	EndGlobalSection
 EndGlobal
