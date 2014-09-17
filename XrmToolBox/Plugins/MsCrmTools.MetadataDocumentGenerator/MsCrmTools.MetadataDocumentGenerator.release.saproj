@@ -1,10 +1,10 @@
-<SmartAssemblyProject ProjectId="{59f0d996-1780-4552-b1b7-109ef4b4294d}" Version="2.0">
-    <MainAssemblyFileName>.\bin\Debug\MsCrmTools.Translator.dll</MainAssemblyFileName>
+<SmartAssemblyProject ProjectId="{9e13e59a-b93d-4dcc-b933-8bc45f34f840}" Version="2.0">
+    <MainAssemblyFileName>.\bin\Release\MsCrmTools.MetadataDocumentGenerator.dll</MainAssemblyFileName>
     <Configuration Name="Release">
         <Options>
             <ExceptionReporting Template="res:{SmartExceptions}.1033.dll" />
             <FeatureUsageReporting Template="res:SmartUsageWithUIConsentFirstRun1033.dll" />
-            <StringsEncoding Encode="0" UseImprovedEncoding="1" />
+            <StringsEncoding Encode="1" UseImprovedEncoding="1" />
             <StrongNameSigning Sign="0" />
             <OtherOptimizations />
             <Obfuscation FieldsNameMangling="3" NameMangling="3" />
@@ -12,7 +12,7 @@
             <Debugging />
         </Options>
         <ApplicationName />
-        <Destination DestinationFileName="..\..\XrmToolBox\bin\Debug\MsCrmTools.Translator.dll" />
+        <Destination DestinationFileName="..\..\XrmToolBox\bin\Release\MsCrmTools.MetadataDocumentGenerator.dll" />
         <Assemblies>
             <Assembly AssemblyName="MsCrmTools.MetadataDocumentGenerator, Culture=neutral, PublicKeyToken=null">
                 <Merging>
@@ -30,7 +30,14 @@
                 <Embedding />
             </Assembly>
             <Assembly AssemblyName="XrmToolBox, Culture=neutral, PublicKeyToken=null">
-                <Merging />
+                <Merging>
+                    <ResourcesCompression />
+                    <MemberRefsProxy />
+                    <StringsEncoding />
+                    <Pruning />
+                    <Obfuscation />
+                    <ControlFlow />
+                </Merging>
                 <Embedding />
             </Assembly>
             <Assembly AssemblyName="McTools.Xrm.Connection.WinForms, Culture=neutral, PublicKeyToken=null">
@@ -56,7 +63,7 @@
                 <Embedding />
             </Assembly>
             <Assembly AssemblyName="GemBox.Document, Culture=neutral, PublicKeyToken=b1b72c69714d4847">
-                <Merging Merge="0">
+                <Merging Merge="1">
                     <Pruning>
                         <Exclusion />
                     </Pruning>
@@ -316,7 +323,7 @@
             <Assembly AssemblyName="Microsoft.Xrm.Client, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
                 <Merging />
             </Assembly>
-            <Assembly AssemblyName="Microsoft.Xrm.Sdk.Deployment, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+            <Assembly AssemblyName="Microsoft.Xrm.Sdk.Deployment, Culture=neutral, PublicKeyToken=31bf3856ad364e35" NotAvailable="1">
                 <Merging />
             </Assembly>
             <Assembly AssemblyName="System.Data.Services, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -324,21 +331,6 @@
             </Assembly>
             <Assembly AssemblyName="System.Windows.Input.Manipulations, Culture=neutral, PublicKeyToken=b77a5c561934e089">
                 <Merging />
-            </Assembly>
-            <Assembly AssemblyName="MsCrmTools.Translator, Culture=neutral, PublicKeyToken=null">
-                <Merging>
-                    <ResourcesCompression />
-                    <MemberRefsProxy />
-                    <StringsEncoding />
-                    <Pruning>
-                        <Exclusion />
-                    </Pruning>
-                    <Obfuscation>
-                        <Exclusion />
-                    </Obfuscation>
-                    <ControlFlow />
-                </Merging>
-                <Embedding />
             </Assembly>
             <Assembly AssemblyName="GemBox.LicenseKey, Culture=neutral, PublicKeyToken=cbe2effbf7c41a7b">
                 <Merging Merge="1">
