@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using MscrmTools.SyncFilterManager.AppCode;
+using MscrmTools.SyncFilterManager.Forms;
 using XrmToolBox;
 
 namespace MscrmTools.SyncFilterManager.Controls
@@ -30,17 +31,24 @@ namespace MscrmTools.SyncFilterManager.Controls
             lvUsers.MultiSelect = selectMultipleUsers;
         }
 
-        public IOrganizationService Service { set { service = value; } }
+        public IOrganizationService Service
+        {
+            set { service = value; }
+        }
 
         [Description("Select Multiple Users"), Category("List")]
-        public bool SelectMultipleUsers { set { lvUsers.MultiSelect = value; } get { return lvUsers.MultiSelect; } }
+        public bool SelectMultipleUsers
+        {
+            set { lvUsers.MultiSelect = value; }
+            get { return lvUsers.MultiSelect; }
+        }
 
         /// <summary>
         /// EventHandler to request a connection to an organization
         /// </summary>
         public event EventHandler OnRequestConnection;
 
-        
+
 
         private void LoadUsers()
         {
@@ -61,7 +69,7 @@ namespace MscrmTools.SyncFilterManager.Controls
 
             var qe = new QueryExpression("systemuser");
             qe.ColumnSet = new ColumnSet(new[] {"systemuserid", "fullname", "businessunitid"});
-            qe.PageInfo = new PagingInfo{Count = 250, PageNumber = 1, ReturnTotalRecordCount = true};
+            qe.PageInfo = new PagingInfo {Count = 250, PageNumber = 1, ReturnTotalRecordCount = true};
             qe.Criteria = new FilterExpression(LogicalOperator.And)
             {
                 Filters =
@@ -70,10 +78,14 @@ namespace MscrmTools.SyncFilterManager.Controls
                     {
                         Conditions =
                         {
-                            new ConditionExpression("fullname", ConditionOperator.BeginsWith, searchTerm.Replace("*", "%")),
-                            new ConditionExpression("domainname", ConditionOperator.BeginsWith, searchTerm.Replace("*", "%")),
-                            new ConditionExpression("firstname", ConditionOperator.BeginsWith, searchTerm.Replace("*", "%")),
-                            new ConditionExpression("lastname", ConditionOperator.BeginsWith, searchTerm.Replace("*", "%"))
+                            new ConditionExpression("fullname", ConditionOperator.BeginsWith,
+                                searchTerm.Replace("*", "%")),
+                            new ConditionExpression("domainname", ConditionOperator.BeginsWith,
+                                searchTerm.Replace("*", "%")),
+                            new ConditionExpression("firstname", ConditionOperator.BeginsWith,
+                                searchTerm.Replace("*", "%")),
+                            new ConditionExpression("lastname", ConditionOperator.BeginsWith,
+                                searchTerm.Replace("*", "%"))
                         }
                     },
                     new FilterExpression
@@ -90,7 +102,9 @@ namespace MscrmTools.SyncFilterManager.Controls
                 result = service.RetrieveMultiple(qe);
                 results.AddRange(result.Entities);
 
-                InformationPanel.ChangeInformationPanelMessage(loadingPanel, string.Format("Retrieving users ({0} %)...", qe.PageInfo.PageNumber * qe.PageInfo.Count / result.TotalRecordCount * 100));
+                InformationPanel.ChangeInformationPanelMessage(loadingPanel,
+                    string.Format("Retrieving users ({0} %)...",
+                        qe.PageInfo.PageNumber*qe.PageInfo.Count/result.TotalRecordCount*100));
 
                 qe.PageInfo.PageNumber++;
 
@@ -108,13 +122,14 @@ namespace MscrmTools.SyncFilterManager.Controls
 
             if (e.Error != null)
             {
-                MessageBox.Show(this, "Error while searching users: " + e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "Error while searching users: " + e.Error.Message, "Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
             }
             else
             {
                 var users = new List<ListViewItem>();
 
-                foreach (var user in (List<Entity>)e.Result)
+                foreach (var user in (List<Entity>) e.Result)
                 {
                     var lvi = new ListViewItem(user.GetAttributeValue<string>("fullname")) {Tag = user};
                     lvi.SubItems.Add(user.GetAttributeValue<EntityReference>("businessunitid").Name);
@@ -167,6 +182,63 @@ namespace MscrmTools.SyncFilterManager.Controls
         internal void Search()
         {
             LoadUsers();
+        }
+
+        internal void ReplaceUserFilters()
+        {
+            if (MessageBox.Show(ParentForm,
+                "Are you sure you want to apply the selected user synchronization filters to other users?",
+                "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            {
+                return;
+            }
+
+            List<Entity> users = null;
+
+            var usDialog = new UserSelectionDialog(service);
+            if (usDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                users = usDialog.SelectedUsers;
+            }
+            else
+            {
+                return;
+            }
+
+            loadingPanel = InformationPanel.GetInformationPanel(this, "Initiating...", 340, 120);
+
+            var bwReplaceFilters = new BackgroundWorker {WorkerReportsProgress = true};
+            bwReplaceFilters.DoWork += bwReplaceFilters_DoWork;
+            bwReplaceFilters.ProgressChanged += bwReplaceFilters_ProgressChanged;
+            bwReplaceFilters.RunWorkerCompleted += bwReplaceFilters_RunWorkerCompleted;
+            bwReplaceFilters.RunWorkerAsync(new object[] {GetSelectedUsers()[0], users});
+        }
+
+        private void bwReplaceFilters_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var worker = (BackgroundWorker) sender;
+            var sourceUser = (Entity) ((object[]) e.Argument)[0];
+            var targetUsers = (List<Entity>) ((object[]) e.Argument)[1];
+
+            var rManager = new RuleManager("userquery", service);
+            rManager.AddRulesFromUser(sourceUser, targetUsers, worker);
+        }
+
+        private void bwReplaceFilters_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            InformationPanel.ChangeInformationPanelMessage(loadingPanel, e.UserState.ToString());
+        }
+
+        private void bwReplaceFilters_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Controls.Remove(loadingPanel);
+            loadingPanel.Dispose();
+
+            if (e.Error != null)
+            {
+                MessageBox.Show(this, "Error while applying filters: " + e.Error.Message, "Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
     }
 }

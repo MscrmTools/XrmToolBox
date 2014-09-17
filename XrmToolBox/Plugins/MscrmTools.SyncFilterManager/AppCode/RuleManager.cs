@@ -8,6 +8,8 @@ using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using MscrmTools.SyncFilterManager.Forms;
 
@@ -246,6 +248,73 @@ namespace MscrmTools.SyncFilterManager.AppCode
             }
 
             ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId = currentId;
+        }
+
+        private void RemoveAllRulesForUser(Guid userId)
+        {
+            var currentId = ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId;
+            ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId = userId;
+
+            var rules = GetRules(new[] { 16, 256 }, new List<Entity> { new Entity("systemuser") { Id = userId } });
+
+            foreach (var rule in rules.Entities)
+            {
+                service.Delete(rule.LogicalName, rule.Id);
+            }
+
+            ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId = currentId;
+        }
+
+        public void AddRulesFromUser(Entity sourceUser, List<Entity> users, BackgroundWorker worker = null)
+        {
+            // Retrieving user filter metadata
+            var emd = (RetrieveEntityResponse)
+                service.Execute(new RetrieveEntityRequest
+                {
+                    EntityFilters = EntityFilters.Attributes,
+                    LogicalName = "userquery"
+                });
+
+            if (worker != null && worker.WorkerReportsProgress)
+            {
+                worker.ReportProgress(0, "Loading source user synchronization filters...");
+            }
+
+            // Retrieve filters for source user
+            var rules = GetRules(new[] { 16, 256 }, new List<Entity> { new Entity("systemuser") { Id = sourceUser.Id } });
+
+            foreach (var targetUser in users)
+            {
+                if (worker != null && worker.WorkerReportsProgress)
+                {
+                    worker.ReportProgress(0, "Removing filters from user " + targetUser.GetAttributeValue<string>("fullname") + "...");
+                }
+
+                // Remove existing rules
+                RemoveAllRulesForUser(targetUser.Id);
+
+                //ApplyRulesToUser(new EntityReferenceCollection(rules.Entities.Where(e=>e.GetAttributeValue<EntityReference>("parentqueryid") != null).Select(e=>e.GetAttributeValue<EntityReference>("parentqueryid")).ToList()), targetUserId);
+
+
+                if (worker != null && worker.WorkerReportsProgress)
+                {
+                    worker.ReportProgress(0, "Adding filters to user " + targetUser.GetAttributeValue<string>("fullname") + "...");
+                }
+
+                // Add source rules to target user
+                foreach (var rule in rules.Entities)
+                {
+                    rule.Id = Guid.Empty;
+                    rule.Attributes.Remove("userqueryid");
+                    rule["ownerid"] = new EntityReference("systemuser", targetUser.Id);
+                    foreach (var amd in emd.EntityMetadata.Attributes.Where(a => a.IsValidForCreate.Value == false))
+                    {
+                        rule.Attributes.Remove(amd.LogicalName);
+                    }
+
+                    service.Create(rule);
+                }
+            }
         }
     }
 }
