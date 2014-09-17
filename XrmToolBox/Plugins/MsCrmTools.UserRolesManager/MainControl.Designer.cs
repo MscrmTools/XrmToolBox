@@ -58,7 +58,7 @@
             this.tsddbRoleActions});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(952, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(1071, 32);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -68,28 +68,28 @@
             this.tsbClose.Image = ((System.Drawing.Image)(resources.GetObject("tsbClose.Image")));
             this.tsbClose.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(23, 24);
+            this.tsbClose.Size = new System.Drawing.Size(23, 29);
             this.tsbClose.Text = "Close this tool";
             this.tsbClose.Click += new System.EventHandler(this.TsbCloseClick);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
             // 
             // tsbLoadCrmItems
             // 
             this.tsbLoadCrmItems.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadCrmItems.Image")));
             this.tsbLoadCrmItems.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbLoadCrmItems.Name = "tsbLoadCrmItems";
-            this.tsbLoadCrmItems.Size = new System.Drawing.Size(220, 24);
+            this.tsbLoadCrmItems.Size = new System.Drawing.Size(262, 29);
             this.tsbLoadCrmItems.Text = "Load Roles, Users and Teams";
             this.tsbLoadCrmItems.Click += new System.EventHandler(this.tsbLoadCrmItems_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 32);
             // 
             // tsddbRoleActions
             // 
@@ -100,36 +100,35 @@
             this.tsddbRoleActions.Image = ((System.Drawing.Image)(resources.GetObject("tsddbRoleActions.Image")));
             this.tsddbRoleActions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbRoleActions.Name = "tsddbRoleActions";
-            this.tsddbRoleActions.Size = new System.Drawing.Size(87, 24);
+            this.tsddbRoleActions.Size = new System.Drawing.Size(100, 29);
             this.tsddbRoleActions.Text = "Actions";
             // 
             // action1ToolStripMenuItem
             // 
             this.action1ToolStripMenuItem.Name = "action1ToolStripMenuItem";
-            this.action1ToolStripMenuItem.Size = new System.Drawing.Size(561, 24);
+            this.action1ToolStripMenuItem.Size = new System.Drawing.Size(661, 30);
             this.action1ToolStripMenuItem.Text = "Add selected roles to selected users or teams";
             this.action1ToolStripMenuItem.Click += new System.EventHandler(this.action1ToolStripMenuItem_Click);
             // 
             // action2ToolStripMenuItem
             // 
             this.action2ToolStripMenuItem.Name = "action2ToolStripMenuItem";
-            this.action2ToolStripMenuItem.Size = new System.Drawing.Size(561, 24);
+            this.action2ToolStripMenuItem.Size = new System.Drawing.Size(661, 30);
             this.action2ToolStripMenuItem.Text = "Remove selected roles from selected users or teams";
             this.action2ToolStripMenuItem.Click += new System.EventHandler(this.action2ToolStripMenuItem_Click);
             // 
             // action3ToolStripMenuItem
             // 
             this.action3ToolStripMenuItem.Name = "action3ToolStripMenuItem";
-            this.action3ToolStripMenuItem.Size = new System.Drawing.Size(561, 24);
+            this.action3ToolStripMenuItem.Size = new System.Drawing.Size(661, 30);
             this.action3ToolStripMenuItem.Text = "Remove exisiting roles then add selected roles to selected users or teams";
             this.action3ToolStripMenuItem.Click += new System.EventHandler(this.action3ToolStripMenuItem_Click);
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(0, 30);
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 32);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -139,8 +138,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.principalSelector1);
-            this.splitContainer1.Size = new System.Drawing.Size(949, 554);
-            this.splitContainer1.SplitterDistance = 452;
+            this.splitContainer1.Size = new System.Drawing.Size(1071, 702);
+            this.splitContainer1.SplitterDistance = 510;
             this.splitContainer1.TabIndex = 2;
             // 
             // roleSelector1
@@ -148,8 +147,9 @@
             this.roleSelector1.AllRoles = null;
             this.roleSelector1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.roleSelector1.Location = new System.Drawing.Point(0, 0);
+            this.roleSelector1.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.roleSelector1.Name = "roleSelector1";
-            this.roleSelector1.Size = new System.Drawing.Size(452, 554);
+            this.roleSelector1.Size = new System.Drawing.Size(510, 702);
             this.roleSelector1.TabIndex = 0;
             // 
             // principalSelector1
@@ -157,18 +157,20 @@
             this.principalSelector1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.principalSelector1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.principalSelector1.Location = new System.Drawing.Point(0, 0);
+            this.principalSelector1.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.principalSelector1.Name = "principalSelector1";
-            this.principalSelector1.Size = new System.Drawing.Size(493, 554);
+            this.principalSelector1.Size = new System.Drawing.Size(557, 702);
             this.principalSelector1.TabIndex = 1;
             // 
             // MainControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.toolStrip1);
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "MainControl";
-            this.Size = new System.Drawing.Size(952, 587);
+            this.Size = new System.Drawing.Size(1071, 734);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
