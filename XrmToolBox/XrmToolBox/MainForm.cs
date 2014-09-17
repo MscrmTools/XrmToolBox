@@ -96,6 +96,7 @@ namespace XrmToolBox
         {
             var welcomeScreen = new WelcomeScreen { StartPosition = FormStartPosition.CenterScreen, MyParentForm = this};
             welcomeScreen.ShowDialog();
+            welcomeScreen.Dispose();
         }
 
         void MainFormMouseWheel(object sender, MouseEventArgs e)

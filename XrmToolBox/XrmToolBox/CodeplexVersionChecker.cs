@@ -13,7 +13,7 @@ namespace XrmToolBox
         private readonly int currentMinorVersion;
         private readonly int currentBuildVersion;
         private readonly int currentRevisionVersion;
-        
+        private Thread th;
         public CodeplexVersionChecker(string currentVersion, Form currentForm)
         {
             this.currentVersion = currentVersion;
@@ -27,7 +27,7 @@ namespace XrmToolBox
 
         public void Run()
         {
-            var th = new Thread(() =>
+            th = new Thread(() =>
             {
                 var mywebBrowser = new WebBrowser();
                 mywebBrowser.DocumentCompleted += mywebBrowser_DocumentCompleted;
@@ -82,6 +82,8 @@ namespace XrmToolBox
                     }
                 }
             }
+
+            th.Abort();
         }
     }
 }
