@@ -427,6 +427,11 @@ namespace MscrmTools.SyncFilterManager.Controls
                 {
                     users = usDialog.SelectedUsers;
                 }
+                else
+                {
+                    return;
+                }
+
             }
 
             if (users == null || users.Count > 0)

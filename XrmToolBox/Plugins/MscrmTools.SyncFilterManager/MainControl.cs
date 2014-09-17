@@ -527,5 +527,10 @@ namespace MscrmTools.SyncFilterManager
         {
             defaultLocalDataRulesView.RenameView();
         }
+
+        private void tsbCopyUserFiltersToUser_Click(object sender, EventArgs e)
+        {
+            crmUserList1.ReplaceUserFilters();
+        }
     }
 }

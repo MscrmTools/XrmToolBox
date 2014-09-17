@@ -30,26 +30,25 @@
         {
             this.lvViews = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // lvViews
             // 
-            this.lvViews.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.lvViews.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader4,
             this.columnHeader2,
             this.columnHeader3});
+            this.lvViews.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvViews.FullRowSelect = true;
             this.lvViews.HideSelection = false;
-            this.lvViews.Location = new System.Drawing.Point(3, 3);
+            this.lvViews.Location = new System.Drawing.Point(0, 0);
+            this.lvViews.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lvViews.Name = "lvViews";
-            this.lvViews.Size = new System.Drawing.Size(693, 459);
+            this.lvViews.Size = new System.Drawing.Size(1048, 715);
             this.lvViews.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvViews.TabIndex = 3;
             this.lvViews.UseCompatibleStateImageBehavior = false;
@@ -61,6 +60,11 @@
             this.columnHeader1.Text = "Name";
             this.columnHeader1.Width = 200;
             // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Type";
+            this.columnHeader4.Width = 100;
+            // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Returned Type";
@@ -71,18 +75,14 @@
             this.columnHeader3.Text = "Description";
             this.columnHeader3.Width = 150;
             // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Type";
-            this.columnHeader4.Width = 100;
-            // 
             // CrmSystemViewList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.lvViews);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "CrmSystemViewList";
-            this.Size = new System.Drawing.Size(699, 465);
+            this.Size = new System.Drawing.Size(1048, 715);
             this.ResumeLayout(false);
 
         }
