@@ -276,8 +276,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"C:\Program Files (x86)\Microsoft\ILMerge\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(TargetDir)MsCrmTools.WebResourcesManager.dll" MsCrmTools.WebResourcesManager.dll ICSharpCode.TextEditor.dll Yahoo.Yui.Compressor.dll EcmaScript.NET.modified.dll
-xcopy /y $(TargetPath) "$(SolutionDir)XrmToolBox\$(OutDir)"
+    <PostBuildEvent>"C:\Program Files (x86)\Microsoft\ILMerge\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(SolutionDir)XrmToolBox\$(OutDir)$(TargetFileName)" MsCrmTools.WebResourcesManager.dll ICSharpCode.TextEditor.dll Yahoo.Yui.Compressor.dll EcmaScript.NET.modified.dll
 </PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
