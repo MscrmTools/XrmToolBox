@@ -235,8 +235,11 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
                                         // Removes existing attributes
                                         for (int i = targetLinkNode.ChildNodes.Count; i > 0; i--)
                                         {
-                                            XmlNode toDelete = targetLinkNode.ChildNodes[i - 1];
-                                            targetLinkNode.RemoveChild(toDelete);
+                                            if (targetLinkNode.ChildNodes[i - 1].Name == "attribute")
+                                            {
+                                                XmlNode toDelete = targetLinkNode.ChildNodes[i - 1];
+                                                targetLinkNode.RemoveChild(toDelete);
+                                            }
                                         }
 
                                         // Adds the attribute nodes from the source node
