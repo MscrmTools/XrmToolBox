@@ -4,11 +4,11 @@ using System.Windows.Forms;
 
 namespace XrmToolBox
 {
-    internal class Worker
+    public class Worker
     {
         private Panel _infoPanel;
 
-        internal void WorkAsync(Control host, string message, Action<DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback)
+        public void WorkAsync(Control host, string message, Action<DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback)
         {
             _infoPanel = InformationPanel.GetInformationPanel(host, message, 340, 100);
 
@@ -28,7 +28,7 @@ namespace XrmToolBox
             worker.RunWorkerAsync();
         }
 
-        internal void WorkAsync(Control host, string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, Action<ProgressChangedEventArgs> progressChanged)
+        public void WorkAsync(Control host, string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, Action<ProgressChangedEventArgs> progressChanged)
         {
             _infoPanel = InformationPanel.GetInformationPanel(host, message, 340, 100);
 
@@ -53,7 +53,7 @@ namespace XrmToolBox
             worker.RunWorkerAsync();
         }
 
-        internal void SetWorkingMessage(Control host, string message, int width = 340, int height = 100)
+        public void SetWorkingMessage(Control host, string message, int width = 340, int height = 100)
         {
             if (host.Controls.Contains(_infoPanel))
             {

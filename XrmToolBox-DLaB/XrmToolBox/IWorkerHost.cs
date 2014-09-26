@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace XrmToolBox
 {
-    internal interface IWorkerHost
+    public interface IWorkerHost
     {
         Control.ControlCollection Controls { get; }
 

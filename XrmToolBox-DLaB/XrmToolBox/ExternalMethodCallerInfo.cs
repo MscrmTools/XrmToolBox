@@ -6,13 +6,13 @@ using System;
 
 namespace XrmToolBox
 {
-    internal class ExternalMethodCallerInfo<T>
+    public class ExternalMethodCallerInfo<T>
     {
         public Action<T> ExternalAction { get; set; }
         public T Parameter { get; set; }
     }
 
-    internal class ExternalMethodCallerInfo
+    public class ExternalMethodCallerInfo
     {
         public Action ExternalAction { get; set; }
 
