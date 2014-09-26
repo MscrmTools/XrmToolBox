@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>GemBox.Document</id>
+    <version>23.3.30.1040</version>
+    <title>GemBox.Document</title>
+    <authors>GemBox Software</authors>
+    <owners>GemBox Software</owners>
+    <licenseUrl>http://www.gemboxsoftware.com/Document/Eula.rtf</licenseUrl>
+    <projectUrl>http://www.gemboxsoftware.com/Document/Overview</projectUrl>
+    <iconUrl>http://www.gemboxsoftware.com/images/nugetgbd.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>GemBox.Document is a .NET component that enables developers to read, write, convert and print document files (DOCX, DOC, PDF, HTML, XPS, TXT) from .NET applications in a simple and efficient way.</description>
+    <summary>GemBox.Document is a .NET component for reading and writing Word (DOCX, DOC), PDF, XPS and HTML documents.</summary>
+    <releaseNotes>- Added support for TextBox element.
+- Added support for DOCX encryption.
+- Improved quality of rendering metafiles (EMF, WMF) in PDF, XPS, image formats and printing.
+- Added support for loading documents from URI locations.
+- Improved loading from HTML: added support for absolute and relative URI images.
+- Various fixes and enhancements in GemBox.Document model and DOC, HTML, PDF and DOCX readers / writers.</releaseNotes>
+    <copyright>Copyright (c) GemBox Software 2013</copyright>
+    <language />
+    <tags>GemBox.Document Word DOCX DOC PDF XPS Print OpenXml Document Processing</tags>
+  </metadata>
+</package>
