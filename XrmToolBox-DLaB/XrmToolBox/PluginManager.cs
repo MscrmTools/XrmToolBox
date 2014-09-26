@@ -57,7 +57,7 @@ namespace XrmToolBox
 
                         foreach (var type in assembly.GetTypes())
                         {
-                            if (type.IsPublic)
+                            if (type.IsPublic && !type.IsAbstract)
                             {
                                 if ((type.Attributes & TypeAttributes.Abstract) != TypeAttributes.Abstract)
                                 {
