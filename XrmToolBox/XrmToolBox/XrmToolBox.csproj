@@ -113,6 +113,7 @@
     <Compile Include="Attributes\PrimaryFontColorAttribute.cs" />
     <Compile Include="CodeplexVersionChecker.cs" />
     <Compile Include="CrmExceptionHelper.cs" />
+    <Compile Include="ExternalMethodCallerInfo.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -138,6 +139,7 @@
       <DependentUpon>WelcomeScreen.cs</DependentUpon>
     </Compile>
     <Compile Include="InformationPanel.cs" />
+    <Compile Include="IWorkerHost.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,6 +148,9 @@
     </Compile>
     <Compile Include="IMsCrmToolsPlugin.cs" />
     <Compile Include="Options.cs" />
+    <Compile Include="PluginBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="PluginManager.cs" />
     <Compile Include="PluginUseCount.cs" />
     <Compile Include="Program.cs" />
@@ -172,6 +177,7 @@
     <Compile Include="UserControls\PluginModel.Designer.cs">
       <DependentUpon>PluginModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Worker.cs" />
     <Compile Include="XmlSerializerHelper.cs" />
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
@@ -258,7 +264,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+            <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
