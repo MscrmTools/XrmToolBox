@@ -19,7 +19,7 @@ namespace XrmToolBox
     /// Fully Implements the IWorkerHost which provides a much nicer api for requesting a connection then calling a method
     /// </summary>
 
-    public abstract class PluginBase : UserControl, IMsCrmToolsPluginUserControl, IWorkerHost
+    public class PluginBase : UserControl, IMsCrmToolsPluginUserControl, IWorkerHost
     {
         public ConnectionDetail ConnectionDetail { get; set; }
 
