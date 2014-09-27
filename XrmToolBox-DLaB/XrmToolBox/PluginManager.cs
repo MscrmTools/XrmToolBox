@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace XrmToolBox
@@ -59,7 +60,8 @@ namespace XrmToolBox
                         {
                             if (type.IsPublic && !type.IsAbstract)
                             {
-                                if ((type.Attributes & TypeAttributes.Abstract) != TypeAttributes.Abstract)
+                                if ((type.Attributes & TypeAttributes.Abstract) != TypeAttributes.Abstract &&
+                                    !type.GetCustomAttributes(typeof(IgnorePluginAttribute), false).Any())
                                 {
                                     var iConnector = type.GetInterface("IMsCrmToolsPluginUserControl", true);
 
