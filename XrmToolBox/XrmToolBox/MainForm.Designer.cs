@@ -59,6 +59,7 @@ namespace XrmToolBox
             this.donateInUSDollarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateInEuroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateInGBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeCurrentTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1.SuspendLayout();
             this.HomePageTab.SuspendLayout();
             this.pnlHelp.SuspendLayout();
@@ -192,6 +193,7 @@ namespace XrmToolBox
             // tsbManageTabs
             // 
             this.tsbManageTabs.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.closeCurrentTabToolStripMenuItem,
             this.closeAllTabsToolStripMenuItem,
             this.closeAllTabsExceptActiveToolStripMenuItem});
             this.tsbManageTabs.Image = ((System.Drawing.Image)(resources.GetObject("tsbManageTabs.Image")));
@@ -321,6 +323,13 @@ namespace XrmToolBox
             this.donateInGBPToolStripMenuItem.Text = "Donate in GBP";
             this.donateInGBPToolStripMenuItem.Click += new System.EventHandler(this.donateInGBPToolStripMenuItem_Click);
             // 
+            // closeCurrentTabToolStripMenuItem
+            // 
+            this.closeCurrentTabToolStripMenuItem.Name = "closeCurrentTabToolStripMenuItem";
+            this.closeCurrentTabToolStripMenuItem.Size = new System.Drawing.Size(286, 30);
+            this.closeCurrentTabToolStripMenuItem.Text = "Close current tab";
+            this.closeCurrentTabToolStripMenuItem.Click += new System.EventHandler(this.closeCurrentTabToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -373,6 +382,7 @@ namespace XrmToolBox
         private System.Windows.Forms.ToolStripButton tsbManageConnections;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem donateInGBPToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem closeCurrentTabToolStripMenuItem;
     }
 }
 

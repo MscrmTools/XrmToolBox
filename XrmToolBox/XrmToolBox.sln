@@ -79,9 +79,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.UserRolesManager
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.FormAttributeManager", "Plugins\MsCrmTools.FormAttributeManager\MsCrmTools.FormAttributeManager.csproj", "{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.UserSettingsUtility", "Plugins\MsCrmTools.UserSettingsUtility\MsCrmTools.UserSettingsUtility.csproj", "{A217441C-677F-43C3-8BD8-FD27586E82AC}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 33
+		SccNumberOfProjects = 34
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs24
 		SccLocalPath0 = .
@@ -211,6 +213,10 @@ Global
 		SccProjectTopLevelParentUniqueName32 = XrmToolBox.sln
 		SccProjectName32 = Plugins/MsCrmTools.FormAttributeManager
 		SccLocalPath32 = Plugins\\MsCrmTools.FormAttributeManager
+		SccProjectUniqueName33 = Plugins\\MsCrmTools.UserSettingsUtility\\MsCrmTools.UserSettingsUtility.csproj
+		SccProjectTopLevelParentUniqueName33 = XrmToolBox.sln
+		SccProjectName33 = Plugins/MsCrmTools.UserSettingsUtility
+		SccLocalPath33 = Plugins\\MsCrmTools.UserSettingsUtility
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -538,6 +544,16 @@ Global
 		{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F}.Release|x86.ActiveCfg = Release|Any CPU
+		{A217441C-677F-43C3-8BD8-FD27586E82AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A217441C-677F-43C3-8BD8-FD27586E82AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A217441C-677F-43C3-8BD8-FD27586E82AC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A217441C-677F-43C3-8BD8-FD27586E82AC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A217441C-677F-43C3-8BD8-FD27586E82AC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A217441C-677F-43C3-8BD8-FD27586E82AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A217441C-677F-43C3-8BD8-FD27586E82AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A217441C-677F-43C3-8BD8-FD27586E82AC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A217441C-677F-43C3-8BD8-FD27586E82AC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A217441C-677F-43C3-8BD8-FD27586E82AC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -573,5 +589,9 @@ Global
 		{6EE0DF38-28E0-4A18-8298-F70D12A12F96} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{129B49D2-9B84-4FDF-B968-A7FAADE16F0D} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{9AC9AF8F-D629-4ED2-AC91-6F62AEA1F93F} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{A217441C-677F-43C3-8BD8-FD27586E82AC} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		BuildVersion_ConfigurationName = Release
 	EndGlobalSection
 EndGlobal

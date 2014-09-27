@@ -113,8 +113,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"C:\Program Files (x86)\Microsoft\ILMerge\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(SolutionDir)XrmToolBox\$(OutDir)$(TargetFileName)" $(TargetDir)MsCrmTools.SolutionImport.dll $(TargetDir)ICSharpCode.SharpZipLib.dll
-xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.SolutionImport.pdb" "$(SolutionDir)XrmToolBox\bin\Debug"
+    <PostBuildEvent>"C:\Program Files (x86)\Microsoft\ILMerge\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(SolutionDir)XrmToolBox\$(OutDir)$(TargetFileName)" "$(TargetDir)MsCrmTools.SolutionImport.dll" "$(TargetDir)ICSharpCode.SharpZipLib.dll"
+xcopy /y "$(TargetDir)MsCrmTools.SolutionImport.pdb" "$(SolutionDir)XrmToolBox\bin\$(ConfigurationName)"
 </PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>

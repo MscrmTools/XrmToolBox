@@ -543,6 +543,12 @@ namespace XrmToolBox
             Process.Start(url);
         }
 
+        private void closeCurrentTabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab.TabIndex != 0)
+                tabControl1.TabPages.RemoveAt(tabControl1.SelectedTab.TabIndex);
+        }
+        
         private void CloseAllTabsToolStripMenuItemClick(object sender, EventArgs e)
         {
             for (int i = tabControl1.TabPages.Count - 1; i > 0; i--)
@@ -583,6 +589,8 @@ namespace XrmToolBox
         {
             fHelper.DisplayConnectionsList(this);
         }
+
+      
 
         
     }
