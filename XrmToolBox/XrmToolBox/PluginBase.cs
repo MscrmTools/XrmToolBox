@@ -87,15 +87,15 @@ namespace XrmToolBox
 
         private readonly Worker _worker = new Worker();
 
-        public void WorkAsync(string message, Action<DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback)
+        public void WorkAsync(object argument, Action<DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, string message, int messageWidth = 340, int messageHeight = 150)
         {
-            _worker.WorkAsync(this, message, work, callback);
+            _worker.WorkAsync(this, argument, work, callback, message, messageWidth, messageHeight);
         }
 
-        public void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback,
-                              Action<ProgressChangedEventArgs> progressChanged)
+        public void WorkAsync(object argument, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback,
+                              Action<ProgressChangedEventArgs> progressChanged, string message, int messageWidth = 340, int messageHeight = 150)
         {
-            _worker.WorkAsync(this, message, work, callback, progressChanged);
+            _worker.WorkAsync(this, argument, work, callback, progressChanged, message, messageWidth, messageHeight);
         }
 
         public void SetWorkingMessage(string message, int width = 340, int height = 100)

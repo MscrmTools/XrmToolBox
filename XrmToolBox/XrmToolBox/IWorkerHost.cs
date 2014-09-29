@@ -12,11 +12,11 @@ namespace XrmToolBox
     {
         Control.ControlCollection Controls { get; }
 
-        void WorkAsync(string message, Action<DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback);
+        void WorkAsync(object argument, Action<DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, string message, int messageWidth, int messageHeight);
 
-        void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, Action<ProgressChangedEventArgs> progressChanged);
+        void WorkAsync(object argument, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, Action<ProgressChangedEventArgs> progressChanged, string message, int messageWidth, int messageHeight);
 
-        void SetWorkingMessage(string message, int width, int height);
+        void SetWorkingMessage(string message, int messageWidth, int messageHeight);
 
         void RaiseRequestConnectionEvent(RequestConnectionEventArgs args);
     }
