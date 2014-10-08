@@ -7,7 +7,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 
 namespace MsCrmTools.FormAttributeManager.AppCode
 {
-    internal class FormInfo
+    public class FormInfo
     {
         private readonly Entity form;
 
@@ -292,7 +292,7 @@ namespace MsCrmTools.FormAttributeManager.AppCode
             }
         }
 
-        internal bool HasAttribute(string attributeLogicalName)
+        public bool HasAttribute(string attributeLogicalName)
         {
             try
             {
