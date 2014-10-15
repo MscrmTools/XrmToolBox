@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
@@ -61,9 +59,9 @@ namespace MsCrmTools.UserSettingsUtility.AppCode
                 record["autocreatecontactonpromote"] = settings.AutoCreateContactOnPromote;
             if (settings.DefaultCalendarView >= 0)
                 record["defaultcalendarview"] = settings.DefaultCalendarView;
-            if (settings.HomePageArea.Length > 0 && settings.HomePageArea != "Default")
+            if (settings.HomePageArea.Length > 0 && settings.HomePageArea != "No change")
                 record["homepagearea"] = settings.HomePageArea;
-            if (settings.HomePageSubArea.Length > 0 && settings.HomePageSubArea != "Default")
+            if (settings.HomePageSubArea.Length > 0 && settings.HomePageSubArea != "No change")
                 record["homepagesubarea"] = settings.HomePageSubArea;
             if (settings.IncomingEmailFilteringMethod >= 0)
                 record["incomingemailfilteringmethod"] = new OptionSetValue(settings.IncomingEmailFilteringMethod);
@@ -71,9 +69,9 @@ namespace MsCrmTools.UserSettingsUtility.AppCode
                 record["paginglimit"] = settings.PagingLimit.Value;
             if (settings.TimeZoneCode >= 0)
                 record["timezonecode"] = settings.TimeZoneCode;
-            if (settings.WorkdayStartTime.Length > 0 && settings.WorkdayStartTime != "Default")
+            if (settings.WorkdayStartTime.Length > 0 && settings.WorkdayStartTime != "No change")
                 record["workdaystarttime"] = settings.WorkdayStartTime;
-            if (settings.WorkdayStopTime.Length > 0 && settings.WorkdayStopTime != "Default")
+            if (settings.WorkdayStopTime.Length > 0 && settings.WorkdayStopTime != "No change")
                 record["workdaystoptime"] = settings.WorkdayStopTime;
             if (settings.ReportScriptErrors >= 1)
                 record["reportscripterrors"] = new OptionSetValue(settings.ReportScriptErrors);
@@ -85,6 +83,8 @@ namespace MsCrmTools.UserSettingsUtility.AppCode
                 record["helplanguageid"] = settings.HelpLanguage.Value;
             if (settings.Currency != null)
                 record["transactioncurrencyid"] = settings.Currency;
+            if (settings.StartupPaneEnabled.HasValue)
+                record["getstartedpanecontentenabled"] = settings.StartupPaneEnabled.Value;
 
             service.Update(record);
 

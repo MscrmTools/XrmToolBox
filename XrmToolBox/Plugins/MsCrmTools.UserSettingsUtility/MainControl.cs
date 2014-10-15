@@ -232,6 +232,11 @@ namespace MsCrmTools.UserSettingsUtility
                 setting.Currency = ((Currency)cbbCurrencies.SelectedItem).CurrencyReference;
             }
 
+            if (cbbStartupPane.SelectedIndex != 0)
+            {
+                setting.StartupPaneEnabled = cbbStartupPane.SelectedIndex == 2;
+            }
+
             #endregion
 
             WorkAsync("Initializing update...",
