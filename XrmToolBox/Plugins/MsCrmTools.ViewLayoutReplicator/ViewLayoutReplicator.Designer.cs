@@ -34,8 +34,6 @@
             this.lvEntities = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.gbSourceViewLayout = new System.Windows.Forms.GroupBox();
-            this.lvSourceViewLayoutPreview = new System.Windows.Forms.ListView();
             this.gbTargetViews = new System.Windows.Forms.GroupBox();
             this.lvTargetViews = new System.Windows.Forms.ListView();
             this.viewName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -54,11 +52,11 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.gbSourceViews = new System.Windows.Forms.GroupBox();
+            this.lvSourceViewLayoutPreview = new System.Windows.Forms.ListView();
             this.lvSourceViews = new System.Windows.Forms.ListView();
             this.allViewName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.allViewType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.gbEntities.SuspendLayout();
-            this.gbSourceViewLayout.SuspendLayout();
             this.gbTargetViews.SuspendLayout();
             this.tsMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -114,33 +112,6 @@
             // 
             this.columnHeader2.Text = "Logical name";
             this.columnHeader2.Width = 100;
-            // 
-            // gbSourceViewLayout
-            // 
-            this.gbSourceViewLayout.Controls.Add(this.lvSourceViewLayoutPreview);
-            this.gbSourceViewLayout.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.gbSourceViewLayout.Enabled = false;
-            this.gbSourceViewLayout.Location = new System.Drawing.Point(0, 207);
-            this.gbSourceViewLayout.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gbSourceViewLayout.Name = "gbSourceViewLayout";
-            this.gbSourceViewLayout.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gbSourceViewLayout.Size = new System.Drawing.Size(807, 138);
-            this.gbSourceViewLayout.TabIndex = 88;
-            this.gbSourceViewLayout.TabStop = false;
-            this.gbSourceViewLayout.Text = "Source view layout";
-            // 
-            // lvSourceViewLayoutPreview
-            // 
-            this.lvSourceViewLayoutPreview.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvSourceViewLayoutPreview.ForeColor = System.Drawing.Color.Black;
-            this.lvSourceViewLayoutPreview.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.lvSourceViewLayoutPreview.Location = new System.Drawing.Point(4, 24);
-            this.lvSourceViewLayoutPreview.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.lvSourceViewLayoutPreview.Name = "lvSourceViewLayoutPreview";
-            this.lvSourceViewLayoutPreview.Size = new System.Drawing.Size(799, 109);
-            this.lvSourceViewLayoutPreview.TabIndex = 66;
-            this.lvSourceViewLayoutPreview.UseCompatibleStateImageBehavior = false;
-            this.lvSourceViewLayoutPreview.View = System.Windows.Forms.View.Details;
             // 
             // gbTargetViews
             // 
@@ -312,7 +283,6 @@
             // splitContainer2.Panel1
             // 
             this.splitContainer2.Panel1.Controls.Add(this.gbSourceViews);
-            this.splitContainer2.Panel1.Controls.Add(this.gbSourceViewLayout);
             // 
             // splitContainer2.Panel2
             // 
@@ -324,16 +294,30 @@
             // gbSourceViews
             // 
             this.gbSourceViews.Controls.Add(this.lvSourceViews);
+            this.gbSourceViews.Controls.Add(this.lvSourceViewLayoutPreview);
             this.gbSourceViews.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbSourceViews.Enabled = false;
             this.gbSourceViews.Location = new System.Drawing.Point(0, 0);
             this.gbSourceViews.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.gbSourceViews.Name = "gbSourceViews";
             this.gbSourceViews.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gbSourceViews.Size = new System.Drawing.Size(807, 207);
+            this.gbSourceViews.Size = new System.Drawing.Size(807, 345);
             this.gbSourceViews.TabIndex = 89;
             this.gbSourceViews.TabStop = false;
             this.gbSourceViews.Text = "Source Views";
+            // 
+            // lvSourceViewLayoutPreview
+            // 
+            this.lvSourceViewLayoutPreview.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lvSourceViewLayoutPreview.ForeColor = System.Drawing.Color.Black;
+            this.lvSourceViewLayoutPreview.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.lvSourceViewLayoutPreview.Location = new System.Drawing.Point(4, 239);
+            this.lvSourceViewLayoutPreview.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.lvSourceViewLayoutPreview.Name = "lvSourceViewLayoutPreview";
+            this.lvSourceViewLayoutPreview.Size = new System.Drawing.Size(799, 101);
+            this.lvSourceViewLayoutPreview.TabIndex = 67;
+            this.lvSourceViewLayoutPreview.UseCompatibleStateImageBehavior = false;
+            this.lvSourceViewLayoutPreview.View = System.Windows.Forms.View.Details;
             // 
             // lvSourceViews
             // 
@@ -346,14 +330,13 @@
             this.lvSourceViews.Location = new System.Drawing.Point(4, 24);
             this.lvSourceViews.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lvSourceViews.Name = "lvSourceViews";
-            this.lvSourceViews.Size = new System.Drawing.Size(799, 178);
+            this.lvSourceViews.Size = new System.Drawing.Size(799, 215);
             this.lvSourceViews.SmallImageList = this.imageList1;
             this.lvSourceViews.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.lvSourceViews.TabIndex = 63;
+            this.lvSourceViews.TabIndex = 68;
             this.lvSourceViews.UseCompatibleStateImageBehavior = false;
             this.lvSourceViews.View = System.Windows.Forms.View.Details;
-            this.lvSourceViews.SelectedIndexChanged += new System.EventHandler(this.LvSourceViewsSelectedIndexChanged);
-            this.lvSourceViews.DoubleClick += new System.EventHandler(this.LvSourceViewsDoubleClick);
+            this.lvSourceViews.Click += new System.EventHandler(this.LvSourceViewsSelectedIndexChanged);
             // 
             // allViewName
             // 
@@ -375,7 +358,6 @@
             this.Name = "ViewLayoutReplicator";
             this.Size = new System.Drawing.Size(1216, 794);
             this.gbEntities.ResumeLayout(false);
-            this.gbSourceViewLayout.ResumeLayout(false);
             this.gbTargetViews.ResumeLayout(false);
             this.tsMain.ResumeLayout(false);
             this.tsMain.PerformLayout();
@@ -397,8 +379,6 @@
         private System.Windows.Forms.GroupBox gbEntities;
         private System.Windows.Forms.ListView lvEntities;
         private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.GroupBox gbSourceViewLayout;
-        private System.Windows.Forms.ListView lvSourceViewLayoutPreview;
         private System.Windows.Forms.GroupBox gbTargetViews;
         private System.Windows.Forms.ListView lvTargetViews;
         private System.Windows.Forms.ColumnHeader viewName;
@@ -421,5 +401,6 @@
         private System.Windows.Forms.ListView lvSourceViews;
         private System.Windows.Forms.ColumnHeader allViewName;
         private System.Windows.Forms.ColumnHeader allViewType;
+        private System.Windows.Forms.ListView lvSourceViewLayoutPreview;
     }
 }

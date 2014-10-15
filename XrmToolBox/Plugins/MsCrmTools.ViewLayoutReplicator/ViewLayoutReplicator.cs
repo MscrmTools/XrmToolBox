@@ -512,7 +512,7 @@ namespace MsCrmTools.ViewLayoutReplicator
 
                 ListViewDelegates.AddItem(lvSourceViewLayoutPreview, item);
 
-                GroupBoxDelegates.SetEnableState(gbSourceViewLayout, true);
+                ListViewDelegates.SetEnableState(lvSourceViewLayoutPreview, true);
             }
             catch (Exception error)
             {
