@@ -89,6 +89,7 @@
     <Compile Include="AppCode\LabelMd\LabelCollection.cs" />
     <Compile Include="AppCode\LabelMd\LabelInfo.cs" />
     <Compile Include="AppCode\LabelMd\LabelPropertyDescriptor.cs" />
+    <Compile Include="AppCode\ListViewColumnsSettings.cs" />
     <Compile Include="AppCode\ListViewItemComparer.cs" />
     <Compile Include="AppCode\LocalizedLabelMd\LocalizedLabelCollection.cs" />
     <Compile Include="AppCode\LocalizedLabelMd\LocalizedLabelInfo.cs" />
@@ -129,6 +130,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\ColumnSettingsUpdatedEventArgs.cs" />
+    <Compile Include="UserControls\EntityPropertiesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\EntityPropertiesControl.Designer.cs">
+      <DependentUpon>EntityPropertiesControl.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\ColumnSelector.resx">
@@ -140,6 +148,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\EntityPropertiesControl.resx">
+      <DependentUpon>EntityPropertiesControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

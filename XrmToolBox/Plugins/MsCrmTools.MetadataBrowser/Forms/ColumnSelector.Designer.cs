@@ -40,6 +40,7 @@
             this.tsbDown = new System.Windows.Forms.ToolStripButton();
             this.attributeListView = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btnResetToDefault = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -47,6 +48,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btnResetToDefault);
             this.panel1.Controls.Add(this.btnOK);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -156,6 +158,17 @@
             this.columnHeader1.Text = "Attribute";
             this.columnHeader1.Width = 400;
             // 
+            // btnResetToDefault
+            // 
+            this.btnResetToDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnResetToDefault.Location = new System.Drawing.Point(380, 12);
+            this.btnResetToDefault.Name = "btnResetToDefault";
+            this.btnResetToDefault.Size = new System.Drawing.Size(216, 35);
+            this.btnResetToDefault.TabIndex = 2;
+            this.btnResetToDefault.Text = "Reset to default";
+            this.btnResetToDefault.UseVisualStyleBackColor = true;
+            this.btnResetToDefault.Click += new System.EventHandler(this.btnResetToDefault_Click);
+            // 
             // ColumnSelector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -192,5 +205,6 @@
         private System.Windows.Forms.ToolStripButton tsbDown;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Button btnResetToDefault;
     }
 }

@@ -37,6 +37,13 @@ namespace MsCrmTools.MetadataBrowser.Forms
             {
                 var dico = new Dictionary<int, ListViewItem>();
 
+                foreach (var attrName in firstColumns)
+                {
+                    var item = new ListViewItem(attrName) {ForeColor = Color.Gray, Checked = true};
+                    var index = Array.IndexOf(firstColumns, attrName);
+                    dico.Add(index, item);
+                }
+
                 foreach (var prop in type.GetProperties())
                 {
                     if (firstColumns.Contains(prop.Name) || attributeToIgnore.Contains(prop.Name))
@@ -44,23 +51,8 @@ namespace MsCrmTools.MetadataBrowser.Forms
                         continue;
                     }
 
-                    var item = new ListViewItem(prop.Name);
-                    var index = Array.IndexOf(currentAttributes, prop.Name);
-
-                    if (index >= 0)
-                    {
-                        if (index <= firstColumns.Length - 1)
-                        {
-                            item.ForeColor = Color.Gray;
-                        }
-
-                        item.Checked = true;
-                        dico.Add(index, item);
-                    }
-                    else
-                    {
-                        dico.Add(dico.Count + 1000, item);
-                    }
+                    var item = new ListViewItem(prop.Name){Checked = currentAttributes.Contains(prop.Name)};
+                    dico.Add(dico.Count + (currentAttributes.Contains(prop.Name) ? 1000 : 2000), item);
                 }
 
                 list = dico.OrderBy(x => x.Key).Select(x => x.Value).ToList();
@@ -131,6 +123,14 @@ namespace MsCrmTools.MetadataBrowser.Forms
         private void btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void btnResetToDefault_Click(object sender, EventArgs e)
+        {
+            currentAttributes = null;
+
+            DialogResult = DialogResult.OK;
             Close();
         }
     }
