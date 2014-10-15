@@ -64,7 +64,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.cbbAdvancedFindMode = new System.Windows.Forms.ComboBox();
-            this.comboBox10 = new System.Windows.Forms.ComboBox();
+            this.cbbStartupPane = new System.Windows.Forms.ComboBox();
             this.gbPrivacy = new System.Windows.Forms.GroupBox();
             this.label13 = new System.Windows.Forms.Label();
             this.cbbReportScriptErrors = new System.Windows.Forms.ComboBox();
@@ -526,7 +526,7 @@
             this.gbGeneral.Controls.Add(this.label12);
             this.gbGeneral.Controls.Add(this.label11);
             this.gbGeneral.Controls.Add(this.cbbAdvancedFindMode);
-            this.gbGeneral.Controls.Add(this.comboBox10);
+            this.gbGeneral.Controls.Add(this.cbbStartupPane);
             this.gbGeneral.Controls.Add(this.cbbSiteMapSubArea);
             this.gbGeneral.Controls.Add(this.cbbSiteMapArea);
             this.gbGeneral.Controls.Add(this.cbbPagingLimit);
@@ -609,17 +609,21 @@
             this.cbbAdvancedFindMode.Size = new System.Drawing.Size(438, 28);
             this.cbbAdvancedFindMode.TabIndex = 58;
             // 
-            // comboBox10
+            // cbbStartupPane
             // 
-            this.comboBox10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cbbStartupPane.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox10.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox10.FormattingEnabled = true;
-            this.comboBox10.Location = new System.Drawing.Point(234, 168);
-            this.comboBox10.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.comboBox10.Name = "comboBox10";
-            this.comboBox10.Size = new System.Drawing.Size(438, 28);
-            this.comboBox10.TabIndex = 57;
+            this.cbbStartupPane.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbStartupPane.FormattingEnabled = true;
+            this.cbbStartupPane.Items.AddRange(new object[] {
+            "No change",
+            "False",
+            "True"});
+            this.cbbStartupPane.Location = new System.Drawing.Point(234, 168);
+            this.cbbStartupPane.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbbStartupPane.Name = "cbbStartupPane";
+            this.cbbStartupPane.Size = new System.Drawing.Size(438, 28);
+            this.cbbStartupPane.TabIndex = 57;
             // 
             // gbPrivacy
             // 
@@ -807,7 +811,7 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ComboBox cbbAdvancedFindMode;
-        private System.Windows.Forms.ComboBox comboBox10;
+        private System.Windows.Forms.ComboBox cbbStartupPane;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.ComboBox cbbHelpLanguage;
         private System.Windows.Forms.Label label14;

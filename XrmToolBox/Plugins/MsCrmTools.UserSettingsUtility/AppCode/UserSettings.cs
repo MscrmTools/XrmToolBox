@@ -36,5 +36,6 @@ namespace MsCrmTools.UserSettingsUtility.AppCode
         public int? UiLanguage { get; set; }
 
         public EntityReference Currency { get; set; }
+        public bool? StartupPaneEnabled { get; set; }
     }
 }
