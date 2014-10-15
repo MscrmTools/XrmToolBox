@@ -11,7 +11,7 @@ using MsCrmTools.MetadataBrowser.AppCode.SecurityPrivilege;
 
 namespace MsCrmTools.MetadataBrowser.AppCode
 {
-    internal class EntityMetadataInfo
+    public class EntityMetadataInfo
     {
         private readonly EntityMetadata emd;
 

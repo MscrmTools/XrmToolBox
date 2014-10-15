@@ -19,7 +19,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
             get { return amd.DefaultFormValue.Value; }
         }
 
-        [TypeConverter(typeof (OptionSetMetadataCollectionConverter))]
+        [TypeConverter(typeof(OptionSetAttributeMetadataInfoConverter))]
         public OptionSetMetadataInfo OptionSet
         {
             get { return new OptionSetMetadataInfo(amd.OptionSet); }

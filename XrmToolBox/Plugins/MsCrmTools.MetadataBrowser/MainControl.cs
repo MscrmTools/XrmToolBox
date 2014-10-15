@@ -13,6 +13,7 @@ using MsCrmTools.MetadataBrowser.AppCode.OneToManyRelationship;
 using MsCrmTools.MetadataBrowser.AppCode.SecurityPrivilege;
 using MsCrmTools.MetadataBrowser.Forms;
 using MsCrmTools.MetadataBrowser.Helpers;
+using MsCrmTools.MetadataBrowser.UserControls;
 using XrmToolBox;
 using XrmToolBox.Attributes;
 
@@ -25,45 +26,14 @@ namespace MsCrmTools.MetadataBrowser
 {
     public partial class MainControl : PluginBase
     {
-        private readonly string[] entityFirstColumns = { "LogicalName", "SchemaName", "ObjectTypeCode" };
-        private readonly string[] entityAttributesToIgnore = { "Attributes", "Privileges", "OneToManyRelationships", "ManyToOneRelationships", "ManyToManyRelationships" };
-        private readonly string[] attributeFirstColumns = { "LogicalName", "SchemaName", "AttributeType" };
-        private readonly string[] relFirstColumns = { "SchemaName" };
-        private readonly string[] privFirstColumns = { "Name" };
-        private string[] entitySelectedAttributes;
-        private string[] attributeSelectedAttributes;
-        private string[] otmRelSelectedAttributes;
-        private string[] mtmRelSelectedAttributes;
-        private string[] privSelectedAttributes;
-        
+        private ListViewColumnsSettings lvcSettings;        
         private EntityMetadata[] currentAllMetadata;
         private EntityMetadata currentMetadata;
    
         public MainControl()
         {
             InitializeComponent();
-
-            entitySplitContainer.Panel2Collapsed = true;
-            attributesSplitContainer.Panel2Collapsed = true;
-            manyToManySplitContainer.Panel2Collapsed = true;
-            manyToOneSplitContainer.Panel2Collapsed = true;
-            oneToManySplitContainer.Panel2Collapsed = true;
-            privilegeSplitContainer.Panel2Collapsed = true;
-
-            var settings = SettingsHelper.LoadSettings();
-            if (settings != null)
-            {
-                if(settings[0].Length > 0)
-                    entitySelectedAttributes = settings[0].Split(';');
-                if (settings[1].Length > 0)
-                    attributeSelectedAttributes = settings[1].Split(';');
-                if (settings[2].Length > 0)
-                    otmRelSelectedAttributes = settings[2].Split(';');
-                if (settings[3].Length > 0)
-                    mtmRelSelectedAttributes = settings[3].Split(';');
-                if (settings[4].Length > 0)
-                    privSelectedAttributes = settings[4].Split(';');
-            }
+            lvcSettings = ListViewColumnsSettings.LoadSettings();
         }
 
         private void tsbClose_Click(object sender, EventArgs e)
@@ -78,17 +48,9 @@ namespace MsCrmTools.MetadataBrowser
 
         private void LoadEntities()
         {
-            entitySplitContainer.Panel1Collapsed = false;
-            entitySplitContainer.Panel2Collapsed = true;
-
             // Loads listview header column for entities
-            ListViewColumnHelper.AddColumnsHeader(entityListView, typeof(EntityMetadataInfo), entityFirstColumns, entitySelectedAttributes, entityAttributesToIgnore);
-            ListViewColumnHelper.AddColumnsHeader(attributeListView, typeof(AttributeMetadataInfo), attributeFirstColumns, attributeSelectedAttributes, new string[]{});
-            ListViewColumnHelper.AddColumnsHeader(OneToManyListView, typeof(OneToManyRelationshipMetadataInfo), relFirstColumns, otmRelSelectedAttributes, new string[] { });
-            ListViewColumnHelper.AddColumnsHeader(manyToOneListView, typeof(OneToManyRelationshipMetadataInfo), relFirstColumns, otmRelSelectedAttributes, new string[] { });
-            ListViewColumnHelper.AddColumnsHeader(manyToManyListView, typeof(ManyToManyRelationshipMetadataInfo), relFirstColumns, mtmRelSelectedAttributes, new string[] { });
-            ListViewColumnHelper.AddColumnsHeader(privilegeListView, typeof(SecurityPrivilegeInfo), privFirstColumns, privSelectedAttributes, new string[] { });
-
+            ListViewColumnHelper.AddColumnsHeader(entityListView, typeof(EntityMetadataInfo), ListViewColumnsSettings.EntityFirstColumns, lvcSettings.EntitySelectedAttributes, ListViewColumnsSettings.EntityAttributesToIgnore);
+          
             WorkAsync("Loading Entities...",
                 e =>
                 {
@@ -111,6 +73,8 @@ namespace MsCrmTools.MetadataBrowser
 
         private List<ListViewItem> BuildEntityItems(IEnumerable<EntityMetadata> emds)
         {
+            if (emds == null) return new List<ListViewItem>();
+
             var items = new List<ListViewItem>();
 
             // Stores each property in a listviewitem
@@ -121,7 +85,7 @@ namespace MsCrmTools.MetadataBrowser
                 var item = new ListViewItem(emd.LogicalName) { Tag = metadata };
                 item.SubItems.Add(emd.SchemaName);
                 item.SubItems.Add(emd.ObjectTypeCode.ToString(CultureInfo.InvariantCulture));
-                AddSecondarySubItems(typeof(EntityMetadataInfo), entityFirstColumns, entitySelectedAttributes, emd, item);
+                AddSecondarySubItems(typeof(EntityMetadataInfo), ListViewColumnsSettings.EntityFirstColumns, lvcSettings.EntitySelectedAttributes, emd, item);
 
                 items.Add(item);
             }
@@ -155,112 +119,45 @@ namespace MsCrmTools.MetadataBrowser
                 wce =>
                 {
                     var emdFull = (EntityMetadata) wce.Result;
-                    var emdInfoFull = new EntityMetadataInfo(emdFull);
-                    entityPropertyGrid.SelectedObject = emdInfoFull;
-                    currentMetadata = emdFull;
 
-                    LoadAttributes(emdFull.Attributes);
-                    LoadOneToManyRelationships(emdFull.OneToManyRelationships);
-                    LoadManyToOneRelationships(emdFull.ManyToOneRelationships);
-                    LoadManyToManyRelationships(emdFull.ManyToManyRelationships);
-                    LoadPrivileges(emdFull.Privileges);
+                    TabPage tab;
+                    if (mainTabControl.TabPages.ContainsKey(emd.SchemaName))
+                    {
+                        tab = mainTabControl.TabPages[emd.SchemaName];
+                        ((EntityPropertiesControl)tab.Controls[0]).RefreshContent(emdFull);
+                    }
+                    else
+                    {
+                        mainTabControl.TabPages.Add(emd.SchemaName,emd.SchemaName);
+                        tab = mainTabControl.TabPages[emd.SchemaName];
 
-                    entitySplitContainer.Panel1Collapsed = true;
-                    entitySplitContainer.Panel2Collapsed = false;
-                    tsbEntityColumns.Visible = false;
+                        var epc = new EntityPropertiesControl(emdFull, lvcSettings)
+                        {
+                            Dock = DockStyle.Fill,
+                            Name = emdFull.SchemaName
+                        };
+                        epc.OnColumnSettingsUpdated += epc_OnColumnSettingsUpdated;
+                        tab.Controls.Add(epc);
+                        mainTabControl.SelectTab(tab);
+                    }
                 },
                 emd);
         }
 
-        private void LoadAttributes(IEnumerable<AttributeMetadata> attributes)
+        void epc_OnColumnSettingsUpdated(object sender, ColumnSettingsUpdatedEventArgs e)
         {
-            var items = new List<ListViewItem>();
+            lvcSettings = (ListViewColumnsSettings)e.Settings.Clone();
+            lvcSettings.SaveSettings();
 
-            foreach (var attribute in attributes.ToList().OrderBy(a=>a.LogicalName))
+            foreach (TabPage page in mainTabControl.TabPages)
             {
-                var amd = new AttributeMetadataInfo(attribute);
-
-                var item = new ListViewItem(amd.LogicalName) { Tag = amd };
-                item.SubItems.Add(amd.SchemaName);
-                item.SubItems.Add(amd.AttributeType.ToString());
-                AddSecondarySubItems(typeof(AttributeMetadataInfo), attributeFirstColumns, attributeSelectedAttributes, amd, item);
-                   
-                items.Add(item);
+                if (page.TabIndex == 0) continue;
+                var ctrl = ((EntityPropertiesControl)page.Controls[0]);
+                if (ctrl.Name != e.Control.Name)
+                {
+                    ctrl.RefreshColumns(lvcSettings);
+                }
             }
-            attributeListView.Items.Clear();
-            attributeListView.Items.AddRange(items.ToArray());
-        }
-
-        private void LoadOneToManyRelationships(IEnumerable<OneToManyRelationshipMetadata> rels)
-        {
-            var items = new List<ListViewItem>();
-
-            foreach (var rel in rels.ToList().OrderBy(a => a.ReferencingEntity))
-            {
-                var rmd = new OneToManyRelationshipMetadataInfo(rel);
-
-                var item = new ListViewItem(rmd.SchemaName) { Tag = rmd };
-                AddSecondarySubItems(typeof(OneToManyRelationshipMetadataInfo), relFirstColumns, otmRelSelectedAttributes, rmd, item);
-               
-                items.Add(item);
-            }
-
-            OneToManyListView.Items.Clear();
-            OneToManyListView.Items.AddRange(items.ToArray());
-        }
-
-        private void LoadManyToOneRelationships(IEnumerable<OneToManyRelationshipMetadata> rels)
-        {
-            var items = new List<ListViewItem>();
-
-            foreach (var rel in rels.ToList().OrderBy(a => a.ReferencedAttribute))
-            {
-                var rmd = new OneToManyRelationshipMetadataInfo(rel);
-
-                var item = new ListViewItem(rmd.SchemaName) { Tag = rmd };
-                AddSecondarySubItems(typeof(OneToManyRelationshipMetadataInfo), relFirstColumns, otmRelSelectedAttributes, rmd, item);
-               
-                items.Add(item);
-            }
-
-            manyToOneListView.Items.Clear();
-            manyToOneListView.Items.AddRange(items.ToArray());
-        }
-
-        private void LoadManyToManyRelationships(IEnumerable<ManyToManyRelationshipMetadata> rels)
-        {
-            var items = new List<ListViewItem>();
-
-            foreach (var rel in rels.ToList().OrderBy(a => a.Entity2LogicalName))
-            {
-                var rmd = new ManyToManyRelationshipMetadataInfo(rel);
-
-                var item = new ListViewItem(rmd.SchemaName) { Tag = rmd };
-                AddSecondarySubItems(typeof(ManyToManyRelationshipMetadataInfo), relFirstColumns,mtmRelSelectedAttributes, rmd, item);
-             
-                items.Add(item);
-            }
-
-            manyToManyListView.Items.Clear();
-            manyToManyListView.Items.AddRange(items.ToArray());
-        }
-
-        private void LoadPrivileges(IEnumerable<SecurityPrivilegeMetadata> privileges)
-        {
-            var items = new List<ListViewItem>();
-
-            foreach (var privilege in privileges.ToList().OrderBy(a => a.Name))
-            {
-                var pmd = new SecurityPrivilegeInfo(privilege);
-
-                var item = new ListViewItem(pmd.Name) { Tag = pmd };
-                AddSecondarySubItems(typeof(SecurityPrivilegeInfo), relFirstColumns, privSelectedAttributes, pmd, item);
-              
-                items.Add(item);
-            }
-
-            privilegeListView.Items.Clear();
-            privilegeListView.Items.AddRange(items.ToArray());
         }
 
         private void AddSecondarySubItems(Type type, string[] firstColumns, string[] selectedAttributes, object o, ListViewItem item)
@@ -272,7 +169,7 @@ namespace MsCrmTools.MetadataBrowser
                     if (firstColumns.Contains(prop.Name))
                         continue;
 
-                    if(entityAttributesToIgnore.Contains(prop.Name))
+                    if(ListViewColumnsSettings.EntityAttributesToIgnore.Contains(prop.Name))
                         continue;
 
                     object value = null;
@@ -349,130 +246,6 @@ namespace MsCrmTools.MetadataBrowser
             }
         }
 
-        private void attributeListView_DoubleClick(object sender, EventArgs e)
-        {
-            if (attributeListView.SelectedItems.Count == 0)
-                return;
-
-            var amd = (AttributeMetadataInfo)attributeListView.SelectedItems[0].Tag;
-            attributePropertyGrid.SelectedObject = amd;
-            attributesSplitContainer.Panel1Collapsed = true;
-            attributesSplitContainer.Panel2Collapsed = false;
-            tsbHideAttributePanel.Visible = true;
-            tsbAttributeColumns.Visible = false;
-        }
-
-        private void OneToManyListView_DoubleClick(object sender, EventArgs e)
-        {
-            if (OneToManyListView.SelectedItems.Count == 0)
-                return;
-
-            var rmd = (OneToManyRelationshipMetadataInfo)OneToManyListView.SelectedItems[0].Tag;
-            OneToManyPropertyGrid.SelectedObject = rmd;
-            oneToManySplitContainer.Panel1Collapsed = true;
-            oneToManySplitContainer.Panel2Collapsed = false;
-            tsbHideOneToManyPanel.Visible = true;
-            tsbOneToManyColumns.Visible = false;
-        }
-
-        private void manyToOneListView_DoubleClick(object sender, EventArgs e)
-        {
-            if (manyToOneListView.SelectedItems.Count == 0)
-                return;
-
-            var rmd = (OneToManyRelationshipMetadataInfo)manyToOneListView.SelectedItems[0].Tag;
-            manyToOnePropertyGrid.SelectedObject = rmd;
-            manyToOneSplitContainer.Panel1Collapsed = true;
-            manyToOneSplitContainer.Panel2Collapsed = false;
-            tsbHideManyToOnePanel.Visible = true;
-            tsbManyToOneColumns.Visible = false;
-        }
-
-        private void manyToManyListView_DoubleClick(object sender, EventArgs e)
-        {
-            if (manyToManyListView.SelectedItems.Count == 0)
-                return;
-
-            var rmd = (ManyToManyRelationshipMetadataInfo)manyToManyListView.SelectedItems[0].Tag;
-            manyToManyPropertyGrid.SelectedObject = rmd;
-            manyToManySplitContainer.Panel1Collapsed = true;
-            manyToManySplitContainer.Panel2Collapsed = false;
-            tsbHideManyToManyPanel.Visible = true;
-            tsbManyToManyColumns.Visible = false;
-        }
-
-        private void privilegeListView_DoubleClick(object sender, EventArgs e)
-        {
-            if (privilegeListView.SelectedItems.Count == 0)
-                return;
-
-            var rmd = (SecurityPrivilegeInfo)privilegeListView.SelectedItems[0].Tag;
-            privilegePropertyGrid.SelectedObject = rmd;
-            privilegeSplitContainer.Panel1Collapsed = true;
-            privilegeSplitContainer.Panel2Collapsed = false;
-            tsbHidePrivilegePanel.Visible = true;
-            tsbPrivilegeColumns.Visible = false;
-        }
-
-        private void tsbHidePanel_Click(object sender, EventArgs e)
-        {
-            switch (((ToolStripButton) sender).Name)
-            {
-                case "tsbHideEntityPanel":
-                {
-                    entitySplitContainer.Panel1Collapsed = false;
-                    entitySplitContainer.Panel2Collapsed = true;
-                    tsbEntityColumns.Visible = true;
-                }
-                    break;
-                case "tsbHideAttributePanel":
-                    {
-                        attributesSplitContainer.Panel1Collapsed = false;
-                        attributesSplitContainer.Panel2Collapsed = true;
-                        tsbHideAttributePanel.Visible = false;
-                        tsbAttributeColumns.Visible = true;
-                    }
-                    break;
-                case "tsbHideOneToManyPanel":
-                    {
-                        oneToManySplitContainer.Panel1Collapsed = false;
-                        oneToManySplitContainer.Panel2Collapsed = true;
-                        tsbHideOneToManyPanel.Visible = false;
-                        tsbOneToManyColumns.Visible = true;
-                    }
-                    break;
-                case "tsbHideManyToOnePanel":
-                    {
-                        manyToOneSplitContainer.Panel1Collapsed = false;
-                        manyToOneSplitContainer.Panel2Collapsed = true;
-                        tsbHideManyToOnePanel.Visible = false;
-                        tsbManyToOneColumns.Visible = true;
-                    }
-                    break;
-                case "tsbHideManyToManyPanel":
-                    {
-                        manyToManySplitContainer.Panel1Collapsed = false;
-                        manyToManySplitContainer.Panel2Collapsed = true;
-                        tsbHideManyToManyPanel.Visible = false;
-                        tsbManyToManyColumns.Visible = true;
-                    }
-                    break;
-                case "tsbHidePrivilegePanel":
-                    {
-                        privilegeSplitContainer.Panel1Collapsed = false;
-                        privilegeSplitContainer.Panel2Collapsed = true;
-                        tsbHidePrivilegePanel.Visible = false;
-                        tsbPrivilegeColumns.Visible = true;
-                    }
-                    break;
-                default:
-                {
-                    MessageBox.Show(this, "Unexpected source for hiding panels");
-                }
-                    break;
-            }
-        }
-
         private void listView_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             var list = (ListView) sender;
@@ -487,138 +260,23 @@ namespace MsCrmTools.MetadataBrowser
                 case "tsbEntityColumns":
                 {
                     var dialog = new ColumnSelector(typeof (EntityMetadataInfo),
-                        entityFirstColumns,
-                        entityAttributesToIgnore,
-                        entitySelectedAttributes);
+                        ListViewColumnsSettings.EntityFirstColumns,
+                        ListViewColumnsSettings.EntityAttributesToIgnore,
+                        lvcSettings.EntitySelectedAttributes);
 
                     if (dialog.ShowDialog(this) == DialogResult.OK)
                     {
-                        entitySelectedAttributes = dialog.UpdatedCurrentAttributes;
+                        lvcSettings.EntitySelectedAttributes = dialog.UpdatedCurrentAttributes;
                         entityListView.Columns.Clear();
                         entityListView.Items.Clear();
 
                         ListViewColumnHelper.AddColumnsHeader(entityListView,
                             typeof (EntityMetadataInfo),
-                            entityFirstColumns,
-                            entitySelectedAttributes,
-                            entityAttributesToIgnore);
+                            ListViewColumnsSettings.EntityFirstColumns,
+                            lvcSettings.EntitySelectedAttributes,
+                            ListViewColumnsSettings.EntityAttributesToIgnore);
 
                         entityListView.Items.AddRange(BuildEntityItems(currentAllMetadata).ToArray());
-                    }
-                }
-                    break;
-                case "tsbAttributeColumns":
-                {
-                    var dialog = new ColumnSelector(typeof (AttributeMetadataInfo),
-                        attributeFirstColumns,
-                        new string[] {},
-                        attributeSelectedAttributes);
-
-                    if (dialog.ShowDialog(this) == DialogResult.OK)
-                    {
-                        attributeSelectedAttributes = dialog.UpdatedCurrentAttributes;
-                        attributeListView.Columns.Clear();
-                        attributeListView.Items.Clear();
-
-                        ListViewColumnHelper.AddColumnsHeader(attributeListView,
-                            typeof (AttributeMetadataInfo),
-                            attributeFirstColumns,
-                            attributeSelectedAttributes,
-                            new string[] {});
-
-                        LoadAttributes(currentMetadata.Attributes);
-                    }
-                }
-                    break;
-                case "tsbOneToManyColumns":
-                {
-                    var dialog = new ColumnSelector(typeof (OneToManyRelationshipMetadataInfo),
-                        relFirstColumns,
-                        new string[] {},
-                        otmRelSelectedAttributes);
-
-                    if (dialog.ShowDialog(this) == DialogResult.OK)
-                    {
-                        otmRelSelectedAttributes = dialog.UpdatedCurrentAttributes;
-                        OneToManyListView.Columns.Clear();
-                        OneToManyListView.Items.Clear();
-
-                        ListViewColumnHelper.AddColumnsHeader(OneToManyListView,
-                            typeof (OneToManyRelationshipMetadataInfo),
-                            relFirstColumns,
-                            otmRelSelectedAttributes,
-                            new string[] {});
-
-                        LoadOneToManyRelationships(currentMetadata.OneToManyRelationships);
-                    }
-                }
-                    break;
-                case "tsbManyToOneColumns":
-                {
-                    var dialog = new ColumnSelector(typeof (OneToManyRelationshipMetadataInfo),
-                        relFirstColumns,
-                        new string[] {},
-                        otmRelSelectedAttributes);
-
-                    if (dialog.ShowDialog(this) == DialogResult.OK)
-                    {
-                        otmRelSelectedAttributes = dialog.UpdatedCurrentAttributes;
-                        manyToOneListView.Columns.Clear();
-                        manyToOneListView.Items.Clear();
-
-                        ListViewColumnHelper.AddColumnsHeader(manyToOneListView,
-                            typeof (OneToManyRelationshipMetadataInfo),
-                            relFirstColumns,
-                            otmRelSelectedAttributes,
-                            new string[] {});
-
-                        LoadManyToOneRelationships(currentMetadata.ManyToOneRelationships);
-                    }
-                }
-                    break;
-                case "tsbManyToManyColumns":
-                {
-                    var dialog = new ColumnSelector(typeof (ManyToManyRelationshipMetadataInfo),
-                        relFirstColumns,
-                        new string[] {},
-                        mtmRelSelectedAttributes);
-
-                    if (dialog.ShowDialog(this) == DialogResult.OK)
-                    {
-                        mtmRelSelectedAttributes = dialog.UpdatedCurrentAttributes;
-                        manyToManyListView.Columns.Clear();
-                        manyToManyListView.Items.Clear();
-
-                        ListViewColumnHelper.AddColumnsHeader(manyToManyListView,
-                            typeof (ManyToManyRelationshipMetadataInfo),
-                            relFirstColumns,
-                            mtmRelSelectedAttributes,
-                            new string[] {});
-
-                        LoadManyToManyRelationships(currentMetadata.ManyToManyRelationships);
-                    }
-                }
-                    break;
-                case "tsbHidePrivilegePanel":
-                {
-                    var dialog = new ColumnSelector(typeof (SecurityPrivilegeInfo),
-                        privFirstColumns,
-                        new string[] {},
-                        privSelectedAttributes);
-
-                    if (dialog.ShowDialog(this) == DialogResult.OK)
-                    {
-                        privSelectedAttributes = dialog.UpdatedCurrentAttributes;
-                        privilegeListView.Columns.Clear();
-                        privilegeListView.Items.Clear();
-
-                        ListViewColumnHelper.AddColumnsHeader(privilegeListView,
-                            typeof (SecurityPrivilegeInfo),
-                            privFirstColumns,
-                            privSelectedAttributes,
-                            new string[] {});
-
-                        LoadPrivileges(currentMetadata.Privileges);
                     }
                 }
                     break;
@@ -631,8 +289,13 @@ namespace MsCrmTools.MetadataBrowser
 
             try
             {
-                SettingsHelper.SaveSettings(entitySelectedAttributes, attributeSelectedAttributes,
-                    otmRelSelectedAttributes, mtmRelSelectedAttributes, privSelectedAttributes);
+                lvcSettings.SaveSettings();
+                foreach (TabPage page in mainTabControl.TabPages)
+                {
+                    if (page.TabIndex == 0) continue;
+
+                    ((EntityPropertiesControl)page.Controls[0]).RefreshColumns(lvcSettings);
+                }
             }
             catch (UnauthorizedAccessException error)
             {
