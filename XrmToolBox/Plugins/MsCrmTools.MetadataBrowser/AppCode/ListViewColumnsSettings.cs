@@ -84,7 +84,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode
                 }
             }
 
-            return null;
+            return new ListViewColumnsSettings();
         }
 
         public object Clone()
