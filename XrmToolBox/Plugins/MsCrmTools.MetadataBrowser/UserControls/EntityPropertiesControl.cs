@@ -512,6 +512,13 @@ namespace MsCrmTools.MetadataBrowser.UserControls
             }
         }
 
+        private void listView_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            var list = (ListView)sender;
+            list.Sorting = list.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            list.ListViewItemSorter = new ListViewItemComparer(e.Column, list.Sorting);
+        }
+
         private void tsbColumns_Click(object sender, EventArgs e)
         {
             switch (((ToolStripButton) sender).Name)
