@@ -74,6 +74,7 @@ namespace XrmToolBox
             fHelper = new FormHelper(this, cManager);
 
             ccsb = new CrmConnectionStatusBar(cManager, fHelper);
+            ccsb.Dock = DockStyle.Bottom;
 
             Controls.Add(ccsb);
 
