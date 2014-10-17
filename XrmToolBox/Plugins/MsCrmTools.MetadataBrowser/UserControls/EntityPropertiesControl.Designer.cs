@@ -201,6 +201,7 @@
             this.attributeListView.TabIndex = 1;
             this.attributeListView.UseCompatibleStateImageBehavior = false;
             this.attributeListView.View = System.Windows.Forms.View.Details;
+            this.attributeListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView_ColumnClick);
             this.attributeListView.DoubleClick += new System.EventHandler(this.attributeListView_DoubleClick);
             // 
             // attributePropertyGrid
@@ -282,6 +283,7 @@
             this.OneToManyListView.TabIndex = 1;
             this.OneToManyListView.UseCompatibleStateImageBehavior = false;
             this.OneToManyListView.View = System.Windows.Forms.View.Details;
+            this.OneToManyListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView_ColumnClick);
             this.OneToManyListView.DoubleClick += new System.EventHandler(this.OneToManyListView_DoubleClick);
             // 
             // OneToManyPropertyGrid
@@ -362,6 +364,7 @@
             this.manyToOneListView.TabIndex = 1;
             this.manyToOneListView.UseCompatibleStateImageBehavior = false;
             this.manyToOneListView.View = System.Windows.Forms.View.Details;
+            this.manyToOneListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView_ColumnClick);
             this.manyToOneListView.DoubleClick += new System.EventHandler(this.manyToOneListView_DoubleClick);
             // 
             // manyToOnePropertyGrid
@@ -442,6 +445,7 @@
             this.manyToManyListView.TabIndex = 1;
             this.manyToManyListView.UseCompatibleStateImageBehavior = false;
             this.manyToManyListView.View = System.Windows.Forms.View.Details;
+            this.manyToManyListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView_ColumnClick);
             this.manyToManyListView.DoubleClick += new System.EventHandler(this.manyToManyListView_DoubleClick);
             // 
             // manyToManyPropertyGrid
@@ -522,6 +526,7 @@
             this.privilegeListView.TabIndex = 1;
             this.privilegeListView.UseCompatibleStateImageBehavior = false;
             this.privilegeListView.View = System.Windows.Forms.View.Details;
+            this.privilegeListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView_ColumnClick);
             this.privilegeListView.DoubleClick += new System.EventHandler(this.privilegeListView_DoubleClick);
             // 
             // privilegePropertyGrid
