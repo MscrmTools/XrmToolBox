@@ -359,6 +359,11 @@ namespace MsCrmTools.RolePrivilegeAnalyzer
                     {
                         matchPrivileges = role.Privileges.Any(p => p.Id == currentPrivilege.Id && currentPrivilege.Depth == p.Depth);
                     }
+
+                    if (!matchPrivileges)
+                    {
+                        break;
+                    }
                 }
 
                 if (matchPrivileges)
