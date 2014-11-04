@@ -101,7 +101,7 @@ namespace MsCrmTools.WebResourcesManager
             {
                 case "LoadWebResources":
                     {
-                        LoadWebResourcesGeneral(Guid.Empty);
+                        LoadWebResourcesGeneral(null);
                     }
                     break;
                 case "LoadWebResourcesFromSolution":
@@ -109,7 +109,7 @@ namespace MsCrmTools.WebResourcesManager
                         var sPicker = new SolutionPicker(service) {StartPosition = FormStartPosition.CenterParent};
                         if (sPicker.ShowDialog(this) == DialogResult.OK)
                         {
-                            LoadWebResourcesGeneral(sPicker.SelectedSolution.Id);
+                            LoadWebResourcesGeneral(sPicker.SelectedSolution);
                         }
                     }
                     break;
@@ -157,7 +157,7 @@ namespace MsCrmTools.WebResourcesManager
             }
             else
             {
-                LoadWebResourcesGeneral(Guid.Empty);
+                LoadWebResourcesGeneral(null);
             }
         }
 
@@ -178,12 +178,12 @@ namespace MsCrmTools.WebResourcesManager
                 var sPicker = new SolutionPicker(service) {StartPosition = FormStartPosition.CenterParent};
                 if (sPicker.ShowDialog(this) == DialogResult.OK)
                 {
-                    LoadWebResourcesGeneral(sPicker.SelectedSolution.Id);
+                    LoadWebResourcesGeneral(sPicker.SelectedSolution);
                 }
             }
         }
 
-        private void LoadWebResourcesGeneral(Guid specificSolutionId)
+        private void LoadWebResourcesGeneral(Entity specificSolution)
         {
             tvWebResources.Nodes.Clear();
 
@@ -192,7 +192,9 @@ namespace MsCrmTools.WebResourcesManager
             {
                 var settings = new LoadCrmResourcesSettings
                 {
-                    SolutionId = specificSolutionId,
+                    SolutionId = specificSolution != null ? specificSolution.Id : Guid.Empty,
+                    SolutionName = specificSolution != null ?specificSolution.GetAttributeValue<string>("friendlyname") : "",
+                    SolutionVersion = specificSolution != null ?specificSolution.GetAttributeValue<string>("version") : "",
                     Types = dialog.TypesToLoad
                 };
 
@@ -212,6 +214,8 @@ namespace MsCrmTools.WebResourcesManager
             Guid solutionId = e.Argument != null ? ((LoadCrmResourcesSettings)e.Argument).SolutionId : Guid.Empty;
 
             RetrieveWebResources(solutionId, ((LoadCrmResourcesSettings)e.Argument).Types);
+
+            e.Result = e.Argument;
         }
 
         private void BwFillWebResourcesRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -224,6 +228,11 @@ namespace MsCrmTools.WebResourcesManager
             else
             {
                 tvWebResources.Enabled = true;
+
+                var settings = (LoadCrmResourcesSettings) e.Result;
+                tssCurrentlyLoadedSolution.Visible = settings.SolutionId != Guid.Empty;
+                tslCurrentlyLoadedSolution.Visible = settings.SolutionId != Guid.Empty;
+                tslCurrentlyLoadedSolution.Text = string.Format("Solution loaded: {0} - v{1}", settings.SolutionName, settings.SolutionVersion);
             }
 
             tvWebResources.ExpandAll();
