@@ -237,6 +237,26 @@ namespace MsCrmTools.UserSettingsUtility
                 setting.StartupPaneEnabled = cbbStartupPane.SelectedIndex == 2;
             }
 
+            if (cbbUseCrmFormAppt.SelectedIndex != 0)
+            {
+                setting.UseCrmFormForAppointment = cbbUseCrmFormAppt.SelectedIndex == 2;
+            }
+
+            if (cbbUseCrmFormContact.SelectedIndex != 0)
+            {
+                setting.UseCrmFormForContact = cbbUseCrmFormContact.SelectedIndex == 2;
+            }
+
+            if (cbbUseCrmFormEmail.SelectedIndex != 0)
+            {
+                setting.UseCrmFormForEmail = cbbUseCrmFormEmail.SelectedIndex == 2;
+            }
+
+            if (cbbUseCrmFormTask.SelectedIndex != 0)
+            {
+                setting.UseCrmFormForTask = cbbUseCrmFormTask.SelectedIndex == 2;
+            }
+
             #endregion
 
             WorkAsync("Initializing update...",
