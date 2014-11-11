@@ -85,6 +85,14 @@ namespace MsCrmTools.UserSettingsUtility.AppCode
                 record["transactioncurrencyid"] = settings.Currency;
             if (settings.StartupPaneEnabled.HasValue)
                 record["getstartedpanecontentenabled"] = settings.StartupPaneEnabled.Value;
+            if (settings.UseCrmFormForAppointment.HasValue)
+                record["usecrmformforappointment"] = settings.UseCrmFormForAppointment.Value;
+            if (settings.UseCrmFormForContact.HasValue)
+                record["usecrmformforcontact"] = settings.UseCrmFormForContact.Value;
+            if (settings.UseCrmFormForEmail.HasValue)
+                record["usecrmformforemail"] = settings.UseCrmFormForEmail.Value;
+            if (settings.UseCrmFormForTask.HasValue)
+                record["usecrmformfortask"] = settings.UseCrmFormForTask.Value;
 
             service.Update(record);
 

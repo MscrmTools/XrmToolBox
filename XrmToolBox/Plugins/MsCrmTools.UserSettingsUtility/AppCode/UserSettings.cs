@@ -37,5 +37,10 @@ namespace MsCrmTools.UserSettingsUtility.AppCode
 
         public EntityReference Currency { get; set; }
         public bool? StartupPaneEnabled { get; set; }
+
+        public bool? UseCrmFormForAppointment { get; set; }
+        public bool? UseCrmFormForContact { get; set; }
+        public bool? UseCrmFormForEmail { get; set; }
+        public bool? UseCrmFormForTask { get; set; }
     }
 }
