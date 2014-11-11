@@ -25,10 +25,13 @@ namespace MsCrmTools.WebResourcesManager
         public string FilePath { get; set; }
         public Entity WebResourceEntity { get; set; }
 
+        public string InitialBase64 { get; set; }
+
         public WebResource(Entity webResource, string filePath)
         {
             FilePath = filePath;
             WebResourceEntity = webResource;
+            InitialBase64 = webResource.GetAttributeValue<string>("content");
         }
 
         public WebResource(Entity webresource)
