@@ -71,6 +71,8 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         {
             try
             {
+                if (innerContent == null) return;
+
                 string imageBase64 = innerContent;
                 byte[] imageBytes = Convert.FromBase64String(imageBase64);
 

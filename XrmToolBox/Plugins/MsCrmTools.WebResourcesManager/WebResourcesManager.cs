@@ -213,7 +213,7 @@ namespace MsCrmTools.WebResourcesManager
         {
             Guid solutionId = e.Argument != null ? ((LoadCrmResourcesSettings)e.Argument).SolutionId : Guid.Empty;
 
-            RetrieveWebResources(solutionId, ((LoadCrmResourcesSettings)e.Argument).Types);
+     RetrieveWebResources(solutionId, ((LoadCrmResourcesSettings)e.Argument).Types);
 
             e.Result = e.Argument;
         }
@@ -238,6 +238,7 @@ namespace MsCrmTools.WebResourcesManager
             tvWebResources.ExpandAll();
             tvWebResources.TreeViewNodeSorter = new NodeSorter();
             tvWebResources.Sort();
+            TvWebResourcesAfterSelect(null, null);
 
             infoPanel.Dispose();
             Controls.Remove(infoPanel);
@@ -416,15 +417,6 @@ namespace MsCrmTools.WebResourcesManager
 
         private void UpdateWebResources(bool publish, IEnumerable<TreeNode> nodes, bool addToSolution = false)
         {
-            var webResources = new List<Entity>();
-            foreach (TreeNode node in nodes)
-            {
-                if (node.Tag != null && ((WebResource)node.Tag).WebResourceEntity != null)
-                {
-                    webResources.Add(((WebResource)node.Tag).WebResourceEntity);
-                }
-            }
-
             var solutionUniqueName = string.Empty;
             if (addToSolution)
             {
@@ -443,7 +435,7 @@ namespace MsCrmTools.WebResourcesManager
             SetWorkingState(true);
             infoPanel = InformationPanel.GetInformationPanel(this, "Updating web resources...", 400, 120);
 
-            var parameters = new object[] { webResources, publish, solutionUniqueName };
+            var parameters = new object[] { nodes, publish, solutionUniqueName };
 
             var bw = new BackgroundWorker {WorkerReportsProgress = true};
             bw.DoWork += BwDoWork;
@@ -457,25 +449,64 @@ namespace MsCrmTools.WebResourcesManager
             var bw = (BackgroundWorker) sender;
             var webResourceManager = new WebResourceManager(service);
             var idsToPublish = new List<Guid>();
+            var nodes = (IEnumerable<TreeNode>)((object[])e.Argument)[0];
 
-            foreach (Entity wr in ((List<Entity>)((object[])e.Argument)[0]))
+            var wrDifferentFromServer = new List<TreeNode>();
+
+            foreach (TreeNode node in nodes.Where(n=>n.Tag != null))
             {
-                bw.ReportProgress(1, string.Format("Updating {0}...", wr["name"]));
+                var wr = (WebResource)node.Tag;
+                Entity serverVersion = null;
+                if (wr.WebResourceEntity != null && wr.WebResourceEntity.Id != Guid.Empty)
+                {
+                    serverVersion = webResourceManager.RetrieveWebResource(wr.WebResourceEntity.Id);
+                }
 
-                wr.Id = webResourceManager.UpdateWebResource(wr);
+                if (serverVersion != null && serverVersion.GetAttributeValue<string>("content") != wr.InitialBase64)
+                {
+                    wrDifferentFromServer.Add(node);
+                }
+                else
+                {
+                    bw.ReportProgress(1, string.Format("Updating {0}...", wr.WebResourceEntity["name"]));
 
-                idsToPublish.Add(wr.Id);
+                    wr.WebResourceEntity.Id = webResourceManager.UpdateWebResource(wr.WebResourceEntity);
+                    idsToPublish.Add(wr.WebResourceEntity.Id);
+                    wr.InitialBase64 = wr.WebResourceEntity.GetAttributeValue<string>("content");
+                }
+            }
+
+            if (wrDifferentFromServer.Count > 0)
+            {
+                if (
+                    CommonDelegates.DisplayMessageBox(null,
+                        string.Format(
+                            "The following web resources were updated on the server by someone else:\r\n{0}\r\n\r\nAre you sure you want to update them with your content?",
+                            String.Join("\r\n", wrDifferentFromServer.Select(r => ((WebResource)r.Tag).WebResourceEntity.GetAttributeValue<string>("name")))),
+                        "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    foreach (var resource in wrDifferentFromServer)
+                    {
+                        var wr = (WebResource)resource.Tag;
+
+                        bw.ReportProgress(1, string.Format("Updating {0}...", wr.WebResourceEntity["name"]));
+
+                        wr.WebResourceEntity.Id = webResourceManager.UpdateWebResource(wr.WebResourceEntity);
+                        idsToPublish.Add(wr.WebResourceEntity.Id);
+                        wr.InitialBase64 = wr.WebResourceEntity.GetAttributeValue<string>("content");
+                    }
+                }
             }
 
             // if publish
-            if ((bool)((object[])e.Argument)[1])
+            if ((bool)((object[])e.Argument)[1] && wrDifferentFromServer.Count < nodes.Count())
             {
                 bw.ReportProgress(2,"Publishing web resources...");
 
                 webResourceManager.PublishWebResources(idsToPublish);
             }
 
-            if (((object[])e.Argument)[2].ToString().Length > 0)
+            if (((object[])e.Argument)[2].ToString().Length > 0 && wrDifferentFromServer.Count < nodes.Count())
             {
                 bw.ReportProgress(3,"Adding web resources to solution...");
 
@@ -846,12 +877,53 @@ namespace MsCrmTools.WebResourcesManager
                             MessageBoxIcon.Information);
         }
 
+        private void getLatestVersionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var selectedWr = (WebResource)tvWebResources.SelectedNode.Tag;
+            if (selectedWr.WebResourceEntity == null || selectedWr.WebResourceEntity.Id == Guid.Empty)
+            {
+                MessageBox.Show(ParentForm,
+                    "This web resource has not been synchronized to CRM server yet. You cannot get latest version",
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            infoPanel = InformationPanel.GetInformationPanel(this, "Getting latest version...", 340, 150);
+
+            var bw = new BackgroundWorker();
+            bw.DoWork += (bwSender, arg) =>
+            {
+                var wrm = new WebResourceManager(service);
+                var wr = wrm.RetrieveWebResource((Guid) arg.Argument);
+
+                arg.Result = wr;
+            };
+            bw.RunWorkerCompleted += (bwSender, arg) =>
+            {
+                Controls.Remove(infoPanel);
+                infoPanel.Dispose();
+
+                var wr = (Entity)arg.Result;
+
+                ((WebResource) tvWebResources.SelectedNode.Tag).WebResourceEntity = wr;
+                ((WebResource) tvWebResources.SelectedNode.Tag).InitialBase64 = wr.GetAttributeValue<string>("content");
+                TvWebResourcesAfterSelect(null, null);
+            };
+            bw.RunWorkerAsync(selectedWr.WebResourceEntity.Id);
+        }
+
         #endregion TREEVIEW - Manage content
 
         #region WEBRESOURCE CONTENT - Actions
 
         private void FileMenuSaveClick(object sender, EventArgs e)
         {
+            if (((TabControl)(Parent).Parent).SelectedTab != Parent)
+            {
+                ((ToolStripDropDownItem)((ToolStrip)(((TabControl)(Parent).Parent).SelectedTab.Controls.Find("toolStripScriptContent", true)[0])).Items[0]).DropDownItems[0].PerformClick();
+                return;
+            }
+
             string content = ((IWebResourceControl)panelControl.Controls[0]).GetBase64WebResourceContent();
 
             ((WebResource)tvWebResources.SelectedNode.Tag).WebResourceEntity["content"] = content;
@@ -868,6 +940,12 @@ namespace MsCrmTools.WebResourcesManager
 
         private void FileMenuReplaceClick(object sender, EventArgs e)
         {
+            if (((TabControl)(Parent).Parent).SelectedTab != Parent)
+            {
+                ((ToolStripDropDownItem)((ToolStrip)(((TabControl)(Parent).Parent).SelectedTab.Controls.Find("toolStripScriptContent", true)[0])).Items[0]).DropDownItems[1].PerformClick();
+                return;
+            }
+
             try
             {
                 var ctrl = ((IWebResourceControl)panelControl.Controls[0]);
@@ -950,6 +1028,12 @@ namespace MsCrmTools.WebResourcesManager
 
         private void FileMenuUpdateAndPublishClick(object sender, EventArgs e)
         {
+            if (((TabControl) (Parent).Parent).SelectedTab != Parent)
+            {
+                ((ToolStripDropDownItem)((ToolStrip)(((TabControl)(Parent).Parent).SelectedTab.Controls.Find("toolStripScriptContent", true)[0])).Items[0]).DropDownItems[2].PerformClick();
+                return;
+            }
+
             if (tvWebResources.SelectedNode != null)
             {
                 var nodesList = new List<TreeNode> { tvWebResources.SelectedNode };
@@ -994,6 +1078,12 @@ namespace MsCrmTools.WebResourcesManager
 
         private void FindToolStripMenuItemClick(object sender, EventArgs e)
         {
+            if (((TabControl)(Parent).Parent).SelectedTab != Parent)
+            {
+                ((ToolStripDropDownItem)((ToolStrip)(((TabControl)(Parent).Parent).SelectedTab.Controls.Find("toolStripScriptContent", true)[0])).Items[2]).DropDownItems[0].PerformClick();
+                return;
+            }
+
             var control = ((IWebResourceControl) panelControl.Controls[0]);
             if (!(control is CodeControl)) return;
 
@@ -1002,6 +1092,12 @@ namespace MsCrmTools.WebResourcesManager
 
         private void ReplaceToolStripMenuItemClick(object sender, EventArgs e)
         {
+            if (((TabControl)(Parent).Parent).SelectedTab != Parent)
+            {
+                ((ToolStripDropDownItem)((ToolStrip)(((TabControl)(Parent).Parent).SelectedTab.Controls.Find("toolStripScriptContent", true)[0])).Items[2]).DropDownItems[1].PerformClick();
+                return;
+            }
+
             var control = ((IWebResourceControl)panelControl.Controls[0]);
             if (!(control is CodeControl)) return;
 
@@ -1042,12 +1138,12 @@ namespace MsCrmTools.WebResourcesManager
                 Entity script = ((WebResource)tvWebResources.SelectedNode.Tag).WebResourceEntity;
                 UserControl ctrl = null;
 
-                if (script.Contains("content") && script["content"] != null)
-                {
+                //if (script.Contains("content") && script["content"] != null)
+                //{
                     switch (((OptionSetValue) script["webresourcetype"]).Value)
                     {
                         case 1:
-                            ctrl = new CodeControl(script["content"].ToString(),
+                            ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
                                                    Enumerations.WebResourceType.WebPage);
                             ((CodeControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
@@ -1060,7 +1156,7 @@ namespace MsCrmTools.WebResourcesManager
                             break;
 
                         case 2:
-                            ctrl = new CodeControl(script["content"].ToString(),
+                            ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
                                                    Enumerations.WebResourceType.Css);
                             ((CodeControl) ctrl).WebResourceUpdated += MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
@@ -1070,7 +1166,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsddbEdit.Visible = true;
                             break;
                         case 3:
-                            ctrl = new CodeControl(script["content"].ToString(),
+                            ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
                                                    Enumerations.WebResourceType.Script);
                             ((CodeControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
@@ -1082,7 +1178,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsddbEdit.Visible = true;
                             break;
                         case 4:
-                            ctrl = new CodeControl(script["content"].ToString(),
+                            ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
                                                    Enumerations.WebResourceType.Data);
                             ((CodeControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
@@ -1093,7 +1189,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsddbEdit.Visible = true;
                             break;
                         case 5:
-                            ctrl = new ImageControl(script["content"].ToString(),
+                            ctrl = new ImageControl(script.GetAttributeValue<string>("content"),
                                                     Enumerations.WebResourceType.Png);
                             ((ImageControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
@@ -1104,7 +1200,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsddbEdit.Visible = false;
                             break;
                         case 6:
-                            ctrl = new ImageControl(script["content"].ToString(),
+                            ctrl = new ImageControl(script.GetAttributeValue<string>("content"),
                                                     Enumerations.WebResourceType.Jpg);
                             ((ImageControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
@@ -1115,7 +1211,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsddbEdit.Visible = false;
                             break;
                         case 7:
-                            ctrl = new ImageControl(script["content"].ToString(),
+                            ctrl = new ImageControl(script.GetAttributeValue<string>("content"),
                                                     Enumerations.WebResourceType.Gif);
                             ((ImageControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
@@ -1131,7 +1227,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsddbEdit.Visible = false;
                             break;
                         case 9:
-                            ctrl = new CodeControl(script["content"].ToString(),
+                            ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
                                                    Enumerations.WebResourceType.Xsl);
                             ((CodeControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
@@ -1142,7 +1238,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsddbEdit.Visible = true;
                             break;
                         case 10:
-                            ctrl = new IconControl(script["content"].ToString());
+                            ctrl = new IconControl(script.GetAttributeValue<string>("content"));
                             ((IconControl) ctrl).WebResourceUpdated +=
                                 MainFormWebResourceUpdated;
                             tsbMinifyJS.Visible = false;
@@ -1152,7 +1248,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsddbEdit.Visible = false;
                             break;
                     }
-                }
+                //}
 
                 if (ctrl != null)
                 {
@@ -1215,6 +1311,7 @@ namespace MsCrmTools.WebResourcesManager
                                 propertiesToolStripMenuItem.Enabled = false;
                                 updateFromDiskToolStripMenuItem.Enabled = true;
                                 copyWebResourceNameToClipboardToolStripMenuItem.Enabled = false;
+                                getLatestVersionToolStripMenuItem.Enabled = false;
                             }
                             break;
                         case 1:
@@ -1229,6 +1326,7 @@ namespace MsCrmTools.WebResourcesManager
                                 propertiesToolStripMenuItem.Enabled = false;
                                 updateFromDiskToolStripMenuItem.Enabled = true;
                                 copyWebResourceNameToClipboardToolStripMenuItem.Enabled = false;
+                                getLatestVersionToolStripMenuItem.Enabled = false;
                             }
                             break;
                         default:
@@ -1243,6 +1341,7 @@ namespace MsCrmTools.WebResourcesManager
                                 propertiesToolStripMenuItem.Enabled = true;
                                 updateFromDiskToolStripMenuItem.Enabled = false;
                                 copyWebResourceNameToClipboardToolStripMenuItem.Enabled = true;
+                                getLatestVersionToolStripMenuItem.Enabled = true;
                             }
                             break;
                     }
@@ -1467,7 +1566,5 @@ namespace MsCrmTools.WebResourcesManager
             else
                 e.Effect = DragDropEffects.None;
         }
-
-       
     }
 }

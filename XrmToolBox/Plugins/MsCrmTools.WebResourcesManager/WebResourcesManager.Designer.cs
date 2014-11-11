@@ -70,6 +70,8 @@
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
             this.findUnusedWebResourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssCurrentlyLoadedSolution = new System.Windows.Forms.ToolStripSeparator();
+            this.tslCurrentlyLoadedSolution = new System.Windows.Forms.ToolStripLabel();
             this.contextMenuStripTreeView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addNewWebResourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewEmptyWebResourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,6 +83,7 @@
             this.addNewFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.updateFromDiskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.getLatestVersionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToCRMServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAndPublishToCRMServerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -92,8 +95,6 @@
             this.copyWebResourceNameToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssCurrentlyLoadedSolution = new System.Windows.Forms.ToolStripSeparator();
-            this.tslCurrentlyLoadedSolution = new System.Windows.Forms.ToolStripLabel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -514,6 +515,19 @@
             this.findUnusedWebResourcesToolStripMenuItem.Text = "Find web resources without dependency";
             this.findUnusedWebResourcesToolStripMenuItem.Click += new System.EventHandler(this.findUnusedWebResourcesToolStripMenuItem_Click);
             // 
+            // tssCurrentlyLoadedSolution
+            // 
+            this.tssCurrentlyLoadedSolution.Name = "tssCurrentlyLoadedSolution";
+            this.tssCurrentlyLoadedSolution.Size = new System.Drawing.Size(6, 39);
+            this.tssCurrentlyLoadedSolution.Visible = false;
+            // 
+            // tslCurrentlyLoadedSolution
+            // 
+            this.tslCurrentlyLoadedSolution.Name = "tslCurrentlyLoadedSolution";
+            this.tslCurrentlyLoadedSolution.Size = new System.Drawing.Size(62, 36);
+            this.tslCurrentlyLoadedSolution.Text = "[none]";
+            this.tslCurrentlyLoadedSolution.Visible = false;
+            // 
             // contextMenuStripTreeView
             // 
             this.contextMenuStripTreeView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -522,6 +536,7 @@
             this.addNewFolderToolStripMenuItem,
             this.toolStripSeparator1,
             this.updateFromDiskToolStripMenuItem,
+            this.getLatestVersionToolStripMenuItem,
             this.toolStripSeparator4,
             this.saveToCRMServerToolStripMenuItem,
             this.saveAndPublishToCRMServerToolStripMenuItem,
@@ -534,7 +549,7 @@
             this.toolStripSeparator7,
             this.propertiesToolStripMenuItem});
             this.contextMenuStripTreeView.Name = "contextMenuStripTreeView";
-            this.contextMenuStripTreeView.Size = new System.Drawing.Size(480, 364);
+            this.contextMenuStripTreeView.Size = new System.Drawing.Size(480, 427);
             // 
             // addNewWebResourceToolStripMenuItem
             // 
@@ -612,6 +627,14 @@
             this.updateFromDiskToolStripMenuItem.Text = "Update web resources in this folder with local files";
             this.updateFromDiskToolStripMenuItem.Click += new System.EventHandler(this.UpdateFromDiskToolStripMenuItemClick);
             // 
+            // getLatestVersionToolStripMenuItem
+            // 
+            this.getLatestVersionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("getLatestVersionToolStripMenuItem.Image")));
+            this.getLatestVersionToolStripMenuItem.Name = "getLatestVersionToolStripMenuItem";
+            this.getLatestVersionToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
+            this.getLatestVersionToolStripMenuItem.Text = "Get latest version";
+            this.getLatestVersionToolStripMenuItem.Click += new System.EventHandler(this.getLatestVersionToolStripMenuItem_Click);
+            // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
@@ -687,19 +710,6 @@
             this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.PropertiesToolStripMenuItemClick);
-            // 
-            // tssCurrentlyLoadedSolution
-            // 
-            this.tssCurrentlyLoadedSolution.Name = "tssCurrentlyLoadedSolution";
-            this.tssCurrentlyLoadedSolution.Size = new System.Drawing.Size(6, 39);
-            this.tssCurrentlyLoadedSolution.Visible = false;
-            // 
-            // tslCurrentlyLoadedSolution
-            // 
-            this.tslCurrentlyLoadedSolution.Name = "tslCurrentlyLoadedSolution";
-            this.tslCurrentlyLoadedSolution.Size = new System.Drawing.Size(62, 36);
-            this.tslCurrentlyLoadedSolution.Text = "[none]";
-            this.tslCurrentlyLoadedSolution.Visible = false;
             // 
             // WebResourcesManager
             // 
@@ -790,5 +800,6 @@
         private System.Windows.Forms.ToolStripLabel tslResourceName;
         private System.Windows.Forms.ToolStripSeparator tssCurrentlyLoadedSolution;
         private System.Windows.Forms.ToolStripLabel tslCurrentlyLoadedSolution;
+        private System.Windows.Forms.ToolStripMenuItem getLatestVersionToolStripMenuItem;
     }
 }
