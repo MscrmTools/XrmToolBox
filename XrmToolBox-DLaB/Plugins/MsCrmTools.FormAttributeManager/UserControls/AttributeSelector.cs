@@ -49,7 +49,6 @@ namespace MsCrmTools.FormAttributeManager.UserControls
             }
         }
 
-
         public EntityMetadata SelectedEntity
         {
             get
@@ -60,6 +59,8 @@ namespace MsCrmTools.FormAttributeManager.UserControls
                 return ((EntityInfo)cbbEntities.SelectedItem).Metadata;
             }
         }
+
+        public List<FormInfo> EntityForms { set; private get; } 
 
         public event EventHandler<AttributeSelectedEventArgs> OnAttributeSelected;
         public event EventHandler<EntitySelectedEventArgs> OnEntitySelected;
@@ -182,6 +183,51 @@ namespace MsCrmTools.FormAttributeManager.UserControls
             {
                 RaiseAttributeSelected(new AttributeSelectedEventArgs{Metadata = (AttributeMetadata)lvAttributes.SelectedItems[0].Tag});
             }
+        }
+
+        private void listView_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            var list = (ListView)sender;
+            list.Sorting = list.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            list.ListViewItemSorter = new ListViewItemComparer(e.Column, list.Sorting);
+        }
+
+        private void llSelectAll_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            foreach (ListViewItem item in lvAttributes.Items)
+            {
+                item.Selected = true;
+            }
+            lvAttributes.Focus();
+        }
+
+        private void llSelectNone_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            foreach (ListViewItem item in lvAttributes.Items)
+            {
+                item.Selected = false;
+            }
+            lvAttributes.Focus();
+        }
+
+        private void llSelectOnForm_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            foreach (ListViewItem item in lvAttributes.Items)
+            {
+                var amd = (AttributeMetadata) item.Tag;
+                item.Selected = EntityForms.All(f => f.HasAttribute(amd.LogicalName));
+            }
+            lvAttributes.Focus();
+        }
+
+        private void llSelectNotOnForm_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            foreach (ListViewItem item in lvAttributes.Items)
+            {
+                var amd = (AttributeMetadata)item.Tag;
+                item.Selected = EntityForms.All(f => !f.HasAttribute(amd.LogicalName));
+            }
+            lvAttributes.Focus();
         }
     }
 }

@@ -61,11 +61,14 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         {
             InitializeComponent();
 
-            // Converts base64 content to string 
-            byte[] b = Convert.FromBase64String(content);
-            innerContent = System.Text.Encoding.UTF8.GetString(b);
-            originalContent = innerContent;
-            innerType = type;
+            if (!string.IsNullOrEmpty(content))
+            {
+                // Converts base64 content to string 
+                byte[] b = Convert.FromBase64String(content);
+                innerContent = System.Text.Encoding.UTF8.GetString(b);
+                originalContent = innerContent;
+                innerType = type;
+            }
         }
 
         public void Find(bool replace, IWin32Window owner)

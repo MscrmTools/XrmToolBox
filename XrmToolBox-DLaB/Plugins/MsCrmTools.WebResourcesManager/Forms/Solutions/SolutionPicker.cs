@@ -132,5 +132,12 @@ namespace MsCrmTools.WebResourcesManager.Forms.Solutions
             DialogResult = DialogResult.Cancel;
             Close();
         }
+
+        private void lstSolutions_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            var list = (ListView)sender;
+            list.Sorting = list.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            list.ListViewItemSorter = new ListViewItemComparer(e.Column, list.Sorting);
+        }
     }
 }

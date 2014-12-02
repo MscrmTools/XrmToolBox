@@ -29,10 +29,8 @@ namespace MsCrmTools.Translator
 
         public bool ExportGlobalOptionSet { get; set; }
 
-        public bool ExportRibbon { get; set; }
-
-        public bool ExportOnlyUnmanagedRibbonLabels { get; set; }
-
         public bool ExportForms { get; set; }
+
+        public bool ExportSiteMap { get; set; }
     }
 }

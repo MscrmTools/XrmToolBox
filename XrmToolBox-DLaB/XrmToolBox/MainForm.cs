@@ -74,13 +74,19 @@ namespace XrmToolBox
             fHelper = new FormHelper(this, cManager);
 
             ccsb = new CrmConnectionStatusBar(cManager, fHelper);
+            ccsb.Dock = DockStyle.Bottom;
 
             Controls.Add(ccsb);
 
             Show();
 
-            var cvc = new CodeplexVersionChecker(Assembly.GetExecutingAssembly().GetName().Version.ToString(), this);
-            cvc.Run();
+            if (currentOptions.LastUpdateCheck.Date != DateTime.Now.Date)
+            {
+                var cvc = new CodeplexVersionChecker(Assembly.GetExecutingAssembly().GetName().Version.ToString(), this);
+                cvc.Run();
+                currentOptions.LastUpdateCheck = DateTime.Now;
+                currentOptions.Save();
+            }
         }
 
        
@@ -204,7 +210,7 @@ namespace XrmToolBox
                 foreach (var item in currentOptions.MostUsedList.OrderByDescending(i => i.Count).ThenBy(i=>i.Name))
                 {
                     var plugin = pManager.Plugins.FirstOrDefault(x => x.FullName == item.Name);
-                    if (plugin != null)
+                    if (plugin != null && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyTitleAttribute))).Title)))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth, item.Count);
                     }
@@ -212,7 +218,7 @@ namespace XrmToolBox
 
                 foreach (var plugin in pManager.Plugins.OrderBy(p => ((AssemblyTitleAttribute)GetAssemblyAttribute(p.Assembly, typeof(AssemblyTitleAttribute))).Title))
                 {
-                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.FullName))
+                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.FullName) && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyTitleAttribute))).Title)))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth);
                     }
@@ -222,10 +228,13 @@ namespace XrmToolBox
             {
                 foreach (var plugin in pManager.Plugins.OrderBy(p => ((AssemblyTitleAttribute)GetAssemblyAttribute(p.Assembly, typeof(AssemblyTitleAttribute))).Title))
                 {
-                    DisplayOnePlugin(plugin, ref top, lastWidth);
+                    if (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof (AssemblyTitleAttribute))).Title))
+                    {
+                        DisplayOnePlugin(plugin, ref top, lastWidth);
+                    }
                 }
             }
-            
+
             foreach (Control ctrl in HomePageTab.Controls)
             {
                 ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
@@ -282,7 +291,7 @@ namespace XrmToolBox
                     Left = 4,
                     Top = top,
                     Width = width,
-                    Tag = plugin
+                    Tag = plugin,
                 };
 
                 pm.Clicked += PluginClicked;
@@ -296,7 +305,7 @@ namespace XrmToolBox
                     Left = 4,
                     Top = top,
                     Width = width,
-                    Tag = plugin
+                    Tag = plugin,
                 };
 
                 pm.Clicked += PluginClicked;
@@ -504,17 +513,6 @@ namespace XrmToolBox
             Process.Start("http://xrmtoolbox.codeplex.com/WorkItem/Create");
         }
 
-        private void TsbDonateClick(object sender, EventArgs e)
-        {
-            var url = string.Format("https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business={0}&lc={1}&item_name={2}&currency_code={3}&bn=PP%2dDonationsBF",
-                "tanguy92@hotmail.com",
-                "FR",
-                "Donation%20for%20MSCRM%20Tools%20-%20Xrm%20Tool%20Box",
-                "EUR");
-
-            Process.Start(url);
-        }
-
         private void donateInUSDollarsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             donate("EN", "USD");
@@ -543,6 +541,12 @@ namespace XrmToolBox
             Process.Start(url);
         }
 
+        private void closeCurrentTabToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedTab.TabIndex != 0)
+                tabControl1.TabPages.RemoveAt(tabControl1.SelectedTab.TabIndex);
+        }
+        
         private void CloseAllTabsToolStripMenuItemClick(object sender, EventArgs e)
         {
             for (int i = tabControl1.TabPages.Count - 1; i > 0; i--)
@@ -567,9 +571,10 @@ namespace XrmToolBox
             {
                 bool reinitDisplay = currentOptions.DisplayMostUsedFirst != oDialog.Option.DisplayMostUsedFirst
                                      || currentOptions.MostUsedList.Count != oDialog.Option.MostUsedList.Count
-                                     || currentOptions.DisplayLargeIcons != oDialog.Option.DisplayLargeIcons;
+                                     || currentOptions.DisplayLargeIcons != oDialog.Option.DisplayLargeIcons
+                                     || !oDialog.Option.HiddenPlugins.SequenceEqual(currentOptions.HiddenPlugins);
 
-                currentOptions = oDialog.Option;
+              currentOptions = oDialog.Option;
 
                if (reinitDisplay)
                 {
@@ -583,8 +588,6 @@ namespace XrmToolBox
         {
             fHelper.DisplayConnectionsList(this);
         }
-
-        
     }
 }
 

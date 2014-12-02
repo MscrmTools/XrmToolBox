@@ -243,5 +243,12 @@ namespace MsCrmTools.SynchronousEventOrderEditor
                     MessageBoxIcon.Error);
             }
         }
+
+        private void tsbClose_Click(object sender, EventArgs e)
+        {
+            const string message = "Are your sure you want to close this tab?";
+            if (MessageBox.Show(message, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                OnCloseTool(this, null);
+        }
     }
 }

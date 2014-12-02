@@ -68,12 +68,12 @@ namespace XrmToolBox
                 var externalCaller = parameter as ExternalMethodCallerInfo;
                 if (externalCaller == null)
                 {
-                    method = GetType().GetMethod(actionName, new[] {parameter.GetType()});
+                    method = GetType().GetMethod(actionName, new[] { parameter.GetType() });
                     if (method == null)
                     {
                         throw new Exception("Unable to find method " + GetType().Name + "." + actionName);
                     }
-                    method.Invoke(this, new[] {parameter});
+                    method.Invoke(this, new[] { parameter });
                 }
                 else
                 {
@@ -88,15 +88,15 @@ namespace XrmToolBox
 
         private readonly Worker _worker = new Worker();
 
-        public void WorkAsync(string message, Action<DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback)
+        public void WorkAsync(string message, Action<DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, object argument = null, int messageWidth = 340, int messageHeight = 150)
         {
-            _worker.WorkAsync(this, message, work, callback);
+            _worker.WorkAsync(this, message, work, callback, argument, messageWidth, messageHeight);
         }
 
         public void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback,
-                              Action<ProgressChangedEventArgs> progressChanged)
+                              Action<ProgressChangedEventArgs> progressChanged, object argument = null, int messageWidth = 340, int messageHeight = 150)
         {
-            _worker.WorkAsync(this, message, work, callback, progressChanged);
+            _worker.WorkAsync(this, message, work, callback, progressChanged, argument, messageWidth, messageHeight);
         }
 
         public void SetWorkingMessage(string message, int width = 340, int height = 100)

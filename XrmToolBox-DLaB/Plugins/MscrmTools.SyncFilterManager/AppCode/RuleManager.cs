@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
@@ -173,8 +174,25 @@ namespace MscrmTools.SyncFilterManager.AppCode
                 rule["description"] = systemView.GetAttributeValue<string>("description");
                 rule["querytype"] = templateType;
                 rule["isdefault"] = false;
-                rule["fetchxml"] = systemView.GetAttributeValue<string>("fetchxml");
                 rule["layoutxml"] = systemView.GetAttributeValue<string>("layoutxml");
+
+                if (templateType == 256 || templateType == 131072)
+                {
+                    // Remove Order nodes if Outlook template
+                    var fetchDoc = new XmlDocument();
+                    fetchDoc.LoadXml(systemView.GetAttributeValue<string>("fetchxml"));
+                    var orderNodes = fetchDoc.SelectNodes("//order");
+                    foreach (XmlNode orderNode in orderNodes)
+                    {
+                        orderNode.ParentNode.RemoveChild(orderNode);
+                    }
+
+                    rule["fetchxml"] = fetchDoc.OuterXml;
+                }
+                else
+                {
+                    rule["fetchxml"] = systemView.GetAttributeValue<string>("fetchxml");
+                }
 
                 rulesIds.Add(service.Create(rule));
             }
@@ -214,7 +232,24 @@ namespace MscrmTools.SyncFilterManager.AppCode
         public void UpdateRuleFromSystemView(Entity systemView, Entity rule, BackgroundWorker worker = null)
         {
             var ruleToUpdate = new Entity("savedquery") {Id = rule.Id};
-            ruleToUpdate["fetchxml"] = systemView.GetAttributeValue<string>("fetchxml");
+
+            if (rule.GetAttributeValue<int>("querytype") == 256 || rule.GetAttributeValue<int>("querytype") == 131072)
+            {
+                // Remove Order nodes if Outlook template
+                var fetchDoc = new XmlDocument();
+                fetchDoc.LoadXml(systemView.GetAttributeValue<string>("fetchxml"));
+                var orderNodes = fetchDoc.SelectNodes("//order");
+                foreach (XmlNode orderNode in orderNodes)
+                {
+                    orderNode.ParentNode.RemoveChild(orderNode);
+                }
+
+                rule["fetchxml"] = fetchDoc.OuterXml;
+            }
+            else
+            {
+                ruleToUpdate["fetchxml"] = systemView.GetAttributeValue<string>("fetchxml");
+            }
 
             service.Update(ruleToUpdate);
 

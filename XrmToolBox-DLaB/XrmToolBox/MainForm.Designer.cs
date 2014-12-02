@@ -32,11 +32,6 @@ namespace XrmToolBox
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.HomePageTab = new System.Windows.Forms.TabPage();
-            this.pnlHelp = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbConnect = new System.Windows.Forms.ToolStripButton();
@@ -44,6 +39,7 @@ namespace XrmToolBox
             this.tsbManageConnections = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbManageTabs = new System.Windows.Forms.ToolStripDropDownButton();
+            this.closeCurrentTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeAllTabsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeAllTabsExceptActiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbOptions = new System.Windows.Forms.ToolStripButton();
@@ -59,78 +55,16 @@ namespace XrmToolBox
             this.donateInUSDollarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateInEuroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateInGBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.HomePageTab = new System.Windows.Forms.TabPage();
+            this.pnlHelp = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.HomePageTab.SuspendLayout();
             this.pnlHelp.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.HomePageTab);
-            this.tabControl1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl1.Location = new System.Drawing.Point(0, 42);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1326, 852);
-            this.tabControl1.TabIndex = 0;
-            // 
-            // HomePageTab
-            // 
-            this.HomePageTab.AutoScroll = true;
-            this.HomePageTab.Controls.Add(this.pnlHelp);
-            this.HomePageTab.Location = new System.Drawing.Point(4, 32);
-            this.HomePageTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.HomePageTab.Name = "HomePageTab";
-            this.HomePageTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.HomePageTab.Size = new System.Drawing.Size(1318, 816);
-            this.HomePageTab.TabIndex = 0;
-            this.HomePageTab.Text = "Home";
-            this.HomePageTab.UseVisualStyleBackColor = true;
-            // 
-            // pnlHelp
-            // 
-            this.pnlHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlHelp.Controls.Add(this.label2);
-            this.pnlHelp.Controls.Add(this.label1);
-            this.pnlHelp.Location = new System.Drawing.Point(4, 9);
-            this.pnlHelp.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.pnlHelp.Name = "pnlHelp";
-            this.pnlHelp.Size = new System.Drawing.Size(1297, 794);
-            this.pnlHelp.TabIndex = 0;
-            this.pnlHelp.Visible = false;
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(8, 80);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(1286, 179);
-            this.label2.TabIndex = 1;
-            this.label2.Text = resources.GetString("label2.Text");
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(8, 0);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(1286, 52);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Oups... no plugin found!";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // imageList1
             // 
@@ -192,6 +126,7 @@ namespace XrmToolBox
             // tsbManageTabs
             // 
             this.tsbManageTabs.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.closeCurrentTabToolStripMenuItem,
             this.closeAllTabsToolStripMenuItem,
             this.closeAllTabsExceptActiveToolStripMenuItem});
             this.tsbManageTabs.Image = ((System.Drawing.Image)(resources.GetObject("tsbManageTabs.Image")));
@@ -199,6 +134,13 @@ namespace XrmToolBox
             this.tsbManageTabs.Name = "tsbManageTabs";
             this.tsbManageTabs.Size = new System.Drawing.Size(78, 29);
             this.tsbManageTabs.Text = "Tabs";
+            // 
+            // closeCurrentTabToolStripMenuItem
+            // 
+            this.closeCurrentTabToolStripMenuItem.Name = "closeCurrentTabToolStripMenuItem";
+            this.closeCurrentTabToolStripMenuItem.Size = new System.Drawing.Size(286, 30);
+            this.closeCurrentTabToolStripMenuItem.Text = "Close current tab";
+            this.closeCurrentTabToolStripMenuItem.Click += new System.EventHandler(this.closeCurrentTabToolStripMenuItem_Click);
             // 
             // closeAllTabsToolStripMenuItem
             // 
@@ -321,24 +263,89 @@ namespace XrmToolBox
             this.donateInGBPToolStripMenuItem.Text = "Donate in GBP";
             this.donateInGBPToolStripMenuItem.Click += new System.EventHandler(this.donateInGBPToolStripMenuItem_Click);
             // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.HomePageTab);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tabControl1.Location = new System.Drawing.Point(0, 32);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(1326, 909);
+            this.tabControl1.TabIndex = 2;
+            // 
+            // HomePageTab
+            // 
+            this.HomePageTab.AutoScroll = true;
+            this.HomePageTab.Controls.Add(this.pnlHelp);
+            this.HomePageTab.Location = new System.Drawing.Point(4, 32);
+            this.HomePageTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.HomePageTab.Name = "HomePageTab";
+            this.HomePageTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.HomePageTab.Size = new System.Drawing.Size(1318, 873);
+            this.HomePageTab.TabIndex = 0;
+            this.HomePageTab.Text = "Home";
+            this.HomePageTab.UseVisualStyleBackColor = true;
+            // 
+            // pnlHelp
+            // 
+            this.pnlHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlHelp.Controls.Add(this.label2);
+            this.pnlHelp.Controls.Add(this.label1);
+            this.pnlHelp.Location = new System.Drawing.Point(4, 9);
+            this.pnlHelp.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.pnlHelp.Name = "pnlHelp";
+            this.pnlHelp.Size = new System.Drawing.Size(1297, 851);
+            this.pnlHelp.TabIndex = 0;
+            this.pnlHelp.Visible = false;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(8, 80);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(1286, 179);
+            this.label2.TabIndex = 1;
+            this.label2.Text = resources.GetString("label2.Text");
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Red;
+            this.label1.Location = new System.Drawing.Point(8, 0);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(1286, 52);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Oups... no plugin found!";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1326, 941);
-            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.toolStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ToolBox for Microsoft Dynamics CRM 2011/2013";
             this.Load += new System.EventHandler(this.Form1Load);
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.HomePageTab.ResumeLayout(false);
             this.pnlHelp.ResumeLayout(false);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -346,8 +353,6 @@ namespace XrmToolBox
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage HomePageTab;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton tsbConnect;
@@ -364,15 +369,18 @@ namespace XrmToolBox
         private System.Windows.Forms.ToolStripMenuItem startADiscussionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rateThisToolToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton tsbOptions;
-        private System.Windows.Forms.Panel pnlHelp;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripDropDownButton tsddbDonate;
         private System.Windows.Forms.ToolStripMenuItem donateInUSDollarsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem donateInEuroToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton tsbManageConnections;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem donateInGBPToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem closeCurrentTabToolStripMenuItem;
+        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabPage HomePageTab;
+        private System.Windows.Forms.Panel pnlHelp;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
     }
 }
 

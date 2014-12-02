@@ -30,79 +30,84 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WelcomeScreen));
             this.pnlSupport = new System.Windows.Forms.Panel();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.lblOptimization = new System.Windows.Forms.Label();
             this.lblSupport = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.lbl1 = new System.Windows.Forms.Label();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.lblAnd = new System.Windows.Forms.Label();
+            this.lblMscrmTools = new System.Windows.Forms.Label();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.lblProvidedBy = new System.Windows.Forms.Label();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
+            this.linkClose = new System.Windows.Forms.LinkLabel();
             this.pnlSupport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
-            this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlSupport
             // 
-            this.pnlSupport.Controls.Add(this.label7);
-            this.pnlSupport.Controls.Add(this.label3);
-            this.pnlSupport.Controls.Add(this.label4);
+            this.pnlSupport.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlSupport.Controls.Add(this.linkClose);
+            this.pnlSupport.Controls.Add(this.lblOptimization);
+            this.pnlSupport.Controls.Add(this.lblSupport);
+            this.pnlSupport.Controls.Add(this.lblAnd);
+            this.pnlSupport.Controls.Add(this.lblMscrmTools);
             this.pnlSupport.Controls.Add(this.pictureBox3);
-            this.pnlSupport.Controls.Add(this.label5);
+            this.pnlSupport.Controls.Add(this.lblProvidedBy);
             this.pnlSupport.Controls.Add(this.pictureBox4);
-            this.pnlSupport.Controls.Add(this.label6);
+            this.pnlSupport.Controls.Add(this.lblTitle);
             this.pnlSupport.Location = new System.Drawing.Point(0, 0);
             this.pnlSupport.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pnlSupport.Name = "pnlSupport";
-            this.pnlSupport.Size = new System.Drawing.Size(900, 461);
+            this.pnlSupport.Size = new System.Drawing.Size(899, 461);
             this.pnlSupport.TabIndex = 0;
             // 
-            // label7
+            // lblOptimization
             // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.Color.Firebrick;
-            this.label7.Location = new System.Drawing.Point(68, 359);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(262, 60);
-            this.label7.TabIndex = 22;
-            this.label7.Text = "Sponsored by YOU! {0}{1}\r\nThank you very much!";
+            this.lblOptimization.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblOptimization.Location = new System.Drawing.Point(0, 439);
+            this.lblOptimization.Name = "lblOptimization";
+            this.lblOptimization.Size = new System.Drawing.Size(897, 20);
+            this.lblOptimization.TabIndex = 23;
+            this.lblOptimization.Text = "Plugin Development optimizations by Daryl LaBar";
+            this.lblOptimization.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label3
+            // lblSupport
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label3.Location = new System.Drawing.Point(396, 251);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(49, 30);
-            this.label3.TabIndex = 21;
-            this.label3.Text = "and";
+            this.lblSupport.AutoSize = true;
+            this.lblSupport.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSupport.ForeColor = System.Drawing.Color.Firebrick;
+            this.lblSupport.Location = new System.Drawing.Point(68, 359);
+            this.lblSupport.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblSupport.Name = "lblSupport";
+            this.lblSupport.Size = new System.Drawing.Size(262, 60);
+            this.lblSupport.TabIndex = 22;
+            this.lblSupport.Text = "Sponsored by YOU! {0}{1}\r\nThank you very much!";
+            this.lblSupport.Visible = false;
             // 
-            // label4
+            // lblAnd
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 30F);
-            this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label4.Location = new System.Drawing.Point(208, 148);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(372, 81);
-            this.label4.TabIndex = 20;
-            this.label4.Text = "Mscrm Tools";
+            this.lblAnd.AutoSize = true;
+            this.lblAnd.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAnd.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblAnd.Location = new System.Drawing.Point(396, 251);
+            this.lblAnd.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAnd.Name = "lblAnd";
+            this.lblAnd.Size = new System.Drawing.Size(49, 30);
+            this.lblAnd.TabIndex = 21;
+            this.lblAnd.Text = "and";
+            // 
+            // lblMscrmTools
+            // 
+            this.lblMscrmTools.AutoSize = true;
+            this.lblMscrmTools.Font = new System.Drawing.Font("Segoe UI", 30F);
+            this.lblMscrmTools.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblMscrmTools.Location = new System.Drawing.Point(208, 148);
+            this.lblMscrmTools.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblMscrmTools.Name = "lblMscrmTools";
+            this.lblMscrmTools.Size = new System.Drawing.Size(372, 81);
+            this.lblMscrmTools.TabIndex = 20;
+            this.lblMscrmTools.Text = "Mscrm Tools";
             // 
             // pictureBox3
             // 
@@ -115,23 +120,23 @@
             this.pictureBox3.TabIndex = 19;
             this.pictureBox3.TabStop = false;
             // 
-            // label5
+            // lblProvidedBy
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label5.Location = new System.Drawing.Point(68, 85);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(130, 30);
-            this.label5.TabIndex = 18;
-            this.label5.Text = "Provided by";
+            this.lblProvidedBy.AutoSize = true;
+            this.lblProvidedBy.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProvidedBy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblProvidedBy.Location = new System.Drawing.Point(68, 85);
+            this.lblProvidedBy.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblProvidedBy.Name = "lblProvidedBy";
+            this.lblProvidedBy.Size = new System.Drawing.Size(130, 30);
+            this.lblProvidedBy.TabIndex = 18;
+            this.lblProvidedBy.Text = "Provided by";
             // 
             // pictureBox4
             // 
             this.pictureBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(505, 235);
+            this.pictureBox4.Location = new System.Drawing.Point(502, 235);
             this.pictureBox4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(377, 112);
@@ -139,118 +144,35 @@
             this.pictureBox4.TabIndex = 17;
             this.pictureBox4.TabStop = false;
             // 
-            // label6
-            // 
-            this.label6.Font = new System.Drawing.Font("Segoe UI", 20F);
-            this.label6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label6.Location = new System.Drawing.Point(0, 14);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(900, 71);
-            this.label6.TabIndex = 16;
-            this.label6.Text = "Toolbox for Microsoft Dynamics CRM 2011/2013";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // panel2
-            // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel2.Controls.Add(this.lblSupport);
-            this.panel2.Controls.Add(this.label2);
-            this.panel2.Controls.Add(this.label1);
-            this.panel2.Controls.Add(this.pictureBox1);
-            this.panel2.Controls.Add(this.lbl1);
-            this.panel2.Controls.Add(this.pictureBox2);
-            this.panel2.Controls.Add(this.lblTitle);
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(899, 461);
-            this.panel2.TabIndex = 1;
-            // 
-            // lblSupport
-            // 
-            this.lblSupport.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSupport.ForeColor = System.Drawing.Color.Red;
-            this.lblSupport.Location = new System.Drawing.Point(-1, 425);
-            this.lblSupport.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblSupport.Name = "lblSupport";
-            this.lblSupport.Size = new System.Drawing.Size(900, 35);
-            this.lblSupport.TabIndex = 16;
-            this.lblSupport.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label2.Location = new System.Drawing.Point(395, 238);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(49, 30);
-            this.label2.TabIndex = 15;
-            this.label2.Text = "and";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 30F);
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label1.Location = new System.Drawing.Point(231, 146);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(372, 81);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "Mscrm Tools";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(72, 119);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(150, 149);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 13;
-            this.pictureBox1.TabStop = false;
-            // 
-            // lbl1
-            // 
-            this.lbl1.AutoSize = true;
-            this.lbl1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbl1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lbl1.Location = new System.Drawing.Point(66, 82);
-            this.lbl1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lbl1.Name = "lbl1";
-            this.lbl1.Size = new System.Drawing.Size(130, 30);
-            this.lbl1.TabIndex = 12;
-            this.lbl1.Text = "Provided by";
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(400, 272);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(480, 151);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 11;
-            this.pictureBox2.TabStop = false;
-            // 
             // lblTitle
             // 
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 20F);
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblTitle.Location = new System.Drawing.Point(-1, 12);
+            this.lblTitle.Location = new System.Drawing.Point(0, 17);
             this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(900, 71);
-            this.lblTitle.TabIndex = 8;
+            this.lblTitle.TabIndex = 16;
             this.lblTitle.Text = "Toolbox for Microsoft Dynamics CRM 2011/2013";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // linkClose
+            // 
+            this.linkClose.AutoSize = true;
+            this.linkClose.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkClose.DisabledLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.linkClose.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.linkClose.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
+            this.linkClose.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.linkClose.Location = new System.Drawing.Point(859, 0);
+            this.linkClose.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.linkClose.Name = "linkClose";
+            this.linkClose.Size = new System.Drawing.Size(34, 38);
+            this.linkClose.TabIndex = 24;
+            this.linkClose.Text = "X";
+            this.linkClose.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.linkClose.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkClose_LinkClicked);
             // 
             // WelcomeScreen
             // 
@@ -259,7 +181,6 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(900, 461);
             this.Controls.Add(this.pnlSupport);
-            this.Controls.Add(this.panel2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "WelcomeScreen";
@@ -273,10 +194,6 @@
             this.pnlSupport.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -284,21 +201,15 @@
         #endregion
 
         private System.Windows.Forms.Panel pnlSupport;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.PictureBox pictureBox4;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label lblSupport;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label lbl1;
-        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.Label lblAnd;
+        private System.Windows.Forms.Label lblMscrmTools;
+        private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.Label lblProvidedBy;
+        private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Label lblOptimization;
+        private System.Windows.Forms.LinkLabel linkClose;
 
 
     }

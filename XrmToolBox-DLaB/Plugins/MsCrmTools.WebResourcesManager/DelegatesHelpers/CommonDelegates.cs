@@ -52,7 +52,7 @@ namespace MsCrmTools.WebResourcesManager.DelegatesHelpers
                 result = MessageBox.Show(form, message, caption, buttons, icon);
             };
 
-            if (form.InvokeRequired)
+            if (form != null && form.InvokeRequired)
             {
                 form.Invoke(DisplayMessage);
                 return result;

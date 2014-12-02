@@ -16,9 +16,6 @@ namespace XrmToolBox.Forms
         public WelcomeScreen()
         {
             InitializeComponent();
-
-            pnlSupport.Visible = false;
-            panel2.Visible = true;
         }
 
         public Form MyParentForm { get; set; }
@@ -35,12 +32,6 @@ namespace XrmToolBox.Forms
 
         void TimerTick(object sender, EventArgs e)
         {
-            //try
-            //{
-            //    MyParentForm.Activate();
-            //    MyParentForm.BringToFront();
-            //}
-            //catch { }
             ((Timer) sender).Stop();
             Close();
         }
@@ -70,15 +61,11 @@ namespace XrmToolBox.Forms
                                 var userName = userNameInfo.GetValue(classInstance, null).ToString();
                                 var orgName = orgNameInfo.GetValue(classInstance, null).ToString();
 
-                                label7.Text = string.Format(label7.Text,
+                                lblSupport.Text = string.Format(lblSupport.Text,
                                     userName,
                                     orgName.Length > 0 && orgName != userName ? string.Format(" ({0})", orgName) : "");
 
-                                pnlSupport.Visible = true;
-                                panel2.Visible = false;
-                                //lblSupport.Text = string.Format("Thank you for your support {0}{1}!",
-                                //    userName,
-                                //    orgName.Length > 0 && orgName != userName ? string.Format(" ({0})", orgName) : "");
+                                lblSupport.Visible = true;
                             }
                         }
                     }
@@ -92,6 +79,11 @@ namespace XrmToolBox.Forms
                 //pnlSupport.Visible = false;
                 //panel2.Visible = true;
             }
+        }
+
+        private void linkClose_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Close();
         }
     }
 }

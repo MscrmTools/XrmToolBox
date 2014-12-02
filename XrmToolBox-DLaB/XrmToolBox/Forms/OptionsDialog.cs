@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace XrmToolBox.Forms
@@ -29,6 +31,9 @@ namespace XrmToolBox.Forms
             if (!option.DisplayMostUsedFirst && option.MostUsedList.Count > 0)
                 option.MostUsedList.Clear();
 
+            option.HiddenPlugins =
+                lvPlugins.Items.Cast<ListViewItem>().Where(i => i.Checked == false).Select(i => i.Text).ToList();
+
             option.Save();
 
             DialogResult = DialogResult.OK;
@@ -44,6 +49,31 @@ namespace XrmToolBox.Forms
         private void BtnResetMuListClick(object sender, EventArgs e)
         {
             option.MostUsedList = new List<PluginUseCount>();
+        }
+
+        private void OptionsDialog_Load(object sender, EventArgs e)
+        {
+            var pManager = new PluginManager();
+            pManager.LoadPlugins();
+
+            foreach (var plugin in pManager.Plugins)
+            {
+                var title = ((AssemblyTitleAttribute) GetAssemblyAttribute(plugin.Assembly, typeof (AssemblyTitleAttribute))).Title;
+                var author = ((AssemblyCompanyAttribute) GetAssemblyAttribute(plugin.Assembly, typeof (AssemblyCompanyAttribute))).Company;
+                var version = plugin.Assembly.GetName().Version.ToString();
+
+                var item = new ListViewItem(title);
+                item.SubItems.Add(author);
+                item.SubItems.Add(version);
+                item.Checked = option.HiddenPlugins == null || !option.HiddenPlugins.Contains(title);
+
+                lvPlugins.Items.Add(item);
+            }
+        }
+
+        private object GetAssemblyAttribute(Assembly assembly, Type attributeType)
+        {
+            return assembly.GetCustomAttributes(attributeType, true)[0];
         }
     }
 }
