@@ -113,6 +113,9 @@ namespace Javista.XrmToolBox.ImportNN
                     cbbFirstEntity.SelectedIndex = 0;
                 }
 
+                cbbFirstEntity.DrawMode = DrawMode.OwnerDrawFixed;
+                cbbFirstEntity.DrawItem += cbbEntity_DrawItem; 
+
                 tsbExport.Enabled = true;
                 tsbImportNN.Enabled = true;
             }
@@ -147,6 +150,9 @@ namespace Javista.XrmToolBox.ImportNN
                 });
             }
 
+            cbbFirstEntityAttribute.DrawMode = DrawMode.OwnerDrawFixed;
+            cbbFirstEntityAttribute.DrawItem +=cbbAttribute_DrawItem; 
+
             if (cbbFirstEntityAttribute.Items.Count > 0)
             {
                 cbbFirstEntityAttribute.SelectedIndex = 0;
@@ -168,9 +174,142 @@ namespace Javista.XrmToolBox.ImportNN
                 MessageBox.Show(ParentForm, "No many to many relationships found for this entity!", "Warning",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+
+            cbbRelationship.DrawMode = DrawMode.OwnerDrawFixed;
+            cbbRelationship.DrawItem += cbbRelationship_DrawItem; 
+
         }
 
-      
+        private void cbbAttribute_DrawItem(object sender, DrawItemEventArgs e)
+        {
+
+            // Draw the default background
+            e.DrawBackground();
+
+            if (e.Index == -1) return;
+
+            // The ComboBox is bound to a DataTable,
+            // so the items are DataRowView objects.
+            var attr = (AttributeInfo)((ComboBox)sender).Items[e.Index];
+
+            // Retrieve the value of each column.
+            string displayName = attr.Metadata.DisplayName.UserLocalizedLabel != null
+                ? attr.Metadata.DisplayName.UserLocalizedLabel.Label
+                : "N/A";
+            string logicalName = attr.Metadata.LogicalName;
+
+            // Get the bounds for the first column
+            Rectangle r1 = e.Bounds;
+            r1.Width /= 2;
+
+            // Draw the text on the first column
+            using (SolidBrush sb = new SolidBrush(e.ForeColor))
+            {
+                e.Graphics.DrawString(displayName, e.Font, sb, r1);
+            }
+
+            // Get the bounds for the second column
+            Rectangle r2 = e.Bounds;
+            r2.X = e.Bounds.Width/2;
+            r2.Width /= 2;
+
+            // Draw the text on the second column
+            using (SolidBrush sb = new SolidBrush(e.ForeColor))
+            {
+                e.Graphics.DrawString(logicalName, e.Font, sb, r2);
+            }
+        }
+
+        private void cbbEntity_DrawItem(object sender, DrawItemEventArgs e)
+        {
+
+            // Draw the default background
+            e.DrawBackground();
+
+            if (e.Index == -1) return;
+
+            // The ComboBox is bound to a DataTable,
+            // so the items are DataRowView objects.
+            var attr = (EntityInfo)((ComboBox)sender).Items[e.Index];
+
+            // Retrieve the value of each column.
+            string displayName = attr.Metadata.DisplayName.UserLocalizedLabel != null
+                ? attr.Metadata.DisplayName.UserLocalizedLabel.Label
+                : "N/A";
+            string logicalName = attr.Metadata.LogicalName;
+
+            // Get the bounds for the first column
+            Rectangle r1 = e.Bounds;
+            r1.Width /= 2;
+
+            // Draw the text on the first column
+            using (SolidBrush sb = new SolidBrush(e.ForeColor))
+            {
+                e.Graphics.DrawString(displayName, e.Font, sb, r1);
+            }
+
+            // Get the bounds for the second column
+            Rectangle r2 = e.Bounds;
+            r2.X = e.Bounds.Width / 2;
+            r2.Width /= 2;
+
+            // Draw the text on the second column
+            using (SolidBrush sb = new SolidBrush(e.ForeColor))
+            {
+                e.Graphics.DrawString(logicalName, e.Font, sb, r2);
+            }
+        }
+
+        private void cbbRelationship_DrawItem(object sender, DrawItemEventArgs e)
+        {
+
+            // Draw the default background
+            e.DrawBackground();
+
+            if (e.Index == -1) return;
+
+            // The ComboBox is bound to a DataTable,
+            // so the items are DataRowView objects.
+            var rel = (RelationshipInfo)((ComboBox)sender).Items[e.Index];
+
+            // Retrieve the value of each column.
+            string name = rel.Metadata.IntersectEntityName;
+            string entity1 = rel.Metadata.Entity1LogicalName;
+            string entity2 = rel.Metadata.Entity2LogicalName;
+
+            // Get the bounds for the first column
+            Rectangle r1 = e.Bounds;
+            r1.Width /= 3;
+
+            // Draw the text on the first column
+            using (SolidBrush sb = new SolidBrush(e.ForeColor))
+            {
+                e.Graphics.DrawString(name, e.Font, sb, r1);
+            }
+
+            // Get the bounds for the second column
+            Rectangle r2 = e.Bounds;
+            r2.X = e.Bounds.Width / 3;
+            r2.Width /= 3;
+
+            // Draw the text on the second column
+            using (SolidBrush sb = new SolidBrush(e.ForeColor))
+            {
+                e.Graphics.DrawString(entity1, e.Font, sb, r2);
+            }
+
+            // Get the bounds for the third column
+            Rectangle r3 = e.Bounds;
+            r3.X = e.Bounds.Width / 3 * 2;
+            r3.Width /= 3;
+
+            // Draw the text on the third column
+            using (SolidBrush sb = new SolidBrush(e.ForeColor))
+            {
+                e.Graphics.DrawString(entity2, e.Font, sb, r3);
+            }
+        }
+
         private void cbbRelationship_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbbRelationship.SelectedItem == null)
@@ -180,13 +319,17 @@ namespace Javista.XrmToolBox.ImportNN
             cbbSecondEntity.Items.Clear();
             cbbSecondEntity.Items.Add(new EntityInfo
             {
-                Metadata = emds.First(ent => ent.LogicalName == rel.Entity2LogicalName)
+                Metadata = emds.First(ent => (ent.LogicalName == rel.Entity1LogicalName && rel.Entity1LogicalName != ((EntityInfo)cbbFirstEntity.SelectedItem).Metadata.LogicalName)
+                || (ent.LogicalName == rel.Entity2LogicalName && rel.Entity2LogicalName != ((EntityInfo)cbbFirstEntity.SelectedItem).Metadata.LogicalName))
             });
 
             if (cbbSecondEntity.Items.Count > 0)
             {
                 cbbSecondEntity.SelectedIndex = 0;
             }
+
+            cbbSecondEntity.DrawMode = DrawMode.OwnerDrawFixed;
+            cbbSecondEntity.DrawItem += cbbEntity_DrawItem; 
         }
 
         private void cbbSecondEntity_SelectedIndexChanged(object sender, EventArgs e)
@@ -213,6 +356,9 @@ namespace Javista.XrmToolBox.ImportNN
             {
                 cbbSecondEntityAttribute.SelectedIndex = 0;
             }
+
+            cbbSecondEntityAttribute.DrawMode = DrawMode.OwnerDrawFixed;
+            cbbSecondEntityAttribute.DrawItem += cbbAttribute_DrawItem; 
         }
 
         private void rdbFirstGuid_CheckedChanged(object sender, EventArgs e)
@@ -250,7 +396,7 @@ namespace Javista.XrmToolBox.ImportNN
                 FirstEntity = ((EntityInfo)cbbFirstEntity.SelectedItem).Metadata.LogicalName,
                 FirstAttributeIsGuid = rdbFirstGuid.Checked,
                 FirstAttributeName = ((AttributeInfo)cbbFirstEntityAttribute.SelectedItem).Metadata.LogicalName,
-                Relationship = ((RelationshipInfo)cbbRelationship.SelectedItem).Metadata.SchemaName,
+                Relationship = ((RelationshipInfo)cbbRelationship.SelectedItem).Metadata.IntersectEntityName,
                 SecondEntity = ((EntityInfo)cbbSecondEntity.SelectedItem).Metadata.LogicalName,
                 SecondAttributeIsGuid = rdbSecondGuid.Checked,
                 SecondAttributeName = ((AttributeInfo)cbbSecondEntityAttribute.SelectedItem).Metadata.LogicalName,
@@ -305,7 +451,7 @@ namespace Javista.XrmToolBox.ImportNN
                 FirstEntity = ((EntityInfo)cbbFirstEntity.SelectedItem).Metadata.LogicalName,
                 FirstAttributeIsGuid = rdbFirstGuid.Checked,
                 FirstAttributeName = ((AttributeInfo)cbbFirstEntityAttribute.SelectedItem).Metadata.LogicalName,
-                Relationship = ((RelationshipInfo)cbbRelationship.SelectedItem).Metadata.SchemaName,
+                Relationship = ((RelationshipInfo)cbbRelationship.SelectedItem).Metadata.IntersectEntityName,
                 SecondEntity = ((EntityInfo)cbbSecondEntity.SelectedItem).Metadata.LogicalName,
                 SecondAttributeIsGuid = rdbSecondGuid.Checked,
                 SecondAttributeName = ((AttributeInfo)cbbSecondEntityAttribute.SelectedItem).Metadata.LogicalName,
