@@ -11,8 +11,10 @@ namespace XrmToolBox
         public bool DisplayMostUsedFirst { get; set; }
         public List<PluginUseCount> MostUsedList { get; set; }
         public DateTime LastAdvertisementDisplay { get; set; }
+        public DateTime LastUpdateCheck { get; set; }
 
         public bool CheckUpdateOnStartup { get; set; }
+        public List<string> HiddenPlugins { get; set; }
 
         public Options()
         {
@@ -43,13 +45,15 @@ namespace XrmToolBox
         public object Clone()
         {
             return new Options
-                                   {
-                                       CheckUpdateOnStartup = CheckUpdateOnStartup,
-                                       DisplayLargeIcons = DisplayLargeIcons,
-                                       DisplayMostUsedFirst = DisplayMostUsedFirst,
-                                       MostUsedList = MostUsedList,
-                                       LastAdvertisementDisplay = LastAdvertisementDisplay
-                                   };
+            {
+                CheckUpdateOnStartup = CheckUpdateOnStartup,
+                DisplayLargeIcons = DisplayLargeIcons,
+                DisplayMostUsedFirst = DisplayMostUsedFirst,
+                MostUsedList = MostUsedList,
+                LastAdvertisementDisplay = LastAdvertisementDisplay,
+                HiddenPlugins = HiddenPlugins,
+                LastUpdateCheck = LastUpdateCheck
+            };
         }
     }
 }
