@@ -95,6 +95,7 @@
             this.copyWebResourceNameToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsbGetLatestVersion = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -204,6 +205,7 @@
             this.tsbMinifyJS,
             this.tsbPreviewHtml,
             this.tsbBeautify,
+            this.tsbGetLatestVersion,
             this.toolStripSeparator10,
             this.tslResourceName});
             this.toolStripScriptContent.Location = new System.Drawing.Point(0, 0);
@@ -549,7 +551,7 @@
             this.toolStripSeparator7,
             this.propertiesToolStripMenuItem});
             this.contextMenuStripTreeView.Name = "contextMenuStripTreeView";
-            this.contextMenuStripTreeView.Size = new System.Drawing.Size(480, 427);
+            this.contextMenuStripTreeView.Size = new System.Drawing.Size(480, 394);
             // 
             // addNewWebResourceToolStripMenuItem
             // 
@@ -711,6 +713,16 @@
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.PropertiesToolStripMenuItemClick);
             // 
+            // tsbGetLatestVersion
+            // 
+            this.tsbGetLatestVersion.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbGetLatestVersion.Image = ((System.Drawing.Image)(resources.GetObject("tsbGetLatestVersion.Image")));
+            this.tsbGetLatestVersion.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbGetLatestVersion.Name = "tsbGetLatestVersion";
+            this.tsbGetLatestVersion.Size = new System.Drawing.Size(23, 36);
+            this.tsbGetLatestVersion.Text = "Get latest version";
+            this.tsbGetLatestVersion.Click += new System.EventHandler(this.getLatestVersionToolStripMenuItem_Click);
+            // 
             // WebResourcesManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -801,5 +813,6 @@
         private System.Windows.Forms.ToolStripSeparator tssCurrentlyLoadedSolution;
         private System.Windows.Forms.ToolStripLabel tslCurrentlyLoadedSolution;
         private System.Windows.Forms.ToolStripMenuItem getLatestVersionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton tsbGetLatestVersion;
     }
 }
