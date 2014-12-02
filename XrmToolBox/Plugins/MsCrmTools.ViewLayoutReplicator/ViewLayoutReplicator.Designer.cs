@@ -52,10 +52,10 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.gbSourceViews = new System.Windows.Forms.GroupBox();
-            this.lvSourceViewLayoutPreview = new System.Windows.Forms.ListView();
             this.lvSourceViews = new System.Windows.Forms.ListView();
             this.allViewName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.allViewType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.lvSourceViewLayoutPreview = new System.Windows.Forms.ListView();
             this.gbEntities.SuspendLayout();
             this.gbTargetViews.SuspendLayout();
             this.tsMain.SuspendLayout();
@@ -306,19 +306,6 @@
             this.gbSourceViews.TabStop = false;
             this.gbSourceViews.Text = "Source Views";
             // 
-            // lvSourceViewLayoutPreview
-            // 
-            this.lvSourceViewLayoutPreview.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lvSourceViewLayoutPreview.ForeColor = System.Drawing.Color.Black;
-            this.lvSourceViewLayoutPreview.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.lvSourceViewLayoutPreview.Location = new System.Drawing.Point(4, 239);
-            this.lvSourceViewLayoutPreview.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.lvSourceViewLayoutPreview.Name = "lvSourceViewLayoutPreview";
-            this.lvSourceViewLayoutPreview.Size = new System.Drawing.Size(799, 101);
-            this.lvSourceViewLayoutPreview.TabIndex = 67;
-            this.lvSourceViewLayoutPreview.UseCompatibleStateImageBehavior = false;
-            this.lvSourceViewLayoutPreview.View = System.Windows.Forms.View.Details;
-            // 
             // lvSourceViews
             // 
             this.lvSourceViews.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -336,7 +323,8 @@
             this.lvSourceViews.TabIndex = 68;
             this.lvSourceViews.UseCompatibleStateImageBehavior = false;
             this.lvSourceViews.View = System.Windows.Forms.View.Details;
-            this.lvSourceViews.Click += new System.EventHandler(this.LvSourceViewsSelectedIndexChanged);
+            this.lvSourceViews.SelectedIndexChanged += new System.EventHandler(this.LvSourceViewsSelectedIndexChanged);
+            this.lvSourceViews.DoubleClick += new System.EventHandler(this.LvSourceViewsDoubleClick);
             // 
             // allViewName
             // 
@@ -347,6 +335,19 @@
             // 
             this.allViewType.Text = "View Type";
             this.allViewType.Width = 130;
+            // 
+            // lvSourceViewLayoutPreview
+            // 
+            this.lvSourceViewLayoutPreview.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lvSourceViewLayoutPreview.ForeColor = System.Drawing.Color.Black;
+            this.lvSourceViewLayoutPreview.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.lvSourceViewLayoutPreview.Location = new System.Drawing.Point(4, 239);
+            this.lvSourceViewLayoutPreview.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.lvSourceViewLayoutPreview.Name = "lvSourceViewLayoutPreview";
+            this.lvSourceViewLayoutPreview.Size = new System.Drawing.Size(799, 101);
+            this.lvSourceViewLayoutPreview.TabIndex = 67;
+            this.lvSourceViewLayoutPreview.UseCompatibleStateImageBehavior = false;
+            this.lvSourceViewLayoutPreview.View = System.Windows.Forms.View.Details;
             // 
             // ViewLayoutReplicator
             // 
