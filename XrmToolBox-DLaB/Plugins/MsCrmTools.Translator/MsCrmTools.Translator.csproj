@@ -72,6 +72,9 @@
   <ItemGroup>
     <Compile Include="AppCode\AttributeTranslation.cs" />
     <Compile Include="AppCode\BooleanTranslation.cs" />
+    <Compile Include="AppCode\CrmSiteMapArea.cs" />
+    <Compile Include="AppCode\CrmSiteMapGroup.cs" />
+    <Compile Include="AppCode\CrmSiteMapSubArea.cs" />
     <Compile Include="AppCode\GlobalOptionSetTranslation.cs" />
     <Compile Include="AppCode\CrmFormLabel.cs" />
     <Compile Include="AppCode\CrmFormSection.cs" />
@@ -82,6 +85,7 @@
     <Compile Include="AppCode\FormTranslation.cs" />
     <Compile Include="AppCode\MasterAttribute.cs" />
     <Compile Include="AppCode\RibbonTranslation.cs" />
+    <Compile Include="AppCode\SiteMapTranslation.cs" />
     <Compile Include="AppCode\ViewTranslation.cs" />
     <Compile Include="AppCode\OptionSetTranslation.cs" />
     <Compile Include="AppCode\EntityTranslation.cs" />
@@ -135,7 +139,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

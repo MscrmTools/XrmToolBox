@@ -189,12 +189,12 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
         private static void ReplaceLayoutXmlObjectTypeCode(Entity view, IOrganizationService targetService)
         {
             // Retrieve Metadata for target entity
-            var response = (RetrieveEntityResponse) targetService.Execute(new RetrieveEntityRequest {LogicalName = view.GetAttributeValue<string>("returntypecode"),EntityFilters = EntityFilters.Entity});
+            var response = (RetrieveEntityResponse) targetService.Execute(new RetrieveEntityRequest {LogicalName = view.GetAttributeValue<string>("returnedtypecode"),EntityFilters = EntityFilters.Entity});
             var code = response.EntityMetadata.ObjectTypeCode.Value;
 
             var sXml = view.GetAttributeValue<string>("layoutxml");
             var xml = new XmlDocument();
-            xml.Load(sXml);
+            xml.LoadXml(sXml);
 
             var gridNode = xml.SelectSingleNode("grid");
             gridNode.Attributes["object"].Value = code.ToString(CultureInfo.InvariantCulture);

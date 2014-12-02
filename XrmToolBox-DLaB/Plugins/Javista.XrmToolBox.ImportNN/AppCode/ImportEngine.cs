@@ -147,6 +147,11 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                             }
                         };
 
+                        if (request.Target.LogicalName == request.RelatedEntities.First().LogicalName)
+                        {
+                            request.Relationship.PrimaryEntityRole = EntityRole.Referenced;
+                        }
+
                         service.Execute(request);
 
                         OnRaiseSuccess(new ResultEventArgs { LineNumber = lineNumber });

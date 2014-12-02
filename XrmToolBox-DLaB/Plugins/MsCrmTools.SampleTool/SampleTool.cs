@@ -18,7 +18,7 @@ using XrmToolBox;
 
 namespace MsCrmTools.SampleTool
 {
-    public partial class SampleTool : UserControl, IMsCrmToolsPluginUserControl
+    public partial class SampleTool : PluginBase
     {
         private IOrganizationService service;
 
@@ -29,97 +29,36 @@ namespace MsCrmTools.SampleTool
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Gets the organization service used by the tool
-        /// </summary>
-        public IOrganizationService Service
-        {
-            get { return service; }
-        }
-
-        /// <summary>
-        /// Gets the logo to display in the tools list
-        /// </summary>
-        public Image PluginLogo
-        {
-            get { return null; }
-        }
-
-        /// <summary>
-        /// EventHandler to request a connection to an organization
-        /// </summary>
-        public event EventHandler OnRequestConnection;
-
-        /// <summary>
-        /// EventHandler to close the current tool
-        /// </summary>
-        public event EventHandler OnCloseTool;
-
-        /// <summary>
-        /// Updates the organization service used by the tool
-        /// </summary>
-        /// <param name="newService">Organization service</param>
-        /// <param name="actionName">Action that requested a service update</param>
-        /// <param name="parameter">Parameter passed when requesting a service update</param>
-        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
-        {
-            service = newService;
-
-            if (actionName == "WhoAmI")
-            {
-                ProcessWhoAmI();
-            }
-        }
-
         private void BtnWhoAmIClick(object sender, EventArgs e)
         {
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs {ActionName = "WhoAmI", Control = this};
-                    OnRequestConnection(this, args);
-                }
-            }
-            else
-            {
-                ProcessWhoAmI();
-            }
+            ExecuteMethod(ProcessWhoAmI);
         }
 
         private void ProcessWhoAmI()
         {
-            infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving your user id...", 340, 120);
+            WorkAsync(null, (w, e) =>
+            {
+                var request = new WhoAmIRequest();
+                var response = (WhoAmIResponse) service.Execute(request);
 
-            var worker = new BackgroundWorker();
-            worker.DoWork += WorkerDoWork;
-            worker.RunWorkerCompleted += WorkerRunWorkerCompleted;
-            worker.RunWorkerAsync();
-        }
+                e.Result = response.UserId;
+            },
+                e =>
+                {
+                    MessageBox.Show(string.Format("You are {0}", (Guid) e.Result));
+                },
+                e =>
+                {
 
-        void WorkerDoWork(object sender, DoWorkEventArgs e)
-        {
-            var request = new WhoAmIRequest();
-            var response = (WhoAmIResponse)service.Execute(request);
-
-            e.Result = response.UserId;
-        }
-
-        void WorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            infoPanel.Dispose();
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
-
-            MessageBox.Show(string.Format("You are {0}", (Guid)e.Result));
+                },
+                "Retrieving your user id...",
+                340,
+                150);
         }
 
         private void BtnCloseClick(object sender, EventArgs e)
         {
-            if (OnCloseTool != null)
-            {
-                OnCloseTool(this, null);
-            }
+            base.CloseToolPrompt();
         }
     }
 }

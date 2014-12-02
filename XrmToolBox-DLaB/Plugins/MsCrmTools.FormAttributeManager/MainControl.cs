@@ -359,6 +359,9 @@ namespace MsCrmTools.FormAttributeManager
             {
                 listView1.Items.Clear();
                 listView1.Items.AddRange(((List<ListViewItem>)e.Result).ToArray());
+
+                // Adds forms list to attribute selector
+                attributeSelector1.EntityForms = ((List<ListViewItem>) e.Result).Select(i => (FormInfo) i.Tag).ToList();
             }
 
             Controls.Remove(infoPanel);

@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -147,10 +148,14 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
 
                         XmlNodeList sourceCellNodes = sourceLayout.SelectNodes("grid/row/cell");
 
+                        var cells = new List<string>();
+
                         foreach (XmlNode cellNode in sourceCellNodes)
                         {
                             if (!cellNode.Attributes["name"].Value.Contains(".") || (int)targetView["querytype"] != VIEW_ASSOCIATED)
                             {
+                                cells.Add(cellNode.Attributes["name"].Value);
+
                                 XmlNode nodeDest = targetLayout.ImportNode(cellNode.Clone(), true);
                                 targetLayout.SelectSingleNode("grid/row").AppendChild(nodeDest);
                             }
@@ -220,17 +225,34 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
 
                                     foreach (XmlNode sourceLinkNode in linkNodes)
                                     {
-                                        XmlNode targetLinkNode = targetFetchDoc.SelectSingleNode("fetch/entity/link-entity[@alias=\"" + sourceLinkNode.Attributes["alias"].Value + "\"]");
+                                        var alias = sourceLinkNode.Attributes["alias"].Value;
+
+                                        if (cells.FirstOrDefault(c => c.StartsWith(alias + ".")) == null)
+                                            continue;
+
+                                        XmlNode targetLinkNode = targetFetchDoc.SelectSingleNode("fetch/entity/link-entity[@alias=\"" + alias + "\"]");
 
                                         // Adds the missing link-entity node
                                         if (targetLinkNode == null)
                                         {
                                             XmlNode nodeDest = targetFetchDoc.ImportNode(sourceLinkNode.Clone(), true);
+                                            XmlAttribute typeAttr = nodeDest.Attributes["link-type"];
+                                            if (typeAttr == null)
+                                            {
+                                                typeAttr = targetFetchDoc.CreateAttribute("link-type");
+                                                typeAttr.Value = "outer";
+                                                nodeDest.Attributes.Append(typeAttr);
+                                            }
+                                            else
+                                            {
+                                                typeAttr.Value = "outer";
+                                            }
+
                                             targetFetchDoc.SelectSingleNode("fetch/entity").AppendChild(nodeDest);
                                         }
 
                                         // Retrieves node again (if it was added)
-                                        targetLinkNode = targetFetchDoc.SelectSingleNode("fetch/entity/link-entity[@alias=\"" + sourceLinkNode.Attributes["alias"].Value + "\"]");
+                                        targetLinkNode = targetFetchDoc.SelectSingleNode("fetch/entity/link-entity[@alias=\"" + alias + "\"]");
 
                                         // Removes existing attributes
                                         for (int i = targetLinkNode.ChildNodes.Count; i > 0; i--)

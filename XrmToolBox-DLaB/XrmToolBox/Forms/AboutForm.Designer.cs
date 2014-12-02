@@ -56,8 +56,9 @@
             this.panel1.Controls.Add(this.lblTitle);
             this.panel1.Controls.Add(this.linkClose);
             this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(600, 300);
+            this.panel1.Size = new System.Drawing.Size(899, 460);
             this.panel1.TabIndex = 0;
             // 
             // lblCompany
@@ -66,9 +67,10 @@
             this.lblCompany.AutoSize = true;
             this.lblCompany.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCompany.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblCompany.Location = new System.Drawing.Point(365, 190);
+            this.lblCompany.Location = new System.Drawing.Point(548, 292);
+            this.lblCompany.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCompany.Name = "lblCompany";
-            this.lblCompany.Size = new System.Drawing.Size(122, 20);
+            this.lblCompany.Size = new System.Drawing.Size(179, 30);
             this.lblCompany.TabIndex = 13;
             this.lblCompany.Text = "Company: Javista";
             // 
@@ -77,9 +79,10 @@
             this.lblDeveloper.AutoSize = true;
             this.lblDeveloper.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDeveloper.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblDeveloper.Location = new System.Drawing.Point(76, 190);
+            this.lblDeveloper.Location = new System.Drawing.Point(114, 292);
+            this.lblDeveloper.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblDeveloper.Name = "lblDeveloper";
-            this.lblDeveloper.Size = new System.Drawing.Size(133, 20);
+            this.lblDeveloper.Size = new System.Drawing.Size(196, 30);
             this.lblDeveloper.TabIndex = 12;
             this.lblDeveloper.Text = "Developer: Tanguy";
             // 
@@ -87,18 +90,20 @@
             // 
             this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(326, 225);
+            this.pictureBox2.Location = new System.Drawing.Point(489, 346);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(201, 65);
+            this.pictureBox2.Size = new System.Drawing.Size(302, 100);
             this.pictureBox2.TabIndex = 11;
             this.pictureBox2.TabStop = false;
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(50, 219);
+            this.pictureBox1.Location = new System.Drawing.Point(75, 337);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(184, 76);
+            this.pictureBox1.Size = new System.Drawing.Size(276, 117);
             this.pictureBox1.TabIndex = 10;
             this.pictureBox1.TabStop = false;
             // 
@@ -108,9 +113,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.Font = new System.Drawing.Font("Segoe UI", 11F);
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label1.Location = new System.Drawing.Point(13, 53);
+            this.label1.Location = new System.Drawing.Point(12, 71);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(573, 133);
+            this.label1.Size = new System.Drawing.Size(886, 221);
             this.label1.TabIndex = 9;
             this.label1.Text = resources.GetString("label1.Text");
             // 
@@ -119,9 +125,10 @@
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblTitle.Location = new System.Drawing.Point(12, 6);
+            this.lblTitle.Location = new System.Drawing.Point(18, 9);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(417, 25);
+            this.lblTitle.Size = new System.Drawing.Size(618, 38);
             this.lblTitle.TabIndex = 8;
             this.lblTitle.Text = "Toolbox for Microsoft Dynamics CRM 2011/2013";
             // 
@@ -134,9 +141,10 @@
             this.linkClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.linkClose.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
             this.linkClose.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.linkClose.Location = new System.Drawing.Point(565, 6);
+            this.linkClose.Location = new System.Drawing.Point(848, 9);
+            this.linkClose.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.linkClose.Name = "linkClose";
-            this.linkClose.Size = new System.Drawing.Size(23, 25);
+            this.linkClose.Size = new System.Drawing.Size(34, 38);
             this.linkClose.TabIndex = 7;
             this.linkClose.Text = "X";
             this.linkClose.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -144,12 +152,13 @@
             // 
             // AboutForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(600, 300);
+            this.ClientSize = new System.Drawing.Size(900, 462);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "AboutForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

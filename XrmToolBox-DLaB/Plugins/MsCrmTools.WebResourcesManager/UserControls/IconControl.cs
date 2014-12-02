@@ -64,6 +64,8 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         {
             try
             {
+                if (innerContent == null) return;
+
                 Icon ic = null;
 
                 byte[] imageBytes = Convert.FromBase64String(innerContent);

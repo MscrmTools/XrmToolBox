@@ -138,16 +138,15 @@ namespace MsCrmTools.Translator
                               });
             }
 
-            if (settings.ExportRibbon && false)
+            if (settings.ExportSiteMap)
             {
                 if (worker != null && worker.WorkerReportsProgress)
                 {
-                    worker.ReportProgress(0, "Exporting ribbon labels translations...");
+                    worker.ReportProgress(0, "Exporting SiteMap custom labels translations...");
                 }
 
-                var sheet = file.Worksheets.Add("Ribbon Labels");
-                var rt = new RibbonTranslation();
-                rt.Export(lcids, sheet, settings.ExportOnlyUnmanagedRibbonLabels, service);
+                var st = new SiteMapTranslation();
+                st.Export(lcids, file, service);
             }
 
             file.Save(settings.FilePath, SaveOptions.XlsxDefault);
@@ -160,7 +159,9 @@ namespace MsCrmTools.Translator
                 
             var forms = new List<Entity>();
             var ft = new FormTranslation();
+            var st = new SiteMapTranslation();
             bool hasFormContent = false;
+            bool hasSiteMapContent = false;
 
             foreach (var sheet in file.Worksheets)
             {
@@ -240,15 +241,17 @@ namespace MsCrmTools.Translator
                         ft.PrepareFormLabels(sheet, service, forms);
                         hasFormContent = true;
                         break;
-                    case "Ribbon Labels":
-                        continue;
-                        if (worker != null && worker.WorkerReportsProgress)
-                        {
-                            worker.ReportProgress(0, "Importing ribbon labels translations...");
-                        }
-
-                        var rt = new RibbonTranslation();
-                        rt.Import(sheet, service);
+                    case "SiteMap Areas":
+                        st.PrepareAreas(sheet, service);
+                        hasSiteMapContent = true;
+                        break;
+                    case "SiteMap Groups":
+                        st.PrepareGroups(sheet, service);
+                        hasSiteMapContent = true;
+                        break;
+                    case "SiteMap SubAreas":
+                        st.PrepareSubAreas(sheet, service);
+                        hasSiteMapContent = true;
                         break;
                 }
 
@@ -260,6 +263,16 @@ namespace MsCrmTools.Translator
                     }
 
                     ft.ImportFormsContent(service, forms);
+                }
+
+                if (hasSiteMapContent)
+                {
+                    if (worker != null && worker.WorkerReportsProgress)
+                    {
+                        worker.ReportProgress(0, "Importing SiteMap translations...");
+                    }
+
+                    st.Import(service);
                 }
             }
 
