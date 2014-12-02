@@ -517,6 +517,8 @@ namespace DamSim.ViewTransferTool
 
             Controls.Remove(informationPanel);
 
+            if (e.Result == null) return;
+
             if (((List<Tuple<string, string>>)e.Result).Count > 0)
             {
                 var errorDialog = new ErrorList((List<Tuple<string, string>>)e.Result);
