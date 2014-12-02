@@ -80,5 +80,10 @@ namespace XrmToolBox.Forms
                 //panel2.Visible = true;
             }
         }
+
+        private void linkClose_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Close();
+        }
     }
 }

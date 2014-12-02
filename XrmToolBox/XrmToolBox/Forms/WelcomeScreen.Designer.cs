@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WelcomeScreen));
             this.pnlSupport = new System.Windows.Forms.Panel();
+            this.lblOptimization = new System.Windows.Forms.Label();
             this.lblSupport = new System.Windows.Forms.Label();
             this.lblAnd = new System.Windows.Forms.Label();
             this.lblMscrmTools = new System.Windows.Forms.Label();
@@ -37,7 +38,7 @@
             this.lblProvidedBy = new System.Windows.Forms.Label();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.lblOptimization = new System.Windows.Forms.Label();
+            this.linkClose = new System.Windows.Forms.LinkLabel();
             this.pnlSupport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -46,6 +47,7 @@
             // pnlSupport
             // 
             this.pnlSupport.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlSupport.Controls.Add(this.linkClose);
             this.pnlSupport.Controls.Add(this.lblOptimization);
             this.pnlSupport.Controls.Add(this.lblSupport);
             this.pnlSupport.Controls.Add(this.lblAnd);
@@ -59,6 +61,16 @@
             this.pnlSupport.Name = "pnlSupport";
             this.pnlSupport.Size = new System.Drawing.Size(899, 461);
             this.pnlSupport.TabIndex = 0;
+            // 
+            // lblOptimization
+            // 
+            this.lblOptimization.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblOptimization.Location = new System.Drawing.Point(0, 439);
+            this.lblOptimization.Name = "lblOptimization";
+            this.lblOptimization.Size = new System.Drawing.Size(897, 20);
+            this.lblOptimization.TabIndex = 23;
+            this.lblOptimization.Text = "Plugin Development optimizations by Daryl LaBar";
+            this.lblOptimization.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblSupport
             // 
@@ -136,7 +148,7 @@
             // 
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 20F);
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblTitle.Location = new System.Drawing.Point(0, 14);
+            this.lblTitle.Location = new System.Drawing.Point(0, 17);
             this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(900, 71);
@@ -144,15 +156,23 @@
             this.lblTitle.Text = "Toolbox for Microsoft Dynamics CRM 2011/2013";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblOptimization
+            // linkClose
             // 
-            this.lblOptimization.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.lblOptimization.Location = new System.Drawing.Point(0, 439);
-            this.lblOptimization.Name = "lblOptimization";
-            this.lblOptimization.Size = new System.Drawing.Size(897, 20);
-            this.lblOptimization.TabIndex = 23;
-            this.lblOptimization.Text = "Plugin Development optimizations by Daryl LaBar";
-            this.lblOptimization.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.linkClose.AutoSize = true;
+            this.linkClose.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkClose.DisabledLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.linkClose.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.linkClose.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
+            this.linkClose.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.linkClose.Location = new System.Drawing.Point(859, 0);
+            this.linkClose.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.linkClose.Name = "linkClose";
+            this.linkClose.Size = new System.Drawing.Size(34, 38);
+            this.linkClose.TabIndex = 24;
+            this.linkClose.Text = "X";
+            this.linkClose.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.linkClose.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkClose_LinkClicked);
             // 
             // WelcomeScreen
             // 
@@ -189,6 +209,7 @@
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Label lblOptimization;
+        private System.Windows.Forms.LinkLabel linkClose;
 
 
     }
