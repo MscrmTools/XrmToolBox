@@ -250,6 +250,7 @@ namespace McTools.Xrm.Connection.WinForms
             if (cbUseOnline.Checked)
             {
                 cbUseIfd.Checked = false;
+                cbUseOSDP.Checked = true;
 
                 rbAuthenticationCustom.Checked = true;
                 rbAuthenticationIntegrated.Enabled = false;
@@ -283,6 +284,7 @@ namespace McTools.Xrm.Connection.WinForms
 
                 cbUseSsl.Checked = false;
                 cbUseSsl.Enabled = true;
+                cbUseOSDP.Checked = false;
                 tbServerPort.Enabled = true;
                
                 tbServerName.Visible = true;
@@ -296,7 +298,7 @@ namespace McTools.Xrm.Connection.WinForms
             {
                 cbUseIfd.Checked = false;
                 cbUseOnline.Checked = true;
-                cbUseOnline.Enabled = false;
+                //cbUseOnline.Enabled = false;
 
                 rbAuthenticationCustom.Checked = true;
                 rbAuthenticationIntegrated.Enabled = false;
@@ -322,7 +324,7 @@ namespace McTools.Xrm.Connection.WinForms
             {
                 rbAuthenticationCustom.Checked = cbUseOnline.Checked;
                 rbAuthenticationIntegrated.Enabled = !cbUseOnline.Checked;
-                cbUseOnline.Enabled = true;
+                //cbUseOnline.Enabled = true;
 
                 tbUserDomain.Enabled = false;
                 tbUserLogin.Enabled = cbUseOnline.Checked;
