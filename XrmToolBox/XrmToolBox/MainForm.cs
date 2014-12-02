@@ -210,7 +210,7 @@ namespace XrmToolBox
                 foreach (var item in currentOptions.MostUsedList.OrderByDescending(i => i.Count).ThenBy(i=>i.Name))
                 {
                     var plugin = pManager.Plugins.FirstOrDefault(x => x.FullName == item.Name);
-                    if (plugin != null && !currentOptions.HiddenPlugins.Contains(((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyTitleAttribute))).Title))
+                    if (plugin != null && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyTitleAttribute))).Title)))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth, item.Count);
                     }
@@ -218,7 +218,7 @@ namespace XrmToolBox
 
                 foreach (var plugin in pManager.Plugins.OrderBy(p => ((AssemblyTitleAttribute)GetAssemblyAttribute(p.Assembly, typeof(AssemblyTitleAttribute))).Title))
                 {
-                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.FullName) && !currentOptions.HiddenPlugins.Contains(((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyTitleAttribute))).Title))
+                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.FullName) && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyTitleAttribute))).Title)))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth);
                     }
@@ -228,7 +228,7 @@ namespace XrmToolBox
             {
                 foreach (var plugin in pManager.Plugins.OrderBy(p => ((AssemblyTitleAttribute)GetAssemblyAttribute(p.Assembly, typeof(AssemblyTitleAttribute))).Title))
                 {
-                    if (!currentOptions.HiddenPlugins.Contains(((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof (AssemblyTitleAttribute))).Title))
+                    if (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof (AssemblyTitleAttribute))).Title))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth);
                     }
