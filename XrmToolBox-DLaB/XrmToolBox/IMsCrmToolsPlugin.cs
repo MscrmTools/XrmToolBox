@@ -33,6 +33,12 @@ namespace XrmToolBox
         event EventHandler OnCloseTool;
 
         /// <summary>
+        /// M
+        /// </summary>
+        /// <param name="info"></param>
+        void ClosingPlugin(PluginCloseInfo info);
+
+        /// <summary>
         /// Updates the organization service used by the tool
         /// </summary>
         /// <param name="newService">Organization service</param>

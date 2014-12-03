@@ -465,7 +465,7 @@ namespace XrmToolBox
 
         void MainForm_OnCloseTool(object sender, EventArgs e)
         {
-            CloseTab((TabPage)((UserControl)sender).Parent);
+            RequestCloseTab((TabPage)((UserControl)sender).Parent, new PluginCloseInfo(ToolBoxCloseReason.PluginRequest));
         }
 
         private void MainForm_OnRequestConnection(object sender, EventArgs e)
@@ -486,7 +486,7 @@ namespace XrmToolBox
             {
                 foreach (TabPage tab in tcu.SelectedTabs)
                 {
-                    ((IMsCrmToolsPluginUserControl)tab.Controls[0]).UpdateConnection(service, currentConnectionDetail);
+                    tab.GetPlugin().UpdateConnection(service, currentConnectionDetail);
 
                     tab.Text = string.Format("{0} ({1})",
                                         ((AssemblyTitleAttribute)GetAssemblyAttribute(tab.Controls[0].GetType().Assembly, typeof(AssemblyTitleAttribute))).Title,
@@ -499,34 +499,79 @@ namespace XrmToolBox
 
         #region Close Tabs/Plugins
 
+        private IEnumerable<TabPage> GetPluginPages()
+        {
+            for (var i = tabControl1.TabPages.Count - 1; i > 0; i--)
+            {
+                yield return tabControl1.TabPages[i];
+            }
+        }
+
         private void closeCurrentTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (tabControl1.SelectedTab.TabIndex != 0)
-                CloseTab(tabControl1.TabPages[tabControl1.SelectedTab.TabIndex]);
+            {
+                RequestCloseTab(tabControl1.TabPages[tabControl1.SelectedTab.TabIndex], new PluginCloseInfo(ToolBoxCloseReason.CloseCurrent));
+            }
         }
 
         private void CloseAllTabsToolStripMenuItemClick(object sender, EventArgs e)
         {
-            CloseAllTabs();
-        }
-
-        private void CloseAllTabs()
-        {
-            for (int i = tabControl1.TabPages.Count - 1; i > 0; i--)
-            {
-                CloseTab(tabControl1.TabPages[i]);
-            }
+            RequestCloseTabs(GetPluginPages(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
         }
 
         private void CloseAllTabsExceptActiveToolStripMenuItemClick(object sender, EventArgs e)
         {
-            for (int i = tabControl1.TabPages.Count - 1; i > 0; i--)
+            RequestCloseTabs(GetPluginPages().Where(p => tabControl1.SelectedTab != p), new PluginCloseInfo(ToolBoxCloseReason.CloseAllExceptActive));
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            var info = new PluginCloseInfo(e.CloseReason);
+            RequestCloseTabs(GetPluginPages(), info);
+            e.Cancel = info.Cancel;
+        }
+
+        private void tabControl1_MouseClick(object sender, MouseEventArgs e)
+        {
+            var tabControl = sender as TabControl;
+            if (tabControl == null || e.Button != MouseButtons.Middle) { return; }
+
+            var tabs = tabControl.TabPages;
+            var tabPage = tabs.Cast<TabPage>()
+                .Where((t, i) => tabControl.GetTabRect(i).Contains(e.Location))
+                .FirstOrDefault();
+
+            if (tabPage != null && tabControl1.TabPages[0] != tabPage)
             {
-                if (tabControl1.SelectedTab.TabIndex != i)
-                    CloseTab(tabControl1.TabPages[i]);
+                RequestCloseTab(tabPage, new PluginCloseInfo(ToolBoxCloseReason.CloseMiddleClick));
             }
         }
 
+        private void RequestCloseTabs(IEnumerable<TabPage> pages, PluginCloseInfo info)
+        {
+            foreach (var page in pages)
+            {
+                RequestCloseTab(page, info);
+                if (info.Cancel) return;
+            }
+        }
+
+        private void RequestCloseTab(TabPage page, PluginCloseInfo info)
+        {
+            var plugin = page.GetPlugin();
+            plugin.ClosingPlugin(info);
+            if (info.Cancel)
+            {
+                return;
+            }
+            CloseTab(page);
+        }
+
+        /// <summary>
+        /// Only to be called from the RequestCloseTab
+        /// </summary>
+        /// <param name="page"></param>
         private void CloseTab(TabPage page)
         {
             tabControl1.TabPages.Remove(page);
@@ -541,11 +586,6 @@ namespace XrmToolBox
             }
 
             plugin.Dispose();
-        }
-
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            CloseAllTabs();
         }
 
         #endregion // Close Tabs/Plugins
@@ -617,21 +657,13 @@ namespace XrmToolBox
         {
             fHelper.DisplayConnectionsList(this);
         }
+    }
 
-        private void tabControl1_MouseClick(object sender, MouseEventArgs e)
+    public static class Extensions
+    {
+        public static IMsCrmToolsPluginUserControl GetPlugin(this TabPage page)
         {
-            var tabControl = sender as TabControl;
-            if (tabControl == null || e.Button != MouseButtons.Middle) { return; }  
-
-            var tabs = tabControl.TabPages;
-            var tabPage = tabs.Cast<TabPage>()
-                .Where((t, i) => tabControl.GetTabRect(i).Contains(e.Location))
-                .FirstOrDefault();
-
-            if (tabPage != null)
-            {
-                tabs.Remove(tabPage);
-            }
+            return (IMsCrmToolsPluginUserControl)page.Controls[0];
         }
     }
 }
