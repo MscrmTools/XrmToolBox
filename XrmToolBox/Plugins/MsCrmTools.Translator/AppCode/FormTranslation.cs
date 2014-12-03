@@ -470,11 +470,11 @@ namespace MsCrmTools.Translator.AppCode
                         forms.Add(formRecord);
                     }
                     
-                    if (row.Cells[2].Value.ToString() == "Name")
+                    if (row.Cells[3].Value.ToString() == "Name")
                     {
                         formRecord.Item2["name"] = row.Cells[columnIndex].Value.ToString();
                     }
-                    else if (row.Cells[2].Value.ToString() == "Description")
+                    else if (row.Cells[3].Value.ToString() == "Description")
                     {
                         formRecord.Item2["description"] = row.Cells[columnIndex].Value.ToString();
                     }
