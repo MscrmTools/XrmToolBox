@@ -179,9 +179,19 @@ namespace MsCrmTools.AccessChecker
 
         private void TsbCloseClick(object sender, EventArgs e)
         {
-            const string message = "Are your sure you want to close this tab?";
-            if (MessageBox.Show(message, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                OnCloseTool(this, null);
+            OnCloseTool(this, null);
+        }
+
+        public virtual void ClosingPlugin(PluginCloseInfo info)
+        {
+            if (info.FormReason != CloseReason.None ||
+                info.ToolBoxReason == ToolBoxCloseReason.CloseAll ||
+                info.ToolBoxReason == ToolBoxCloseReason.CloseAllExceptActive)
+            {
+                return;
+            }
+
+            info.Cancel = MessageBox.Show(@"Are you sure you want to close this tab?", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes;
         }
 
         #endregion Methods
