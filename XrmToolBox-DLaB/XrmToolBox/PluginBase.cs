@@ -24,8 +24,13 @@ namespace XrmToolBox
     {
         public ConnectionDetail ConnectionDetail { get; set; }
 
-        [Obsolete("Use OnCloseTool, and add any required logic for Closing in an override of the ClosingPlugin Method", true)]
+        [Obsolete("This has been renamed to CloseTool.  Call that method instead, and if there is any required logic for Closing override the ClosingPlugin Method", true)]
         public virtual void CloseToolPrompt()
+        {
+            CloseTool();
+        }
+
+        public void CloseTool()
         {
             OnCloseTool(this, null);
         }
