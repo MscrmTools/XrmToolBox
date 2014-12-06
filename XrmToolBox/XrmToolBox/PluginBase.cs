@@ -24,9 +24,14 @@ namespace XrmToolBox
     {
         public ConnectionDetail ConnectionDetail { get; set; }
 
+        [Obsolete("This has been renamed to CloseTool.  Call that method instead, and if there is any required logic for Closing override the ClosingPlugin Method", true)]
         public virtual void CloseToolPrompt()
         {
-            if (MessageBox.Show(@"Are you sure you want to close this tab?", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            CloseTool();
+        }
+
+        public void CloseTool()
+        {
                 OnCloseTool(this, null);
         }
 
@@ -42,6 +47,23 @@ namespace XrmToolBox
         }
 
         public IOrganizationService Service { get; private set; }
+
+        /// <summary>
+        /// Allows for the plugin to prevent the form from closing, or preform some action before closing
+        /// By default, if the Form is being closed, or a close all or all except active is being called, it won't prompt the user to ensure they wanted to close 
+        /// </summary>
+        /// <param name="info"></param>
+        public virtual void ClosingPlugin(PluginCloseInfo info)
+        {
+            if (info.FormReason != CloseReason.None ||
+                info.ToolBoxReason == ToolBoxCloseReason.CloseAll ||
+                info.ToolBoxReason == ToolBoxCloseReason.CloseAllExceptActive)
+            {
+                return;
+            }
+
+            info.Cancel = MessageBox.Show(@"Are you sure you want to close this tab?", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes;
+        }
 
         public virtual void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
@@ -99,7 +121,7 @@ namespace XrmToolBox
             _worker.WorkAsync(this, message, work, callback, progressChanged, argument, messageWidth, messageHeight);
         }
 
-        public void SetWorkingMessage(string message, int width = 340, int height = 100)
+        public void SetWorkingMessage(string message, int width = 340, int height = 150)
         {
             _worker.SetWorkingMessage(this, message);
         }
