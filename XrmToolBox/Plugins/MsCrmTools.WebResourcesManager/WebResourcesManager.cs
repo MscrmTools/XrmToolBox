@@ -135,7 +135,8 @@ namespace MsCrmTools.WebResourcesManager
 
         private void LoadWebResourceFromASpecificSolution()
         {
-            var sPicker = new SolutionPicker(Service) {StartPosition = FormStartPosition.CenterParent};
+            wrManager = new WebResourceManager(Service);
+            var sPicker = new SolutionPicker(Service) { StartPosition = FormStartPosition.CenterParent };
             if (sPicker.ShowDialog(this) == DialogResult.OK)
             {
                 LoadWebResourcesGeneral(sPicker.SelectedSolution);
@@ -144,6 +145,7 @@ namespace MsCrmTools.WebResourcesManager
 
         private void LoadWebResourcesGeneral(Entity specificSolution)
         {
+            wrManager = new WebResourceManager(Service);
             tvWebResources.Nodes.Clear();
 
             var dialog = new WebResourceTypeSelectorDialog();
@@ -333,6 +335,8 @@ namespace MsCrmTools.WebResourcesManager
         {
             try
             {
+                wrManager = new WebResourceManager(Service);
+            
                 // Retrieve checked web resources
                 var nodesList = new List<TreeNode>();
                 TreeViewHelper.GetNodes(nodesList, tvWebResources, true);
