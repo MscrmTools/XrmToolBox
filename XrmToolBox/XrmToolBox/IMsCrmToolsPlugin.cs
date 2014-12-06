@@ -33,6 +33,12 @@ namespace XrmToolBox
         event EventHandler OnCloseTool;
 
         /// <summary>
+        /// Method to allow plugin to Cancel a closing event, or perform any save events required before closing.
+        /// </summary>
+        /// <param name="info"></param>
+        void ClosingPlugin(PluginCloseInfo info);
+
+        /// <summary>
         /// Updates the organization service used by the tool
         /// </summary>
         /// <param name="newService">Organization service</param>
