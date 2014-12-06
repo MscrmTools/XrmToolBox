@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using Microsoft.Xrm.Sdk;
 using MsCrmTools.FormLibrariesManager.AppCode;
@@ -149,10 +143,10 @@ namespace MsCrmTools.FormLibrariesManager.UserControls
 
         private void ScriptsTreeView_AfterCheck(object sender, TreeViewEventArgs e)
         {
-            CheckTreeNode(e.Node, e.Node.Checked);
+            CheckTreeNode(e.Node);
         }
 
-        private void CheckTreeNode(TreeNode node, bool isChecked)
+        private void CheckTreeNode(TreeNode node)
         {
             foreach (TreeNode childNode in node.Nodes)
             {

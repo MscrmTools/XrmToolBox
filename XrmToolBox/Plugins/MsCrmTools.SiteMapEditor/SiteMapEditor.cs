@@ -35,19 +35,15 @@ using Clipboard = MsCrmTools.SiteMapEditor.AppCode.Clipboard;
 
 namespace MsCrmTools.SiteMapEditor
 {
-    public partial class SiteMapEditor : UserControl, IMsCrmToolsPluginUserControl
+    public partial class SiteMapEditor : PluginBase
     {
-        internal IOrganizationService service;
         internal List<EntityMetadata> entityCache;
         internal List<Entity> webResourcesHtmlCache;
         internal List<Entity> webResourcesImageCache;
         internal Clipboard clipboard = new Clipboard();
 
-        private Panel infoPanel;
-
         private Entity siteMap;
         private XmlDocument siteMapDoc;
-
 
         public SiteMapEditor()
         {
@@ -58,49 +54,12 @@ namespace MsCrmTools.SiteMapEditor
 
         private void TsbMainOpenSiteMapClick(object sender, EventArgs e)
         {
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs
-                                   {
-                                       ActionName = "LoadSiteMap",
-                                       Control = this
-                                   };
-                    OnRequestConnection(this, args);
-                }
-                else
-                {
-                    MessageBox.Show(this, "OnRequestConnection event not registered!", "Error", MessageBoxButtons.OK,
-                                    MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                LoadSiteMap();
-            }
+            ExecuteMethod(LoadSiteMap);
         }
 
         private void TsbMainImportClick(object sender, EventArgs e)
         {
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs
-                                   {
-                                       ActionName = "UpdateSiteMap",
-                                       Control = this,
-                                       Parameter = null
-                                   };
-
-                    OnRequestConnection(this, args);
-                }
-            }
-            else
-            {
-                UpdateSiteMap();
-            }
+            ExecuteMethod(UpdateSiteMap);
         }
 
         private void ToolStripButtonLoadSiteMapFromDiskClick(object sender, EventArgs e)
@@ -425,7 +384,7 @@ namespace MsCrmTools.SiteMapEditor
                 case "Area":
                     {
                         if (collec.Count == 0) collec.Add("Id", string.Format("tempId_{0}", DateTime.Now.Ticks));
-                        var ctrl = new AreaControl(collec, webResourcesImageCache, webResourcesHtmlCache, service);
+                        var ctrl = new AreaControl(collec, webResourcesImageCache, webResourcesHtmlCache, Service);
                         ctrl.Saved += CtrlSaved;
 
                         panelContainer.Controls.Add(ctrl);
@@ -437,7 +396,7 @@ namespace MsCrmTools.SiteMapEditor
                 case "SubArea":
                     {
                         if (collec.Count == 0) collec.Add("Id", string.Format("tempId_{0}", DateTime.Now.Ticks));
-                        var ctrl = new SubAreaControl(collec, entityCache, webResourcesImageCache, webResourcesHtmlCache, service);
+                        var ctrl = new SubAreaControl(collec, entityCache, webResourcesImageCache, webResourcesHtmlCache, Service);
                         ctrl.Saved += CtrlSaved;
 
                         panelContainer.Controls.Add(ctrl);
@@ -685,83 +644,67 @@ namespace MsCrmTools.SiteMapEditor
 
         private void LoadSiteMap()
         {
-            CommonDelegates.SetCursor(this, Cursors.WaitCursor);
             EnableControls(false);
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Loading SiteMap...", 340, 120);
-
-            var loadSiteMapWorker = new BackgroundWorker();
-            loadSiteMapWorker.RunWorkerCompleted += LoadSiteMapWorkerRunWorkerCompleted;
-            loadSiteMapWorker.DoWork += LoadSiteMapWorkerDoWork;
-            loadSiteMapWorker.RunWorkerAsync();
-        }
-
-        private void LoadSiteMapWorkerDoWork(object sender, DoWorkEventArgs e)
-        {
-            var qe = new QueryExpression("sitemap");
-            qe.ColumnSet = new ColumnSet(true);
-
-            EntityCollection ec = service.RetrieveMultiple(qe);
-
-            siteMap = ec[0];
-            siteMapDoc = new XmlDocument();
-            siteMapDoc.LoadXml(ec[0]["sitemapxml"].ToString());
-
-            DisplaySiteMap();
-
-            InformationPanel.ChangeInformationPanelMessage(infoPanel, "Loading Entities...");
-
-            // Recherche des métadonnées
-            entityCache = new List<EntityMetadata>();
-
-            var request = new RetrieveAllEntitiesRequest
-            {
-                EntityFilters = EntityFilters.Entity
-            };
-
-            var response = (RetrieveAllEntitiesResponse)service.Execute(request);
-
-            foreach (var emd in response.EntityMetadata)
-            {
-                entityCache.Add(emd);
-            }
-            // Fin Recherche des métadonnées
-
-            InformationPanel.ChangeInformationPanelMessage(infoPanel, "Loading web resources...");
-            // Rercherche des images
-
-            webResourcesImageCache = new List<Entity>();
-
-            var wrQuery = new QueryExpression("webresource");
-            wrQuery.Criteria.AddCondition("webresourcetype", ConditionOperator.In, new[] { 2, 5, 6, 7 });
-            wrQuery.ColumnSet.AllColumns = true;
-
-            EntityCollection results = service.RetrieveMultiple(wrQuery);
-
-            foreach (Entity webresource in results.Entities)
-            {
-                if (webresource.GetAttributeValue<OptionSetValue>("webresourcetype").Value == 2)
+            WorkAsync("Loading SiteMap...",
+                (bw, e) =>
                 {
-                    webResourcesHtmlCache.Add(webresource);    
-                }
-                else
+                    var qe = new QueryExpression("sitemap");
+                    qe.ColumnSet = new ColumnSet(true);
+
+                    EntityCollection ec = Service.RetrieveMultiple(qe);
+
+                    siteMap = ec[0];
+                    siteMapDoc = new XmlDocument();
+                    siteMapDoc.LoadXml(ec[0]["sitemapxml"].ToString());
+
+                    bw.ReportProgress(0, "Loading Entities...");
+
+                    // Recherche des métadonnées
+                    entityCache = new List<EntityMetadata>();
+
+                    var request = new RetrieveAllEntitiesRequest
+                    {
+                        EntityFilters = EntityFilters.Entity
+                    };
+
+                    var response = (RetrieveAllEntitiesResponse)Service.Execute(request);
+
+                    foreach (var emd in response.EntityMetadata)
+                    {
+                        entityCache.Add(emd);
+                    }
+                    // Fin Recherche des métadonnées
+
+                    bw.ReportProgress(0, "Loading web resources...");
+                    // Rercherche des images
+
+                    webResourcesImageCache = new List<Entity>();
+
+                    var wrQuery = new QueryExpression("webresource");
+                    wrQuery.Criteria.AddCondition("webresourcetype", ConditionOperator.In, new[] { 2, 5, 6, 7 });
+                    wrQuery.ColumnSet.AllColumns = true;
+
+                    EntityCollection results = Service.RetrieveMultiple(wrQuery);
+
+                    foreach (Entity webresource in results.Entities)
+                    {
+                        if (webresource.GetAttributeValue<OptionSetValue>("webresourcetype").Value == 2)
+                        {
+                            webResourcesHtmlCache.Add(webresource);
+                        }
+                        else
+                        {
+                            webResourcesImageCache.Add(webresource);
+                        }
+                    }
+                },
+                e =>
                 {
-                    webResourcesImageCache.Add(webresource);
-                }
-            }
-
-            // Fin recherche des images
-
-            CommonDelegates.SetCursor(this, Cursors.Default);
-            EnableControls(true);
-        }
-
-        private void LoadSiteMapWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            CommonDelegates.SetCursor(this, Cursors.Default);
-            EnableControls(true);
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
+                    DisplaySiteMap();
+                    EnableControls(true);
+                },
+                e=>SetWorkingMessage(e.UserState.ToString()));
         }
 
         #endregion Load SiteMap Methods
@@ -775,64 +718,51 @@ namespace MsCrmTools.SiteMapEditor
                 var qe = new QueryExpression("sitemap");
                 qe.ColumnSet = new ColumnSet(true);
 
-                EntityCollection ec = service.RetrieveMultiple(qe);
+                EntityCollection ec = Service.RetrieveMultiple(qe);
 
                 siteMap = ec[0];
                 siteMapDoc = new XmlDocument();
                 siteMapDoc.LoadXml(ec[0]["sitemapxml"].ToString());
             }
 
-            CommonDelegates.SetCursor(this, Cursors.WaitCursor);
             EnableControls(false);
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Updating Sitemap...", 340, 120);
-
-            var updateWorker = new BackgroundWorker();
-            updateWorker.RunWorkerCompleted += UpdateWorkerRunWorkerCompleted;
-            updateWorker.DoWork += UpdateWorkerDoWork;
-            updateWorker.RunWorkerAsync();
-        }
-
-        private void UpdateWorkerDoWork(object sender, DoWorkEventArgs e)
-        {
-            // Build the Xml SiteMap from SiteMap TreeView
-            var doc = new XmlDocument();
-            XmlNode rootNode = doc.CreateElement("SiteMap");
-            doc.AppendChild(rootNode);
-
-            AddXmlNode(tvSiteMap.Nodes[0], rootNode);
-
-            siteMap["sitemapxml"] = doc.SelectSingleNode("SiteMap/SiteMap").OuterXml;
-            siteMapDoc.LoadXml(doc.SelectSingleNode("SiteMap/SiteMap").OuterXml);
-
-            service.Update(siteMap);
-
-            var request = new PublishXmlRequest();
-            request.ParameterXml = "<importexportxml><sitemaps><sitemap></sitemap></sitemaps></importexportxml>";
-            service.Execute(request);
-        }
-
-        private void UpdateWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                if (e.Error.Message.Contains("DefaultDashboard"))
+            WorkAsync("Updating Sitemap...",
+                e =>
                 {
-                    MessageBox.Show(ParentForm, "Error while updating SiteMap: Defining 'DefaultDashboard' attribute on 'SubArea' element is only available in CRM 2013 and Microsoft Dynamics CRM Online Fall '13 Service Update",
-                      "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
+                    // Build the Xml SiteMap from SiteMap TreeView
+                    var doc = new XmlDocument();
+                    XmlNode rootNode = doc.CreateElement("SiteMap");
+                    doc.AppendChild(rootNode);
+
+                    AddXmlNode(tvSiteMap.Nodes[0], rootNode);
+
+                    siteMap["sitemapxml"] = doc.SelectSingleNode("SiteMap/SiteMap").OuterXml;
+                    siteMapDoc.LoadXml(doc.SelectSingleNode("SiteMap/SiteMap").OuterXml);
+
+                    Service.Update(siteMap);
+
+                    var request = new PublishXmlRequest();
+                    request.ParameterXml = "<importexportxml><sitemaps><sitemap></sitemap></sitemaps></importexportxml>";
+                    Service.Execute(request);
+                },
+                e =>
                 {
-                    MessageBox.Show(ParentForm, "Error while updating SiteMap: " + e.Error.Message,
-                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
-
-            CommonDelegates.SetCursor(this, Cursors.Default);
-            EnableControls(true);
+                    if (e.Error != null)
+                    {
+                        if (e.Error.Message.Contains("DefaultDashboard"))
+                        {
+                            MessageBox.Show(ParentForm, "Error while updating SiteMap: Defining 'DefaultDashboard' attribute on 'SubArea' element is only available in CRM 2013 and Microsoft Dynamics CRM Online Fall '13 Service Update",
+                              "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            MessageBox.Show(ParentForm, "Error while updating SiteMap: " + e.Error.Message,
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    EnableControls(true);
+                });
         }
 
         #endregion Update SiteMap Methods
@@ -844,33 +774,42 @@ namespace MsCrmTools.SiteMapEditor
         /// </summary>
         private void DisplaySiteMap()
         {
-            XmlNode siteMapXmlNode = null;
+            XmlNode siteMapXmlNode = siteMapDoc.DocumentElement;
+            tvSiteMap.Nodes.Clear();
 
-            MethodInvoker miReadSiteMap = delegate { siteMapXmlNode = siteMapDoc.DocumentElement; };
+            TreeNodeHelper.AddTreeViewNode(tvSiteMap, siteMapXmlNode, this);
 
-            if (InvokeRequired)
-                Invoke(miReadSiteMap);
-            else
-                miReadSiteMap();
+            ManageMenuDisplay();
+            tvSiteMap.Nodes[0].Expand();
 
-            MethodInvoker miFillTreeView = delegate
-                                               {
-                                                   tvSiteMap.Nodes.Clear();
+            // TODO a supprimer
+            //XmlNode siteMapXmlNode = null;
 
-                                                   TreeNodeHelper.AddTreeViewNode(tvSiteMap, siteMapXmlNode, this);
+            //MethodInvoker miReadSiteMap = delegate { siteMapXmlNode = siteMapDoc.DocumentElement; };
 
-                                                   ManageMenuDisplay();
-                                                   tvSiteMap.Nodes[0].Expand();
-                                               };
+            //if (InvokeRequired)
+            //    Invoke(miReadSiteMap);
+            //else
+            //    miReadSiteMap();
 
-            if (tvSiteMap.InvokeRequired)
-            {
-                tvSiteMap.Invoke(miFillTreeView);
-            }
-            else
-            {
-                miFillTreeView();
-            }
+            //MethodInvoker miFillTreeView = delegate
+            //                                   {
+            //                                       tvSiteMap.Nodes.Clear();
+
+            //                                       TreeNodeHelper.AddTreeViewNode(tvSiteMap, siteMapXmlNode, this);
+
+            //                                       ManageMenuDisplay();
+            //                                       tvSiteMap.Nodes[0].Expand();
+            //                                   };
+
+            //if (tvSiteMap.InvokeRequired)
+            //{
+            //    tvSiteMap.Invoke(miFillTreeView);
+            //}
+            //else
+            //{
+            //    miFillTreeView();
+            //}
         }
 
         /// <summary>
@@ -990,41 +929,9 @@ namespace MsCrmTools.SiteMapEditor
 
         #endregion Others
 
-        public IOrganizationService Service
-        {
-            get { return service; }
-        }
-
-        public Image PluginLogo
-        {
-            get { return imageList1.Images[0]; }
-        }
-
-        public event EventHandler OnRequestConnection;
-        public event EventHandler OnCloseTool;
-
-        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
-        {
-            service = newService;
-
-            if (actionName == "LoadSiteMap")
-            {
-                LoadSiteMap();
-            }
-            if (actionName == "UpdateSiteMap")
-            {
-                UpdateSiteMap();
-            }
-        }
-
         private void TsbCloseThisTabClick(object sender, EventArgs e)
         {
-            const string message = "Are your sure you want to close this tab?";
-            if (MessageBox.Show(message, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
-                DialogResult.Yes)
-                OnCloseTool(this, null);
+            CloseTool();
         }
-
-       
     }
 }

@@ -80,7 +80,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Helper
 
             foreach (var form in ec.Entities)
             {
-                allFormsXml.Append(form["formxml"].ToString());
+                allFormsXml.Append(form.GetAttributeValue<string>("formxml"));
             }
 
             allFormsXml.Append("</root>");

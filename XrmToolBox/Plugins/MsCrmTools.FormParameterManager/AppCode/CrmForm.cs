@@ -15,7 +15,7 @@ namespace MsCrmTools.FormParameterManager.AppCode
     {
         #region Variables
 
-        private static EntityMetadata[] EntitiesMetadatas;
+        private static EntityMetadata[] entitiesMetadatas;
 
         private const string ParametersListXPath = "form/formparameters";
 
@@ -27,7 +27,7 @@ namespace MsCrmTools.FormParameterManager.AppCode
 
         public CrmForm(Entity form)
         {
-            var emd = EntitiesMetadatas.ToList().First(e => e.LogicalName == form.LogicalName);
+            var emd = entitiesMetadatas.ToList().First(e => e.LogicalName == form.LogicalName);
 
             this.form = form;
 
@@ -72,7 +72,7 @@ namespace MsCrmTools.FormParameterManager.AppCode
 
             var request = new RetrieveAllEntitiesRequest {EntityFilters = EntityFilters.Entity};
             var response = (RetrieveAllEntitiesResponse) service.Execute(request);
-            EntitiesMetadatas = response.EntityMetadata;
+            entitiesMetadatas = response.EntityMetadata;
 
             if (worker != null && worker.WorkerReportsProgress)
             {
@@ -121,7 +121,6 @@ namespace MsCrmTools.FormParameterManager.AppCode
             if (parametersListNode == null)
             {
                 return;
-                throw new XmlException("Unable to find node 'formparameters' in the form");
             }
 
             

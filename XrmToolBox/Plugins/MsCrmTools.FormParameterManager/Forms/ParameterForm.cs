@@ -7,7 +7,7 @@ namespace MsCrmTools.FormParameterManager.Forms
 {
     public partial class ParameterForm : Form
     {
-        private IOrganizationService service;
+        private readonly IOrganizationService service;
 
         public ParameterForm(IOrganizationService service)
         {

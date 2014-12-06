@@ -38,7 +38,7 @@ namespace MsCrmTools.MetadataBrowser
 
         private void tsbClose_Click(object sender, EventArgs e)
         {
-            base.CloseToolPrompt();
+            CloseTool();
         }
 
         private void tsbLoadEntities_Click(object sender, EventArgs e)

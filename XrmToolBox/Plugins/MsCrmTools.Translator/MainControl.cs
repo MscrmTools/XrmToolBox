@@ -26,22 +26,8 @@ using CrmExceptionHelper = XrmToolBox.CrmExceptionHelper;
 
 namespace MsCrmTools.Translator
 {
-    public partial class MainControl : UserControl, IMsCrmToolsPluginUserControl
+    public partial class MainControl : PluginBase
     {
-        #region Variables
-
-        /// <summary>
-        /// Microsoft Dynamics CRM 2011 Organization Service
-        /// </summary>
-        private IOrganizationService service;
-
-        /// <summary>
-        /// Panel used to display progress information
-        /// </summary>
-        private Panel infoPanel;
-
-        #endregion Variables
-
         #region Constructor
 
         /// <summary>
@@ -54,67 +40,11 @@ namespace MsCrmTools.Translator
 
         #endregion Constructor
 
-        #region Properties
-
-        /// <summary>
-        /// Gets the organization service used by the tool
-        /// </summary>
-        public IOrganizationService Service
-        {
-            get { return service; }
-        }
-
-        /// <summary>
-        /// Gets the logo to display in the tools list
-        /// </summary>
-        public Image PluginLogo
-        {
-            get { return null; }
-        }
-
-        #endregion
-
-        #region EventHandlers
-
-        /// <summary>
-        /// EventHandler to request a connection to an organization
-        /// </summary>
-        public event EventHandler OnRequestConnection;
-
-        /// <summary>
-        /// EventHandler to close the current tool
-        /// </summary>
-        public event EventHandler OnCloseTool;
-
-        #endregion EventHandlers
-
         #region Methods
-
-        /// <summary>
-        /// Updates the organization service used by the tool
-        /// </summary>
-        /// <param name="newService">Organization service</param>
-        /// <param name="actionName">Action that requested a service update</param>
-        /// <param name="parameter">Parameter passed when requesting a service update</param>
-        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
-        {
-            service = newService;
-
-            if (actionName == "LoadEntities")
-            {
-                LoadEntities();
-            }
-            else if(actionName == "Import")
-            {
-                ImportTranslations();
-            }
-        }
 
         private void TsbCloseClick(object sender, EventArgs e)
         {
-            const string message = "Are your sure you want to close this tab?";
-            if (MessageBox.Show(message, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                OnCloseTool(this, null);
+            CloseTool();
         }
 
         #endregion Methods
@@ -147,103 +77,60 @@ namespace MsCrmTools.Translator
 
                     SetState(true);
 
-                    infoPanel = InformationPanel.GetInformationPanel(this, "Exporting Translations...", 340, 120);
-                    
-                    var bWorker = new BackgroundWorker { WorkerReportsProgress = true };
-                    bWorker.DoWork += BWorkerDoWork;
-                    bWorker.ProgressChanged += BWorkerProgressChanged;
-                    bWorker.RunWorkerCompleted += BWorkerRunWorkerCompleted;
-                    bWorker.RunWorkerAsync(settings);
+                    WorkAsync("Exporting Translations...",
+                        (bw, evt) =>
+                        {
+                            var engine = new Engine();
+                            engine.Export((ExportSettings)evt.Argument, Service, bw);
+                        },
+                        evt =>
+                        {
+                            SetState(false);
+
+                            if (evt.Error != null)
+                            {
+                                string errorMessage = CrmExceptionHelper.GetErrorMessage(evt.Error, true);
+                                MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        },
+                        evt=>SetWorkingMessage(evt.UserState.ToString()),
+                        settings);
                 }
-            }
-        }
-
-        void BWorkerDoWork(object sender, DoWorkEventArgs e)
-        {
-            var engine = new Engine();
-            engine.Export((ExportSettings)e.Argument, service, (BackgroundWorker)sender);
-        }
-
-        void BWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            InformationPanel.ChangeInformationPanelMessage(infoPanel, e.UserState.ToString());
-        }
-
-        void BWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
-            SetState(false);
-
-            if (e.Error != null)
-            {
-                string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
-                MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void TsbLoadEntitiesClick(object sender, EventArgs e)
         {
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs
-                    {
-                        ActionName = "LoadEntities",
-                        Control = this
-                    };
-                    OnRequestConnection(this, args);
-                }
-                else
-                {
-                    MessageBox.Show(this, "OnRequestConnection event not registered!", "Error", MessageBoxButtons.OK,
-                                    MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                LoadEntities();
-            }
+            ExecuteMethod(LoadEntities);
         }
 
         private void LoadEntities()
         {
             lvEntities.Items.Clear();
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Loading entities...", 340, 120);
-
-            var bwFillEntities = new BackgroundWorker();
-            bwFillEntities.DoWork += BwFillEntitiesDoWork;
-            bwFillEntities.RunWorkerCompleted += BwFillEntitiesRunWorkerCompleted;
-            bwFillEntities.RunWorkerAsync();
-        }
-
-        void BwFillEntitiesRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
-                MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                foreach (EntityMetadata emd in (List<EntityMetadata>)e.Result)
+            WorkAsync("Loading entities...",
+                e =>
                 {
-                    var item = new ListViewItem { Text = emd.DisplayName.UserLocalizedLabel.Label, Tag = emd };
-                    item.SubItems.Add(emd.LogicalName);
-                    lvEntities.Items.Add(item);
-                }
-            }
-
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
-        }
-
-        void BwFillEntitiesDoWork(object sender, DoWorkEventArgs e)
-        {
-            List<EntityMetadata> entities = MetadataHelper.RetrieveEntities(service);
-            e.Result = entities;
+                    List<EntityMetadata> entities = MetadataHelper.RetrieveEntities(service);
+                    e.Result = entities;
+                },
+                e =>
+                {
+                    if (e.Error != null)
+                    {
+                        string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
+                        MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        foreach (EntityMetadata emd in (List<EntityMetadata>)e.Result)
+                        {
+                            var item = new ListViewItem { Text = emd.DisplayName.UserLocalizedLabel.Label, Tag = emd };
+                            item.SubItems.Add(emd.LogicalName);
+                            lvEntities.Items.Add(item);
+                        }
+                    }
+                });
         }
 
         private void BtnBrowseImportFileClick(object sender, EventArgs e)
@@ -272,74 +159,33 @@ namespace MsCrmTools.Translator
                 return;
             }
 
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs
-                    {
-                        ActionName = "Import",
-                        Control = this
-                    };
-                    OnRequestConnection(this, args);
-                }
-                else
-                {
-                    MessageBox.Show(this, "OnRequestConnection event not registered!", "Error", MessageBoxButtons.OK,
-                                    MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                ImportTranslations();
-            }
+            ExecuteMethod(ImportTranslations);
         }
-
-        private Stopwatch sw = new Stopwatch();
 
         private void ImportTranslations()
         {
-            //sw.Start();
-            infoPanel = InformationPanel.GetInformationPanel(this, "Importing translations...", 340, 120);
-
             SetState(false);
 
-            var importBw = new BackgroundWorker { WorkerReportsProgress = true };
-            importBw.DoWork += ImportBwDoWork;
-            importBw.ProgressChanged += ImportBwProgressChanged;
-            importBw.RunWorkerCompleted += ImportBwRunWorkerCompleted;
-            importBw.RunWorkerAsync(txtFilePath.Text);
+            WorkAsync("",
+                (bw, e) =>
+                {
+                    var engine = new Engine();
+                    engine.Import(e.Argument.ToString(), Service, bw);
+                },
+                e =>
+                {
+                    if (e.Error != null)
+                    {
+                        string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
+                        MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    SetState(false);
+                },
+                e=>SetWorkingMessage(e.UserState.ToString()),
+                txtFilePath.Text);
         }
 
-        void ImportBwDoWork(object sender, DoWorkEventArgs e)
-        {
-            var engine = new Engine();
-            engine.Import(e.Argument.ToString(), service, (BackgroundWorker)sender);
-        }
-
-        void ImportBwProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            InformationPanel.ChangeInformationPanelMessage(infoPanel, e.UserState.ToString());
-        }
-
-        void ImportBwRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
-                MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            //else
-            //{
-            //    sw.Stop();
-            //    MessageBox.Show(string.Format("Processed in {0} seconds", sw.Elapsed.TotalSeconds));
-            //}
-         
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
-            SetState(false);
-        }
-    
         private void SetState(bool isRunning)
         {
             tabPage1.Enabled = !isRunning;
@@ -361,15 +207,7 @@ namespace MsCrmTools.Translator
 
         private void LvEntitiesColumnClick(object sender, ColumnClickEventArgs e)
         {
-            if (lvEntities.Sorting == SortOrder.Ascending)
-            {
-                lvEntities.Sorting = SortOrder.Descending;
-            }
-            else
-            {
-                lvEntities.Sorting = SortOrder.Ascending;
-            }
-
+            lvEntities.Sorting = lvEntities.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
             lvEntities.ListViewItemSorter = new ListViewItemComparer(e.Column, lvEntities.Sorting);
         }
     }

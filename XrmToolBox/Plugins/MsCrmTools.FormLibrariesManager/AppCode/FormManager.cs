@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.Windows.Forms.Design;
 using System.Xml;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
@@ -108,7 +106,7 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
 
             // Retrieve events that use the library
             var eventNodes = formNode.SelectNodes(string.Format("events/event/Handlers/Handler[@libraryName='{0}']", libraryName));
-            if (eventNodes == null || eventNodes.Count > 0)
+            if (eventNodes != null && eventNodes.Count > 0)
             {
                 var result =
                     MessageBox.Show(parentForm,
