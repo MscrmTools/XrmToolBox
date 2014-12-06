@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ServiceModel.Description;
+using System.Xml.Serialization;
 using Microsoft.Xrm.Sdk.Client;
 
 namespace McTools.Xrm.Connection
@@ -109,10 +110,23 @@ namespace McTools.Xrm.Connection
 
         public string OrganizationVersion { get; set; }
 
-        public int OrganizationMajorVersion {get
+        [XmlIgnore]
+        public TimeSpan Timeout { get; set; }
+
+        [XmlElement("Timeout")]
+        public long TimeoutTicks
         {
-            return OrganizationVersion != null ? int.Parse(OrganizationVersion.Split('.')[0]) : -1;
-        }}
+            get { return Timeout.Ticks; }
+            set { Timeout = new TimeSpan(value); }
+        }
+
+        public int OrganizationMajorVersion
+        {
+            get
+            {
+                return OrganizationVersion != null ? int.Parse(OrganizationVersion.Split('.')[0]) : -1;
+            }
+        }
 
         public int OrganizationMinorVersion
         {
@@ -203,9 +217,9 @@ namespace McTools.Xrm.Connection
             else if (UseIfd)
             {
                 var serverNameParts = ServerName.Split('.');
-                
+
                 serverNameParts[0] = OrganizationUrlName;
-                
+
 
                 currentServerName = string.Format("{0}:{1}",
                                                   string.Join(".", serverNameParts),
@@ -223,7 +237,7 @@ namespace McTools.Xrm.Connection
             //                                     UseSsl ? "https" : "http",
             //                                     currentServerName);
 
-            var connectionString = string.Format("Url={0};", OrganizationServiceUrl.Replace("/XRMServices/2011/Organization.svc",""));
+            var connectionString = string.Format("Url={0};", OrganizationServiceUrl.Replace("/XRMServices/2011/Organization.svc", ""));
 
             if (IsCustomAuth)
             {
@@ -272,6 +286,8 @@ namespace McTools.Xrm.Connection
                 connectionString += string.Format("HomeRealmUri={0};", HomeRealmUrl);
             }
 
+            //append timeout in seconds to connectionstring
+            connectionString += string.Format("Timeout={0};", Timeout.ToString(@"hh\:mm\:ss"));
             return connectionString;
         }
 

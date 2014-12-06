@@ -285,6 +285,12 @@ namespace McTools.Xrm.Connection
                                 detail.OrganizationUrlName = detail.Organization;
                             }
                         }
+
+                        // Fix old connection for TimeOut
+                        if (detail.Timeout == TimeSpan.Zero)
+                        {
+                            detail.Timeout = new TimeSpan(1200000000);
+                        }
                     }
                 }
                 else
