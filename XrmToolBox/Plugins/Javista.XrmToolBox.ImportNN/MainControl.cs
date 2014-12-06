@@ -58,6 +58,19 @@ namespace Javista.XrmToolBox.ImportNN
             }
         }
 
+        public void ClosingPlugin(PluginCloseInfo info)
+        {
+
+            if (info.FormReason != CloseReason.None ||
+                info.ToolBoxReason == ToolBoxCloseReason.CloseAll ||
+                info.ToolBoxReason == ToolBoxCloseReason.CloseAllExceptActive)
+            {
+                return;
+            }
+
+            info.Cancel = MessageBox.Show(@"Are you sure you want to close this tab?", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes;
+        }
+
         private void tsbLoadMetadata_Click(object sender, EventArgs e)
         {
             if (Service == null)

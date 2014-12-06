@@ -22,17 +22,20 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
             // Stage
             if (workflow.GetAttributeValue<bool>("triggeroncreate"))
             {
-                Stage = workflow.GetAttributeValue<OptionSetValue>("createstage").Value;
+                var stageCode = workflow.GetAttributeValue<OptionSetValue>("createstage");
+                Stage = stageCode != null ? stageCode.Value : 40;
                 Message = "Create";
             }
             else if (workflow.GetAttributeValue<bool>("triggeronupdate"))
             {
-                Stage = workflow.GetAttributeValue<OptionSetValue>("updatestage").Value;
+                var stageCode = workflow.GetAttributeValue<OptionSetValue>("updatestage");
+                Stage = stageCode != null ? stageCode.Value : 40;
                 Message = "Update";
             }
             else if (workflow.GetAttributeValue<bool>("triggerondelete"))
             {
-                Stage = workflow.GetAttributeValue<OptionSetValue>("deletestage").Value;
+                var stageCode = workflow.GetAttributeValue<OptionSetValue>("deletestage");
+                Stage = stageCode != null ? stageCode.Value : 20;
                 Message = "Delete";
             }
             else

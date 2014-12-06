@@ -58,7 +58,7 @@ namespace MsCrmTools.SampleTool
 
         private void BtnCloseClick(object sender, EventArgs e)
         {
-            base.CloseToolPrompt();
+            CloseTool();
         }
     }
 }

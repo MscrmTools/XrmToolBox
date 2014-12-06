@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
 
 namespace MsCrmTools.MetadataDocumentGenerator
 {

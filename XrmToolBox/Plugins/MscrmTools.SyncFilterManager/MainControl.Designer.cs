@@ -35,6 +35,7 @@
             this.toolImageList = new System.Windows.Forms.ImageList(this.components);
             this.tabCtrl = new System.Windows.Forms.TabControl();
             this.tabPageSystemFilters = new System.Windows.Forms.TabPage();
+            this.systemRulesListView = new MscrmTools.SyncFilterManager.Controls.CrmSystemViewList();
             this.toolStrip5 = new System.Windows.Forms.ToolStrip();
             this.tsbLoadSystemSynchronizationFilter = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
@@ -44,6 +45,7 @@
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbShowFetchXmlSystemRules = new System.Windows.Forms.ToolStripButton();
             this.tabPageDefaultRules = new System.Windows.Forms.TabPage();
+            this.defaultLocalDataRulesView = new MscrmTools.SyncFilterManager.Controls.CrmSystemViewList();
             this.toolStrip4 = new System.Windows.Forms.ToolStrip();
             this.tsbLoadDefaultLocalDataRules = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -56,6 +58,10 @@
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbShowFetchXmlDefault = new System.Windows.Forms.ToolStripButton();
             this.tabPageUsersRules = new System.Windows.Forms.TabPage();
+            this.usersLocalDataRulesView = new MscrmTools.SyncFilterManager.Controls.CrmSystemViewList();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.chkDisplayOfflineFilters = new System.Windows.Forms.CheckBox();
+            this.chkDisplayOutlookFilters = new System.Windows.Forms.CheckBox();
             this.toolStrip3 = new System.Windows.Forms.ToolStrip();
             this.tsddbLoadUsersLocalDataRules = new System.Windows.Forms.ToolStripDropDownButton();
             this.forSpecificUsersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,6 +79,7 @@
             this.tsmiGroupByReturnedType = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiGroupByUser = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageSystemViews = new System.Windows.Forms.TabPage();
+            this.crmSystemViewsList = new MscrmTools.SyncFilterManager.Controls.CrmSystemViewList();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.tsbLoadSystemViews = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -85,18 +92,11 @@
             this.tsmiUpdateSystemFilter = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiUpdateFilterTemplate = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageUsers = new System.Windows.Forms.TabPage();
+            this.crmUserList1 = new MscrmTools.SyncFilterManager.Controls.CrmUserList();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbResetUsersFiltersToDefault = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbCopyUserFiltersToUser = new System.Windows.Forms.ToolStripButton();
-            this.crmUserList1 = new MscrmTools.SyncFilterManager.Controls.CrmUserList();
-            this.crmSystemViewsList = new MscrmTools.SyncFilterManager.Controls.CrmSystemViewList();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.chkDisplayOfflineFilters = new System.Windows.Forms.CheckBox();
-            this.chkDisplayOutlookFilters = new System.Windows.Forms.CheckBox();
-            this.usersLocalDataRulesView = new MscrmTools.SyncFilterManager.Controls.CrmSystemViewList();
-            this.defaultLocalDataRulesView = new MscrmTools.SyncFilterManager.Controls.CrmSystemViewList();
-            this.systemRulesListView = new MscrmTools.SyncFilterManager.Controls.CrmSystemViewList();
             this.toolStripMenu.SuspendLayout();
             this.tabCtrl.SuspendLayout();
             this.tabPageSystemFilters.SuspendLayout();
@@ -104,12 +104,12 @@
             this.tabPageDefaultRules.SuspendLayout();
             this.toolStrip4.SuspendLayout();
             this.tabPageUsersRules.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.toolStrip3.SuspendLayout();
             this.tabPageSystemViews.SuspendLayout();
             this.toolStrip2.SuspendLayout();
             this.tabPageUsers.SuspendLayout();
             this.toolStrip1.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStripMenu
@@ -168,6 +168,21 @@
             this.tabPageSystemFilters.TabIndex = 4;
             this.tabPageSystemFilters.Text = "System Synchronization Filters";
             this.tabPageSystemFilters.UseVisualStyleBackColor = true;
+            // 
+            // systemRulesListView
+            // 
+            this.systemRulesListView.DisplayOfflineFilter = true;
+            this.systemRulesListView.DisplayOutlookFilter = true;
+            this.systemRulesListView.DisplayRulesTemplate = false;
+            this.systemRulesListView.DisplaySystemRules = true;
+            this.systemRulesListView.DisplaySystemView = false;
+            this.systemRulesListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.systemRulesListView.EntityName = "savedquery";
+            this.systemRulesListView.Location = new System.Drawing.Point(4, 37);
+            this.systemRulesListView.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.systemRulesListView.Name = "systemRulesListView";
+            this.systemRulesListView.Size = new System.Drawing.Size(1342, 800);
+            this.systemRulesListView.TabIndex = 2;
             // 
             // toolStrip5
             // 
@@ -253,6 +268,21 @@
             this.tabPageDefaultRules.TabIndex = 0;
             this.tabPageDefaultRules.Text = "Synchronization Filters Templates";
             this.tabPageDefaultRules.UseVisualStyleBackColor = true;
+            // 
+            // defaultLocalDataRulesView
+            // 
+            this.defaultLocalDataRulesView.DisplayOfflineFilter = false;
+            this.defaultLocalDataRulesView.DisplayOutlookFilter = false;
+            this.defaultLocalDataRulesView.DisplayRulesTemplate = true;
+            this.defaultLocalDataRulesView.DisplaySystemRules = false;
+            this.defaultLocalDataRulesView.DisplaySystemView = false;
+            this.defaultLocalDataRulesView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.defaultLocalDataRulesView.EntityName = "savedquery";
+            this.defaultLocalDataRulesView.Location = new System.Drawing.Point(4, 37);
+            this.defaultLocalDataRulesView.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.defaultLocalDataRulesView.Name = "defaultLocalDataRulesView";
+            this.defaultLocalDataRulesView.Size = new System.Drawing.Size(1342, 800);
+            this.defaultLocalDataRulesView.TabIndex = 7;
             // 
             // toolStrip4
             // 
@@ -367,6 +397,58 @@
             this.tabPageUsersRules.TabIndex = 1;
             this.tabPageUsersRules.Text = "Users Synchronization Filters";
             this.tabPageUsersRules.UseVisualStyleBackColor = true;
+            // 
+            // usersLocalDataRulesView
+            // 
+            this.usersLocalDataRulesView.DisplayOfflineFilter = false;
+            this.usersLocalDataRulesView.DisplayOutlookFilter = false;
+            this.usersLocalDataRulesView.DisplayRulesTemplate = false;
+            this.usersLocalDataRulesView.DisplaySystemRules = false;
+            this.usersLocalDataRulesView.DisplaySystemView = false;
+            this.usersLocalDataRulesView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.usersLocalDataRulesView.EntityName = "userquery";
+            this.usersLocalDataRulesView.Location = new System.Drawing.Point(4, 73);
+            this.usersLocalDataRulesView.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.usersLocalDataRulesView.Name = "usersLocalDataRulesView";
+            this.usersLocalDataRulesView.Size = new System.Drawing.Size(1342, 764);
+            this.usersLocalDataRulesView.TabIndex = 12;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.chkDisplayOfflineFilters);
+            this.panel1.Controls.Add(this.chkDisplayOutlookFilters);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(4, 37);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1342, 36);
+            this.panel1.TabIndex = 11;
+            // 
+            // chkDisplayOfflineFilters
+            // 
+            this.chkDisplayOfflineFilters.AutoSize = true;
+            this.chkDisplayOfflineFilters.Checked = true;
+            this.chkDisplayOfflineFilters.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDisplayOfflineFilters.Location = new System.Drawing.Point(206, 5);
+            this.chkDisplayOfflineFilters.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkDisplayOfflineFilters.Name = "chkDisplayOfflineFilters";
+            this.chkDisplayOfflineFilters.Size = new System.Drawing.Size(183, 24);
+            this.chkDisplayOfflineFilters.TabIndex = 8;
+            this.chkDisplayOfflineFilters.Text = "Display Offline Filters";
+            this.chkDisplayOfflineFilters.UseVisualStyleBackColor = true;
+            // 
+            // chkDisplayOutlookFilters
+            // 
+            this.chkDisplayOutlookFilters.AutoSize = true;
+            this.chkDisplayOutlookFilters.Checked = true;
+            this.chkDisplayOutlookFilters.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkDisplayOutlookFilters.Location = new System.Drawing.Point(4, 5);
+            this.chkDisplayOutlookFilters.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkDisplayOutlookFilters.Name = "chkDisplayOutlookFilters";
+            this.chkDisplayOutlookFilters.Size = new System.Drawing.Size(192, 24);
+            this.chkDisplayOutlookFilters.TabIndex = 7;
+            this.chkDisplayOutlookFilters.Text = "Display Outlook Filters";
+            this.chkDisplayOutlookFilters.UseVisualStyleBackColor = true;
             // 
             // toolStrip3
             // 
@@ -523,6 +605,21 @@
             this.tabPageSystemViews.Text = "System Views";
             this.tabPageSystemViews.UseVisualStyleBackColor = true;
             // 
+            // crmSystemViewsList
+            // 
+            this.crmSystemViewsList.DisplayOfflineFilter = false;
+            this.crmSystemViewsList.DisplayOutlookFilter = false;
+            this.crmSystemViewsList.DisplayRulesTemplate = false;
+            this.crmSystemViewsList.DisplaySystemRules = false;
+            this.crmSystemViewsList.DisplaySystemView = true;
+            this.crmSystemViewsList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.crmSystemViewsList.EntityName = "savedquery";
+            this.crmSystemViewsList.Location = new System.Drawing.Point(4, 37);
+            this.crmSystemViewsList.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.crmSystemViewsList.Name = "crmSystemViewsList";
+            this.crmSystemViewsList.Size = new System.Drawing.Size(1342, 800);
+            this.crmSystemViewsList.TabIndex = 4;
+            // 
             // toolStrip2
             // 
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -631,6 +728,17 @@
             this.tabPageUsers.Text = "Users";
             this.tabPageUsers.UseVisualStyleBackColor = true;
             // 
+            // crmUserList1
+            // 
+            this.crmUserList1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.crmUserList1.Location = new System.Drawing.Point(4, 37);
+            this.crmUserList1.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.crmUserList1.Name = "crmUserList1";
+            this.crmUserList1.SelectMultipleUsers = true;
+            this.crmUserList1.Size = new System.Drawing.Size(1342, 800);
+            this.crmUserList1.TabIndex = 2;
+            this.crmUserList1.OnRequestConnection += new System.EventHandler(this.crmUserList1_OnRequestConnection);
+            // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -669,113 +777,6 @@
             this.tsbCopyUserFiltersToUser.Text = "Apply selected user synchronization filters to user(s)";
             this.tsbCopyUserFiltersToUser.Click += new System.EventHandler(this.tsbCopyUserFiltersToUser_Click);
             // 
-            // crmUserList1
-            // 
-            this.crmUserList1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.crmUserList1.Location = new System.Drawing.Point(4, 37);
-            this.crmUserList1.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.crmUserList1.Name = "crmUserList1";
-            this.crmUserList1.SelectMultipleUsers = true;
-            this.crmUserList1.Size = new System.Drawing.Size(1342, 800);
-            this.crmUserList1.TabIndex = 2;
-            // 
-            // crmSystemViewsList
-            // 
-            this.crmSystemViewsList.DisplayOfflineFilter = false;
-            this.crmSystemViewsList.DisplayOutlookFilter = false;
-            this.crmSystemViewsList.DisplayRulesTemplate = false;
-            this.crmSystemViewsList.DisplaySystemRules = false;
-            this.crmSystemViewsList.DisplaySystemView = true;
-            this.crmSystemViewsList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.crmSystemViewsList.EntityName = "savedquery";
-            this.crmSystemViewsList.Location = new System.Drawing.Point(4, 37);
-            this.crmSystemViewsList.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.crmSystemViewsList.Name = "crmSystemViewsList";
-            this.crmSystemViewsList.Size = new System.Drawing.Size(1342, 800);
-            this.crmSystemViewsList.TabIndex = 4;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.chkDisplayOfflineFilters);
-            this.panel1.Controls.Add(this.chkDisplayOutlookFilters);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(4, 37);
-            this.panel1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1342, 36);
-            this.panel1.TabIndex = 11;
-            // 
-            // chkDisplayOfflineFilters
-            // 
-            this.chkDisplayOfflineFilters.AutoSize = true;
-            this.chkDisplayOfflineFilters.Checked = true;
-            this.chkDisplayOfflineFilters.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDisplayOfflineFilters.Location = new System.Drawing.Point(206, 5);
-            this.chkDisplayOfflineFilters.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.chkDisplayOfflineFilters.Name = "chkDisplayOfflineFilters";
-            this.chkDisplayOfflineFilters.Size = new System.Drawing.Size(183, 24);
-            this.chkDisplayOfflineFilters.TabIndex = 8;
-            this.chkDisplayOfflineFilters.Text = "Display Offline Filters";
-            this.chkDisplayOfflineFilters.UseVisualStyleBackColor = true;
-            // 
-            // chkDisplayOutlookFilters
-            // 
-            this.chkDisplayOutlookFilters.AutoSize = true;
-            this.chkDisplayOutlookFilters.Checked = true;
-            this.chkDisplayOutlookFilters.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkDisplayOutlookFilters.Location = new System.Drawing.Point(4, 5);
-            this.chkDisplayOutlookFilters.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.chkDisplayOutlookFilters.Name = "chkDisplayOutlookFilters";
-            this.chkDisplayOutlookFilters.Size = new System.Drawing.Size(192, 24);
-            this.chkDisplayOutlookFilters.TabIndex = 7;
-            this.chkDisplayOutlookFilters.Text = "Display Outlook Filters";
-            this.chkDisplayOutlookFilters.UseVisualStyleBackColor = true;
-            // 
-            // usersLocalDataRulesView
-            // 
-            this.usersLocalDataRulesView.DisplayOfflineFilter = false;
-            this.usersLocalDataRulesView.DisplayOutlookFilter = false;
-            this.usersLocalDataRulesView.DisplayRulesTemplate = false;
-            this.usersLocalDataRulesView.DisplaySystemRules = false;
-            this.usersLocalDataRulesView.DisplaySystemView = false;
-            this.usersLocalDataRulesView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.usersLocalDataRulesView.EntityName = "userquery";
-            this.usersLocalDataRulesView.Location = new System.Drawing.Point(4, 73);
-            this.usersLocalDataRulesView.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.usersLocalDataRulesView.Name = "usersLocalDataRulesView";
-            this.usersLocalDataRulesView.Size = new System.Drawing.Size(1342, 764);
-            this.usersLocalDataRulesView.TabIndex = 12;
-            // 
-            // defaultLocalDataRulesView
-            // 
-            this.defaultLocalDataRulesView.DisplayOfflineFilter = false;
-            this.defaultLocalDataRulesView.DisplayOutlookFilter = false;
-            this.defaultLocalDataRulesView.DisplayRulesTemplate = true;
-            this.defaultLocalDataRulesView.DisplaySystemRules = false;
-            this.defaultLocalDataRulesView.DisplaySystemView = false;
-            this.defaultLocalDataRulesView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.defaultLocalDataRulesView.EntityName = "savedquery";
-            this.defaultLocalDataRulesView.Location = new System.Drawing.Point(4, 37);
-            this.defaultLocalDataRulesView.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.defaultLocalDataRulesView.Name = "defaultLocalDataRulesView";
-            this.defaultLocalDataRulesView.Size = new System.Drawing.Size(1342, 800);
-            this.defaultLocalDataRulesView.TabIndex = 7;
-            // 
-            // systemRulesListView
-            // 
-            this.systemRulesListView.DisplayOfflineFilter = true;
-            this.systemRulesListView.DisplayOutlookFilter = true;
-            this.systemRulesListView.DisplayRulesTemplate = false;
-            this.systemRulesListView.DisplaySystemRules = true;
-            this.systemRulesListView.DisplaySystemView = false;
-            this.systemRulesListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.systemRulesListView.EntityName = "savedquery";
-            this.systemRulesListView.Location = new System.Drawing.Point(4, 37);
-            this.systemRulesListView.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
-            this.systemRulesListView.Name = "systemRulesListView";
-            this.systemRulesListView.Size = new System.Drawing.Size(1342, 800);
-            this.systemRulesListView.TabIndex = 2;
-            // 
             // MainControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -798,6 +799,8 @@
             this.toolStrip4.PerformLayout();
             this.tabPageUsersRules.ResumeLayout(false);
             this.tabPageUsersRules.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.toolStrip3.ResumeLayout(false);
             this.toolStrip3.PerformLayout();
             this.tabPageSystemViews.ResumeLayout(false);
@@ -808,8 +811,6 @@
             this.tabPageUsers.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

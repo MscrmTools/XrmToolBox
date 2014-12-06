@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -27,36 +27,9 @@ using XrmToolBox.Attributes;
 
 namespace MsCrmTools.ViewLayoutReplicator
 {
-    public partial class ViewLayoutReplicator : UserControl, IMsCrmToolsPluginUserControl
+    public partial class ViewLayoutReplicator : PluginBase
     {
-        #region Variables
-
-        /// <summary>
-        /// Dynamics CRM 2011 organization service
-        /// </summary>
-        private IOrganizationService service;
-
-        /// <summary>
-        /// XML Document that represents customization
-        /// </summary>
-        private XmlDocument custoDoc;
-
-        /// <summary>
-        /// List of entities
-        /// </summary>
-        private List<EntityMetadata> entitiesCache;
-
-        /// <summary>
-        /// List of views
-        /// </summary>
-        private Dictionary<Guid, Entity> viewsList;
-
-        /// <summary>
-        /// Information panel
-        /// </summary>
-        private Panel informationPanel;
-
-        #endregion
+        private List<EntityMetadata> entitiesCache; 
 
         #region Constructor
 
@@ -76,27 +49,7 @@ namespace MsCrmTools.ViewLayoutReplicator
 
         private void TsbLoadEntitiesClick(object sender, EventArgs e)
         {
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs
-                    {
-                        ActionName = "Load",
-                        Control = this
-                    };
-                    OnRequestConnection(this, args);
-                }
-                else
-                {
-                    MessageBox.Show(this, "OnRequestConnection event not registered!", "Error", MessageBoxButtons.OK,
-                                    MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                LoadEntities();
-            }
+            ExecuteMethod(LoadEntities);
         }
 
         private void LoadEntities()
@@ -111,67 +64,39 @@ namespace MsCrmTools.ViewLayoutReplicator
             lvTargetViews.Items.Clear();
             lvSourceViewLayoutPreview.Columns.Clear();
 
-            CommonDelegates.SetCursor(this, Cursors.WaitCursor);
-
-            informationPanel = InformationPanel.GetInformationPanel(this, "Loading entities...", 340, 120);
-
-            var bwFillEntities = new BackgroundWorker();
-            bwFillEntities.DoWork += BwFillEntitiesDoWork;
-            bwFillEntities.RunWorkerCompleted += BwFillEntitiesRunWorkerCompleted;
-            bwFillEntities.RunWorkerAsync();
-        }
-
-        private void BwFillEntitiesDoWork(object sender, DoWorkEventArgs e)
-        {
-            // Caching entities
-            entitiesCache = MetadataHelper.RetrieveEntities(service);
-
-            // Filling entities list
-            FillEntitiesList();
-        }
-
-        private void BwFillEntitiesRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
-                CommonDelegates.DisplayMessageBox(ParentForm, errorMessage, "Error", MessageBoxButtons.OK,
-                                                  MessageBoxIcon.Error);
-            }
-            else
-            {
-                gbEntities.Enabled = true;
-                tsbPublishEntity.Enabled = true;
-                tsbPublishAll.Enabled = true;
-                tsbSaveViews.Enabled = true;
-            }
-
-            Controls.Remove(informationPanel);
-            CommonDelegates.SetCursor(this, Cursors.Default);
-        }
-
-        /// <summary>
-        /// Fills the entities listview
-        /// </summary>
-        public void FillEntitiesList()
-        {
-            try
-            {
-                ListViewDelegates.ClearItems(lvEntities);
-
-                foreach (EntityMetadata emd in entitiesCache)
+            WorkAsync("Loading entities...",
+                e =>
                 {
-                    var item = new ListViewItem {Text = emd.DisplayName.UserLocalizedLabel.Label, Tag = emd.LogicalName};
-                    item.SubItems.Add(emd.LogicalName);
-                    ListViewDelegates.AddItem(lvEntities, item);
-                }
-            }
-            catch (Exception error)
-            {
-                string errorMessage = CrmExceptionHelper.GetErrorMessage(error, true);
-                CommonDelegates.DisplayMessageBox(ParentForm, errorMessage, "Error", MessageBoxButtons.OK,
-                                                  MessageBoxIcon.Error);
-            }
+                    e.Result = MetadataHelper.RetrieveEntities(Service);
+                },
+                e =>
+                {
+                    if (e.Error != null)
+                    {
+                        string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
+                        CommonDelegates.DisplayMessageBox(ParentForm, errorMessage, "Error", MessageBoxButtons.OK,
+                                                          MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        entitiesCache = (List<EntityMetadata>) e.Result;
+                        lvEntities.Items.Clear();
+                        var list = new List<ListViewItem>();
+                        foreach (EntityMetadata emd in (List<EntityMetadata>)e.Result)
+                        {
+                            var item = new ListViewItem { Text = emd.DisplayName.UserLocalizedLabel.Label, Tag = emd.LogicalName };
+                            item.SubItems.Add(emd.LogicalName);
+                            list.Add(item);
+                        }
+
+                        lvEntities.Items.AddRange(list.ToArray());
+
+                        gbEntities.Enabled = true;
+                        tsbPublishEntity.Enabled = true;
+                        tsbPublishAll.Enabled = true;
+                        tsbSaveViews.Enabled = true;
+                    }
+                });
         }
 
         #endregion
@@ -185,58 +110,31 @@ namespace MsCrmTools.ViewLayoutReplicator
             tsbSaveViews.Enabled = false;
             tsbLoadEntities.Enabled = false;
 
-            //this.Cursor = Cursors.WaitCursor;
-            CommonDelegates.SetCursor(this, Cursors.WaitCursor);
+            var targetViews = lvTargetViews.CheckedItems.Cast<ListViewItem>().Select(i => (Entity) i.Tag);
+            var sourceView = (Entity)lvSourceViews.SelectedItems.Cast<ListViewItem>().First().Tag;
 
-            informationPanel = InformationPanel.GetInformationPanel(this, "Saving views...", 340, 120);
-
-            var bwSaveViews = new BackgroundWorker();
-            bwSaveViews.DoWork += BwSaveViewsDoWork;
-            bwSaveViews.RunWorkerCompleted += BwSaveViewsRunWorkerCompleted;
-            bwSaveViews.RunWorkerAsync();
-        }
-
-        private void BwSaveViewsDoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                Entity sourceView = (Entity)ListViewDelegates.GetSelectedItems(lvSourceViews)[0].Tag;
-
-                List<Entity> targetViews = new List<Entity>();
-
-                foreach (ListViewItem item in ListViewDelegates.GetCheckedItems(lvTargetViews))
+            WorkAsync("Saving views...",
+                evt =>
                 {
-                    targetViews.Add((Entity)item.Tag);
-                }
+                    var args = (object[])evt.Argument;
+                    evt.Result = ViewHelper.PropagateLayout((Entity)args[0], (List<Entity>)args[1], Service);
+                },
+                evt =>
+                {
+                    if (((List<Tuple<string, string>>)evt.Result).Count > 0)
+                    {
+                        var errorDialog = new ErrorList((List<Tuple<string, string>>)evt.Result);
+                        errorDialog.ShowDialog();
+                    }
 
-                e.Result = ViewHelper.PropagateLayout(sourceView, targetViews, service);
-            }
-            catch (Exception error)
-            {
-                CommonDelegates.DisplayMessageBox(ParentForm, error.Message, "Error", MessageBoxButtons.OK,
-                                                  MessageBoxIcon.Error);
-            }
+                    tsbPublishEntity.Enabled = true;
+                    tsbPublishAll.Enabled = true;
+                    tsbSaveViews.Enabled = true;
+                    tsbLoadEntities.Enabled = true;
+                },
+                new object[]{sourceView, targetViews});
         }
 
-        private void BwSaveViewsRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            CommonDelegates.SetCursor(this, Cursors.Default);
-            //Cursor = Cursors.Default;
-
-            Controls.Remove(informationPanel);
-
-            if (((List<Tuple<string, string>>) e.Result).Count > 0)
-            {
-                var errorDialog = new ErrorList((List<Tuple<string, string>>) e.Result);
-                errorDialog.ShowDialog();
-            }
-
-            tsbPublishEntity.Enabled = true;
-            tsbPublishAll.Enabled = true;
-            tsbSaveViews.Enabled = true;
-            tsbLoadEntities.Enabled = true;
-        }
-        
         #endregion
 
         #region Publish Entity
@@ -250,53 +148,36 @@ namespace MsCrmTools.ViewLayoutReplicator
                 tsbSaveViews.Enabled = false;
                 tsbLoadEntities.Enabled = false;
 
-                CommonDelegates.SetCursor(this, Cursors.WaitCursor);
-
-                informationPanel = InformationPanel.GetInformationPanel(this, "Publishing entity...", 340, 120);
-
-                var bwPublish = new BackgroundWorker();
-                bwPublish.DoWork += BwPublishDoWork;
-                bwPublish.RunWorkerCompleted += BwPublishRunWorkerCompleted;
-                bwPublish.RunWorkerAsync(lvEntities.SelectedItems[0].Text);
-            }
-        }
-
-        private void BwPublishDoWork(object sender, DoWorkEventArgs e)
-        {
-                EntityMetadata currentEmd =
-                    entitiesCache.Find(
-                        emd => emd.DisplayName.UserLocalizedLabel.Label == e.Argument.ToString());
-
-                var pubRequest = new PublishXmlRequest();
-                pubRequest.ParameterXml = string.Format(@"<importexportxml>
+                WorkAsync("Publishing entity...",
+                    evt =>
+                    {
+                        var pubRequest = new PublishXmlRequest();
+                        pubRequest.ParameterXml = string.Format(@"<importexportxml>
                                                            <entities>
                                                               <entity>{0}</entity>
                                                            </entities>
                                                            <nodes/><securityroles/><settings/><workflows/>
                                                         </importexportxml>",
-                                                        currentEmd.LogicalName);
+                                                                evt.Argument);
 
-                service.Execute(pubRequest);
-        }
+                        Service.Execute(pubRequest);
+                    },
+                    evt =>
+                    {
+                        if (evt.Error != null)
+                        {
+                            string errorMessage = CrmExceptionHelper.GetErrorMessage(evt.Error, false);
+                            MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK,
+                                                              MessageBoxIcon.Error);
+                        }
 
-        private void BwPublishRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            CommonDelegates.SetCursor(this, Cursors.Default);
-            //Cursor = Cursors.Default;
-
-            if (e.Error != null)
-            {
-                string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, false);
-                MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK,
-                                                  MessageBoxIcon.Error);
+                        tsbPublishEntity.Enabled = true;
+                        tsbPublishAll.Enabled = true;
+                        tsbSaveViews.Enabled = true;
+                        tsbLoadEntities.Enabled = true;
+                    },
+                    ((Entity)lvEntities.SelectedItems[0].Tag).LogicalName);
             }
-
-            Controls.Remove(informationPanel);
-
-            tsbPublishEntity.Enabled = true;
-            tsbPublishAll.Enabled = true;
-            tsbSaveViews.Enabled = true;
-            tsbLoadEntities.Enabled = true;
         }
 
         #endregion
@@ -332,8 +213,8 @@ namespace MsCrmTools.ViewLayoutReplicator
         {
             string entityLogicalName = e.Argument.ToString();
 
-            List<Entity> viewsList = ViewHelper.RetrieveViews(entityLogicalName, entitiesCache, service);
-            viewsList.AddRange(ViewHelper.RetrieveUserViews(entityLogicalName, entitiesCache, service));
+            List<Entity> viewsList = ViewHelper.RetrieveViews(entityLogicalName, entitiesCache, Service);
+            viewsList.AddRange(ViewHelper.RetrieveUserViews(entityLogicalName, entitiesCache, Service));
 
             foreach (Entity view in viewsList)
             {
@@ -453,71 +334,67 @@ namespace MsCrmTools.ViewLayoutReplicator
                 lvSourceViews.SelectedIndexChanged -= LvSourceViewsSelectedIndexChanged;
                 lvSourceViewLayoutPreview.Items.Clear();
                 lvSourceViews.Enabled = false;
-                Cursor = Cursors.WaitCursor;
 
-                var bwDisplayView = new BackgroundWorker();
-                bwDisplayView.DoWork += BwDisplayViewDoWork;
-                bwDisplayView.RunWorkerCompleted += BwDisplayViewRunWorkerCompleted;
-                bwDisplayView.RunWorkerAsync(lvSourceViews.SelectedItems[0].Tag);
-            }
-        }
+                WorkAsync("Loading view layout...",
+                    evt =>
+                    {
+                        Entity currentSelectedView = (Entity)evt.Argument;
+                        string layoutXml = currentSelectedView["layoutxml"].ToString();
+                        string fetchXml = currentSelectedView.Contains("fetchxml")
+                                              ? currentSelectedView["fetchxml"].ToString()
+                                              : string.Empty;
+                        string currentEntityDisplayName = ListViewDelegates.GetSelectedItems(lvEntities)[0].Text;
 
-        private void BwDisplayViewRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            lvSourceViews.SelectedIndexChanged += LvSourceViewsSelectedIndexChanged;
-            lvSourceViews.Enabled = true;
-            Cursor = Cursors.Default;
-        }
+                        EntityMetadata currentEmd = entitiesCache.Find(
+                            emd => emd.DisplayName.UserLocalizedLabel.Label == currentEntityDisplayName);
 
-        private void BwDisplayViewDoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                // Gets current view data
-                Entity currentSelectedView = (Entity) ListViewDelegates.GetSelectedItems(lvSourceViews)[0].Tag;
-                string layoutXml = currentSelectedView["layoutxml"].ToString();
-                string fetchXml = currentSelectedView.Contains("fetchxml")
-                                      ? currentSelectedView["fetchxml"].ToString()
-                                      : string.Empty;
-                string currentEntityDisplayName = ListViewDelegates.GetSelectedItems(lvEntities)[0].Text;
+                        XmlDocument layoutDoc = new XmlDocument();
+                        layoutDoc.LoadXml(layoutXml);
 
-                EntityMetadata currentEmd =
-                    entitiesCache.Find(
-                        delegate(EntityMetadata emd)
-                            { return emd.DisplayName.UserLocalizedLabel.Label == currentEntityDisplayName; });
+                        EntityMetadata emdWithItems = MetadataHelper.RetrieveEntity(currentEmd.LogicalName, Service);
 
-                XmlDocument layoutDoc = new XmlDocument();
-                layoutDoc.LoadXml(layoutXml);
+                        var headers = new List<ColumnHeader>();
 
-                EntityMetadata emdWithItems = MetadataHelper.RetrieveEntity(currentEmd.LogicalName, service);
+                        var item = new ListViewItem();
 
-                ListViewItem item = new ListViewItem();
-                
-                foreach (XmlNode columnNode in layoutDoc.SelectNodes("grid/row/cell"))
-                {
-                    ColumnHeader header = new ColumnHeader();
+                        foreach (XmlNode columnNode in layoutDoc.SelectNodes("grid/row/cell"))
+                        {
+                            ColumnHeader header = new ColumnHeader();
 
-                    header.Text = MetadataHelper.RetrieveAttributeDisplayName(emdWithItems,
-                                                                              columnNode.Attributes["name"].Value,
-                                                                              fetchXml, service);
-                    header.Width = int.Parse(columnNode.Attributes["width"].Value);
+                            header.Width = int.Parse(columnNode.Attributes["width"].Value);
+                            header.Text = MetadataHelper.RetrieveAttributeDisplayName(emdWithItems,
+                                                                                      columnNode.Attributes["name"].Value,
+                                                                                      fetchXml, Service);
+                            headers.Add(header);
 
-                    ListViewDelegates.AddColumn(lvSourceViewLayoutPreview, header);
+                            if (string.IsNullOrEmpty(item.Text))//item.SubItems.Add("preview");
+                                item.Text = columnNode.Attributes["width"].Value + "px";
+                            else
+                                item.SubItems.Add(columnNode.Attributes["width"].Value + "px");
+                        }
 
-                    if(string.IsNullOrEmpty(item.Text))//item.SubItems.Add("preview");
-                        item.Text = columnNode.Attributes["width"].Value + "px";
-                    else
-                        item.SubItems.Add(columnNode.Attributes["width"].Value + "px");
-                }
+                        evt.Result = new object[] {headers, item};
+                    },
+                    evt =>
+                    {
+                        if (evt.Error != null)
+                        {
+                            MessageBox.Show(ParentForm, "Error while displaying view: " + evt.Error.Message, "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            var args = (object[])evt.Result;
 
-                ListViewDelegates.AddItem(lvSourceViewLayoutPreview, item);
+                            lvSourceViewLayoutPreview.Columns.AddRange(((List<ColumnHeader>)args[0]).ToArray());
+                            lvSourceViewLayoutPreview.Items.Add((ListViewItem)args[1]);
+                            lvSourceViewLayoutPreview.Enabled = true;
+                        }
 
-                ListViewDelegates.SetEnableState(lvSourceViewLayoutPreview, true);
-            }
-            catch (Exception error)
-            {
-                CommonDelegates.DisplayMessageBox(ParentForm, "Error while displaying view: " + error.Message, "Error",
-                                                  MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        lvSourceViews.SelectedIndexChanged += LvSourceViewsSelectedIndexChanged;
+                        lvSourceViews.Enabled = true;
+                    },
+                    lvSourceViews.SelectedItems[0].Tag);
             }
         }
 
@@ -546,35 +423,9 @@ namespace MsCrmTools.ViewLayoutReplicator
 
         #endregion
 
-        public IOrganizationService Service
-        {
-            get { return service; }
-        }
-
-        public Image PluginLogo
-        {
-            get { return imageList2.Images[0]; }
-        }
-
-        public event EventHandler OnRequestConnection;
-        public event EventHandler OnCloseTool;
-
-        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
-        {
-            service = newService;
-
-            if (actionName == "Load")
-            {
-                LoadEntities();
-            }
-        }
-
         private void TsbCloseThisTabClick(object sender, EventArgs e)
         {
-            const string message = "Are your sure you want to close this tab?";
-            if (MessageBox.Show(message, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
-                DialogResult.Yes)
-                OnCloseTool(this, null);
+            CloseTool();
         }
 
         private void LvEntitiesColumnClick(object sender, ColumnClickEventArgs e)
@@ -602,39 +453,26 @@ namespace MsCrmTools.ViewLayoutReplicator
             tsbSaveViews.Enabled = false;
             tsbLoadEntities.Enabled = false;
 
-            Cursor = Cursors.WaitCursor;
+            WorkAsync("Publishing all customizations...",
+                evt =>
+                {
+                    var pubRequest = new PublishAllXmlRequest();
+                    Service.Execute(pubRequest);
+                },
+                evt =>
+                {
+                    if (evt.Error != null)
+                    {
+                        string errorMessage = CrmExceptionHelper.GetErrorMessage(evt.Error, false);
+                        MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK,
+                                                          MessageBoxIcon.Error);
+                    }
 
-            informationPanel = InformationPanel.GetInformationPanel(this, "Publishing all customizations...", 340, 120);
-
-            var bwPublishAll = new BackgroundWorker();
-            bwPublishAll.DoWork += BwPublishAllDoWork;
-            bwPublishAll.RunWorkerCompleted += BwPublishAllRunWorkerCompleted;
-            bwPublishAll.RunWorkerAsync();
-        }
-
-        private void BwPublishAllDoWork(object sender, DoWorkEventArgs e)
-        {
-            var pubRequest = new PublishAllXmlRequest();
-            service.Execute(pubRequest);
-        }
-
-        private void BwPublishAllRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Cursor = Cursors.Default;
-
-            if (e.Error != null)
-            {
-                string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, false);
-                MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK,
-                                                  MessageBoxIcon.Error);
-            }
-
-            Controls.Remove(informationPanel);
-
-            tsbPublishEntity.Enabled = true;
-            tsbPublishAll.Enabled = true;
-            tsbSaveViews.Enabled = true;
-            tsbLoadEntities.Enabled = true;
+                    tsbPublishEntity.Enabled = true;
+                    tsbPublishAll.Enabled = true;
+                    tsbSaveViews.Enabled = true;
+                    tsbLoadEntities.Enabled = true;
+                });
         }
     }
 }

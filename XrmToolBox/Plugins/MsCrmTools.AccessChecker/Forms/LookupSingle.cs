@@ -221,15 +221,7 @@ namespace MsCrmTools.AccessChecker.Forms
 
         private void LvResultsColumnClick(object sender, ColumnClickEventArgs e)
         {
-            if (lvResults.Sorting == SortOrder.Ascending)
-            {
-                lvResults.Sorting = SortOrder.Descending;
-            }
-            else
-            {
-                lvResults.Sorting = SortOrder.Ascending;
-            }
-
+            lvResults.Sorting = lvResults.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
             lvResults.ListViewItemSorter = new ListViewItemComparer(e.Column, lvResults.Sorting);
         }
 

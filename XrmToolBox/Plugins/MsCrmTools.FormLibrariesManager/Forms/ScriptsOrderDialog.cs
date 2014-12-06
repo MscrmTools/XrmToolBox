@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Microsoft.Xrm.Sdk;
 
@@ -12,7 +8,6 @@ namespace MsCrmTools.FormLibrariesManager.Forms
 {
     public partial class ScriptsOrderDialog : Form
     {
-
         public ScriptsOrderDialog(List<Entity> scripts)
         {
             InitializeComponent();
@@ -79,7 +74,7 @@ namespace MsCrmTools.FormLibrariesManager.Forms
                         "Item Select", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 }
             }
-            catch (Exception ex)
+            catch
             {
 
             }
@@ -112,7 +107,7 @@ namespace MsCrmTools.FormLibrariesManager.Forms
                         "Item Select", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 }
             }
-            catch (Exception ex)
+            catch
             {
             }
         }
