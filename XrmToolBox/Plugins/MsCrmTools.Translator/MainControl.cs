@@ -111,7 +111,7 @@ namespace MsCrmTools.Translator
             WorkAsync("Loading entities...",
                 e =>
                 {
-                    List<EntityMetadata> entities = MetadataHelper.RetrieveEntities(service);
+                    List<EntityMetadata> entities = MetadataHelper.RetrieveEntities(Service);
                     e.Result = entities;
                 },
                 e =>
