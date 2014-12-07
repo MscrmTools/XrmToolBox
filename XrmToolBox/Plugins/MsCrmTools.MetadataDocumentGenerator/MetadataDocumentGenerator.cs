@@ -453,7 +453,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
                         docGenerator = new WordDocument();
                     }
 
-                    docGenerator.Worker = (BackgroundWorker)sender;
+                    docGenerator.Worker = bw;
                     docGenerator.Settings = settings;
                     docGenerator.Generate(Service);
                 },
@@ -474,7 +474,8 @@ namespace MsCrmTools.MetadataDocumentGenerator
                         }
                     }
                 },
-                evt => SetWorkingMessage(string.Format("{0}%\r\n{1}", evt.ProgressPercentage, evt.UserState)));
+                evt => SetWorkingMessage(string.Format("{0}%\r\n{1}", evt.ProgressPercentage, evt.UserState)),
+                messageHeight: 180);
         }
 
         private void CbbOutputTypeSelectedIndexChanged(object sender, EventArgs e)

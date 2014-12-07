@@ -455,14 +455,14 @@ namespace MsCrmTools.Translator.AppCode
         public void ImportFormName(ExcelWorksheet sheet, IOrganizationService service)
         {
             var forms = new List<Tuple<int, Entity>>();
-            int lastColumnIndex = sheet.Rows[0].Cells.LastColumnIndex;
+            //int lastColumnIndex = sheet.Rows[0].Cells.LastColumnIndex;
 
             foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
             {
                 var currentFormId = new Guid(row.Cells[1].Value.ToString());
                 var columnIndex = 4;
-                while (columnIndex <= lastColumnIndex)
-                //while (row.Cells[columnIndex].Value != null)
+                //while (columnIndex <= lastColumnIndex)
+                while (row.Cells[columnIndex].Value != null)
                 {
                     var currentLcid = int.Parse(sheet.Cells[0, columnIndex].Value.ToString());
                     var formRecord = forms.FirstOrDefault(t => t.Item1 == currentLcid && t.Item2.Id == currentFormId);
