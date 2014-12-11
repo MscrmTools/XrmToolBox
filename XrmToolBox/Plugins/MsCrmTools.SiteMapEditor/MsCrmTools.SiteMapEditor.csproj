@@ -240,7 +240,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\menu_b_addXml.Image.png" />
     <EmbeddedResource Include="Resources\menu_b_showXml.Image.png" />
-    <EmbeddedResource Include="Resources\sitemap.xml" />
+    <EmbeddedResource Include="Resources\sitemap2011.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\sitemap.xsd">
@@ -248,7 +248,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\SiteMap2013.xml" />
+    <EmbeddedResource Include="Resources\sitemap2013.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Connection Projects\McTools.Xrm.Connection.WinForms\McTools.Xrm.Connection.WinForms.csproj">
@@ -264,6 +264,9 @@
       <Name>XrmToolBox</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\sitemap2015.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y "$(ProjectDir)$(OutDir)MsCrmTools.SiteMapEditor.dll" "$(SolutionDir)XrmToolBox\$(OutDir)"
@@ -271,7 +274,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
