@@ -132,15 +132,43 @@ namespace MsCrmTools.SiteMapEditor
 
         private void ResetSiteMapToDefaultToolStripMenuItemClick(object sender, EventArgs e)
         {
-            ResetSiteMap(true);
+            if (ConnectionDetail.OrganizationMajorVersion != 5)
+            {
+                if (DialogResult.No == MessageBox.Show(this,
+                    "Your current organization is not a CRM 2011 organization! Are you sure you want to continue?",
+                    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                    return;
+            }
+
+            ResetSiteMap(2011);
         }
 
         private void resetCRM2013SiteMapToDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ResetSiteMap(false);
+            if (ConnectionDetail.OrganizationMajorVersion != 6)
+            {
+                if (DialogResult.No == MessageBox.Show(this,
+                    "Your current organization is not a CRM 2013 organization! Are you sure you want to continue?",
+                    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                    return;
+            }
+
+            ResetSiteMap(2013);
         }
 
-        private void ResetSiteMap(bool isCrm2011)
+        private void resetCRM2015SiteMapToDefaultToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ConnectionDetail.OrganizationMajorVersion != 7)
+            {
+                if (DialogResult.No == MessageBox.Show(this,
+                    "Your current organization is not a CRM 2015 organization! Are you sure you want to continue?",
+                    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                    return;
+            }
+
+            ResetSiteMap(2015);
+        }
+        private void ResetSiteMap(int version)
         {
             if (DialogResult.Yes ==
                MessageBox.Show(this,
@@ -151,7 +179,7 @@ namespace MsCrmTools.SiteMapEditor
                 using (
                     var reader =
                         new StreamReader(
-                            myAssembly.GetManifestResourceStream(string.Format("MsCrmTools.SiteMapEditor.Resources.{0}.xml", isCrm2011 ? "sitemap" : "SiteMap2013"))))
+                            myAssembly.GetManifestResourceStream(string.Format("MsCrmTools.SiteMapEditor.Resources.sitemap{0}.xml",version))))
                 {
                     var doc = new XmlDocument();
                     doc.LoadXml(reader.ReadToEnd());
@@ -933,5 +961,7 @@ namespace MsCrmTools.SiteMapEditor
         {
             CloseTool();
         }
+
+      
     }
 }
