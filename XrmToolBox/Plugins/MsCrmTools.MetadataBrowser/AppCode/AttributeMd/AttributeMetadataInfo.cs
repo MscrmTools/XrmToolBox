@@ -151,6 +151,10 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
             get { return amd.IsValidForUpdate.HasValue && amd.IsValidForUpdate.Value; }
         }
 
+        public BooleanManagedPropertyInfo IsValidForAdvancedFind
+        {
+            get { return new BooleanManagedPropertyInfo(amd.IsValidForAdvancedFind); }
+        }
 
         public string LinkedAttributeId
         {
