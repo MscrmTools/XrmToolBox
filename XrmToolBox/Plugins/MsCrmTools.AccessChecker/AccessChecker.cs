@@ -75,9 +75,50 @@ namespace MsCrmTools.AccessChecker
                           cBoxEntities.Items.Add(new EntityInfo(emd.LogicalName, emd.DisplayName != null && emd.DisplayName.UserLocalizedLabel != null ? emd.DisplayName.UserLocalizedLabel.Label : "N/A", emd.PrimaryNameAttribute));
                       }
 
+                      cBoxEntities.DrawMode = DrawMode.OwnerDrawFixed;
+                      cBoxEntities.DrawItem += cbbEntity_DrawItem; 
+
                       cBoxEntities.SelectedIndex = 0;
                   }
               });
+        }
+
+        private void cbbEntity_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            // Draw the default background
+            e.DrawBackground();
+            e.DrawFocusRectangle();
+
+            if (e.Index == -1) return;
+
+            // The ComboBox is bound to a DataTable,
+            // so the items are DataRowView objects.
+            var attr = (EntityInfo)((ComboBox)sender).Items[e.Index];
+
+            // Retrieve the value of each column.
+            string displayName = attr.DisplayName;
+            string logicalName = attr.LogicalName;
+
+            // Get the bounds for the first column
+            Rectangle r1 = e.Bounds;
+            r1.Width /= 2;
+
+            // Draw the text on the first column
+            using (SolidBrush sb = new SolidBrush(e.ForeColor))
+            {
+                e.Graphics.DrawString(displayName, e.Font, sb, r1);
+            }
+
+            // Get the bounds for the second column
+            Rectangle r2 = e.Bounds;
+            r2.X = e.Bounds.Width / 2;
+            r2.Width /= 2;
+
+            // Draw the text on the second column
+            using (SolidBrush sb = new SolidBrush(e.ForeColor))
+            {
+                e.Graphics.DrawString(logicalName, e.Font, sb, r2);
+            }
         }
 
         private void BtnBrowseClick(object sender, EventArgs e)
