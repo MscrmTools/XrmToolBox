@@ -31,7 +31,13 @@ namespace MsCrmTools.FormAttributeManager
 
         private void tsbLoadEntities_Click(object sender, EventArgs e)
         {
-            ExecuteMethod(attributeSelector1.LoadEntities);
+            ExecuteMethod(LoadEntities);
+        }
+
+        private void LoadEntities()
+        {
+            attributeSelector1.Service = Service;
+            attributeSelector1.LoadEntities();
         }
 
         private void removeFromFormToolStripMenuItem_Click(object sender, EventArgs e)

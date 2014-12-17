@@ -448,7 +448,8 @@ namespace MsCrmTools.Iconator
                             {
                                 LvEntitiesSelectedIndexChanged(null, null);
                             }
-                        });
+                        },
+                        listViewEntities.SelectedItems[0].Tag);
                 }
             }
             else

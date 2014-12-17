@@ -211,6 +211,7 @@ namespace MsCrmTools.AttributeBulkUpdater.Forms
         /// </summary>
         private void FillImagesInListView()
         {
+            lvInformation.SmallImageList = new ImageList();
             System.Reflection.Assembly myAssembly = System.Reflection.Assembly.GetExecutingAssembly();
 
             using (Stream myStream = myAssembly.GetManifestResourceStream("MsCrmTools.AttributeBulkUpdater.Images.solidgreentick.gif"))
