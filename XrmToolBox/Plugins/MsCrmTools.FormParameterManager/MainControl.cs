@@ -142,6 +142,8 @@ namespace MsCrmTools.FormParameterManager
                         // Publishing form
                         bw.ReportProgress(0,"Publishing form(s) ...");
                         CrmForm.PublishForms(Service, formsUpdated.Select(f => f.EntityLogicalName));
+
+                        evt.Result = lvItems;
                     },
                     evt =>
                     {

@@ -380,10 +380,10 @@ namespace MsCrmTools.AuditCenter
                     }
                     else
                     {
+                        lblStatusStatus.Text = lblStatusStatus.Text == "ON" ? "OFF" : "ON";
                         tsbChangeSystemAuditStatus.Image = lblStatusStatus.Text == "ON" ? statusImageList.Images[1] : statusImageList.Images[0];
                         tsbChangeSystemAuditStatus.Text = lblStatusStatus.Text == "ON" ? "Deactivate system audit" : "Activate system audit";
                         lblStatusStatus.ForeColor = lblStatusStatus.ForeColor == Color.Green ? Color.Red : Color.Green;
-                        lblStatusStatus.Text = lblStatusStatus.Text == "ON" ? "OFF" : "ON";
                     }
                 });
         }

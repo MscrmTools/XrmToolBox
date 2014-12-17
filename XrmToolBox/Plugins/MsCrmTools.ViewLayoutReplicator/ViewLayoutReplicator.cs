@@ -110,7 +110,7 @@ namespace MsCrmTools.ViewLayoutReplicator
             tsbSaveViews.Enabled = false;
             tsbLoadEntities.Enabled = false;
 
-            var targetViews = lvTargetViews.CheckedItems.Cast<ListViewItem>().Select(i => (Entity) i.Tag);
+            var targetViews = lvTargetViews.CheckedItems.Cast<ListViewItem>().Select(i => (Entity) i.Tag).ToList();
             var sourceView = (Entity)lvSourceViews.SelectedItems.Cast<ListViewItem>().First().Tag;
 
             WorkAsync("Saving views...",
@@ -176,7 +176,7 @@ namespace MsCrmTools.ViewLayoutReplicator
                         tsbSaveViews.Enabled = true;
                         tsbLoadEntities.Enabled = true;
                     },
-                    ((Entity)lvEntities.SelectedItems[0].Tag).LogicalName);
+                    lvEntities.SelectedItems[0].Tag);
             }
         }
 

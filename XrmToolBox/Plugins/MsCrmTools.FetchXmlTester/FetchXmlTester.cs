@@ -82,7 +82,8 @@ namespace MsCrmTools.FetchXmlTester
                         MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK,
                                         MessageBoxIcon.Error);
                     }
-                });
+                },
+                txtRequest.Text);
         }
     
         private void TsbCloseClick(object sender, EventArgs e)
@@ -123,13 +124,16 @@ namespace MsCrmTools.FetchXmlTester
                 if ((tabControl1.SelectedTab.Controls[0]).Text.Length == 0)
                 {
                     MessageBox.Show(this, "Please provide a valid Xml before trying to format it!", "Warning",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-            }            catch (Exception error)
+           
+                ((XMLViewer)tabControl1.SelectedTab.Controls[0]).Process(true);
+            }
+            catch (Exception error)
             {
                 MessageBox.Show(this, "An error occured: " + error.Message, "Error", MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
+                    MessageBoxIcon.Error);
             }
         }
     }
