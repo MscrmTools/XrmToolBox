@@ -70,14 +70,12 @@ namespace MsCrmTools.FormParameterManager.AppCode
         {
             if (innerOrder == SortOrder.Ascending)
             {
-                return String.Compare(x.SubItems[col].Text, y.SubItems[col].Text);
+                return String.CompareOrdinal(x.SubItems[col].Text, y.SubItems[col].Text);
             }
-            else
-            {
-                return String.Compare(y.SubItems[col].Text, x.SubItems[col].Text);
-            }
+
+            return String.CompareOrdinal(y.SubItems[col].Text, x.SubItems[col].Text);
         }
-       
+
         #endregion
     }
 }

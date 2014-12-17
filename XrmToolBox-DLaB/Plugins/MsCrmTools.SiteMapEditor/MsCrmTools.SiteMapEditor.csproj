@@ -240,7 +240,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\menu_b_addXml.Image.png" />
     <EmbeddedResource Include="Resources\menu_b_showXml.Image.png" />
-    <EmbeddedResource Include="Resources\sitemap.xml" />
+    <EmbeddedResource Include="Resources\sitemap2011.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\sitemap.xsd">
@@ -248,7 +248,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\SiteMap2013.xml" />
+    <EmbeddedResource Include="Resources\sitemap2013.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Connection Projects\McTools.Xrm.Connection.WinForms\McTools.Xrm.Connection.WinForms.csproj">
@@ -263,6 +263,9 @@
       <Project>{328d55be-8b9a-4087-a5c2-9fbaf623f54b}</Project>
       <Name>XrmToolBox</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\sitemap2015.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

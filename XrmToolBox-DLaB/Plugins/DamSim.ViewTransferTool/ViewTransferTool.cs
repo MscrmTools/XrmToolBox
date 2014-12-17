@@ -102,6 +102,19 @@ namespace DamSim.ViewTransferTool
             }
         }
 
+        public void ClosingPlugin(PluginCloseInfo info)
+        {
+
+            if (info.FormReason != CloseReason.None ||
+                info.ToolBoxReason == ToolBoxCloseReason.CloseAll ||
+                info.ToolBoxReason == ToolBoxCloseReason.CloseAllExceptActive)
+            {
+                return;
+            }
+
+            info.Cancel = MessageBox.Show(@"Are you sure you want to close this tab?", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes;
+        }
+
         #endregion
 
         private void btnSelectTarget_Click(object sender, EventArgs e)

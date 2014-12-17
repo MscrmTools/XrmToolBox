@@ -38,6 +38,15 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.userSelector1 = new MsCrmTools.UserSettingsUtility.UserControls.UserSelector();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.gbOutlookForms = new System.Windows.Forms.GroupBox();
+            this.cbbUseCrmFormTask = new System.Windows.Forms.ComboBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.cbbUseCrmFormAppt = new System.Windows.Forms.ComboBox();
+            this.cbbUseCrmFormContact = new System.Windows.Forms.ComboBox();
+            this.cbbUseCrmFormEmail = new System.Windows.Forms.ComboBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
             this.gbLanguages = new System.Windows.Forms.GroupBox();
             this.label15 = new System.Windows.Forms.Label();
             this.cbbUiLanguage = new System.Windows.Forms.ComboBox();
@@ -75,27 +84,18 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.gbOutlookForms = new System.Windows.Forms.GroupBox();
-            this.cbbUseCrmFormAppt = new System.Windows.Forms.ComboBox();
-            this.cbbUseCrmFormContact = new System.Windows.Forms.ComboBox();
-            this.cbbUseCrmFormEmail = new System.Windows.Forms.ComboBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
-            this.cbbUseCrmFormTask = new System.Windows.Forms.ComboBox();
-            this.label20 = new System.Windows.Forms.Label();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.gbOutlookForms.SuspendLayout();
             this.gbLanguages.SuspendLayout();
             this.gbPrivacy.SuspendLayout();
             this.gbEmail.SuspendLayout();
             this.gbActivities.SuspendLayout();
             this.gbGeneral.SuspendLayout();
-            this.gbOutlookForms.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -193,6 +193,124 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(704, 729);
             this.panel1.TabIndex = 0;
+            // 
+            // gbOutlookForms
+            // 
+            this.gbOutlookForms.Controls.Add(this.cbbUseCrmFormTask);
+            this.gbOutlookForms.Controls.Add(this.label20);
+            this.gbOutlookForms.Controls.Add(this.cbbUseCrmFormAppt);
+            this.gbOutlookForms.Controls.Add(this.cbbUseCrmFormContact);
+            this.gbOutlookForms.Controls.Add(this.cbbUseCrmFormEmail);
+            this.gbOutlookForms.Controls.Add(this.label17);
+            this.gbOutlookForms.Controls.Add(this.label18);
+            this.gbOutlookForms.Controls.Add(this.label19);
+            this.gbOutlookForms.Dock = System.Windows.Forms.DockStyle.Top;
+            this.gbOutlookForms.Location = new System.Drawing.Point(0, 766);
+            this.gbOutlookForms.Name = "gbOutlookForms";
+            this.gbOutlookForms.Size = new System.Drawing.Size(678, 196);
+            this.gbOutlookForms.TabIndex = 59;
+            this.gbOutlookForms.TabStop = false;
+            this.gbOutlookForms.Text = "Outlook Forms";
+            // 
+            // cbbUseCrmFormTask
+            // 
+            this.cbbUseCrmFormTask.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbbUseCrmFormTask.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbUseCrmFormTask.FormattingEnabled = true;
+            this.cbbUseCrmFormTask.Items.AddRange(new object[] {
+            "No change",
+            "No",
+            "Yes"});
+            this.cbbUseCrmFormTask.Location = new System.Drawing.Point(232, 137);
+            this.cbbUseCrmFormTask.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbbUseCrmFormTask.Name = "cbbUseCrmFormTask";
+            this.cbbUseCrmFormTask.Size = new System.Drawing.Size(432, 28);
+            this.cbbUseCrmFormTask.TabIndex = 57;
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(9, 140);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(171, 20);
+            this.label20.TabIndex = 58;
+            this.label20.Text = "Use CRM form for task";
+            // 
+            // cbbUseCrmFormAppt
+            // 
+            this.cbbUseCrmFormAppt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbbUseCrmFormAppt.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbUseCrmFormAppt.FormattingEnabled = true;
+            this.cbbUseCrmFormAppt.Items.AddRange(new object[] {
+            "No change",
+            "No",
+            "Yes"});
+            this.cbbUseCrmFormAppt.Location = new System.Drawing.Point(232, 26);
+            this.cbbUseCrmFormAppt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbbUseCrmFormAppt.Name = "cbbUseCrmFormAppt";
+            this.cbbUseCrmFormAppt.Size = new System.Drawing.Size(432, 28);
+            this.cbbUseCrmFormAppt.TabIndex = 51;
+            // 
+            // cbbUseCrmFormContact
+            // 
+            this.cbbUseCrmFormContact.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbbUseCrmFormContact.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbUseCrmFormContact.FormattingEnabled = true;
+            this.cbbUseCrmFormContact.Items.AddRange(new object[] {
+            "No change",
+            "No",
+            "Yes"});
+            this.cbbUseCrmFormContact.Location = new System.Drawing.Point(232, 63);
+            this.cbbUseCrmFormContact.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbbUseCrmFormContact.Name = "cbbUseCrmFormContact";
+            this.cbbUseCrmFormContact.Size = new System.Drawing.Size(432, 28);
+            this.cbbUseCrmFormContact.TabIndex = 52;
+            // 
+            // cbbUseCrmFormEmail
+            // 
+            this.cbbUseCrmFormEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbbUseCrmFormEmail.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbUseCrmFormEmail.FormattingEnabled = true;
+            this.cbbUseCrmFormEmail.Items.AddRange(new object[] {
+            "No change",
+            "No",
+            "Yes"});
+            this.cbbUseCrmFormEmail.Location = new System.Drawing.Point(232, 101);
+            this.cbbUseCrmFormEmail.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbbUseCrmFormEmail.Name = "cbbUseCrmFormEmail";
+            this.cbbUseCrmFormEmail.Size = new System.Drawing.Size(432, 28);
+            this.cbbUseCrmFormEmail.TabIndex = 53;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(9, 29);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(177, 20);
+            this.label17.TabIndex = 54;
+            this.label17.Text = "Use CRM form for appt.";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(9, 66);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(194, 20);
+            this.label18.TabIndex = 55;
+            this.label18.Text = "Use CRM form for contact";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(9, 104);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(178, 20);
+            this.label19.TabIndex = 56;
+            this.label19.Text = "Use CRM form for email";
             // 
             // gbLanguages
             // 
@@ -751,124 +869,6 @@
             this.label4.TabIndex = 44;
             this.label4.Text = "Time zone";
             // 
-            // gbOutlookForms
-            // 
-            this.gbOutlookForms.Controls.Add(this.cbbUseCrmFormTask);
-            this.gbOutlookForms.Controls.Add(this.label20);
-            this.gbOutlookForms.Controls.Add(this.cbbUseCrmFormAppt);
-            this.gbOutlookForms.Controls.Add(this.cbbUseCrmFormContact);
-            this.gbOutlookForms.Controls.Add(this.cbbUseCrmFormEmail);
-            this.gbOutlookForms.Controls.Add(this.label17);
-            this.gbOutlookForms.Controls.Add(this.label18);
-            this.gbOutlookForms.Controls.Add(this.label19);
-            this.gbOutlookForms.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.gbOutlookForms.Location = new System.Drawing.Point(0, 766);
-            this.gbOutlookForms.Name = "gbOutlookForms";
-            this.gbOutlookForms.Size = new System.Drawing.Size(678, 196);
-            this.gbOutlookForms.TabIndex = 59;
-            this.gbOutlookForms.TabStop = false;
-            this.gbOutlookForms.Text = "Outlook Forms";
-            // 
-            // cbbUseCrmFormAppt
-            // 
-            this.cbbUseCrmFormAppt.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbbUseCrmFormAppt.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbUseCrmFormAppt.FormattingEnabled = true;
-            this.cbbUseCrmFormAppt.Items.AddRange(new object[] {
-            "No change",
-            "No",
-            "Yes"});
-            this.cbbUseCrmFormAppt.Location = new System.Drawing.Point(232, 26);
-            this.cbbUseCrmFormAppt.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.cbbUseCrmFormAppt.Name = "cbbUseCrmFormAppt";
-            this.cbbUseCrmFormAppt.Size = new System.Drawing.Size(432, 28);
-            this.cbbUseCrmFormAppt.TabIndex = 51;
-            // 
-            // cbbUseCrmFormContact
-            // 
-            this.cbbUseCrmFormContact.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbbUseCrmFormContact.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbUseCrmFormContact.FormattingEnabled = true;
-            this.cbbUseCrmFormContact.Items.AddRange(new object[] {
-            "No change",
-            "No",
-            "Yes"});
-            this.cbbUseCrmFormContact.Location = new System.Drawing.Point(232, 63);
-            this.cbbUseCrmFormContact.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.cbbUseCrmFormContact.Name = "cbbUseCrmFormContact";
-            this.cbbUseCrmFormContact.Size = new System.Drawing.Size(432, 28);
-            this.cbbUseCrmFormContact.TabIndex = 52;
-            // 
-            // cbbUseCrmFormEmail
-            // 
-            this.cbbUseCrmFormEmail.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbbUseCrmFormEmail.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbUseCrmFormEmail.FormattingEnabled = true;
-            this.cbbUseCrmFormEmail.Items.AddRange(new object[] {
-           "No change",
-            "No",
-            "Yes"});
-            this.cbbUseCrmFormEmail.Location = new System.Drawing.Point(232, 101);
-            this.cbbUseCrmFormEmail.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.cbbUseCrmFormEmail.Name = "cbbUseCrmFormEmail";
-            this.cbbUseCrmFormEmail.Size = new System.Drawing.Size(432, 28);
-            this.cbbUseCrmFormEmail.TabIndex = 53;
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(9, 29);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(177, 20);
-            this.label17.TabIndex = 54;
-            this.label17.Text = "Use CRM form for appt.";
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(9, 66);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(194, 20);
-            this.label18.TabIndex = 55;
-            this.label18.Text = "Use CRM form for contact";
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(9, 104);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(178, 20);
-            this.label19.TabIndex = 56;
-            this.label19.Text = "Use CRM form for email";
-            // 
-            // cbbUseCrmFormTask
-            // 
-            this.cbbUseCrmFormTask.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbbUseCrmFormTask.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbUseCrmFormTask.FormattingEnabled = true;
-            this.cbbUseCrmFormTask.Items.AddRange(new object[] {
-           "No change",
-            "No",
-            "Yes"});
-            this.cbbUseCrmFormTask.Location = new System.Drawing.Point(232, 137);
-            this.cbbUseCrmFormTask.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.cbbUseCrmFormTask.Name = "cbbUseCrmFormTask";
-            this.cbbUseCrmFormTask.Size = new System.Drawing.Size(432, 28);
-            this.cbbUseCrmFormTask.TabIndex = 57;
-            // 
-            // label20
-            // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(9, 140);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(171, 20);
-            this.label20.TabIndex = 58;
-            this.label20.Text = "Use CRM form for task";
-            // 
             // MainControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -885,6 +885,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            this.gbOutlookForms.ResumeLayout(false);
+            this.gbOutlookForms.PerformLayout();
             this.gbLanguages.ResumeLayout(false);
             this.gbLanguages.PerformLayout();
             this.gbPrivacy.ResumeLayout(false);
@@ -895,8 +897,6 @@
             this.gbActivities.PerformLayout();
             this.gbGeneral.ResumeLayout(false);
             this.gbGeneral.PerformLayout();
-            this.gbOutlookForms.ResumeLayout(false);
-            this.gbOutlookForms.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

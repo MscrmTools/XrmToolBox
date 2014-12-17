@@ -5,16 +5,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Microsoft.Xrm.Sdk;
 using MsCrmTools.AssemblyRecoveryTool.AppCode;
 using XrmToolBox;
-using McTools.Xrm.Connection;
-
-// If empty strings are left, default values are used
 using XrmToolBox.Attributes;
 
 [assembly: BackgroundColor("")]
@@ -25,22 +20,8 @@ using XrmToolBox.Attributes;
 
 namespace MsCrmTools.AssemblyRecoveryTool
 {
-    public partial class MainControl : UserControl, IMsCrmToolsPluginUserControl
+    public partial class MainControl : PluginBase
     {
-        #region Variables
-
-        /// <summary>
-        /// Microsoft Dynamics CRM 2011 Organization Service
-        /// </summary>
-        private IOrganizationService service;
-
-        /// <summary>
-        /// Panel used to display progress information
-        /// </summary>
-        private Panel infoPanel;
-
-        #endregion Variables
-
         #region Constructor
 
         /// <summary>
@@ -53,137 +34,50 @@ namespace MsCrmTools.AssemblyRecoveryTool
 
         #endregion Constructor
 
-        #region Properties
-
-        /// <summary>
-        /// Gets the organization service used by the tool
-        /// </summary>
-        public IOrganizationService Service
-        {
-            get { return service; }
-        }
-
-        /// <summary>
-        /// Gets the logo to display in the tools list
-        /// </summary>
-        public Image PluginLogo
-        {
-            get { return toolImageList.Images[0]; }
-        }
-
-        #endregion
-
-        #region EventHandlers
-
-        /// <summary>
-        /// EventHandler to request a connection to an organization
-        /// </summary>
-        public event EventHandler OnRequestConnection;
-
-        /// <summary>
-        /// EventHandler to close the current tool
-        /// </summary>
-        public event EventHandler OnCloseTool;
-
-        #endregion EventHandlers
-
         #region Methods
 
-        /// <summary>
-        /// Updates the organization service used by the tool
-        /// </summary>
-        /// <param name="newService">Organization service</param>
-        /// <param name="detail">Details of the connection</param>
-        /// <param name="actionName">Action that requested a service update</param>
-        /// <param name="parameter">Parameter passed when requesting a service update</param>
-        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
-        {
-            service = newService;
-
-            if (actionName == "RetrieveAssemblies")
-            {
-                RetrieveAssemblies();
-            }
-        }
-
-      
-      
         private void TsbCloseClick(object sender, EventArgs e)
         {
-            if (OnCloseTool != null)
-            {
-                OnCloseTool(this, null);
-            }
+            CloseTool();
         }
 
         #endregion Methods
 
+        private void tsbLoadAssemblies_Click(object sender, EventArgs e)
+        {
+            ExecuteMethod(RetrieveAssemblies);
+        }
+
         private void RetrieveAssemblies()
         {
-            infoPanel = InformationPanel.GetInformationPanel(this, "Retrieving assemblies...", 340, 150);
-
-            var worker = new BackgroundWorker();
-            worker.DoWork += WorkerDoWork;
-            worker.ProgressChanged += WorkerProgressChanged;
-            worker.RunWorkerCompleted += WorkerRunWorkerCompleted;
-            worker.WorkerReportsProgress = true;
-            worker.RunWorkerAsync();
-
-        }
-
-
-        private void WorkerProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            InformationPanel.ChangeInformationPanelMessage(infoPanel, e.UserState.ToString());
-        }
-
-        private void WorkerDoWork(object sender, DoWorkEventArgs e)
-        {
-            var aManager = new AssemblyManager(Service);
-            e.Result = aManager.RetrieveAssemblies();
-        }
-
-        private void WorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            var list = (List<Entity>) e.Result;
-
-            foreach (Entity pAssembly in list)
-            {
-                var item = new ListViewItem(pAssembly["name"].ToString());
-                item.SubItems.Add(pAssembly["version"].ToString());
-                item.SubItems.Add(pAssembly["publickeytoken"].ToString());
-
-                item.Tag = pAssembly["content"];
-
-                listView_Assemblies.Items.Add(item);
-            }
-
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
-        }
-
-      private void tsbLoadAssemblies_Click(object sender, EventArgs e)
-        {
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
+            WorkAsync("Loading assemblies...",
+                e =>
                 {
-                    var args = new RequestConnectionEventArgs { ActionName = "RetrieveAssemblies", Control = this, Parameter = null };
-                    OnRequestConnection(this, args);
-                }
-            }
-            else
-            {
-                RetrieveAssemblies();
-            }
+                    var aManager = new AssemblyManager(Service);
+                    e.Result = aManager.RetrieveAssemblies();
+                },
+                e =>
+                {
+                    var list = (List<Entity>) e.Result;
+
+                    foreach (Entity pAssembly in list)
+                    {
+                        var item = new ListViewItem(pAssembly["name"].ToString());
+                        item.SubItems.Add(pAssembly["version"].ToString());
+                        item.SubItems.Add(pAssembly["publickeytoken"].ToString());
+
+                        item.Tag = pAssembly["content"];
+
+                        listView_Assemblies.Items.Add(item);
+                    }
+                });
         }
 
         private void tsbExportToDisk_Click(object sender, EventArgs e)
         {
             if (listView_Assemblies.CheckedItems.Count == 0)
             {
-                MessageBox.Show(this, "Please select at least one assembly in the list!", "Warning",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, "Please select at least one assembly in the list!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -206,14 +100,13 @@ namespace MsCrmTools.AssemblyRecoveryTool
                         item.Text);
 
                         byte[] buffer = Convert.FromBase64String(item.Tag.ToString());
-                        using (BinaryWriter writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
+                        using (var writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
                         {
                             writer.Write(buffer);
                         }
                     }
 
-                    MessageBox.Show(this, "Assemblies recovered!", "Information", MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
+                    MessageBox.Show(this, "Assemblies recovered!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }

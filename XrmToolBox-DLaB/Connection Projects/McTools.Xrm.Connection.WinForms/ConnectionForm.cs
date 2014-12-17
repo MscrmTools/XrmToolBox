@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -84,7 +85,7 @@ namespace McTools.Xrm.Connection.WinForms
             // allows for validation of SSL conversations
             ServicePointManager.ServerCertificateValidationCallback += ValidateRemoteCertificate;
 
-          
+
         }
 
         // callback used to validate the certificate in an SSL conversation
@@ -156,7 +157,16 @@ namespace McTools.Xrm.Connection.WinForms
             detail.UseIfd = cbUseIfd.Checked;
             detail.HomeRealmUrl = (tbHomeRealmUrl.Text.Length > 0 ? tbHomeRealmUrl.Text : null);
 
-             OrganizationDetail selectedOrganization = comboBoxOrganizations.SelectedItem != null ? ((Organization)comboBoxOrganizations.SelectedItem).OrganizationDetail : null;
+            TimeSpan timeOut;
+            if (!TimeSpan.TryParse(tbTimeoutValue.Text, CultureInfo.InvariantCulture, out timeOut))
+            {
+                   MessageBox.Show(this, "Wrong timeout value!\r\n\r\nExpected format : HH:mm:ss", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+         }
+
+            detail.Timeout = timeOut;
+
+            OrganizationDetail selectedOrganization = comboBoxOrganizations.SelectedItem != null ? ((Organization)comboBoxOrganizations.SelectedItem).OrganizationDetail : null;
             if (selectedOrganization != null)
             {
                 detail.OrganizationServiceUrl = selectedOrganization.Endpoints[EndpointType.OrganizationService];
@@ -286,7 +296,7 @@ namespace McTools.Xrm.Connection.WinForms
                 cbUseSsl.Enabled = true;
                 cbUseOSDP.Checked = false;
                 tbServerPort.Enabled = true;
-               
+
                 tbServerName.Visible = true;
                 cbbOnlineEnv.Visible = false;
             }
@@ -493,6 +503,7 @@ namespace McTools.Xrm.Connection.WinForms
             cbUseOnline.Checked = detail.UseOnline;
             cbUseSsl.Checked = detail.UseSsl;
             tbHomeRealmUrl.Text = detail.HomeRealmUrl;
+            tbTimeoutValue.Text = detail.Timeout.ToString(@"hh\:mm\:ss");
 
             tbHomeRealmUrl.Enabled = detail.UseIfd;
 

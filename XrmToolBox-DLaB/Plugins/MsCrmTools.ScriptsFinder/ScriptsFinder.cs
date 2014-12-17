@@ -5,13 +5,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using McTools.Xrm.Connection;
-using Microsoft.Xrm.Sdk;
 using XrmToolBox;
 using XrmToolBox.Attributes;
 
@@ -23,16 +19,8 @@ using XrmToolBox.Attributes;
 
 namespace MsCrmTools.ScriptsFinder
 {
-    public partial class ScriptsFinder : UserControl, IMsCrmToolsPluginUserControl
+    public partial class ScriptsFinder : PluginBase
     {
-        #region Variables
-
-        private IOrganizationService service;
-
-        private Panel infoPanel;
-
-        #endregion Variables
-
         #region Constructor
 
         public ScriptsFinder()
@@ -42,34 +30,9 @@ namespace MsCrmTools.ScriptsFinder
 
         #endregion Constructor
 
-        #region Properties
-
-        public IOrganizationService Service
-        {
-            get { return service; }
-        }
-
-        public Image PluginLogo
-        {
-            get { return imageList1.Images[0]; }
-        }
-
-        #endregion Properties
-
         private void TsbMainFindScriptsClick(object sender, EventArgs e)
         {
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var arg = new RequestConnectionEventArgs { Control = this, ActionName = "FindScripts" };
-                    OnRequestConnection(this, arg);
-                }
-            }
-            else
-            {
-                FindScripts();
-            }
+            ExecuteMethod(FindScripts);
         }
 
         private void FindScripts()
@@ -78,50 +41,37 @@ namespace MsCrmTools.ScriptsFinder
             tsbMainFindScripts.Enabled = false;
             tsbExportToCsv.Enabled = false;
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Loading scripts (this can take a while...)", 340,120);
+            WorkAsync("Loading scripts (this can take a while...)",
+                e =>
+                {
+                    var lScripts = new List<ListViewItem>();
 
-            var worker = new BackgroundWorker();
-            worker.DoWork += WorkerDoWork;
-            worker.RunWorkerCompleted += WorkerRunWorkerCompleted;
-            worker.RunWorkerAsync();
-        }
+                    var sManager = new ScriptsManager(Service);
+                    sManager.Find();
 
-        void WorkerDoWork(object sender, DoWorkEventArgs e)
-        {
-            var lScripts = new List<ListViewItem>();
+                    foreach (var script in sManager.Scripts)
+                    {
+                        var item = new ListViewItem(script.Type);
+                        item.SubItems.Add(script.EntityName);
+                        item.SubItems.Add(script.EntityLogicalName);
+                        item.SubItems.Add(script.Name);
+                        item.SubItems.Add(script.Event);
+                        item.SubItems.Add(script.Attribute);
+                        item.SubItems.Add(script.AttributeLogicalName);
+                        item.SubItems.Add(script.ScriptLocation);
+                        item.SubItems.Add(script.MethodCalled);
 
-            var sManager = new ScriptsManager(service);
-            sManager.Find();
+                        lScripts.Add(item);
+                    }
 
-            foreach (var script in sManager.Scripts)
-            {
-                var item = new ListViewItem(script.Type);
-                item.SubItems.Add(script.EntityName);
-                item.SubItems.Add(script.EntityLogicalName);
-                item.SubItems.Add(script.Name);
-                item.SubItems.Add(script.Event);
-                item.SubItems.Add(script.Attribute);
-                item.SubItems.Add(script.AttributeLogicalName);
-                item.SubItems.Add(script.ScriptLocation);
-                item.SubItems.Add(script.MethodCalled);
-
-                lScripts.Add(item);
-            }
-
-            e.Result = lScripts;
-        }
-
-        void WorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            foreach (var item in (List<ListViewItem>) e.Result)
-            {
-                lvScripts.Items.Add(item);
-            }
-
-            tsbMainFindScripts.Enabled = true;
-            tsbExportToCsv.Enabled = true;
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
+                    e.Result = lScripts;
+                },
+                e =>
+                {
+                    lvScripts.Items.AddRange(((List<ListViewItem>)e.Result).ToArray());
+                    tsbMainFindScripts.Enabled = true;
+                    tsbExportToCsv.Enabled = true;
+                });
         }
 
         private void LvScriptsColumnClick(object sender, ColumnClickEventArgs e)
@@ -132,23 +82,7 @@ namespace MsCrmTools.ScriptsFinder
 
         private void TsbCloseThisTabClick(object sender, EventArgs e)
         {
-            const string message = "Are your sure you want to close this tab?";
-            if (MessageBox.Show(message, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                OnCloseTool(this, null);
-        }
-
-
-        public event EventHandler OnRequestConnection;
-        public event EventHandler OnCloseTool;
-
-        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
-        {
-            service = newService;
-
-            if(actionName == "FindScripts")
-            {
-                FindScripts(); 
-            }
+            CloseTool();
         }
 
         private void TsbExportToCsvClick(object sender, EventArgs e)

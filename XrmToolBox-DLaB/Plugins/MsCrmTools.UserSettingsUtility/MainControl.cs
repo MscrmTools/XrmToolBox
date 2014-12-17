@@ -33,7 +33,7 @@ namespace MsCrmTools.UserSettingsUtility
 
         private void TsbCloseClick(object sender, EventArgs e)
         {
-            base.CloseTool();
+            CloseTool();
         }
 
         private void tsbLoadCrmItems_Click(object sender, EventArgs e)

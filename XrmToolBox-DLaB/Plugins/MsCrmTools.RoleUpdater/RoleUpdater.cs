@@ -5,14 +5,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Windows.Forms;
-using McTools.Xrm.Connection;
-using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.RoleUpdater.Controls;
-using MsCrmTools.RoleUpdater.DelegatesHelpers;
 using XrmToolBox;
 using XrmToolBox.Attributes;
 using CrmExceptionHelper = XrmToolBox.CrmExceptionHelper;
@@ -25,14 +20,9 @@ using CrmExceptionHelper = XrmToolBox.CrmExceptionHelper;
 
 namespace MsCrmTools.RoleUpdater
 {
-    public partial class RoleUpdater : UserControl, IMsCrmToolsPluginUserControl
+    public partial class RoleUpdater : PluginBase
     {
         #region Variables
-
-        /// <summary>
-        /// Crm organization service
-        /// </summary>
-        private IOrganizationService service;
 
         /// <summary>
         /// Manager to process actions on roles
@@ -54,11 +44,6 @@ namespace MsCrmTools.RoleUpdater
         /// </summary>
         private UpdateSettings settings = new UpdateSettings();
 
-        /// <summary>
-        /// Panel for displaying information
-        /// </summary>
-        private Panel infoPanel;
-
         #endregion Variables
 
         #region Constructor
@@ -73,125 +58,48 @@ namespace MsCrmTools.RoleUpdater
 
         #endregion Constructor
 
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the organization service
-        /// </summary>
-        public IOrganizationService Service
-        {
-            get { return service; }
-        }
-
-        /// <summary>
-        /// Gets the logo for this tool
-        /// </summary>
-        public Image PluginLogo
-        {
-            get { return imageList1.Images[0]; }
-        }
-
-        #endregion Properties
-
-        #region Events
-
-        public event EventHandler OnRequestConnection;
-        public event EventHandler OnCloseTool;
-
-        #endregion Events
-
         #region Methods
-
-        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
-        {
-            service = newService;
-            rManager = new RoleManager(service);
-            entities = MetadataHelper.GetEntitiesMetadata(service, EntityFilters.Privileges);
-
-            if (actionName.ToLower() == "loadroles")
-            {
-                LoadRolesAndPrivileges();
-                BtnResetClick(null, null);
-            }
-        }
-        
-        private void LoadRolesAndPrivileges()
-        {
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs
-                                   {
-                                       ActionName = "LoadRoles",
-                                       Control = this,
-                                       Parameter = null
-                                   };
-
-                    OnRequestConnection(this, args);
-                }
-            }
-            else
-            {
-                CommonDelegates.SetCursor(this, Cursors.WaitCursor);
-
-                infoPanel = InformationPanel.GetInformationPanel(this, "Loading roles...", 340, 120);
-
-                var bwFillRolesAndPrivileges = new BackgroundWorker();
-                bwFillRolesAndPrivileges.DoWork += BwFillRolesAndPrivilegesDoWork;
-                bwFillRolesAndPrivileges.ProgressChanged += BwFillRolesAndPrivilegesRunWorkerProgressChanged;
-                bwFillRolesAndPrivileges.RunWorkerCompleted += BwFillRolesAndPrivilegesRunWorkerCompleted;
-                bwFillRolesAndPrivileges.WorkerReportsProgress = true;
-                bwFillRolesAndPrivileges.RunWorkerAsync();
-            }
-        }
-
-        private void BwFillRolesAndPrivilegesDoWork(object sender, DoWorkEventArgs e)
-        {
-            var worker = (BackgroundWorker)sender;
-
-            // Retrieve all roles without parent role
-            rManager.LoadRootRoles();
-
-            worker.ReportProgress(1, "Loading privileges...");
-
-            // Retrieve all privileges
-            rManager.LoadPrivileges();
-        }
-
-        private void BwFillRolesAndPrivilegesRunWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            InformationPanel.ChangeInformationPanelMessage(infoPanel, e.UserState.ToString());
-        }
-
-        private void BwFillRolesAndPrivilegesRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
-
-            if (e.Error != null)
-            {
-                var errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
-                MessageBox.Show(this, "An error occured: " + errorMessage, "Error", MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-            }
-            else
-            {
-                BtnNextClick(null, null);
-
-                pnlSteps.Visible = true;
-                btnPrevious.Visible = false;
-                btnReset.Visible = false;
-                btnNext.Visible = true;
-            }
-
-            CommonDelegates.SetCursor(this, Cursors.Default);
-        }
 
         private void BtnConnectClick(object sender, EventArgs e)
         {
-            LoadRolesAndPrivileges();
+            ExecuteMethod(LoadRolesAndPrivileges);
         }
+
+        private void LoadRolesAndPrivileges()
+        {
+            rManager = new RoleManager(Service);
+           
+            WorkAsync("Loading roles...",
+                (bw, e) =>
+                {
+                    rManager.LoadRootRoles();
+
+                    bw.ReportProgress(1, "Loading privileges...");
+                    rManager.LoadPrivileges();
+
+                    bw.ReportProgress(2, "Loading Entities privileges...");
+                    entities = MetadataHelper.GetEntitiesMetadata(Service, EntityFilters.Privileges);
+                },
+                e =>
+                {
+                    if (e.Error != null)
+                    {
+                        var errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
+                        MessageBox.Show(this, "An error occured: " + errorMessage, "Error", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        pnlSteps.Visible = true;
+                        btnPrevious.Visible = false;
+                        btnReset.Visible = false;
+                        btnNext.Visible = true;
+                        BtnResetClick(null, null);
+                    }
+                },
+                e => SetWorkingMessage(e.UserState.ToString()));
+        }
+
 
         private void BtnNextClick(object sender, EventArgs e)
         {
@@ -256,15 +164,6 @@ namespace MsCrmTools.RoleUpdater
                         btnReset.Visible = true;
 
                         ((PrivilegeLevelSelectionControl) pnlSteps.Controls[0]).ApplyChanges();
-
-                       
-
-                        //settings.Actions = ((PrivilegeLevelSelectionControl)pnlSteps.Controls[0]).Actions;
-                        //pnlSteps.Controls.Clear();
-
-                        //var ctrl = new UpdateControl(rManager, settings);
-                        //pnlSteps.Controls.Add(ctrl);
-                        //currentStep = 4;
                     }
                     break;
             }
@@ -359,9 +258,7 @@ namespace MsCrmTools.RoleUpdater
 
         private void TsbCloseThisTabClick(object sender, EventArgs e)
         {
-            const string message = "Are your sure you want to close this tab?";
-            if (MessageBox.Show(message, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                OnCloseTool(this, null);
+            CloseTool();
         }
 
         #endregion

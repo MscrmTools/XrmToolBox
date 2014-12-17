@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using Microsoft.Xrm.Sdk;
@@ -26,24 +27,16 @@ namespace MsCrmTools.AuditCenter
         /// <returns>List of entities metadata</returns>
         public static List<EntityMetadata> RetrieveEntities(IOrganizationService oService)
         {
-            List<EntityMetadata> entities = new List<EntityMetadata>();
-
-            RetrieveAllEntitiesRequest request = new RetrieveAllEntitiesRequest
-                                                     {
-                EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
-            };
-
-            RetrieveAllEntitiesResponse response = (RetrieveAllEntitiesResponse)oService.Execute(request);
-
-            foreach (EntityMetadata emd in response.EntityMetadata)
+            var response = (RetrieveAllEntitiesResponse) oService.Execute(new RetrieveAllEntitiesRequest
             {
-                if (emd.DisplayName.UserLocalizedLabel != null && (emd.IsCustomizable.Value || emd.IsManaged.Value == false))
-                {
-                    entities.Add(emd);
-                }
-            }
+                EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
+            });
 
-            return entities;
+            return
+                response.EntityMetadata.Where(
+                    emd => emd.DisplayName.UserLocalizedLabel != null &&
+                           (emd.IsCustomizable.Value || emd.IsManaged.HasValue && emd.IsManaged.Value == false))
+                    .ToList();
         }
 
         /// <summary>
@@ -56,14 +49,12 @@ namespace MsCrmTools.AuditCenter
         {
             try
             {
-                RetrieveEntityRequest request = new RetrieveEntityRequest
+                var response = (RetrieveEntityResponse)oService.Execute(new RetrieveEntityRequest
                                                     {
                     LogicalName = logicalName,
                     EntityFilters = EntityFilters.Attributes,
                     RetrieveAsIfPublished = true
-                };
-
-                RetrieveEntityResponse response = (RetrieveEntityResponse)oService.Execute(request);
+                });
 
                 return response.EntityMetadata;
             }

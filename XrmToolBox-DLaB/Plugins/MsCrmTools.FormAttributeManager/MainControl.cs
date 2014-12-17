@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using McTools.Xrm.Connection;
-using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.FormAttributeManager.AppCode;
 using MsCrmTools.FormAttributeManager.Forms;
@@ -20,59 +17,27 @@ using XrmToolBox.Attributes;
 
 namespace MsCrmTools.FormAttributeManager
 {
-    public partial class MainControl : UserControl, IMsCrmToolsPluginUserControl
+    public partial class MainControl : PluginBase
     {
-        private IOrganizationService service;
-        private Panel infoPanel;
         public MainControl()
         {
             InitializeComponent();
         }
 
-        public IOrganizationService Service
-        {
-            get { return service; }
-        }
-
-        public Image PluginLogo
-        {
-            get { return null; }
-        }
-
-        public event EventHandler OnRequestConnection;
-
-        public event EventHandler OnCloseTool;
-
-        public void UpdateConnection(IOrganizationService newService, ConnectionDetail connectionDetail, string actionName = "", object parameter = null)
-        {
-            service = newService;
-            attributeSelector1.Service = newService;
-
-            if (actionName == "LoadEntities")
-            {
-                attributeSelector1.LoadEntities();
-            }
-        }
-        
         private void tsbClose_Click(object sender, EventArgs e)
         {
-            OnCloseTool(this, new EventArgs());
+            CloseTool();
         }
 
         private void tsbLoadEntities_Click(object sender, EventArgs e)
         {
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs { ActionName = "LoadEntities", Control = this, Parameter = null };
-                    OnRequestConnection(this, args);
-                }
-            }
-            else
-            {
-                attributeSelector1.LoadEntities();
-            }
+            ExecuteMethod(LoadEntities);
+        }
+
+        private void LoadEntities()
+        {
+            attributeSelector1.Service = Service;
+            attributeSelector1.LoadEntities();
         }
 
         private void removeFromFormToolStripMenuItem_Click(object sender, EventArgs e)
@@ -333,39 +298,30 @@ namespace MsCrmTools.FormAttributeManager
 
         private void attributeSelector1_OnEntitySelected(object sender, EntitySelectedEventArgs e)
         {
-            infoPanel = InformationPanel.GetInformationPanel(this, "Loading forms...", 340, 150);
+            WorkAsync("Loading forms...",
+                evt =>
+                {
+                    var formManager = new FormManager(Service);
+                    var forms = formManager.GetAllFormsByTypeCode(((EntityMetadata)evt.Argument).ObjectTypeCode.Value);
+                    var items = forms.Select(form => new FormInfo(form)).Select(fi => new ListViewItem(fi.ToString()) { Tag = fi }).ToList();
+                    evt.Result = items;
+                },
+                evt =>
+                {
+                    if (evt.Error != null)
+                    {
+                        MessageBox.Show(evt.Error.ToString());
+                    }
+                    else
+                    {
+                        listView1.Items.Clear();
+                        listView1.Items.AddRange(((List<ListViewItem>)evt.Result).ToArray());
 
-            var bwLoadForms = new BackgroundWorker {WorkerReportsProgress = true};
-            bwLoadForms.DoWork += bwLoadForms_DoWork;
-            bwLoadForms.RunWorkerCompleted += bwLoadForms_RunWorkerCompleted;
-            bwLoadForms.RunWorkerAsync(e.Metadata);
-        }
-
-        void bwLoadForms_DoWork(object sender, DoWorkEventArgs e)
-        {
-            var formManager = new FormManager(service);
-            var forms = formManager.GetAllFormsByTypeCode(((EntityMetadata) e.Argument).ObjectTypeCode.Value);
-            var items = forms.Select(form => new FormInfo(form)).Select(fi => new ListViewItem(fi.ToString()) {Tag = fi}).ToList();
-            e.Result = items;
-        }
-        
-        void bwLoadForms_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                MessageBox.Show(e.Error.ToString());
-            }
-            else
-            {
-                listView1.Items.Clear();
-                listView1.Items.AddRange(((List<ListViewItem>)e.Result).ToArray());
-
-                // Adds forms list to attribute selector
-                attributeSelector1.EntityForms = ((List<ListViewItem>) e.Result).Select(i => (FormInfo) i.Tag).ToList();
-            }
-
-            Controls.Remove(infoPanel);
-            infoPanel.Dispose();
+                        // Adds forms list to attribute selector
+                        attributeSelector1.EntityForms = ((List<ListViewItem>)evt.Result).Select(i => (FormInfo)i.Tag).ToList();
+                    }
+                },
+                e.Metadata);
         }
 
         #endregion
@@ -386,39 +342,30 @@ namespace MsCrmTools.FormAttributeManager
         private void tsbSaveForms_Click(object sender, EventArgs e)
         {
             if (attributeSelector1.SelectedEntity == null)
-                return; 
-            
-            infoPanel = InformationPanel.GetInformationPanel(this, "Updating forms...", 340, 150);
+                return;
 
-            var bwSaveForms = new BackgroundWorker { WorkerReportsProgress = true };
-            bwSaveForms.DoWork += bwSaveForms_DoWork;
-            bwSaveForms.RunWorkerCompleted += bwSaveForms_RunWorkerCompleted;
-            bwSaveForms.RunWorkerAsync(listView1.Items.Cast<ListViewItem>().Select(i=>(FormInfo)i.Tag).ToList());
-        }
+            WorkAsync("Updating forms...",
+                evt =>
+                {
+                    var fis = (List<FormInfo>)evt.Argument;
 
-        void bwSaveForms_DoWork(object sender, DoWorkEventArgs e)
-        {
-            var fis = (List<FormInfo>)e.Argument;
-
-            foreach (var fi in fis)
-            {
-                fi.Update(service);
-            }
-        }
-
-        void bwSaveForms_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                MessageBox.Show(e.Error.ToString());
-            }
-            else
-            {
-                tslInfo.Visible = false;
-            }
-
-            Controls.Remove(infoPanel);
-            infoPanel.Dispose();
+                    foreach (var fi in fis)
+                    {
+                        fi.Update(Service);
+                    }
+                },
+                evt =>
+                {
+                    if (evt.Error != null)
+                    {
+                        MessageBox.Show(evt.Error.ToString());
+                    }
+                    else
+                    {
+                        tslInfo.Visible = false;
+                    }
+                },
+                listView1.Items.Cast<ListViewItem>().Select(i=>(FormInfo)i.Tag).ToList());
         }
 
         private void tsbClearLog_Click(object sender, EventArgs e)
@@ -440,29 +387,21 @@ namespace MsCrmTools.FormAttributeManager
             if (attributeSelector1.SelectedEntity == null)
                 return;
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Publishing entity...", 340, 150);
+            WorkAsync("Publishing entity...",
+                evt =>
+                {
+                    var fm = new FormManager(Service);
+                    fm.PublishForm(evt.Argument.ToString());
+                },
+                evt =>
+                {
+                    if (evt.Error != null)
+                    {
+                        MessageBox.Show(evt.Error.ToString());
+                    }
 
-            var bwPublishForms = new BackgroundWorker { WorkerReportsProgress = true };
-            bwPublishForms.DoWork += bwPublishForms_DoWork;
-            bwPublishForms.RunWorkerCompleted += bwPublishForms_RunWorkerCompleted;
-            bwPublishForms.RunWorkerAsync(attributeSelector1.SelectedEntity.LogicalName);
-        }
-
-        void bwPublishForms_DoWork(object sender, DoWorkEventArgs e)
-        {
-            var fm = new FormManager(service);
-            fm.PublishForm(e.Argument.ToString());
-        }
-
-        void bwPublishForms_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                MessageBox.Show(e.Error.ToString());
-            }
-
-            Controls.Remove(infoPanel);
-            infoPanel.Dispose();
+                },
+                attributeSelector1.SelectedEntity.LogicalName);
         }
 
         private void updateLabelToolStripMenuItem_Click(object sender, EventArgs e)

@@ -57,6 +57,8 @@
             this.bGetOrganizations = new System.Windows.Forms.Button();
             this.bCancel = new System.Windows.Forms.Button();
             this.gbOrgs = new System.Windows.Forms.GroupBox();
+            this.tbTimeoutValue = new System.Windows.Forms.TextBox();
+            this.lblTimeoutValue = new System.Windows.Forms.Label();
             this.gbAuthentication.SuspendLayout();
             this.gbServer.SuspendLayout();
             this.gbOrgs.SuspendLayout();
@@ -76,7 +78,7 @@
             // 
             this.bValidate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.bValidate.Enabled = false;
-            this.bValidate.Location = new System.Drawing.Point(352, 600);
+            this.bValidate.Location = new System.Drawing.Point(357, 648);
             this.bValidate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.bValidate.Name = "bValidate";
             this.bValidate.Size = new System.Drawing.Size(112, 35);
@@ -145,7 +147,7 @@
             this.gbAuthentication.Controls.Add(this.labelUserDomain);
             this.gbAuthentication.Controls.Add(this.rbAuthenticationCustom);
             this.gbAuthentication.Controls.Add(this.rbAuthenticationIntegrated);
-            this.gbAuthentication.Location = new System.Drawing.Point(18, 268);
+            this.gbAuthentication.Location = new System.Drawing.Point(22, 265);
             this.gbAuthentication.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.gbAuthentication.Name = "gbAuthentication";
             this.gbAuthentication.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -258,7 +260,7 @@
             this.gbServer.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.gbServer.Name = "gbServer";
             this.gbServer.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gbServer.Size = new System.Drawing.Size(568, 200);
+            this.gbServer.Size = new System.Drawing.Size(568, 197);
             this.gbServer.TabIndex = 2;
             this.gbServer.TabStop = false;
             this.gbServer.Text = "Server Information";
@@ -385,7 +387,7 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bCancel.Location = new System.Drawing.Point(474, 600);
+            this.bCancel.Location = new System.Drawing.Point(478, 648);
             this.bCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(112, 35);
@@ -398,20 +400,41 @@
             // 
             this.gbOrgs.Controls.Add(this.bGetOrganizations);
             this.gbOrgs.Controls.Add(this.comboBoxOrganizations);
-            this.gbOrgs.Location = new System.Drawing.Point(18, 509);
+            this.gbOrgs.Location = new System.Drawing.Point(22, 506);
             this.gbOrgs.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.gbOrgs.Name = "gbOrgs";
             this.gbOrgs.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.gbOrgs.Size = new System.Drawing.Size(568, 82);
+            this.gbOrgs.Size = new System.Drawing.Size(568, 80);
             this.gbOrgs.TabIndex = 14;
             this.gbOrgs.TabStop = false;
             this.gbOrgs.Text = "Organization";
+            // 
+            // tbTimeoutValue
+            // 
+            this.tbTimeoutValue.Location = new System.Drawing.Point(142, 598);
+            this.tbTimeoutValue.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tbTimeoutValue.Name = "tbTimeoutValue";
+            this.tbTimeoutValue.Size = new System.Drawing.Size(95, 26);
+            this.tbTimeoutValue.TabIndex = 21;
+            this.tbTimeoutValue.Text = "00:02:00";
+            // 
+            // lblTimeoutValue
+            // 
+            this.lblTimeoutValue.AutoSize = true;
+            this.lblTimeoutValue.Location = new System.Drawing.Point(27, 601);
+            this.lblTimeoutValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTimeoutValue.Name = "lblTimeoutValue";
+            this.lblTimeoutValue.Size = new System.Drawing.Size(107, 20);
+            this.lblTimeoutValue.TabIndex = 22;
+            this.lblTimeoutValue.Text = "Timeout value";
             // 
             // ConnectionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(604, 654);
+            this.ClientSize = new System.Drawing.Size(604, 692);
+            this.Controls.Add(this.tbTimeoutValue);
+            this.Controls.Add(this.lblTimeoutValue);
             this.Controls.Add(this.gbOrgs);
             this.Controls.Add(this.bCancel);
             this.Controls.Add(this.gbServer);
@@ -464,5 +487,7 @@
         private System.Windows.Forms.Label lblHomeRealmUrl;
         private System.Windows.Forms.CheckBox chkSavePassword;
         private System.Windows.Forms.ComboBox cbbOnlineEnv;
+        private System.Windows.Forms.TextBox tbTimeoutValue;
+        private System.Windows.Forms.Label lblTimeoutValue;
     }
 }

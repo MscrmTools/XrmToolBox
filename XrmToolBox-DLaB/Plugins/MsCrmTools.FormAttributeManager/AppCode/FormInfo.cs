@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Metadata;
 
 namespace MsCrmTools.FormAttributeManager.AppCode
 {
@@ -154,6 +152,11 @@ namespace MsCrmTools.FormAttributeManager.AppCode
                 throw new Exception("Unable to find label with language code " + lcid);
             }
 
+            if (labelNode.Attributes == null)
+            {
+                throw new NullReferenceException();
+            }
+
             labelNode.Attributes["description"].Value = text;
         }
 
@@ -164,6 +167,11 @@ namespace MsCrmTools.FormAttributeManager.AppCode
             if (labelNode == null)
             {
                 throw new Exception("Unable to find label with language code " + lcid);
+            }
+
+            if (labelNode.Attributes == null)
+            {
+                throw new NullReferenceException();
             }
 
             labelNode.Attributes["description"].Value = text;
@@ -194,8 +202,20 @@ namespace MsCrmTools.FormAttributeManager.AppCode
                 var controlNode = GetCellControlNode(cellNode);
                 cellNode.RemoveChild(controlNode);
 
-                foreach (XmlNode labelNode in cellNode.SelectNodes("Labels/Label"))
+                var labelNodes = cellNode.SelectNodes("Labels/Label");
+
+                if (labelNodes == null)
                 {
+                    throw new NullReferenceException();
+                }
+
+                foreach (XmlNode labelNode in labelNodes)
+                {
+                    if (labelNode.Attributes == null)
+                    {
+                        throw new NullReferenceException();
+                    }
+
                     labelNode.Attributes["description"].Value = string.Empty;
                 }
 
@@ -303,7 +323,6 @@ namespace MsCrmTools.FormAttributeManager.AppCode
             {
                 return false;
             }
-
         }
     }
 }

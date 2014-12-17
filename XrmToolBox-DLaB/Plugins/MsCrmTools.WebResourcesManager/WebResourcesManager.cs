@@ -33,14 +33,9 @@ using CrmExceptionHelper = XrmToolBox.CrmExceptionHelper;
 
 namespace MsCrmTools.WebResourcesManager
 {
-    public partial class WebResourcesManager : UserControl, IMsCrmToolsPluginUserControl
+    public partial class WebResourcesManager : PluginBase
     {
         #region Variables
-
-        /// <summary>
-        /// Dynamics CRM 2011 Organization service
-        /// </summary>
-        private IOrganizationService service;
 
         /// <summary>
         /// Scripts Manager
@@ -51,11 +46,6 @@ namespace MsCrmTools.WebResourcesManager
         /// List of invalid filenames when creating or importing web resources
         /// </summary>
         private List<string> invalidFilenames;
-
-        /// <summary>
-        /// Information panel
-        /// </summary>
-        private Panel infoPanel;
 
         const string OPENFILE_TITLE_MASK = "Select the {0} to replace the existing web resource";
 
@@ -76,66 +66,54 @@ namespace MsCrmTools.WebResourcesManager
 
         #region IMsCrmToolsPluginUserControl Members
 
-        public IOrganizationService Service
-        {
-            get { return service; }
-        }
+        //    wrManager = new WebResourceManager(newService);
 
-        public Image PluginLogo
-        {
-            get { return imageList2.Images[0]; }
-        }
-
-        public event EventHandler OnRequestConnection;
-        public event EventHandler OnCloseTool;
-
-        void IMsCrmToolsPluginUserControl.UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter = null)
-        {
-            service = newService;
-            wrManager = new WebResourceManager(newService);
+        //void IMsCrmToolsPluginUserControl.UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter = null)
+        //{
+        //    service = newService;
                         
-            var nodesList = new List<TreeNode>();
-            TreeViewHelper.GetNodes(nodesList, tvWebResources, true);
+        //    var nodesList = new List<TreeNode>();
+        //    TreeViewHelper.GetNodes(nodesList, tvWebResources, true);
 
-            switch (actionName)
-            {
-                case "LoadWebResources":
-                    {
-                        LoadWebResourcesGeneral(null);
-                    }
-                    break;
-                case "LoadWebResourcesFromSolution":
-                    {
-                        var sPicker = new SolutionPicker(service) {StartPosition = FormStartPosition.CenterParent};
-                        if (sPicker.ShowDialog(this) == DialogResult.OK)
-                        {
-                            LoadWebResourcesGeneral(sPicker.SelectedSolution);
-                        }
-                    }
-                    break;
-                case "Update":
-                    {
-                        UpdateWebResources(false, nodesList);
-                    }
-                    break;
-                case "UpdateAndPublish":
-                    {
-                        UpdateWebResources(true, nodesList);
-                    }
-                    break;
-                case "UpdateAndPublishAndAdd":
-                    {
-                        UpdateWebResources(true, nodesList, true);
-                    }
-                    break;
-                case "Delete":
-                    {
-                        wrManager.DeleteWebResource(((WebResource)nodesList[0].Tag).WebResourceEntity);
-                        tvWebResources.Nodes.Remove(nodesList[0]);
-                    }
-                    break;
-            }
-        }
+        //    switch (actionName)
+        //    {
+        //        case "LoadWebResources":
+        //            {
+        //                LoadWebResourcesGeneral(null);
+        //            }
+        //            break;
+        //        case "LoadWebResourcesFromSolution":
+        //            {
+        //                var sPicker = new SolutionPicker(service) {StartPosition = FormStartPosition.CenterParent};
+        //                if (sPicker.ShowDialog(this) == DialogResult.OK)
+        //                {
+        //                    LoadWebResourcesGeneral(sPicker.SelectedSolution);
+        //                }
+        //            }
+        //            break;
+        //        case "Update":
+        //            {
+        //                UpdateWebResources(false, nodesList);
+        //            }
+        //            break;
+        //        case "UpdateAndPublish":
+        //            {
+        //                UpdateWebResources(true, nodesList);
+        //            }
+        //            break;
+        //        case "UpdateAndPublishAndAdd":
+        //            {
+        //                UpdateWebResources(true, nodesList, true);
+        //            }
+        //            break;
+        //        case "Delete":
+        //            {
+        //                wrManager.DeleteWebResource(((WebResource)nodesList[0].Tag).WebResourceEntity);
+        //                tvWebResources.Nodes.Remove(nodesList[0]);
+        //            }
+        //            break;
+        //    }
+        //}
 
         #endregion IMsCrmToolsPluginUserControl Members
 
@@ -145,46 +123,29 @@ namespace MsCrmTools.WebResourcesManager
 
         private void LoadWebResourcesToolStripMenuItemClick(object sender, EventArgs e)
         {
-            if (service == null)
-            {
-                tvWebResources.Nodes.Clear();
+            tvWebResources.Nodes.Clear();
 
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs {ActionName = "LoadWebResources", Control = this};
-                    OnRequestConnection(this, args);
-                }
-            }
-            else
-            {
-                LoadWebResourcesGeneral(null);
-            }
+            ExecuteMethod<Entity>(LoadWebResourcesGeneral,null);
         }
 
         private void LoadWebResourcesFromASpecificSolutionToolStripMenuItemClick(object sender, EventArgs e)
         {
-            if (service == null)
-            {
-                tvWebResources.Nodes.Clear();
+            ExecuteMethod(LoadWebResourceFromASpecificSolution);
+        }
 
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs { ActionName = "LoadWebResourcesFromSolution", Control = this };
-                    OnRequestConnection(this, args);
-                }
-            }
-            else
+        private void LoadWebResourceFromASpecificSolution()
+        {
+            wrManager = new WebResourceManager(Service);
+            var sPicker = new SolutionPicker(Service) { StartPosition = FormStartPosition.CenterParent };
+            if (sPicker.ShowDialog(this) == DialogResult.OK)
             {
-                var sPicker = new SolutionPicker(service) {StartPosition = FormStartPosition.CenterParent};
-                if (sPicker.ShowDialog(this) == DialogResult.OK)
-                {
-                    LoadWebResourcesGeneral(sPicker.SelectedSolution);
-                }
+                LoadWebResourcesGeneral(sPicker.SelectedSolution);
             }
         }
 
         private void LoadWebResourcesGeneral(Entity specificSolution)
         {
+            wrManager = new WebResourceManager(Service);
             tvWebResources.Nodes.Clear();
 
             var dialog = new WebResourceTypeSelectorDialog();
@@ -199,59 +160,48 @@ namespace MsCrmTools.WebResourcesManager
                 };
 
                 SetWorkingState(true);
+                tvWebResources.Nodes.Clear();
 
-                infoPanel = InformationPanel.GetInformationPanel(this, "Loading web resources...", 340, 120);
+                WorkAsync("Loading web resources...",
+                    e =>
+                    {
+                        Guid solutionId = e.Argument != null ? ((LoadCrmResourcesSettings)e.Argument).SolutionId : Guid.Empty;
 
-                var bwFillWebResources = new BackgroundWorker();
-                bwFillWebResources.DoWork += BwFillWebResourcesDoWork;
-                bwFillWebResources.RunWorkerCompleted += BwFillWebResourcesRunWorkerCompleted;
-                bwFillWebResources.RunWorkerAsync(settings);
+                        RetrieveWebResources(solutionId, ((LoadCrmResourcesSettings)e.Argument).Types);
+
+                        e.Result = e.Argument;
+                    },
+                    e =>
+                    {
+                        if (e.Error != null)
+                        {
+                            string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
+                            MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            tvWebResources.Enabled = true;
+
+                            var currentSettings = (LoadCrmResourcesSettings)e.Result;
+                            tssCurrentlyLoadedSolution.Visible = currentSettings.SolutionId != Guid.Empty;
+                            tslCurrentlyLoadedSolution.Visible = currentSettings.SolutionId != Guid.Empty;
+                            tslCurrentlyLoadedSolution.Text = string.Format("Solution loaded: {0} - v{1}", currentSettings.SolutionName, currentSettings.SolutionVersion);
+                        }
+
+                        tvWebResources.ExpandAll();
+                        tvWebResources.TreeViewNodeSorter = new NodeSorter();
+                        tvWebResources.Sort();
+                        TvWebResourcesAfterSelect(null, null);
+
+                        SetWorkingState(false);
+                    },
+                    settings);
             }
-        }
-
-        private void BwFillWebResourcesDoWork(object sender, DoWorkEventArgs e)
-        {
-            Guid solutionId = e.Argument != null ? ((LoadCrmResourcesSettings)e.Argument).SolutionId : Guid.Empty;
-
-     RetrieveWebResources(solutionId, ((LoadCrmResourcesSettings)e.Argument).Types);
-
-            e.Result = e.Argument;
-        }
-
-        private void BwFillWebResourcesRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
-                MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                tvWebResources.Enabled = true;
-
-                var settings = (LoadCrmResourcesSettings) e.Result;
-                tssCurrentlyLoadedSolution.Visible = settings.SolutionId != Guid.Empty;
-                tslCurrentlyLoadedSolution.Visible = settings.SolutionId != Guid.Empty;
-                tslCurrentlyLoadedSolution.Text = string.Format("Solution loaded: {0} - v{1}", settings.SolutionName, settings.SolutionVersion);
-            }
-
-            tvWebResources.ExpandAll();
-            tvWebResources.TreeViewNodeSorter = new NodeSorter();
-            tvWebResources.Sort();
-            TvWebResourcesAfterSelect(null, null);
-
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
-            SetWorkingState(false);
         }
 
         private void RetrieveWebResources(Guid solutionId, List<int> types)
         {
             EntityCollection scripts = wrManager.RetrieveWebResources(solutionId, types);
-
-            //Todo ccsb.SetMessage(string.Empty);
-
-            TreeViewDelegates.ClearNodes(tvWebResources);
 
             foreach (Entity script in scripts.Entities)
             {
@@ -261,8 +211,6 @@ namespace MsCrmTools.WebResourcesManager
 
                 AddNode(nameParts, 0, tvWebResources, wrObject);
             }
-
-            
         }
 
         private void AddNode(string[] nameParts, int index, object parent, WebResource wrObject)
@@ -380,8 +328,15 @@ namespace MsCrmTools.WebResourcesManager
 
         private void DoUpdateWebResources(bool publish, bool addToSolution)
         {
+            ExecuteMethod(DoUpdate, new []{publish, addToSolution});
+        }
+
+        private void DoUpdate(bool[] options)
+        {
             try
             {
+                wrManager = new WebResourceManager(Service);
+            
                 // Retrieve checked web resources
                 var nodesList = new List<TreeNode>();
                 TreeViewHelper.GetNodes(nodesList, tvWebResources, true);
@@ -393,20 +348,7 @@ namespace MsCrmTools.WebResourcesManager
                     return;
                 }
 
-                if (service == null)
-                {
-                    if (OnRequestConnection != null)
-                    {
-                        string action = addToSolution ? "UpdateAndPublishAndAdd" : publish ? "UpdateAndPublish" : "Update";
-
-                        var args = new RequestConnectionEventArgs { ActionName = action, Control = this };
-                        OnRequestConnection(this, args);
-                    }
-                }
-                else
-                {
-                    UpdateWebResources(publish, nodesList, addToSolution);
-                }
+                UpdateWebResources(options[0], nodesList, options[1]);
             }
             catch (Exception error)
             {
@@ -420,7 +362,7 @@ namespace MsCrmTools.WebResourcesManager
             var solutionUniqueName = string.Empty;
             if (addToSolution)
             {
-                var sPicker = new SolutionPicker(service) { StartPosition = FormStartPosition.CenterParent };
+                var sPicker = new SolutionPicker(Service) { StartPosition = FormStartPosition.CenterParent };
 
                 if (sPicker.ShowDialog(this) == DialogResult.OK)
                 {
@@ -433,102 +375,88 @@ namespace MsCrmTools.WebResourcesManager
             }
 
             SetWorkingState(true);
-            infoPanel = InformationPanel.GetInformationPanel(this, "Updating web resources...", 400, 120);
-
             var parameters = new object[] { nodes, publish, solutionUniqueName };
 
-            var bw = new BackgroundWorker {WorkerReportsProgress = true};
-            bw.DoWork += BwDoWork;
-            bw.ProgressChanged += BwProgressChanged;
-            bw.RunWorkerCompleted += BwRunWorkerCompleted;
-            bw.RunWorkerAsync(parameters);
-        }
-
-        private void BwDoWork(object sender, DoWorkEventArgs e)
-        {
-            var bw = (BackgroundWorker) sender;
-            var webResourceManager = new WebResourceManager(service);
-            var idsToPublish = new List<Guid>();
-            var nodes = (IEnumerable<TreeNode>)((object[])e.Argument)[0];
-
-            var wrDifferentFromServer = new List<TreeNode>();
-
-            foreach (TreeNode node in nodes.Where(n=>n.Tag != null))
-            {
-                var wr = (WebResource)node.Tag;
-                Entity serverVersion = null;
-                if (wr.WebResourceEntity != null && wr.WebResourceEntity.Id != Guid.Empty)
+            WorkAsync("Updating web resources...",
+                (bw, e) =>
                 {
-                    serverVersion = webResourceManager.RetrieveWebResource(wr.WebResourceEntity.Id);
-                }
+                    var webResourceManager = new WebResourceManager(Service);
+                    var idsToPublish = new List<Guid>();
+                    var localNodes = (IEnumerable<TreeNode>)((object[])e.Argument)[0];
 
-                if (serverVersion != null && serverVersion.GetAttributeValue<string>("content") != wr.InitialBase64)
-                {
-                    wrDifferentFromServer.Add(node);
-                }
-                else
-                {
-                    bw.ReportProgress(1, string.Format("Updating {0}...", wr.WebResourceEntity["name"]));
+                    var wrDifferentFromServer = new List<TreeNode>();
 
-                    wr.WebResourceEntity.Id = webResourceManager.UpdateWebResource(wr.WebResourceEntity);
-                    idsToPublish.Add(wr.WebResourceEntity.Id);
-                    wr.InitialBase64 = wr.WebResourceEntity.GetAttributeValue<string>("content");
-                }
-            }
-
-            if (wrDifferentFromServer.Count > 0)
-            {
-                if (
-                    CommonDelegates.DisplayMessageBox(null,
-                        string.Format(
-                            "The following web resources were updated on the server by someone else:\r\n{0}\r\n\r\nAre you sure you want to update them with your content?",
-                            String.Join("\r\n", wrDifferentFromServer.Select(r => ((WebResource)r.Tag).WebResourceEntity.GetAttributeValue<string>("name")))),
-                        "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                {
-                    foreach (var resource in wrDifferentFromServer)
+                    foreach (TreeNode node in localNodes.Where(n => n.Tag != null))
                     {
-                        var wr = (WebResource)resource.Tag;
+                        var wr = (WebResource)node.Tag;
+                        Entity serverVersion = null;
+                        if (wr.WebResourceEntity != null && wr.WebResourceEntity.Id != Guid.Empty)
+                        {
+                            serverVersion = webResourceManager.RetrieveWebResource(wr.WebResourceEntity.Id);
+                        }
 
-                        bw.ReportProgress(1, string.Format("Updating {0}...", wr.WebResourceEntity["name"]));
+                        if (serverVersion != null && serverVersion.GetAttributeValue<string>("content") != wr.InitialBase64)
+                        {
+                            wrDifferentFromServer.Add(node);
+                        }
+                        else
+                        {
+                            bw.ReportProgress(1, string.Format("Updating {0}...", wr.WebResourceEntity["name"]));
 
-                        wr.WebResourceEntity.Id = webResourceManager.UpdateWebResource(wr.WebResourceEntity);
-                        idsToPublish.Add(wr.WebResourceEntity.Id);
-                        wr.InitialBase64 = wr.WebResourceEntity.GetAttributeValue<string>("content");
+                            wr.WebResourceEntity.Id = webResourceManager.UpdateWebResource(wr.WebResourceEntity);
+                            idsToPublish.Add(wr.WebResourceEntity.Id);
+                            wr.InitialBase64 = wr.WebResourceEntity.GetAttributeValue<string>("content");
+                        }
                     }
-                }
-            }
 
-            // if publish
-            if ((bool)((object[])e.Argument)[1] && wrDifferentFromServer.Count < nodes.Count())
-            {
-                bw.ReportProgress(2,"Publishing web resources...");
+                    if (wrDifferentFromServer.Count > 0)
+                    {
+                        if (
+                            CommonDelegates.DisplayMessageBox(null,
+                                string.Format(
+                                    "The following web resources were updated on the server by someone else:\r\n{0}\r\n\r\nAre you sure you want to update them with your content?",
+                                    String.Join("\r\n", wrDifferentFromServer.Select(r => ((WebResource)r.Tag).WebResourceEntity.GetAttributeValue<string>("name")))),
+                                "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                        {
+                            foreach (var resource in wrDifferentFromServer)
+                            {
+                                var wr = (WebResource)resource.Tag;
 
-                webResourceManager.PublishWebResources(idsToPublish);
-            }
+                                bw.ReportProgress(1, string.Format("Updating {0}...", wr.WebResourceEntity["name"]));
 
-            if (((object[])e.Argument)[2].ToString().Length > 0 && wrDifferentFromServer.Count < nodes.Count())
-            {
-                bw.ReportProgress(3,"Adding web resources to solution...");
+                                wr.WebResourceEntity.Id = webResourceManager.UpdateWebResource(wr.WebResourceEntity);
+                                idsToPublish.Add(wr.WebResourceEntity.Id);
+                                wr.InitialBase64 = wr.WebResourceEntity.GetAttributeValue<string>("content");
+                            }
+                        }
+                    }
 
-                webResourceManager.AddToSolution(idsToPublish, ((object[])e.Argument)[2].ToString());
-            }
-        }
-        
-        private void BwProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            InformationPanel.ChangeInformationPanelMessage(infoPanel, e.UserState.ToString());
-        }
-        
-        private void BwRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                MessageBox.Show(this, "An error occured: " + e.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+                    // if publish
+                    if ((bool)((object[])e.Argument)[1] && wrDifferentFromServer.Count < localNodes.Count())
+                    {
+                        bw.ReportProgress(2, "Publishing web resources...");
 
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
-            SetWorkingState(false);
+                        webResourceManager.PublishWebResources(idsToPublish);
+                    }
+
+                    if (((object[])e.Argument)[2].ToString().Length > 0 && wrDifferentFromServer.Count < localNodes.Count())
+                    {
+                        bw.ReportProgress(3, "Adding web resources to solution...");
+
+                        webResourceManager.AddToSolution(idsToPublish, ((object[])e.Argument)[2].ToString());
+                    }
+                },
+                e =>
+                {
+                    if (e.Error != null)
+                    {
+                        MessageBox.Show(this, "An error occured: " + e.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    SetWorkingState(false);
+                },
+                e=>SetWorkingMessage(e.UserState.ToString()),
+                parameters);
         }
 
         #endregion CRM - Update web resources
@@ -699,6 +627,11 @@ namespace MsCrmTools.WebResourcesManager
 
         private void DeleteToolStripMenuItemClick(object sender, EventArgs e)
         {
+            ExecuteMethod(DeleteWebResource);
+        }
+
+        private void DeleteWebResource()
+        {
             try
             {
                 if (TreeViewHelper.CheckOnlyThisNode(tvWebResources))
@@ -718,21 +651,24 @@ namespace MsCrmTools.WebResourcesManager
 
                         if (wr != null && wr.WebResourceEntity != null && wr.WebResourceEntity.Id != Guid.Empty)
                         {
-                            var nodesList = new List<TreeNode> {selectedNode};
-
-                            if (service == null)
-                            {
-                                if (OnRequestConnection != null)
+                            WorkAsync("Deleting web resource...",
+                                e => wrManager.DeleteWebResource((Entity)e.Argument),
+                                e =>
                                 {
-                                    var args = new RequestConnectionEventArgs {ActionName = "Delete", Control = this};
-                                    OnRequestConnection(this, args);
-                                }
-                            }
-                            else
-                            {
-                                DeleteWebResource(nodesList);
-                                tvWebResources.Nodes.Remove(selectedNode);
-                            }
+                                    if (e.Error != null)
+                                    {
+                                        MessageBox.Show(this, "An error occured: " + e.Error, "Error",
+                                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    }
+                                    else
+                                    {
+                                        tvWebResources.Nodes.Remove(selectedNode);
+                                    }
+
+                                    SetWorkingState(false);
+
+                                },
+                                wr.WebResourceEntity);
                         }
                         else
                         {
@@ -750,35 +686,6 @@ namespace MsCrmTools.WebResourcesManager
                 MessageBox.Show(this, "Error while deleting web resource: " + error.Message, "Error",
                              MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void DeleteWebResource(List<TreeNode> nodes)
-        {
-            SetWorkingState(true);
-            
-            infoPanel = InformationPanel.GetInformationPanel(this, "Deleting web resource...", 340, 120);
-
-            var bwDelete = new BackgroundWorker();
-            bwDelete.DoWork += BwDeleteDoWork;
-            bwDelete.RunWorkerCompleted += BwDeleteRunWorkerCompleted;
-            bwDelete.RunWorkerAsync(((WebResource)nodes[0].Tag).WebResourceEntity);
-        }
-
-        private void BwDeleteRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                MessageBox.Show(this, "An error occured: " + e.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
-            SetWorkingState(false);
-        }
-
-        private void BwDeleteDoWork(object sender, DoWorkEventArgs e)
-        {
-            wrManager.DeleteWebResource((Entity)e.Argument);
         }
 
         #endregion CRM/DISK - Delete Web resources
@@ -853,8 +760,7 @@ namespace MsCrmTools.WebResourcesManager
             if (TreeViewHelper.CheckOnlyThisNode(tvWebResources))
                 return;
 
-            tvWebResources.SelectedNode.Tag = ((WebResource) tvWebResources.SelectedNode.Tag).ShowProperties(service,
-                                                                                                             this);
+            tvWebResources.SelectedNode.Tag = ((WebResource) tvWebResources.SelectedNode.Tag).ShowProperties(Service, this);
         }
 
         private void CopyWebResourceNameToClipboardToolStripMenuItemClick(object sender, EventArgs e)
@@ -879,7 +785,7 @@ namespace MsCrmTools.WebResourcesManager
 
         private void getLatestVersionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var selectedWr = (WebResource)tvWebResources.SelectedNode.Tag;
+            var selectedWr = (WebResource) tvWebResources.SelectedNode.Tag;
             if (selectedWr.WebResourceEntity == null || selectedWr.WebResourceEntity.Id == Guid.Empty)
             {
                 MessageBox.Show(ParentForm,
@@ -888,28 +794,23 @@ namespace MsCrmTools.WebResourcesManager
                 return;
             }
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Getting latest version...", 340, 150);
+            WorkAsync("",
+                evt =>
+                {
+                    var wrm = new WebResourceManager(Service);
+                    var wr = wrm.RetrieveWebResource((Guid) evt.Argument);
 
-            var bw = new BackgroundWorker();
-            bw.DoWork += (bwSender, arg) =>
-            {
-                var wrm = new WebResourceManager(service);
-                var wr = wrm.RetrieveWebResource((Guid) arg.Argument);
+                    evt.Result = wr;
+                },
+                evt =>
+                {
+                    var wr = (Entity) evt.Result;
 
-                arg.Result = wr;
-            };
-            bw.RunWorkerCompleted += (bwSender, arg) =>
-            {
-                Controls.Remove(infoPanel);
-                infoPanel.Dispose();
-
-                var wr = (Entity)arg.Result;
-
-                ((WebResource) tvWebResources.SelectedNode.Tag).WebResourceEntity = wr;
-                ((WebResource) tvWebResources.SelectedNode.Tag).InitialBase64 = wr.GetAttributeValue<string>("content");
-                TvWebResourcesAfterSelect(null, null);
-            };
-            bw.RunWorkerAsync(selectedWr.WebResourceEntity.Id);
+                    ((WebResource) tvWebResources.SelectedNode.Tag).WebResourceEntity = wr;
+                    ((WebResource) tvWebResources.SelectedNode.Tag).InitialBase64 = wr.GetAttributeValue<string>("content");
+                    TvWebResourcesAfterSelect(null, null);
+                },
+                selectedWr.WebResourceEntity.Id);
         }
 
         #endregion TREEVIEW - Manage content
@@ -1036,21 +937,13 @@ namespace MsCrmTools.WebResourcesManager
 
             if (tvWebResources.SelectedNode != null)
             {
-                var nodesList = new List<TreeNode> { tvWebResources.SelectedNode };
-
-                if (service == null)
-                {
-                    if (OnRequestConnection != null)
-                    {
-                        var args = new RequestConnectionEventArgs { ActionName = "UpdateAndPublish", Control = this };
-                        OnRequestConnection(this, args);
-                    }
-                }
-                else
-                {
-                    UpdateWebResources(true, nodesList);
-                }
+                ExecuteMethod(FileMenuUpdateAndPublish, tvWebResources.SelectedNode);
             }
+        }
+
+        private void FileMenuUpdateAndPublish(TreeNode node)
+        {
+            UpdateWebResources(true, new List<TreeNode> { node });
         }
 
 
@@ -1402,9 +1295,7 @@ namespace MsCrmTools.WebResourcesManager
 
         private void TsbCloseThisTabClick(object sender, EventArgs e)
         {
-            const string message = "Are your sure you want to close this tab?";
-            if (MessageBox.Show(message, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                OnCloseTool(this, null);
+           CloseTool();
         }
 
         #endregion
@@ -1415,7 +1306,7 @@ namespace MsCrmTools.WebResourcesManager
 
             if (wr.Id != Guid.Empty)
             {
-                var url = ((OrganizationServiceProxy) ((OrganizationService)service).InnerService).ServiceConfiguration.CurrentServiceEndpoint.Address.Uri
+                var url = ((OrganizationServiceProxy) ((OrganizationService)Service).InnerService).ServiceConfiguration.CurrentServiceEndpoint.Address.Uri
                                                               .AbsoluteUri.Replace(
                                                                   "/XRMServices/2011/Organization.svc",
                                                                   "/main.aspx?id=" + wr.Id.ToString("B") + "&etc=9333&pagetype=webresourceedit")
@@ -1435,54 +1326,37 @@ namespace MsCrmTools.WebResourcesManager
             var nodes = new List<TreeNode>();
             TreeViewHelper.GetNodes(nodes, tvWebResources, false);
 
-            infoPanel = InformationPanel.GetInformationPanel(this, "Starting analysis...", 500, 120);
-
-            var bwFindUnunsedResources = new BackgroundWorker();
-            bwFindUnunsedResources.DoWork += BwFindUnunsedResourcesDoWork;
-            bwFindUnunsedResources.ProgressChanged += BwFindUnunsedResourcesProgressChanged;
-            bwFindUnunsedResources.RunWorkerCompleted += BwFindUnunsedResourcesRunWorkerCompleted;
-            bwFindUnunsedResources.WorkerReportsProgress = true;
-            bwFindUnunsedResources.RunWorkerAsync(nodes);
-        }
-
-        void BwFindUnunsedResourcesDoWork(object sender, DoWorkEventArgs e)
-        {
-            var bw = (BackgroundWorker) sender;
-            var nodes = (List<TreeNode>) e.Argument;
-
-            var unusedWebResources = new List<Entity>();
-            int i = 1;
-            foreach (TreeNode node in nodes)
-            {
-                var wr = ((WebResource)node.Tag).WebResourceEntity;
-
-                bw.ReportProgress((i*100)/nodes.Count, "Analyzing web resource " + wr["name"] + "...");
-
-                if (!wrManager.HasDependencies(wr.Id))
+            WorkAsync("Starting analysis...",
+                (bw, evt) =>
                 {
-                    unusedWebResources.Add(wr);
-                }
-                i++;
-            }
+                    var localNodes = (List<TreeNode>)evt.Argument;
 
-            e.Result = unusedWebResources;
-        }
+                    var unusedWebResources = new List<Entity>();
+                    int i = 1;
+                    foreach (TreeNode node in localNodes)
+                    {
+                        var wr = ((WebResource)node.Tag).WebResourceEntity;
 
-        void BwFindUnunsedResourcesProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            InformationPanel.ChangeInformationPanelMessage(infoPanel, 
-                string.Format("{0}% - {1}", e.ProgressPercentage, e.UserState));
-        }
+                        bw.ReportProgress((i * 100) / nodes.Count, "Analyzing web resource " + wr["name"] + "...");
 
-        void BwFindUnunsedResourcesRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
+                        if (!wrManager.HasDependencies(wr.Id))
+                        {
+                            unusedWebResources.Add(wr);
+                        }
+                        i++;
+                    }
 
-            var dialog = new UnusedWebResourcesListDialog((List<Entity>) e.Result, service);
-            dialog.ShowInTaskbar = true;
-            dialog.StartPosition = FormStartPosition.CenterParent;
-            dialog.ShowDialog(this);
+                    evt.Result = unusedWebResources;
+                },
+                evt =>
+                {
+                    var dialog = new UnusedWebResourcesListDialog((List<Entity>)evt.Result, Service);
+                    dialog.ShowInTaskbar = true;
+                    dialog.StartPosition = FormStartPosition.CenterParent;
+                    dialog.ShowDialog(this);
+                },
+                evt => SetWorkingMessage(string.Format("{0}% - {1}", evt.ProgressPercentage, evt.UserState)),
+                nodes);
         }
 
         private void tvWebResources_DragDrop(object sender, DragEventArgs e)

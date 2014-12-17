@@ -32,7 +32,7 @@ namespace XrmToolBox
 
         public void CloseTool()
         {
-            OnCloseTool(this, null);
+                OnCloseTool(this, null);
         }
 
         #region IMsCrmToolsPluginUserControl Members
@@ -121,7 +121,7 @@ namespace XrmToolBox
             _worker.WorkAsync(this, message, work, callback, progressChanged, argument, messageWidth, messageHeight);
         }
 
-        public void SetWorkingMessage(string message, int width = 340, int height = 100)
+        public void SetWorkingMessage(string message, int width = 340, int height = 150)
         {
             _worker.SetWorkingMessage(this, message);
         }

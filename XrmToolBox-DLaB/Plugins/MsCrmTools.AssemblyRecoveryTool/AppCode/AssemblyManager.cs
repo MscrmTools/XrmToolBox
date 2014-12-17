@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
@@ -40,37 +41,37 @@ namespace MsCrmTools.AssemblyRecoveryTool.AppCode
         /// <returns>List of plugin assemblies</returns>
         public List<Entity> RetrieveAssemblies()
         {
-            List<Entity> list = new List<Entity>();
+            var list = new List<Entity>();
 
-            LinkEntity le = new LinkEntity();
-            le.LinkFromAttributeName = "pluginassemblyid";
-            le.LinkFromEntityName = "pluginassembly";
-            le.LinkToAttributeName = "pluginassemblyid";
-            le.LinkToEntityName = "plugintype";
-            le.LinkCriteria = new FilterExpression();
-            le.LinkCriteria.Conditions.AddRange(
-                new ConditionExpression("typename", ConditionOperator.NotLike, "Microsoft.Crm.%"),
-                new ConditionExpression("typename", ConditionOperator.NotLike, "Compiled.%"));
-
-            QueryExpression qe = new QueryExpression();
-            qe.EntityName = "pluginassembly";
-            qe.ColumnSet = new ColumnSet(true);
-            qe.LinkEntities.Add(le);
-            qe.Distinct = false;
-
-            RetrieveMultipleRequest request = new RetrieveMultipleRequest();
-            request.Query = qe;
-
-            RetrieveMultipleResponse response = (RetrieveMultipleResponse)service.Execute(request);
-
-            EntityCollection bec = response.EntityCollection;// service.RetrieveMultiple(qe);
-
-            foreach (Entity pAssembly in bec.Entities)
+            var qe = new QueryExpression("pluginassembly")
             {
-                if (list.Find(x => x["publickeytoken"].ToString() == pAssembly["publickeytoken"].ToString() && x["name"].ToString() == pAssembly["name"].ToString()) == null)
+                ColumnSet = new ColumnSet(true),
+                Distinct = false,
+                LinkEntities =
                 {
-                    list.Add(pAssembly);
+                    new LinkEntity
+                    {
+                        LinkFromAttributeName = "pluginassemblyid",
+                        LinkFromEntityName = "pluginassembly",
+                        LinkToAttributeName = "pluginassemblyid",
+                        LinkToEntityName = "plugintype",
+                        LinkCriteria = new FilterExpression
+                        {
+                            Conditions =
+                            {
+                                new ConditionExpression("typename", ConditionOperator.NotLike, "Microsoft.Crm.%"),
+                                new ConditionExpression("typename", ConditionOperator.NotLike, "Compiled.%")
+                            }
+                        }
+                    }
                 }
+            };
+
+            var response = (RetrieveMultipleResponse) service.Execute(new RetrieveMultipleRequest {Query = qe});
+
+            foreach (Entity pAssembly in response.EntityCollection.Entities.Where(pAssembly => list.Find(x => x["publickeytoken"].ToString() == pAssembly["publickeytoken"].ToString() && x["name"].ToString() == pAssembly["name"].ToString()) == null))
+            {
+                list.Add(pAssembly);
             }
 
             return list;

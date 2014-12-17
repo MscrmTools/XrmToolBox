@@ -70,9 +70,9 @@ namespace MsCrmTools.FormAttributeManager.AppCode
         {
             if (innerOrder == SortOrder.Ascending)
             {
-                return String.Compare(x.SubItems[col].Text, y.SubItems[col].Text);
+                return String.CompareOrdinal(x.SubItems[col].Text, y.SubItems[col].Text);
             }
-            return String.Compare(y.SubItems[col].Text, x.SubItems[col].Text);
+            return String.CompareOrdinal(y.SubItems[col].Text, x.SubItems[col].Text);
         }
 
         #endregion
@@ -82,7 +82,7 @@ namespace MsCrmTools.FormAttributeManager.AppCode
     {
         public int Compare(object objA, object objB)
         {
-            return ((ListViewGroup)objA).Header.CompareTo(((ListViewGroup)objB).Header);
+            return String.Compare(((ListViewGroup)objA).Header, ((ListViewGroup)objB).Header, StringComparison.Ordinal);
         }
     }
 }
