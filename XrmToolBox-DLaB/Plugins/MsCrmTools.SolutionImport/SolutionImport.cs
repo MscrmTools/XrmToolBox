@@ -14,8 +14,6 @@ using Microsoft.Xrm.Sdk.Client;
 using Tanguy.WinForm.Utilities.DelegatesHelpers;
 using XrmToolBox;
 using XrmToolBox.Attributes;
-using Microsoft.Xrm.Sdk.Query;
-using System.Threading;
 
 [assembly: BackgroundColor("")]
 [assembly: PrimaryFontColor("")]
@@ -25,14 +23,11 @@ using System.Threading;
 
 namespace MsCrmTools.SolutionImport
 {
-    public partial class SolutionImport : UserControl, IMsCrmToolsPluginUserControl
+    public partial class SolutionImport : PluginBase
     {
         #region Variables
 
-        private Panel infoPanel;
         private SolutionManager sManager;
-        private IOrganizationService service;
-        private ConnectionDetail cDetail;
 
         private Guid currentOperationId;
 
@@ -44,35 +39,7 @@ namespace MsCrmTools.SolutionImport
 
             gbImportSolution.AllowDrop = true;
         }
-
-        public IOrganizationService Service
-        {
-            get { return service; }
-        }
-
-        public Image PluginLogo
-        {
-            get { return imageList1.Images[0]; }
-        }
-
-        public event EventHandler OnRequestConnection;
-        public event EventHandler OnCloseTool;
-
-        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
-        {
-            ((OrganizationServiceProxy)((OrganizationService)newService).InnerService).Timeout = new TimeSpan(0,1,0,0);
-
-            service = newService;
-            cDetail = detail;
-            sManager= new SolutionManager(service);
-
-            if (actionName == "ImportSolution")
-            {
-                ((ImportSettings) parameter).MajorVersion = cDetail.OrganizationMajorVersion;
-                ImportArchive((ImportSettings) parameter);
-            }
-        }
-
+        
         private void GbImportSolutionDragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -100,91 +67,53 @@ namespace MsCrmTools.SolutionImport
                                     Activate = chkActivate.Checked,
                                     ConvertToManaged = chkConvertToManaged.Checked,
                                     OverwriteUnmanagedCustomizations = chkOverwriteUnmanagedCustomizations.Checked,
-                                    MajorVersion = cDetail.OrganizationMajorVersion
                                 };
+            ExecuteMethod(ImportArchive, iSettings);
 
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs {ActionName = "ImportSolution", Control = this, Parameter = iSettings};
-                    OnRequestConnection(this, args);
-                }
-            }
-            else
-            {
-                ImportArchive(iSettings);
-            }
         }
 
         private void ImportArchive(ImportSettings iSettings)
         {
+            sManager = new SolutionManager(Service);
+            iSettings.MajorVersion = ConnectionDetail.OrganizationMajorVersion;
+
             currentOperationId = iSettings.ImportId;
 
-            CommonDelegates.SetCursor(this, Cursors.WaitCursor);
-
-            infoPanel = InformationPanel.GetInformationPanel(this, "Importing solution...", 340, 120);
-
             EnableControls(false);
-           
-            var worker = new BackgroundWorker { WorkerReportsProgress = true };
-            worker.DoWork += WorkerDoWork;
-            worker.ProgressChanged += WorkerProgressChanged;
-            worker.RunWorkerCompleted += WorkerRunWorkerCompleted;
-            worker.RunWorkerAsync(iSettings);
-        }
 
-        public bool hasFinished = false;
+            WorkAsync("Importing solution...",
+                (bw, e) =>
+                {
+                    var settings = (ImportSettings)e.Argument;
 
-        void WorkerProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            if (e.ProgressPercentage <= 100)
-            {
-                InformationPanel.ChangeInformationPanelMessage(infoPanel, string.Format("Importing solution...", e.ProgressPercentage));
-            }
-            else
-            {
-                InformationPanel.ChangeInformationPanelMessage(infoPanel, "Publishing solution...");
-            }
-        }
+                    // Launch a new thread to monitor import status
+                    if (settings.IsFolder)
+                    {
+                        sManager.ImportSolutionFolder(settings);
+                    }
+                    else
+                    {
+                        sManager.ImportSolutionArchive(settings.Path, settings);
+                    }
 
-        private void WorkerDoWork(object sender, DoWorkEventArgs e)
-        {
-            var worker = (BackgroundWorker) sender;
-            var settings = (ImportSettings) e.Argument;
+                    if (((ImportSettings)e.Argument).Publish)
+                    {
+                        bw.ReportProgress(101, "Publishing solution...");
+                        sManager.PublishAll();
+                    }
+                },
+                e =>
+                {
+                    if (e.Error != null)
+                    {
+                        var eForm = new ErrorForm(e.Error.Message);
+                        eForm.ShowDialog();
+                    }
 
-            // Launch a new thread to monitor import status
-            if (settings.IsFolder)
-            {
-                sManager.ImportSolutionFolder(settings);
-            }
-            else
-            {
-                sManager.ImportSolutionArchive(settings.Path, settings);
-            }
-
-            hasFinished = true;
-            
-            if (((ImportSettings)e.Argument).Publish)
-            {
-                worker.ReportProgress(101, "Publishing solution...");
-                sManager.PublishAll();
-            }
-        }
-
-        private void WorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
-
-            if (e.Error != null)
-            {
-                var eForm = new ErrorForm(e.Error.Message);
-                eForm.ShowDialog();
-            }
-
-            EnableControls(true);
-            CommonDelegates.SetCursor(this, Cursors.Default);
+                    EnableControls(true);
+                },
+                e => SetWorkingMessage(e.ProgressPercentage <= 100 ? "Importing solution..." : "Publishing solution..."),
+                iSettings);
         }
 
         private void BtnBrowseFolderClick(object sender, EventArgs e)
@@ -214,26 +143,9 @@ namespace MsCrmTools.SolutionImport
                                     Activate = chkActivate.Checked,
                                     ConvertToManaged = chkConvertToManaged.Checked,
                                     OverwriteUnmanagedCustomizations = chkOverwriteUnmanagedCustomizations.Checked,
-                                    MajorVersion = cDetail.OrganizationMajorVersion
                                 };
 
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs
-                                   {
-                                       ActionName = "Import",
-                                       Control = this,
-                                       Parameter = iSettings
-                                   };
-                    OnRequestConnection(this, args);
-                }
-            }
-            else
-            {
-                ImportArchive(iSettings);
-            }
+            ExecuteMethod(ImportArchive, iSettings);
         }
 
         private void EnableControls(bool enable)
@@ -261,12 +173,7 @@ namespace MsCrmTools.SolutionImport
 
         private void TsbCloseThisTabClick(object sender, EventArgs e)
         {
-            const string message = "Are your sure you want to close this tab?";
-            if (MessageBox.Show(message, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
-                DialogResult.Yes)
-                OnCloseTool(this, null);
+           CloseTool();
         }
-
-
     }
 }

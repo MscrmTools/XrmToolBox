@@ -73,6 +73,12 @@ namespace XrmToolBox.Forms
             }
             catch (FileNotFoundException)
             {
+                // Nothing to do as if the file is missing, it's not big deal
+            }
+            catch(NotSupportedException)
+            {
+                MessageBox.Show(this,
+                    "It seems you maybe forgot to unblock XrmToolBox.zip before extracting it. XrmToolBox can't work as expected until you unblocked all files. To do so, display XrmToolBox.zip properties and unblock the file before extracting it","Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {

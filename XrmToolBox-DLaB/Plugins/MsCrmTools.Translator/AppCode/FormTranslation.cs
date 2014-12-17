@@ -455,11 +455,13 @@ namespace MsCrmTools.Translator.AppCode
         public void ImportFormName(ExcelWorksheet sheet, IOrganizationService service)
         {
             var forms = new List<Tuple<int, Entity>>();
+            //int lastColumnIndex = sheet.Rows[0].Cells.LastColumnIndex;
 
             foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
             {
                 var currentFormId = new Guid(row.Cells[1].Value.ToString());
                 var columnIndex = 4;
+                //while (columnIndex <= lastColumnIndex)
                 while (row.Cells[columnIndex].Value != null)
                 {
                     var currentLcid = int.Parse(sheet.Cells[0, columnIndex].Value.ToString());
@@ -470,11 +472,11 @@ namespace MsCrmTools.Translator.AppCode
                         forms.Add(formRecord);
                     }
                     
-                    if (row.Cells[2].Value.ToString() == "Name")
+                    if (row.Cells[3].Value.ToString() == "Name")
                     {
                         formRecord.Item2["name"] = row.Cells[columnIndex].Value.ToString();
                     }
-                    else if (row.Cells[2].Value.ToString() == "Description")
+                    else if (row.Cells[3].Value.ToString() == "Description")
                     {
                         formRecord.Item2["description"] = row.Cells[columnIndex].Value.ToString();
                     }

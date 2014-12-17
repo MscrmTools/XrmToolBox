@@ -334,5 +334,19 @@ namespace DamSim.SolutionTransferTool
                 lstSourceSolutions.ListViewItemSorter = new ListViewItemComparer(e.Column, SortOrder.Ascending);
             }
         }
+
+
+        public void ClosingPlugin(PluginCloseInfo info)
+        {
+            
+            if (info.FormReason != CloseReason.None ||
+                info.ToolBoxReason == ToolBoxCloseReason.CloseAll ||
+                info.ToolBoxReason == ToolBoxCloseReason.CloseAllExceptActive)
+            {
+                return;
+            }
+
+            info.Cancel = MessageBox.Show(@"Are you sure you want to close this tab?", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes;
+        }
     }
 }

@@ -4,14 +4,10 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using System;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Threading;
 using System.Windows.Forms;
-using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using MsCrmTools.AuditCenter.Forms;
@@ -30,7 +26,7 @@ using CrmExceptionHelper = XrmToolBox.CrmExceptionHelper;
 
 namespace MsCrmTools.AuditCenter
 {
-    public partial class MainControl : UserControl, IMsCrmToolsPluginUserControl
+    public partial class MainControl : PluginBase
     {
         public enum ActionState
         {
@@ -41,27 +37,8 @@ namespace MsCrmTools.AuditCenter
 
         #region Variables
 
-        /// <summary>
-        /// Microsoft Dynamics CRM 2011 Organization Service
-        /// </summary>
-        private IOrganizationService service;
-
-        /// <summary>
-        /// Panel used to display progress information
-        /// </summary>
-        private Panel infoPanel;
-
-        /// <summary>
-        /// Original value for searchable property
-        /// </summary>
-        Dictionary<string, AttributeMetadata> attributesOriginalState;
-
-        /// <summary>
-        /// Current Attributes list order column index
-        /// </summary>
-        int currentAttributesColumnOrder;
-
         private List<EntityInfo> entityInfos;
+
         private List<AttributeInfo> attributeInfos; 
 
         private List<EntityMetadata> emds;
@@ -82,26 +59,6 @@ namespace MsCrmTools.AuditCenter
 
         #endregion Constructor
 
-        #region Properties
-
-        /// <summary>
-        /// Gets the organization service used by the tool
-        /// </summary>
-        public IOrganizationService Service
-        {
-            get { return service; }
-        }
-
-        /// <summary>
-        /// Gets the logo to display in the tools list
-        /// </summary>
-        public Image PluginLogo
-        {
-            get { return toolImageList.Images[0]; }
-        }
-
-        #endregion
-
         #region EventHandlers
 
         /// <summary>
@@ -118,52 +75,14 @@ namespace MsCrmTools.AuditCenter
 
         #region Methods
 
-        /// <summary>
-        /// Updates the organization service used by the tool
-        /// </summary>
-        /// <param name="newService">Organization service</param>
-        /// <param name="actionName">Action that requested a service update</param>
-        /// <param name="parameter">Parameter passed when requesting a service update</param>
-        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
-        {
-            service = newService;
-
-            if (actionName == "LoadEntities")
-            {
-                LoadEntities();
-            }
-        }
-
         private void TsbCloseClick(object sender, EventArgs e)
         {
-            const string message = "Are your sure you want to close this tab?";
-            if (MessageBox.Show(message, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                OnCloseTool(this, null);
+           CloseTool();
         }
 
         private void TsbConnectClick(object sender, EventArgs e)
         {
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs
-                    {
-                        ActionName = "LoadEntities",
-                        Control = this
-                    };
-                    OnRequestConnection(this, args);
-                }
-                else
-                {
-                    MessageBox.Show(this, "OnRequestConnection event not registered!", "Error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                LoadEntities();
-            }
+            ExecuteMethod(LoadEntities);
         }
 
         #endregion Methods
@@ -181,83 +100,66 @@ namespace MsCrmTools.AuditCenter
             tsbChangeSystemAuditStatus.Enabled = false;
             tsbChangeSystemAuditStatus.Image = statusImageList.Images[2];
 
-            Cursor = Cursors.WaitCursor;
-            infoPanel = InformationPanel.GetInformationPanel(this, "Loading entities...", 340, 120);
-
-            var bwFillEntities = new BackgroundWorker();
-            bwFillEntities.DoWork += BwFillEntitiesDoWork;
-            bwFillEntities.RunWorkerCompleted += BwFillEntitiesRunWorkerCompleted;
-            bwFillEntities.RunWorkerAsync();
-        }
-
-        private void BwFillEntitiesDoWork(object sender, DoWorkEventArgs e)
-        {
-            emds = MetadataHelper.RetrieveEntities(service);
-
-            InformationPanel.ChangeInformationPanelMessage(infoPanel,"Retrieving system audit status...");
-
-            var orgs = service.RetrieveMultiple(new QueryExpression
-                                         {
-                                             EntityName = "organization",
-                                             ColumnSet = new ColumnSet(new[] {"isauditenabled"})
-                                         });
-
-
-            e.Result = orgs[0].GetAttributeValue<bool>("isauditenabled");
-        }
-
-        private void BwFillEntitiesRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
-                MessageBox.Show(ParentForm, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                var isAuditEnabled = (bool)e.Result;
-                lblStatusStatus.Text = isAuditEnabled ? "ON" : "OFF";
-                lblStatusStatus.ForeColor = isAuditEnabled ? Color.Green : Color.Red;
-
-                tsbChangeSystemAuditStatus.Image = isAuditEnabled ? statusImageList.Images[1] : statusImageList.Images[0];
-                tsbChangeSystemAuditStatus.Text = isAuditEnabled ? "Deactivate global audit" : "Activate global audit";
-
-                // Filling entities list
-                FillEntitiesList(emds);
-            }
-
-            gbEntities.Enabled = true;
-            gbAttributes.Enabled = true;
-            tsbChangeSystemAuditStatus.Enabled = true;
-            Cursor = Cursors.Default;
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
-        }
-
-        public void FillEntitiesList(List<EntityMetadata> entities)
-        {
-            try
-            {
-                lvEntities.Items.Clear();
-
-                foreach (EntityMetadata emd in entities.Where(e=>e.IsAuditEnabled.Value))
+            WorkAsync("Loading entities...",
+                (bw,e) =>
                 {
-                    entityInfos.Add(new EntityInfo { Action = ActionState.None, Emd = emd, InitialState = true });
+                    emds = MetadataHelper.RetrieveEntities(Service);
 
-                    var item = new ListViewItem {Text = emd.DisplayName.UserLocalizedLabel.Label, Tag = emd};
-                    item.SubItems.Add(emd.LogicalName);
-                    lvEntities.Items.Add(item);
+                    bw.ReportProgress(0, "Retrieving system audit status...");
 
-                    AddEntityAttributesToList(emd);
-                }
+                    var orgs = Service.RetrieveMultiple(new QueryExpression
+                    {
+                        EntityName = "organization",
+                        ColumnSet = new ColumnSet(new[] { "isauditenabled" })
+                    });
 
-                SortGroups(lvAttributes);
-            }
-            catch (Exception error)
-            {
-                string errorMessage = CrmExceptionHelper.GetErrorMessage(error, true);
-                MessageBox.Show(ParentForm, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+                    e.Result = orgs[0].GetAttributeValue<bool>("isauditenabled");
+                },
+                e =>
+                {
+                    if (e.Error != null)
+                    {
+                        string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
+                        MessageBox.Show(ParentForm, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        var isAuditEnabled = (bool)e.Result;
+                        lblStatusStatus.Text = isAuditEnabled ? "ON" : "OFF";
+                        lblStatusStatus.ForeColor = isAuditEnabled ? Color.Green : Color.Red;
+
+                        tsbChangeSystemAuditStatus.Image = isAuditEnabled ? statusImageList.Images[1] : statusImageList.Images[0];
+                        tsbChangeSystemAuditStatus.Text = isAuditEnabled ? "Deactivate global audit" : "Activate global audit";
+
+                        try
+                        {
+                            lvEntities.Items.Clear();
+
+                            foreach (EntityMetadata emd in emds.Where(x => x.IsAuditEnabled.Value))
+                            {
+                                entityInfos.Add(new EntityInfo { Action = ActionState.None, Emd = emd, InitialState = true });
+
+                                var item = new ListViewItem { Text = emd.DisplayName.UserLocalizedLabel.Label, Tag = emd };
+                                item.SubItems.Add(emd.LogicalName);
+                                lvEntities.Items.Add(item);
+
+                                AddEntityAttributesToList(emd);
+                            }
+
+                            SortGroups(lvAttributes);
+                        }
+                        catch (Exception error)
+                        {
+                            string errorMessage = CrmExceptionHelper.GetErrorMessage(error, true);
+                            MessageBox.Show(ParentForm, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+
+                    gbEntities.Enabled = true;
+                    gbAttributes.Enabled = true;
+                    tsbChangeSystemAuditStatus.Enabled = true;
+                },
+                e => SetWorkingMessage(e.UserState.ToString()));
         }
 
         private void AddEntityAttributesToList(EntityMetadata emd)
@@ -362,8 +264,8 @@ namespace MsCrmTools.AuditCenter
             }
 
             var list = group.Items.Cast<ListViewItem>().Select(i => i.SubItems[1].Text);
-            
-            var apForm = new AttributePicker(emd,list,service);
+
+            var apForm = new AttributePicker(emd, list, Service);
             if (apForm.ShowDialog(this) == DialogResult.OK)
             {
                 foreach (var amd in apForm.AttributesToAdd)
@@ -456,45 +358,34 @@ namespace MsCrmTools.AuditCenter
 
         private void TsbChangeSystemAuditStatusClick(object sender, EventArgs e)
         {
-            infoPanel = InformationPanel.GetInformationPanel(this, "Updating audit status...", 340, 120);
+            WorkAsync("Updating audit status...",
+                evt =>
+                {
+                    var orgs = Service.RetrieveMultiple(new QueryExpression
+                    {
+                        EntityName = "organization",
+                        ColumnSet = new ColumnSet(new[] { "isauditenabled" })
+                    });
 
-            var updateStatusBw = new BackgroundWorker();
-            updateStatusBw.DoWork += UpdateStatusBwDoWork;
-            updateStatusBw.RunWorkerCompleted += UpdateStatusBwRunWorkerCompleted;
-            updateStatusBw.RunWorkerAsync();
-        }
-
-        private void UpdateStatusBwDoWork(object sender, DoWorkEventArgs e)
-        {
-            var orgs = service.RetrieveMultiple(new QueryExpression
-            {
-                EntityName = "organization",
-                ColumnSet = new ColumnSet(new[] { "isauditenabled" })
-            });
-
-
-            var auditStatus = orgs[0].GetAttributeValue<bool>("isauditenabled");
-            orgs[0]["isauditenabled"] = !auditStatus;
-            service.Update(orgs[0]);
-        }
-
-        private void UpdateStatusBwRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-            else
-            {
-                tsbChangeSystemAuditStatus.Image = lblStatusStatus.Text == "ON" ? statusImageList.Images[1] : statusImageList.Images[0];
-                tsbChangeSystemAuditStatus.Text = lblStatusStatus.Text == "ON" ? "Deactivate system audit" : "Activate system audit";
-                lblStatusStatus.ForeColor = lblStatusStatus.ForeColor == Color.Green ? Color.Red : Color.Green;
-                lblStatusStatus.Text = lblStatusStatus.Text == "ON" ? "OFF" : "ON";
-            }
-
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
+                    var auditStatus = orgs[0].GetAttributeValue<bool>("isauditenabled");
+                    orgs[0]["isauditenabled"] = !auditStatus;
+                    Service.Update(orgs[0]);
+                },
+                evt =>
+                {
+                    if (evt.Error != null)
+                    {
+                        MessageBox.Show(this, "An error occured: " + evt.Error.Message, "Error", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        lblStatusStatus.Text = lblStatusStatus.Text == "ON" ? "OFF" : "ON";
+                        tsbChangeSystemAuditStatus.Image = lblStatusStatus.Text == "ON" ? statusImageList.Images[1] : statusImageList.Images[0];
+                        tsbChangeSystemAuditStatus.Text = lblStatusStatus.Text == "ON" ? "Deactivate system audit" : "Activate system audit";
+                        lblStatusStatus.ForeColor = lblStatusStatus.ForeColor == Color.Green ? Color.Red : Color.Green;
+                    }
+                });
         }
 
         #endregion Global Audit settings
@@ -511,102 +402,91 @@ namespace MsCrmTools.AuditCenter
             gbAttributes.Enabled = false;
             toolStripMenu.Enabled = false;
 
-            Cursor = Cursors.WaitCursor;
-            infoPanel = InformationPanel.GetInformationPanel(this, "Updating entities...", 500, 120);
-
-            var applyBw = new BackgroundWorker();
-            applyBw.DoWork += ApplyBwDoWork;
-            applyBw.RunWorkerCompleted += ApplyBwRunWorkerCompleted;
-            applyBw.RunWorkerAsync();
-        }
-
-        private void ApplyBwDoWork(object sender, DoWorkEventArgs e)
-        {
-            foreach (EntityInfo ei in entityInfos.OrderBy(entity=>entity.Emd.LogicalName))
-            {
-                if (ei.Action == ActionState.Added)
+            WorkAsync("Updating entities...",
+                (bw, evt) =>
                 {
-                    InformationPanel.ChangeInformationPanelMessage(infoPanel, string.Format("Enabling entity '{0}' for audit...",ei.Emd.LogicalName)); 
-       
-                    ei.Emd.IsAuditEnabled.Value = true;
-                }
-                else if (ei.Action == ActionState.Removed)
+                    foreach (EntityInfo ei in entityInfos.OrderBy(entity => entity.Emd.LogicalName))
+                    {
+                        if (ei.Action == ActionState.Added)
+                        {
+                            bw.ReportProgress(0,string.Format("Enabling entity '{0}' for audit...", ei.Emd.LogicalName));
+
+                            ei.Emd.IsAuditEnabled.Value = true;
+                        }
+                        else if (ei.Action == ActionState.Removed)
+                        {
+                            bw.ReportProgress(0, string.Format("Disabling entity '{0}' for audit...", ei.Emd.LogicalName));
+
+                            ei.Emd.IsAuditEnabled.Value = false;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+                        var request = new UpdateEntityRequest { Entity = ei.Emd };
+                        Service.Execute(request);
+
+                        ei.Action = ActionState.None;
+                    }
+
+                    bw.ReportProgress(0, "Updating attributes...");
+
+                    foreach (AttributeInfo ai in attributeInfos.OrderBy(a => a.Amd.EntityLogicalName).ThenBy(a => a.Amd.LogicalName))
+                    {
+                        if (ai.Action == ActionState.Added)
+                        {
+                            bw.ReportProgress(0, string.Format("Enabling attribute '{0}' ({1}) for audit...", ai.Amd.LogicalName, ai.Amd.EntityLogicalName));
+
+                            ai.Amd.IsAuditEnabled.Value = true;
+                        }
+                        else if (ai.Action == ActionState.Removed)
+                        {
+                            bw.ReportProgress(0, string.Format("Disabling attribute '{0}' ({1}) for audit...", ai.Amd.LogicalName, ai.Amd.EntityLogicalName));
+
+                            ai.Amd.IsAuditEnabled.Value = false;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+                        var request = new UpdateAttributeRequest { Attribute = ai.Amd, EntityName = ai.Amd.EntityLogicalName };
+                        Service.Execute(request);
+
+                        ai.Action = ActionState.None;
+                    }
+
+                    bw.ReportProgress(0, "Publishing changes...");
+
+                    var publishRequest = new PublishXmlRequest { ParameterXml = "<importexportxml><entities>" };
+
+                    foreach (EntityInfo ei in entityInfos.OrderBy(entity => entity.Emd.LogicalName))
+                    {
+                        publishRequest.ParameterXml += string.Format("<entity>{0}</entity>", ei.Emd.LogicalName);
+                    }
+
+                    publishRequest.ParameterXml +=
+                        "</entities><securityroles/><settings/><workflows/></importexportxml>";
+
+                    Service.Execute(publishRequest);
+                },
+                evt =>
                 {
-                    InformationPanel.ChangeInformationPanelMessage(infoPanel, string.Format("Disabling entity '{0}' for audit...", ei.Emd.LogicalName));
-                    
-                    ei.Emd.IsAuditEnabled.Value = false;
-                }
-                else
-                {
-                    continue;
-                }
+                    if (evt.Error != null)
+                    {
+                        MessageBox.Show(this, "An error occured: " + evt.Error.Message, "Error", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
 
-                var request = new UpdateEntityRequest {Entity = ei.Emd};
-                service.Execute(request);
-            
-                ei.Action = ActionState.None;
-            }
+                    gbEntities.Enabled = true;
+                    gbAttributes.Enabled = true;
+                    toolStripMenu.Enabled = true;
 
-            InformationPanel.ChangeInformationPanelMessage(infoPanel, "Updating attributes...");
-
-            foreach (AttributeInfo ai in attributeInfos.OrderBy(a => a.Amd.EntityLogicalName).ThenBy(a=>a.Amd.LogicalName))
-            {
-                if (ai.Action == ActionState.Added)
-                {
-                    InformationPanel.ChangeInformationPanelMessage(infoPanel, string.Format("Enabling attribute '{0}' ({1}) for audit...", ai.Amd.LogicalName, ai.Amd.EntityLogicalName));
-
-                    ai.Amd.IsAuditEnabled.Value = true;
-                }
-                else if (ai.Action == ActionState.Removed)
-                {
-                    InformationPanel.ChangeInformationPanelMessage(infoPanel, string.Format("Disabling attribute '{0}' ({1}) for audit...", ai.Amd.LogicalName, ai.Amd.EntityLogicalName));
-
-                    ai.Amd.IsAuditEnabled.Value = false;
-                }
-                else
-                {
-                    continue;
-                }
-
-                var request = new UpdateAttributeRequest { Attribute = ai.Amd, EntityName = ai.Amd.EntityLogicalName};
-                service.Execute(request);
-
-                ai.Action = ActionState.None;
-            }
-
-            InformationPanel.ChangeInformationPanelMessage(infoPanel, "Publishing changes...");
-
-            var publishRequest = new PublishXmlRequest{ParameterXml = "<importexportxml><entities>"};
-
-            foreach (EntityInfo ei in entityInfos.OrderBy(entity => entity.Emd.LogicalName))
-            {
-                publishRequest.ParameterXml += string.Format("<entity>{0}</entity>", ei.Emd.LogicalName);
-            }
-
-            publishRequest.ParameterXml +=
-                "</entities><securityroles/><settings/><workflows/></importexportxml>";
-
-            service.Execute(publishRequest);
-        }
-
-        private void ApplyBwRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
-
-            gbEntities.Enabled = true;
-            gbAttributes.Enabled = true;
-            toolStripMenu.Enabled = true;
-
-            tsbApplyChanges.Enabled = !((entityInfos.All(ei => ei.Action == ActionState.None) &&
-                                  attributeInfos.All(ai => ai.Action == ActionState.None)));
-
-            Cursor = Cursors.Default;
-            infoPanel.Dispose();
-            Controls.Remove(infoPanel);
+                    tsbApplyChanges.Enabled = !((entityInfos.All(ei => ei.Action == ActionState.None) &&
+                                          attributeInfos.All(ai => ai.Action == ActionState.None)));
+                },
+                evt => SetWorkingMessage(evt.UserState.ToString()));
         }
 
         #endregion Apply changes to entities and attributes

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xrm.Sdk.Metadata;
 
 namespace MsCrmTools.FormAttributeManager.AppCode
@@ -10,6 +7,11 @@ namespace MsCrmTools.FormAttributeManager.AppCode
     {
         public static Guid GetClassId(AttributeMetadata amd)
         {
+            if (amd.AttributeType == null)
+            {
+                throw new ArgumentNullException(typeof(AttributeMetadata).ToString());
+            }
+
             switch (amd.AttributeType.Value)
             {
                 case AttributeTypeCode.Boolean:
@@ -37,7 +39,6 @@ namespace MsCrmTools.FormAttributeManager.AppCode
                             throw new Exception("Unsupported format " + ((IntegerAttributeMetadata)amd).Format + " for type " + amd.AttributeType.Value);
                     }
                 }
-                    break;
                 case AttributeTypeCode.String:
                 {
                     switch (((StringAttributeMetadata) amd).Format)
@@ -55,7 +56,6 @@ namespace MsCrmTools.FormAttributeManager.AppCode
             
                     }
                 }
-                    break;
                 case AttributeTypeCode.Lookup:
                     return new Guid("{270BD3DB-D9AF-4782-9025-509E298DEC0A}");
                 case AttributeTypeCode.Memo:

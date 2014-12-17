@@ -218,7 +218,5 @@ namespace MsCrmTools.RoleUpdater
         }
 
         #endregion Methods
-
-        
     }
 }

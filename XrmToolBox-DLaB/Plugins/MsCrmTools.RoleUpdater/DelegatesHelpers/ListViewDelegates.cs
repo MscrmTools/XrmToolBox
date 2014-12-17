@@ -44,6 +44,20 @@ namespace MsCrmTools.RoleUpdater.DelegatesHelpers
             }
         }
 
+        internal static void AddRange(ListView listview, System.Collections.Generic.List<ListViewItem> items)
+        {
+            MethodInvoker miAddItem = () => listview.Items.AddRange(items.ToArray());
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miAddItem);
+            }
+            else
+            {
+                miAddItem();
+            }
+        }
+
         public static void AddColumn(ListView listview, ColumnHeader column)
         {
             MethodInvoker miAddColumn = delegate
@@ -384,5 +398,7 @@ namespace MsCrmTools.RoleUpdater.DelegatesHelpers
                 miSortGroup();
             }
         }
+
+      
     }
 }

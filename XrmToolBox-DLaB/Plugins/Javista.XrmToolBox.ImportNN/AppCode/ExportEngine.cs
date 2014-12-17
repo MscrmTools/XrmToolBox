@@ -35,11 +35,12 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                 PageInfo = new PagingInfo {Count = 250, PageNumber = 1}
             };
 
-            var results = service.RetrieveMultiple(qe);
+            EntityCollection results;
 
             do
             {
-                using (var writer = new StreamWriter(filePath, false, Encoding.Default))
+                results = service.RetrieveMultiple(qe);
+                using (var writer = new StreamWriter(filePath, true, Encoding.Default))
                 {
                     foreach (var result in results.Entities)
                     {
@@ -114,6 +115,7 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                 }
 
                 qe.PageInfo.PageNumber++;
+                
             } while (results.MoreRecords);
         }
 

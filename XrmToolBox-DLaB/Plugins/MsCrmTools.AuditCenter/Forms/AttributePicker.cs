@@ -36,7 +36,6 @@ namespace MsCrmTools.AuditCenter.Forms
                 var item = new ListViewItem { Text = displayName, Tag = amd };
                 item.SubItems.Add(amd.LogicalName);
                 item.SubItems.Add((allFormsDoc.SelectSingleNode("//control[@datafieldname='" + amd.LogicalName + "']") != null).ToString());
-                //item.Checked = alreadySelectedAttributes.Contains(amd.LogicalName);
                 lvAttributes.Items.Add(item);
             }
         }
@@ -75,14 +74,7 @@ namespace MsCrmTools.AuditCenter.Forms
                 item.Checked = ((Button)sender).Text == "Check All";
             }
 
-            if (((Button)sender).Text == "Check All")
-            {
-                ((Button)sender).Text = "Clear All";
-            }
-            else
-            {
-                ((Button)sender).Text = "Check All";
-            }
+            ((Button)sender).Text = ((Button)sender).Text == "Check All" ? "Clear All" : "Check All";
         }
 
         private void ListViewColumnClick(object sender, ColumnClickEventArgs e)

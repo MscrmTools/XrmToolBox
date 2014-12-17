@@ -5,15 +5,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using MscrmTools.SyncFilterManager.AppCode;
-using MscrmTools.SyncFilterManager.Controls;
 using MscrmTools.SyncFilterManager.Forms;
 using XrmToolBox;
 using XrmToolBox.Attributes;
@@ -27,22 +22,8 @@ using XrmToolBox.Attributes;
 
 namespace MscrmTools.SyncFilterManager
 {
-    public partial class MainControl : UserControl, IMsCrmToolsPluginUserControl
+    public partial class MainControl : PluginBase
     {
-        #region Variables
-
-        /// <summary>
-        /// Microsoft Dynamics CRM 2011 Organization Service
-        /// </summary>
-        private IOrganizationService service;
-
-        /// <summary>
-        /// Panel used to display progress information
-        /// </summary>
-        private Panel infoPanel;
-
-        #endregion Variables
-
         #region Constructor
 
         /// <summary>
@@ -54,26 +35,6 @@ namespace MscrmTools.SyncFilterManager
         }
 
         #endregion Constructor
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the organization service used by the tool
-        /// </summary>
-        public IOrganizationService Service
-        {
-            get { return service; }
-        }
-
-        /// <summary>
-        /// Gets the logo to display in the tools list
-        /// </summary>
-        public Image PluginLogo
-        {
-            get { return toolImageList.Images[0]; }
-        }
-
-        #endregion
 
         #region EventHandlers
 
@@ -91,50 +52,10 @@ namespace MscrmTools.SyncFilterManager
 
         #region Methods
 
-        /// <summary>
-        /// Updates the organization service used by the tool
-        /// </summary>
-        /// <param name="newService">Organization service</param>
-        /// <param name="actionName">Action that requested a service update</param>
-        /// <param name="parameter">Parameter passed when requesting a service update</param>
-        public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
-        {
-            service = newService;
-
-            crmUserList1.Service = service;
-            crmSystemViewsList.Service = service;
-            usersLocalDataRulesView.Service = service;
-            defaultLocalDataRulesView.Service = service;
-            systemRulesListView.Service = service;
-
-            switch (actionName)
-            {
-                case "crmSystemViewsList.LoadSystemViews":
-                    crmSystemViewsList.LoadSystemViews();
-                    break;
-                case "defaultLocalDataRulesView.LoadSystemViews":
-                    defaultLocalDataRulesView.LoadSystemViews();
-                    break;
-                case "usersLocalDataRulesView.LoadSystemViews":
-                    LoadUserLocalDataRules();
-                    break;
-                case "crmUserList1.Search":
-                    ((CrmUserList) parameter).Search();
-                    break;
-                case "LoadUserLocalDataRulesForUsers":
-                    LoadUserLocalDataRulesForUsers();
-                    break;
-                case "LoadSystemRules":
-                    LoadSystemRules();
-                    break;
-            }
-        }
 
         private void TsbCloseClick(object sender, EventArgs e)
         {
-            const string message = "Are your sure you want to close this tab?";
-            if (MessageBox.Show(message, "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                OnCloseTool(this, null);
+            CloseTool();
         }
 
         #endregion Methods
@@ -143,6 +64,12 @@ namespace MscrmTools.SyncFilterManager
 
         private void tsbResetUsersFiltersToDefault_Click(object sender, EventArgs e)
         {
+            ExecuteMethod(ResetUsersFiltersToDefault);
+        }
+
+        private void ResetUsersFiltersToDefault()
+        {
+            crmUserList1.Service = Service;
             var selectedUsers = crmUserList1.GetSelectedUsers();
 
             if (selectedUsers.Count == 0)
@@ -153,62 +80,39 @@ namespace MscrmTools.SyncFilterManager
             if (DialogResult.Yes ==
                 MessageBox.Show(this,
                 "This action will replace all synchronization rules for the selected user(s) with the organization’s default local data rules. Any user-created rules will be removed.\r\n\r\n(Note: Although there can be multiple filters per entity listed in the Default Local Data Rules, CRM only allows one rule per entity to have the “Is Default” attribute set to “True” - Only Default Local Data Rules where the “Is Default” attribute is “True” will be copied to the selected user.)\r\n\r\nDo you want to continue?",
-                //                    "This action will replace existing rule(s) for selected user(s) with default rule(s) defined as default\r\n\r\nDo you want to continue?",
                     "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
             {
                 tabCtrl.Enabled = false;
 
-                infoPanel = InformationPanel.GetInformationPanel(this, "Reseting users local data rules...", 340, 120);
+                WorkAsync("Reseting users local data rules...",
+                   (bw, e) =>
+                   {
+                       var rm = new RuleManager("userquery", Service);
+                       rm.ResetUsersRulesFromDefault((List<Entity>)e.Argument, bw);
+                   },
+                   e =>
+                   {
+                       if (e.Error != null)
+                       {
+                           MessageBox.Show(this, "Error while updating users Local Data Rules: " + e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                       }
 
-                var bwResetUsersFilter = new BackgroundWorker {WorkerReportsProgress = true};
-                bwResetUsersFilter.DoWork += bwResetUsersFilter_DoWork;
-                bwResetUsersFilter.ProgressChanged += bwResetUsersFilter_ProgressChanged;
-                bwResetUsersFilter.RunWorkerCompleted += bwResetUsersFilter_RunWorkerCompleted;
-                bwResetUsersFilter.RunWorkerAsync(selectedUsers);
+                       tabCtrl.Enabled = true;
+                   },
+                   e=>SetWorkingMessage(e.UserState.ToString()),
+                   selectedUsers);
             }
-        }
-
-        void bwResetUsersFilter_DoWork(object sender, DoWorkEventArgs e)
-        {
-            var rm = new RuleManager("userquery", service);
-            rm.ResetUsersRulesFromDefault((List<Entity>)e.Argument, (BackgroundWorker)sender);
-        }
-
-        void bwResetUsersFilter_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            InformationPanel.ChangeInformationPanelMessage(infoPanel, e.UserState.ToString());
-        }
-
-        void bwResetUsersFilter_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Controls.Remove(infoPanel);
-            infoPanel.Dispose();
-
-            if (e.Error != null)
-            {
-                MessageBox.Show(this, "Error while updating users Local Data Rules: " + e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            tabCtrl.Enabled = true;
         }
 
         private void crmUserList1_OnRequestConnection(object sender, EventArgs e)
         {
-            if (OnRequestConnection != null)
-            {
-                var args = new RequestConnectionEventArgs
-                {
-                    ActionName = "crmUserList1.Search",
-                    Control = this,
-                    Parameter = sender
-                };
-                OnRequestConnection(this, args);
-            }
-            else
-            {
-                MessageBox.Show(this, "OnRequestConnection event not registered!", "Error", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-            }
+            ExecuteMethod(SearchUsers);
+        }
+
+        private void SearchUsers()
+        {
+            crmUserList1.Service = Service;
+            crmUserList1.Search();
         }
 
         #endregion Users
@@ -217,27 +121,7 @@ namespace MscrmTools.SyncFilterManager
 
         private void tsbLoadUsersLocalDataRules_Click(object sender, EventArgs e)
         {
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs
-                    {
-                        ActionName = "usersLocalDataRulesView.LoadSystemViews",
-                        Control = this
-                    };
-                    OnRequestConnection(this, args);
-                }
-                else
-                {
-                    MessageBox.Show(this, "OnRequestConnection event not registered!", "Error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                LoadUserLocalDataRules();
-            }
+           ExecuteMethod(LoadUserLocalDataRules);
         }
 
         private void LoadUserLocalDataRules()
@@ -247,43 +131,24 @@ namespace MscrmTools.SyncFilterManager
                     "Depending on the number of users in your organization, it can take time to retrieve all users local data rules",
                     "Information", MessageBoxButtons.OK, MessageBoxIcon.Information))
             {
+                usersLocalDataRulesView.Service = Service;
                 usersLocalDataRulesView.DisplayOfflineFilter = chkDisplayOfflineFilters.Checked;
                 usersLocalDataRulesView.DisplayOutlookFilter = chkDisplayOutlookFilters.Checked;
-
                 usersLocalDataRulesView.LoadSystemViews();
             }
         }
 
         private void forSpecificUsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs
-                    {
-                        ActionName = "LoadUserLocalDataRulesForUsers",
-                        Control = this
-                    };
-                    OnRequestConnection(this, args);
-                }
-                else
-                {
-                    MessageBox.Show(this, "OnRequestConnection event not registered!", "Error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                LoadUserLocalDataRulesForUsers();
-            }
+           ExecuteMethod(LoadUserLocalDataRulesForUsers);
         }
 
         private void LoadUserLocalDataRulesForUsers()
         {
-            var usDialog = new UserSelectionDialog(service);
+            var usDialog = new UserSelectionDialog(Service);
             if (usDialog.ShowDialog(this) == DialogResult.OK)
             {
+                usersLocalDataRulesView.Service = Service;
                 usersLocalDataRulesView.DisplayOfflineFilter = chkDisplayOfflineFilters.Checked;
                 usersLocalDataRulesView.DisplayOutlookFilter = chkDisplayOutlookFilters.Checked;
                 usersLocalDataRulesView.LoadSystemViews(usDialog.SelectedUsers);
@@ -330,31 +195,12 @@ namespace MscrmTools.SyncFilterManager
 
         private void tsbLoadSystemSynchronizationFilter_Click(object sender, EventArgs e)
         {
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs
-                    {
-                        ActionName = "LoadSystemRules",
-                        Control = this
-                    };
-                    OnRequestConnection(this, args);
-                }
-                else
-                {
-                    MessageBox.Show(this, "OnRequestConnection event not registered!", "Error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                LoadSystemRules();
-            }
+            ExecuteMethod(LoadSystemRules);
         }
 
         private void LoadSystemRules()
         {
+            systemRulesListView.Service = Service;
             systemRulesListView.LoadSystemViews();
         }
 
@@ -364,30 +210,16 @@ namespace MscrmTools.SyncFilterManager
 
         private void tsbLoadDefaultLocalDataRules_Click(object sender, EventArgs e)
         {
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs
-                    {
-                        ActionName = "defaultLocalDataRulesView.LoadSystemViews",
-                        Control = this
-                    };
-                    OnRequestConnection(this, args);
-                }
-                else
-                {
-                    MessageBox.Show(this, "OnRequestConnection event not registered!", "Error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                defaultLocalDataRulesView.LoadSystemViews();
+            ExecuteMethod(LoadDefaultLocalDataRules);
+        }
 
-                chkDisplayOfflineFilters.Enabled = true;
-                chkDisplayOutlookFilters.Enabled = true;
-            }
+        private void LoadDefaultLocalDataRules()
+        {
+            defaultLocalDataRulesView.Service = Service;
+            defaultLocalDataRulesView.LoadSystemViews();
+
+            chkDisplayOfflineFilters.Enabled = true;
+            chkDisplayOutlookFilters.Enabled = true;
         }
 
         private void tsbDefaultDelete_Click(object sender, EventArgs e)
@@ -409,27 +241,13 @@ namespace MscrmTools.SyncFilterManager
 
         private void tsbLoadSystemViews_Click(object sender, EventArgs e)
         {
-            if (service == null)
-            {
-                if (OnRequestConnection != null)
-                {
-                    var args = new RequestConnectionEventArgs
-                    {
-                        ActionName = "crmSystemViewsList.LoadSystemViews",
-                        Control = this
-                    };
-                    OnRequestConnection(this, args);
-                }
-                else
-                {
-                    MessageBox.Show(this, "OnRequestConnection event not registered!", "Error", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                crmSystemViewsList.LoadSystemViews();
-            }
+            ExecuteMethod(LoadSystemViews);
+        }
+
+        private void LoadSystemViews()
+        {
+            crmSystemViewsList.Service = Service;
+            crmSystemViewsList.LoadSystemViews();
         }
 
         private void tsmiCreateSystemFilterFromView_Click(object sender, EventArgs e)
@@ -532,5 +350,7 @@ namespace MscrmTools.SyncFilterManager
         {
             crmUserList1.ReplaceUserFilters();
         }
+
+      
     }
 }

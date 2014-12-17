@@ -197,6 +197,8 @@ namespace MsCrmTools.RoleUpdater.Controls
                         x => x["name"].ToString().ToLower().IndexOf(filterTerm.ToLower(), StringComparison.Ordinal) >= 0);
             }
 
+            var items = new List<ListViewItem>();
+
             foreach (var privilege in privileges)
             {
                 var groupName = string.Empty;
@@ -253,9 +255,10 @@ namespace MsCrmTools.RoleUpdater.Controls
                 if (entitySchemaName != null)
                     item.Text = item.Text.Replace(entitySchemaName, "");
 
-                ListViewDelegates.AddItem(lvPrivileges, item);
+                items.Add(item);
             }
 
+            ListViewDelegates.AddRange(lvPrivileges, items);
             ListViewDelegates.SortGroup(lvPrivileges, true);
             ListViewDelegates.Sort(lvPrivileges, true);
         }

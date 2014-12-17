@@ -68,8 +68,8 @@ namespace MsCrmTools.AccessChecker.Forms
 
             foreach (var user in users)
             {
-                var item = new ListViewItem(user["lastname"].ToString()) { Tag = user.Id};
-                item.SubItems.Add(user["firstname"].ToString());
+                var item = new ListViewItem(user.GetAttributeValue<string>("lastname")) { Tag = user.Id};
+                item.SubItems.Add(user.GetAttributeValue<string>("firstname"));
                 item.ImageIndex = 0;
                 lvUsers.Items.Add(item);
             }
@@ -110,15 +110,7 @@ namespace MsCrmTools.AccessChecker.Forms
 
         private void LvUsersColumnClick(object sender, ColumnClickEventArgs e)
         {
-            if (lvUsers.Sorting == SortOrder.Ascending)
-            {
-                lvUsers.Sorting = SortOrder.Descending;
-            }
-            else
-            {
-                lvUsers.Sorting = SortOrder.Ascending;
-            }
-
+            lvUsers.Sorting = lvUsers.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
             lvUsers.ListViewItemSorter = new ListViewItemComparer(e.Column, lvUsers.Sorting);
         }
     }

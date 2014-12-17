@@ -67,10 +67,17 @@ namespace MsCrmTools.AccessChecker.Forms
             foreach (XmlNode cell in layout.SelectNodes("//cell"))
             {
                 var ch = new ColumnHeader();
-                ch.Text =
-                    metadata.Attributes.First(a => a.LogicalName == cell.Attributes["name"].Value)
+                try
+                {
+                    ch.Text =
+                        metadata.Attributes.First(a => a.LogicalName == cell.Attributes["name"].Value)
                             .DisplayName.UserLocalizedLabel.Label;
-                ch.Width = int.Parse(cell.Attributes["width"].Value);
+                    ch.Width = int.Parse(cell.Attributes["width"].Value);
+                }
+                catch
+                {
+                    ch.Text = cell.Attributes["name"].Value;
+                }
                 lvResults.Columns.Add(ch);
             }
         }
@@ -221,15 +228,7 @@ namespace MsCrmTools.AccessChecker.Forms
 
         private void LvResultsColumnClick(object sender, ColumnClickEventArgs e)
         {
-            if (lvResults.Sorting == SortOrder.Ascending)
-            {
-                lvResults.Sorting = SortOrder.Descending;
-            }
-            else
-            {
-                lvResults.Sorting = SortOrder.Ascending;
-            }
-
+            lvResults.Sorting = lvResults.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
             lvResults.ListViewItemSorter = new ListViewItemComparer(e.Column, lvResults.Sorting);
         }
 
