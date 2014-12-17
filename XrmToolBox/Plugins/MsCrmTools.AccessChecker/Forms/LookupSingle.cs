@@ -67,10 +67,17 @@ namespace MsCrmTools.AccessChecker.Forms
             foreach (XmlNode cell in layout.SelectNodes("//cell"))
             {
                 var ch = new ColumnHeader();
-                ch.Text =
-                    metadata.Attributes.First(a => a.LogicalName == cell.Attributes["name"].Value)
+                try
+                {
+                    ch.Text =
+                        metadata.Attributes.First(a => a.LogicalName == cell.Attributes["name"].Value)
                             .DisplayName.UserLocalizedLabel.Label;
-                ch.Width = int.Parse(cell.Attributes["width"].Value);
+                    ch.Width = int.Parse(cell.Attributes["width"].Value);
+                }
+                catch
+                {
+                    ch.Text = cell.Attributes["name"].Value;
+                }
                 lvResults.Columns.Add(ch);
             }
         }
