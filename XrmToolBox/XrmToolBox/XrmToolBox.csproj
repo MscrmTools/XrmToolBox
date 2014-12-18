@@ -51,7 +51,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>favicon3Fr.ico</ApplicationIcon>
+    <ApplicationIcon>XrmToolBox.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
@@ -115,14 +115,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractControlDescriptionProvider.cs" />
+    <Compile Include="AppCode\CodePlexInformation.cs" />
     <Compile Include="Attributes\AssemblyAttributeHelper.cs" />
     <Compile Include="Attributes\BackgroundColorAttribute.cs" />
     <Compile Include="Attributes\BigImageBase64Attribute.cs" />
     <Compile Include="Attributes\SmallImageBase64Attribute.cs" />
     <Compile Include="Attributes\SecondaryFontColorAttribute.cs" />
     <Compile Include="Attributes\PrimaryFontColorAttribute.cs" />
+    <Compile Include="Forms\NewVersionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NewVersionForm.Designer.cs">
+      <DependentUpon>NewVersionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AppCode\CodePlexInfoRetrievedEventArgs.cs" />
+    <Compile Include="Forms\WelcomeDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WelcomeDialog.Designer.cs">
+      <DependentUpon>WelcomeDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="PluginCloseInfo.cs" />
-    <Compile Include="CodeplexVersionChecker.cs" />
+    <Compile Include="AppCode\CodeplexVersionChecker.cs" />
     <Compile Include="CrmExceptionHelper.cs" />
     <Compile Include="ExternalMethodCallerInfo.cs" />
     <Compile Include="Forms\AboutForm.cs">
@@ -174,6 +188,9 @@
     <Compile Include="Forms\TabConnectionUpdater.Designer.cs">
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </Compile>
+    <Compile Include="ToolStripRateControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserControls\SmallPluginLabel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -194,11 +211,17 @@
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NewVersionForm.resx">
+      <DependentUpon>NewVersionForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SupportScreen.resx">
       <DependentUpon>SupportScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\OptionsDialog.resx">
       <DependentUpon>OptionsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WelcomeDialog.resx">
+      <DependentUpon>WelcomeDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\WelcomeScreen.resx">
       <DependentUpon>WelcomeScreen.cs</DependentUpon>
@@ -237,6 +260,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon3Fr.ico" />
+    <Content Include="XrmToolBox.ico" />
+    <EmbeddedResource Include="Images\emptystar.png" />
+    <EmbeddedResource Include="Images\fullstar.png" />
+    <EmbeddedResource Include="Images\mediumstar.png" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />
     <EmbeddedResource Include="Images\progress.gif" />

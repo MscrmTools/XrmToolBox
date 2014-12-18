@@ -4,7 +4,10 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace XrmToolBox
@@ -30,7 +33,8 @@ namespace XrmToolBox
             }
             catch (Exception error)
             {
-                MessageBox.Show("An unexpected error occured: " + error, "Error", MessageBoxButtons.OK,
+                const string lockedMessage = "One reason can be that at least one file is locked by Windows. Please unlock each locked files or unlock XrmToolBox.zip before extracting its content";
+                MessageBox.Show("An unexpected error occured: " + error + "\r\n\r\n" + lockedMessage, "Error", MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
             }
         }
@@ -47,12 +51,21 @@ namespace XrmToolBox
             {
                 if (
                     MessageBox.Show(
-                        "Unable to find Windows Identity Foundation 3.5 on this computer\r\n\r\nThis program may not work properly.\r\n\r\nDo you want to continue?",
-                        "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                        "Unable to find Windows Identity Foundation 3.5 on this computer\r\n\r\nThis program cannot work properly.\r\n\r\nDo you want to display information on how to install this required component on your computer?",
+                        "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
                 {
-                    return false;
+                    if (Environment.OSVersion.Version.Major > 6 ||
+                        Environment.OSVersion.Version.Major == 6 && Environment.OSVersion.Version.Minor > 1)
+                    {
+                        Process.Start("http://blogs.technet.com/b/tvishnun1/archive/2012/06/12/windows-identity-foundation-in-windows-8.aspx");
+                    }
+                    else
+                    {
+                        Process.Start("http://support.microsoft.com/kb/974405");
+                    }
                 }
-                return true;
+
+                return false;
             }
         }
     }
