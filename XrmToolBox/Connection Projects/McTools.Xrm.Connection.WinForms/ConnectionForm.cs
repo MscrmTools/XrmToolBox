@@ -84,8 +84,6 @@ namespace McTools.Xrm.Connection.WinForms
             tip.SetToolTip(tbHomeRealmUrl, "(Optional) In specific case, you should need to specify the home realm url to authenticate through ADFS");
             // allows for validation of SSL conversations
             ServicePointManager.ServerCertificateValidationCallback += ValidateRemoteCertificate;
-
-
         }
 
         // callback used to validate the certificate in an SSL conversation
@@ -123,19 +121,23 @@ namespace McTools.Xrm.Connection.WinForms
         {
             if (tbName.Text.Length == 0)
             {
-                MessageBox.Show(this, "You must define a name for this connection!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, "You must define a name for this connection!", "Warning", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
-            if (proposeToConnect && comboBoxOrganizations.Text.Length == 0 && comboBoxOrganizations.SelectedItem == null && !(cbUseIfd.Checked || cbUseOSDP.Checked))
+            if (proposeToConnect && comboBoxOrganizations.Text.Length == 0 && comboBoxOrganizations.SelectedItem == null &&
+                !(cbUseIfd.Checked || cbUseOSDP.Checked))
             {
-                MessageBox.Show(this, "You must select an organization!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, "You must select an organization!", "Warning", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
             if (tbUserPassword.Text.Length == 0 && (cbUseIfd.Checked || rbAuthenticationCustom.Checked))
             {
-                MessageBox.Show(this, "You must define a password!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, "You must define a password!", "Warning", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
                 return;
             }
 
@@ -148,7 +150,9 @@ namespace McTools.Xrm.Connection.WinForms
             detail.UseSsl = cbUseSsl.Checked;
             detail.UseOnline = cbUseOnline.Checked;
             detail.UseOsdp = cbUseOSDP.Checked;
-            detail.ServerName = (cbUseOSDP.Checked || cbUseOnline.Checked) ? cbbOnlineEnv.SelectedItem.ToString() : tbServerName.Text;
+            detail.ServerName = (cbUseOSDP.Checked || cbUseOnline.Checked)
+                ? cbbOnlineEnv.SelectedItem.ToString()
+                : tbServerName.Text;
             detail.ServerPort = tbServerPort.Text;
             detail.UserDomain = tbUserDomain.Text;
             detail.UserName = tbUserLogin.Text;
@@ -160,13 +164,16 @@ namespace McTools.Xrm.Connection.WinForms
             TimeSpan timeOut;
             if (!TimeSpan.TryParse(tbTimeoutValue.Text, CultureInfo.InvariantCulture, out timeOut))
             {
-                   MessageBox.Show(this, "Wrong timeout value!\r\n\r\nExpected format : HH:mm:ss", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(this, "Wrong timeout value!\r\n\r\nExpected format : HH:mm:ss", "Warning",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
-         }
+            }
 
             detail.Timeout = timeOut;
 
-            OrganizationDetail selectedOrganization = comboBoxOrganizations.SelectedItem != null ? ((Organization)comboBoxOrganizations.SelectedItem).OrganizationDetail : null;
+            OrganizationDetail selectedOrganization = comboBoxOrganizations.SelectedItem != null
+                ? ((Organization) comboBoxOrganizations.SelectedItem).OrganizationDetail
+                : null;
             if (selectedOrganization != null)
             {
                 detail.OrganizationServiceUrl = selectedOrganization.Endpoints[EndpointType.OrganizationService];
@@ -195,7 +202,18 @@ namespace McTools.Xrm.Connection.WinForms
             }
             catch (Exception error)
             {
-                MessageBox.Show(this, error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (detail.OrganizationServiceUrl != null && detail.OrganizationServiceUrl.IndexOf(detail.ServerName, StringComparison.Ordinal) < 0)
+                {
+                    var uri = new Uri(detail.OrganizationServiceUrl);
+                    var hostName = uri.Host;
+
+                    const string format = "The server name you provided ({0}) is not the same as the one defined in deployment manager ({1}). Please make sure that the server name defined in deployment manager is reachable from you computer.\r\n\r\nError:\r\n{2}";
+                    MessageBox.Show(this, string.Format(format, detail.ServerName, hostName,error.Message), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBox.Show(this, error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
