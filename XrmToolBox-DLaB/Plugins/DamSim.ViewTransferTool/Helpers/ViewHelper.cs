@@ -6,7 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Xml;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -103,13 +105,22 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
             }
         }
 
-        public static List<Tuple<string, string>> TransferViews(List<Entity> sourceViews, IOrganizationService targetService, EntityMetadata savedQueryMetadata)
+        public static List<Tuple<string, string>> TransferViews(List<Entity> sourceViews, IOrganizationService sourceService, IOrganizationService targetService, EntityMetadata savedQueryMetadata)
         {
             var errors = new List<Tuple<string, string>>();
             try
             {
                 foreach (var sourceView in sourceViews)
                 {
+                    // Identifiy ownerid domainname if userquery
+                    string userDomainName = null;
+                    if (sourceView.LogicalName == "userquery")
+                    {
+                        var sourceUser = sourceService.Retrieve("systemuser", sourceView.GetAttributeValue<EntityReference>("ownerid").Id,
+                            new ColumnSet("domainname"));
+                        userDomainName = sourceUser.GetAttributeValue<string>("domainname");
+                    }
+
                     var targetViewQuery = new QueryExpression(sourceView.LogicalName);
                     targetViewQuery.ColumnSet = new ColumnSet { AllColumns = true };
                     targetViewQuery.Criteria.AddCondition(sourceView.LogicalName + "id", ConditionOperator.Equal, sourceView.Id);
@@ -136,6 +147,35 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
                     {
                         // We need to create the view
                         var targetView = CleanEntityForCreate(savedQueryMetadata, sourceView);
+
+                        if (targetView.LogicalName == "userquery")
+                        {
+                            // Let's find the user based on systemuserid or domainname
+                            var targetUser = targetService.RetrieveMultiple(new QueryExpression("systemuser")
+                            {
+                                Criteria = new FilterExpression(LogicalOperator.Or)
+                                {
+                                    Conditions =
+                                    {
+                                        new ConditionExpression("domainname", ConditionOperator.Equal, userDomainName ?? "dummyValueNotExpectedAsDomainNameToAvoidSystemAccount"),
+                                        new ConditionExpression("systemuserid", ConditionOperator.Equal,
+                                            sourceView.GetAttributeValue<EntityReference>("ownerid").Id),
+                                    }
+                                }
+                            }).Entities.FirstOrDefault();
+
+                            if (targetUser != null)
+                            {
+                                targetView["ownerid"] = targetUser.ToEntityReference();
+                            }
+                            else
+                            {
+                                throw new Exception(string.Format(
+                                    "Unable to find a user in the target organization with domain name '{0}' or id '{1}'",
+                                    userDomainName,
+                                    sourceView.GetAttributeValue<EntityReference>("ownerid").Id));
+                            }
+                        }
 
                         // Replace ObjectTypeCode in layoutXml
                         ReplaceLayoutXmlObjectTypeCode(targetView, targetService); 

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XrmToolBox</RootNamespace>
     <AssemblyName>XrmToolBox</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -30,6 +30,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -40,6 +41,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -49,9 +52,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>favicon3Fr.ico</ApplicationIcon>
+    <ApplicationIcon>XrmToolBox.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
@@ -65,17 +69,18 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Crm.Sdk.Proxy">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Xrm.Client">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Xrm.Sdk">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
@@ -115,14 +120,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractControlDescriptionProvider.cs" />
+    <Compile Include="AppCode\CodePlexInformation.cs" />
     <Compile Include="Attributes\AssemblyAttributeHelper.cs" />
     <Compile Include="Attributes\BackgroundColorAttribute.cs" />
     <Compile Include="Attributes\BigImageBase64Attribute.cs" />
     <Compile Include="Attributes\SmallImageBase64Attribute.cs" />
     <Compile Include="Attributes\SecondaryFontColorAttribute.cs" />
     <Compile Include="Attributes\PrimaryFontColorAttribute.cs" />
+    <Compile Include="Forms\NewVersionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NewVersionForm.Designer.cs">
+      <DependentUpon>NewVersionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AppCode\CodePlexInfoRetrievedEventArgs.cs" />
+    <Compile Include="Forms\WelcomeDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WelcomeDialog.Designer.cs">
+      <DependentUpon>WelcomeDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="PluginCloseInfo.cs" />
-    <Compile Include="CodeplexVersionChecker.cs" />
+    <Compile Include="AppCode\CodeplexVersionChecker.cs" />
     <Compile Include="CrmExceptionHelper.cs" />
     <Compile Include="ExternalMethodCallerInfo.cs" />
     <Compile Include="Forms\AboutForm.cs">
@@ -174,6 +193,9 @@
     <Compile Include="Forms\TabConnectionUpdater.Designer.cs">
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </Compile>
+    <Compile Include="ToolStripRateControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UserControls\SmallPluginLabel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -194,11 +216,17 @@
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NewVersionForm.resx">
+      <DependentUpon>NewVersionForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\SupportScreen.resx">
       <DependentUpon>SupportScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\OptionsDialog.resx">
       <DependentUpon>OptionsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WelcomeDialog.resx">
+      <DependentUpon>WelcomeDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\WelcomeScreen.resx">
       <DependentUpon>WelcomeScreen.cs</DependentUpon>
@@ -214,6 +242,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Forms\TabConnectionUpdater.resx">
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
@@ -224,7 +253,9 @@
     <EmbeddedResource Include="UserControls\PluginModel.resx">
       <DependentUpon>PluginModel.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -237,6 +268,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon3Fr.ico" />
+    <Content Include="XrmToolBox.ico" />
+    <EmbeddedResource Include="Images\emptystar.png" />
+    <EmbeddedResource Include="Images\fullstar.png" />
+    <EmbeddedResource Include="Images\mediumstar.png" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />
     <EmbeddedResource Include="Images\progress.gif" />

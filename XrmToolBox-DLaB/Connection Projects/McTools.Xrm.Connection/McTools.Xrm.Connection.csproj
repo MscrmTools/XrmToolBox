@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>McTools.Xrm.Connection</RootNamespace>
     <AssemblyName>McTools.Xrm.Connection</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkProfile />
@@ -41,6 +41,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -49,6 +50,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Without GemBox|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -58,6 +60,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
@@ -69,35 +72,14 @@
     <Reference Include="Microsoft.Xrm.Sdk">
       <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk.Deployment">
-      <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Services" />
-    <Reference Include="System.Data.Services.Client" />
-    <Reference Include="System.Design" />
-    <Reference Include="System.DirectoryServices" />
-    <Reference Include="System.DirectoryServices.AccountManagement" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.IdentityModel" />
-    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -130,34 +112,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\Debug\antixsslibrary.dll" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.dll" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.pdb" />
-    <Content Include="bin\Debug\microsoft.crm.outlook.sdk.dll" />
-    <Content Include="bin\Debug\microsoft.crm.sdk.proxy.dll" />
-    <Content Include="bin\Debug\microsoft.crm.tools.emailproviders.dll" />
-    <Content Include="bin\Debug\Microsoft.IdentityModel.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.client.codegeneration.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.client.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.portal.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.portal.files.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.sdk.deployment.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.sdk.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.sdk.workflow.dll" />
-    <Content Include="bin\Debug\pluginprofiler.library.dll" />
-    <Content Include="bin\Debug\pluginprofiler.plugins.dll" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.dll" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.pdb" />
-    <Content Include="bin\Release\microsoft.crm.sdk.proxy.dll" />
-    <Content Include="bin\Release\microsoft.xrm.client.dll" />
-    <Content Include="bin\Release\microsoft.xrm.sdk.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\tools\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

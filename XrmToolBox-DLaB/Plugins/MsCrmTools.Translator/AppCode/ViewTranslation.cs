@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Windows.Forms;
 using GemBox.Spreadsheet;
 using Microsoft.Crm.Sdk;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
@@ -28,55 +30,59 @@ namespace MsCrmTools.Translator.AppCode
 
             AddHeader(sheet, languages);
 
-            var qe = new QueryExpression("usersettings");
-            qe.ColumnSet = new ColumnSet(new[]{"uilanguageid","localeid"});
-            qe.Criteria= new FilterExpression();
-            qe.Criteria.AddCondition("systemuserid", ConditionOperator.EqualUserId);
-            var settings = service.RetrieveMultiple(qe);
-            var userSettingLcid = settings[0].GetAttributeValue<int>("uilanguageid");
-            var currentSetting = userSettingLcid;
-
             var crmViews = new List<CrmView>();
 
-            foreach (var lcid in languages)
+            foreach (var entity in entities.OrderBy(e => e.LogicalName))
             {
-                if (userSettingLcid != lcid)
+                if (!entity.MetadataId.HasValue)
+                    continue;
+
+                var views = RetrieveViews(entity.LogicalName, entity.ObjectTypeCode.Value, service);
+
+                foreach (var view in views)
                 {
-                    settings[0]["localeid"] = lcid;
-                    settings[0]["uilanguageid"] = lcid;
-                    service.Update(settings[0]);
-                    currentSetting = lcid;
-                }
-
-                foreach (var entity in entities.OrderBy(e => e.LogicalName))
-                {
-                    if (!entity.MetadataId.HasValue)
-                        continue;
-
-                    var views = RetrieveViews(entity.LogicalName, entity.ObjectTypeCode.Value, service);
-
-                    foreach (var view in views)
+                    var crmView = crmViews.FirstOrDefault(cv => cv.Id == view.Id);
+                    if (crmView == null)
                     {
-                        var crmView = crmViews.FirstOrDefault(cv => cv.Id == view.Id);
-                        if (crmView == null)
+                        crmView = new CrmView
                         {
-                            crmView = new CrmView
-                                          {
-                                              Id = view.Id,
-                                              Entity = view.GetAttributeValue<string>("returnedtypecode"),
-                                              Type = view.GetAttributeValue<int>("querytype"),
-                                              Names = new Dictionary<int, string>(),
-                                              Descriptions = new Dictionary<int, string>()
-                                          };
-                            crmViews.Add(crmView);
-                        }
+                            Id = view.Id,
+                            Entity = view.GetAttributeValue<string>("returnedtypecode"),
+                            Type = view.GetAttributeValue<int>("querytype"),
+                            Names = new Dictionary<int, string>(),
+                            Descriptions = new Dictionary<int, string>()
+                        };
+                        crmViews.Add(crmView);
+                    }
 
-                        crmView.Names.Add(lcid, view.GetAttributeValue<string>("name"));
-                        crmView.Descriptions.Add(lcid, view.GetAttributeValue<string>("description"));
+                    // Names
+                    var request = new RetrieveLocLabelsRequest
+                    {
+                        AttributeName = "name",
+                        EntityMoniker = new EntityReference("savedquery", view.Id)
+                    };
+
+                    var response = (RetrieveLocLabelsResponse) service.Execute(request);
+                    foreach (var locLabel in response.Label.LocalizedLabels)
+                    {
+                        crmView.Names.Add(locLabel.LanguageCode, locLabel.Label);
+                    }
+
+                    // Descriptions
+                    request = new RetrieveLocLabelsRequest
+                    {
+                        AttributeName = "description",
+                        EntityMoniker = new EntityReference("savedquery", view.Id)
+                    };
+
+                    response = (RetrieveLocLabelsResponse)service.Execute(request);
+                    foreach (var locLabel in response.Label.LocalizedLabels)
+                    {
+                        crmView.Descriptions.Add(locLabel.LanguageCode, locLabel.Label);
                     }
                 }
             }
-
+            
             foreach (var crmView in crmViews.OrderBy(cv=>cv.Entity).ThenBy(cv=>cv.Type))
             {
                 var cell = 0;
@@ -87,7 +93,13 @@ namespace MsCrmTools.Translator.AppCode
 
                 foreach (var lcid in languages)
                 {
-                    sheet.Cells[line, cell++].Value = crmView.Names.First(n => n.Key == lcid).Value;
+                    var name = crmView.Names.FirstOrDefault(n => n.Key == lcid);
+                    if(name.Value != null)
+                        sheet.Cells[line, cell++].Value = name.Value;
+                    else
+                    {
+                        cell++;
+                    }
                 }
 
                 line++;
@@ -99,7 +111,13 @@ namespace MsCrmTools.Translator.AppCode
 
                 foreach (var lcid in languages)
                 {
-                    sheet.Cells[line, cell++].Value = crmView.Descriptions.First(n => n.Key == lcid).Value;
+                    var desc = crmView.Descriptions.FirstOrDefault(n => n.Key == lcid);
+                    if (desc.Value != null)
+                        sheet.Cells[line, cell++].Value = desc.Value;
+                    else
+                    {
+                        cell++;
+                    }
                 }
                 line++;
             }
@@ -118,13 +136,6 @@ namespace MsCrmTools.Translator.AppCode
                     sheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
                 }
             }
-
-            if (userSettingLcid != currentSetting)
-            {
-                settings[0]["localeid"] = userSettingLcid;
-                settings[0]["uilanguageid"] = userSettingLcid;
-                service.Update(settings[0]);
-            }
         }
 
         public void Import(ExcelWorksheet sheet, IOrganizationService service)
@@ -134,67 +145,28 @@ namespace MsCrmTools.Translator.AppCode
             foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
             {
                 var currentViewId = new Guid(row.Cells[0].Value.ToString());
+                var request = new SetLocLabelsRequest
+                {
+                    EntityMoniker = new EntityReference("savedquery", currentViewId),
+                    AttributeName = row.Cells[3].Value.ToString() == "Name" ? "name" : "description"
+                };
+                
+                var labels = new List<LocalizedLabel>();
+
                 var columnIndex = 4;
                 while (row.Cells[columnIndex].Value != null)
                 {
                     var currentLcid = int.Parse(sheet.Cells[0, columnIndex].Value.ToString());
-                    var viewRecord = views.FirstOrDefault(t => t.Item1 == currentLcid && t.Item2.Id == currentViewId);
-                    if (viewRecord == null)
-                    {
-                        viewRecord = new Tuple<int, Entity>(currentLcid, new Entity("savedquery") { Id = currentViewId });
-                        views.Add(viewRecord);
-                    }
-
-                    if (row.Cells[3].Value.ToString() == "Name")
-                    {
-                        viewRecord.Item2["name"] = row.Cells[columnIndex].Value.ToString();
-                    }
-                    else if (row.Cells[3].Value.ToString() == "Description")
-                    {
-                        viewRecord.Item2["description"] = row.Cells[columnIndex].Value.ToString();
-                    }
-
+                    labels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(),currentLcid));
                     columnIndex++;
                 }
-            }
 
-            // Retrieve current user language inviewation
-            var qe = new QueryExpression("usersettings");
-            qe.ColumnSet = new ColumnSet(new[] { "uilanguageid", "localeid" });
-            qe.Criteria = new FilterExpression();
-            qe.Criteria.AddCondition("systemuserid", ConditionOperator.EqualUserId);
-            var settings = service.RetrieveMultiple(qe);
-            var userSettingLcid = settings[0].GetAttributeValue<int>("uilanguageid");
-            var currentSetting = userSettingLcid;
+                request.Labels = labels.ToArray();
 
-            var languages = views.Select(f => f.Item1).Distinct().ToList();
-            foreach (var lcid in languages)
-            {
-                // Define correct user language for update
-                if (userSettingLcid != lcid)
-                {
-                    settings[0]["localeid"] = lcid;
-                    settings[0]["uilanguageid"] = lcid;
-                    service.Update(settings[0]);
-                    currentSetting = lcid;
-                }
-
-                foreach (var view in views.Where(f => f.Item1 == lcid))
-                {
-                    service.Update(view.Item2);
-                }
-            }
-
-            // Reinit user language
-            if (userSettingLcid != currentSetting)
-            {
-                settings[0]["localeid"] = userSettingLcid;
-                settings[0]["uilanguageid"] = userSettingLcid;
-                service.Update(settings[0]);
+                service.Execute(request);
             }
         }
-
-
+        
         private void AddHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
         {
             var cell = 0;
@@ -217,7 +189,6 @@ namespace MsCrmTools.Translator.AppCode
                 var qba = new QueryByAttribute
                 {
                     EntityName = "savedquery",
-                    ColumnSet = new ColumnSet(true)
                 };
 
                 qba.Attributes.Add("returnedtypecode");

@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Threading;
 using System.Windows.Forms;
 
-namespace XrmToolBox
+namespace XrmToolBox.AppCode
 {
     internal class CodeplexVersionChecker
     {
-        private readonly Form currentForm;
-        private readonly string currentVersion;
         private readonly int currentMajorVersion;
         private readonly int currentMinorVersion;
         private readonly int currentBuildVersion;
         private readonly int currentRevisionVersion;
-        private Thread th;
-        public CodeplexVersionChecker(string currentVersion, Form currentForm)
+        public CodeplexVersionChecker(string currentVersion)
         {
-            this.currentVersion = currentVersion;
-            this.currentForm = currentForm;
             var versionParts = currentVersion.Split('.');
             currentMajorVersion = int.Parse(versionParts[0]);
             currentMinorVersion = int.Parse(versionParts[1]);
@@ -25,17 +18,15 @@ namespace XrmToolBox
             currentRevisionVersion = int.Parse(versionParts[3]); 
         }
 
+        public const string NoReleaseDetails = "<div>No description</div>";
+
+        public event EventHandler OnCodePlexInforRetrieved;
+
         public void Run()
         {
-            th = new Thread(() =>
-            {
-                var mywebBrowser = new WebBrowser();
-                mywebBrowser.DocumentCompleted += mywebBrowser_DocumentCompleted;
-                mywebBrowser.Navigate("http://xrmtoolbox.codeplex.com/releases");
-                Application.Run();
-            });
-            th.SetApartmentState(ApartmentState.STA);
-            th.Start();
+            var mywebBrowser = new WebBrowser {ScriptErrorsSuppressed = true};
+            mywebBrowser.DocumentCompleted += mywebBrowser_DocumentCompleted;
+            mywebBrowser.Navigate("http://xrmtoolbox.codeplex.com/releases");
         }
 
         private void mywebBrowser_DocumentCompleted(Object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -44,7 +35,15 @@ namespace XrmToolBox
             var br = sender as WebBrowser;
             if (br.Url == e.Url)
             {
+                var cpi = new CodePlexInformation();
                 HtmlDocument doc = br.Document;
+                
+                HtmlElement rateTag = doc.GetElementById("releasecurrentRating");
+                cpi.Rate = rateTag == null ? doc.GetElementById("NoReviewsLabel").InnerText : rateTag.GetAttribute("value");
+
+                HtmlElement releaseNotesTag = doc.GetElementById("ReleaseNotes");
+                cpi.Description = releaseNotesTag != null ? releaseNotesTag.InnerHtml : NoReleaseDetails;
+
                 HtmlElementCollection tagCollection = doc.GetElementsByTagName("h1");
 
                 foreach (HtmlElement tag in tagCollection)
@@ -69,21 +68,15 @@ namespace XrmToolBox
                             currentMajorVersion == majorVersion && currentMinorVersion == minorVersion &&
                             currentBuildVersion == buildVersion && currentRevisionVersion < revisionVersion)
                         {
-                            if (DialogResult.Yes ==
-                                MessageBox.Show(currentForm,
-                                    "A new version of XrmToolBox is available!\r\n\r\nYour version: "+ currentVersion+"\r\nNew version: " + version + " \r\n\r\nWould you like to display the download page?",
-                                    "Update available", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
-                            {
-                                Process.Start("http://xrmtoolbox.codeplex.com/releases");
-                            }
+                            cpi.Version = version;
                         }
 
                         break;
                     }
                 }
-            }
 
-            th.Abort();
+                OnCodePlexInforRetrieved(this, new CodePlexInfoRetrievedEventArgs{Information = cpi});
+            }
         }
     }
 }

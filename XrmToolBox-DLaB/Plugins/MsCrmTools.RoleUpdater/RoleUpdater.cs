@@ -246,7 +246,17 @@ namespace MsCrmTools.RoleUpdater
         {
             pnlSteps.Controls.Clear();
             settings = new UpdateSettings();
-            var ctrl = new RoleSelectionControl(rManager.Roles, settings);
+            var ctrl = new RoleSelectionControl(rManager.Roles, settings)
+            {
+                Width = Width,
+                Height = Height - 50,
+                Anchor =
+                    AnchorStyles.Bottom |
+                    AnchorStyles.Left |
+                    AnchorStyles.Right |
+                    AnchorStyles.Top
+            };
+
             pnlSteps.Controls.Add(ctrl);
 
             btnPrevious.Visible = false;
