@@ -12,12 +12,13 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using McTools.Xrm.Connection;
 using McTools.Xrm.Connection.WinForms;
 using Microsoft.Xrm.Client;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
+using XrmToolBox.AppCode;
 using XrmToolBox.Attributes;
 using XrmToolBox.Forms;
 using XrmToolBox.UserControls;
@@ -28,11 +29,11 @@ namespace XrmToolBox
     {
         #region Variables
 
-        private readonly FormHelper fHelper;
+        private FormHelper fHelper;
 
-        private readonly ConnectionManager cManager;
+        private ConnectionManager cManager;
 
-        private readonly CrmConnectionStatusBar ccsb;
+        private CrmConnectionStatusBar ccsb;
 
         private IOrganizationService service;
 
@@ -41,6 +42,8 @@ namespace XrmToolBox
         private PluginManager pManager;
 
         private Options currentOptions;
+
+        private string currentReleaseNote;
 
         private Panel infoPanel;
 
@@ -51,137 +54,131 @@ namespace XrmToolBox
         public MainForm()
         {
             InitializeComponent();
+            MouseWheel += (sender, e) => HomePageTab.Focus();
 
             currentOptions = Options.Load();
-
-            Hide();
-            StartPosition = FormStartPosition.CenterScreen;
-
-            var welcomeWorker = new BackgroundWorker();
-            welcomeWorker.DoWork += welcomeWorker_DoWork;
-            welcomeWorker.RunWorkerCompleted += welcomeWorker_RunWorkerCompleted;
-            welcomeWorker.RunWorkerAsync();
-            
-            MouseWheel += MainFormMouseWheel;
-
             Text = string.Format("{0} (v{1})", Text, Assembly.GetExecutingAssembly().GetName().Version);
 
-            cManager = new ConnectionManager();
-            cManager.ConnectionFailed += CManagerConnectionFailed;
-            cManager.ConnectionSucceed += CManagerConnectionSucceed;
-            cManager.RequestPassword += CManagerRequestPassword;
-            cManager.StepChanged += CManagerStepChanged;
-            
-            fHelper = new FormHelper(this, cManager);
-
-            ccsb = new CrmConnectionStatusBar(cManager, fHelper);
-            ccsb.Dock = DockStyle.Bottom;
-
-            Controls.Add(ccsb);
-
+            Hide();
+            LaunchWelcomeMessage();
+            ManageConnectionControl();
             Show();
-
-            if (currentOptions.LastUpdateCheck.Date != DateTime.Now.Date)
-            {
-                var cvc = new CodeplexVersionChecker(Assembly.GetExecutingAssembly().GetName().Version.ToString(), this);
-                cvc.Run();
-                currentOptions.LastUpdateCheck = DateTime.Now;
-                currentOptions.Save();
-            }
-        }
-
-       
-        void welcomeWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            if (e.Error != null)
-            {
-                MessageBox.Show(e.Error.ToString());
-            }
-        }
-
-        void welcomeWorker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            var welcomeScreen = new WelcomeScreen { StartPosition = FormStartPosition.CenterScreen, MyParentForm = this};
-            welcomeScreen.ShowDialog();
-            welcomeScreen.Dispose();
-        }
-
-        void MainFormMouseWheel(object sender, MouseEventArgs e)
-        {
-            HomePageTab.Focus();
+            CheckForNewVersion();
         }
 
         #endregion Constructor
 
-        #region Connection methods
+        #region Initialization methods
 
-        private void CManagerStepChanged(object sender, StepChangedEventArgs e)
+        private void LaunchWelcomeMessage()
         {
-            ccsb.SetMessage(e.CurrentStep);
-        }
-
-        private bool CManagerRequestPassword(object sender, RequestPasswordEventArgs e)
-        {
-            return fHelper.RequestPassword(e.ConnectionDetail);
-        }
-
-        private void CManagerConnectionSucceed(object sender, ConnectionSucceedEventArgs e)
-        {
-            Controls.Remove(infoPanel);
-            if(infoPanel != null)infoPanel.Dispose();
-
-            currentConnectionDetail = e.ConnectionDetail;
-            service = e.OrganizationService;
-            ccsb.SetConnectionStatus(true, e.ConnectionDetail);
-            ccsb.SetMessage(string.Empty);
-
-            if (e.Parameter != null)
+            var welcomeWorker = new BackgroundWorker();
+            welcomeWorker.DoWork += (sender, e) =>
             {
-                var control = e.Parameter as UserControl;
-                if (control != null)
+                var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                var blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
+                blackScreen.ShowDialog();
+            };
+            welcomeWorker.RunWorkerCompleted += (sender, e) =>
+            {
+                if (e.Error != null)
                 {
-                    var realUserControl = control;
-                    DisplayPluginControl(realUserControl);
+                    MessageBox.Show(e.Error.ToString());
                 }
-                else if (e.Parameter.ToString() == "ApplyConnectionToTabs" && tabControl1.TabPages.Count > 1)
+            };
+            welcomeWorker.RunWorkerAsync();
+        }
+
+        private void ManageConnectionControl()
+        {
+            cManager = new ConnectionManager();
+            cManager.RequestPassword += (sender, e) => fHelper.RequestPassword(e.ConnectionDetail);
+            cManager.StepChanged += (sender, e) => ccsb.SetMessage(e.CurrentStep);
+            cManager.ConnectionSucceed += (sender, e) =>
+            {
+                Controls.Remove(infoPanel);
+                if (infoPanel != null) infoPanel.Dispose();
+
+                currentConnectionDetail = e.ConnectionDetail;
+                service = e.OrganizationService;
+                ccsb.SetConnectionStatus(true, e.ConnectionDetail);
+                ccsb.SetMessage(string.Empty);
+
+                if (e.Parameter != null)
+                {
+                    var control = e.Parameter as UserControl;
+                    if (control != null)
+                    {
+                        var realUserControl = control;
+                        DisplayPluginControl(realUserControl);
+                    }
+                    else if (e.Parameter.ToString() == "ApplyConnectionToTabs" && tabControl1.TabPages.Count > 1)
+                    {
+                        ApplyConnectionToTabs();
+                    }
+                    else
+                    {
+                        var args = e.Parameter as RequestConnectionEventArgs;
+                        if (args != null)
+                        {
+                            var userControl = (UserControl)args.Control;
+
+                            args.Control.UpdateConnection(e.OrganizationService, currentConnectionDetail, args.ActionName, args.Parameter);
+
+                            userControl.Parent.Text = string.Format("{0} ({1})",
+                                userControl.Parent.Text.Split(' ')[0],
+                                e.ConnectionDetail.ConnectionName);
+                        }
+                    }
+                }
+                else if (tabControl1.TabPages.Count > 1)
                 {
                     ApplyConnectionToTabs();
                 }
-                else
+            };
+            cManager.ConnectionFailed += (sender, e) =>
+            {
+                Controls.Remove(infoPanel);
+                if (infoPanel != null) infoPanel.Dispose();
+
+                MessageBox.Show(this, e.FailureReason, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                currentConnectionDetail = null;
+                service = null;
+                ccsb.SetConnectionStatus(false, null);
+                ccsb.SetMessage(e.FailureReason);
+            };
+            fHelper = new FormHelper(this, cManager);
+            ccsb = new CrmConnectionStatusBar(cManager, fHelper) { Dock = DockStyle.Bottom };
+            Controls.Add(ccsb);
+        }
+
+        private void CheckForNewVersion()
+        {
+            var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            var cvc = new CodeplexVersionChecker(currentVersion);
+            cvc.OnCodePlexInforRetrieved += (sender, e) =>
+            {
+                var info = (CodePlexInfoRetrievedEventArgs)e;
+                currentReleaseNote = info.Information.Rate;
+                toolStrip1.Items.Insert(10, new ToolStripRateControl(new RateControl(currentReleaseNote)));
+
+                if (!string.IsNullOrEmpty(info.Information.Version))
                 {
-                    var args = e.Parameter as RequestConnectionEventArgs;
-                    if (args != null)
+                    if (currentOptions.LastUpdateCheck.Date != DateTime.Now.Date)
                     {
-                        var userControl = (UserControl) args.Control;
-
-                        args.Control.UpdateConnection(e.OrganizationService, currentConnectionDetail, args.ActionName, args.Parameter);
-
-                        userControl.Parent.Text = string.Format("{0} ({1})",
-                            userControl.Parent.Text.Split(' ')[0],
-                            e.ConnectionDetail.ConnectionName);
+                        var nvForm = new NewVersionForm(currentVersion, info.Information.Version, info.Information.Description);
+                        nvForm.ShowDialog(this);
                     }
                 }
-            }
-            else if (tabControl1.TabPages.Count > 1)
-            {
-                ApplyConnectionToTabs();
-            }
+            };
+
+            cvc.Run();
+            currentOptions.LastUpdateCheck = DateTime.Now;
+            currentOptions.Save();
         }
 
-        private void CManagerConnectionFailed(object sender, ConnectionFailedEventArgs e)
-        {
-            Controls.Remove(infoPanel);
-            if (infoPanel != null) infoPanel.Dispose();
-            
-            MessageBox.Show(this, e.FailureReason, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            currentConnectionDetail = null;
-            service = null;
-            ccsb.SetConnectionStatus(false, null);
-            ccsb.SetMessage(e.FailureReason);
-        }
-
-        #endregion Connection methods
+        #endregion Initialization methods
 
         #region Form events
 
@@ -364,9 +361,9 @@ namespace XrmToolBox
 
                 if (service != null)
                 {
-                    var clonedService =
-                        new OrganizationService(
-                            CrmConnection.Parse(currentConnectionDetail.GetOrganizationCrmConnectionString()));
+                    var clonedService = new OrganizationService(CrmConnection.Parse(currentConnectionDetail.GetOrganizationCrmConnectionString()));
+                    ((OrganizationServiceProxy)clonedService.InnerService).SdkClientVersion = currentConnectionDetail.OrganizationVersion;
+
                     ((IMsCrmToolsPluginUserControl) pluginControl).UpdateConnection(clonedService,
                         currentConnectionDetail);
                 }
@@ -448,7 +445,7 @@ namespace XrmToolBox
 
                     if (displayAdvertisement)
                     {
-                        var sc = new SupportScreen();
+                        var sc = new SupportScreen(currentReleaseNote);
                         sc.ShowDialog(this);
                         currentOptions.LastAdvertisementDisplay = DateTime.Now;
                     }

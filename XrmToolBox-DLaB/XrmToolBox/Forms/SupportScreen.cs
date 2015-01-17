@@ -2,20 +2,27 @@
 // This project was developed by Tanguy Touzard
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
-
-using System;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace XrmToolBox.Forms
 {
     public partial class SupportScreen : Form
     {
-        public SupportScreen()
+        public SupportScreen(string codeplexNote)
         {
             InitializeComponent();
+
+            decimal rate;
+
+            if (decimal.TryParse(codeplexNote, out rate))
+            {
+                lblRateInfo.Text += string.Format(" (current note: {0} / 5)", rate.ToString("N2"));
+            }
+            else
+            {
+                lblRateInfo.Text += " (Not yet rated)";
+            }
         }
 
        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
