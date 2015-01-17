@@ -9,6 +9,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace XrmToolBox
 {
@@ -41,6 +42,42 @@ namespace XrmToolBox
 
         static bool CheckRequiredAssemblies()
         {
+            bool isMissingFramework452 = false;
+            try
+            {
+                RegistryKey key =
+                    Registry.LocalMachine.OpenSubKey("Software\\Microsoft\\Net Framework Setup\\NDP\\v4\\Client");
+                if (key != null)
+                {
+                    Object o = key.GetValue("Release");
+                    if ((int) o < 379893)
+                    {
+                        isMissingFramework452 = true;
+                    }
+                }
+                else
+                {
+                    isMissingFramework452 = true;
+                }
+
+            }
+            catch 
+            {
+                isMissingFramework452 = true;
+            }
+            finally
+            {
+                if (isMissingFramework452)
+                {
+                    if (MessageBox.Show(
+                            "Unable to find .Net Framework 4.5.2 on this computer\r\n\r\nThis program cannot work properly.\r\n\r\nDo you want to download .Net Framework 4.5.2?",
+                            "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+                    {
+                       Process.Start("http://www.microsoft.com/en-us/download/details.aspx?id=42643");
+                    }
+                }
+            }
+
             try
             {
                 Assembly.Load(
