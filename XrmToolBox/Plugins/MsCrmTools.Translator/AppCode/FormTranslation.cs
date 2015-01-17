@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using GemBox.Spreadsheet;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
@@ -58,23 +59,6 @@ namespace MsCrmTools.Translator.AppCode
 
                     foreach (var form in forms)
                     {
-                        var crmForm = crmForms.FirstOrDefault(f => f.FormUniqueId == form.GetAttributeValue<Guid>("formidunique"));
-                        if (crmForm == null)
-                        {
-                            crmForm = new CrmForm
-                                          {
-                                              FormUniqueId = form.GetAttributeValue<Guid>("formidunique"),
-                                              Id = form.GetAttributeValue<Guid>("formid"),
-                                              Entity = entity.LogicalName,
-                                              Names = new Dictionary<int, string>(),
-                                              Descriptions = new Dictionary<int, string>()
-                                          };
-                            crmForms.Add(crmForm);
-                        }
-
-                        crmForm.Names.Add(lcid, form.GetAttributeValue<string>("name"));
-                        crmForm.Descriptions.Add(lcid, form.GetAttributeValue<string>("description"));
-
                         #region Tabs
 
                         if (options.ExportFormTabs || options.ExportFormSections || options.ExportFormFields)
@@ -126,6 +110,59 @@ namespace MsCrmTools.Translator.AppCode
                 service.Update(setting);
             }
 
+
+            foreach (var entity in entities.OrderBy(e => e.LogicalName))
+            {
+                if (!entity.MetadataId.HasValue)
+                    continue;
+
+                var forms = RetrieveEntityFormList(entity.LogicalName, service);
+
+                foreach (var form in forms)
+                {
+                    var crmForm = crmForms.FirstOrDefault(f => f.FormUniqueId == form.GetAttributeValue<Guid>("formidunique"));
+                    if (crmForm == null)
+                    {
+                        crmForm = new CrmForm
+                        {
+                            FormUniqueId = form.GetAttributeValue<Guid>("formidunique"),
+                            Id = form.GetAttributeValue<Guid>("formid"),
+                            Entity = entity.LogicalName,
+                            Names = new Dictionary<int, string>(),
+                            Descriptions = new Dictionary<int, string>()
+                        };
+                        crmForms.Add(crmForm);
+                    }
+
+                    // Names
+                    var request = new RetrieveLocLabelsRequest
+                    {
+                        AttributeName = "name",
+                        EntityMoniker = new EntityReference("systemform", form.Id)
+                    };
+
+                    var response = (RetrieveLocLabelsResponse)service.Execute(request);
+                    foreach (var locLabel in response.Label.LocalizedLabels)
+                    {
+                        crmForm.Names.Add(locLabel.LanguageCode, locLabel.Label);
+                    }
+
+                    // Descriptions
+                    request = new RetrieveLocLabelsRequest
+                    {
+                        AttributeName = "description",
+                        EntityMoniker = new EntityReference("systemform", form.Id)
+                    };
+
+                    response = (RetrieveLocLabelsResponse)service.Execute(request);
+                    foreach (var locLabel in response.Label.LocalizedLabels)
+                    {
+                        crmForm.Descriptions.Add(locLabel.LanguageCode, locLabel.Label);
+                    }
+                }
+            }
+
+           
             var line = 1;
             if (options.ExportForms)
             {
@@ -307,7 +344,11 @@ namespace MsCrmTools.Translator.AppCode
 
             foreach (var lcid in languages)
             {
-                formSheet.Cells[line, cell++].Value = crmForm.Names.First(n => n.Key == lcid).Value;
+                var name = crmForm.Names.FirstOrDefault(n => n.Key == lcid);
+                if (name.Value != null)
+                    formSheet.Cells[line, cell++].Value = name.Value;
+                else
+                    cell++;
             }
 
             line++;
@@ -320,7 +361,11 @@ namespace MsCrmTools.Translator.AppCode
 
             foreach (var lcid in languages)
             {
-                formSheet.Cells[line, cell++].Value = crmForm.Descriptions.First(n => n.Key == lcid).Value;
+                var desc = crmForm.Descriptions.FirstOrDefault(n => n.Key == lcid);
+                if (desc.Value != null)
+                    formSheet.Cells[line, cell++].Value = desc.Value;
+                else
+                    cell++;
             }
             line++;
             return line;
