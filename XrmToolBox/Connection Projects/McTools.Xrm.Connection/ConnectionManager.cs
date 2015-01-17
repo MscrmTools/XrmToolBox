@@ -10,6 +10,7 @@ using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Client;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
 
 namespace McTools.Xrm.Connection
 {
@@ -206,6 +207,8 @@ namespace McTools.Xrm.Connection
             {
                 var connection = CrmConnection.Parse(detail.GetOrganizationCrmConnectionString());
                 var service = new OrganizationService(connection);
+
+                ((OrganizationServiceProxy) service.InnerService).SdkClientVersion = detail.OrganizationVersion;
 
                 TestConnection(service);
 
