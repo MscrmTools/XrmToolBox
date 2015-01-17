@@ -120,7 +120,7 @@ namespace MsCrmTools.Translator
                 vt.Export(emds, lcids, sheet, service);
             }
 
-            if ((settings.ExportFormTabs || settings.ExportFormSections || settings.ExportFormFields) && emds.Count > 0)
+            if ((settings.ExportForms || settings.ExportFormTabs || settings.ExportFormSections || settings.ExportFormFields) && emds.Count > 0)
             {
                 if (worker != null && worker.WorkerReportsProgress)
                 {
