@@ -20,6 +20,7 @@ namespace XrmToolBox.Forms
             lblCurrentVersion.Text = string.Format(lblCurrentVersion.Text, currentVersion);
             lblNewVersion.Text = string.Format(lblNewVersion.Text, newVersion);
             webBrowser1.DocumentText = style + description;
+            webBrowser1.ScriptErrorsSuppressed = true;
         }
 
         private void btnClose_Click(object sender, EventArgs e)

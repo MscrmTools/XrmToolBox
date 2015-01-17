@@ -24,7 +24,7 @@ namespace XrmToolBox.AppCode
 
         public void Run()
         {
-            var mywebBrowser = new WebBrowser();
+            var mywebBrowser = new WebBrowser {ScriptErrorsSuppressed = true};
             mywebBrowser.DocumentCompleted += mywebBrowser_DocumentCompleted;
             mywebBrowser.Navigate("http://xrmtoolbox.codeplex.com/releases");
         }
