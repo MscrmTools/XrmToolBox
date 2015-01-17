@@ -158,7 +158,7 @@ namespace MsCrmTools.MetadataBrowser.UserControls
                             item.Tag = new AttributeMetadataInfo(attribute);
                         }
                         break;
-                    case AttributeTypeCode.Integer:
+                  case AttributeTypeCode.Integer:
                         {
                             item.Tag = new IntegerAttributeMetadataInfo((IntegerAttributeMetadata)attribute);
                         }
@@ -201,7 +201,14 @@ namespace MsCrmTools.MetadataBrowser.UserControls
                         break;
                     default:
                         {
-                            item.Tag = new AttributeMetadataInfo(attribute);
+                            if (attribute.AttributeTypeName == AttributeTypeDisplayName.ImageType)
+                            {
+                                item.Tag = new ImageAttributeMetadataInfo((ImageAttributeMetadata)attribute);
+                            }
+                            else
+                            {
+                                item.Tag = new AttributeMetadataInfo(attribute);
+                            }
                         }
                         break;
                 }
