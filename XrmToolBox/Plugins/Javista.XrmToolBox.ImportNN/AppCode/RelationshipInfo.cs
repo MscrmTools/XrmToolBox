@@ -13,7 +13,7 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
         public override string ToString()
         {
             return string.Format("{0} ({1} - {2})",
-                Metadata.IntersectEntityName,
+                Metadata.SchemaName,
                 Metadata.Entity1LogicalName,
                 Metadata.Entity2LogicalName);
         }

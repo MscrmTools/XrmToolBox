@@ -333,7 +333,8 @@ namespace Javista.XrmToolBox.ImportNN
             cbbSecondEntity.Items.Add(new EntityInfo
             {
                 Metadata = emds.First(ent => (ent.LogicalName == rel.Entity1LogicalName && rel.Entity1LogicalName != ((EntityInfo)cbbFirstEntity.SelectedItem).Metadata.LogicalName)
-                || (ent.LogicalName == rel.Entity2LogicalName && rel.Entity2LogicalName != ((EntityInfo)cbbFirstEntity.SelectedItem).Metadata.LogicalName))
+                || (ent.LogicalName == rel.Entity2LogicalName && rel.Entity2LogicalName != ((EntityInfo)cbbFirstEntity.SelectedItem).Metadata.LogicalName)
+                || (ent.LogicalName == rel.Entity2LogicalName && rel.Entity2LogicalName == ((EntityInfo)cbbFirstEntity.SelectedItem).Metadata.LogicalName))
             });
 
             if (cbbSecondEntity.Items.Count > 0)
@@ -409,7 +410,7 @@ namespace Javista.XrmToolBox.ImportNN
                 FirstEntity = ((EntityInfo)cbbFirstEntity.SelectedItem).Metadata.LogicalName,
                 FirstAttributeIsGuid = rdbFirstGuid.Checked,
                 FirstAttributeName = ((AttributeInfo)cbbFirstEntityAttribute.SelectedItem).Metadata.LogicalName,
-                Relationship = ((RelationshipInfo)cbbRelationship.SelectedItem).Metadata.IntersectEntityName,
+                Relationship = ((RelationshipInfo)cbbRelationship.SelectedItem).Metadata.SchemaName,
                 SecondEntity = ((EntityInfo)cbbSecondEntity.SelectedItem).Metadata.LogicalName,
                 SecondAttributeIsGuid = rdbSecondGuid.Checked,
                 SecondAttributeName = ((AttributeInfo)cbbSecondEntityAttribute.SelectedItem).Metadata.LogicalName,
