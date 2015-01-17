@@ -17,6 +17,7 @@ using McTools.Xrm.Connection.WinForms;
 using Microsoft.Xrm.Client;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
 using XrmToolBox.AppCode;
 using XrmToolBox.Attributes;
 using XrmToolBox.Forms;
@@ -360,9 +361,9 @@ namespace XrmToolBox
 
                 if (service != null)
                 {
-                    var clonedService =
-                        new OrganizationService(
-                            CrmConnection.Parse(currentConnectionDetail.GetOrganizationCrmConnectionString()));
+                    var clonedService = new OrganizationService(CrmConnection.Parse(currentConnectionDetail.GetOrganizationCrmConnectionString()));
+                    ((OrganizationServiceProxy)clonedService.InnerService).SdkClientVersion = currentConnectionDetail.OrganizationVersion;
+
                     ((IMsCrmToolsPluginUserControl) pluginControl).UpdateConnection(clonedService,
                         currentConnectionDetail);
                 }
