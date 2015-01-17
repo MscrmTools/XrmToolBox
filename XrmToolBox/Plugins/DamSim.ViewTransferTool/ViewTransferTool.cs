@@ -515,7 +515,7 @@ namespace DamSim.ViewTransferTool
                     checkedViews.Add((Entity)item.Tag);
                 }
 
-                e.Result = ViewHelper.TransferViews(checkedViews, targetService, _savedQueryMetadata);
+                e.Result = ViewHelper.TransferViews(checkedViews, service, targetService, _savedQueryMetadata);
             }
             catch (Exception error)
             {
