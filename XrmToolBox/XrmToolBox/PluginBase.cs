@@ -238,17 +238,4 @@ namespace XrmToolBox
 
         #endregion // Connection Updated
     }
-
-    /// <summary>
-    /// Can be removed after upgrading to 4.5
-    /// </summary>
-    internal static class FourFiveReflectionExtension
-    {
-        public static MethodInfo GetMethodInfo(this Delegate del)
-        {
-            if (del == null) throw new ArgumentNullException("del");
-
-            return del.Method;
-        }
-    }
 }

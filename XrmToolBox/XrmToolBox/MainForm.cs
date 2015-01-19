@@ -547,7 +547,20 @@ namespace XrmToolBox
 
         private void RequestCloseTabs(IEnumerable<TabPage> pages, PluginCloseInfo info)
         {
-            foreach (var page in pages)
+            var pagesList = pages.ToList();
+            if (info.FormReason != CloseReason.None ||
+                info.ToolBoxReason == ToolBoxCloseReason.CloseAll ||
+                info.ToolBoxReason == ToolBoxCloseReason.CloseAllExceptActive
+                )
+            {
+                info.Cancel = MessageBox.Show(@"Are you sure you want to close " + pagesList.Count + @" tab(s)?", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes;
+                if (info.Cancel)
+                {
+                    return;
+                }
+            }
+
+            foreach (var page in pagesList)
             {
                 RequestCloseTab(page, info);
                 if (info.Cancel) return;
