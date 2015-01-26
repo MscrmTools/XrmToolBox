@@ -15,27 +15,21 @@ namespace MsCrmTools.SiteMapEditor.Forms
     {
         public XmlNode SelectedNode { get; set; }
 
-        public SiteMapComponentPicker(string componentName)
+        public SiteMapComponentPicker(string componentName, string version)
         {
             InitializeComponent();
 
             XmlDocument doc = new XmlDocument();
             
             Assembly myAssembly = Assembly.GetExecutingAssembly();
-            using (StreamReader reader = new StreamReader(myAssembly.GetManifestResourceStream("MsCrmTools.SiteMapEditor.Resources.sitemap.xml")))
+            using (StreamReader reader = new StreamReader(myAssembly.GetManifestResourceStream("MsCrmTools.SiteMapEditor.Resources.sitemap"+version+".xml")))
             {
                 doc.LoadXml(reader.ReadToEnd());
             }
 
             FillList(lvCrm2011SiteMap, doc, componentName);
 
-            using (StreamReader reader = new StreamReader(myAssembly.GetManifestResourceStream("MsCrmTools.SiteMapEditor.Resources.SiteMap2013.xml")))
-            {
-                doc.LoadXml(reader.ReadToEnd());
-            }
-
-            FillList(lvCrm2013SiteMap, doc, componentName);
-
+          
             ToolTip tip = new ToolTip();
             tip.ToolTipTitle = "Information";
             tip.SetToolTip(chkAddChildComponents, "Check this control if you want to add components under the one you select (ie. Area with all child Groups and SubArea or just Area)");
@@ -94,11 +88,10 @@ namespace MsCrmTools.SiteMapEditor.Forms
 
         private void btnComponentPickerValidate_Click(object sender, EventArgs e)
         {
-            var lv = tabControl1.SelectedIndex == 0 ? lvCrm2011SiteMap : lvCrm2013SiteMap;
 
-            if (lv.SelectedItems.Count > 0)
+            if (lvCrm2011SiteMap.SelectedItems.Count > 0)
             {
-                XmlNode selectedXmlNode = (XmlNode)lv.SelectedItems[0].Tag;
+                XmlNode selectedXmlNode = (XmlNode)lvCrm2011SiteMap.SelectedItems[0].Tag;
 
                 if (!chkAddChildComponents.Checked)
                 {

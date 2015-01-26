@@ -573,7 +573,11 @@ namespace MsCrmTools.SiteMapEditor
                 string nodeText = e.ClickedItem.Name.Remove(0, 9);
                 nodeText = nodeText.Substring(0, nodeText.IndexOf("ToolStripMenuItem"));
 
-                var smcPicker = new SiteMapComponentPicker(nodeText);
+                var version = ConnectionDetail.OrganizationMajorVersion == 5
+                    ? "2011"
+                    : ConnectionDetail.OrganizationMajorVersion == 6 ? "2013" : "2015";
+
+                var smcPicker = new SiteMapComponentPicker(nodeText, version);
                 smcPicker.StartPosition = FormStartPosition.CenterParent;
 
                 if (smcPicker.ShowDialog() == DialogResult.OK)
