@@ -46,10 +46,15 @@ namespace XrmToolBox
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbAbout = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsbCodePlex = new System.Windows.Forms.ToolStripDropDownButton();
             this.reportABugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startADiscussionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rateThisToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CodePlexXrmToolBoxMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CodePlexPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.reportABugPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.startADiscussionPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rateThisToolPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tsddbDonate = new System.Windows.Forms.ToolStripDropDownButton();
             this.donateInUSDollarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -86,13 +91,12 @@ namespace XrmToolBox
             this.toolStripSeparator1,
             this.tsbAbout,
             this.toolStripSeparator3,
-            this.toolStripDropDownButton1,
+            this.tsbCodePlex,
             this.toolStripSeparator4,
             this.tsddbDonate});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
-            this.toolStrip1.Size = new System.Drawing.Size(1326, 32);
+            this.toolStrip1.Size = new System.Drawing.Size(884, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -101,28 +105,28 @@ namespace XrmToolBox
             this.tsbConnect.Image = ((System.Drawing.Image)(resources.GetObject("tsbConnect.Image")));
             this.tsbConnect.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbConnect.Name = "tsbConnect";
-            this.tsbConnect.Size = new System.Drawing.Size(162, 29);
+            this.tsbConnect.Size = new System.Drawing.Size(115, 22);
             this.tsbConnect.Text = "Connect to CRM";
             this.tsbConnect.Click += new System.EventHandler(this.TsbConnectClick);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbManageConnections
             // 
             this.tsbManageConnections.Image = ((System.Drawing.Image)(resources.GetObject("tsbManageConnections.Image")));
             this.tsbManageConnections.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbManageConnections.Name = "tsbManageConnections";
-            this.tsbManageConnections.Size = new System.Drawing.Size(196, 29);
+            this.tsbManageConnections.Size = new System.Drawing.Size(138, 22);
             this.tsbManageConnections.Text = "Manage connections";
             this.tsbManageConnections.Click += new System.EventHandler(this.tsbManageConnections_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbManageTabs
             // 
@@ -133,27 +137,27 @@ namespace XrmToolBox
             this.tsbManageTabs.Image = ((System.Drawing.Image)(resources.GetObject("tsbManageTabs.Image")));
             this.tsbManageTabs.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbManageTabs.Name = "tsbManageTabs";
-            this.tsbManageTabs.Size = new System.Drawing.Size(78, 29);
+            this.tsbManageTabs.Size = new System.Drawing.Size(61, 22);
             this.tsbManageTabs.Text = "Tabs";
             // 
             // closeCurrentTabToolStripMenuItem
             // 
             this.closeCurrentTabToolStripMenuItem.Name = "closeCurrentTabToolStripMenuItem";
-            this.closeCurrentTabToolStripMenuItem.Size = new System.Drawing.Size(286, 30);
+            this.closeCurrentTabToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.closeCurrentTabToolStripMenuItem.Text = "Close current tab";
             this.closeCurrentTabToolStripMenuItem.Click += new System.EventHandler(this.closeCurrentTabToolStripMenuItem_Click);
             // 
             // closeAllTabsToolStripMenuItem
             // 
             this.closeAllTabsToolStripMenuItem.Name = "closeAllTabsToolStripMenuItem";
-            this.closeAllTabsToolStripMenuItem.Size = new System.Drawing.Size(286, 30);
+            this.closeAllTabsToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.closeAllTabsToolStripMenuItem.Text = "Close all";
             this.closeAllTabsToolStripMenuItem.Click += new System.EventHandler(this.CloseAllTabsToolStripMenuItemClick);
             // 
             // closeAllTabsExceptActiveToolStripMenuItem
             // 
             this.closeAllTabsExceptActiveToolStripMenuItem.Name = "closeAllTabsExceptActiveToolStripMenuItem";
-            this.closeAllTabsExceptActiveToolStripMenuItem.Size = new System.Drawing.Size(286, 30);
+            this.closeAllTabsExceptActiveToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.closeAllTabsExceptActiveToolStripMenuItem.Text = "Close all except active tab";
             this.closeAllTabsExceptActiveToolStripMenuItem.Click += new System.EventHandler(this.CloseAllTabsExceptActiveToolStripMenuItemClick);
             // 
@@ -163,14 +167,14 @@ namespace XrmToolBox
             this.tsbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tsbOptions.Image")));
             this.tsbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbOptions.Name = "tsbOptions";
-            this.tsbOptions.Size = new System.Drawing.Size(23, 29);
+            this.tsbOptions.Size = new System.Drawing.Size(23, 22);
             this.tsbOptions.Text = "Settings";
             this.tsbOptions.Click += new System.EventHandler(this.TsbOptionsClick);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbAbout
             // 
@@ -178,32 +182,34 @@ namespace XrmToolBox
             this.tsbAbout.Image = ((System.Drawing.Image)(resources.GetObject("tsbAbout.Image")));
             this.tsbAbout.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbAbout.Name = "tsbAbout";
-            this.tsbAbout.Size = new System.Drawing.Size(23, 29);
+            this.tsbAbout.Size = new System.Drawing.Size(23, 22);
             this.tsbAbout.Text = "About";
             this.tsbAbout.Click += new System.EventHandler(this.TsbAboutClick);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
-            // toolStripDropDownButton1
+            // tsbCodePlex
             // 
-            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsbCodePlex.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.reportABugToolStripMenuItem,
             this.startADiscussionToolStripMenuItem,
-            this.rateThisToolToolStripMenuItem});
-            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
-            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(114, 29);
-            this.toolStripDropDownButton1.Text = "CodePlex";
+            this.rateThisToolToolStripMenuItem,
+            this.CodePlexXrmToolBoxMenuItem,
+            this.CodePlexPluginMenuItem});
+            this.tsbCodePlex.Image = ((System.Drawing.Image)(resources.GetObject("tsbCodePlex.Image")));
+            this.tsbCodePlex.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbCodePlex.Name = "tsbCodePlex";
+            this.tsbCodePlex.Size = new System.Drawing.Size(85, 22);
+            this.tsbCodePlex.Text = "CodePlex";
             // 
             // reportABugToolStripMenuItem
             // 
             this.reportABugToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("reportABugToolStripMenuItem.Image")));
             this.reportABugToolStripMenuItem.Name = "reportABugToolStripMenuItem";
-            this.reportABugToolStripMenuItem.Size = new System.Drawing.Size(222, 30);
+            this.reportABugToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.reportABugToolStripMenuItem.Text = "Report a bug";
             this.reportABugToolStripMenuItem.Click += new System.EventHandler(this.TsbReportBugClick);
             // 
@@ -211,22 +217,62 @@ namespace XrmToolBox
             // 
             this.startADiscussionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("startADiscussionToolStripMenuItem.Image")));
             this.startADiscussionToolStripMenuItem.Name = "startADiscussionToolStripMenuItem";
-            this.startADiscussionToolStripMenuItem.Size = new System.Drawing.Size(222, 30);
-            this.startADiscussionToolStripMenuItem.Text = "Start a discussion";
+            this.startADiscussionToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.startADiscussionToolStripMenuItem.Text = "Start a discussion / Request a feature";
             this.startADiscussionToolStripMenuItem.Click += new System.EventHandler(this.TsbDiscussClick);
             // 
             // rateThisToolToolStripMenuItem
             // 
             this.rateThisToolToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("rateThisToolToolStripMenuItem.Image")));
             this.rateThisToolToolStripMenuItem.Name = "rateThisToolToolStripMenuItem";
-            this.rateThisToolToolStripMenuItem.Size = new System.Drawing.Size(222, 30);
+            this.rateThisToolToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
             this.rateThisToolToolStripMenuItem.Text = "Rate this tool";
             this.rateThisToolToolStripMenuItem.Click += new System.EventHandler(this.TsbRateClick);
+            // 
+            // CodePlexXrmToolBoxMenuItem
+            // 
+            this.CodePlexXrmToolBoxMenuItem.Name = "CodePlexXrmToolBoxMenuItem";
+            this.CodePlexXrmToolBoxMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.CodePlexXrmToolBoxMenuItem.Text = "XrmToolbox";
+            // 
+            // CodePlexPluginMenuItem
+            // 
+            this.CodePlexPluginMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.reportABugPluginToolStripMenuItem,
+            this.startADiscussionPluginToolStripMenuItem,
+            this.rateThisToolPluginToolStripMenuItem});
+            this.CodePlexPluginMenuItem.Name = "CodePlexPluginMenuItem";
+            this.CodePlexPluginMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.CodePlexPluginMenuItem.Text = "Selected Plugin";
+            // 
+            // reportABugPluginToolStripMenuItem
+            // 
+            this.reportABugPluginToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("reportABugPluginToolStripMenuItem.Image")));
+            this.reportABugPluginToolStripMenuItem.Name = "reportABugPluginToolStripMenuItem";
+            this.reportABugPluginToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.reportABugPluginToolStripMenuItem.Text = "Report a bug";
+            this.reportABugPluginToolStripMenuItem.Click += new System.EventHandler(this.TsbReportBugPluginClick);
+            // 
+            // startADiscussionPluginToolStripMenuItem
+            // 
+            this.startADiscussionPluginToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("startADiscussionPluginToolStripMenuItem.Image")));
+            this.startADiscussionPluginToolStripMenuItem.Name = "startADiscussionPluginToolStripMenuItem";
+            this.startADiscussionPluginToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.startADiscussionPluginToolStripMenuItem.Text = "Start a discussion / Request a feature";
+            this.startADiscussionPluginToolStripMenuItem.Click += new System.EventHandler(this.TsbDiscussPluginClick);
+            // 
+            // rateThisToolPluginToolStripMenuItem
+            // 
+            this.rateThisToolPluginToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("rateThisToolPluginToolStripMenuItem.Image")));
+            this.rateThisToolPluginToolStripMenuItem.Name = "rateThisToolPluginToolStripMenuItem";
+            this.rateThisToolPluginToolStripMenuItem.Size = new System.Drawing.Size(165, 22);
+            this.rateThisToolPluginToolStripMenuItem.Text = "Rate this tool";
+            this.rateThisToolPluginToolStripMenuItem.Click += new System.EventHandler(this.TsbRatePluginClick);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
             // tsddbDonate
             // 
@@ -237,14 +283,14 @@ namespace XrmToolBox
             this.tsddbDonate.Image = ((System.Drawing.Image)(resources.GetObject("tsddbDonate.Image")));
             this.tsddbDonate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbDonate.Name = "tsddbDonate";
-            this.tsddbDonate.Size = new System.Drawing.Size(99, 29);
+            this.tsddbDonate.Size = new System.Drawing.Size(74, 22);
             this.tsddbDonate.Text = "Donate";
             // 
             // donateInUSDollarsToolStripMenuItem
             // 
             this.donateInUSDollarsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateInUSDollarsToolStripMenuItem.Image")));
             this.donateInUSDollarsToolStripMenuItem.Name = "donateInUSDollarsToolStripMenuItem";
-            this.donateInUSDollarsToolStripMenuItem.Size = new System.Drawing.Size(248, 30);
+            this.donateInUSDollarsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.donateInUSDollarsToolStripMenuItem.Text = "Donate in US Dollars";
             this.donateInUSDollarsToolStripMenuItem.Click += new System.EventHandler(this.donateInUSDollarsToolStripMenuItem_Click);
             // 
@@ -252,7 +298,7 @@ namespace XrmToolBox
             // 
             this.donateInEuroToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateInEuroToolStripMenuItem.Image")));
             this.donateInEuroToolStripMenuItem.Name = "donateInEuroToolStripMenuItem";
-            this.donateInEuroToolStripMenuItem.Size = new System.Drawing.Size(248, 30);
+            this.donateInEuroToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.donateInEuroToolStripMenuItem.Text = "Donate in Euro";
             this.donateInEuroToolStripMenuItem.Click += new System.EventHandler(this.donateInEuroToolStripMenuItem_Click);
             // 
@@ -260,7 +306,7 @@ namespace XrmToolBox
             // 
             this.donateInGBPToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateInGBPToolStripMenuItem.Image")));
             this.donateInGBPToolStripMenuItem.Name = "donateInGBPToolStripMenuItem";
-            this.donateInGBPToolStripMenuItem.Size = new System.Drawing.Size(248, 30);
+            this.donateInGBPToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
             this.donateInGBPToolStripMenuItem.Text = "Donate in GBP";
             this.donateInGBPToolStripMenuItem.Click += new System.EventHandler(this.donateInGBPToolStripMenuItem_Click);
             // 
@@ -269,23 +315,22 @@ namespace XrmToolBox
             this.tabControl1.Controls.Add(this.HomePageTab);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl1.Location = new System.Drawing.Point(0, 32);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tabControl1.Location = new System.Drawing.Point(0, 25);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1326, 910);
+            this.tabControl1.Size = new System.Drawing.Size(884, 587);
             this.tabControl1.TabIndex = 2;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             this.tabControl1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tabControl1_MouseClick);
             // 
             // HomePageTab
             // 
             this.HomePageTab.AutoScroll = true;
             this.HomePageTab.Controls.Add(this.pnlHelp);
-            this.HomePageTab.Location = new System.Drawing.Point(4, 32);
-            this.HomePageTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.HomePageTab.Location = new System.Drawing.Point(4, 22);
             this.HomePageTab.Name = "HomePageTab";
-            this.HomePageTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.HomePageTab.Size = new System.Drawing.Size(1318, 874);
+            this.HomePageTab.Padding = new System.Windows.Forms.Padding(3);
+            this.HomePageTab.Size = new System.Drawing.Size(876, 561);
             this.HomePageTab.TabIndex = 0;
             this.HomePageTab.Text = "Home";
             this.HomePageTab.UseVisualStyleBackColor = true;
@@ -297,10 +342,9 @@ namespace XrmToolBox
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlHelp.Controls.Add(this.label2);
             this.pnlHelp.Controls.Add(this.label1);
-            this.pnlHelp.Location = new System.Drawing.Point(4, 9);
-            this.pnlHelp.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.pnlHelp.Location = new System.Drawing.Point(3, 6);
             this.pnlHelp.Name = "pnlHelp";
-            this.pnlHelp.Size = new System.Drawing.Size(1298, 852);
+            this.pnlHelp.Size = new System.Drawing.Size(865, 550);
             this.pnlHelp.TabIndex = 0;
             this.pnlHelp.Visible = false;
             // 
@@ -309,10 +353,9 @@ namespace XrmToolBox
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(8, 80);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(5, 52);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(1286, 178);
+            this.label2.Size = new System.Drawing.Size(857, 116);
             this.label2.TabIndex = 1;
             this.label2.Text = resources.GetString("label2.Text");
             // 
@@ -322,23 +365,21 @@ namespace XrmToolBox
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(8, 0);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(5, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(1286, 52);
+            this.label1.Size = new System.Drawing.Size(857, 34);
             this.label1.TabIndex = 0;
             this.label1.Text = "Oups... no plugin found!";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1326, 942);
+            this.ClientSize = new System.Drawing.Size(884, 612);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.toolStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ToolBox for Microsoft Dynamics CRM 2011/2013/2015";
@@ -367,7 +408,7 @@ namespace XrmToolBox
         private System.Windows.Forms.ToolStripMenuItem closeAllTabsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeAllTabsExceptActiveToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
-        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripDropDownButton tsbCodePlex;
         private System.Windows.Forms.ToolStripMenuItem reportABugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem startADiscussionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rateThisToolToolStripMenuItem;
@@ -384,6 +425,11 @@ namespace XrmToolBox
         private System.Windows.Forms.Panel pnlHelp;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripMenuItem CodePlexXrmToolBoxMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CodePlexPluginMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem reportABugPluginToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem startADiscussionPluginToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rateThisToolPluginToolStripMenuItem;
     }
 }
 
