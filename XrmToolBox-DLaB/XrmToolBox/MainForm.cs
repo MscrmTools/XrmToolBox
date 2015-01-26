@@ -54,6 +54,8 @@ namespace XrmToolBox
         public MainForm()
         {
             InitializeComponent();
+
+            ProcessCodePlexMenuItemsForPlugin();
             MouseWheel += (sender, e) => HomePageTab.Focus();
 
             currentOptions = Options.Load();
@@ -208,15 +210,15 @@ namespace XrmToolBox
                 foreach (var item in currentOptions.MostUsedList.OrderByDescending(i => i.Count).ThenBy(i=>i.Name))
                 {
                     var plugin = pManager.Plugins.FirstOrDefault(x => x.FullName == item.Name);
-                    if (plugin != null && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyTitleAttribute))).Title)))
+                    if (plugin != null && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.GetTitle())))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth, item.Count);
                     }
                 }
 
-                foreach (var plugin in pManager.Plugins.OrderBy(p => ((AssemblyTitleAttribute)GetAssemblyAttribute(p.Assembly, typeof(AssemblyTitleAttribute))).Title))
+                foreach (var plugin in pManager.Plugins.OrderBy(p => p.GetTitle()))
                 {
-                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.FullName) && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyTitleAttribute))).Title)))
+                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.FullName) && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.GetTitle())))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth);
                     }
@@ -224,9 +226,9 @@ namespace XrmToolBox
             }
             else
             {
-                foreach (var plugin in pManager.Plugins.OrderBy(p => ((AssemblyTitleAttribute)GetAssemblyAttribute(p.Assembly, typeof(AssemblyTitleAttribute))).Title))
+                foreach (var plugin in pManager.Plugins.OrderBy(p => p.GetTitle()))
                 {
-                    if (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof (AssemblyTitleAttribute))).Title))
+                    if (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.GetTitle()))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth);
                     }
@@ -273,9 +275,9 @@ namespace XrmToolBox
         private void DisplayOnePlugin(Type plugin, ref int top, int width, int count = -1)
         {
 
-            var title = ((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyTitleAttribute))).Title;
-            var desc = ((AssemblyDescriptionAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyDescriptionAttribute))).Description;
-            var author = ((AssemblyCompanyAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyCompanyAttribute))).Company;
+            var title = plugin.GetTitle();
+            var desc = plugin.GetDescription();
+            var author = plugin.GetCompany();
             var version = plugin.Assembly.GetName().Version.ToString();
 
             var backColor = AssemblyAttributeHelper.GetColor(plugin.Assembly, typeof(BackgroundColorAttribute));
@@ -342,15 +344,6 @@ namespace XrmToolBox
         
         #endregion Form events
 
-        #region Plugin information retriever
-
-        private object GetAssemblyAttribute(Assembly assembly, Type attributeType)
-        {
-            return assembly.GetCustomAttributes(attributeType, true)[0];
-        }
-        
-        #endregion Plugin information retriever
-
         private void DisplayPluginControl(UserControl plugin)
         {
             try
@@ -371,9 +364,7 @@ namespace XrmToolBox
                 ((IMsCrmToolsPluginUserControl) pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
                 ((IMsCrmToolsPluginUserControl) pluginControl).OnCloseTool += MainForm_OnCloseTool;
 
-                string name = string.Format("{0} ({1})",
-                    ((AssemblyTitleAttribute)
-                        GetAssemblyAttribute(pluginControl.GetType().Assembly, typeof (AssemblyTitleAttribute))).Title,
+                string name = string.Format("{0} ({1})", pluginControl.GetType().GetTitle(),
                     currentConnectionDetail != null
                         ? currentConnectionDetail.ConnectionName
                         : "Not connected");
@@ -486,7 +477,7 @@ namespace XrmToolBox
                     tab.GetPlugin().UpdateConnection(service, currentConnectionDetail);
 
                     tab.Text = string.Format("{0} ({1})",
-                                        ((AssemblyTitleAttribute)GetAssemblyAttribute(tab.Controls[0].GetType().Assembly, typeof(AssemblyTitleAttribute))).Title,
+                                        tab.Controls[0].GetType().GetTitle(),
                                         currentConnectionDetail != null
                                             ? currentConnectionDetail.ConnectionName
                                             : "Not connected");
@@ -600,6 +591,33 @@ namespace XrmToolBox
 
         #endregion // Close Tabs/Plugins
 
+        #region CodePlex
+
+        #region Active Plugin
+
+        private string GetCodePlexUrl(string page)
+        {
+            var plugin = tabControl1.SelectedTab.GetCodePlexPlugin();
+            return String.Format("http://{0}.codeplex.com/{1}", plugin.CodePlexUrlName, page);
+        }
+
+        private void TsbRatePluginClick(object sender, EventArgs e)
+        {
+            Process.Start(GetCodePlexUrl("Releases"));
+        }
+
+        private void TsbDiscussPluginClick(object sender, EventArgs e)
+        {
+            Process.Start(GetCodePlexUrl("Discussions"));
+        }
+
+        private void TsbReportBugPluginClick(object sender, EventArgs e)
+        {
+            Process.Start(GetCodePlexUrl("WorkItem/Create"));
+        }
+
+        #endregion // Active Plugin
+
         private void TsbRateClick(object sender, EventArgs e)
         {
             Process.Start("http://xrmtoolbox.codeplex.com/releases");
@@ -614,6 +632,8 @@ namespace XrmToolBox
         {
             Process.Start("http://xrmtoolbox.codeplex.com/WorkItem/Create");
         }
+
+        #endregion // CodePlex
 
         private void donateInUSDollarsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -667,6 +687,45 @@ namespace XrmToolBox
         {
             fHelper.DisplayConnectionsList(this);
         }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ProcessCodePlexMenuItemsForPlugin();
+        }
+
+        private void ProcessCodePlexMenuItemsForPlugin()
+        {
+            if (tabControl1.SelectedIndex == 0) // Home Screen
+            {
+                CodePlexPluginMenuItem.Visible = false;
+                CodePlexXrmToolBoxMenuItem.Visible = false;
+                AssignCodePlexMenuItems(tsbCodePlex.DropDownItems);
+                return;
+            }
+
+            var plugin = tabControl1.SelectedTab.GetCodePlexPlugin();
+            if (plugin == null)
+            {
+                CodePlexPluginMenuItem.Visible = false;
+                CodePlexXrmToolBoxMenuItem.Visible = false;
+                AssignCodePlexMenuItems(tsbCodePlex.DropDownItems);
+            }
+            else
+            {
+                CodePlexPluginMenuItem.Visible = true;
+                CodePlexXrmToolBoxMenuItem.Visible = true;
+                CodePlexPluginMenuItem.Text = plugin.GetType().GetTitle();
+                AssignCodePlexMenuItems(CodePlexXrmToolBoxMenuItem.DropDownItems);
+            }
+        }
+
+        private void AssignCodePlexMenuItems(ToolStripItemCollection dropDownItems)
+        {
+            dropDownItems.AddRange(new ToolStripItem[] {
+                reportABugToolStripMenuItem,
+                startADiscussionToolStripMenuItem,
+                rateThisToolToolStripMenuItem});
+        }
     }
 
     public static class Extensions
@@ -674,6 +733,32 @@ namespace XrmToolBox
         public static IMsCrmToolsPluginUserControl GetPlugin(this TabPage page)
         {
             return (IMsCrmToolsPluginUserControl)page.Controls[0];
+        }
+
+        public static ICodePlexPlugin GetCodePlexPlugin(this TabPage page)
+        {
+            // ReSharper disable once SuspiciousTypeConversion.Global
+            return page.Controls[0] as ICodePlexPlugin;
+        }
+
+        public static string GetTitle(this Type pluginType)
+        {
+            return ((AssemblyTitleAttribute) GetAssemblyAttribute(pluginType.Assembly, typeof (AssemblyTitleAttribute))).Title;
+        }
+
+        public static string GetDescription(this Type pluginType)
+        {
+            return ((AssemblyDescriptionAttribute)GetAssemblyAttribute(pluginType.Assembly, typeof(AssemblyDescriptionAttribute))).Description;
+        }
+
+        public static string GetCompany(this Type pluginType)
+        {
+            return ((AssemblyCompanyAttribute)GetAssemblyAttribute(pluginType.Assembly, typeof(AssemblyCompanyAttribute))).Company;
+        }
+
+        private static object GetAssemblyAttribute(Assembly assembly, Type attributeType)
+        {
+            return assembly.GetCustomAttributes(attributeType, true)[0];
         }
     }
 }
