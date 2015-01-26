@@ -37,7 +37,7 @@ namespace XrmToolBox
 
                     if (rate > i)
                     {
-                        if (rate - i > 1)
+                        if (rate - i >= 1)
                         {
                             using (
                                 Stream myStream =
