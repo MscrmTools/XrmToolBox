@@ -400,6 +400,11 @@ namespace McTools.Xrm.Connection.WinForms
             if (tbServerName.Text.Length > 0 || cbbOnlineEnv.SelectedIndex >= 0)
                 goodServerData = true;
 
+            if (tbUserPassword.Text.IndexOf(";") >= 0)
+            {
+                warningMessage += "Password cannot contains semicolon character, which is a split character for Microsoft Dynamics CRM simplified connection strings\r\n";
+            }
+
             if (!goodServerData)
             {
                 warningMessage += "Please provide server name\r\n";
@@ -469,7 +474,15 @@ namespace McTools.Xrm.Connection.WinForms
         {
             if (e.Error != null)
             {
-                MessageBox.Show(this, "An error occured while retrieving organizations: " + e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string errorMessage = e.Error.Message;
+                var ex = e.Error.InnerException;
+                while (ex != null)
+                {
+                    errorMessage += "\r\nInner Exception: " + ex.Message;
+                    ex = ex.InnerException;
+                }
+
+                MessageBox.Show(this, "An error occured while retrieving organizations: " + errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
