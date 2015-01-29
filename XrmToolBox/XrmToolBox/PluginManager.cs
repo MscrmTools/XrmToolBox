@@ -20,6 +20,9 @@ namespace XrmToolBox
         /// </summary>
         public List<Type> Plugins { get; private set; }
 
+        // Not sure of a better way to do this, but I figure that the IOrganizationService isn't going anywhere anytime soon
+        private AssemblyName _xrmSdkAssemblyName = typeof (Microsoft.Xrm.Sdk.IOrganizationService).Assembly.GetName();
+
         #endregion
 
         #region Constructor
@@ -56,6 +59,7 @@ namespace XrmToolBox
                     {
                         var assembly = Assembly.UnsafeLoadFrom(file);
 
+                        AssertAssemblyReferencesCorrectXrmSdkVersion(assembly, file);
                         foreach (var type in assembly.GetTypes())
                         {
                             if (type.IsPublic && !type.IsAbstract)
@@ -79,10 +83,28 @@ namespace XrmToolBox
                             }
                         }
                     }
+                    catch (InvalidXrmSdkReferenceException)
+                    {
+                        throw;
+                    }
                     catch (Exception)
                     {
+                        if (System.Diagnostics.Debugger.IsAttached)
+                        {
+                            throw;
+                        }// else eat it
                     }
                 }
+            }
+        }
+
+        private void AssertAssemblyReferencesCorrectXrmSdkVersion(Assembly assembly, string filePath)
+        {
+            var xrmSdkAssembly = assembly.GetReferencedAssemblies().FirstOrDefault(a => a.Name == _xrmSdkAssemblyName.Name);
+            if (xrmSdkAssembly != null && xrmSdkAssembly.Version.Major != _xrmSdkAssemblyName.Version.Major)
+            {
+                throw new InvalidXrmSdkReferenceException("Assembly '{0}' references '{1}' which is incompatible with this version of the XrmToolbox which references '{2}'.  Please remove the dll from the folder and restart the XrmToolbox!",
+                    filePath, xrmSdkAssembly.FullName, _xrmSdkAssemblyName.FullName);
             }
         }
 
