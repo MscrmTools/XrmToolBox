@@ -1,0 +1,349 @@
+<SmartAssemblyProject ProjectId="{e12a1666-1bc6-4f39-a9fe-c99edc9f5380}" Version="2.0">
+    <MainAssemblyFileName>.\bin\Debug\MsCrmTools.MetadataDocumentGenerator.dll</MainAssemblyFileName>
+    <Configuration Name="Release">
+        <Options>
+            <ExceptionReporting Template="res:{SmartExceptions}.1033.dll" />
+            <FeatureUsageReporting Template="res:SmartUsageWithUIConsentFirstRun1033.dll" />
+            <StringsEncoding Encode="1" UseImprovedEncoding="1" />
+            <StrongNameSigning Sign="0" />
+            <OtherOptimizations />
+            <Obfuscation FieldsNameMangling="3" NameMangling="3" />
+            <OtherProtections />
+            <Debugging />
+        </Options>
+        <ApplicationName />
+        <Destination DestinationFileName="..\..\XrmToolBox\bin\Debug\MsCrmTools.MetadataDocumentGenerator.dll" />
+        <Assemblies>
+            <Assembly AssemblyName="MsCrmTools.MetadataDocumentGenerator, Culture=neutral, PublicKeyToken=null">
+                <Merging>
+                    <ResourcesCompression />
+                    <MemberRefsProxy />
+                    <Pruning Prune="0">
+                        <Exclusion />
+                    </Pruning>
+                    <Obfuscation>
+                        <Exclusion />
+                    </Obfuscation>
+                    <ControlFlow />
+                    <StringsEncoding />
+                </Merging>
+                <Embedding />
+            </Assembly>
+            <Assembly AssemblyName="XrmToolBox, Culture=neutral, PublicKeyToken=null">
+                <Merging />
+                <Embedding />
+            </Assembly>
+            <Assembly AssemblyName="McTools.Xrm.Connection.WinForms, Culture=neutral, PublicKeyToken=null">
+                <Merging />
+                <Embedding />
+            </Assembly>
+            <Assembly AssemblyName="McTools.Xrm.Connection, Culture=neutral, PublicKeyToken=null">
+                <Merging />
+                <Embedding />
+            </Assembly>
+            <Assembly AssemblyName="GemBox.Spreadsheet, Culture=neutral, PublicKeyToken=b1b72c69714d4847">
+                <Merging Merge="1">
+                    <Pruning>
+                        <Exclusion />
+                    </Pruning>
+                    <Obfuscation>
+                        <Exclusion />
+                    </Obfuscation>
+                    <ControlFlow />
+                    <MemberRefsProxy />
+                    <ResourcesCompression />
+                </Merging>
+                <Embedding />
+            </Assembly>
+            <Assembly AssemblyName="GemBox.Document, Culture=neutral, PublicKeyToken=b1b72c69714d4847">
+                <Merging Merge="1">
+                    <Pruning>
+                        <Exclusion />
+                    </Pruning>
+                    <Obfuscation>
+                        <Exclusion />
+                    </Obfuscation>
+                    <ControlFlow />
+                    <MemberRefsProxy />
+                    <ResourcesCompression />
+                </Merging>
+                <Embedding />
+            </Assembly>
+            <Assembly AssemblyName="LicenseKey, Culture=neutral, PublicKeyToken=null">
+                <Merging Merge="0">
+                    <Pruning Prune="1">
+                        <Exclusion />
+                    </Pruning>
+                    <Obfuscation Obfuscate="1">
+                        <Exclusion />
+                    </Obfuscation>
+                    <ControlFlow Obfuscate="0" ObfuscationLevel="2" />
+                    <MemberRefsProxy />
+                    <ResourcesCompression />
+                </Merging>
+                <Embedding />
+            </Assembly>
+            <Assembly AssemblyName="mscorlib, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Drawing, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Security, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="Accessibility, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Configuration, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Xml, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Runtime.Serialization.Formatters.Soap, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Deployment, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Data.SqlXml, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="Microsoft.Xrm.Sdk, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.ServiceModel, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Core, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="Microsoft.Crm.Sdk.Proxy, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Runtime.Serialization, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="Microsoft.IdentityModel, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.IdentityModel, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.ServiceModel.Web, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Web, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="SMDiagnostics, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Runtime.DurableInstancing, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.ServiceModel.Internals, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Numerics, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Xml.Linq, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Transactions, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Xaml, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.EnterpriseServices, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.DirectoryServices, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Runtime.Remoting, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="Microsoft.VisualC, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="Microsoft.Build.Framework, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Runtime.Caching, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Web.ApplicationServices, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Data, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Web.Services, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="Microsoft.Build.Utilities.v4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.DirectoryServices.Protocols, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Design, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="Microsoft.Build.Tasks.v4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.ServiceProcess, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Web.RegularExpressions, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Drawing.Design, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Data.OracleClient, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Configuration.Install, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Messaging, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.IdentityModel.Selectors, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="Microsoft.Transactions.Bridge, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.ServiceModel.Activation, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.ServiceModel.Activities, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Activities, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Xaml.Hosting, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Activities.DurableInstancing, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="Microsoft.VisualBasic.Activities.Compiler, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="Microsoft.VisualBasic, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Management, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="Microsoft.JScript, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Web.Extensions, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Data.Linq, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Data.Services.Client, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Data.Services.Design, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Data.Entity, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="ReachFramework, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="PresentationFramework, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="PresentationCore, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Printing, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="WindowsBase, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="UIAutomationProvider, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="PresentationUI, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="UIAutomationTypes, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="PresentationCFFRasterizer, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="SmartAssembly.StringsEncoding, Culture=neutral, PublicKeyToken=7f465a1c156d4d57">
+                <Merging>
+                    <Pruning>
+                        <Exclusion />
+                    </Pruning>
+                    <Obfuscation>
+                        <Exclusion />
+                    </Obfuscation>
+                </Merging>
+            </Assembly>
+            <Assembly AssemblyName="SmartAssembly.HouseOfCards, Culture=neutral, PublicKeyToken=7f465a1c156d4d57">
+                <Merging>
+                    <Obfuscation>
+                        <Exclusion />
+                    </Obfuscation>
+                </Merging>
+            </Assembly>
+            <Assembly AssemblyName="Microsoft.Xrm.Client, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="Microsoft.Xrm.Sdk.Deployment, Culture=neutral, PublicKeyToken=31bf3856ad364e35" NotAvailable="1">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Data.Services, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.Windows.Input.Manipulations, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="GemBox.LicenseKey, Culture=neutral, PublicKeyToken=cbe2effbf7c41a7b">
+                <Merging Merge="1">
+                    <Pruning />
+                    <Obfuscation />
+                    <ControlFlow />
+                    <MemberRefsProxy />
+                    <ResourcesCompression />
+                </Merging>
+                <Embedding />
+            </Assembly>
+            <Assembly AssemblyName="System.Net.Http, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.ComponentModel.DataAnnotations, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+            <Assembly AssemblyName="System.ServiceModel.Channels, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+                <Merging />
+            </Assembly>
+        </Assemblies>
+    </Configuration>
+</SmartAssemblyProject>
