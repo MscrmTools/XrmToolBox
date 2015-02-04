@@ -273,7 +273,8 @@
             "crm.dynamics.com",
             "crm2.dynamics.com",
             "crm4.dynamics.com",
-            "crm5.dynamics.com"});
+            "crm5.dynamics.com",
+            "crm9.dynamics.com"});
             this.cbbOnlineEnv.Location = new System.Drawing.Point(124, 65);
             this.cbbOnlineEnv.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cbbOnlineEnv.Name = "cbbOnlineEnv";
