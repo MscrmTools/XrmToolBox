@@ -28,9 +28,6 @@ namespace XrmToolBox.Forms
             option.DisplayLargeIcons = rdbToolsListLarge.Checked;
             option.DisplayMostUsedFirst = chkDisplayMuFirst.Checked;
 
-            if (!option.DisplayMostUsedFirst && option.MostUsedList.Count > 0)
-                option.MostUsedList.Clear();
-
             option.HiddenPlugins =
                 lvPlugins.Items.Cast<ListViewItem>().Where(i => i.Checked == false).Select(i => i.Text).ToList();
 
