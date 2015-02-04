@@ -91,6 +91,11 @@ namespace SiteMapEditor.Controls
                 if (txtTitleTitle.Text.Length > 0)
                     collection.Add("Title", txtTitleTitle.Text);
 
+                if (collec.ContainsKey("_disabled"))
+                {
+                    collection.Add("_disabled", collec["_disabled"]);
+                }
+
                 initialLCID = txtTitleLCID.Text;
                 initialTitle = txtTitleTitle.Text;
 

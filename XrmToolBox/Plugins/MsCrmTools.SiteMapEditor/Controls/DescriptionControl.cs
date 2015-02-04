@@ -89,6 +89,11 @@ namespace MsCrmTools.SiteMapEditor.Controls
                 if (txtDescriptionDescription.Text.Length > 0)
                     collection.Add("Description", txtDescriptionDescription.Text);
 
+                if (collec.ContainsKey("_disabled"))
+                {
+                    collection.Add("_disabled", collec["_disabled"]);
+                }
+
                 initialLCID = txtDescriptionLCID.Text;
                 initialDescription = txtDescriptionDescription.Text;
 

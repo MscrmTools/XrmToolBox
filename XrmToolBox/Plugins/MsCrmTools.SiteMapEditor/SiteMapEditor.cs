@@ -560,6 +560,11 @@ namespace MsCrmTools.SiteMapEditor
 
                 tvSiteMap.SelectedNode.Name = tvSiteMap.SelectedNode.Text.Replace(" ", "");
             }
+
+            if (nodeAttributesCollection.ContainsKey("_disabled") && nodeAttributesCollection["_disabled"] == "true")
+            {
+                tvSiteMap.SelectedNode.Text += " - disabled";
+            }
         }
 
         #endregion SiteMap Component Handlers
@@ -813,35 +818,6 @@ namespace MsCrmTools.SiteMapEditor
 
             ManageMenuDisplay();
             tvSiteMap.Nodes[0].Expand();
-
-            // TODO a supprimer
-            //XmlNode siteMapXmlNode = null;
-
-            //MethodInvoker miReadSiteMap = delegate { siteMapXmlNode = siteMapDoc.DocumentElement; };
-
-            //if (InvokeRequired)
-            //    Invoke(miReadSiteMap);
-            //else
-            //    miReadSiteMap();
-
-            //MethodInvoker miFillTreeView = delegate
-            //                                   {
-            //                                       tvSiteMap.Nodes.Clear();
-
-            //                                       TreeNodeHelper.AddTreeViewNode(tvSiteMap, siteMapXmlNode, this);
-
-            //                                       ManageMenuDisplay();
-            //                                       tvSiteMap.Nodes[0].Expand();
-            //                                   };
-
-            //if (tvSiteMap.InvokeRequired)
-            //{
-            //    tvSiteMap.Invoke(miFillTreeView);
-            //}
-            //else
-            //{
-            //    miFillTreeView();
-            //}
         }
 
         /// <summary>
