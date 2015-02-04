@@ -110,6 +110,11 @@ namespace MsCrmTools.SiteMapEditor.Controls
                 
                 collection.Add("IsProfile", chkGroupIsProfile.Checked.ToString().ToLower());
 
+                if (collec.ContainsKey("_disabled"))
+                {
+                    collection.Add("_disabled", collec["_disabled"]);
+                }
+
                 initialUrl = txtGroupUrl.Text;
                 initialId = txtGroupId.Text;
                 initialIsProfile = chkGroupIsProfile.Checked;

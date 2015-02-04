@@ -145,6 +145,11 @@ namespace MsCrmTools.SiteMapEditor.Controls
             if (privilege.Length > 0)
                 collection.Add("Privilege", privilege);
 
+            if (collec.ContainsKey("_disabled"))
+            {
+                collection.Add("_disabled", collec["_disabled"]);
+            }
+
             initialEntity = txtPrivilegeEntity.Text;
             initialPrivCreate = chkPrivilegeCreate.Checked;
             initialPrivRead = chkPrivilegeRead.Checked;

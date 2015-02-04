@@ -263,6 +263,11 @@ namespace MsCrmTools.SiteMapEditor.Controls
                 if (sku.Length > 0)
                     collection.Add("Sku", sku);
 
+                if (collec.ContainsKey("_disabled"))
+                {
+                    collection.Add("_disabled", collec["_disabled"]);
+                }
+
                 initialEntity = txtSubAreaEntity.Text;
                 initialGetStartedPanePath = txtSubAreaGetStartedPanePath.Text;
                 initialGetStartedPanePathAdmin = txtSubAreaGetStartedPanePathAdmin.Text;
