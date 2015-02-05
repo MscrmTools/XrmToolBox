@@ -1,21 +1,18 @@
 ﻿namespace XrmToolBox.AppCode
 {
-    public class CodePlexInformation
+    public class GithubInformation
     {
-        public CodePlexInformation()
+        public GithubInformation()
         {}
 
-        public CodePlexInformation(string version, string rate, string description)
+        public GithubInformation(string version, string description)
         {
             Version = version;
-            Rate = rate;
             Description = description;
         }
 
         public string Version { get; set; }
-
-        public string Rate { get; set; }
-
+        
         public string Description { get; set; }
     }
 }

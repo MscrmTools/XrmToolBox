@@ -30,7 +30,7 @@ namespace XrmToolBox.Forms
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
-            Process.Start("http://xrmtoolbox.codeplex.com/releases");
+            Process.Start("https://github.com/MscrmTools/XrmToolBox/releases");
         }
     }
 }

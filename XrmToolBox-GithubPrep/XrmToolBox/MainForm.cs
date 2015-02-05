@@ -11,6 +11,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Web;
 using System.Windows.Forms;
 using McTools.Xrm.Connection;
 using McTools.Xrm.Connection.WinForms;
@@ -55,7 +56,7 @@ namespace XrmToolBox
         {
             InitializeComponent();
 
-            ProcessCodePlexMenuItemsForPlugin();
+            ProcessMenuItemsForPlugin();
             MouseWheel += (sender, e) => HomePageTab.Focus();
 
             currentOptions = Options.Load();
@@ -158,24 +159,19 @@ namespace XrmToolBox
         private void CheckForNewVersion()
         {
             var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            var cvc = new CodeplexVersionChecker(currentVersion);
-            cvc.OnCodePlexInforRetrieved += (sender, e) =>
-            {
-                var info = (CodePlexInfoRetrievedEventArgs)e;
-                currentReleaseNote = info.Information.Rate;
-                toolStrip1.Items.Insert(10, new ToolStripRateControl(new RateControl(currentReleaseNote)));
-
-                if (!string.IsNullOrEmpty(info.Information.Version))
-                {
-                    if (currentOptions.LastUpdateCheck.Date != DateTime.Now.Date)
-                    {
-                        var nvForm = new NewVersionForm(currentVersion, info.Information.Version, info.Information.Description);
-                        nvForm.ShowDialog(this);
-                    }
-                }
-            };
+            var cvc = new GithubVersionChecker(currentVersion);
 
             cvc.Run();
+
+            if (!string.IsNullOrEmpty(GithubVersionChecker.Cpi.Version))
+            {
+                if (currentOptions.LastUpdateCheck.Date != DateTime.Now.Date)
+                {
+                    var nvForm = new NewVersionForm(currentVersion, GithubVersionChecker.Cpi.Version, GithubVersionChecker.Cpi.Description);
+                    nvForm.ShowDialog(this);
+                }
+            }
+
             currentOptions.LastUpdateCheck = DateTime.Now;
             currentOptions.Save();
         }
@@ -601,6 +597,12 @@ namespace XrmToolBox
             return String.Format("http://{0}.codeplex.com/{1}", plugin.CodePlexUrlName, page);
         }
 
+        private string GetGithubBaseUrl(string page)
+        {
+            var plugin = tabControl1.SelectedTab.GetGithubPlugin();
+            return String.Format("https://github.com/{0}/{1}/{2}", plugin.UserName, plugin.RepositoryName, page);
+        }
+
         private void TsbRatePluginClick(object sender, EventArgs e)
         {
             Process.Start(GetCodePlexUrl("Releases"));
@@ -616,48 +618,61 @@ namespace XrmToolBox
             Process.Start(GetCodePlexUrl("WorkItem/Create"));
         }
 
-        #endregion // Active Plugin
-
-        private void TsbRateClick(object sender, EventArgs e)
+        private void discussionPluginToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("http://xrmtoolbox.codeplex.com/releases");
+            Process.Start(GetGithubBaseUrl("issues/new"));
         }
+
+        #endregion // Active Plugin
 
         private void TsbDiscussClick(object sender, EventArgs e)
         {
-            Process.Start("http://xrmtoolbox.codeplex.com/discussions");
-        }
-
-        private void TsbReportBugClick(object sender, EventArgs e)
-        {
-            Process.Start("http://xrmtoolbox.codeplex.com/WorkItem/Create");
+            Process.Start("https://github.com/MscrmTools/XrmToolBox/issues/new");
         }
 
         #endregion // CodePlex
 
         private void donateInUSDollarsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            donate("EN", "USD");
+            Donate("EN", "USD", "tanguy92@hotmail.com", "Donation for MSCRM Tools - XrmToolBox");
         }
 
         private void donateInEuroToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            donate("EN", "EUR");
+            Donate("EN", "EUR", "tanguy92@hotmail.com", "Donation for MSCRM Tools - XrmToolBox");
         }
 
         private void donateInGBPToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            donate("EN", "GBP");
+            Donate("EN", "GBP", "tanguy92@hotmail.com", "Donation for MSCRM Tools - XrmToolBox");
         }
 
-        private void donate(string language, string currency)
+        private void donateDollarPluginMenuItem_Click(object sender, EventArgs e)
+        {
+            var plugin = tabControl1.SelectedTab.GetPaypalPlugin();
+            Donate("EN","USD", plugin.EmailAccount, plugin.DonationDescription);
+        }
+
+        private void donateEuroPluginMenuItem_Click(object sender, EventArgs e)
+        {
+            var plugin = tabControl1.SelectedTab.GetPaypalPlugin();
+            Donate("EN", "EUR", plugin.EmailAccount, plugin.DonationDescription);
+        }
+
+        private void donateGbpPluginMenuItem_Click(object sender, EventArgs e)
+        {
+            var plugin = tabControl1.SelectedTab.GetPaypalPlugin();
+            Donate("EN", "GBP", plugin.EmailAccount, plugin.DonationDescription);
+        }
+
+        private void Donate(string language, string currency, string emailAccount, string description)
         {
             var url =
                string.Format(
                    "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business={0}&lc={1}&item_name={2}&currency_code={3}&bn=PP%2dDonationsBF",
-                   "tanguy92@hotmail.com",
+                   emailAccount,
                    language,
-                   "Donation%20for%20MSCRM%20Tools%20-%20XrmToolBox",
+                   HttpUtility.UrlEncode(description),
                    currency);
 
             Process.Start(url);
@@ -690,41 +705,82 @@ namespace XrmToolBox
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ProcessCodePlexMenuItemsForPlugin();
+            ProcessMenuItemsForPlugin();
         }
 
-        private void ProcessCodePlexMenuItemsForPlugin()
+        private void ProcessMenuItemsForPlugin()
         {
             if (tabControl1.SelectedIndex == 0) // Home Screen
             {
                 CodePlexPluginMenuItem.Visible = false;
-                CodePlexXrmToolBoxMenuItem.Visible = false;
+                GithubXrmToolBoxMenuItem.Visible = false;
+                PaypalXrmToolBoxToolStripMenuItem.Visible = false;
+                PayPalSelectedPluginToolStripMenuItem.Visible = false;
                 AssignCodePlexMenuItems(tsbCodePlex.DropDownItems);
+                AssignPayPalMenuItems(tsbDonate.DropDownItems);
                 return;
+            }
+
+            var paypalPlugin = tabControl1.SelectedTab.GetPaypalPlugin();
+            if (paypalPlugin == null)
+            {
+                PaypalXrmToolBoxToolStripMenuItem.Visible = false;
+                PayPalSelectedPluginToolStripMenuItem.Visible = false;
+                AssignPayPalMenuItems(tsbDonate.DropDownItems);
+            }
+            else
+            {
+                PaypalXrmToolBoxToolStripMenuItem.Visible = true;
+                PayPalSelectedPluginToolStripMenuItem.Visible = true;
+                PayPalSelectedPluginToolStripMenuItem.Text = paypalPlugin.GetType().GetTitle();
+                AssignPayPalMenuItems(PaypalXrmToolBoxToolStripMenuItem.DropDownItems);
             }
 
             var plugin = tabControl1.SelectedTab.GetCodePlexPlugin();
             if (plugin == null)
             {
-                CodePlexPluginMenuItem.Visible = false;
-                CodePlexXrmToolBoxMenuItem.Visible = false;
-                AssignCodePlexMenuItems(tsbCodePlex.DropDownItems);
+                var githubPlugin = tabControl1.SelectedTab.GetGithubPlugin();
+
+                if (githubPlugin == null)
+                {
+                    CodePlexPluginMenuItem.Visible = false;
+                    GithubXrmToolBoxMenuItem.Visible = false;
+                    githubPluginMenuItem.Visible = false;
+                    AssignCodePlexMenuItems(tsbCodePlex.DropDownItems);
+                }
+                else
+                {
+                    CodePlexPluginMenuItem.Visible = false;
+                    GithubXrmToolBoxMenuItem.Visible = true;
+                    githubPluginMenuItem.Visible = true;
+                    CodePlexPluginMenuItem.Text = githubPlugin.GetType().GetTitle();
+                    AssignCodePlexMenuItems(GithubXrmToolBoxMenuItem.DropDownItems);
+                }
             }
             else
             {
                 CodePlexPluginMenuItem.Visible = true;
-                CodePlexXrmToolBoxMenuItem.Visible = true;
+                GithubXrmToolBoxMenuItem.Visible = true;
+                githubPluginMenuItem.Visible = false;
                 CodePlexPluginMenuItem.Text = plugin.GetType().GetTitle();
-                AssignCodePlexMenuItems(CodePlexXrmToolBoxMenuItem.DropDownItems);
+                AssignCodePlexMenuItems(GithubXrmToolBoxMenuItem.DropDownItems);
             }
         }
 
         private void AssignCodePlexMenuItems(ToolStripItemCollection dropDownItems)
         {
             dropDownItems.AddRange(new ToolStripItem[] {
-                reportABugToolStripMenuItem,
-                startADiscussionToolStripMenuItem,
-                rateThisToolToolStripMenuItem});
+                startADiscussionToolStripMenuItem});
+        }
+
+        private void AssignPayPalMenuItems(ToolStripItemCollection dropDownItems)
+        {
+            dropDownItems.AddRange(new ToolStripItem[]
+            {
+                donateInUSDollarsToolStripMenuItem,
+                donateInEuroToolStripMenuItem,
+                donateInGBPToolStripMenuItem
+            });
         }
     }
 
@@ -739,6 +795,18 @@ namespace XrmToolBox
         {
             // ReSharper disable once SuspiciousTypeConversion.Global
             return page.Controls[0] as ICodePlexPlugin;
+        }
+
+        public static IGitHubPlugin GetGithubPlugin(this TabPage page)
+        {
+            // ReSharper disable once SuspiciousTypeConversion.Global
+            return page.Controls[0] as IGitHubPlugin;
+        }
+
+        public static IPayPalPlugin GetPaypalPlugin(this TabPage page)
+        {
+            // ReSharper disable once SuspiciousTypeConversion.Global
+            return page.Controls[0] as IPayPalPlugin;
         }
 
         public static string GetTitle(this Type pluginType)
