@@ -18,7 +18,7 @@ using XrmToolBox;
 
 namespace MsCrmTools.SampleTool
 {
-    public partial class SampleTool : PluginBase
+    public partial class SampleTool : PluginBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin
     {
         private IOrganizationService service;
 
@@ -59,6 +59,31 @@ namespace MsCrmTools.SampleTool
         private void BtnCloseClick(object sender, EventArgs e)
         {
             CloseTool();
+        }
+
+        public string UserName
+        {
+            get { return "GithubUserName"; }
+        }
+
+        public string RepositoryName
+        {
+            get { return "GithubRepositoryName"; }
+        }
+
+        public string CodePlexUrlName
+        {
+            get { return "CodePlex"; }
+        }
+
+        public string EmailAccount
+        {
+            get { return "paypal@paypal.com"; }
+        }
+
+        public string DonationDescription
+        {
+            get { return "paypal description"; }
         }
     }
 }

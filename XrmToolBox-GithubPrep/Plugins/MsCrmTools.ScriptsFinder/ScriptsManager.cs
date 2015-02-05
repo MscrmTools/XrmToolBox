@@ -55,14 +55,39 @@ namespace MsCrmTools.ScriptsFinder
 
                     foreach (XmlNode handlerNode in eventNode.SelectNodes("Handlers/Handler"))
                     {
+                      
                         var script = new Script();
                         script.EntityLogicalName = emd.LogicalName;
                         script.EntityName = emd.DisplayName.UserLocalizedLabel.Label;
                         script.ScriptLocation = handlerNode.Attributes["libraryName"].Value;
                         script.MethodCalled = handlerNode.Attributes["functionName"].Value;
                         script.Event = eventName;
-                        script.Attribute = eventName == "onchange" ? emd.Attributes.First(x=>x.LogicalName == eventNode.Attributes["attribute"].Value).DisplayName.UserLocalizedLabel.Label : "";
-                        script.AttributeLogicalName = eventName == "onchange" ? eventNode.Attributes["attribute"].Value : "";
+
+                        if (eventName == "onchange")
+                        {
+                            var amd = emd.Attributes.FirstOrDefault(x => x.LogicalName == eventNode.Attributes["attribute"].Value);
+
+                            if (amd != null)
+                            {
+                                var displayName = amd.DisplayName != null && amd.DisplayName.UserLocalizedLabel != null
+                                    ? amd.DisplayName.UserLocalizedLabel.Label
+                                    : "(" + amd.LogicalName + ")";
+
+                                script.Attribute = displayName;
+                                script.AttributeLogicalName = amd.LogicalName;
+                            }
+                            else
+                            {
+                                script.Attribute = eventNode.Attributes["attribute"].Value;
+                                script.AttributeLogicalName = eventNode.Attributes["attribute"].Value;
+                                script.HasProblem = true;
+                            }
+                        }
+                        else
+                        {
+                            script.Attribute = "";
+                            script.AttributeLogicalName = "";
+                        }
                         script.Name = form["name"].ToString();
                         script.Type = "Form event";
 

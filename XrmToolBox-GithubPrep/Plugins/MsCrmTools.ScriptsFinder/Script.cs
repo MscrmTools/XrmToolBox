@@ -20,5 +20,7 @@ namespace MsCrmTools.ScriptsFinder
         public List<string> Dependencies { get; set; }
 
         public string Type { get; set; }
+
+        public bool HasProblem { get; set; }
     }
 }
