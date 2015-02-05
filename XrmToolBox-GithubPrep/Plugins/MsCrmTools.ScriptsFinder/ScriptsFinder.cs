@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -61,6 +62,10 @@ namespace MsCrmTools.ScriptsFinder
                         item.SubItems.Add(script.ScriptLocation);
                         item.SubItems.Add(script.MethodCalled);
 
+                        if (script.HasProblem)
+                        {
+                            item.ForeColor = Color.Red;
+                        }
                         lScripts.Add(item);
                     }
 

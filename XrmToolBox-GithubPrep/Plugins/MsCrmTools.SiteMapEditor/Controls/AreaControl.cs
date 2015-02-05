@@ -127,6 +127,11 @@ namespace MsCrmTools.SiteMapEditor.Controls
                     collection.Add("Title", txtAreaTitle.Text);
                 collection.Add("ShowGroups", chkAreaShowGroups.Checked.ToString().ToLower());
 
+                if (collec.ContainsKey("_disabled"))
+                {
+                    collection.Add("_disabled", collec["_disabled"]);
+                }
+
                 initialUrl = txtAreaUrl.Text;
                 initialId = txtAreaId.Text;
                 initialIcon = txtAreaIcon.Text;
