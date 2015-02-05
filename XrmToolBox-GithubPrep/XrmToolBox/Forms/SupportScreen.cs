@@ -12,23 +12,8 @@ namespace XrmToolBox.Forms
         public SupportScreen(string codeplexNote)
         {
             InitializeComponent();
-
-            decimal rate;
-
-            if (decimal.TryParse(codeplexNote, out rate))
-            {
-                lblRateInfo.Text += string.Format(" (current note: {0} / 5)", rate.ToString("N2"));
-            }
-            else
-            {
-                lblRateInfo.Text += " (Not yet rated)";
-            }
         }
-
-       private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-       {
-           Process.Start("https://xrmtoolbox.codeplex.com/");
-       }
+        
 
        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
        {
