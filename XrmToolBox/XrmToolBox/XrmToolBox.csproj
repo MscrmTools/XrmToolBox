@@ -98,6 +98,7 @@
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -120,7 +121,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractControlDescriptionProvider.cs" />
-    <Compile Include="AppCode\CodePlexInformation.cs" />
+    <Compile Include="AppCode\GithubInformation.cs" />
+    <Compile Include="AppCode\Github.cs" />
     <Compile Include="Attributes\AssemblyAttributeHelper.cs" />
     <Compile Include="Attributes\BackgroundColorAttribute.cs" />
     <Compile Include="Attributes\BigImageBase64Attribute.cs" />
@@ -133,17 +135,18 @@
     <Compile Include="Forms\NewVersionForm.Designer.cs">
       <DependentUpon>NewVersionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppCode\CodePlexInfoRetrievedEventArgs.cs" />
     <Compile Include="Forms\WelcomeDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\WelcomeDialog.Designer.cs">
       <DependentUpon>WelcomeDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="IPayPalPlugin.cs" />
+    <Compile Include="IGitHubPlugin.cs" />
     <Compile Include="ICodePlexPlugin.cs" />
     <Compile Include="InvalidXrmSdkReferenceException.cs" />
     <Compile Include="PluginCloseInfo.cs" />
-    <Compile Include="AppCode\CodeplexVersionChecker.cs" />
+    <Compile Include="AppCode\GithubVersionChecker.cs" />
     <Compile Include="CrmExceptionHelper.cs" />
     <Compile Include="ExternalMethodCallerInfo.cs" />
     <Compile Include="Forms\AboutForm.cs">
@@ -163,12 +166,6 @@
     </Compile>
     <Compile Include="Forms\OptionsDialog.Designer.cs">
       <DependentUpon>OptionsDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\WelcomeScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\WelcomeScreen.Designer.cs">
-      <DependentUpon>WelcomeScreen.cs</DependentUpon>
     </Compile>
     <Compile Include="IgnorePluginAttribute.cs" />
     <Compile Include="InformationPanel.cs" />
@@ -194,9 +191,6 @@
     </Compile>
     <Compile Include="Forms\TabConnectionUpdater.Designer.cs">
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ToolStripRateControl.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="UserControls\SmallPluginLabel.cs">
       <SubType>Component</SubType>
@@ -229,9 +223,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\WelcomeDialog.resx">
       <DependentUpon>WelcomeDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\WelcomeScreen.resx">
-      <DependentUpon>WelcomeScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -271,9 +262,6 @@
   <ItemGroup>
     <Content Include="favicon3Fr.ico" />
     <Content Include="XrmToolBox.ico" />
-    <EmbeddedResource Include="Images\emptystar.png" />
-    <EmbeddedResource Include="Images\fullstar.png" />
-    <EmbeddedResource Include="Images\mediumstar.png" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />
     <EmbeddedResource Include="Images\progress.gif" />
@@ -313,7 +301,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
