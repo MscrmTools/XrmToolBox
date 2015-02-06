@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>GemBox.Spreadsheet</id>
+    <version>37.3.30.1110</version>
+    <title>GemBox.Spreadsheet</title>
+    <authors>GemBox Software</authors>
+    <owners>GemBox Software</owners>
+    <licenseUrl>http://www.gemboxsoftware.com/Spreadsheet/Eula.rtf</licenseUrl>
+    <projectUrl>http://www.gemboxsoftware.com/Spreadsheet/Overview</projectUrl>
+    <iconUrl>http://www.gemboxsoftware.com/images/nugetgbs.png</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>GemBox.Spreadsheet is a .NET component that enables developers to read, write, convert and print spreadsheet files (XLSX, XLS, ODS, CSV, HTML, PDF or XPS) from their .NET applications using one simple API.</description>
+    <summary>GemBox.Spreadsheet is a .NET component for reading and writing spreadsheet files (XLSX, XLS, CSV, ODS, HTML, PDF and XPS).</summary>
+    <releaseNotes>- Added support for XLSX encryption.
+- Improved print options: added support for PrintTicket stream.
+- Improved quality of rendering metafiles (EMF, WMF) in PDF, XPS, image formats and printing.
+- Fixed issues with DateTime formats which depend on operating system regional date and time settings.
+- Various fixes and enhancements in GemBox.Spreadsheet model and PDF and XLSX readers / writers.</releaseNotes>
+    <copyright>Copyright (c) GemBox Software 2013</copyright>
+    <language />
+    <tags>GemBox.Spreadsheet Excel XLSX XLS CSV ODS PDF Print OpenXml</tags>
+  </metadata>
+</package>
