@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ServiceModel.Description;
 using System.Xml.Serialization;
 using Microsoft.Xrm.Sdk.Client;
@@ -81,7 +82,8 @@ namespace McTools.Xrm.Connection
         /// <summary>
         /// Get or set the server port
         /// </summary>
-        public string ServerPort { get; set; }
+        [DefaultValue(80)]
+        public int ServerPort { get; set; }
 
         /// <summary>
         /// Get or set the organization name
@@ -154,7 +156,7 @@ namespace McTools.Xrm.Connection
             var connectionString = string.Format("Url={0}://{1}:{2};",
                 UseSsl ? "https" : "http",
                 UseIfd ? ServerName : UseOsdp ? "disco." + ServerName : UseOnline ? "dev." + ServerName : ServerName,
-                ServerPort.Length == 0 ? (UseSsl ? 443 : 80) : int.Parse(ServerPort));
+                ServerPort == 0 ? (UseSsl ? 443 : 80) : ServerPort);
 
             if (IsCustomAuth)
             {
@@ -223,13 +225,13 @@ namespace McTools.Xrm.Connection
 
                 currentServerName = string.Format("{0}:{1}",
                                                   string.Join(".", serverNameParts),
-                                                  ServerPort.Length == 0 ? (UseSsl ? 443 : 80) : int.Parse(ServerPort));
+                                                  ServerPort == 0 ? (UseSsl ? 443 : 80) : ServerPort);
             }
             else
             {
                 currentServerName = string.Format("{0}:{1}/{2}",
                                                   ServerName,
-                                                  ServerPort.Length == 0 ? (UseSsl ? 443 : 80) : int.Parse(ServerPort),
+                                                  ServerPort == 0 ? (UseSsl ? 443 : 80) : ServerPort,
                                                   Organization);
             }
 

@@ -126,6 +126,17 @@ namespace McTools.Xrm.Connection.WinForms
                 return;
             }
 
+            int serverPort = 80;
+            if (tbServerPort.Text.Length > 0)
+            {
+                if (!int.TryParse(tbServerPort.Text, out serverPort))
+                {
+                    MessageBox.Show(this, "Server port must be a integer value!", "Warning", MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+
             if (proposeToConnect && comboBoxOrganizations.Text.Length == 0 && comboBoxOrganizations.SelectedItem == null &&
                 !(cbUseIfd.Checked || cbUseOSDP.Checked))
             {
@@ -153,7 +164,7 @@ namespace McTools.Xrm.Connection.WinForms
             detail.ServerName = (cbUseOSDP.Checked || cbUseOnline.Checked)
                 ? cbbOnlineEnv.SelectedItem.ToString()
                 : tbServerName.Text;
-            detail.ServerPort = tbServerPort.Text;
+            detail.ServerPort = serverPort;
             detail.UserDomain = tbUserDomain.Text;
             detail.UserName = tbUserLogin.Text;
             detail.UserPassword = tbUserPassword.Text;
@@ -364,6 +375,11 @@ namespace McTools.Xrm.Connection.WinForms
             }
         }
 
+        private void cbUseSsl_CheckedChanged(object sender, EventArgs e)
+        {
+            tbServerPort.Text = cbUseSsl.Checked ? "433" : "80";
+        }
+
         private void RbAuthenticationIntegratedCheckedChanged(object sender, EventArgs e)
         {
             if (rbAuthenticationIntegrated.Checked)
@@ -400,6 +416,17 @@ namespace McTools.Xrm.Connection.WinForms
             if (tbServerName.Text.Length > 0 || cbbOnlineEnv.SelectedIndex >= 0)
                 goodServerData = true;
 
+            int serverPort = 80;
+            if (tbServerPort.Text.Length > 0)
+            {
+                if (!int.TryParse(tbServerPort.Text, out serverPort))
+                {
+                    MessageBox.Show(this, "Server port must be a integer value!", "Warning", MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+
             if (tbUserPassword.Text.IndexOf(";") >= 0)
             {
                 warningMessage += "Password cannot contains semicolon character, which is a split character for Microsoft Dynamics CRM simplified connection strings\r\n";
@@ -430,7 +457,7 @@ namespace McTools.Xrm.Connection.WinForms
                 detail.IsCustomAuth = rbAuthenticationCustom.Checked;
                 detail.UseSsl = cbUseSsl.Checked;
                 detail.ServerName = (cbUseOSDP.Checked || cbUseOnline.Checked) ? cbbOnlineEnv.SelectedItem.ToString() : tbServerName.Text;
-                detail.ServerPort = tbServerPort.Text;
+                detail.ServerPort = serverPort;
                 detail.UserDomain = tbUserDomain.Text;
                 detail.UserName = tbUserLogin.Text;
                 detail.UserPassword = tbUserPassword.Text;
@@ -523,7 +550,7 @@ namespace McTools.Xrm.Connection.WinForms
             //rbAuthenticationIntegrated.CheckedChanged += new EventHandler(rbAuthenticationIntegrated_CheckedChanged);
 
             tbName.Text = detail.ConnectionName;
-            tbServerPort.Text = detail.ServerPort;
+            tbServerPort.Text = detail.ServerPort.ToString(CultureInfo.InvariantCulture);
             tbUserDomain.Text = detail.UserDomain;
             tbUserLogin.Text = detail.UserName;
             tbUserPassword.Text = detail.UserPassword;
@@ -552,6 +579,8 @@ namespace McTools.Xrm.Connection.WinForms
 
                 tbServerName.Text = detail.ServerName;
             }
+
+            cbUseSsl_CheckedChanged(null, null);
         }
 
         /// <summary>
@@ -617,5 +646,7 @@ namespace McTools.Xrm.Connection.WinForms
         }
 
         #endregion
+
+      
     }
 }

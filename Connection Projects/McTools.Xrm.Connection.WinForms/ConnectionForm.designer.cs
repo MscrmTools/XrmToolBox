@@ -121,6 +121,7 @@
             this.cbUseSsl.TabIndex = 3;
             this.cbUseSsl.Text = "Use SSL";
             this.cbUseSsl.UseVisualStyleBackColor = true;
+            this.cbUseSsl.CheckedChanged += new System.EventHandler(this.cbUseSsl_CheckedChanged);
             // 
             // rbAuthenticationIntegrated
             // 
@@ -332,6 +333,7 @@
             this.tbServerPort.Name = "tbServerPort";
             this.tbServerPort.Size = new System.Drawing.Size(433, 26);
             this.tbServerPort.TabIndex = 8;
+            this.tbServerPort.Text = "80";
             // 
             // labelServerPort
             // 
