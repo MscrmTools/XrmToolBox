@@ -63,35 +63,13 @@ namespace XrmToolBox
             currentOptions = Options.Load();
             Text = string.Format("{0} (v{1})", Text, Assembly.GetExecutingAssembly().GetName().Version);
 
-            // Hide();
-            // LaunchWelcomeMessage();
             ManageConnectionControl();
-            // Show();
             CheckForNewVersion();
         }
 
         #endregion Constructor
 
         #region Initialization methods
-
-        private void LaunchWelcomeMessage()
-        {
-            var welcomeWorker = new BackgroundWorker();
-            welcomeWorker.DoWork += (sender, e) =>
-            {
-                var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                var blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
-                blackScreen.ShowDialog();
-            };
-            welcomeWorker.RunWorkerCompleted += (sender, e) =>
-            {
-                if (e.Error != null)
-                {
-                    MessageBox.Show(e.Error.ToString());
-                }
-            };
-            welcomeWorker.RunWorkerAsync();
-        }
 
         private void ManageConnectionControl()
         {
