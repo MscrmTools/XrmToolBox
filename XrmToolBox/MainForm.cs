@@ -23,6 +23,7 @@ using XrmToolBox.AppCode;
 using XrmToolBox.Attributes;
 using XrmToolBox.Forms;
 using XrmToolBox.UserControls;
+using System.Threading.Tasks;
 
 namespace XrmToolBox
 {
@@ -62,10 +63,10 @@ namespace XrmToolBox
             currentOptions = Options.Load();
             Text = string.Format("{0} (v{1})", Text, Assembly.GetExecutingAssembly().GetName().Version);
 
-            Hide();
-            LaunchWelcomeMessage();
+            // Hide();
+            // LaunchWelcomeMessage();
             ManageConnectionControl();
-            Show();
+            // Show();
             CheckForNewVersion();
         }
 
@@ -180,10 +181,29 @@ namespace XrmToolBox
 
         #region Form events
 
-        private void Form1Load(object sender, EventArgs e)
+        private async void Form1Load(object sender, EventArgs e)
         {
-            pManager = new PluginManager();
-            pManager.LoadPlugins();
+            var tasks = new List<Task>();
+
+            tasks.Add(new Task(() =>
+                {
+                    pManager = new PluginManager();
+                    pManager.LoadPlugins();
+                }));
+
+            tasks.Add(new Task(() =>
+                {
+                    var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                    var blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
+                    blackScreen.ShowDialog(this);
+                }));
+
+            foreach (var task in tasks)
+            {
+                task.Start();
+            }
+
+            await Task.WhenAny(tasks.ToArray());
 
             DisplayPlugins();
         }
