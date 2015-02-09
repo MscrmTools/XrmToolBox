@@ -158,7 +158,7 @@ namespace XrmToolBox
 
         #region Form events
 
-        private async void Form1Load(object sender, EventArgs e)
+        private async void MainForm_Load(object sender, EventArgs e)
         {
             var tasks = new List<Task>();
 
