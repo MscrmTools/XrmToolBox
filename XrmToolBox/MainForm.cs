@@ -3,22 +3,22 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Web;
-using System.Windows.Forms;
 using McTools.Xrm.Connection;
 using McTools.Xrm.Connection.WinForms;
 using Microsoft.Xrm.Client;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.Web;
+using System.Windows.Forms;
 using XrmToolBox.AppCode;
 using XrmToolBox.Attributes;
 using XrmToolBox.Forms;
@@ -62,35 +62,13 @@ namespace XrmToolBox
             currentOptions = Options.Load();
             Text = string.Format("{0} (v{1})", Text, Assembly.GetExecutingAssembly().GetName().Version);
 
-            Hide();
-            LaunchWelcomeMessage();
             ManageConnectionControl();
-            Show();
             CheckForNewVersion();
         }
 
         #endregion Constructor
 
         #region Initialization methods
-
-        private void LaunchWelcomeMessage()
-        {
-            var welcomeWorker = new BackgroundWorker();
-            welcomeWorker.DoWork += (sender, e) =>
-            {
-                var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                var blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
-                blackScreen.ShowDialog();
-            };
-            welcomeWorker.RunWorkerCompleted += (sender, e) =>
-            {
-                if (e.Error != null)
-                {
-                    MessageBox.Show(e.Error.ToString());
-                }
-            };
-            welcomeWorker.RunWorkerAsync();
-        }
 
         private void ManageConnectionControl()
         {
@@ -180,10 +158,29 @@ namespace XrmToolBox
 
         #region Form events
 
-        private void Form1Load(object sender, EventArgs e)
+        private async void MainForm_Load(object sender, EventArgs e)
         {
-            pManager = new PluginManager();
-            pManager.LoadPlugins();
+            var tasks = new List<Task>();
+
+            tasks.Add(new Task(() =>
+                {
+                    pManager = new PluginManager();
+                    pManager.LoadPlugins();
+                }));
+
+            tasks.Add(new Task(() =>
+                {
+                    var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                    var blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
+                    blackScreen.ShowDialog(this);
+                }));
+
+            foreach (var task in tasks)
+            {
+                task.Start();
+            }
+
+            await Task.WhenAny(tasks.ToArray());
 
             DisplayPlugins();
         }
