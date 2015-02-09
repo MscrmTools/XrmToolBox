@@ -176,8 +176,8 @@ namespace McTools.Xrm.Connection.WinForms
                 hadCreatedNewConnection = true;
 
                 var item = new ListViewItem(newConnection.ConnectionName);
-                item.SubItems.Add(newConnection.Organization);
                 item.SubItems.Add(newConnection.ServerName);
+                item.SubItems.Add(newConnection.Organization);
                 item.SubItems.Add(newConnection.OrganizationVersion);
                 item.Tag = newConnection;
                 item.Group = GetGroup(newConnection.AuthType);
