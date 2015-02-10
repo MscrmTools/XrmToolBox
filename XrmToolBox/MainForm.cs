@@ -171,10 +171,12 @@ namespace XrmToolBox
 
             tasks.Add(new Task(() =>
                 {
-                    var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                    var blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
-                    blackScreen.ShowDialog();
-                    blackScreen.TopLevel = true;
+                    this.Invoke(new Action(() =>
+                        {
+                            var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                            var blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
+                            blackScreen.ShowDialog(this);
+                        }));
                 }));
 
             tasks.ForEach(x => x.Start());
