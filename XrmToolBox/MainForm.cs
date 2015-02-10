@@ -188,7 +188,6 @@ namespace XrmToolBox
             var tasks = new List<Task>();
 
             tasks.Add(this.LaunchPlugins());
-
             tasks.Add(this.LaunchWelcomeMessage());
 
             tasks.ForEach(x => x.Start());
@@ -241,10 +240,13 @@ namespace XrmToolBox
                 }
             }
 
-            foreach (Control ctrl in HomePageTab.Controls)
-            {
-                ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            }
+            this.Invoke(new Action(() =>
+                {
+                    foreach (Control ctrl in this.HomePageTab.Controls)
+                    {
+                        ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+                    }
+                }));
         }
 
         private Image GetImage(Type plugin, bool small = false)
@@ -301,7 +303,10 @@ namespace XrmToolBox
                 };
 
                 pm.Clicked += PluginClicked;
-                HomePageTab.Controls.Add(pm);
+                this.Invoke(new Action(() =>
+                    {
+                        this.HomePageTab.Controls.Add(pm);
+                    }));
                 top += 104;
             }
             else
@@ -315,7 +320,10 @@ namespace XrmToolBox
                 };
 
                 pm.Clicked += PluginClicked;
-                HomePageTab.Controls.Add(pm);
+                this.Invoke(new Action(() =>
+                    {
+                        this.HomePageTab.Controls.Add(pm);
+                    }));
                 top += 54;
             }
         }
