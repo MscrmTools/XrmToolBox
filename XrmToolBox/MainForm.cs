@@ -190,12 +190,14 @@ namespace XrmToolBox
         private async void MainForm_Load(object sender, EventArgs e)
         {
             this.Opacity = 0;
-            var tasks = new List<Task>();
 
-            tasks.Add(this.LaunchWelcomeDialog());
-            tasks.Add(this.LaunchPluginsLoad());
-            tasks.Add(this.LaunchVersionCheck());
-
+            var tasks = new List<Task>
+            {
+                this.LaunchWelcomeDialog(),
+                this.LaunchPluginsLoad(),
+                this.LaunchVersionCheck()
+            };
+            
             tasks.ForEach(x => x.Start());
             
             await Task.WhenAny(tasks.ToArray());
