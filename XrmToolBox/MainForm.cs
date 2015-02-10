@@ -167,6 +167,17 @@ namespace XrmToolBox
             });
         }
 
+        private Task LaunchPlugins()
+        {
+            return new Task(() =>
+            {
+                pManager = new PluginManager();
+                pManager.LoadPlugins();
+
+                this.DisplayPlugins();
+            });
+        }
+
         #endregion Initialization methods
 
         #region Form events
@@ -176,13 +187,7 @@ namespace XrmToolBox
             this.Opacity = 0;
             var tasks = new List<Task>();
 
-            tasks.Add(new Task(() =>
-                {
-                    pManager = new PluginManager();
-                    pManager.LoadPlugins();
-
-                    this.DisplayPlugins();
-                }));
+            tasks.Add(this.LaunchPlugins());
 
             tasks.Add(this.LaunchWelcomeMessage());
 
