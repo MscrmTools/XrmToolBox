@@ -160,6 +160,7 @@ namespace XrmToolBox
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
+            this.Opacity = 0;
             var tasks = new List<Task>();
 
             tasks.Add(new Task(() =>
@@ -172,17 +173,16 @@ namespace XrmToolBox
                 {
                     var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                     var blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
-                    blackScreen.ShowDialog(this);
+                    blackScreen.ShowDialog();
+                    blackScreen.TopLevel = true;
                 }));
 
-            foreach (var task in tasks)
-            {
-                task.Start();
-            }
-
+            tasks.ForEach(x => x.Start());
+            
             await Task.WhenAny(tasks.ToArray());
 
-            DisplayPlugins();
+            this.DisplayPlugins();
+            this.Opacity = 100;
         }
 
         private void DisplayPlugins()
