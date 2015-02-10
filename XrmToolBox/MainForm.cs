@@ -200,7 +200,7 @@ namespace XrmToolBox
             
             tasks.ForEach(x => x.Start());
             
-            await Task.WhenAny(tasks.ToArray());
+            await Task.WhenAll(tasks.ToArray());
 
             this.Opacity = 100;
         }
