@@ -63,7 +63,6 @@ namespace XrmToolBox
             Text = string.Format("{0} (v{1})", Text, Assembly.GetExecutingAssembly().GetName().Version);
 
             ManageConnectionControl();
-            CheckForNewVersion();
         }
 
         #endregion Constructor
@@ -134,24 +133,30 @@ namespace XrmToolBox
             Controls.Add(ccsb);
         }
 
-        private void CheckForNewVersion()
+        private Task LaunchVersionCheck()
         {
-            var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            var cvc = new GithubVersionChecker(currentVersion);
-
-            cvc.Run();
-
-            if (!string.IsNullOrEmpty(GithubVersionChecker.Cpi.Version))
+            return new Task(() =>
             {
-                if (currentOptions.LastUpdateCheck.Date != DateTime.Now.Date)
-                {
-                    var nvForm = new NewVersionForm(currentVersion, GithubVersionChecker.Cpi.Version, GithubVersionChecker.Cpi.Description);
-                    nvForm.ShowDialog(this);
-                }
-            }
+                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                var cvc = new GithubVersionChecker(currentVersion);
 
-            currentOptions.LastUpdateCheck = DateTime.Now;
-            currentOptions.Save();
+                cvc.Run();
+
+                if (!string.IsNullOrEmpty(GithubVersionChecker.Cpi.Version))
+                {
+                    if (currentOptions.LastUpdateCheck.Date != DateTime.Now.Date)
+                    {
+                        this.Invoke(new Action(() =>
+                        {
+                            var nvForm = new NewVersionForm(currentVersion, GithubVersionChecker.Cpi.Version, GithubVersionChecker.Cpi.Description);
+                            nvForm.ShowDialog(this);
+                        }));
+                    }
+                }
+
+                currentOptions.LastUpdateCheck = DateTime.Now;
+                currentOptions.Save();
+            });
         }
 
         private Task LaunchWelcomeDialog()
@@ -189,6 +194,7 @@ namespace XrmToolBox
 
             tasks.Add(this.LaunchWelcomeDialog());
             tasks.Add(this.LaunchPluginsLoad());
+            tasks.Add(this.LaunchVersionCheck());
 
             tasks.ForEach(x => x.Start());
             
