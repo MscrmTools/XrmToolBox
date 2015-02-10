@@ -180,6 +180,8 @@ namespace XrmToolBox
                 {
                     pManager = new PluginManager();
                     pManager.LoadPlugins();
+
+                    this.DisplayPlugins();
                 }));
 
             tasks.Add(this.LaunchWelcomeMessage());
@@ -188,7 +190,6 @@ namespace XrmToolBox
             
             await Task.WhenAny(tasks.ToArray());
 
-            this.DisplayPlugins();
             this.Opacity = 100;
         }
 
