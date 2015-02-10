@@ -154,7 +154,7 @@ namespace XrmToolBox
             currentOptions.Save();
         }
 
-        private Task LaunchWelcomeMessage()
+        private Task LaunchWelcomeDialog()
         {
             return new Task(() =>
             {
@@ -167,7 +167,7 @@ namespace XrmToolBox
             });
         }
 
-        private Task LaunchPlugins()
+        private Task LaunchPluginsLoad()
         {
             return new Task(() =>
             {
@@ -187,8 +187,8 @@ namespace XrmToolBox
             this.Opacity = 0;
             var tasks = new List<Task>();
 
-            tasks.Add(this.LaunchPlugins());
-            tasks.Add(this.LaunchWelcomeMessage());
+            tasks.Add(this.LaunchWelcomeDialog());
+            tasks.Add(this.LaunchPluginsLoad());
 
             tasks.ForEach(x => x.Start());
             
