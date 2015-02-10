@@ -154,6 +154,19 @@ namespace XrmToolBox
             currentOptions.Save();
         }
 
+        private Task LaunchWelcomeMessage()
+        {
+            return new Task(() =>
+            {
+                this.Invoke(new Action(() =>
+                {
+                    var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                    var blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
+                    blackScreen.ShowDialog(this);
+                }));
+            });
+        }
+
         #endregion Initialization methods
 
         #region Form events
@@ -169,15 +182,7 @@ namespace XrmToolBox
                     pManager.LoadPlugins();
                 }));
 
-            tasks.Add(new Task(() =>
-                {
-                    this.Invoke(new Action(() =>
-                        {
-                            var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                            var blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
-                            blackScreen.ShowDialog(this);
-                        }));
-                }));
+            tasks.Add(this.LaunchWelcomeMessage());
 
             tasks.ForEach(x => x.Start());
             
