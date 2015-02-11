@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace XrmToolBox
 {
@@ -53,7 +54,7 @@ namespace XrmToolBox
             {
                 var files = Directory.GetFileSystemEntries(directoryInfo.FullName, "*.dll");
 
-                foreach (var file in files)
+                Parallel.ForEach(files, file =>
                 {
                     try
                     {
@@ -94,7 +95,7 @@ namespace XrmToolBox
                             throw;
                         }// else eat it
                     }
-                }
+                });
             }
         }
 
