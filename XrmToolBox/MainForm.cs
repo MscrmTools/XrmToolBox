@@ -209,14 +209,21 @@ namespace XrmToolBox
         {
             if (pManager.Plugins.Count == 0)
             {
-                pnlHelp.Visible = true;
+                this.Invoke(new Action(() =>
+                    {
+                        this.pnlHelp.Visible = true;
+                    }));
+                
                 return;
             }
             
             var top = 4;
             int lastWidth = HomePageTab.Width - 28;
 
-            HomePageTab.Controls.Clear();
+            this.Invoke(new Action(() =>
+                {
+                    this.HomePageTab.Controls.Clear();
+                }));
 
             if (currentOptions.DisplayMostUsedFirst)
             {
