@@ -58,6 +58,8 @@ namespace MsCrmTools.AssemblyRecoveryTool
                 },
                 e =>
                 {
+                    listView_Assemblies.Items.Clear();
+
                     var list = (List<Entity>) e.Result;
 
                     foreach (Entity pAssembly in list)
