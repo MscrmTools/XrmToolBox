@@ -148,7 +148,24 @@ img {
   -ms-box-shadow: 0 0 5px #ebebeb;
 }
 
-img.logo {
+img.mainImg {
+    max-width: 600px;
+    	box-shadow: 0 0 0 #ebebeb;
+  -webkit-box-shadow: 0 0 0 #ebebeb;
+  -moz-box-shadow: 0 0 0 #ebebeb;
+  -o-box-shadow: 0 0 0 #ebebeb;
+  -ms-box-shadow: 0 0 0 #ebebeb;
+}
+
+img.logo{
+	border: 0px solid #ebebeb;
+	box-shadow: 0 0 0 #ebebeb;
+  -webkit-box-shadow: 0 0 0 #ebebeb;
+  -moz-box-shadow: 0 0 0 #ebebeb;
+  -o-box-shadow: 0 0 0 #ebebeb;
+  -ms-box-shadow: 0 0 0 #ebebeb;
+}
+img.paypal {
 	border: 0px solid #ebebeb;
 	box-shadow: 0 0 0 #ebebeb;
   -webkit-box-shadow: 0 0 0 #ebebeb;
@@ -248,6 +265,16 @@ table {
   text-align: left;
  }
 
+    table.paypal {
+        border: 0 solid #373737;
+    }
+
+        table.paypal td{
+        border: 0 solid #373737;
+            margin: 0;
+            padding: 0;
+    }
+
 th {
   font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   padding: 10px;
@@ -263,6 +290,10 @@ td {
 form {
   background: #f2f2f2;
   padding: 20px;
+}
+
+form.paypal {
+    padding: 0;
 }
 
 /*******************************************************************************
@@ -326,7 +357,7 @@ Full-Width Styles
 
 #downloads {
   position: absolute;
-  width: 210px;
+  width: 110px;
   z-index: 10;
   bottom: -40px;
   right: 0;
@@ -358,8 +389,8 @@ Full-Width Styles
 .bin_download_link {
   display: block;
   float: right;
-  width: 90px;
-  height:70px;
+  width: 70px;
+  height:64px;
   text-indent: -5000px;
   overflow: hidden;
   background: url(../images/download60.png) no-repeat bottom left;
