@@ -138,6 +138,8 @@ namespace McTools.Xrm.Connection
             }
         }
 
+        public string WebApplicationUrl { get; set; }
+
         #endregion
 
         #region Méthodes

@@ -188,6 +188,7 @@ namespace McTools.Xrm.Connection.WinForms
             if (selectedOrganization != null)
             {
                 detail.OrganizationServiceUrl = selectedOrganization.Endpoints[EndpointType.OrganizationService];
+                detail.WebApplicationUrl = selectedOrganization.Endpoints[EndpointType.WebApplication];
                 detail.Organization = selectedOrganization.UniqueName;
                 detail.OrganizationUrlName = selectedOrganization.UrlName;
                 detail.OrganizationFriendlyName = selectedOrganization.FriendlyName;
