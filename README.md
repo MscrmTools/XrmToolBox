@@ -1,4 +1,6 @@
 # XrmToolBox
+
+[![Join the chat at https://gitter.im/MscrmTools/XrmToolBox](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/MscrmTools/XrmToolBox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 XrmToolBox is an application that can connect to Microsoft Dynamics CRM 2011, 2013 and 2015 (Online, OnPremise of IFD). It is shipped with more than 20 plugins to handle several administration, customization or configuration tasks.
 
 One of the great point about XrmToolBox is its capability to welcome external plugins written by other developers, just by implementing specific part of XrmToolBox code.
