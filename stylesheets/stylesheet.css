@@ -357,12 +357,20 @@ Full-Width Styles
 
 #downloads {
   position: absolute;
-  width: 110px;
+  width: 400px;
   z-index: 10;
   bottom: -40px;
   right: 0;
   height: 70px;
-  background: url('../images/icon_download.png') no-repeat 0% 90%;
+  /*background: url('../images/icon_download.png') no-repeat 0% 90%;*/
+}
+
+.downloadCountContent{
+	right:0;
+	padding-right:80px;
+	position:absolute;
+	bottom:0;
+	padding-bottom:10px;
 }
 
 .zip_download_link {

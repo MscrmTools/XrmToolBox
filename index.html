@@ -8,7 +8,33 @@
     <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="favicon.png" sizes="16x16" />
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script>
+	  $(document).ready(function () {
+            $.ajax({
+                url: 'https://api.github.com/repos/MscrmTools/XrmToolBox/releases',
+                success: function (data) {
+                    if (data.length > 0) {
+						var allCount = 0;
+						
+						$(data).each(function(index){
+							allCount += this.assets[0].download_count;
+						});
+											
+                        $("#latestVersionDownloadCount").text(data[0].assets[0].download_count);
+                        $("#allDownloadCount").text(allCount);
+						$("#downloadLink").attr("href", data[0].assets[0].browser_download_url);
+                       
+                    } else {
+                         $("#latestVersionDownloadCount").text("0");
+                        $("#allDownloadCount").text("0");
+                    }
+                }
+            });
+        });
+
+	
+	
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
                 (i[r].q = i[r].q || []).push(arguments)
@@ -37,7 +63,8 @@
             <section id="downloads">
                 <!--<a class="zip_download_link" href="https://github.com/MscrmTools/XrmToolBox/zipball/master">Download this project as a .zip file</a>
                 <a class="tar_download_link" href="https://github.com/MscrmTools/XrmToolBox/tarball/master">Download this project as a tar.gz file</a>-->
-                <a class="bin_download_link" href="https://github.com/MscrmTools/XrmToolBox/releases">Download latest release</a>
+				<span class="downloadCountContent">Downloads: <span id="latestVersionDownloadCount"></span> (All versions: <span id="allDownloadCount"></span>)</span>
+                <a id="downloadLink" class="bin_download_link" href="https://github.com/MscrmTools/XrmToolBox/releases">Download latest release</a>
             </section>
         </header>
     </div>
