@@ -49,6 +49,8 @@ namespace XrmToolBox
             this.tsbCodePlex = new System.Windows.Forms.ToolStripDropDownButton();
             this.startADiscussionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.GithubXrmToolBoxMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.githubPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.discussionPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CodePlexPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportABugPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.startADiscussionPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,18 +60,16 @@ namespace XrmToolBox
             this.donateInUSDollarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateInEuroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateInGBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.HomePageTab = new System.Windows.Forms.TabPage();
-            this.pnlHelp = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.githubPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.discussionPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.PaypalXrmToolBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.PayPalSelectedPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateDollarPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateEuroPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateGbpPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.HomePageTab = new System.Windows.Forms.TabPage();
+            this.pnlHelp = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.HomePageTab.SuspendLayout();
@@ -86,7 +86,6 @@ namespace XrmToolBox
             // 
             // toolStrip1
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbConnect,
             this.toolStripSeparator2,
@@ -225,6 +224,23 @@ namespace XrmToolBox
             this.GithubXrmToolBoxMenuItem.Size = new System.Drawing.Size(356, 30);
             this.GithubXrmToolBoxMenuItem.Text = "XrmToolbox";
             // 
+            // githubPluginMenuItem
+            // 
+            this.githubPluginMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.discussionPluginToolStripMenuItem});
+            this.githubPluginMenuItem.Name = "githubPluginMenuItem";
+            this.githubPluginMenuItem.Size = new System.Drawing.Size(356, 30);
+            this.githubPluginMenuItem.Text = "Selected Plugin";
+            this.githubPluginMenuItem.Visible = false;
+            // 
+            // discussionPluginToolStripMenuItem
+            // 
+            this.discussionPluginToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("discussionPluginToolStripMenuItem.Image")));
+            this.discussionPluginToolStripMenuItem.Name = "discussionPluginToolStripMenuItem";
+            this.discussionPluginToolStripMenuItem.Size = new System.Drawing.Size(356, 30);
+            this.discussionPluginToolStripMenuItem.Text = "New issue / question / discussion";
+            this.discussionPluginToolStripMenuItem.Click += new System.EventHandler(this.discussionPluginToolStripMenuItem_Click);
+            // 
             // CodePlexPluginMenuItem
             // 
             this.CodePlexPluginMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -302,6 +318,46 @@ namespace XrmToolBox
             this.donateInGBPToolStripMenuItem.Text = "Donate in GBP";
             this.donateInGBPToolStripMenuItem.Click += new System.EventHandler(this.donateInGBPToolStripMenuItem_Click);
             // 
+            // PaypalXrmToolBoxToolStripMenuItem
+            // 
+            this.PaypalXrmToolBoxToolStripMenuItem.Name = "PaypalXrmToolBoxToolStripMenuItem";
+            this.PaypalXrmToolBoxToolStripMenuItem.Size = new System.Drawing.Size(256, 30);
+            this.PaypalXrmToolBoxToolStripMenuItem.Text = "XrmToolBox";
+            // 
+            // PayPalSelectedPluginToolStripMenuItem
+            // 
+            this.PayPalSelectedPluginToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.donateDollarPluginMenuItem,
+            this.donateEuroPluginMenuItem,
+            this.donateGbpPluginMenuItem});
+            this.PayPalSelectedPluginToolStripMenuItem.Name = "PayPalSelectedPluginToolStripMenuItem";
+            this.PayPalSelectedPluginToolStripMenuItem.Size = new System.Drawing.Size(256, 30);
+            this.PayPalSelectedPluginToolStripMenuItem.Text = "SelectedPlugin";
+            // 
+            // donateDollarPluginMenuItem
+            // 
+            this.donateDollarPluginMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateDollarPluginMenuItem.Image")));
+            this.donateDollarPluginMenuItem.Name = "donateDollarPluginMenuItem";
+            this.donateDollarPluginMenuItem.Size = new System.Drawing.Size(256, 30);
+            this.donateDollarPluginMenuItem.Text = "Donate in US Dollars";
+            this.donateDollarPluginMenuItem.Click += new System.EventHandler(this.donateDollarPluginMenuItem_Click);
+            // 
+            // donateEuroPluginMenuItem
+            // 
+            this.donateEuroPluginMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateEuroPluginMenuItem.Image")));
+            this.donateEuroPluginMenuItem.Name = "donateEuroPluginMenuItem";
+            this.donateEuroPluginMenuItem.Size = new System.Drawing.Size(256, 30);
+            this.donateEuroPluginMenuItem.Text = "Donate in Euro";
+            this.donateEuroPluginMenuItem.Click += new System.EventHandler(this.donateEuroPluginMenuItem_Click);
+            // 
+            // donateGbpPluginMenuItem
+            // 
+            this.donateGbpPluginMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateGbpPluginMenuItem.Image")));
+            this.donateGbpPluginMenuItem.Name = "donateGbpPluginMenuItem";
+            this.donateGbpPluginMenuItem.Size = new System.Drawing.Size(256, 30);
+            this.donateGbpPluginMenuItem.Text = "Donate in GBP";
+            this.donateGbpPluginMenuItem.Click += new System.EventHandler(this.donateGbpPluginMenuItem_Click);
+            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.HomePageTab);
@@ -368,63 +424,6 @@ namespace XrmToolBox
             this.label1.TabIndex = 0;
             this.label1.Text = "Oups... no plugin found!";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // githubPluginMenuItem
-            // 
-            this.githubPluginMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.discussionPluginToolStripMenuItem});
-            this.githubPluginMenuItem.Name = "githubPluginMenuItem";
-            this.githubPluginMenuItem.Size = new System.Drawing.Size(356, 30);
-            this.githubPluginMenuItem.Text = "Selected Plugin";
-            this.githubPluginMenuItem.Visible = false;
-            // 
-            // discussionPluginToolStripMenuItem
-            // 
-            this.discussionPluginToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("discussionPluginToolStripMenuItem.Image")));
-            this.discussionPluginToolStripMenuItem.Name = "discussionPluginToolStripMenuItem";
-            this.discussionPluginToolStripMenuItem.Size = new System.Drawing.Size(356, 30);
-            this.discussionPluginToolStripMenuItem.Text = "New issue / question / discussion";
-            this.discussionPluginToolStripMenuItem.Click += new System.EventHandler(this.discussionPluginToolStripMenuItem_Click);
-            // 
-            // PaypalXrmToolBoxToolStripMenuItem
-            // 
-            this.PaypalXrmToolBoxToolStripMenuItem.Name = "PaypalXrmToolBoxToolStripMenuItem";
-            this.PaypalXrmToolBoxToolStripMenuItem.Size = new System.Drawing.Size(256, 30);
-            this.PaypalXrmToolBoxToolStripMenuItem.Text = "XrmToolBox";
-            // 
-            // PayPalSelectedPluginToolStripMenuItem
-            // 
-            this.PayPalSelectedPluginToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.donateDollarPluginMenuItem,
-            this.donateEuroPluginMenuItem,
-            this.donateGbpPluginMenuItem});
-            this.PayPalSelectedPluginToolStripMenuItem.Name = "PayPalSelectedPluginToolStripMenuItem";
-            this.PayPalSelectedPluginToolStripMenuItem.Size = new System.Drawing.Size(256, 30);
-            this.PayPalSelectedPluginToolStripMenuItem.Text = "SelectedPlugin";
-            // 
-            // donateDollarPluginMenuItem
-            // 
-            this.donateDollarPluginMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateDollarPluginMenuItem.Image")));
-            this.donateDollarPluginMenuItem.Name = "donateDollarPluginMenuItem";
-            this.donateDollarPluginMenuItem.Size = new System.Drawing.Size(256, 30);
-            this.donateDollarPluginMenuItem.Text = "Donate in US Dollars";
-            this.donateDollarPluginMenuItem.Click += new System.EventHandler(this.donateDollarPluginMenuItem_Click);
-            // 
-            // donateEuroPluginMenuItem
-            // 
-            this.donateEuroPluginMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateEuroPluginMenuItem.Image")));
-            this.donateEuroPluginMenuItem.Name = "donateEuroPluginMenuItem";
-            this.donateEuroPluginMenuItem.Size = new System.Drawing.Size(256, 30);
-            this.donateEuroPluginMenuItem.Text = "Donate in Euro";
-            this.donateEuroPluginMenuItem.Click += new System.EventHandler(this.donateEuroPluginMenuItem_Click);
-            // 
-            // donateGbpPluginMenuItem
-            // 
-            this.donateGbpPluginMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateGbpPluginMenuItem.Image")));
-            this.donateGbpPluginMenuItem.Name = "donateGbpPluginMenuItem";
-            this.donateGbpPluginMenuItem.Size = new System.Drawing.Size(256, 30);
-            this.donateGbpPluginMenuItem.Text = "Donate in GBP";
-            this.donateGbpPluginMenuItem.Click += new System.EventHandler(this.donateGbpPluginMenuItem_Click);
             // 
             // MainForm
             // 
