@@ -226,28 +226,28 @@ namespace MsCrmTools.Translator.AppCode
 
             for (int i = 0; i < (3 + languages.Count); i++)
             {
-                StyleMutator.SetCellColorAndFontWeight(areaSheet.Cells[0, i].Style, Color.PowderBlue, isBold: true);
+                StyleMutator.SetCellColorAndFontWeight(groupSheet.Cells[0, i].Style, Color.PowderBlue, isBold: true);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    StyleMutator.SetCellColorAndFontWeight(areaSheet.Cells[i, j].Style, Color.AliceBlue);
+                    StyleMutator.SetCellColorAndFontWeight(groupSheet.Cells[i, j].Style, Color.AliceBlue);
 
                 }
             }
 
             for (int i = 0; i < (4 + languages.Count); i++)
             {
-                StyleMutator.SetCellColorAndFontWeight(areaSheet.Cells[0, i].Style, Color.PowderBlue, isBold: true);
+                StyleMutator.SetCellColorAndFontWeight(subAreaSheet.Cells[0, i].Style, Color.PowderBlue, isBold: true);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    StyleMutator.SetCellColorAndFontWeight(areaSheet.Cells[i, j].Style, Color.AliceBlue);
+                    StyleMutator.SetCellColorAndFontWeight(subAreaSheet.Cells[i, j].Style, Color.AliceBlue);
                 }
             }
         }
