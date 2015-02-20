@@ -107,24 +107,91 @@ namespace MsCrmTools.Translator.AppCode
             // Applying style to cells
             for (int i = 0; i < (4 + languages.Count); i++)
             {
-                sheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                sheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                StyleMutator.SetCellColorAndFontWeight(sheet.Cells[0, i].Style, Color.PowderBlue, isBold:true);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    sheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    StyleMutator.SetCellColorAndFontWeight(sheet.Cells[i, j].Style, Color.AliceBlue);
                 }
             }
         }
 
+#if NO_GEMBOX
         public void Import(ExcelWorksheet sheet, List<EntityMetadata> emds, IOrganizationService service)
         {
             var amds = new List<MasterAttribute>();
 
-            foreach (ExcelRow row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
+            var rowsCount = sheet.Dimension.Rows;
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                var amd = amds.FirstOrDefault(a => a.Amd.MetadataId == new Guid(sheet.Cells[rowI, 0].Value.ToString()));
+                if (amd == null)
+                {
+                    var currentEntity = emds.FirstOrDefault(e => e.LogicalName == sheet.Cells[rowI, 1].Value.ToString());
+                    if (currentEntity == null)
+                    {
+                        var request = new RetrieveEntityRequest
+                        {
+                            LogicalName = sheet.Cells[rowI, 1].Value.ToString(),
+                            EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
+                        };
+
+                        var response = ((RetrieveEntityResponse)service.Execute(request));
+                        currentEntity = response.EntityMetadata;
+
+                        emds.Add(currentEntity);
+                    }
+
+                    amd = new MasterAttribute();
+                    amd.Amd = currentEntity.Attributes.FirstOrDefault(a => a.LogicalName == sheet.Cells[rowI, 2].Value.ToString());
+                    amds.Add(amd);
+                }
+
+                int columnIndex = 4;
+
+                if (sheet.Cells[rowI, 3].Value.ToString() == "DisplayName")
+                {
+                    amd.Amd.DisplayName = new Label();
+
+                    while (sheet.Cells[rowI, columnIndex].Value != null)
+                    {
+                        amd.Amd.DisplayName.LocalizedLabels.Add(new LocalizedLabel(sheet.Cells[rowI, columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+
+                        columnIndex++;
+                    }
+                }
+                else if (sheet.Cells[rowI, 3].Value.ToString() == "Description")
+                {
+                    amd.Amd.Description = new Label();
+
+                    while (sheet.Cells[rowI, columnIndex].Value != null)
+                    {
+                        amd.Amd.Description.LocalizedLabels.Add(new LocalizedLabel(sheet.Cells[rowI, columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+
+                        columnIndex++;
+                    }
+                }
+            }
+
+            foreach (var amd in amds)
+            {
+                if (amd.Amd.DisplayName.LocalizedLabels.All(l => string.IsNullOrEmpty(l.Label))
+                    || amd.Amd.IsRenameable.Value == false)
+                    continue;
+
+                var request = new UpdateAttributeRequest { Attribute = amd.Amd, EntityName = amd.Amd.EntityLogicalName };
+                service.Execute(request);
+            }
+        }
+#else
+        public void Import(ExcelWorksheet sheet, List<EntityMetadata> emds, IOrganizationService service)
+        {
+            var amds = new List<MasterAttribute>();
+
+            foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
             {
                 var amd = amds.FirstOrDefault(a => a.Amd.MetadataId == new Guid(row.Cells[0].Value.ToString()));
                 if (amd == null)
@@ -185,6 +252,7 @@ namespace MsCrmTools.Translator.AppCode
                 service.Execute(request);
             }
         }
+#endif
 
         private void AddHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
         {

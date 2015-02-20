@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -114,19 +113,93 @@ namespace MsCrmTools.Translator.AppCode
             // Applying style to cells
             for (int i = 0; i < (3 + languages.Count); i++)
             {
-                sheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                sheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                StyleMutator.SetCellColorAndFontWeight(sheet.Cells[0, i].Style, Color.PowderBlue, isBold:true);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    sheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    StyleMutator.SetCellColorAndFontWeight(sheet.Cells[i, j].Style, Color.AliceBlue);
                 }
             }
         }
 
+#if NO_GEMBOX
+        public void Import(ExcelWorksheet sheet, List<EntityMetadata> emds, IOrganizationService service)
+        {
+            var rowsCount = sheet.Dimension.Rows;
+
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                {
+                    var emd = emds.FirstOrDefault(e => e.LogicalName == sheet.Cells[rowI, 1].Value.ToString());
+                    if (emd == null)
+                    {
+                        var request = new RetrieveEntityRequest
+                        {
+                            LogicalName = sheet.Cells[rowI, 1].Value.ToString(),
+                            EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
+                        };
+
+                        var response = ((RetrieveEntityResponse) service.Execute(request));
+                        emd = response.EntityMetadata;
+
+                        emds.Add(emd);
+                    }
+
+                    if (sheet.Cells[rowI, 2].Value.ToString() == "DisplayName")
+                    {
+                        emd.DisplayName = new Label();
+                        int columnIndex = 3;
+
+                        while (sheet.Cells[rowI, columnIndex].Value != null)
+                        {
+                            emd.DisplayName.LocalizedLabels.Add(
+                                new LocalizedLabel(sheet.Cells[rowI, columnIndex].Value.ToString(),
+                                    int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+
+                            columnIndex++;
+                        }
+                    }
+                    else if (sheet.Cells[rowI, 2].Value.ToString() == "DisplayCollectionName")
+                    {
+                        emd.DisplayCollectionName = new Label();
+                        int columnIndex = 3;
+
+                        while (sheet.Cells[rowI, columnIndex].Value != null)
+                        {
+                            emd.DisplayCollectionName.LocalizedLabels.Add(
+                                new LocalizedLabel(sheet.Cells[rowI, columnIndex].Value.ToString(),
+                                    int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+
+                            columnIndex++;
+                        }
+                    }
+                    else if (sheet.Cells[rowI, 2].Value.ToString() == "Description")
+                    {
+                        emd.Description = new Label();
+                        int columnIndex = 3;
+
+                        while (sheet.Cells[rowI, columnIndex].Value != null)
+                        {
+                            emd.Description.LocalizedLabels.Add(
+                                new LocalizedLabel(sheet.Cells[rowI, columnIndex].Value.ToString(),
+                                    int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+
+                            columnIndex++;
+                        }
+                    }
+                }
+
+                foreach (var emd in emds.Where(e => e.IsRenameable.Value))
+                {
+                    var request = new UpdateEntityRequest {Entity = emd};
+                    service.Execute(request);
+                }
+            }
+        }
+#else
         public void Import(ExcelWorksheet sheet, List<EntityMetadata> emds, IOrganizationService service)
         {
             foreach (ExcelRow row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
@@ -190,7 +263,7 @@ namespace MsCrmTools.Translator.AppCode
                 service.Execute(request);
             }
         }
-
+#endif
         private void AddHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
         {
             var cell = 0;

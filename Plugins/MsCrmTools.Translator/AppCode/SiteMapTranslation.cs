@@ -214,42 +214,40 @@ namespace MsCrmTools.Translator.AppCode
             // Applying style to cells
             for (int i = 0; i < (2 + languages.Count); i++)
             {
-                areaSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                areaSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                StyleMutator.SetCellColorAndFontWeight(areaSheet.Cells[0, i].Style, Color.PowderBlue, isBold:true);
             }
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 2; j++)
                 {
-                    areaSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    StyleMutator.SetCellColorAndFontWeight(areaSheet.Cells[i, j].Style, Color.AliceBlue);
                 }
             }
 
             for (int i = 0; i < (3 + languages.Count); i++)
             {
-                groupSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                groupSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                StyleMutator.SetCellColorAndFontWeight(areaSheet.Cells[0, i].Style, Color.PowderBlue, isBold: true);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    groupSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    StyleMutator.SetCellColorAndFontWeight(areaSheet.Cells[i, j].Style, Color.AliceBlue);
+
                 }
             }
 
             for (int i = 0; i < (4 + languages.Count); i++)
             {
-                subAreaSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                subAreaSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                StyleMutator.SetCellColorAndFontWeight(areaSheet.Cells[0, i].Style, Color.PowderBlue, isBold: true);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    subAreaSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    StyleMutator.SetCellColorAndFontWeight(areaSheet.Cells[i, j].Style, Color.AliceBlue);
                 }
             }
         }
@@ -262,6 +260,141 @@ namespace MsCrmTools.Translator.AppCode
             return siteMap;
         }
 
+#if NO_GEMBOX
+        public void PrepareAreas(ExcelWorksheet sheet, IOrganizationService service)
+        {
+            if (siteMap == null)
+            {
+                siteMap = GetSiteMap(service);
+            }
+
+            var siteMapDoc = new XmlDocument();
+            siteMapDoc.LoadXml(siteMap["sitemapxml"].ToString());
+
+            var rowsCount = sheet.Dimension.Rows;
+
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                if (sheet.Cells[rowI, 0].Value == null) break;
+
+                var areaId = sheet.Cells[rowI, 0].Value.ToString();
+                var areaNode = siteMapDoc.SelectSingleNode("SiteMap/Area[@Id='" + areaId + "']");
+                if (areaNode == null)
+                {
+                    throw new Exception("Unable to find area with id " + areaId);
+                }
+
+                var columnIndex = 2;
+                while (sheet.Cells[rowI, columnIndex].Value != null)
+                {
+                    if (sheet.Cells[rowI, 1].Value.ToString() == "Title")
+                    {
+                        UpdateXmlNode(areaNode, "Titles", "Title", sheet.Cells[0, columnIndex].Value.ToString(),
+                            sheet.Cells[rowI, columnIndex].Value.ToString());
+                    }
+                    else
+                    {
+                        UpdateXmlNode(areaNode, "Descriptions", "Description", sheet.Cells[0, columnIndex].Value.ToString(),
+                         sheet.Cells[rowI, columnIndex].Value.ToString());
+                    }
+                    columnIndex++;
+                }
+
+            }
+
+            siteMap["sitemapxml"] = siteMapDoc.OuterXml;
+        }
+
+        public void PrepareGroups(ExcelWorksheet sheet, IOrganizationService service)
+        {
+            if (siteMap == null)
+            {
+                siteMap = GetSiteMap(service);
+            }
+
+            var siteMapDoc = new XmlDocument();
+            siteMapDoc.LoadXml(siteMap["sitemapxml"].ToString());
+
+            var rowsCount = sheet.Dimension.Rows;
+
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                if (sheet.Cells[rowI, 0].Value == null) break;
+
+                var areaId = sheet.Cells[rowI, 0].Value.ToString();
+                var groupId = sheet.Cells[rowI, 1].Value.ToString();
+                var groupNode = siteMapDoc.SelectSingleNode("SiteMap/Area[@Id='" + areaId + "']/Group[@Id='" + groupId + "']");
+                if (groupNode == null)
+                {
+                    throw new Exception("Unable to find group with id " + groupId + " in area " + areaId);
+                }
+
+                var columnIndex = 3;
+                while (sheet.Cells[rowI, columnIndex].Value != null)
+                {
+                    if (sheet.Cells[rowI, 1].Value.ToString() == "Title")
+                    {
+                        UpdateXmlNode(groupNode, "Titles", "Title", sheet.Cells[0, columnIndex].Value.ToString(),
+                            sheet.Cells[rowI, columnIndex].Value.ToString());
+                    }
+                    else
+                    {
+                        UpdateXmlNode(groupNode, "Descriptions", "Description", sheet.Cells[0, columnIndex].Value.ToString(),
+                         sheet.Cells[rowI, columnIndex].Value.ToString());
+                    }
+                    columnIndex++;
+                }
+
+            }
+
+            siteMap["sitemapxml"] = siteMapDoc.OuterXml;
+        }
+
+        public void PrepareSubAreas(ExcelWorksheet sheet, IOrganizationService service)
+        {
+            if (siteMap == null)
+            {
+                siteMap = GetSiteMap(service);
+            }
+
+            var siteMapDoc = new XmlDocument();
+            siteMapDoc.LoadXml(siteMap["sitemapxml"].ToString());
+
+            var rowsCount = sheet.Dimension.Rows;
+
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                if (sheet.Cells[rowI, 0].Value == null) break;
+
+                var areaId = sheet.Cells[rowI, 0].Value.ToString();
+                var groupId = sheet.Cells[rowI, 1].Value.ToString();
+                var subAreaId = sheet.Cells[rowI, 2].Value.ToString();
+                var subAreaNode = siteMapDoc.SelectSingleNode("SiteMap/Area[@Id='" + areaId + "']/Group[@Id='" + groupId + "']/SubArea[@Id='" + subAreaId + "']");
+                if (subAreaNode == null)
+                {
+                    throw new Exception("Unable to find group with id " + groupId + " in area " + areaId);
+                }
+
+                var columnIndex = 4;
+                while (sheet.Cells[rowI, columnIndex].Value != null)
+                {
+                    if (sheet.Cells[rowI, 1].Value.ToString() == "Title")
+                    {
+                        UpdateXmlNode(subAreaNode, "Titles", "Title", sheet.Cells[0, columnIndex].Value.ToString(),
+                            sheet.Cells[rowI, columnIndex].Value.ToString());
+                    }
+                    else
+                    {
+                        UpdateXmlNode(subAreaNode, "Descriptions", "Description", sheet.Cells[0, columnIndex].Value.ToString(),
+                         sheet.Cells[rowI, columnIndex].Value.ToString());
+                    }
+                    columnIndex++;
+                }
+            }
+
+            siteMap["sitemapxml"] = siteMapDoc.OuterXml;
+        }
+#else
         public void PrepareAreas(ExcelWorksheet sheet, IOrganizationService service)
         {
             if (siteMap == null)
@@ -392,7 +525,7 @@ namespace MsCrmTools.Translator.AppCode
 
             siteMap["sitemapxml"] = siteMapDoc.OuterXml;
         }
-
+#endif
         public void Import(IOrganizationService service)
         {
            service.Update(siteMap);

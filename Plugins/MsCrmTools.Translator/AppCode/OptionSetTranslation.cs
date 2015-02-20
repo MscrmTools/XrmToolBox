@@ -125,19 +125,123 @@ namespace MsCrmTools.Translator.AppCode
             // Applying style to cells
             for (int i = 0; i < (6 + languages.Count); i++)
             {
-                sheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                sheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                StyleMutator.SetCellColorAndFontWeight(sheet.Cells[0, i].Style, Color.PowderBlue, isBold:true);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 6; j++)
                 {
-                    sheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    StyleMutator.SetCellColorAndFontWeight(sheet.Cells[0, i].Style, Color.AliceBlue);
                 }
             }
         }
 
+#if NO_GEMBOX
+        public void Import(ExcelWorksheet sheet, IOrganizationService service)
+        {
+            var requests = new List<UpdateOptionValueRequest>();
+
+            var rowsCount = sheet.Dimension.Rows;
+
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                UpdateOptionValueRequest request =
+                    requests
+                    .FirstOrDefault(
+                        r => r.OptionSetName == sheet.Cells[rowI, 1].Value.ToString() &&
+                        r.Value == int.Parse(sheet.Cells[rowI, 4].Value.ToString()));
+
+                if (request == null)
+                {
+                    request = new UpdateOptionValueRequest
+                    {
+                        AttributeLogicalName = sheet.Cells[rowI, 2].Value.ToString(),
+                        EntityLogicalName = sheet.Cells[rowI, 1].Value.ToString(),
+                        Value = int.Parse(sheet.Cells[rowI, 4].Value.ToString()),
+                        Label = new Label(),
+                        Description = new Label(),
+                        MergeLabels = true
+                    };
+
+                    int columnIndex = 6;
+
+                    if (sheet.Cells[rowI, 5].Value.ToString() == "Label")
+                    {
+                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex && 
+                        while (sheet.Cells[rowI, columnIndex] != null && sheet.Cells[rowI, columnIndex].Value != null)
+                        {
+                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
+                            var sLabel = sheet.Cells[rowI, columnIndex].Value.ToString();
+
+                            if (sLcid.Length > 0 && sLabel.Length > 0)
+                            {
+                                request.Label.LocalizedLabels.Add(new LocalizedLabel(sLabel, int.Parse(sLcid)));
+                            }
+                            columnIndex++;
+                        }
+                    }
+                    else if (sheet.Cells[rowI, 5].Value.ToString() == "Description")
+                    {
+                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex && 
+                        while (sheet.Cells[rowI, columnIndex] != null && sheet.Cells[rowI, columnIndex].Value != null)
+                        {
+                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
+                            var sLabel = sheet.Cells[rowI, columnIndex].Value.ToString();
+
+                            if (sLcid.Length > 0 && sLabel.Length > 0)
+                            {
+                                request.Description.LocalizedLabels.Add(new LocalizedLabel(sLabel, int.Parse(sLcid)));
+                            }
+                            columnIndex++;
+                        }
+                    }
+
+                    requests.Add(request);
+                }
+                else
+                {
+                    int columnIndex = 6;
+
+                    if (sheet.Cells[rowI, 5].Value.ToString() == "Label")
+                    {
+                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex && 
+                        while (sheet.Cells[rowI, columnIndex] != null && sheet.Cells[rowI, columnIndex].Value != null)
+                        {
+                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
+                            var sLabel = sheet.Cells[rowI, columnIndex].Value.ToString();
+
+                            if (sLcid.Length > 0 && sLabel.Length > 0)
+                            {
+                                request.Label.LocalizedLabels.Add(new LocalizedLabel(sLabel, int.Parse(sLcid)));
+                            }
+                            columnIndex++;
+                        }
+                    }
+                    else if (sheet.Cells[rowI, 5].Value.ToString() == "Description")
+                    {
+                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex && 
+                        while (sheet.Cells[rowI, columnIndex] != null && sheet.Cells[rowI, columnIndex].Value != null)
+                        {
+                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
+                            var sLabel = sheet.Cells[rowI, columnIndex].Value.ToString();
+
+                            if (sLcid.Length > 0 && sLabel.Length > 0)
+                            {
+                                request.Description.LocalizedLabels.Add(new LocalizedLabel(sLabel, int.Parse(sLcid)));
+                            }
+                            columnIndex++;
+                        }
+                    }
+                }
+            }
+
+            foreach (var request in requests)
+            {
+                service.Execute(request);
+            }
+        }
+#else
         public void Import(ExcelWorksheet sheet, IOrganizationService service)
         {
             var requests = new List<UpdateOptionValueRequest>();
@@ -230,7 +334,7 @@ namespace MsCrmTools.Translator.AppCode
                 service.Execute(request);
             }
         }
-
+#endif
         private void AddHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
         {
             var cell = 0;

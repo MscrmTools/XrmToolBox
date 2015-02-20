@@ -130,19 +130,50 @@ namespace MsCrmTools.Translator.AppCode
             // Applying style to cells
             for (int i = 0; i < (4 + languages.Count); i++)
             {
-                sheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                sheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                StyleMutator.SetCellColorAndFontWeight(sheet.Cells[0, i].Style, Color.PowderBlue, isBold:true);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    sheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    StyleMutator.SetCellColorAndFontWeight(sheet.Cells[i, j].Style, Color.AliceBlue);
                 }
             }
         }
 
+#if NO_GEMBOX
+        public void Import(ExcelWorksheet sheet, IOrganizationService service)
+        {
+            var views = new List<Tuple<int, Entity>>();
+
+            var rowsCount = sheet.Dimension.Rows;
+
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                var currentViewId = new Guid(sheet.Cells[rowI, 0].Value.ToString());
+                var request = new SetLocLabelsRequest
+                {
+                    EntityMoniker = new EntityReference("savedquery", currentViewId),
+                    AttributeName = sheet.Cells[rowI, 3].Value.ToString() == "Name" ? "name" : "description"
+                };
+
+                var labels = new List<LocalizedLabel>();
+
+                var columnIndex = 4;
+                while (sheet.Cells[rowI, columnIndex].Value != null)
+                {
+                    var currentLcid = int.Parse(sheet.Cells[0, columnIndex].Value.ToString());
+                    labels.Add(new LocalizedLabel(sheet.Cells[rowI, columnIndex].Value.ToString(), currentLcid));
+                    columnIndex++;
+                }
+
+                request.Labels = labels.ToArray();
+
+                service.Execute(request);
+            }
+        }
+#else
         public void Import(ExcelWorksheet sheet, IOrganizationService service)
         {
             var views = new List<Tuple<int, Entity>>();
@@ -171,7 +202,8 @@ namespace MsCrmTools.Translator.AppCode
                 service.Execute(request);
             }
         }
-        
+#endif
+
         private void AddHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
         {
             var cell = 0;

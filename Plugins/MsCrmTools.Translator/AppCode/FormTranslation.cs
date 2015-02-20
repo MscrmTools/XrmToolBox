@@ -781,6 +781,47 @@ namespace MsCrmTools.Translator.AppCode
             }
         }
 #endif
+
+#if NO_GEMBOX
+        public void PrepareFormLabels(ExcelWorksheet sheet, IOrganizationService service, List<Entity> forms)
+        {
+            var rowsCount = sheet.Dimension.Rows;
+
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                var labelId = sheet.Cells[rowI, 0].Value.ToString();
+                var formId = new Guid(sheet.Cells[rowI, 4].Value.ToString());
+
+                var form = forms.FirstOrDefault(f => f.Id == formId);
+                if (form == null)
+                {
+                    form = service.Retrieve("systemform", formId, new ColumnSet(new[] { "formxml" }));
+                    forms.Add(form);
+                }
+
+                // Load formxml
+                var formXml = form.GetAttributeValue<string>("formxml");
+                var docXml = new XmlDocument();
+                docXml.LoadXml(formXml);
+
+                var cellNode =
+                    docXml.DocumentElement.SelectSingleNode(
+                        string.Format("tabs/tab/columns/column/sections/section/rows/row/cell[@id='{0}']", labelId));
+                if (cellNode != null)
+                {
+                    var columnIndex = 8;
+                    while (sheet.Cells[rowI, columnIndex].Value != null)
+                    {
+                        UpdateXmlNode(cellNode, sheet.Cells[0, columnIndex].Value.ToString(),
+                            sheet.Cells[rowI, columnIndex].Value.ToString());
+                        columnIndex++;
+                    }
+                }
+
+                form["formxml"] = docXml.OuterXml;
+            }
+        }
+#else
         public void PrepareFormLabels(ExcelWorksheet sheet, IOrganizationService service, List<Entity> forms)
         {
             foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
@@ -817,7 +858,7 @@ namespace MsCrmTools.Translator.AppCode
                 form["formxml"] = docXml.OuterXml;
             }
         }
-
+#endif
         public void ImportFormsContent(IOrganizationService service, List<Entity> forms)
         {
             foreach (var form in forms)
