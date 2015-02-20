@@ -31,10 +31,8 @@ namespace MsCrmTools.Translator
 
         public static void FontDefaults(ExcelWorksheet sheet)
         {
-            var style = sheet.Cells.Style;
-
-            style.Font.Name = "Arial";
-            style.Font.Size = 10;
+            sheet.Cells.Style.Font.Name = "Arial";
+            sheet.Cells.Style.Font.Size = 10;
         }
 #else
         public static void TitleCell(CellStyle style)
