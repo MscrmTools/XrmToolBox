@@ -55,7 +55,7 @@ namespace MsCrmTools.Translator
                 emds.Add(response.EntityMetadata);
             }
 #if NO_GEMBOX
-            var file = new ExcelPackage();
+            var file = new ExcelPackage(new FileInfo(settings.FilePath));
 #else
             var file = new ExcelFile();
 #endif
@@ -68,11 +68,14 @@ namespace MsCrmTools.Translator
 
 #if NO_GEMBOX
                 var sheet = file.Workbook.Worksheets.Add("Entities");
-#else
-                var sheet = file.Worksheets.Add("Entities");
-#endif
                 var et = new EntityTranslation();
                 et.Export(emds, lcids, sheet);
+                StyleMutator.FontDefaults(sheet);
+#else
+                var sheet = file.Worksheets.Add("Entities");
+                var et = new EntityTranslation();
+                et.Export(emds, lcids, sheet);
+#endif
             }
 
             if (settings.ExportAttributes && emds.Count > 0)
@@ -83,11 +86,14 @@ namespace MsCrmTools.Translator
                 }
 #if NO_GEMBOX
                 var sheet = file.Workbook.Worksheets.Add("Attributes");
-#else
-                var sheet = file.Worksheets.Add("Attributes");
-#endif
                 var at = new AttributeTranslation();
                 at.Export(emds, lcids, sheet);
+                StyleMutator.FontDefaults(sheet);
+#else
+                var sheet = file.Worksheets.Add("Attributes");
+                var at = new AttributeTranslation();
+                at.Export(emds, lcids, sheet);
+#endif
             }
 
             if (settings.ExportGlobalOptionSet)
@@ -98,12 +104,14 @@ namespace MsCrmTools.Translator
                 }
 #if NO_GEMBOX
                 var sheet = file.Workbook.Worksheets.Add("Global OptionSets");
-#else
-                var sheet = file.Worksheets.Add("Global OptionSets");
-#endif
-
                 var ot = new GlobalOptionSetTranslation();
                 ot.Export(lcids, sheet, service);
+                StyleMutator.FontDefaults(sheet);
+#else
+                var sheet = file.Worksheets.Add("Global OptionSets");
+                var ot = new GlobalOptionSetTranslation();
+                ot.Export(lcids, sheet, service);
+#endif
             }
 
             if (settings.ExportOptionSet && emds.Count > 0)
@@ -115,11 +123,14 @@ namespace MsCrmTools.Translator
 
 #if NO_GEMBOX
                 var sheet = file.Workbook.Worksheets.Add("OptionSets");
-#else
-                var sheet = file.Worksheets.Add("OptionSets");
-#endif
                 var ot = new OptionSetTranslation();
                 ot.Export(emds, lcids, sheet);
+                StyleMutator.FontDefaults(sheet);
+#else
+                var sheet = file.Worksheets.Add("OptionSets");
+                var ot = new OptionSetTranslation();
+                ot.Export(emds, lcids, sheet);
+#endif
             }
 
             if (settings.ExportBooleans && emds.Count > 0)
@@ -131,12 +142,16 @@ namespace MsCrmTools.Translator
 
 #if NO_GEMBOX
                 var sheet = file.Workbook.Worksheets.Add("Booleans");
-#else
-                var sheet = file.Worksheets.Add("Booleans");
-#endif
 
                 var bt = new BooleanTranslation();
                 bt.Export(emds, lcids, sheet);
+                StyleMutator.FontDefaults(sheet);
+#else
+                var sheet = file.Worksheets.Add("Booleans");
+                
+                var bt = new BooleanTranslation();
+                bt.Export(emds, lcids, sheet);
+#endif
             }
 
             if (settings.ExportViews && emds.Count > 0)
@@ -148,11 +163,14 @@ namespace MsCrmTools.Translator
 
 #if NO_GEMBOX
                 var sheet = file.Workbook.Worksheets.Add("Views");
-#else
-                var sheet = file.Add("Views");
-#endif
                 var vt = new ViewTranslation();
                 vt.Export(emds, lcids, sheet, service);
+                StyleMutator.FontDefaults(sheet);
+#else
+                var sheet = file.Worksheets.Add("Views");
+                var vt = new ViewTranslation();
+                vt.Export(emds, lcids, sheet, service);
+#endif
             }
 
             if ((settings.ExportForms || settings.ExportFormTabs || settings.ExportFormSections || settings.ExportFormFields) && emds.Count > 0)
@@ -194,7 +212,7 @@ namespace MsCrmTools.Translator
             }
 
 #if NO_GEMBOX
-            file.Save(settings.FilePath);
+            file.Save();
 #else
             file.Save(settings.FilePath, SaveOptions.XlsxDefault);
 #endif

@@ -67,12 +67,12 @@ namespace MsCrmTools.Translator.AppCode
                    
                     foreach (var option in omd.Options.OrderBy(o => o.Value))
                     {
-                        sheet.Cells[line, cell++].Value = attribute.MetadataId.Value.ToString("B");
-                        sheet.Cells[line, cell++].Value = entity.LogicalName;
-                        sheet.Cells[line, cell++].Value = attribute.LogicalName;
-                        sheet.Cells[line, cell++].Value = attribute.AttributeType.Value.ToString();
-                        sheet.Cells[line, cell++].Value = option.Value;
-                        sheet.Cells[line, cell++].Value = "Label";
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.MetadataId.Value.ToString("B");
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = entity.LogicalName;
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.LogicalName;
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.AttributeType.Value.ToString();
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = option.Value;
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = "Label";
 
                         foreach (var lcid in languages)
                         {
@@ -87,18 +87,18 @@ namespace MsCrmTools.Translator.AppCode
                                 }
                             }
 
-                            sheet.Cells[line, cell++].Value = label;
+                            ZeroBasedSheet.Cell(sheet, line, cell++).Value = label;
                         }
 
                         line++;
                         cell = 0;
 
-                        sheet.Cells[line, cell++].Value = attribute.MetadataId.Value.ToString("B");
-                        sheet.Cells[line, cell++].Value = entity.LogicalName;
-                        sheet.Cells[line, cell++].Value = attribute.LogicalName;
-                        sheet.Cells[line, cell++].Value = attribute.AttributeType.Value.ToString();
-                        sheet.Cells[line, cell++].Value = option.Value;
-                        sheet.Cells[line, cell++].Value = "Description";
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.MetadataId.Value.ToString("B");
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = entity.LogicalName;
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.LogicalName;
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.AttributeType.Value.ToString();
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = option.Value;
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = "Description";
 
                         foreach (var lcid in languages)
                         {
@@ -113,7 +113,7 @@ namespace MsCrmTools.Translator.AppCode
                                 }
                             }
 
-                            sheet.Cells[line, cell++].Value = label;
+                            ZeroBasedSheet.Cell(sheet, line, cell++).Value = label;
                         }
 
                         line++;
@@ -125,14 +125,14 @@ namespace MsCrmTools.Translator.AppCode
             // Applying style to cells
             for (int i = 0; i < (6 + languages.Count); i++)
             {
-                StyleMutator.SetCellColorAndFontWeight(sheet.Cells[0, i].Style, Color.PowderBlue, isBold:true);
+                StyleMutator.TitleCell(ZeroBasedSheet.Cell(sheet, 0, i).Style);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 6; j++)
                 {
-                    StyleMutator.SetCellColorAndFontWeight(sheet.Cells[0, i].Style, Color.AliceBlue);
+                    StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(sheet, 0, i).Style);
                 }
             }
         }
@@ -149,16 +149,16 @@ namespace MsCrmTools.Translator.AppCode
                 UpdateOptionValueRequest request =
                     requests
                     .FirstOrDefault(
-                        r => r.OptionSetName == sheet.Cells[rowI, 1].Value.ToString() &&
-                        r.Value == int.Parse(sheet.Cells[rowI, 4].Value.ToString()));
+                        r => r.OptionSetName == ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString() &&
+                        r.Value == int.Parse(ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString()));
 
                 if (request == null)
                 {
                     request = new UpdateOptionValueRequest
                     {
-                        AttributeLogicalName = sheet.Cells[rowI, 2].Value.ToString(),
-                        EntityLogicalName = sheet.Cells[rowI, 1].Value.ToString(),
-                        Value = int.Parse(sheet.Cells[rowI, 4].Value.ToString()),
+                        AttributeLogicalName = ZeroBasedSheet.Cell(sheet, rowI, 2).Value.ToString(),
+                        EntityLogicalName = ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString(),
+                        Value = int.Parse(ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString()),
                         Label = new Label(),
                         Description = new Label(),
                         MergeLabels = true
@@ -166,13 +166,13 @@ namespace MsCrmTools.Translator.AppCode
 
                     int columnIndex = 6;
 
-                    if (sheet.Cells[rowI, 5].Value.ToString() == "Label")
+                    if (ZeroBasedSheet.Cell(sheet, rowI, 5).Value.ToString() == "Label")
                     {
                         // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex && 
-                        while (sheet.Cells[rowI, columnIndex] != null && sheet.Cells[rowI, columnIndex].Value != null)
+                        while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex) != null && ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                         {
-                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
-                            var sLabel = sheet.Cells[rowI, columnIndex].Value.ToString();
+                            var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
+                            var sLabel = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
 
                             if (sLcid.Length > 0 && sLabel.Length > 0)
                             {
@@ -181,13 +181,13 @@ namespace MsCrmTools.Translator.AppCode
                             columnIndex++;
                         }
                     }
-                    else if (sheet.Cells[rowI, 5].Value.ToString() == "Description")
+                    else if (ZeroBasedSheet.Cell(sheet, rowI, 5).Value.ToString() == "Description")
                     {
                         // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex && 
-                        while (sheet.Cells[rowI, columnIndex] != null && sheet.Cells[rowI, columnIndex].Value != null)
+                        while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex) != null && ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                         {
-                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
-                            var sLabel = sheet.Cells[rowI, columnIndex].Value.ToString();
+                            var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
+                            var sLabel = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
 
                             if (sLcid.Length > 0 && sLabel.Length > 0)
                             {
@@ -203,13 +203,13 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     int columnIndex = 6;
 
-                    if (sheet.Cells[rowI, 5].Value.ToString() == "Label")
+                    if (ZeroBasedSheet.Cell(sheet, rowI, 5).Value.ToString() == "Label")
                     {
                         // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex && 
-                        while (sheet.Cells[rowI, columnIndex] != null && sheet.Cells[rowI, columnIndex].Value != null)
+                        while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex) != null && ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                         {
-                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
-                            var sLabel = sheet.Cells[rowI, columnIndex].Value.ToString();
+                            var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
+                            var sLabel = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
 
                             if (sLcid.Length > 0 && sLabel.Length > 0)
                             {
@@ -218,13 +218,13 @@ namespace MsCrmTools.Translator.AppCode
                             columnIndex++;
                         }
                     }
-                    else if (sheet.Cells[rowI, 5].Value.ToString() == "Description")
+                    else if (ZeroBasedSheet.Cell(sheet, rowI, 5).Value.ToString() == "Description")
                     {
                         // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex && 
-                        while (sheet.Cells[rowI, columnIndex] != null && sheet.Cells[rowI, columnIndex].Value != null)
+                        while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex) != null && ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                         {
-                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
-                            var sLabel = sheet.Cells[rowI, columnIndex].Value.ToString();
+                            var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
+                            var sLabel = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
 
                             if (sLcid.Length > 0 && sLabel.Length > 0)
                             {
@@ -267,7 +267,7 @@ namespace MsCrmTools.Translator.AppCode
                     {
                         while (row.Cells.Count() > columnIndex && row.Cells[columnIndex] != null && row.Cells[columnIndex].Value != null)
                         {
-                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
+                            var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
                             var sLabel = row.Cells[columnIndex].Value.ToString();
 
                             if (sLcid.Length > 0 && sLabel.Length > 0)
@@ -281,7 +281,7 @@ namespace MsCrmTools.Translator.AppCode
                     {
                         while (row.Cells.Count() > columnIndex && row.Cells[columnIndex] != null && row.Cells[columnIndex].Value != null)
                         {
-                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
+                            var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
                             var sLabel = row.Cells[columnIndex].Value.ToString();
 
                             if (sLcid.Length > 0 && sLabel.Length > 0)
@@ -302,7 +302,7 @@ namespace MsCrmTools.Translator.AppCode
                     {
                         while (row.Cells.Count() > columnIndex && row.Cells[columnIndex] != null && row.Cells[columnIndex].Value != null)
                         {
-                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
+                            var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
                             var sLabel = row.Cells[columnIndex].Value.ToString();
 
                             if (sLcid.Length > 0 && sLabel.Length > 0)
@@ -316,7 +316,7 @@ namespace MsCrmTools.Translator.AppCode
                     {
                         while (row.Cells.Count() > columnIndex && row.Cells[columnIndex] != null && row.Cells[columnIndex].Value != null)
                         {
-                            var sLcid = sheet.Cells[0, columnIndex].Value.ToString();
+                            var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
                             var sLabel = row.Cells[columnIndex].Value.ToString();
 
                             if (sLcid.Length > 0 && sLabel.Length > 0)
@@ -339,16 +339,16 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            sheet.Cells[0, cell++].Value = "Attribute Id";
-            sheet.Cells[0, cell++].Value = "Entity Logical Name";
-            sheet.Cells[0, cell++].Value = "Attribute Logical Name";
-            sheet.Cells[0, cell++].Value = "Attribute Type";
-            sheet.Cells[0, cell++].Value = "Value";
-            sheet.Cells[0, cell++].Value = "Type";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Attribute Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Attribute Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Attribute Type";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Value";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Type";
 
             foreach (var lcid in languages)
             {
-                sheet.Cells[0, cell++].Value = lcid.ToString(CultureInfo.InvariantCulture);
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
     }

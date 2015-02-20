@@ -123,22 +123,22 @@ namespace MsCrmTools.Translator.AppCode
             foreach (var crmArea in crmSiteMapAreas)
             {
                 var cell = 0;
-                areaSheet.Cells[line, cell++].Value = crmArea.Id;
-                areaSheet.Cells[line, cell++].Value = "Title";
+                ZeroBasedSheet.Cell(areaSheet, line, cell++).Value = crmArea.Id;
+                ZeroBasedSheet.Cell(areaSheet, line, cell++).Value = "Title";
 
                 foreach (var lcid in languages)
                 {
-                    areaSheet.Cells[line, cell++].Value = crmArea.Titles.FirstOrDefault(n => n.Key == lcid).Value;
+                    ZeroBasedSheet.Cell(areaSheet, line, cell++).Value = crmArea.Titles.FirstOrDefault(n => n.Key == lcid).Value;
                 }
 
                 line++;
                 cell = 0;
-                areaSheet.Cells[line, cell++].Value = crmArea.Id;
-                areaSheet.Cells[line, cell++].Value = "Description";
+                ZeroBasedSheet.Cell(areaSheet, line, cell++).Value = crmArea.Id;
+                ZeroBasedSheet.Cell(areaSheet, line, cell++).Value = "Description";
 
                 foreach (var lcid in languages)
                 {
-                    areaSheet.Cells[line, cell++].Value = crmArea.Descriptions.FirstOrDefault(n => n.Key == lcid).Value;
+                    ZeroBasedSheet.Cell(areaSheet, line, cell++).Value = crmArea.Descriptions.FirstOrDefault(n => n.Key == lcid).Value;
                 }
                 line++;
             }
@@ -153,24 +153,24 @@ namespace MsCrmTools.Translator.AppCode
             foreach (var crmGroup in crmSiteMapGroups)
             {
                 var cell = 0;
-                groupSheet.Cells[line, cell++].Value = crmGroup.AreaId;
-                groupSheet.Cells[line, cell++].Value = crmGroup.Id;
-                groupSheet.Cells[line, cell++].Value = "Title";
+                ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = crmGroup.AreaId;
+                ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = crmGroup.Id;
+                ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = "Title";
 
                 foreach (var lcid in languages)
                 {
-                    groupSheet.Cells[line, cell++].Value = crmGroup.Titles.FirstOrDefault(n => n.Key == lcid).Value;
+                    ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = crmGroup.Titles.FirstOrDefault(n => n.Key == lcid).Value;
                 }
 
                 line++;
                 cell = 0;
-                groupSheet.Cells[line, cell++].Value = crmGroup.AreaId;
-                groupSheet.Cells[line, cell++].Value = crmGroup.Id;
-                groupSheet.Cells[line, cell++].Value = "Description";
+                ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = crmGroup.AreaId;
+                ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = crmGroup.Id;
+                ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = "Description";
 
                 foreach (var lcid in languages)
                 {
-                    groupSheet.Cells[line, cell++].Value = crmGroup.Descriptions.FirstOrDefault(n => n.Key == lcid).Value;
+                    ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = crmGroup.Descriptions.FirstOrDefault(n => n.Key == lcid).Value;
                 }
                 line++;
             }
@@ -185,26 +185,26 @@ namespace MsCrmTools.Translator.AppCode
             foreach (var crmSubArea in crmSiteMapSubAreas)
             {
                 var cell = 0;
-                subAreaSheet.Cells[line, cell++].Value = crmSubArea.AreaId;
-                subAreaSheet.Cells[line, cell++].Value = crmSubArea.GroupId;
-                subAreaSheet.Cells[line, cell++].Value = crmSubArea.Id;
-                subAreaSheet.Cells[line, cell++].Value = "Title";
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.AreaId;
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.GroupId;
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.Id;
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = "Title";
 
                 foreach (var lcid in languages)
                 {
-                    subAreaSheet.Cells[line, cell++].Value = crmSubArea.Titles.FirstOrDefault(n => n.Key == lcid).Value;
+                    ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.Titles.FirstOrDefault(n => n.Key == lcid).Value;
                 }
 
                 line++;
                 cell = 0;
-                subAreaSheet.Cells[line, cell++].Value = crmSubArea.AreaId;
-                subAreaSheet.Cells[line, cell++].Value = crmSubArea.GroupId;
-                subAreaSheet.Cells[line, cell++].Value = crmSubArea.Id;
-                subAreaSheet.Cells[line, cell++].Value = "Description";
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.AreaId;
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.GroupId;
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.Id;
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = "Description";
 
                 foreach (var lcid in languages)
                 {
-                    subAreaSheet.Cells[line, cell++].Value = crmSubArea.Descriptions.FirstOrDefault(n => n.Key == lcid).Value;
+                    ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.Descriptions.FirstOrDefault(n => n.Key == lcid).Value;
                 }
                 line++;
             }
@@ -214,40 +214,40 @@ namespace MsCrmTools.Translator.AppCode
             // Applying style to cells
             for (int i = 0; i < (2 + languages.Count); i++)
             {
-                StyleMutator.SetCellColorAndFontWeight(areaSheet.Cells[0, i].Style, Color.PowderBlue, isBold:true);
+                StyleMutator.TitleCell(ZeroBasedSheet.Cell(areaSheet, 0, i).Style);
             }
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 2; j++)
                 {
-                    StyleMutator.SetCellColorAndFontWeight(areaSheet.Cells[i, j].Style, Color.AliceBlue);
+                    StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(areaSheet, i, j).Style);
                 }
             }
 
             for (int i = 0; i < (3 + languages.Count); i++)
             {
-                StyleMutator.SetCellColorAndFontWeight(groupSheet.Cells[0, i].Style, Color.PowderBlue, isBold: true);
+                StyleMutator.TitleCell(ZeroBasedSheet.Cell(groupSheet, 0, i).Style);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    StyleMutator.SetCellColorAndFontWeight(groupSheet.Cells[i, j].Style, Color.AliceBlue);
+                    StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(groupSheet, i, j).Style);
 
                 }
             }
 
             for (int i = 0; i < (4 + languages.Count); i++)
             {
-                StyleMutator.SetCellColorAndFontWeight(subAreaSheet.Cells[0, i].Style, Color.PowderBlue, isBold: true);
+                StyleMutator.TitleCell(ZeroBasedSheet.Cell(subAreaSheet, 0, i).Style);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    StyleMutator.SetCellColorAndFontWeight(subAreaSheet.Cells[i, j].Style, Color.AliceBlue);
+                    StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(subAreaSheet, i, j).Style);
                 }
             }
         }
@@ -275,9 +275,9 @@ namespace MsCrmTools.Translator.AppCode
 
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
-                if (sheet.Cells[rowI, 0].Value == null) break;
+                if (ZeroBasedSheet.Cell(sheet, rowI, 0).Value == null) break;
 
-                var areaId = sheet.Cells[rowI, 0].Value.ToString();
+                var areaId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
                 var areaNode = siteMapDoc.SelectSingleNode("SiteMap/Area[@Id='" + areaId + "']");
                 if (areaNode == null)
                 {
@@ -285,17 +285,17 @@ namespace MsCrmTools.Translator.AppCode
                 }
 
                 var columnIndex = 2;
-                while (sheet.Cells[rowI, columnIndex].Value != null)
+                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                 {
-                    if (sheet.Cells[rowI, 1].Value.ToString() == "Title")
+                    if (ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString() == "Title")
                     {
-                        UpdateXmlNode(areaNode, "Titles", "Title", sheet.Cells[0, columnIndex].Value.ToString(),
-                            sheet.Cells[rowI, columnIndex].Value.ToString());
+                        UpdateXmlNode(areaNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
                     }
                     else
                     {
-                        UpdateXmlNode(areaNode, "Descriptions", "Description", sheet.Cells[0, columnIndex].Value.ToString(),
-                         sheet.Cells[rowI, columnIndex].Value.ToString());
+                        UpdateXmlNode(areaNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                         ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
                     }
                     columnIndex++;
                 }
@@ -319,10 +319,10 @@ namespace MsCrmTools.Translator.AppCode
 
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
-                if (sheet.Cells[rowI, 0].Value == null) break;
+                if (ZeroBasedSheet.Cell(sheet, rowI, 0).Value == null) break;
 
-                var areaId = sheet.Cells[rowI, 0].Value.ToString();
-                var groupId = sheet.Cells[rowI, 1].Value.ToString();
+                var areaId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
+                var groupId = ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString();
                 var groupNode = siteMapDoc.SelectSingleNode("SiteMap/Area[@Id='" + areaId + "']/Group[@Id='" + groupId + "']");
                 if (groupNode == null)
                 {
@@ -330,17 +330,17 @@ namespace MsCrmTools.Translator.AppCode
                 }
 
                 var columnIndex = 3;
-                while (sheet.Cells[rowI, columnIndex].Value != null)
+                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                 {
-                    if (sheet.Cells[rowI, 1].Value.ToString() == "Title")
+                    if (ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString() == "Title")
                     {
-                        UpdateXmlNode(groupNode, "Titles", "Title", sheet.Cells[0, columnIndex].Value.ToString(),
-                            sheet.Cells[rowI, columnIndex].Value.ToString());
+                        UpdateXmlNode(groupNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
                     }
                     else
                     {
-                        UpdateXmlNode(groupNode, "Descriptions", "Description", sheet.Cells[0, columnIndex].Value.ToString(),
-                         sheet.Cells[rowI, columnIndex].Value.ToString());
+                        UpdateXmlNode(groupNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                         ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
                     }
                     columnIndex++;
                 }
@@ -364,11 +364,11 @@ namespace MsCrmTools.Translator.AppCode
 
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
-                if (sheet.Cells[rowI, 0].Value == null) break;
+                if (ZeroBasedSheet.Cell(sheet, rowI, 0).Value == null) break;
 
-                var areaId = sheet.Cells[rowI, 0].Value.ToString();
-                var groupId = sheet.Cells[rowI, 1].Value.ToString();
-                var subAreaId = sheet.Cells[rowI, 2].Value.ToString();
+                var areaId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
+                var groupId = ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString();
+                var subAreaId = ZeroBasedSheet.Cell(sheet, rowI, 2).Value.ToString();
                 var subAreaNode = siteMapDoc.SelectSingleNode("SiteMap/Area[@Id='" + areaId + "']/Group[@Id='" + groupId + "']/SubArea[@Id='" + subAreaId + "']");
                 if (subAreaNode == null)
                 {
@@ -376,17 +376,17 @@ namespace MsCrmTools.Translator.AppCode
                 }
 
                 var columnIndex = 4;
-                while (sheet.Cells[rowI, columnIndex].Value != null)
+                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                 {
-                    if (sheet.Cells[rowI, 1].Value.ToString() == "Title")
+                    if (ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString() == "Title")
                     {
-                        UpdateXmlNode(subAreaNode, "Titles", "Title", sheet.Cells[0, columnIndex].Value.ToString(),
-                            sheet.Cells[rowI, columnIndex].Value.ToString());
+                        UpdateXmlNode(subAreaNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
                     }
                     else
                     {
-                        UpdateXmlNode(subAreaNode, "Descriptions", "Description", sheet.Cells[0, columnIndex].Value.ToString(),
-                         sheet.Cells[rowI, columnIndex].Value.ToString());
+                        UpdateXmlNode(subAreaNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                         ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
                     }
                     columnIndex++;
                 }
@@ -422,12 +422,12 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     if (row.Cells[1].Value.ToString() == "Title")
                     {
-                        UpdateXmlNode(areaNode, "Titles", "Title", sheet.Cells[0, columnIndex].Value.ToString(),
+                        UpdateXmlNode(areaNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             row.Cells[columnIndex].Value.ToString());
                     }
                     else
                     {
-                        UpdateXmlNode(areaNode, "Descriptions", "Description", sheet.Cells[0, columnIndex].Value.ToString(),
+                        UpdateXmlNode(areaNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                          row.Cells[columnIndex].Value.ToString());
                     }
                     columnIndex++;
@@ -466,12 +466,12 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     if (row.Cells[1].Value.ToString() == "Title")
                     {
-                        UpdateXmlNode(groupNode, "Titles", "Title", sheet.Cells[0, columnIndex].Value.ToString(),
+                        UpdateXmlNode(groupNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             row.Cells[columnIndex].Value.ToString());
                     }
                     else
                     {
-                        UpdateXmlNode(groupNode, "Descriptions", "Description", sheet.Cells[0, columnIndex].Value.ToString(),
+                        UpdateXmlNode(groupNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                          row.Cells[columnIndex].Value.ToString());
                     }
                     columnIndex++;
@@ -511,12 +511,12 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     if (row.Cells[1].Value.ToString() == "Title")
                     {
-                        UpdateXmlNode(subAreaNode, "Titles", "Title", sheet.Cells[0, columnIndex].Value.ToString(),
+                        UpdateXmlNode(subAreaNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             row.Cells[columnIndex].Value.ToString());
                     }
                     else
                     {
-                        UpdateXmlNode(subAreaNode, "Descriptions", "Description", sheet.Cells[0, columnIndex].Value.ToString(),
+                        UpdateXmlNode(subAreaNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                          row.Cells[columnIndex].Value.ToString());
                     }
                     columnIndex++;
@@ -535,12 +535,12 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            sheet.Cells[0, cell++].Value = "Area Id";
-            sheet.Cells[0, cell++].Value = "Type";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Area Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Type";
 
             foreach (var lcid in languages)
             {
-                sheet.Cells[0, cell++].Value = lcid.ToString(CultureInfo.InvariantCulture);
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -548,13 +548,13 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            sheet.Cells[0, cell++].Value = "Area Id";
-            sheet.Cells[0, cell++].Value = "Group Id";
-            sheet.Cells[0, cell++].Value = "Type";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Area Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Group Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Type";
 
             foreach (var lcid in languages)
             {
-                sheet.Cells[0, cell++].Value = lcid.ToString(CultureInfo.InvariantCulture);
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -562,14 +562,14 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            sheet.Cells[0, cell++].Value = "Area Id";
-            sheet.Cells[0, cell++].Value = "Group Id";
-            sheet.Cells[0, cell++].Value = "SubArea Id";
-            sheet.Cells[0, cell++].Value = "Type";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Area Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Group Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "SubArea Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Type";
 
             foreach (var lcid in languages)
             {
-                sheet.Cells[0, cell++].Value = lcid.ToString(CultureInfo.InvariantCulture);
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
 

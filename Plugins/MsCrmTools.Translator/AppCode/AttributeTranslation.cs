@@ -53,12 +53,12 @@ namespace MsCrmTools.Translator.AppCode
                     if (attribute.DisplayName != null && attribute.DisplayName.LocalizedLabels.All(l => string.IsNullOrEmpty(l.Label)))
                         continue;
 
-                    sheet.Cells[line, cell++].Value = attribute.MetadataId.Value.ToString("B");
-                    sheet.Cells[line, cell++].Value = entity.LogicalName;
-                    sheet.Cells[line, cell++].Value = attribute.LogicalName;
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.MetadataId.Value.ToString("B");
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = entity.LogicalName;
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.LogicalName;
 
                     // DisplayName
-                    sheet.Cells[line, cell++].Value = "DisplayName";
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = "DisplayName";
 
                     foreach (var lcid in languages)
                     {
@@ -73,16 +73,16 @@ namespace MsCrmTools.Translator.AppCode
                             }
                         }
 
-                        sheet.Cells[line, cell++].Value = displayName;
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = displayName;
                     }
                     
                     // Description
                     line++;
                     cell = 0;
-                    sheet.Cells[line, cell++].Value = attribute.MetadataId.Value.ToString("B");
-                    sheet.Cells[line, cell++].Value = entity.LogicalName;
-                    sheet.Cells[line, cell++].Value = attribute.LogicalName;
-                    sheet.Cells[line, cell++].Value = "Description";
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.MetadataId.Value.ToString("B");
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = entity.LogicalName;
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.LogicalName;
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = "Description";
 
                     foreach (var lcid in languages)
                     {
@@ -97,7 +97,7 @@ namespace MsCrmTools.Translator.AppCode
                             }
                         }
 
-                        sheet.Cells[line, cell++].Value = description;
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = description;
                     }
 
                     line++;
@@ -107,14 +107,14 @@ namespace MsCrmTools.Translator.AppCode
             // Applying style to cells
             for (int i = 0; i < (4 + languages.Count); i++)
             {
-                StyleMutator.SetCellColorAndFontWeight(sheet.Cells[0, i].Style, Color.PowderBlue, isBold:true);
+                StyleMutator.TitleCell(ZeroBasedSheet.Cell(sheet, 0, i).Style);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    StyleMutator.SetCellColorAndFontWeight(sheet.Cells[i, j].Style, Color.AliceBlue);
+                    StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(sheet, i, j).Style);
                 }
             }
         }
@@ -127,15 +127,15 @@ namespace MsCrmTools.Translator.AppCode
             var rowsCount = sheet.Dimension.Rows;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
-                var amd = amds.FirstOrDefault(a => a.Amd.MetadataId == new Guid(sheet.Cells[rowI, 0].Value.ToString()));
+                var amd = amds.FirstOrDefault(a => a.Amd.MetadataId == new Guid(ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString()));
                 if (amd == null)
                 {
-                    var currentEntity = emds.FirstOrDefault(e => e.LogicalName == sheet.Cells[rowI, 1].Value.ToString());
+                    var currentEntity = emds.FirstOrDefault(e => e.LogicalName == ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString());
                     if (currentEntity == null)
                     {
                         var request = new RetrieveEntityRequest
                         {
-                            LogicalName = sheet.Cells[rowI, 1].Value.ToString(),
+                            LogicalName = ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString(),
                             EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
                         };
 
@@ -146,30 +146,30 @@ namespace MsCrmTools.Translator.AppCode
                     }
 
                     amd = new MasterAttribute();
-                    amd.Amd = currentEntity.Attributes.FirstOrDefault(a => a.LogicalName == sheet.Cells[rowI, 2].Value.ToString());
+                    amd.Amd = currentEntity.Attributes.FirstOrDefault(a => a.LogicalName == ZeroBasedSheet.Cell(sheet, rowI, 2).Value.ToString());
                     amds.Add(amd);
                 }
 
                 int columnIndex = 4;
 
-                if (sheet.Cells[rowI, 3].Value.ToString() == "DisplayName")
+                if (ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "DisplayName")
                 {
                     amd.Amd.DisplayName = new Label();
 
-                    while (sheet.Cells[rowI, columnIndex].Value != null)
+                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                     {
-                        amd.Amd.DisplayName.LocalizedLabels.Add(new LocalizedLabel(sheet.Cells[rowI, columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+                        amd.Amd.DisplayName.LocalizedLabels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString())));
 
                         columnIndex++;
                     }
                 }
-                else if (sheet.Cells[rowI, 3].Value.ToString() == "Description")
+                else if (ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Description")
                 {
                     amd.Amd.Description = new Label();
 
-                    while (sheet.Cells[rowI, columnIndex].Value != null)
+                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                     {
-                        amd.Amd.Description.LocalizedLabels.Add(new LocalizedLabel(sheet.Cells[rowI, columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+                        amd.Amd.Description.LocalizedLabels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString())));
 
                         columnIndex++;
                     }
@@ -258,14 +258,14 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            sheet.Cells[0, cell++].Value = "Attribute Id";
-            sheet.Cells[0, cell++].Value = "Entity Logical Name";
-            sheet.Cells[0, cell++].Value = "Attribute Logical Name";
-            sheet.Cells[0, cell++].Value = "Type";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Attribute Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Attribute Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Type";
 
             foreach (var lcid in languages)
             {
-                sheet.Cells[0, cell++].Value = lcid.ToString(CultureInfo.InvariantCulture);
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
     }

@@ -194,14 +194,14 @@ namespace MsCrmTools.Translator.AppCode
                 // Applying style to cells
                 for (int i = 0; i < (4 + languages.Count); i++)
                 {
-                    StyleMutator.SetCellColorAndFontWeight(formSheet.Cells[0, i].Style, Color.PowderBlue, isBold: true);
+                    StyleMutator.TitleCell(ZeroBasedSheet.Cell(formSheet, 0, i).Style);
                 }
 
                 for (int i = 1; i < line; i++)
                 {
                     for (int j = 0; j < 4; j++)
                     {
-                        StyleMutator.SetCellColorAndFontWeight(formSheet.Cells[i, j].Style, Color.AliceBlue);
+                        StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(formSheet, i, j).Style);
                     }
                 }
             }
@@ -219,14 +219,14 @@ namespace MsCrmTools.Translator.AppCode
                 // Applying style to cells
                 for (int i = 0; i < (5 + languages.Count); i++)
                 {
-                    StyleMutator.SetCellColorAndFontWeight(tabSheet.Cells[0, i].Style, Color.PowderBlue, isBold: true);
+                    StyleMutator.TitleCell(ZeroBasedSheet.Cell(tabSheet, 0, i).Style);
                 }
 
                 for (int i = 1; i < line; i++)
                 {
                     for (int j = 0; j < 5; j++)
                     {
-                        StyleMutator.SetCellColorAndFontWeight(tabSheet.Cells[i, j].Style, Color.AliceBlue);
+                        StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(tabSheet, i, j).Style);
                     }
                 }
             }
@@ -244,14 +244,14 @@ namespace MsCrmTools.Translator.AppCode
                 // Applying style to cells
                 for (int i = 0; i < (6 + languages.Count); i++)
                 {
-                    StyleMutator.SetCellColorAndFontWeight(sectionSheet.Cells[0, i].Style, Color.PowderBlue, isBold: true);
+                    StyleMutator.TitleCell(ZeroBasedSheet.Cell(sectionSheet, 0, i).Style);
                 }
 
                 for (int i = 1; i < line; i++)
                 {
                     for (int j = 0; j < 6; j++)
                     {
-                        StyleMutator.SetCellColorAndFontWeight(sectionSheet.Cells[i, j].Style, Color.AliceBlue);
+                        StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(sectionSheet, i, j).Style);
                     }
                 }
             }
@@ -269,14 +269,14 @@ namespace MsCrmTools.Translator.AppCode
                 // Applying style to cells
                 for (int i = 0; i < (8 + languages.Count); i++)
                 {
-                    StyleMutator.SetCellColorAndFontWeight(labelSheet.Cells[0, i].Style, Color.PowderBlue, isBold: true);
+                    StyleMutator.TitleCell(ZeroBasedSheet.Cell(labelSheet, 0, i).Style);
                 }
 
                 for (int i = 1; i < line; i++)
                 {
                     for (int j = 0; j < 8; j++)
                     {
-                        StyleMutator.SetCellColorAndFontWeight(labelSheet.Cells[i, j].Style, Color.AliceBlue);
+                        StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(labelSheet, i, j).Style);
                     }
                 }
             }
@@ -287,19 +287,19 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            labelSheet.Cells[line, cell++].Value = crmFormLabel.Id.ToString("B");
-            labelSheet.Cells[line, cell++].Value = crmFormLabel.Entity;
-            labelSheet.Cells[line, cell++].Value = crmFormLabel.Form;
-            labelSheet.Cells[line, cell++].Value = crmFormLabel.FormUniqueId.ToString("B");
-            labelSheet.Cells[line, cell++].Value = crmFormLabel.FormId.ToString("B");
-            labelSheet.Cells[line, cell++].Value = crmFormLabel.Tab;
-            labelSheet.Cells[line, cell++].Value = crmFormLabel.Section;
-            labelSheet.Cells[line, cell++].Value = crmFormLabel.Attribute;
+            ZeroBasedSheet.Cell(labelSheet, line, cell++).Value = crmFormLabel.Id.ToString("B");
+            ZeroBasedSheet.Cell(labelSheet, line, cell++).Value = crmFormLabel.Entity;
+            ZeroBasedSheet.Cell(labelSheet, line, cell++).Value = crmFormLabel.Form;
+            ZeroBasedSheet.Cell(labelSheet, line, cell++).Value = crmFormLabel.FormUniqueId.ToString("B");
+            ZeroBasedSheet.Cell(labelSheet, line, cell++).Value = crmFormLabel.FormId.ToString("B");
+            ZeroBasedSheet.Cell(labelSheet, line, cell++).Value = crmFormLabel.Tab;
+            ZeroBasedSheet.Cell(labelSheet, line, cell++).Value = crmFormLabel.Section;
+            ZeroBasedSheet.Cell(labelSheet, line, cell++).Value = crmFormLabel.Attribute;
 
             foreach (var lcid in languages)
             {
                 bool exists = crmFormLabel.Names.ContainsKey(lcid);
-                labelSheet.Cells[line, cell++].Value = exists
+                ZeroBasedSheet.Cell(labelSheet, line, cell++).Value = exists
                     ? crmFormLabel.Names.First(n => n.Key == lcid).Value
                     : string.Empty;
             }
@@ -313,17 +313,17 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            sectionSheet.Cells[line, cell++].Value = crmFormSection.Id.ToString("B");
-            sectionSheet.Cells[line, cell++].Value = crmFormSection.Entity;
-            sectionSheet.Cells[line, cell++].Value = crmFormSection.Form;
-            sectionSheet.Cells[line, cell++].Value = crmFormSection.FormUniqueId.ToString("B");
-            sectionSheet.Cells[line, cell++].Value = crmFormSection.FormId.ToString("B");
-            sectionSheet.Cells[line, cell++].Value = crmFormSection.Tab;
+            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.Id.ToString("B");
+            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.Entity;
+            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.Form;
+            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.FormUniqueId.ToString("B");
+            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.FormId.ToString("B");
+            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.Tab;
 
             foreach (var lcid in languages)
             {
                 bool exists = crmFormSection.Names.ContainsKey(lcid);
-                sectionSheet.Cells[line, cell++].Value = exists
+                ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = exists
                     ? crmFormSection.Names.First(n => n.Key == lcid).Value
                     : string.Empty;
             }
@@ -336,16 +336,16 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            tabSheet.Cells[line, cell++].Value = crmFormTab.Id.ToString("B");
-            tabSheet.Cells[line, cell++].Value = crmFormTab.Entity;
-            tabSheet.Cells[line, cell++].Value = crmFormTab.Form;
-            tabSheet.Cells[line, cell++].Value = crmFormTab.FormUniqueId.ToString("B");
-            tabSheet.Cells[line, cell++].Value = crmFormTab.FormId.ToString("B");
+            ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = crmFormTab.Id.ToString("B");
+            ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = crmFormTab.Entity;
+            ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = crmFormTab.Form;
+            ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = crmFormTab.FormUniqueId.ToString("B");
+            ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = crmFormTab.FormId.ToString("B");
 
             foreach (var lcid in languages)
             {
                 bool exists = crmFormTab.Names.ContainsKey(lcid);
-                tabSheet.Cells[line, cell++].Value = exists
+                ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = exists
                     ? crmFormTab.Names.First(n => n.Key == lcid).Value
                     : string.Empty;
             }
@@ -358,16 +358,16 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            formSheet.Cells[line, cell++].Value = crmForm.FormUniqueId.ToString("B");
-            formSheet.Cells[line, cell++].Value = crmForm.Id.ToString("B");
-            formSheet.Cells[line, cell++].Value = crmForm.Entity;
-            formSheet.Cells[line, cell++].Value = "Name";
+            ZeroBasedSheet.Cell(formSheet, line, cell++).Value = crmForm.FormUniqueId.ToString("B");
+            ZeroBasedSheet.Cell(formSheet, line, cell++).Value = crmForm.Id.ToString("B");
+            ZeroBasedSheet.Cell(formSheet, line, cell++).Value = crmForm.Entity;
+            ZeroBasedSheet.Cell(formSheet, line, cell++).Value = "Name";
 
             foreach (var lcid in languages)
             {
                 var name = crmForm.Names.FirstOrDefault(n => n.Key == lcid);
                 if (name.Value != null)
-                    formSheet.Cells[line, cell++].Value = name.Value;
+                    ZeroBasedSheet.Cell(formSheet, line, cell++).Value = name.Value;
                 else
                     cell++;
             }
@@ -375,16 +375,16 @@ namespace MsCrmTools.Translator.AppCode
             line++;
             cell = 0;
 
-            formSheet.Cells[line, cell++].Value = crmForm.FormUniqueId.ToString("B");
-            formSheet.Cells[line, cell++].Value = crmForm.Id.ToString("B");
-            formSheet.Cells[line, cell++].Value = crmForm.Entity;
-            formSheet.Cells[line, cell++].Value = "Description";
+            ZeroBasedSheet.Cell(formSheet, line, cell++).Value = crmForm.FormUniqueId.ToString("B");
+            ZeroBasedSheet.Cell(formSheet, line, cell++).Value = crmForm.Id.ToString("B");
+            ZeroBasedSheet.Cell(formSheet, line, cell++).Value = crmForm.Entity;
+            ZeroBasedSheet.Cell(formSheet, line, cell++).Value = "Description";
 
             foreach (var lcid in languages)
             {
                 var desc = crmForm.Descriptions.FirstOrDefault(n => n.Key == lcid);
                 if (desc.Value != null)
-                    formSheet.Cells[line, cell++].Value = desc.Value;
+                    ZeroBasedSheet.Cell(formSheet, line, cell++).Value = desc.Value;
                 else
                     cell++;
             }
@@ -538,12 +538,12 @@ namespace MsCrmTools.Translator.AppCode
             var rowsCount = sheet.Dimension.Rows;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
-                var currentFormId = new Guid(sheet.Cells[rowI, 1].Value.ToString());
+                var currentFormId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString());
                 var columnIndex = 4;
 
-                while (sheet.Cells[rowI, columnIndex].Value != null)
+                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                 {
-                    var currentLcid = int.Parse(sheet.Cells[0, columnIndex].Value.ToString());
+                    var currentLcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
                     var formRecord = forms.FirstOrDefault(t => t.Item1 == currentLcid && t.Item2.Id == currentFormId);
                     if (formRecord == null)
                     {
@@ -551,13 +551,13 @@ namespace MsCrmTools.Translator.AppCode
                         forms.Add(formRecord);
                     }
 
-                    if (sheet.Cells[rowI, 3].Value.ToString() == "Name")
+                    if (ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Name")
                     {
-                        formRecord.Item2["name"] = sheet.Cells[rowI, columnIndex].Value.ToString();
+                        formRecord.Item2["name"] = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
                     }
-                    else if (sheet.Cells[rowI, 3].Value.ToString() == "Description")
+                    else if (ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Description")
                     {
-                        formRecord.Item2["description"] = sheet.Cells[rowI, columnIndex].Value.ToString();
+                        formRecord.Item2["description"] = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
                     }
 
                     columnIndex++;
@@ -571,7 +571,7 @@ namespace MsCrmTools.Translator.AppCode
                 //while (columnIndex <= lastColumnIndex)
                 while (row.Cells[columnIndex].Value != null)
                 {
-                    var currentLcid = int.Parse(sheet.Cells[0, columnIndex].Value.ToString());
+                    var currentLcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
                     var formRecord = forms.FirstOrDefault(t => t.Item1 == currentLcid && t.Item2.Id == currentFormId);
                     if (formRecord == null)
                     {
@@ -637,8 +637,8 @@ namespace MsCrmTools.Translator.AppCode
 
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
-                var tabId = sheet.Cells[rowI, 0].Value.ToString();
-                var formId = new Guid(sheet.Cells[rowI, 4].Value.ToString());
+                var tabId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
+                var formId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString());
 
                 var form = forms.FirstOrDefault(f => f.Id == formId);
                 if (form == null)
@@ -656,10 +656,10 @@ namespace MsCrmTools.Translator.AppCode
                 if (tabNode != null)
                 {
                     var columnIndex = 5;
-                    while (sheet.Cells[rowI, columnIndex].Value != null)
+                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                     {
-                        UpdateXmlNode(tabNode, sheet.Cells[0, columnIndex].Value.ToString(),
-                            sheet.Cells[rowI, columnIndex].Value.ToString());
+                        UpdateXmlNode(tabNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
                         columnIndex++;
                     }
                 }
@@ -693,7 +693,7 @@ namespace MsCrmTools.Translator.AppCode
                     var columnIndex = 5;
                     while (row.Cells[columnIndex].Value != null)
                     {
-                        UpdateXmlNode(tabNode, sheet.Cells[0, columnIndex].Value.ToString(),
+                        UpdateXmlNode(tabNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             row.Cells[columnIndex].Value.ToString());
                         columnIndex++;
                     }
@@ -711,8 +711,8 @@ namespace MsCrmTools.Translator.AppCode
 
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
-                var sectionId = sheet.Cells[rowI, 0].Value.ToString();
-                var formId = new Guid(sheet.Cells[rowI, 4].Value.ToString());
+                var sectionId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
+                var formId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString());
 
                 var form = forms.FirstOrDefault(f => f.Id == formId);
                 if (form == null)
@@ -732,10 +732,10 @@ namespace MsCrmTools.Translator.AppCode
                 if (sectionNode != null)
                 {
                     var columnIndex = 6;
-                    while (sheet.Cells[rowI, columnIndex].Value != null)
+                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                     {
-                        UpdateXmlNode(sectionNode, sheet.Cells[0, columnIndex].Value.ToString(),
-                            sheet.Cells[rowI, columnIndex].Value.ToString());
+                        UpdateXmlNode(sectionNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
                         columnIndex++;
                     }
                 }
@@ -771,7 +771,7 @@ namespace MsCrmTools.Translator.AppCode
                     var columnIndex = 6;
                     while (row.Cells[columnIndex].Value != null)
                     {
-                        UpdateXmlNode(sectionNode, sheet.Cells[0, columnIndex].Value.ToString(),
+                        UpdateXmlNode(sectionNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             row.Cells[columnIndex].Value.ToString());
                         columnIndex++;
                     }
@@ -789,8 +789,8 @@ namespace MsCrmTools.Translator.AppCode
 
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
-                var labelId = sheet.Cells[rowI, 0].Value.ToString();
-                var formId = new Guid(sheet.Cells[rowI, 4].Value.ToString());
+                var labelId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
+                var formId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString());
 
                 var form = forms.FirstOrDefault(f => f.Id == formId);
                 if (form == null)
@@ -810,10 +810,10 @@ namespace MsCrmTools.Translator.AppCode
                 if (cellNode != null)
                 {
                     var columnIndex = 8;
-                    while (sheet.Cells[rowI, columnIndex].Value != null)
+                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                     {
-                        UpdateXmlNode(cellNode, sheet.Cells[0, columnIndex].Value.ToString(),
-                            sheet.Cells[rowI, columnIndex].Value.ToString());
+                        UpdateXmlNode(cellNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
                         columnIndex++;
                     }
                 }
@@ -849,7 +849,7 @@ namespace MsCrmTools.Translator.AppCode
                     var columnIndex = 8;
                     while (row.Cells[columnIndex].Value != null)
                     {
-                        UpdateXmlNode(cellNode, sheet.Cells[0, columnIndex].Value.ToString(),
+                        UpdateXmlNode(cellNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             row.Cells[columnIndex].Value.ToString());
                         columnIndex++;
                     }
@@ -908,14 +908,14 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            sheet.Cells[0, cell++].Value = "Form Unique Id";
-            sheet.Cells[0, cell++].Value = "Form Id";
-            sheet.Cells[0, cell++].Value = "Entity Logical Name";
-            sheet.Cells[0, cell++].Value = "Type";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Unique Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Type";
 
             foreach (var lcid in languages)
             {
-                sheet.Cells[0, cell++].Value = lcid.ToString(CultureInfo.InvariantCulture);
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -923,15 +923,15 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            sheet.Cells[0, cell++].Value = "Tab Id";
-            sheet.Cells[0, cell++].Value = "Entity Logical Name";
-            sheet.Cells[0, cell++].Value = "Form Name";
-            sheet.Cells[0, cell++].Value = "Form Unique Id";
-            sheet.Cells[0, cell++].Value = "Form Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Tab Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Unique Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Id";
 
             foreach (var lcid in languages)
             {
-                sheet.Cells[0, cell++].Value = lcid.ToString(CultureInfo.InvariantCulture);
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -939,16 +939,16 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            sheet.Cells[0, cell++].Value = "Section Id";
-            sheet.Cells[0, cell++].Value = "Entity Logical Name";
-            sheet.Cells[0, cell++].Value = "Form Name";
-            sheet.Cells[0, cell++].Value = "Form Unique Id";
-            sheet.Cells[0, cell++].Value = "Form Id";
-            sheet.Cells[0, cell++].Value = "Tab Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Section Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Unique Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Tab Name";
 
             foreach (var lcid in languages)
             {
-                sheet.Cells[0, cell++].Value = lcid.ToString(CultureInfo.InvariantCulture);
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -956,18 +956,18 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            sheet.Cells[0, cell++].Value = "Label Id";
-            sheet.Cells[0, cell++].Value = "Entity Logical Name";
-            sheet.Cells[0, cell++].Value = "Form Name";
-            sheet.Cells[0, cell++].Value = "Form Unique Id";
-            sheet.Cells[0, cell++].Value = "Form Id";
-            sheet.Cells[0, cell++].Value = "Tab Name";
-            sheet.Cells[0, cell++].Value = "Section Name";
-            sheet.Cells[0, cell++].Value = "Attribute";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Label Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Unique Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Tab Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Section Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Attribute";
 
             foreach (var lcid in languages)
             {
-                sheet.Cells[0, cell++].Value = lcid.ToString(CultureInfo.InvariantCulture);
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
     }
