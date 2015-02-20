@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using GemBox.Spreadsheet;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+
+#if NO_GEMBOX
+using OfficeOpenXml;
+#else
+using GemBox.Spreadsheet;
+#endif
 
 namespace MsCrmTools.Translator.AppCode
 {

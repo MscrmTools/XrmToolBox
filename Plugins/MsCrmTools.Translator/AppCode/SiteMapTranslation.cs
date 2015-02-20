@@ -5,11 +5,16 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Policy;
 using System.Xml;
-using GemBox.Spreadsheet;
 using Microsoft.Crm.Sdk;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+
+#if NO_GEMBOX
+using OfficeOpenXml;
+#else
+using GemBox.Spreadsheet;
+#endif
 
 namespace MsCrmTools.Translator.AppCode
 {
@@ -24,9 +29,13 @@ namespace MsCrmTools.Translator.AppCode
         /// viewId;entityLogicalName;viewName;ViewType;Type;LCID1;LCID2;...;LCODX
         /// </example>
         /// <param name="languages"></param>
-        /// <param name="sheet"></param>
+        /// <param name="file"></param>
         /// <param name="service"></param>
+#if NO_GEMBOX
+        public void Export(List<int> languages, ExcelWorkbook file, IOrganizationService service)
+#else
         public void Export(List<int> languages, ExcelFile file, IOrganizationService service)
+#endif
         {
             var line = 1;
 
