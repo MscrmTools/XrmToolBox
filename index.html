@@ -18,7 +18,7 @@
 						var allCount = 0;
 						
 						$(data).each(function(index){
-							allCount += this.assets[0].download_count;
+							allCount += this.assets[index].download_count;
 						});
 											
                         $("#latestVersionDownloadCount").text(data[0].assets[0].download_count);
