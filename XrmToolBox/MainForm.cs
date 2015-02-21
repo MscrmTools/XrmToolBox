@@ -786,7 +786,7 @@ namespace XrmToolBox
                     CodePlexPluginMenuItem.Visible = false;
                     GithubXrmToolBoxMenuItem.Visible = true;
                     githubPluginMenuItem.Visible = true;
-                    CodePlexPluginMenuItem.Text = githubPlugin.GetType().GetTitle();
+                    githubPluginMenuItem.Text = githubPlugin.GetType().GetTitle();
                     AssignCodePlexMenuItems(GithubXrmToolBoxMenuItem.DropDownItems);
                 }
             }
