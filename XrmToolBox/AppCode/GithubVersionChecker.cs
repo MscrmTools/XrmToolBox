@@ -39,7 +39,7 @@ namespace XrmToolBox.AppCode
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.Add("User-Agent", "MscrmTools");
 
-                HttpResponseMessage response = await client.GetAsync("repos/MsCrmTools/ApplicationParameters/releases").ConfigureAwait(continueOnCapturedContext: false);
+                HttpResponseMessage response = await client.GetAsync("repos/MsCrmTools/XrmToolBox/releases").ConfigureAwait(continueOnCapturedContext: false);
                 response.EnsureSuccessStatusCode();
                 if (response.IsSuccessStatusCode)
                 {
@@ -47,29 +47,31 @@ namespace XrmToolBox.AppCode
                     var jSserializer = new JavaScriptSerializer();
                     var releases = jSserializer.Deserialize<List<RootObject>>(data.Result);
 
-                    var lastRelease = releases.OrderByDescending(r => r.created_at).First();
-
-                    var version = lastRelease.tag_name.Replace("v.", "");
-                    var versionParts = version.Split('.');
-                    int majorVersion = int.Parse(versionParts[0]);
-                    int minorVersion = int.Parse(versionParts[1]);
-                    int buildVersion = int.Parse(versionParts[2]);
-                    int revisionVersion = int.Parse(versionParts[3]);
-
-                    if (currentMajorVersion < majorVersion
-                        || currentMajorVersion == majorVersion && currentMinorVersion < minorVersion
-                        ||
-                        currentMajorVersion == majorVersion && currentMinorVersion == minorVersion &&
-                        currentBuildVersion < buildVersion
-                        ||
-                        currentMajorVersion == majorVersion && currentMinorVersion == minorVersion &&
-                        currentBuildVersion == buildVersion && currentRevisionVersion < revisionVersion)
+                    var lastRelease = releases.OrderByDescending(r => r.created_at).FirstOrDefault();
+                    if (lastRelease != null)
                     {
-                        Cpi = new GithubInformation
+                        var version = lastRelease.tag_name.Replace("v.", "");
+                        var versionParts = version.Split('.');
+                        int majorVersion = int.Parse(versionParts[0]);
+                        int minorVersion = int.Parse(versionParts[1]);
+                        int buildVersion = int.Parse(versionParts[2]);
+                        int revisionVersion = int.Parse(versionParts[3]);
+
+                        if (currentMajorVersion < majorVersion
+                            || currentMajorVersion == majorVersion && currentMinorVersion < minorVersion
+                            ||
+                            currentMajorVersion == majorVersion && currentMinorVersion == minorVersion &&
+                            currentBuildVersion < buildVersion
+                            ||
+                            currentMajorVersion == majorVersion && currentMinorVersion == minorVersion &&
+                            currentBuildVersion == buildVersion && currentRevisionVersion < revisionVersion)
                         {
-                            Description = lastRelease.body,
-                            Version = version
-                        };
+                            Cpi = new GithubInformation
+                            {
+                                Description = lastRelease.body,
+                                Version = version
+                            };
+                        }
                     }
                 }
             }
