@@ -1,13 +1,18 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using System.Xml;
-using GemBox.Spreadsheet;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+
+#if NO_GEMBOX
+using OfficeOpenXml;
+#else
+using GemBox.Spreadsheet;
+#endif
 
 namespace MsCrmTools.Translator.AppCode
 {
@@ -39,9 +44,9 @@ namespace MsCrmTools.Translator.AppCode
             {
                 var cell = 0;
 
-                sheet.Cells[line, cell++].Value = record.Id.ToString("B");
-                sheet.Cells[line, cell++].Value = record.GetAttributeValue<string>("entity");
-                sheet.Cells[line, cell++].Value = record.GetAttributeValue<string>("diffid");
+                ZeroBasedSheet.Cell(sheet, line, cell++).Value = record.Id.ToString("B");
+                ZeroBasedSheet.Cell(sheet, line, cell++).Value = record.GetAttributeValue<string>("entity");
+                ZeroBasedSheet.Cell(sheet, line, cell++).Value = record.GetAttributeValue<string>("diffid");
 
                 var xml = new XmlDocument();
                 xml.LoadXml(record.GetAttributeValue<string>("rdx"));
@@ -49,7 +54,7 @@ namespace MsCrmTools.Translator.AppCode
                 foreach (var lcid in languages)
                 {
                     var labelNode = xml.SelectSingleNode(string.Format("LocLabel/Titles/Title[@languagecode='{0}']", lcid));
-                    sheet.Cells[line, cell++].Value = labelNode == null ? string.Empty : labelNode.Attributes["description"].Value;
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = labelNode == null ? string.Empty : labelNode.Attributes["description"].Value;
                 }
 
                 line++;
@@ -58,19 +63,47 @@ namespace MsCrmTools.Translator.AppCode
             // Applying style to cells
             for (int i = 0; i < (3 + languages.Count); i++)
             {
-                sheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                sheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                StyleMutator.TitleCell(ZeroBasedSheet.Cell(sheet, 0, i).Style);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    sheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(sheet, i, j).Style);
                 }
             }
         }
 
+#if NO_GEMBOX
+        public void Import(ExcelWorksheet sheet, IOrganizationService service)
+        {
+            var rowsCount = sheet.Dimension.Rows;
+
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                var xml = new StringBuilder(string.Format("<LocLabel Id=\"{0}\"><Titles>", ZeroBasedSheet.Cell(sheet, rowI, 2).Value));
+
+                var columnIndex = 3;
+
+                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                {
+                    xml.Append(string.Format("<Title description=\"{0}\" languagecode=\"{1}\"/>",
+                                             ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value,
+                                             int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString())));
+
+                    columnIndex++;
+                }
+
+                xml.Append("</Titles></LocLabel>");
+
+                var ribbonDiff = new Entity("ribbondiff") { Id = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString()) };
+                ribbonDiff["rdx"] = xml.ToString();
+
+                service.Update(ribbonDiff);
+            }
+        }
+#else
         public void Import(ExcelWorksheet sheet, IOrganizationService service)
         {
             foreach (ExcelRow row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
@@ -83,7 +116,7 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     xml.Append(string.Format("<Title description=\"{0}\" languagecode=\"{1}\"/>",
                                              row.Cells[columnIndex].Value,
-                                             int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+                                             int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString())));
 
                     columnIndex++;
                 }
@@ -96,18 +129,18 @@ namespace MsCrmTools.Translator.AppCode
                 service.Update(ribbonDiff);
             }
         }
-
+#endif
         private void AddHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
         {
             var cell = 0;
 
-            sheet.Cells[0, cell++].Value = "Ribbon Diff Id";
-            sheet.Cells[0, cell++].Value = "Entity Logical Name";
-            sheet.Cells[0, cell++].Value = "Ribbon Component";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Ribbon Diff Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Ribbon Component";
 
             foreach (var lcid in languages)
             {
-                sheet.Cells[0, cell++].Value = lcid.ToString(CultureInfo.InvariantCulture);
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
 

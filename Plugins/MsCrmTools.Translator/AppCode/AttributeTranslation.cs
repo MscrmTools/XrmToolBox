@@ -2,11 +2,16 @@
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using GemBox.Spreadsheet;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
+
+#if NO_GEMBOX
+using OfficeOpenXml;
+#else
+using GemBox.Spreadsheet;
+#endif
 
 namespace MsCrmTools.Translator.AppCode
 {
@@ -48,12 +53,12 @@ namespace MsCrmTools.Translator.AppCode
                     if (attribute.DisplayName != null && attribute.DisplayName.LocalizedLabels.All(l => string.IsNullOrEmpty(l.Label)))
                         continue;
 
-                    sheet.Cells[line, cell++].Value = attribute.MetadataId.Value.ToString("B");
-                    sheet.Cells[line, cell++].Value = entity.LogicalName;
-                    sheet.Cells[line, cell++].Value = attribute.LogicalName;
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.MetadataId.Value.ToString("B");
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = entity.LogicalName;
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.LogicalName;
 
                     // DisplayName
-                    sheet.Cells[line, cell++].Value = "DisplayName";
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = "DisplayName";
 
                     foreach (var lcid in languages)
                     {
@@ -68,16 +73,16 @@ namespace MsCrmTools.Translator.AppCode
                             }
                         }
 
-                        sheet.Cells[line, cell++].Value = displayName;
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = displayName;
                     }
                     
                     // Description
                     line++;
                     cell = 0;
-                    sheet.Cells[line, cell++].Value = attribute.MetadataId.Value.ToString("B");
-                    sheet.Cells[line, cell++].Value = entity.LogicalName;
-                    sheet.Cells[line, cell++].Value = attribute.LogicalName;
-                    sheet.Cells[line, cell++].Value = "Description";
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.MetadataId.Value.ToString("B");
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = entity.LogicalName;
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.LogicalName;
+                    ZeroBasedSheet.Cell(sheet, line, cell++).Value = "Description";
 
                     foreach (var lcid in languages)
                     {
@@ -92,7 +97,7 @@ namespace MsCrmTools.Translator.AppCode
                             }
                         }
 
-                        sheet.Cells[line, cell++].Value = description;
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = description;
                     }
 
                     line++;
@@ -102,24 +107,91 @@ namespace MsCrmTools.Translator.AppCode
             // Applying style to cells
             for (int i = 0; i < (4 + languages.Count); i++)
             {
-                sheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                sheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                StyleMutator.TitleCell(ZeroBasedSheet.Cell(sheet, 0, i).Style);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    sheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(sheet, i, j).Style);
                 }
             }
         }
 
+#if NO_GEMBOX
         public void Import(ExcelWorksheet sheet, List<EntityMetadata> emds, IOrganizationService service)
         {
             var amds = new List<MasterAttribute>();
 
-            foreach (ExcelRow row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
+            var rowsCount = sheet.Dimension.Rows;
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                var amd = amds.FirstOrDefault(a => a.Amd.MetadataId == new Guid(ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString()));
+                if (amd == null)
+                {
+                    var currentEntity = emds.FirstOrDefault(e => e.LogicalName == ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString());
+                    if (currentEntity == null)
+                    {
+                        var request = new RetrieveEntityRequest
+                        {
+                            LogicalName = ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString(),
+                            EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
+                        };
+
+                        var response = ((RetrieveEntityResponse)service.Execute(request));
+                        currentEntity = response.EntityMetadata;
+
+                        emds.Add(currentEntity);
+                    }
+
+                    amd = new MasterAttribute();
+                    amd.Amd = currentEntity.Attributes.FirstOrDefault(a => a.LogicalName == ZeroBasedSheet.Cell(sheet, rowI, 2).Value.ToString());
+                    amds.Add(amd);
+                }
+
+                int columnIndex = 4;
+
+                if (ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "DisplayName")
+                {
+                    amd.Amd.DisplayName = new Label();
+
+                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    {
+                        amd.Amd.DisplayName.LocalizedLabels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString())));
+
+                        columnIndex++;
+                    }
+                }
+                else if (ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Description")
+                {
+                    amd.Amd.Description = new Label();
+
+                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    {
+                        amd.Amd.Description.LocalizedLabels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString())));
+
+                        columnIndex++;
+                    }
+                }
+            }
+
+            foreach (var amd in amds)
+            {
+                if (amd.Amd.DisplayName.LocalizedLabels.All(l => string.IsNullOrEmpty(l.Label))
+                    || amd.Amd.IsRenameable.Value == false)
+                    continue;
+
+                var request = new UpdateAttributeRequest { Attribute = amd.Amd, EntityName = amd.Amd.EntityLogicalName };
+                service.Execute(request);
+            }
+        }
+#else
+        public void Import(ExcelWorksheet sheet, List<EntityMetadata> emds, IOrganizationService service)
+        {
+            var amds = new List<MasterAttribute>();
+
+            foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
             {
                 var amd = amds.FirstOrDefault(a => a.Amd.MetadataId == new Guid(row.Cells[0].Value.ToString()));
                 if (amd == null)
@@ -180,19 +252,20 @@ namespace MsCrmTools.Translator.AppCode
                 service.Execute(request);
             }
         }
+#endif
 
         private void AddHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
         {
             var cell = 0;
 
-            sheet.Cells[0, cell++].Value = "Attribute Id";
-            sheet.Cells[0, cell++].Value = "Entity Logical Name";
-            sheet.Cells[0, cell++].Value = "Attribute Logical Name";
-            sheet.Cells[0, cell++].Value = "Type";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Attribute Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Attribute Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Type";
 
             foreach (var lcid in languages)
             {
-                sheet.Cells[0, cell++].Value = lcid.ToString(CultureInfo.InvariantCulture);
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
     }

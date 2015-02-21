@@ -4,12 +4,17 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using GemBox.Spreadsheet;
 using Microsoft.Crm.Sdk;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+
+#if NO_GEMBOX
+using OfficeOpenXml;
+#else
+using GemBox.Spreadsheet;
+#endif
 
 namespace MsCrmTools.Translator.AppCode
 {
@@ -86,16 +91,16 @@ namespace MsCrmTools.Translator.AppCode
             foreach (var crmView in crmViews.OrderBy(cv=>cv.Entity).ThenBy(cv=>cv.Type))
             {
                 var cell = 0;
-                sheet.Cells[line, cell++].Value = crmView.Id.ToString("B");
-                sheet.Cells[line, cell++].Value = crmView.Entity;
-                sheet.Cells[line, cell++].Value = crmView.Type;
-                sheet.Cells[line, cell++].Value = "Name";
+                ZeroBasedSheet.Cell(sheet, line, cell++).Value = crmView.Id.ToString("B");
+                ZeroBasedSheet.Cell(sheet, line, cell++).Value = crmView.Entity;
+                ZeroBasedSheet.Cell(sheet, line, cell++).Value = crmView.Type;
+                ZeroBasedSheet.Cell(sheet, line, cell++).Value = "Name";
 
                 foreach (var lcid in languages)
                 {
                     var name = crmView.Names.FirstOrDefault(n => n.Key == lcid);
                     if(name.Value != null)
-                        sheet.Cells[line, cell++].Value = name.Value;
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = name.Value;
                     else
                     {
                         cell++;
@@ -104,16 +109,16 @@ namespace MsCrmTools.Translator.AppCode
 
                 line++;
                 cell = 0;
-                sheet.Cells[line, cell++].Value = crmView.Id.ToString("B");
-                sheet.Cells[line, cell++].Value = crmView.Entity;
-                sheet.Cells[line, cell++].Value = crmView.Type;
-                sheet.Cells[line, cell++].Value = "Description";
+                ZeroBasedSheet.Cell(sheet, line, cell++).Value = crmView.Id.ToString("B");
+                ZeroBasedSheet.Cell(sheet, line, cell++).Value = crmView.Entity;
+                ZeroBasedSheet.Cell(sheet, line, cell++).Value = crmView.Type;
+                ZeroBasedSheet.Cell(sheet, line, cell++).Value = "Description";
 
                 foreach (var lcid in languages)
                 {
                     var desc = crmView.Descriptions.FirstOrDefault(n => n.Key == lcid);
                     if (desc.Value != null)
-                        sheet.Cells[line, cell++].Value = desc.Value;
+                        ZeroBasedSheet.Cell(sheet, line, cell++).Value = desc.Value;
                     else
                     {
                         cell++;
@@ -125,19 +130,50 @@ namespace MsCrmTools.Translator.AppCode
             // Applying style to cells
             for (int i = 0; i < (4 + languages.Count); i++)
             {
-                sheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                sheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                StyleMutator.TitleCell(ZeroBasedSheet.Cell(sheet, 0, i).Style);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    sheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(sheet, i, j).Style);
                 }
             }
         }
 
+#if NO_GEMBOX
+        public void Import(ExcelWorksheet sheet, IOrganizationService service)
+        {
+            var views = new List<Tuple<int, Entity>>();
+
+            var rowsCount = sheet.Dimension.Rows;
+
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                var currentViewId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString());
+                var request = new SetLocLabelsRequest
+                {
+                    EntityMoniker = new EntityReference("savedquery", currentViewId),
+                    AttributeName = ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Name" ? "name" : "description"
+                };
+
+                var labels = new List<LocalizedLabel>();
+
+                var columnIndex = 4;
+                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                {
+                    var currentLcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
+                    labels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), currentLcid));
+                    columnIndex++;
+                }
+
+                request.Labels = labels.ToArray();
+
+                service.Execute(request);
+            }
+        }
+#else
         public void Import(ExcelWorksheet sheet, IOrganizationService service)
         {
             var views = new List<Tuple<int, Entity>>();
@@ -156,7 +192,7 @@ namespace MsCrmTools.Translator.AppCode
                 var columnIndex = 4;
                 while (row.Cells[columnIndex].Value != null)
                 {
-                    var currentLcid = int.Parse(sheet.Cells[0, columnIndex].Value.ToString());
+                    var currentLcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
                     labels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(),currentLcid));
                     columnIndex++;
                 }
@@ -166,19 +202,20 @@ namespace MsCrmTools.Translator.AppCode
                 service.Execute(request);
             }
         }
-        
+#endif
+
         private void AddHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
         {
             var cell = 0;
 
-            sheet.Cells[0, cell++].Value = "View Id";
-            sheet.Cells[0, cell++].Value = "Entity Logical Name";
-            sheet.Cells[0, cell++].Value = "ViewType";
-            sheet.Cells[0, cell++].Value = "Type";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "View Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "ViewType";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Type";
 
             foreach (var lcid in languages)
             {
-                sheet.Cells[0, cell++].Value = lcid.ToString(CultureInfo.InvariantCulture);
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
 
