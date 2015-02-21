@@ -142,7 +142,7 @@ namespace XrmToolBox
 
                 cvc.Run();
 
-                if (!string.IsNullOrEmpty(GithubVersionChecker.Cpi.Version))
+                if (GithubVersionChecker.Cpi != null && !string.IsNullOrEmpty(GithubVersionChecker.Cpi.Version))
                 {
                     if (currentOptions.LastUpdateCheck.Date != DateTime.Now.Date)
                     {
