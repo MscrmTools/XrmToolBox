@@ -647,7 +647,5 @@ namespace McTools.Xrm.Connection.WinForms
         }
 
         #endregion
-
-      
     }
 }

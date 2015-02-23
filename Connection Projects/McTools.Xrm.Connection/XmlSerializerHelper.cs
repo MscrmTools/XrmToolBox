@@ -59,9 +59,17 @@ namespace McTools.Xrm.Connection
             {
                 XmlSerializer s = new XmlSerializer(o.GetType());
 
-                using (StreamWriter writer = new StreamWriter(path, false))
+                using (var fStream = File.Open(path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
                 {
-                    s.Serialize(writer, o);
+                    fStream.SetLength(0);
+                }
+
+                using (var fStream = File.Open(path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
+                {
+                    using (StreamWriter writer = new StreamWriter(fStream))
+                    {
+                        s.Serialize(writer, o);
+                    }
                 }
             }
             catch (Exception error)

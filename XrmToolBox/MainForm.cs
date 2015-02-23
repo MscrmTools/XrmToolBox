@@ -71,7 +71,7 @@ namespace XrmToolBox
 
         private void ManageConnectionControl()
         {
-            cManager = new ConnectionManager();
+            cManager = ConnectionManager.Instance;
             cManager.RequestPassword += (sender, e) => fHelper.RequestPassword(e.ConnectionDetail);
             cManager.StepChanged += (sender, e) => ccsb.SetMessage(e.CurrentStep);
             cManager.ConnectionSucceed += (sender, e) =>

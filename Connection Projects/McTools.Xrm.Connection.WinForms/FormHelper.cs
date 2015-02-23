@@ -63,10 +63,9 @@ namespace McTools.Xrm.Connection.WinForms
         /// </summary>
         public bool AskForConnection(object connectionParameter)
         {
-            var cs = new ConnectionSelector(_connectionManager.LoadConnectionsList(), _connectionManager)
+            var cs = new ConnectionSelector(_connectionManager.ConnectionsList, _connectionManager)
             {
                 StartPosition = FormStartPosition.CenterParent,
-                ConnectionList = _connectionManager.LoadConnectionsList()
             };
 
             if (cs.ShowDialog(_innerAppForm) == DialogResult.OK)
@@ -110,10 +109,9 @@ namespace McTools.Xrm.Connection.WinForms
 
         public void DisplayConnectionsList(Form form)
         {
-            var cs = new ConnectionSelector(_connectionManager.LoadConnectionsList(), _connectionManager, true, false)
+            var cs = new ConnectionSelector(_connectionManager.ConnectionsList, _connectionManager, true, false)
             {
                 StartPosition = FormStartPosition.CenterParent,
-                ConnectionList = _connectionManager.LoadConnectionsList()
             };
 
             cs.ShowDialog(form);
@@ -121,10 +119,9 @@ namespace McTools.Xrm.Connection.WinForms
 
         public List<ConnectionDetail> SelectMultipleConnectionDetails()
         {
-            var cs = new ConnectionSelector(_connectionManager.LoadConnectionsList(), _connectionManager, true)
+            var cs = new ConnectionSelector(_connectionManager.ConnectionsList, _connectionManager, true)
             {
                 StartPosition = FormStartPosition.CenterParent,
-                ConnectionList = _connectionManager.LoadConnectionsList()
             };
 
             if (cs.ShowDialog(_innerAppForm) == DialogResult.OK)

@@ -26,6 +26,11 @@ namespace McTools.Xrm.Connection
 
         #endregion
 
+        public CrmConnections()
+        {
+            Connections = new List<ConnectionDetail>();
+        }
+
         #region Propriétés
 
         /// <summary>

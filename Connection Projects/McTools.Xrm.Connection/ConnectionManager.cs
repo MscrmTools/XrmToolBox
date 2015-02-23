@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Client;
 using Microsoft.Xrm.Client.Services;
@@ -65,17 +66,18 @@ namespace McTools.Xrm.Connection
     {
         #region Delegates
 
+        public delegate void ConnectionListUpdatedEventHandler(object sender, EventArgs e);
         public delegate void ConnectionSucceedEventHandler(object sender, ConnectionSucceedEventArgs e);
         public delegate void ConnectionFailedEventHandler(object sender, ConnectionFailedEventArgs e);
         public delegate void StepChangedEventHandler(object sender, StepChangedEventArgs e);
         public delegate bool RequestPasswordEventHandler(object sender, RequestPasswordEventArgs e);
         public delegate void UseProxyEventHandler(object sender, UseProxyEventArgs e);
 
-
         #endregion
 
         #region Event Handlers
 
+        public event ConnectionListUpdatedEventHandler ConnectionListUpdated;
         public event ConnectionSucceedEventHandler ConnectionSucceed;
         public event ConnectionFailedEventHandler ConnectionFailed;
         public event StepChangedEventHandler StepChanged;
@@ -96,18 +98,36 @@ namespace McTools.Xrm.Connection
 
         #endregion Constants
 
+        private static readonly ConnectionManager instance = new ConnectionManager();
+
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of class ConnectionManager
         /// </summary>
-        public ConnectionManager()
+        private ConnectionManager()
         {
             ConnectionsList = LoadConnectionsList();
+
+            var fsw = new FileSystemWatcher(new FileInfo(ConfigFileName).Directory.FullName, ConfigFileName);
+            fsw.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
+            fsw.EnableRaisingEvents = true;
+            fsw.Changed += fsw_Changed;
 
             ServicePointManager.ServerCertificateValidationCallback += ValidateRemoteCertificate;
 
         }
+
+        void fsw_Changed(object sender, FileSystemEventArgs e)
+        {
+            if (e.ChangeType == WatcherChangeTypes.Changed)
+            {
+                ConnectionsList = LoadConnectionsList();
+
+                ConnectionListUpdated(null, new EventArgs());
+            }
+        }
+
         // callback used to validate the certificate in an SSL conversation
         private static bool ValidateRemoteCertificate(
         object sender,
@@ -126,6 +146,11 @@ namespace McTools.Xrm.Connection
         /// List of Crm connections
         /// </summary>
         public CrmConnections ConnectionsList { get; set; }
+
+        public static ConnectionManager Instance
+        {
+            get { return instance; }
+        }
 
         #endregion Properties
 
@@ -246,9 +271,16 @@ namespace McTools.Xrm.Connection
             {
                 if (File.Exists(ConfigFileName))
                 {
-                    using (var configReader = new StreamReader(ConfigFileName))
+                    using (var fStream = File.Open(ConfigFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                     {
-                        crmConnections = (CrmConnections)XmlSerializerHelper.Deserialize(configReader.ReadToEnd(), typeof(CrmConnections));
+                        if (fStream.Length == 0) return new CrmConnections();
+
+                        using (var configReader = new StreamReader(fStream))
+                        {
+                            crmConnections =
+                                (CrmConnections)
+                                    XmlSerializerHelper.Deserialize(configReader.ReadToEnd(), typeof (CrmConnections));
+                        }
                     }
 
                     if (!string.IsNullOrEmpty(crmConnections.Password))

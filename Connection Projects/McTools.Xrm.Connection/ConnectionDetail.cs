@@ -48,7 +48,7 @@ namespace McTools.Xrm.Connection
         /// <summary>
         /// Get or set the Crm Ticket
         /// </summary>
-        [System.Xml.Serialization.XmlIgnore]
+        [XmlIgnore]
         public string CrmTicket { get; set; }
 
         /// <summary>
@@ -212,35 +212,6 @@ namespace McTools.Xrm.Connection
 
         public string GetOrganizationCrmConnectionString()
         {
-            var currentServerName = string.Empty;
-
-            if (UseOsdp || UseOnline)
-            {
-                currentServerName = string.Format("{0}.{1}", OrganizationUrlName, ServerName);
-            }
-            else if (UseIfd)
-            {
-                var serverNameParts = ServerName.Split('.');
-
-                serverNameParts[0] = OrganizationUrlName;
-
-
-                currentServerName = string.Format("{0}:{1}",
-                                                  string.Join(".", serverNameParts),
-                                                  ServerPort == 0 ? (UseSsl ? 443 : 80) : ServerPort);
-            }
-            else
-            {
-                currentServerName = string.Format("{0}:{1}/{2}",
-                                                  ServerName,
-                                                  ServerPort == 0 ? (UseSsl ? 443 : 80) : ServerPort,
-                                                  Organization);
-            }
-
-            //var connectionString = string.Format("Url={0}://{1};",
-            //                                     UseSsl ? "https" : "http",
-            //                                     currentServerName);
-
             var connectionString = string.Format("Url={0};", OrganizationServiceUrl.Replace("/XRMServices/2011/Organization.svc", ""));
 
             if (IsCustomAuth)
