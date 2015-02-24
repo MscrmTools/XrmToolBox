@@ -556,7 +556,8 @@ namespace McTools.Xrm.Connection.WinForms
             tbUserLogin.Text = detail.UserName;
             tbUserPassword.Text = detail.UserPassword;
             chkSavePassword.Checked = detail.SavePassword;
-            comboBoxOrganizations.Text = detail.OrganizationFriendlyName;
+            comboBoxOrganizations.Items.Add(detail.OrganizationFriendlyName);
+            comboBoxOrganizations.SelectedIndex = 0;
             cbUseIfd.Checked = detail.UseIfd;
             cbUseOSDP.Checked = detail.UseOsdp;
             cbUseOnline.Checked = detail.UseOnline;
