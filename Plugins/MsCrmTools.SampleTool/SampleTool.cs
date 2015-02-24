@@ -4,26 +4,14 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Windows.Forms;
-using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
-using Microsoft.Xrm.Sdk.Metadata.Query;
-using Microsoft.Xrm.Sdk.Query;
 using XrmToolBox;
 
 namespace MsCrmTools.SampleTool
 {
     public partial class SampleTool : PluginBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin
     {
-        private IOrganizationService service;
-
-        private Panel infoPanel;
-
         public SampleTool()
         {
             InitializeComponent();
@@ -34,12 +22,12 @@ namespace MsCrmTools.SampleTool
             ExecuteMethod(ProcessWhoAmI);
         }
 
-        private void ProcessWhoAmI()
+        public void ProcessWhoAmI()
         {
             WorkAsync(null, (w, e) =>
             {
                 var request = new WhoAmIRequest();
-                var response = (WhoAmIResponse) service.Execute(request);
+                var response = (WhoAmIResponse) Service.Execute(request);
 
                 e.Result = response.UserId;
             },
