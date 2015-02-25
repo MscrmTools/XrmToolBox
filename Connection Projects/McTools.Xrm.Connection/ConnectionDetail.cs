@@ -1,18 +1,22 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 using System.ServiceModel.Description;
 using System.Xml.Serialization;
+using Microsoft.Xrm.Client;
+using Microsoft.Xrm.Client.Services;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Sdk.Discovery;
 
 namespace McTools.Xrm.Connection
 {
     /// <summary>
     /// Stores data regarding a specific connection to Crm server
     /// </summary>
-    public class ConnectionDetail : IComparable
+    public class ConnectionDetail : IComparable, ICloneable
     {
         #region Propriétés
-
         public AuthenticationProviderType AuthType { get; set; }
 
         /// <summary>
@@ -48,7 +52,6 @@ namespace McTools.Xrm.Connection
         /// <summary>
         /// Get or set the Crm Ticket
         /// </summary>
-        [XmlIgnore]
         public string CrmTicket { get; set; }
 
         /// <summary>
@@ -64,8 +67,9 @@ namespace McTools.Xrm.Connection
         /// <summary>
         /// Get or set the user password
         /// </summary>
-        //[System.Xml.Serialization.XmlIgnore]
-        public string UserPassword { get; set; }
+        public string UserPassword { internal get; set; }
+
+        public bool PasswordIsEmpty { get { return string.IsNullOrEmpty(UserPassword); } }
 
         public bool SavePassword { get; set; }
 
@@ -112,10 +116,8 @@ namespace McTools.Xrm.Connection
 
         public string OrganizationVersion { get; set; }
 
-        [XmlIgnore]
         public TimeSpan Timeout { get; set; }
 
-        [XmlElement("Timeout")]
         public long TimeoutTicks
         {
             get { return Timeout.Ticks; }
@@ -153,7 +155,7 @@ namespace McTools.Xrm.Connection
             return ConnectionName;
         }
 
-        public string GetDiscoveryCrmConnectionString()
+        internal string GetDiscoveryCrmConnectionString()
         {
             var connectionString = string.Format("Url={0}://{1}:{2};",
                 UseSsl ? "https" : "http",
@@ -210,7 +212,7 @@ namespace McTools.Xrm.Connection
             return connectionString;
         }
 
-        public string GetOrganizationCrmConnectionString()
+        internal string GetOrganizationCrmConnectionString()
         {
             var connectionString = string.Format("Url={0};", OrganizationServiceUrl.Replace("/XRMServices/2011/Organization.svc", ""));
 
@@ -266,6 +268,40 @@ namespace McTools.Xrm.Connection
             return connectionString;
         }
 
+        public void UpdateAfterEdit(ConnectionDetail editedConnection)
+        {
+            ConnectionName = editedConnection.ConnectionName;
+            OrganizationServiceUrl = editedConnection.OrganizationServiceUrl;
+            CrmTicket = editedConnection.CrmTicket;
+            IsCustomAuth = editedConnection.IsCustomAuth;
+            Organization = editedConnection.Organization;
+            OrganizationFriendlyName = editedConnection.OrganizationFriendlyName;
+            ServerName = editedConnection.ServerName;
+            ServerPort = editedConnection.ServerPort;
+            UseIfd = editedConnection.UseIfd;
+            UseOnline = editedConnection.UseOnline;
+            UseOsdp = editedConnection.UseOsdp;
+            UserDomain = editedConnection.UserDomain;
+            UserName = editedConnection.UserName;
+            UserPassword = editedConnection.UserPassword;
+            UseSsl = editedConnection.UseSsl;
+            HomeRealmUrl = editedConnection.HomeRealmUrl;
+        }
+
+        public IOrganizationService GetOrganizationService()
+        {
+            return new OrganizationService(CrmConnection.Parse(GetOrganizationCrmConnectionString()));
+        }
+
+        public IDiscoveryService GetDiscoveryService()
+        {
+            return new DiscoveryService(CrmConnection.Parse(GetDiscoveryCrmConnectionString()));
+        }
+
+        public void ErasePassword()
+        {
+            UserPassword = null;
+        }
 
         #endregion
 
@@ -273,9 +309,64 @@ namespace McTools.Xrm.Connection
 
         public int CompareTo(object obj)
         {
-            return String.CompareOrdinal(ConnectionName, ((ConnectionDetail)obj).ConnectionName);
+            var detail = (ConnectionDetail) obj;
+
+            if (detail.AuthType != AuthType
+                || detail.CrmTicket != CrmTicket
+                || detail.HomeRealmUrl != HomeRealmUrl
+                || detail.IsCustomAuth != IsCustomAuth
+                || detail.Organization != Organization
+                || detail.OrganizationFriendlyName != OrganizationFriendlyName
+                || detail.OrganizationServiceUrl != OrganizationServiceUrl
+                || detail.OrganizationUrlName != OrganizationUrlName
+                || detail.ServerName != ServerName
+                || detail.ServerPort != ServerPort
+                || detail.UseIfd != UseIfd
+                || detail.UseOnline != UseOnline
+                || detail.UseOsdp != UseOsdp
+                || detail.UseSsl != UseSsl
+                || detail.UserDomain != UserDomain
+                || detail.UserName != UserName
+                || detail.UserPassword != null && detail.UserPassword != UserPassword)
+            {
+                return 1;
+            }
+
+            return 0;
         }
 
         #endregion
+
+        public object Clone()
+        {
+            return new ConnectionDetail
+            {
+                AuthType = AuthType,
+                ConnectionId = ConnectionId,
+                ConnectionName = ConnectionName,
+                CrmTicket = CrmTicket,
+                HomeRealmUrl = HomeRealmUrl,
+                IsCustomAuth = IsCustomAuth,
+                Organization = Organization,
+                OrganizationFriendlyName = OrganizationFriendlyName,
+                OrganizationServiceUrl = OrganizationServiceUrl,
+                OrganizationUrlName = OrganizationUrlName,
+                OrganizationVersion = OrganizationVersion,
+                SavePassword = SavePassword,
+                ServerName = ServerName,
+                ServerPort = ServerPort,
+                TimeoutTicks = TimeoutTicks,
+                UseIfd = UseIfd,
+                UseOnline = UseOnline,
+                UseOsdp = UseOsdp,
+                UseSsl = UseSsl,
+                UserDomain = UserDomain,
+                UserName = UserName,
+                UserPassword = UserPassword,
+                WebApplicationUrl = WebApplicationUrl
+            };
+        }
+
+       
     }
 }

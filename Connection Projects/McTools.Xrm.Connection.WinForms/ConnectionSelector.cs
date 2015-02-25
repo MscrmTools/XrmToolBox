@@ -188,6 +188,8 @@ namespace McTools.Xrm.Connection.WinForms
                 lvConnections.SelectedItems.Clear();
                 item.Selected = true;
 
+                lvConnections.Sort();
+
                 if (isConnectionSelection)
                 {
                     BValidateClick(sender, e);

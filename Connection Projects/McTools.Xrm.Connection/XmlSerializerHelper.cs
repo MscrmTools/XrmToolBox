@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace McTools.Xrm.Connection
@@ -59,12 +61,12 @@ namespace McTools.Xrm.Connection
             {
                 XmlSerializer s = new XmlSerializer(o.GetType());
 
-                using (var fStream = File.Open(path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
+                using (var fStream = File.Open(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
                 {
                     fStream.SetLength(0);
                 }
 
-                using (var fStream = File.Open(path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
+                using (var fStream = File.Open(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
                 {
                     using (StreamWriter writer = new StreamWriter(fStream))
                     {

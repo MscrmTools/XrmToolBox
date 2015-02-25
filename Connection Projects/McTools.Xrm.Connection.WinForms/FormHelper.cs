@@ -24,7 +24,7 @@ namespace McTools.Xrm.Connection.WinForms
         /// <returns>True if password defined</returns>
         public bool RequestPassword(ConnectionDetail detail)
         {
-            if (!string.IsNullOrEmpty(detail.UserPassword))
+            if (!detail.PasswordIsEmpty)
                 return true;
 
             bool returnValue = false;
@@ -73,7 +73,7 @@ namespace McTools.Xrm.Connection.WinForms
                 var connectionDetail = cs.SelectedConnections.First();
                 if (connectionDetail.IsCustomAuth)
                 {
-                    if (string.IsNullOrEmpty(connectionDetail.UserPassword))
+                    if (connectionDetail.PasswordIsEmpty)
                     {
                         var pForm = new PasswordForm()
                         {
@@ -149,6 +149,17 @@ namespace McTools.Xrm.Connection.WinForms
 
             if (cForm.ShowDialog(_innerAppForm) == DialogResult.OK)
             {
+               
+                if (cForm.DoConnect)
+                {
+                    _connectionManager.ConnectToServer(cForm.CrmConnectionDetail);
+                }
+
+                if (!cForm.CrmConnectionDetail.PasswordIsEmpty && !cForm.CrmConnectionDetail.SavePassword)
+                {
+                    cForm.CrmConnectionDetail.ErasePassword();
+                }
+
                 if (isCreation)
                 {
                     if (!_connectionManager.ConnectionsList.Connections.Contains(cForm.CrmConnectionDetail))
@@ -160,33 +171,9 @@ namespace McTools.Xrm.Connection.WinForms
                     {
                         if (detail.ConnectionId == cForm.CrmConnectionDetail.ConnectionId)
                         {
-                            #region Update connection details
-
-                            detail.ConnectionName = cForm.CrmConnectionDetail.ConnectionName;
-                            detail.OrganizationServiceUrl = cForm.CrmConnectionDetail.OrganizationServiceUrl;
-                            detail.CrmTicket = cForm.CrmConnectionDetail.CrmTicket;
-                            detail.IsCustomAuth = cForm.CrmConnectionDetail.IsCustomAuth;
-                            detail.Organization = cForm.CrmConnectionDetail.Organization;
-                            detail.OrganizationFriendlyName = cForm.CrmConnectionDetail.OrganizationFriendlyName;
-                            detail.ServerName = cForm.CrmConnectionDetail.ServerName;
-                            detail.ServerPort = cForm.CrmConnectionDetail.ServerPort;
-                            detail.UseIfd = cForm.CrmConnectionDetail.UseIfd;
-                            detail.UseOnline = cForm.CrmConnectionDetail.UseOnline;
-                            detail.UseOsdp = cForm.CrmConnectionDetail.UseOsdp;
-                            detail.UserDomain = cForm.CrmConnectionDetail.UserDomain;
-                            detail.UserName = cForm.CrmConnectionDetail.UserName;
-                            detail.UserPassword = cForm.CrmConnectionDetail.UserPassword;
-                            detail.UseSsl = cForm.CrmConnectionDetail.UseSsl;
-                            detail.HomeRealmUrl = cForm.CrmConnectionDetail.HomeRealmUrl;
-
-                            #endregion
+                            detail.UpdateAfterEdit(cForm.CrmConnectionDetail);
                         }
                     }
-                }
-
-                if (cForm.DoConnect)
-                {
-                    _connectionManager.ConnectToServer(cForm.CrmConnectionDetail);
                 }
 
                 _connectionManager.SaveConnectionsFile(_connectionManager.ConnectionsList);

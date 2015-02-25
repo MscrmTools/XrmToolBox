@@ -5,8 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
+using System.Runtime.Serialization;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Xml;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Client;
 using Microsoft.Xrm.Client.Services;
@@ -237,6 +239,11 @@ namespace McTools.Xrm.Connection
 
                 TestConnection(service);
 
+                if (!detail.SavePassword)
+                {
+                    detail.ErasePassword();
+                }
+
                 var vRequest = new RetrieveVersionRequest();
                 var vResponse = (RetrieveVersionResponse) service.Execute(vRequest);
 
@@ -266,22 +273,12 @@ namespace McTools.Xrm.Connection
         /// <returns>List of Crm connections</returns>
         public CrmConnections LoadConnectionsList()
         {
-            CrmConnections crmConnections;
             try
             {
+                CrmConnections crmConnections;
                 if (File.Exists(ConfigFileName))
                 {
-                    using (var fStream = File.Open(ConfigFileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                    {
-                        if (fStream.Length == 0) return new CrmConnections();
-
-                        using (var configReader = new StreamReader(fStream))
-                        {
-                            crmConnections =
-                                (CrmConnections)
-                                    XmlSerializerHelper.Deserialize(configReader.ReadToEnd(), typeof (CrmConnections));
-                        }
-                    }
+                    crmConnections = CrmConnections.LoadFromFile(ConfigFileName);
 
                     if (!string.IsNullOrEmpty(crmConnections.Password))
                     {
@@ -389,7 +386,7 @@ namespace McTools.Xrm.Connection
                 }
             }
 
-            XmlSerializerHelper.SerializeToFile(connectionsList, ConfigFileName);
+            connectionsList.SerializeToFile(ConfigFileName);
 
             foreach (var detail in connectionsList.Connections)
             {

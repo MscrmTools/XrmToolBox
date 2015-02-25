@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Xml;
+using System.Xml.Linq;
+using Microsoft.Xrm.Client.Windows.Controls.ConnectionDialog;
+using Microsoft.Xrm.Sdk.Client;
 
 namespace McTools.Xrm.Connection
 {
@@ -74,6 +80,190 @@ namespace McTools.Xrm.Connection
         {
             get { return _useCustomProxy; }
             set { _useCustomProxy = value; }
+        }
+
+        #endregion
+
+        #region methods
+
+        public void SerializeToFile(string filePath)
+        {
+            var listElement = new XElement("Connections");
+                
+            foreach (var connection in Connections)
+            {
+                var xc = new XElement("ConnectionDetail",
+                    new XElement("AuthType", connection.AuthType),
+                    new XElement("ConnectionId", connection.ConnectionId),
+                    new XElement("ConnectionName", connection.ConnectionName),
+                    new XElement("IsCustomAuth", connection.IsCustomAuth),
+                    new XElement("UseIfd", connection.UseIfd),
+                    new XElement("UseOnline", connection.UseOnline),
+                    new XElement("UseOsdp", connection.UseOsdp),
+                    new XElement("UserDomain", connection.UserDomain),
+                    new XElement("UserName", connection.UserName),
+                    new XElement("UserPassword", connection.UserPassword),
+                    new XElement("SavePassword", connection.SavePassword),
+                    new XElement("UseSsl", connection.UseSsl),
+                    new XElement("ServerName", connection.ServerName),
+                    new XElement("ServerPort", connection.ServerPort),
+                    new XElement("Organization", connection.Organization),
+                    new XElement("OrganizationUrlName", connection.OrganizationUrlName),
+                    new XElement("OrganizationFriendlyName", connection.OrganizationFriendlyName),
+                    new XElement("OrganizationServiceUrl", connection.OrganizationServiceUrl),
+                    new XElement("OrganizationVersion", connection.OrganizationVersion),
+                    new XElement("Timeout", connection.TimeoutTicks),
+                    new XElement("WebApplicationUrl", connection.WebApplicationUrl));
+
+                listElement.Add(xc);
+            }
+
+            var doc = new XDocument(new XElement("CrmConnections", listElement));
+
+            using (var fStream = File.Open(filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
+            {
+                fStream.SetLength(0);
+            }
+
+            using (var fStream = File.Open(filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
+            {
+                XmlWriter writer = XmlWriter.Create(fStream, new XmlWriterSettings { Indent = true });
+                doc.WriteTo(writer);
+                writer.Close();
+            }
+        }
+
+        public static CrmConnections LoadFromFile(string filePath)
+        {
+            var crmConnections = new CrmConnections();
+
+            if (!File.Exists(filePath))
+            {
+                return crmConnections;
+            }
+
+            using (var fStream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                if (fStream.Length == 0)
+                {
+                    return crmConnections;
+                }
+
+                var doc = XDocument.Load(fStream);
+
+                foreach (var elt in doc.Descendants("ConnectionDetail"))
+                {
+                    var cd = new ConnectionDetail();
+
+                    var authElement = elt.Element("AuthType");
+                    if (authElement != null)
+                    {
+                        cd.AuthType =
+                            (AuthenticationProviderType)
+                                Enum.Parse(typeof (AuthenticationProviderType), authElement.Value);
+                    }
+
+                    var connectionIdElement = elt.Element("ConnectionId");
+                    cd.ConnectionId = connectionIdElement != null ? new Guid(connectionIdElement.Value) : Guid.NewGuid();
+
+                    var connectionNameElement = elt.Element("ConnectionName");
+                    cd.ConnectionName = connectionNameElement != null ? connectionNameElement.Value : null;
+
+                    var homeRealmUrlElement = elt.Element("HomeRealmUrl");
+                    cd.HomeRealmUrl = homeRealmUrlElement != null ? homeRealmUrlElement.Value : null;
+
+                    var isCustomAuthElement = elt.Element("IsCustomAuth");
+                    cd.IsCustomAuth = isCustomAuthElement != null && isCustomAuthElement.Value == "true";
+
+                    var organizationElement = elt.Element("Organization");
+                    if (organizationElement != null)
+                    {
+                        cd.Organization = organizationElement.Value;
+                    }
+
+                    var organizationFriendlyNameElement = elt.Element("OrganizationFriendlyName");
+                    if (organizationFriendlyNameElement != null)
+                    {
+                        cd.OrganizationFriendlyName = organizationFriendlyNameElement.Value;
+                    }
+
+                    var organizationServiceUrlElement = elt.Element("OrganizationServiceUrl");
+                    if (organizationServiceUrlElement != null)
+                    {
+                        cd.OrganizationServiceUrl = organizationServiceUrlElement.Value;
+                    }
+
+                    var organizationUrlNameElement = elt.Element("OrganizationUrlName");
+                    if (organizationUrlNameElement != null)
+                    {
+                        cd.OrganizationUrlName = organizationUrlNameElement.Value;
+                    }
+
+                    var organizationVersionElement = elt.Element("OrganizationVersion");
+                    if (organizationVersionElement != null)
+                    {
+                        cd.OrganizationVersion = organizationVersionElement.Value;
+                    }
+
+                    var savePasswordElement = elt.Element("SavePassword");
+                    cd.SavePassword = savePasswordElement != null && savePasswordElement.Value == "true";
+
+                    var serverNameElement = elt.Element("ServerName");
+                    if (serverNameElement != null)
+                    {
+                        cd.ServerName = serverNameElement.Value;
+                    }
+
+                    var serverPortElement = elt.Element("ServerPort");
+                    if (serverPortElement != null)
+                    {
+                        cd.ServerPort = int.Parse(serverPortElement.Value);
+                    }
+
+                    var timeOutElement = elt.Element("Timeout");
+                    if (timeOutElement != null)
+                    {
+                        cd.TimeoutTicks = int.Parse(timeOutElement.Value);
+                    }
+
+                    var useIfdElement = elt.Element("UseIfd");
+                    cd.UseIfd = useIfdElement != null && useIfdElement.Value == "true";
+                    var useOnlineElement = elt.Element("UseOnline");
+                    cd.UseOnline = useOnlineElement != null && useOnlineElement.Value == "true";
+                    var useOsdpElement = elt.Element("UseOsdp");
+                    cd.UseOsdp = useOsdpElement != null && useOsdpElement.Value == "true";
+                    var useSslElement = elt.Element("UseSsl");
+                    cd.UseSsl = useSslElement != null && useSslElement.Value == "true";
+
+                    var userDomainElement = elt.Element("UserDomain");
+                    if (timeOutElement != null)
+                    {
+                        cd.UserDomain = userDomainElement.Value;
+                    }
+
+                    var userNameElement = elt.Element("UserName");
+                    if (userNameElement != null)
+                    {
+                        cd.UserName = userNameElement.Value;
+                    }
+
+                    var userPasswordElement = elt.Element("UserPassword");
+                    if (userPasswordElement != null)
+                    {
+                        cd.UserPassword = userPasswordElement.Value;
+                    }
+
+                    var webApplicationUrlElement = elt.Element("WebApplicationUrl");
+                    if (webApplicationUrlElement != null)
+                    {
+                        cd.WebApplicationUrl = webApplicationUrlElement.Value;
+                    }
+
+                    crmConnections.Connections.Add(cd);
+                }
+            }
+
+            return crmConnections;
         }
 
         #endregion

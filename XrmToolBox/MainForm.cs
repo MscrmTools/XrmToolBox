@@ -383,7 +383,7 @@ namespace XrmToolBox
 
                 if (service != null)
                 {
-                    var clonedService = new OrganizationService(CrmConnection.Parse(currentConnectionDetail.GetOrganizationCrmConnectionString()));
+                    var clonedService = (OrganizationService)currentConnectionDetail.GetOrganizationService();
                     ((OrganizationServiceProxy)clonedService.InnerService).SdkClientVersion = currentConnectionDetail.OrganizationVersion;
 
                     ((IMsCrmToolsPluginUserControl) pluginControl).UpdateConnection(clonedService,

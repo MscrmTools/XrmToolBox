@@ -77,7 +77,6 @@
             // bValidate
             // 
             this.bValidate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.bValidate.Enabled = false;
             this.bValidate.Location = new System.Drawing.Point(357, 648);
             this.bValidate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.bValidate.Name = "bValidate";
@@ -180,6 +179,7 @@
             this.tbUserPassword.PasswordChar = '*';
             this.tbUserPassword.Size = new System.Drawing.Size(460, 26);
             this.tbUserPassword.TabIndex = 14;
+            this.tbUserPassword.Enter += new System.EventHandler(this.tbUserPassword_Enter);
             // 
             // tbUserLogin
             // 

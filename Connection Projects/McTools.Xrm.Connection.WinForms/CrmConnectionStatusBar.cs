@@ -273,7 +273,18 @@ namespace McTools.Xrm.Connection.WinForms
             switch (clickedItem.Text)
             {
                 case "Connect":
-                    this.cManager.ConnectToServer(currentConnection);
+
+                    if (currentConnection.IsCustomAuth)
+                    {
+                        if (_formHelper.RequestPassword(currentConnection))
+                        {
+                            this.cManager.ConnectToServer(currentConnection);
+                        }
+                    }
+                    else
+                    {
+                        this.cManager.ConnectToServer(currentConnection);
+                    }
                     break;
                 case "Edit":
                     currentConnection = _formHelper.EditConnection(false, currentConnection);

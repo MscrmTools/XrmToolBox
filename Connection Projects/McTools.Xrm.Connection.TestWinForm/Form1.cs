@@ -143,5 +143,10 @@ namespace McTools.Xrm.Connection.TestWinForm
         }
 
         #endregion WhoAmI Sample methods
+
+        private void tsbManageConnections_Click(object sender, EventArgs e)
+        {
+            formHelper.DisplayConnectionsList(this);
+        }
     }
 }

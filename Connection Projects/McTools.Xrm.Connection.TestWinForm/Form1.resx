@@ -117,4 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="toolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="tsbManageConnections.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAMbSURBVDhPfZLrb5NlGMbfP8APfMRI+CBxGBFjPASNCdNA
+        YqJL+OIHD4khTpERJSgHx0A3li1kK6OtMrZuE9ZtBTLat61lRXBI177t0rVbt8JYD7DiPIwo2tJ2XU/z
+        59MuOiHRK/nlfvLkvq77/nBLJTV2DhobO4wcKdFppqHLTn33MLXdij74VYXer92AT/MEPrWgVP9hA1J9
+        +6Cx1+7hoi+MfSzM0Pgc/sEaprVrCWrXETv/OoVwK/mb7eQjGsFx8uFj5EIqQQvSIe0ZUrki8VSWP1J5
+        fs9BQPUwxNSMtVVQiBwje6OZ3O0B8nMy2Vg/2YiOxZCGzPWjSLVqA3eTi2J6BLsvxoWpBH7V2mXzTCOR
+        M68S6qtkYWI/CyEtmaiOzLSahWAz6UAd0oG2PubjabzRBKOzBQLyPu4MbSM7+YkwbyHcv5n8bA/psRqS
+        oztIT9WTFubUxEGSY7tFgErP3N0kjb0OvtW9y7z1ZTJeUW1V3Dj1PIWolkjfS+K9iXvKOyScb3FPGNO+
+        PaRGq5H2qXqJzsfx/1Ak2LaaRfdr3LFW4jnxCpe7PuTaifVETj9D7lYHCWU78atVJBxVxB1vEh6oRPq0
+        5RTTP/5Kk34Ei/YNrqnX8H3L0wwMyJzUyfQer2OyfSO/2V4k2PEUySub+cn4An7Nk5g+f/xrac/RHiZv
+        /kwglmJiLkfgF9hevYvx8Qg7ZyRsdje1+/fiUj9HtKeCkO4xvJ1bOPD+1g/ECT0iArrxhm7Tor9Ma/8w
+        rQYHXzQ0UFLCMUSmAMNXFdq0OlSaLhyeSc5aryDMD5WvcHezDmcwiqxMYFYCmNxTmC3mcsDsKol0EZyK
+        G7dnFEXxlP9N1gulgGV93KTjO/8MF72znB/xM+SNYTKZyo35JciJDQqFJYrFJVFFmpBRNq8EfNTUKY7o
+        enm67AqIELGJeXmDtz0S/Ck2cLpwuVyiOsv/RlleCaj+TOXYdeQkNQ3t7BS8d/hLbLZvyo3/JZPFshIg
+        tE7w7L8xGAyXzBYrJtlSXrc08W9kYT577tyU6PtfPSq4L/QB1guEJOkv9myr+X/UtE0AAAAASUVORK5C
+        YII=
+</value>
+  </data>
 </root>

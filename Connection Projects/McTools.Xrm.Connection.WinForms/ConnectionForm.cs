@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
 using System.Net;
 using System.Net.Security;
@@ -25,6 +26,8 @@ namespace McTools.Xrm.Connection.WinForms
         /// Détail de connexion courant
         /// </summary>
         ConnectionDetail detail;
+
+        private ConnectionDetail initialDetail;
 
         /// <summary>
         /// List of Crm server organizations
@@ -106,13 +109,14 @@ namespace McTools.Xrm.Connection.WinForms
         {
             if (detail != null)
             {
+                initialDetail = (ConnectionDetail) detail.Clone();
                 FillValues();
             }
 
-            if (proposeToConnect == false && isCreationMode == false)
-            {
-                bValidate.Enabled = true;
-            }
+            //if (proposeToConnect == false && isCreationMode == false)
+            //{
+            //    bValidate.Enabled = true;
+            //}
 
             base.OnLoad(e);
         }
@@ -135,6 +139,10 @@ namespace McTools.Xrm.Connection.WinForms
                         MessageBoxIcon.Warning);
                     return;
                 }
+            }
+            else if (cbUseSsl.Checked)
+            {
+                serverPort = 443;
             }
 
             if (proposeToConnect && comboBoxOrganizations.Text.Length == 0 && comboBoxOrganizations.SelectedItem == null &&
@@ -167,10 +175,14 @@ namespace McTools.Xrm.Connection.WinForms
             detail.ServerPort = serverPort;
             detail.UserDomain = tbUserDomain.Text;
             detail.UserName = tbUserLogin.Text;
-            detail.UserPassword = tbUserPassword.Text;
             detail.SavePassword = chkSavePassword.Checked;
             detail.UseIfd = cbUseIfd.Checked;
             detail.HomeRealmUrl = (tbHomeRealmUrl.Text.Length > 0 ? tbHomeRealmUrl.Text : null);
+
+            if (tbUserPassword.Text != "@@PASSWORD@@")
+            {
+                detail.UserPassword = tbUserPassword.Text;
+            }
 
             TimeSpan timeOut;
             if (!TimeSpan.TryParse(tbTimeoutValue.Text, CultureInfo.InvariantCulture, out timeOut))
@@ -194,18 +206,28 @@ namespace McTools.Xrm.Connection.WinForms
                 detail.OrganizationFriendlyName = selectedOrganization.FriendlyName;
                 detail.OrganizationVersion = selectedOrganization.OrganizationVersion;
             }
+            else if (initialDetail.CompareTo(detail) != 0)
+            {
+                MessageBox.Show(this,
+                    "You changed critical parameters for this connection! Please retrieve organizations to ensure your changes are valid",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
             try
             {
-                if (proposeToConnect || isCreationMode)
+                if (initialDetail == null || initialDetail.CompareTo(detail) != 0)
                 {
-                    FillDetails();
-
-                    if (proposeToConnect &&
-                        MessageBox.Show(this, "Do you want to connect now to this server?", "Question",
-                            MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                    if (proposeToConnect || isCreationMode)
                     {
-                        doConnect = true;
+                        FillDetails();
+
+                        if (proposeToConnect &&
+                            MessageBox.Show(this, "Do you want to connect now to this server?", "Question",
+                                MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        {
+                            doConnect = true;
+                        }
                     }
                 }
 
@@ -237,26 +259,26 @@ namespace McTools.Xrm.Connection.WinForms
 
         private void ComboBoxOrganizationsSelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBoxOrganizations.Text.Length > 0 || comboBoxOrganizations.SelectedItem != null)
-            {
-                bValidate.Enabled = true;
-            }
-            else
-            {
-                bValidate.Enabled = false;
-            }
+            //if (comboBoxOrganizations.Text.Length > 0 || comboBoxOrganizations.SelectedItem != null)
+            //{
+            //    bValidate.Enabled = true;
+            //}
+            //else
+            //{
+            //    bValidate.Enabled = false;
+            //}
         }
 
         private void ComboBoxOrganizationsTextChanged(object sender, EventArgs e)
         {
-            if (comboBoxOrganizations.Text.Length > 0 || comboBoxOrganizations.SelectedItem != null)
-            {
-                bValidate.Enabled = true;
-            }
-            else
-            {
-                bValidate.Enabled = false;
-            }
+            //if (comboBoxOrganizations.Text.Length > 0 || comboBoxOrganizations.SelectedItem != null)
+            //{
+            //    bValidate.Enabled = true;
+            //}
+            //else
+            //{
+            //    bValidate.Enabled = false;
+            //}
         }
 
         private void CbUseIfdCheckedChanged(object sender, EventArgs e)
@@ -267,7 +289,7 @@ namespace McTools.Xrm.Connection.WinForms
                 cbUseOSDP.Checked = false;
             }
 
-            bValidate.Enabled = cbUseIfd.Checked;
+            //bValidate.Enabled = cbUseIfd.Checked;
 
             rbAuthenticationCustom.Checked = cbUseIfd.Checked;
             rbAuthenticationIntegrated.Enabled = !cbUseIfd.Checked;
@@ -378,7 +400,7 @@ namespace McTools.Xrm.Connection.WinForms
 
         private void cbUseSsl_CheckedChanged(object sender, EventArgs e)
         {
-            tbServerPort.Text = cbUseSsl.Checked ? "433" : "80";
+            tbServerPort.Text = cbUseSsl.Checked ? "443" : "80";
         }
 
         private void RbAuthenticationIntegratedCheckedChanged(object sender, EventArgs e)
@@ -427,6 +449,13 @@ namespace McTools.Xrm.Connection.WinForms
                     return;
                 }
             }
+            else
+            {
+                if (cbUseSsl.Checked)
+                {
+                    serverPort = 443;
+                }
+            }
 
             if (tbUserPassword.Text.IndexOf(";") >= 0)
             {
@@ -461,7 +490,12 @@ namespace McTools.Xrm.Connection.WinForms
                 detail.ServerPort = serverPort;
                 detail.UserDomain = tbUserDomain.Text;
                 detail.UserName = tbUserLogin.Text;
-                detail.UserPassword = tbUserPassword.Text;
+
+                if (tbUserPassword.Text != "@@PASSWORD@@")
+                {
+                    detail.UserPassword = tbUserPassword.Text;
+                }
+                
                 detail.UseIfd = cbUseIfd.Checked;
                 detail.UseOnline = cbUseOnline.Checked;
                 detail.UseOsdp = cbUseOSDP.Checked;
@@ -514,6 +548,7 @@ namespace McTools.Xrm.Connection.WinForms
             }
             else
             {
+                comboBoxOrganizations.DropDownStyle = ComboBoxStyle.DropDownList;
                 foreach (OrganizationDetail orgDetail in (OrganizationDetailCollection)e.Result)
                 {
                     organizations.Add(orgDetail);
@@ -531,8 +566,7 @@ namespace McTools.Xrm.Connection.WinForms
         {
             WebRequest.GetSystemWebProxy();
 
-            var connection = CrmConnection.Parse(currentDetail.GetDiscoveryCrmConnectionString());
-            var service = new DiscoveryService(connection);
+            var service = currentDetail.GetDiscoveryService();
 
             var request = new RetrieveOrganizationsRequest();
             var response = (RetrieveOrganizationsResponse)service.Execute(request);
@@ -554,7 +588,21 @@ namespace McTools.Xrm.Connection.WinForms
             tbServerPort.Text = detail.ServerPort.ToString(CultureInfo.InvariantCulture);
             tbUserDomain.Text = detail.UserDomain;
             tbUserLogin.Text = detail.UserName;
-            tbUserPassword.Text = detail.UserPassword;
+
+            if (detail.PasswordIsEmpty)
+            {
+                tbUserPassword.PasswordChar = (char)0;
+                tbUserPassword.UseSystemPasswordChar = false;
+                tbUserPassword.Text = "Please specify the password";
+                tbUserPassword.ForeColor = Color.DarkGray;
+            }
+            else
+            {
+                tbUserPassword.PasswordChar =  '•';
+                tbUserPassword.UseSystemPasswordChar = true;
+                tbUserPassword.Text = "@@PASSWORD@@";
+                tbUserPassword.ForeColor = Color.Black;
+            }
             chkSavePassword.Checked = detail.SavePassword;
             comboBoxOrganizations.Text = detail.OrganizationFriendlyName;
             cbUseIfd.Checked = detail.UseIfd;
@@ -580,6 +628,9 @@ namespace McTools.Xrm.Connection.WinForms
 
                 tbServerName.Text = detail.ServerName;
             }
+
+            comboBoxOrganizations.DropDownStyle = ComboBoxStyle.DropDown;
+            comboBoxOrganizations.SelectedText = detail.OrganizationFriendlyName;
 
             cbUseSsl_CheckedChanged(null, null);
         }
@@ -647,5 +698,16 @@ namespace McTools.Xrm.Connection.WinForms
         }
 
         #endregion
+
+        private void tbUserPassword_Enter(object sender, EventArgs e)
+        {
+            if (tbUserPassword.UseSystemPasswordChar == false)
+            {
+                tbUserPassword.PasswordChar = '•';
+                tbUserPassword.UseSystemPasswordChar = true;
+                tbUserPassword.Text = string.Empty;
+                tbUserPassword.ForeColor = Color.Black;
+            }
+        }
     }
 }
