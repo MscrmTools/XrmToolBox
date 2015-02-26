@@ -39,9 +39,10 @@
             // 
             // picture
             // 
-            this.picture.Location = new System.Drawing.Point(10, 10);
+            this.picture.Location = new System.Drawing.Point(15, 15);
+            this.picture.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.picture.Name = "picture";
-            this.picture.Size = new System.Drawing.Size(80, 80);
+            this.picture.Size = new System.Drawing.Size(120, 123);
             this.picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picture.TabIndex = 0;
             this.picture.TabStop = false;
@@ -53,9 +54,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblTitle.AutoEllipsis = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitle.Location = new System.Drawing.Point(104, 2);
+            this.lblTitle.Location = new System.Drawing.Point(156, 3);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(354, 23);
+            this.lblTitle.Size = new System.Drawing.Size(531, 35);
             this.lblTitle.TabIndex = 1;
             this.lblTitle.Text = "[Label]";
             this.lblTitle.Click += new System.EventHandler(this.MouseClick);
@@ -67,9 +69,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription.AutoEllipsis = true;
             this.lblDescription.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDescription.Location = new System.Drawing.Point(106, 63);
+            this.lblDescription.Location = new System.Drawing.Point(159, 97);
+            this.lblDescription.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblDescription.Name = "lblDescription";
-            this.lblDescription.Size = new System.Drawing.Size(391, 27);
+            this.lblDescription.Size = new System.Drawing.Size(586, 42);
             this.lblDescription.TabIndex = 2;
             this.lblDescription.Text = "[Description]";
             this.lblDescription.Click += new System.EventHandler(this.MouseClick);
@@ -82,11 +85,13 @@
             this.lblVersion.AutoEllipsis = true;
             this.lblVersion.AutoSize = true;
             this.lblVersion.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVersion.Location = new System.Drawing.Point(106, 25);
+            this.lblVersion.Location = new System.Drawing.Point(159, 38);
+            this.lblVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(63, 19);
+            this.lblVersion.Size = new System.Drawing.Size(89, 28);
             this.lblVersion.TabIndex = 3;
             this.lblVersion.Text = "[Version]";
+            this.lblVersion.Click += new System.EventHandler(this.MouseClick);
             // 
             // lblAuthor
             // 
@@ -96,27 +101,31 @@
             this.lblAuthor.AutoEllipsis = true;
             this.lblAuthor.AutoSize = true;
             this.lblAuthor.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAuthor.Location = new System.Drawing.Point(106, 44);
+            this.lblAuthor.Location = new System.Drawing.Point(159, 68);
+            this.lblAuthor.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblAuthor.Name = "lblAuthor";
-            this.lblAuthor.Size = new System.Drawing.Size(60, 19);
+            this.lblAuthor.Size = new System.Drawing.Size(85, 28);
             this.lblAuthor.TabIndex = 4;
             this.lblAuthor.Text = "[Author]";
+            this.lblAuthor.Click += new System.EventHandler(this.MouseClick);
             // 
             // lblCount
             // 
             this.lblCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCount.AutoEllipsis = true;
             this.lblCount.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCount.Location = new System.Drawing.Point(454, 2);
+            this.lblCount.Location = new System.Drawing.Point(681, 3);
+            this.lblCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCount.Name = "lblCount";
-            this.lblCount.Size = new System.Drawing.Size(43, 23);
+            this.lblCount.Size = new System.Drawing.Size(64, 35);
             this.lblCount.TabIndex = 5;
             this.lblCount.Text = "[NB]";
             this.lblCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.lblCount.Click += new System.EventHandler(this.MouseClick);
             // 
             // PluginModel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -127,8 +136,9 @@
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.picture);
             this.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "PluginModel";
-            this.Size = new System.Drawing.Size(500, 100);
+            this.Size = new System.Drawing.Size(750, 154);
             this.Click += new System.EventHandler(this.MouseClick);
             ((System.ComponentModel.ISupportInitialize)(this.picture)).EndInit();
             this.ResumeLayout(false);
