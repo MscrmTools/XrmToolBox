@@ -44,7 +44,16 @@ namespace MsCrmTools.AssemblyRecoveryTool
         {
             if (sender != null)
             {
-                ExecuteMethod(RetrieveAssemblies);
+                if (sender is MainControl)
+                {
+                    if (((MainControl)sender).Service != null)
+                    {
+                        // Execute assemblies retrieve only if Service object is set for correct sender.
+                        // This will help plugin act predicatable when it was loaded in offline mode;
+                        // Plugin will not insist on connecting to server. Will scinetly obey instead.
+                        ExecuteMethod(RetrieveAssemblies);
+                    }
+                }
             }
         }
 
