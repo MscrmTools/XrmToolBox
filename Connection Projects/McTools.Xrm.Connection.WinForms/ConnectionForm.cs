@@ -378,7 +378,7 @@ namespace McTools.Xrm.Connection.WinForms
 
         private void cbUseSsl_CheckedChanged(object sender, EventArgs e)
         {
-            tbServerPort.Text = cbUseSsl.Checked ? "433" : "80";
+            tbServerPort.Text = cbUseSsl.Checked ? "443" : "80";
         }
 
         private void RbAuthenticationIntegratedCheckedChanged(object sender, EventArgs e)

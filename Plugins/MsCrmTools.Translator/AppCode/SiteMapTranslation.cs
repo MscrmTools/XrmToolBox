@@ -5,11 +5,16 @@ using System.Globalization;
 using System.Linq;
 using System.Security.Policy;
 using System.Xml;
-using GemBox.Spreadsheet;
 using Microsoft.Crm.Sdk;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+
+#if NO_GEMBOX
+using OfficeOpenXml;
+#else
+using GemBox.Spreadsheet;
+#endif
 
 namespace MsCrmTools.Translator.AppCode
 {
@@ -24,9 +29,13 @@ namespace MsCrmTools.Translator.AppCode
         /// viewId;entityLogicalName;viewName;ViewType;Type;LCID1;LCID2;...;LCODX
         /// </example>
         /// <param name="languages"></param>
-        /// <param name="sheet"></param>
+        /// <param name="file"></param>
         /// <param name="service"></param>
+#if NO_GEMBOX
+        public void Export(List<int> languages, ExcelWorkbook file, IOrganizationService service)
+#else
         public void Export(List<int> languages, ExcelFile file, IOrganizationService service)
+#endif
         {
             var line = 1;
 
@@ -114,22 +123,22 @@ namespace MsCrmTools.Translator.AppCode
             foreach (var crmArea in crmSiteMapAreas)
             {
                 var cell = 0;
-                areaSheet.Cells[line, cell++].Value = crmArea.Id;
-                areaSheet.Cells[line, cell++].Value = "Title";
+                ZeroBasedSheet.Cell(areaSheet, line, cell++).Value = crmArea.Id;
+                ZeroBasedSheet.Cell(areaSheet, line, cell++).Value = "Title";
 
                 foreach (var lcid in languages)
                 {
-                    areaSheet.Cells[line, cell++].Value = crmArea.Titles.FirstOrDefault(n => n.Key == lcid).Value;
+                    ZeroBasedSheet.Cell(areaSheet, line, cell++).Value = crmArea.Titles.FirstOrDefault(n => n.Key == lcid).Value;
                 }
 
                 line++;
                 cell = 0;
-                areaSheet.Cells[line, cell++].Value = crmArea.Id;
-                areaSheet.Cells[line, cell++].Value = "Description";
+                ZeroBasedSheet.Cell(areaSheet, line, cell++).Value = crmArea.Id;
+                ZeroBasedSheet.Cell(areaSheet, line, cell++).Value = "Description";
 
                 foreach (var lcid in languages)
                 {
-                    areaSheet.Cells[line, cell++].Value = crmArea.Descriptions.FirstOrDefault(n => n.Key == lcid).Value;
+                    ZeroBasedSheet.Cell(areaSheet, line, cell++).Value = crmArea.Descriptions.FirstOrDefault(n => n.Key == lcid).Value;
                 }
                 line++;
             }
@@ -144,24 +153,24 @@ namespace MsCrmTools.Translator.AppCode
             foreach (var crmGroup in crmSiteMapGroups)
             {
                 var cell = 0;
-                groupSheet.Cells[line, cell++].Value = crmGroup.AreaId;
-                groupSheet.Cells[line, cell++].Value = crmGroup.Id;
-                groupSheet.Cells[line, cell++].Value = "Title";
+                ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = crmGroup.AreaId;
+                ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = crmGroup.Id;
+                ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = "Title";
 
                 foreach (var lcid in languages)
                 {
-                    groupSheet.Cells[line, cell++].Value = crmGroup.Titles.FirstOrDefault(n => n.Key == lcid).Value;
+                    ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = crmGroup.Titles.FirstOrDefault(n => n.Key == lcid).Value;
                 }
 
                 line++;
                 cell = 0;
-                groupSheet.Cells[line, cell++].Value = crmGroup.AreaId;
-                groupSheet.Cells[line, cell++].Value = crmGroup.Id;
-                groupSheet.Cells[line, cell++].Value = "Description";
+                ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = crmGroup.AreaId;
+                ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = crmGroup.Id;
+                ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = "Description";
 
                 foreach (var lcid in languages)
                 {
-                    groupSheet.Cells[line, cell++].Value = crmGroup.Descriptions.FirstOrDefault(n => n.Key == lcid).Value;
+                    ZeroBasedSheet.Cell(groupSheet, line, cell++).Value = crmGroup.Descriptions.FirstOrDefault(n => n.Key == lcid).Value;
                 }
                 line++;
             }
@@ -176,26 +185,26 @@ namespace MsCrmTools.Translator.AppCode
             foreach (var crmSubArea in crmSiteMapSubAreas)
             {
                 var cell = 0;
-                subAreaSheet.Cells[line, cell++].Value = crmSubArea.AreaId;
-                subAreaSheet.Cells[line, cell++].Value = crmSubArea.GroupId;
-                subAreaSheet.Cells[line, cell++].Value = crmSubArea.Id;
-                subAreaSheet.Cells[line, cell++].Value = "Title";
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.AreaId;
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.GroupId;
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.Id;
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = "Title";
 
                 foreach (var lcid in languages)
                 {
-                    subAreaSheet.Cells[line, cell++].Value = crmSubArea.Titles.FirstOrDefault(n => n.Key == lcid).Value;
+                    ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.Titles.FirstOrDefault(n => n.Key == lcid).Value;
                 }
 
                 line++;
                 cell = 0;
-                subAreaSheet.Cells[line, cell++].Value = crmSubArea.AreaId;
-                subAreaSheet.Cells[line, cell++].Value = crmSubArea.GroupId;
-                subAreaSheet.Cells[line, cell++].Value = crmSubArea.Id;
-                subAreaSheet.Cells[line, cell++].Value = "Description";
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.AreaId;
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.GroupId;
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.Id;
+                ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = "Description";
 
                 foreach (var lcid in languages)
                 {
-                    subAreaSheet.Cells[line, cell++].Value = crmSubArea.Descriptions.FirstOrDefault(n => n.Key == lcid).Value;
+                    ZeroBasedSheet.Cell(subAreaSheet, line, cell++).Value = crmSubArea.Descriptions.FirstOrDefault(n => n.Key == lcid).Value;
                 }
                 line++;
             }
@@ -205,42 +214,40 @@ namespace MsCrmTools.Translator.AppCode
             // Applying style to cells
             for (int i = 0; i < (2 + languages.Count); i++)
             {
-                areaSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                areaSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                StyleMutator.TitleCell(ZeroBasedSheet.Cell(areaSheet, 0, i).Style);
             }
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 2; j++)
                 {
-                    areaSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(areaSheet, i, j).Style);
                 }
             }
 
             for (int i = 0; i < (3 + languages.Count); i++)
             {
-                groupSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                groupSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                StyleMutator.TitleCell(ZeroBasedSheet.Cell(groupSheet, 0, i).Style);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    groupSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(groupSheet, i, j).Style);
+
                 }
             }
 
             for (int i = 0; i < (4 + languages.Count); i++)
             {
-                subAreaSheet.Cells[0, i].Style.FillPattern.SetSolid(Color.PowderBlue);
-                subAreaSheet.Cells[0, i].Style.Font.Weight = ExcelFont.BoldWeight;
+                StyleMutator.TitleCell(ZeroBasedSheet.Cell(subAreaSheet, 0, i).Style);
             }
 
             for (int i = 1; i < line; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
-                    subAreaSheet.Cells[i, j].Style.FillPattern.SetSolid(Color.AliceBlue);
+                    StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(subAreaSheet, i, j).Style);
                 }
             }
         }
@@ -253,6 +260,141 @@ namespace MsCrmTools.Translator.AppCode
             return siteMap;
         }
 
+#if NO_GEMBOX
+        public void PrepareAreas(ExcelWorksheet sheet, IOrganizationService service)
+        {
+            if (siteMap == null)
+            {
+                siteMap = GetSiteMap(service);
+            }
+
+            var siteMapDoc = new XmlDocument();
+            siteMapDoc.LoadXml(siteMap["sitemapxml"].ToString());
+
+            var rowsCount = sheet.Dimension.Rows;
+
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                if (ZeroBasedSheet.Cell(sheet, rowI, 0).Value == null) break;
+
+                var areaId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
+                var areaNode = siteMapDoc.SelectSingleNode("SiteMap/Area[@Id='" + areaId + "']");
+                if (areaNode == null)
+                {
+                    throw new Exception("Unable to find area with id " + areaId);
+                }
+
+                var columnIndex = 2;
+                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                {
+                    if (ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString() == "Title")
+                    {
+                        UpdateXmlNode(areaNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
+                    }
+                    else
+                    {
+                        UpdateXmlNode(areaNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                         ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
+                    }
+                    columnIndex++;
+                }
+
+            }
+
+            siteMap["sitemapxml"] = siteMapDoc.OuterXml;
+        }
+
+        public void PrepareGroups(ExcelWorksheet sheet, IOrganizationService service)
+        {
+            if (siteMap == null)
+            {
+                siteMap = GetSiteMap(service);
+            }
+
+            var siteMapDoc = new XmlDocument();
+            siteMapDoc.LoadXml(siteMap["sitemapxml"].ToString());
+
+            var rowsCount = sheet.Dimension.Rows;
+
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                if (ZeroBasedSheet.Cell(sheet, rowI, 0).Value == null) break;
+
+                var areaId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
+                var groupId = ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString();
+                var groupNode = siteMapDoc.SelectSingleNode("SiteMap/Area[@Id='" + areaId + "']/Group[@Id='" + groupId + "']");
+                if (groupNode == null)
+                {
+                    throw new Exception("Unable to find group with id " + groupId + " in area " + areaId);
+                }
+
+                var columnIndex = 3;
+                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                {
+                    if (ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString() == "Title")
+                    {
+                        UpdateXmlNode(groupNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
+                    }
+                    else
+                    {
+                        UpdateXmlNode(groupNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                         ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
+                    }
+                    columnIndex++;
+                }
+
+            }
+
+            siteMap["sitemapxml"] = siteMapDoc.OuterXml;
+        }
+
+        public void PrepareSubAreas(ExcelWorksheet sheet, IOrganizationService service)
+        {
+            if (siteMap == null)
+            {
+                siteMap = GetSiteMap(service);
+            }
+
+            var siteMapDoc = new XmlDocument();
+            siteMapDoc.LoadXml(siteMap["sitemapxml"].ToString());
+
+            var rowsCount = sheet.Dimension.Rows;
+
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                if (ZeroBasedSheet.Cell(sheet, rowI, 0).Value == null) break;
+
+                var areaId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
+                var groupId = ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString();
+                var subAreaId = ZeroBasedSheet.Cell(sheet, rowI, 2).Value.ToString();
+                var subAreaNode = siteMapDoc.SelectSingleNode("SiteMap/Area[@Id='" + areaId + "']/Group[@Id='" + groupId + "']/SubArea[@Id='" + subAreaId + "']");
+                if (subAreaNode == null)
+                {
+                    throw new Exception("Unable to find group with id " + groupId + " in area " + areaId);
+                }
+
+                var columnIndex = 4;
+                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                {
+                    if (ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString() == "Title")
+                    {
+                        UpdateXmlNode(subAreaNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
+                    }
+                    else
+                    {
+                        UpdateXmlNode(subAreaNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                         ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
+                    }
+                    columnIndex++;
+                }
+            }
+
+            siteMap["sitemapxml"] = siteMapDoc.OuterXml;
+        }
+#else
         public void PrepareAreas(ExcelWorksheet sheet, IOrganizationService service)
         {
             if (siteMap == null)
@@ -280,12 +422,12 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     if (row.Cells[1].Value.ToString() == "Title")
                     {
-                        UpdateXmlNode(areaNode, "Titles", "Title", sheet.Cells[0, columnIndex].Value.ToString(),
+                        UpdateXmlNode(areaNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             row.Cells[columnIndex].Value.ToString());
                     }
                     else
                     {
-                        UpdateXmlNode(areaNode, "Descriptions", "Description", sheet.Cells[0, columnIndex].Value.ToString(),
+                        UpdateXmlNode(areaNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                          row.Cells[columnIndex].Value.ToString());
                     }
                     columnIndex++;
@@ -324,12 +466,12 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     if (row.Cells[1].Value.ToString() == "Title")
                     {
-                        UpdateXmlNode(groupNode, "Titles", "Title", sheet.Cells[0, columnIndex].Value.ToString(),
+                        UpdateXmlNode(groupNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             row.Cells[columnIndex].Value.ToString());
                     }
                     else
                     {
-                        UpdateXmlNode(groupNode, "Descriptions", "Description", sheet.Cells[0, columnIndex].Value.ToString(),
+                        UpdateXmlNode(groupNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                          row.Cells[columnIndex].Value.ToString());
                     }
                     columnIndex++;
@@ -369,12 +511,12 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     if (row.Cells[1].Value.ToString() == "Title")
                     {
-                        UpdateXmlNode(subAreaNode, "Titles", "Title", sheet.Cells[0, columnIndex].Value.ToString(),
+                        UpdateXmlNode(subAreaNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             row.Cells[columnIndex].Value.ToString());
                     }
                     else
                     {
-                        UpdateXmlNode(subAreaNode, "Descriptions", "Description", sheet.Cells[0, columnIndex].Value.ToString(),
+                        UpdateXmlNode(subAreaNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                          row.Cells[columnIndex].Value.ToString());
                     }
                     columnIndex++;
@@ -383,7 +525,7 @@ namespace MsCrmTools.Translator.AppCode
 
             siteMap["sitemapxml"] = siteMapDoc.OuterXml;
         }
-
+#endif
         public void Import(IOrganizationService service)
         {
            service.Update(siteMap);
@@ -393,12 +535,12 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            sheet.Cells[0, cell++].Value = "Area Id";
-            sheet.Cells[0, cell++].Value = "Type";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Area Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Type";
 
             foreach (var lcid in languages)
             {
-                sheet.Cells[0, cell++].Value = lcid.ToString(CultureInfo.InvariantCulture);
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -406,13 +548,13 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            sheet.Cells[0, cell++].Value = "Area Id";
-            sheet.Cells[0, cell++].Value = "Group Id";
-            sheet.Cells[0, cell++].Value = "Type";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Area Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Group Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Type";
 
             foreach (var lcid in languages)
             {
-                sheet.Cells[0, cell++].Value = lcid.ToString(CultureInfo.InvariantCulture);
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
 
@@ -420,14 +562,14 @@ namespace MsCrmTools.Translator.AppCode
         {
             var cell = 0;
 
-            sheet.Cells[0, cell++].Value = "Area Id";
-            sheet.Cells[0, cell++].Value = "Group Id";
-            sheet.Cells[0, cell++].Value = "SubArea Id";
-            sheet.Cells[0, cell++].Value = "Type";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Area Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Group Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "SubArea Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Type";
 
             foreach (var lcid in languages)
             {
-                sheet.Cells[0, cell++].Value = lcid.ToString(CultureInfo.InvariantCulture);
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
 
