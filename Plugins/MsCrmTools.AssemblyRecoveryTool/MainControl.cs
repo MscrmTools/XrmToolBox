@@ -64,7 +64,7 @@ namespace MsCrmTools.AssemblyRecoveryTool
             ExecuteMethod(RetrieveAssemblies);
         }
 
-        private void RetrieveAssemblies()
+        public void RetrieveAssemblies()
         {
             WorkAsync("Loading assemblies...",
                 e =>
