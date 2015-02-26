@@ -418,13 +418,20 @@ namespace McTools.Xrm.Connection.WinForms
                 goodServerData = true;
 
             int serverPort = 80;
-            if (tbServerPort.Text.Length > 0)
+            if (cbUseSsl.Checked)
             {
-                if (!int.TryParse(tbServerPort.Text, out serverPort))
+                serverPort = 443;
+            }
+            else
+            {
+                if (tbServerPort.Text.Length > 0)
                 {
-                    MessageBox.Show(this, "Server port must be a integer value!", "Warning", MessageBoxButtons.OK,
-                        MessageBoxIcon.Warning);
-                    return;
+                    if (!int.TryParse(tbServerPort.Text, out serverPort))
+                    {
+                        MessageBox.Show(this, "Server port must be a integer value!", "Warning", MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                        return;
+                    }
                 }
             }
 
