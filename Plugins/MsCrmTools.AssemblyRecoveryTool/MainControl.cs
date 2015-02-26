@@ -30,6 +30,22 @@ namespace MsCrmTools.AssemblyRecoveryTool
         public MainControl()
         {
             InitializeComponent();
+
+            // Execute code automatically when plugin is loaded
+            this.Enter += MainControl_Enter;
+        }
+
+        /// <summary>
+        /// Will initiate loading of assemblies from currently connected server
+        /// </summary>
+        /// <param name="sender">Instance of class <see cref="MainControl"/></param>
+        /// <param name="e">Event aguments</param>
+        void MainControl_Enter(object sender, EventArgs e)
+        {
+            if (sender != null)
+            {
+                ExecuteMethod(RetrieveAssemblies);
+            }
         }
 
         #endregion Constructor
