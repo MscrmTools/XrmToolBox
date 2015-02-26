@@ -46,7 +46,11 @@ namespace MsCrmTools.AssemblyRecoveryTool
             {
                 if (sender is MainControl)
                 {
-                    if (((MainControl)sender).Service != null)
+                    var plugin = ((MainControl)sender);
+                    // In case if connection updated on main application, update assemblies list inside the plugin
+                    plugin.ConnectionUpdated += MainControl_ConnectionUpdated;
+
+                    if (plugin.Service != null)
                     {
                         // Execute assemblies retrieve only if Service object is set for correct sender.
                         // This will help plugin act predicatable when it was loaded in offline mode;
@@ -55,6 +59,16 @@ namespace MsCrmTools.AssemblyRecoveryTool
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Will initiate loading of assemblies from currently connected server if current connection was updated in main application
+        /// </summary>
+        /// <param name="sender">Instance of class <see cref="MainControl"/></param>
+        /// <param name="e">Event arguments</param>
+        void MainControl_ConnectionUpdated(object sender, PluginBase.ConnectionUpdatedEventArgs e)
+        {
+            ExecuteMethod(RetrieveAssemblies);
         }
 
         #endregion Constructor
