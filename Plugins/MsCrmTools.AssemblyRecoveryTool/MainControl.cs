@@ -30,6 +30,31 @@ namespace MsCrmTools.AssemblyRecoveryTool
         public MainControl()
         {
             InitializeComponent();
+
+            // Execute code automatically when plugin is loaded
+            this.Enter += MainControl_Enter;
+        }
+
+        /// <summary>
+        /// Will initiate loading of assemblies from currently connected server
+        /// </summary>
+        /// <param name="sender">Instance of class <see cref="MainControl"/></param>
+        /// <param name="e">Event aguments</param>
+        void MainControl_Enter(object sender, EventArgs e)
+        {
+            if (sender != null)
+            {
+                if (sender is MainControl)
+                {
+                    if (((MainControl)sender).Service != null)
+                    {
+                        // Execute assemblies retrieve only if Service object is set for correct sender.
+                        // This will help plugin act predicatable when it was loaded in offline mode;
+                        // Plugin will not insist on connecting to server. Will scinetly obey instead.
+                        ExecuteMethod(RetrieveAssemblies);
+                    }
+                }
+            }
         }
 
         #endregion Constructor
@@ -48,7 +73,7 @@ namespace MsCrmTools.AssemblyRecoveryTool
             ExecuteMethod(RetrieveAssemblies);
         }
 
-        private void RetrieveAssemblies()
+        public void RetrieveAssemblies()
         {
             WorkAsync("Loading assemblies...",
                 e =>
