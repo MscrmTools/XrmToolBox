@@ -30,6 +30,45 @@ namespace MsCrmTools.AssemblyRecoveryTool
         public MainControl()
         {
             InitializeComponent();
+
+            // Execute code automatically when plugin is loaded
+            this.Enter += MainControl_Enter;
+        }
+
+        /// <summary>
+        /// Will initiate loading of assemblies from currently connected server
+        /// </summary>
+        /// <param name="sender">Instance of class <see cref="MainControl"/></param>
+        /// <param name="e">Event aguments</param>
+        void MainControl_Enter(object sender, EventArgs e)
+        {
+            if (sender != null)
+            {
+                if (sender is MainControl)
+                {
+                    var plugin = ((MainControl)sender);
+                    // In case if connection updated on main application, update assemblies list inside the plugin
+                    plugin.ConnectionUpdated += MainControl_ConnectionUpdated;
+
+                    if (plugin.Service != null)
+                    {
+                        // Execute assemblies retrieve only if Service object is set for correct sender.
+                        // This will help plugin act predicatable when it was loaded in offline mode;
+                        // Plugin will not insist on connecting to server. Will scinetly obey instead.
+                        ExecuteMethod(RetrieveAssemblies);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Will initiate loading of assemblies from currently connected server if current connection was updated in main application
+        /// </summary>
+        /// <param name="sender">Instance of class <see cref="MainControl"/></param>
+        /// <param name="e">Event arguments</param>
+        void MainControl_ConnectionUpdated(object sender, PluginBase.ConnectionUpdatedEventArgs e)
+        {
+            ExecuteMethod(RetrieveAssemblies);
         }
 
         #endregion Constructor
@@ -48,7 +87,7 @@ namespace MsCrmTools.AssemblyRecoveryTool
             ExecuteMethod(RetrieveAssemblies);
         }
 
-        private void RetrieveAssemblies()
+        public void RetrieveAssemblies()
         {
             WorkAsync("Loading assemblies...",
                 e =>

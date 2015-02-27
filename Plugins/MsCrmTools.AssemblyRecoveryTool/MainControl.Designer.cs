@@ -38,7 +38,7 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbLoadAssemblies = new System.Windows.Forms.ToolStripButton();
+            this.tsbReloadAssemblies = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbExportToDisk = new System.Windows.Forms.ToolStripButton();
             this.toolStripMenu.SuspendLayout();
@@ -49,7 +49,7 @@
             this.toolStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbClose,
             this.toolStripSeparator1,
-            this.tsbLoadAssemblies,
+            this.tsbReloadAssemblies,
             this.toolStripSeparator2,
             this.tsbExportToDisk});
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
@@ -84,6 +84,7 @@
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3});
+            this.listView_Assemblies.FullRowSelect = true;
             this.listView_Assemblies.GridLines = true;
             this.listView_Assemblies.Location = new System.Drawing.Point(3, 28);
             this.listView_Assemblies.Name = "listView_Assemblies";
@@ -112,14 +113,14 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
-            // tsbLoadAssemblies
+            // tsbReloadAssemblies
             // 
-            this.tsbLoadAssemblies.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadAssemblies.Image")));
-            this.tsbLoadAssemblies.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbLoadAssemblies.Name = "tsbLoadAssemblies";
-            this.tsbLoadAssemblies.Size = new System.Drawing.Size(113, 22);
-            this.tsbLoadAssemblies.Text = "Load assemblies";
-            this.tsbLoadAssemblies.Click += new System.EventHandler(this.tsbLoadAssemblies_Click);
+            this.tsbReloadAssemblies.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadAssemblies.Image")));
+            this.tsbReloadAssemblies.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbReloadAssemblies.Name = "tsbLoadAssemblies";
+            this.tsbReloadAssemblies.Size = new System.Drawing.Size(113, 22);
+            this.tsbReloadAssemblies.Text = "Reload assemblies";
+            this.tsbReloadAssemblies.Click += new System.EventHandler(this.tsbLoadAssemblies_Click);
             // 
             // toolStripSeparator2
             // 
@@ -160,7 +161,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton tsbLoadAssemblies;
+        private System.Windows.Forms.ToolStripButton tsbReloadAssemblies;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton tsbExportToDisk;
     }
