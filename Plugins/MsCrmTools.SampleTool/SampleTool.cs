@@ -34,7 +34,7 @@ namespace MsCrmTools.SampleTool
             ExecuteMethod(ProcessWhoAmI);
         }
 
-        private void ProcessWhoAmI()
+        public void ProcessWhoAmI()
         {
             WorkAsync(null, (w, e) =>
             {
