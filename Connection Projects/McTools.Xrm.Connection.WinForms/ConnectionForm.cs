@@ -181,7 +181,7 @@ namespace McTools.Xrm.Connection.WinForms
 
             if (tbUserPassword.Text != "@@PASSWORD@@")
             {
-                detail.UserPassword = tbUserPassword.Text;
+                detail.SetPassword(tbUserPassword.Text);
             }
 
             TimeSpan timeOut;
@@ -493,7 +493,7 @@ namespace McTools.Xrm.Connection.WinForms
 
                 if (tbUserPassword.Text != "@@PASSWORD@@")
                 {
-                    detail.UserPassword = tbUserPassword.Text;
+                    detail.SetPassword(tbUserPassword.Text);
                 }
                 
                 detail.UseIfd = cbUseIfd.Checked;

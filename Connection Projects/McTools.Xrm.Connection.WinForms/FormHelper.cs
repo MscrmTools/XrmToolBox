@@ -40,7 +40,7 @@ namespace McTools.Xrm.Connection.WinForms
             {
                 if (pForm.ShowDialog(_innerAppForm) == DialogResult.OK)
                 {
-                    detail.UserPassword = pForm.UserPassword;
+                    detail.SetPassword(pForm.UserPassword);
                     detail.SavePassword = pForm.SavePassword;
                     returnValue = true;
                 }
@@ -82,7 +82,7 @@ namespace McTools.Xrm.Connection.WinForms
                         };
                         if (pForm.ShowDialog(_innerAppForm) == DialogResult.OK)
                         {
-                            connectionDetail.UserPassword = pForm.UserPassword;
+                            connectionDetail.SetPassword(pForm.UserPassword);
                             connectionDetail.SavePassword = pForm.SavePassword;
                         }
                         else

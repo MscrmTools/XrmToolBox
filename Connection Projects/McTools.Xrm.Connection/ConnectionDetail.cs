@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.ServiceModel.Description;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using Microsoft.Xrm.Client;
 using Microsoft.Xrm.Client.Services;
@@ -16,6 +17,9 @@ namespace McTools.Xrm.Connection
     /// </summary>
     public class ConnectionDetail : IComparable, ICloneable
     {
+        private string userPassword;
+
+
         #region Propriétés
         public AuthenticationProviderType AuthType { get; set; }
 
@@ -64,12 +68,8 @@ namespace McTools.Xrm.Connection
         /// </summary>
         public string UserName { get; set; }
 
-        /// <summary>
-        /// Get or set the user password
-        /// </summary>
-        public string UserPassword { internal get; set; }
-
-        public bool PasswordIsEmpty { get { return string.IsNullOrEmpty(UserPassword); } }
+     
+        public bool PasswordIsEmpty { get { return string.IsNullOrEmpty(userPassword); } }
 
         public bool SavePassword { get; set; }
 
@@ -155,7 +155,7 @@ namespace McTools.Xrm.Connection
             return ConnectionName;
         }
 
-        internal string GetDiscoveryCrmConnectionString()
+        private string GetDiscoveryCrmConnectionString()
         {
             var connectionString = string.Format("Url={0}://{1}:{2};",
                 UseSsl ? "https" : "http",
@@ -181,7 +181,14 @@ namespace McTools.Xrm.Connection
                     }
                 }
 
-                connectionString += string.Format("Username={0};Password={1};", username, UserPassword);
+                var decryptedPassword = CryptoManager.Decrypt(userPassword, ConnectionManager.CryptoPassPhrase,
+                    ConnectionManager.CryptoSaltValue,
+                    ConnectionManager.CryptoHashAlgorythm,
+                    ConnectionManager.CryptoPasswordIterations,
+                    ConnectionManager.CryptoInitVector,
+                    ConnectionManager.CryptoKeySize);
+
+                connectionString += string.Format("Username={0};Password={1};", username, decryptedPassword);
             }
 
             if (UseOnline && !UseOsdp)
@@ -212,7 +219,7 @@ namespace McTools.Xrm.Connection
             return connectionString;
         }
 
-        internal string GetOrganizationCrmConnectionString()
+        private string GetOrganizationCrmConnectionString()
         {
             var connectionString = string.Format("Url={0};", OrganizationServiceUrl.Replace("/XRMServices/2011/Organization.svc", ""));
 
@@ -235,7 +242,14 @@ namespace McTools.Xrm.Connection
                     }
                 }
 
-                connectionString += string.Format("Username={0};Password={1};", username, UserPassword);
+                var decryptedPassword = CryptoManager.Decrypt(userPassword, ConnectionManager.CryptoPassPhrase,
+                   ConnectionManager.CryptoSaltValue,
+                   ConnectionManager.CryptoHashAlgorythm,
+                   ConnectionManager.CryptoPasswordIterations,
+                   ConnectionManager.CryptoInitVector,
+                   ConnectionManager.CryptoKeySize);
+
+                connectionString += string.Format("Username={0};Password={1};", username, decryptedPassword);
             }
 
             if (UseOnline)
@@ -283,7 +297,7 @@ namespace McTools.Xrm.Connection
             UseOsdp = editedConnection.UseOsdp;
             UserDomain = editedConnection.UserDomain;
             UserName = editedConnection.UserName;
-            UserPassword = editedConnection.UserPassword;
+            userPassword = editedConnection.userPassword;
             UseSsl = editedConnection.UseSsl;
             HomeRealmUrl = editedConnection.HomeRealmUrl;
         }
@@ -300,7 +314,18 @@ namespace McTools.Xrm.Connection
 
         public void ErasePassword()
         {
-            UserPassword = null;
+            userPassword = null;
+        }
+
+        public void SetPassword(string password)
+        {
+            if(!string.IsNullOrEmpty(password))
+            userPassword = CryptoManager.Encrypt(password, ConnectionManager.CryptoPassPhrase,
+                   ConnectionManager.CryptoSaltValue,
+                   ConnectionManager.CryptoHashAlgorythm,
+                   ConnectionManager.CryptoPasswordIterations,
+                   ConnectionManager.CryptoInitVector,
+                   ConnectionManager.CryptoKeySize);
         }
 
         #endregion
@@ -327,7 +352,7 @@ namespace McTools.Xrm.Connection
                 || detail.UseSsl != UseSsl
                 || detail.UserDomain != UserDomain
                 || detail.UserName != UserName
-                || detail.UserPassword != null && detail.UserPassword != UserPassword)
+                || detail.userPassword != null && detail.userPassword != userPassword)
             {
                 return 1;
             }
@@ -362,11 +387,40 @@ namespace McTools.Xrm.Connection
                 UseSsl = UseSsl,
                 UserDomain = UserDomain,
                 UserName = UserName,
-                UserPassword = UserPassword,
+                userPassword = userPassword,
                 WebApplicationUrl = WebApplicationUrl
             };
         }
 
-       
+        internal XElement GetXElement()
+        {
+            return new XElement("ConnectionDetail",
+                    new XElement("AuthType", AuthType),
+                    new XElement("ConnectionId", ConnectionId),
+                    new XElement("ConnectionName", ConnectionName),
+                    new XElement("IsCustomAuth", IsCustomAuth),
+                    new XElement("UseIfd", UseIfd),
+                    new XElement("UseOnline", UseOnline),
+                    new XElement("UseOsdp", UseOsdp),
+                    new XElement("UserDomain", UserDomain),
+                    new XElement("UserName", UserName),
+                    new XElement("UserPassword", SavePassword ? userPassword : string.Empty),
+                    new XElement("SavePassword", SavePassword),
+                    new XElement("UseSsl", UseSsl),
+                    new XElement("ServerName", ServerName),
+                    new XElement("ServerPort", ServerPort),
+                    new XElement("Organization", Organization),
+                    new XElement("OrganizationUrlName", OrganizationUrlName),
+                    new XElement("OrganizationFriendlyName", OrganizationFriendlyName),
+                    new XElement("OrganizationServiceUrl", OrganizationServiceUrl),
+                    new XElement("OrganizationVersion", OrganizationVersion),
+                    new XElement("Timeout", TimeoutTicks),
+                    new XElement("WebApplicationUrl", WebApplicationUrl));
+        }
+
+        public void CopyPasswordTo(ConnectionDetail detail)
+        {
+            detail.userPassword = userPassword;
+        }
     }
 }

@@ -92,30 +92,7 @@ namespace McTools.Xrm.Connection
                 
             foreach (var connection in Connections)
             {
-                var xc = new XElement("ConnectionDetail",
-                    new XElement("AuthType", connection.AuthType),
-                    new XElement("ConnectionId", connection.ConnectionId),
-                    new XElement("ConnectionName", connection.ConnectionName),
-                    new XElement("IsCustomAuth", connection.IsCustomAuth),
-                    new XElement("UseIfd", connection.UseIfd),
-                    new XElement("UseOnline", connection.UseOnline),
-                    new XElement("UseOsdp", connection.UseOsdp),
-                    new XElement("UserDomain", connection.UserDomain),
-                    new XElement("UserName", connection.UserName),
-                    new XElement("UserPassword", connection.UserPassword),
-                    new XElement("SavePassword", connection.SavePassword),
-                    new XElement("UseSsl", connection.UseSsl),
-                    new XElement("ServerName", connection.ServerName),
-                    new XElement("ServerPort", connection.ServerPort),
-                    new XElement("Organization", connection.Organization),
-                    new XElement("OrganizationUrlName", connection.OrganizationUrlName),
-                    new XElement("OrganizationFriendlyName", connection.OrganizationFriendlyName),
-                    new XElement("OrganizationServiceUrl", connection.OrganizationServiceUrl),
-                    new XElement("OrganizationVersion", connection.OrganizationVersion),
-                    new XElement("Timeout", connection.TimeoutTicks),
-                    new XElement("WebApplicationUrl", connection.WebApplicationUrl));
-
-                listElement.Add(xc);
+                listElement.Add(connection.GetXElement());
             }
 
             var doc = new XDocument(new XElement("CrmConnections", listElement));
@@ -250,7 +227,7 @@ namespace McTools.Xrm.Connection
                     var userPasswordElement = elt.Element("UserPassword");
                     if (userPasswordElement != null)
                     {
-                        cd.UserPassword = userPasswordElement.Value;
+                        cd.SetPassword(userPasswordElement.Value);
                     }
 
                     var webApplicationUrlElement = elt.Element("WebApplicationUrl");
