@@ -202,6 +202,8 @@ namespace XrmToolBox
             
             await Task.WhenAll(tasks.ToArray());
 
+            AdaptPluginControlSize();
+
             this.Opacity = 100;
         }
 
@@ -262,7 +264,8 @@ namespace XrmToolBox
                         ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
                     }
                 }));
-        }
+
+         }
 
         private Image GetImage(Type plugin, bool small = false)
         {
@@ -814,6 +817,46 @@ namespace XrmToolBox
                 donateInEuroToolStripMenuItem,
                 donateInGBPToolStripMenuItem
             });
+        }
+
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+
+            AdaptPluginControlSize();
+        }
+
+        private void AdaptPluginControlSize()
+        {
+            if (GetVisibleScrollbars(HomePageTab) == ScrollBars.Vertical)
+            {
+                foreach (var ctrl in HomePageTab.Controls)
+                {
+                    if (ctrl is UserControl)
+                    {
+                        ((UserControl)ctrl).Width = HomePageTab.Width - 30;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var ctrl in HomePageTab.Controls)
+                {
+                    if (ctrl is UserControl)
+                    {
+                        ((UserControl)ctrl).Width = HomePageTab.Width - 10;
+                    }
+                }
+            }
+        }
+
+        protected static ScrollBars GetVisibleScrollbars(ScrollableControl ctl)
+        {
+            if (ctl.HorizontalScroll.Visible)
+                return ctl.VerticalScroll.Visible ? ScrollBars.Both : ScrollBars.Horizontal;
+            else
+                return ctl.VerticalScroll.Visible ? ScrollBars.Vertical : ScrollBars.None;
         }
     }
 
