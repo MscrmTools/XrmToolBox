@@ -191,12 +191,12 @@ namespace MsCrmTools.Translator.AppCode
                         }
                     }
                 }
+            }
 
-                foreach (var emd in emds.Where(e => e.IsRenameable.Value))
-                {
-                    var request = new UpdateEntityRequest {Entity = emd};
-                    service.Execute(request);
-                }
+            foreach (var emd in emds.Where(e => e.IsRenameable.Value))
+            {
+                var request = new UpdateEntityRequest {Entity = emd};
+                service.Execute(request);
             }
         }
 #else
