@@ -85,8 +85,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.MetadataBrowser"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.FlsBulkUpdater", "Plugins\MsCrmTools.FlsBulkUpdater\MsCrmTools.FlsBulkUpdater.csproj", "{5244E9BE-820A-4613-8ACC-ADC858B83C26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox.UnitTest", "XrmToolBox.UnitTest\XrmToolBox.UnitTest.csproj", "{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug Without GemBox|Any CPU = Debug Without GemBox|Any CPU
@@ -616,21 +614,6 @@ Global
 		{5244E9BE-820A-4613-8ACC-ADC858B83C26}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{5244E9BE-820A-4613-8ACC-ADC858B83C26}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5244E9BE-820A-4613-8ACC-ADC858B83C26}.Release|x86.ActiveCfg = Release|Any CPU
-		{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}.Debug Without GemBox|Any CPU.ActiveCfg = Debug|Any CPU
-		{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}.Debug Without GemBox|Any CPU.Build.0 = Debug|Any CPU
-		{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}.Debug Without GemBox|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}.Debug Without GemBox|Mixed Platforms.Build.0 = Debug|Any CPU
-		{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}.Debug Without GemBox|x86.ActiveCfg = Debug|Any CPU
-		{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{EEA806E1-D5DB-4604-9AAF-158D0B9E008E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
