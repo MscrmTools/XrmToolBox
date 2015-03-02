@@ -16,21 +16,23 @@ namespace McTools.Xrm.Connection.Console
 
         public void Run()
         {
-            connectionManager = new ConnectionManager();
+            var cd = new ConnectionDetail()
+            {
+                UseIfd = RequestInformation("Use IFD") == "y",
+                UserDomain = RequestInformation("Domain"),
+                UserName = RequestInformation("Username"),
+                UseSsl = RequestInformation("Use SSL") == "y",
+                OrganizationServiceUrl = RequestInformation("Organization service url")
+            };
+            cd.SetPassword(RequestInformation("Password"));
+
+            connectionManager = ConnectionManager.Instance;
             connectionManager.ConnectionSucceed += new ConnectionManager.ConnectionSucceedEventHandler(connectionManager_ConnectionSucceed);
             connectionManager.ConnectionFailed += new ConnectionManager.ConnectionFailedEventHandler(connectionManager_ConnectionFailed);
             connectionManager.RequestPassword += new ConnectionManager.RequestPasswordEventHandler(connectionManager_RequestPassword);
             connectionManager.UseProxy += new ConnectionManager.UseProxyEventHandler(connectionManager_UseProxy);
             connectionManager.StepChanged += new ConnectionManager.StepChangedEventHandler(connectionManager_StepChanged);
-            connectionManager.ConnectToServer(new ConnectionDetail()
-            {
-                UseIfd = RequestInformation("Use IFD") == "y",
-                UserDomain = RequestInformation("Domain"),
-                UserName = RequestInformation("Username"),
-                UserPassword = RequestInformation("Password"),
-                UseSsl = RequestInformation("Use SSL") == "y",
-                OrganizationServiceUrl = RequestInformation("Organization service url")
-            });
+            connectionManager.ConnectToServer(cd);
 
             System.Console.ReadLine();
         }
@@ -54,7 +56,7 @@ namespace McTools.Xrm.Connection.Console
         bool connectionManager_RequestPassword(object sender, RequestPasswordEventArgs e)
         {
             System.Console.WriteLine("Please enter your password: ");
-            e.ConnectionDetail.UserPassword = System.Console.ReadLine();
+            e.ConnectionDetail.SetPassword(System.Console.ReadLine());
             return false;
         }
 

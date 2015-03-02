@@ -32,10 +32,6 @@ namespace McTools.Xrm.Connection.WinForms
 
         private readonly bool isConnectionSelection;
 
-        public CrmConnections ConnectionList { get; set; }
-
-        private readonly ConnectionManager connectionManager;
-
         #endregion
 
         #region Constructeur
@@ -43,12 +39,9 @@ namespace McTools.Xrm.Connection.WinForms
         /// <summary>
         /// Créé une nouvelle instance de la classe ConnectionSelector
         /// </summary>
-        /// <param name="connections">Liste des connexions disponibles</param>
-        /// <param name="cManager">Gestionnaire des connexions</param>
-        public ConnectionSelector(CrmConnections connections, ConnectionManager cManager, bool allowMultipleSelection = false, bool isConnectionSelection = true)
+        public ConnectionSelector(bool allowMultipleSelection = false, bool isConnectionSelection = true)
         {
             InitializeComponent();
-            ConnectionList = connections;
             this.isConnectionSelection = isConnectionSelection;
             if (isConnectionSelection)
             {
@@ -67,14 +60,13 @@ namespace McTools.Xrm.Connection.WinForms
                 bValidate.Visible = false;
             }
 
-            connectionManager = cManager;
-            connections.Connections.Sort();
+            ConnectionManager.Instance.ConnectionsList.Connections.Sort();
 
             lvConnections.MultiSelect = allowMultipleSelection;
 
             LoadImages();
 
-            foreach (ConnectionDetail detail in connections.Connections)
+            foreach (ConnectionDetail detail in ConnectionManager.Instance.ConnectionsList.Connections)
             {
                 var item = new ListViewItem(detail.ConnectionName);
                 item.SubItems.Add(detail.ServerName);
@@ -167,8 +159,7 @@ namespace McTools.Xrm.Connection.WinForms
         {
             var cForm = new ConnectionForm(true, false)
             {
-                ConnectionList = ConnectionList,
-                StartPosition = FormStartPosition.CenterParent
+               StartPosition = FormStartPosition.CenterParent
             };
 
             if (cForm.ShowDialog(this) == DialogResult.OK)
@@ -195,9 +186,13 @@ namespace McTools.Xrm.Connection.WinForms
                     BValidateClick(sender, e);
                 }
 
-                if (!connectionManager.ConnectionsList.Connections.Contains(newConnection))
-                connectionManager.ConnectionsList.Connections.Add(newConnection);
-                connectionManager.SaveConnectionsFile(connectionManager.ConnectionsList);
+                if (ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(
+                             d => d.ConnectionId == newConnection.ConnectionId) == null)
+                {
+                    ConnectionManager.Instance.ConnectionsList.Connections.Add(newConnection);
+                }
+
+                ConnectionManager.Instance.SaveConnectionsFile();
             }
         }
 
@@ -210,7 +205,6 @@ namespace McTools.Xrm.Connection.WinForms
                 var cForm = new ConnectionForm(false, false)
                 {
                     CrmConnectionDetail = (ConnectionDetail)item.Tag,
-                    ConnectionList = ConnectionList,
                     StartPosition = FormStartPosition.CenterParent
                 };
 
@@ -231,8 +225,7 @@ namespace McTools.Xrm.Connection.WinForms
 
                     lvConnections.Refresh();
 
-                    ConnectionList.Connections = lvConnections.Items.Cast<ListViewItem>().Select(i => (ConnectionDetail)i.Tag).ToList();
-                    connectionManager.SaveConnectionsFile(ConnectionList);
+                    ConnectionManager.Instance.SaveConnectionsFile();
                 }
             }
         }
@@ -243,8 +236,9 @@ namespace McTools.Xrm.Connection.WinForms
             {
                 lvConnections.Items.Remove(lvConnections.SelectedItems[0]);
 
-                ConnectionList.Connections = lvConnections.Items.Cast<ListViewItem>().Select(i => (ConnectionDetail)i.Tag).ToList();
-                connectionManager.SaveConnectionsFile(ConnectionList);
+                var detailToRemove = (ConnectionDetail)lvConnections.SelectedItems[0].Tag;
+                ConnectionManager.Instance.ConnectionsList.Connections.Remove(detailToRemove);
+                ConnectionManager.Instance.SaveConnectionsFile();
             }
         }
 

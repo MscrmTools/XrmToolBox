@@ -98,7 +98,7 @@
             // columnHeader3
             // 
             this.columnHeader3.Text = "Server";
-            this.columnHeader3.Width = 150;
+            this.columnHeader3.Width = 120;
             // 
             // columnHeader2
             // 
@@ -108,7 +108,7 @@
             // columnHeader4
             // 
             this.columnHeader4.Text = "Version";
-            this.columnHeader4.Width = 70;
+            this.columnHeader4.Width = 100;
             // 
             // menu
             // 

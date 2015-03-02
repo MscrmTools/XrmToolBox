@@ -12,11 +12,6 @@ namespace McTools.Xrm.Connection.WinForms
     {
         #region Variables
 
-        /// <summary>
-        /// Crm connection manager
-        /// </summary>
-        ConnectionManager cManager;
-
         private FormHelper _formHelper;
 
         /// <summary>
@@ -31,14 +26,11 @@ namespace McTools.Xrm.Connection.WinForms
         /// <summary>
         /// Initializes a new instance of class CrmConnectionStatusBar
         /// </summary>
-        /// <param name="connectionManager">Connection manager to use</param>
-        public CrmConnectionStatusBar(ConnectionManager connectionManager, FormHelper formHelper)
+        public CrmConnectionStatusBar(FormHelper formHelper)
         {
             resources = new System.ComponentModel.ComponentResourceManager(typeof(CrmConnectionStatusBar));
-
-
-            this.cManager = connectionManager;
-            cManager.ConnectionListUpdated += cManager_ConnectionListUpdated;
+            
+            ConnectionManager.Instance.ConnectionListUpdated += cManager_ConnectionListUpdated;
             _formHelper = formHelper;
 
             // Build connection control
@@ -67,8 +59,7 @@ namespace McTools.Xrm.Connection.WinForms
             ToolStripDropDownButton connexionManager = new ToolStripDropDownButton();
             connexionManager.Text = "Not connected";
             connexionManager.Image = ((System.Drawing.Image)(resources.GetObject("server")));
-            //connexionManager.Click += new EventHandler(connexionManager_Click);
-
+            
             this.AddActionsList(connexionManager);
 
             this.Items.Add(connexionManager);
@@ -88,12 +79,11 @@ namespace McTools.Xrm.Connection.WinForms
         {
             var list = new List<ToolStripItem>();
 
-            if (this.cManager != null && this.cManager.ConnectionsList != null &&
-                this.cManager.ConnectionsList.Connections.Count > 0)
+            if (ConnectionManager.Instance.ConnectionsList.Connections.Count > 0)
             {
-                this.cManager.ConnectionsList.Connections.Sort();
+                ConnectionManager.Instance.ConnectionsList.Connections.Sort();
 
-                foreach (ConnectionDetail cDetail in this.cManager.ConnectionsList.Connections)
+                foreach (ConnectionDetail cDetail in ConnectionManager.Instance.ConnectionsList.Connections)
                 {
                     ToolStripMenuItem item = new ToolStripMenuItem();
                     item.Text = cDetail.ConnectionName;
@@ -278,12 +268,12 @@ namespace McTools.Xrm.Connection.WinForms
                     {
                         if (_formHelper.RequestPassword(currentConnection))
                         {
-                            this.cManager.ConnectToServer(currentConnection);
+                            ConnectionManager.Instance.ConnectToServer(currentConnection);
                         }
                     }
                     else
                     {
-                        this.cManager.ConnectToServer(currentConnection);
+                        ConnectionManager.Instance.ConnectToServer(currentConnection);
                     }
                     break;
                 case "Edit":

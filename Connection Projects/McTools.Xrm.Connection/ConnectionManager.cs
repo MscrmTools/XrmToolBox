@@ -5,12 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
-using System.Runtime.Serialization;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Xml;
 using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Client;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
@@ -100,7 +96,7 @@ namespace McTools.Xrm.Connection
 
         #endregion Constants
 
-        private static readonly ConnectionManager instance = new ConnectionManager();
+        private static ConnectionManager instance;
 
         #region Constructor
 
@@ -117,7 +113,6 @@ namespace McTools.Xrm.Connection
             fsw.Changed += fsw_Changed;
 
             ServicePointManager.ServerCertificateValidationCallback += ValidateRemoteCertificate;
-
         }
 
         void fsw_Changed(object sender, FileSystemEventArgs e)
@@ -151,7 +146,15 @@ namespace McTools.Xrm.Connection
 
         public static ConnectionManager Instance
         {
-            get { return instance; }
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new ConnectionManager();
+                }
+
+                return instance;
+            }
         }
 
         #endregion Properties
@@ -256,7 +259,7 @@ namespace McTools.Xrm.Connection
                     detail.CopyPasswordTo(currentConnection);
                 }
 
-                SaveConnectionsFile(ConnectionsList);
+                SaveConnectionsFile();
 
                 return service;
             }
@@ -332,11 +335,11 @@ namespace McTools.Xrm.Connection
         /// <summary>
         /// Saves Crm connections list to file
         /// </summary>
-        public void SaveConnectionsFile(CrmConnections connectionsList)
+        public void SaveConnectionsFile()
         {
-            if (!string.IsNullOrEmpty(connectionsList.Password))
+            if (!string.IsNullOrEmpty(ConnectionsList.Password))
             {
-                connectionsList.Password = CryptoManager.Encrypt(connectionsList.Password,
+                ConnectionsList.Password = CryptoManager.Encrypt(ConnectionsList.Password,
                     CryptoPassPhrase,
                     CryptoSaltValue,
                     CryptoHashAlgorythm,
@@ -345,7 +348,7 @@ namespace McTools.Xrm.Connection
                     CryptoKeySize);
             }
 
-            connectionsList.SerializeToFile(ConfigFileName);
+            ConnectionsList.SerializeToFile(ConfigFileName);
         }
 
         /// <summary>

@@ -8,15 +8,13 @@ namespace McTools.Xrm.Connection.WinForms
 {
     public class FormHelper
     {
-        public FormHelper(Form innerAppForm, ConnectionManager connectionManager)
+        public FormHelper(Form innerAppForm)
         {
             _innerAppForm = innerAppForm;
-            _connectionManager = connectionManager;
         }
 
         private readonly Form _innerAppForm;
-        private readonly ConnectionManager _connectionManager;
-
+    
         /// <summary>
         /// Checks the existence of a user password and returns it
         /// </summary>
@@ -63,7 +61,7 @@ namespace McTools.Xrm.Connection.WinForms
         /// </summary>
         public bool AskForConnection(object connectionParameter)
         {
-            var cs = new ConnectionSelector(_connectionManager.ConnectionsList, _connectionManager)
+            var cs = new ConnectionSelector
             {
                 StartPosition = FormStartPosition.CenterParent,
             };
@@ -92,14 +90,7 @@ namespace McTools.Xrm.Connection.WinForms
                     }
                  }
 
-                _connectionManager.ConnectToServer(connectionDetail, connectionParameter);
-
-                if (cs.HadCreatedNewConnection)
-                {
-                    if (!_connectionManager.ConnectionsList.Connections.Contains(connectionDetail))
-                        _connectionManager.ConnectionsList.Connections.Add(connectionDetail);
-                    _connectionManager.SaveConnectionsFile(_connectionManager.ConnectionsList);
-                }
+                ConnectionManager.Instance.ConnectToServer(connectionDetail, connectionParameter);
 
                 return true;
             }
@@ -109,7 +100,7 @@ namespace McTools.Xrm.Connection.WinForms
 
         public void DisplayConnectionsList(Form form)
         {
-            var cs = new ConnectionSelector(_connectionManager.ConnectionsList, _connectionManager, true, false)
+            var cs = new ConnectionSelector(true, false)
             {
                 StartPosition = FormStartPosition.CenterParent,
             };
@@ -119,7 +110,7 @@ namespace McTools.Xrm.Connection.WinForms
 
         public List<ConnectionDetail> SelectMultipleConnectionDetails()
         {
-            var cs = new ConnectionSelector(_connectionManager.ConnectionsList, _connectionManager, true)
+            var cs = new ConnectionSelector(true)
             {
                 StartPosition = FormStartPosition.CenterParent,
             };
@@ -152,7 +143,7 @@ namespace McTools.Xrm.Connection.WinForms
                
                 if (cForm.DoConnect)
                 {
-                    _connectionManager.ConnectToServer(cForm.CrmConnectionDetail);
+                    ConnectionManager.Instance.ConnectToServer(cForm.CrmConnectionDetail);
                 }
 
                 if (!cForm.CrmConnectionDetail.PasswordIsEmpty && !cForm.CrmConnectionDetail.SavePassword)
@@ -162,12 +153,16 @@ namespace McTools.Xrm.Connection.WinForms
 
                 if (isCreation)
                 {
-                    if (!_connectionManager.ConnectionsList.Connections.Contains(cForm.CrmConnectionDetail))
-                        _connectionManager.ConnectionsList.Connections.Add(cForm.CrmConnectionDetail);
+
+                    if (ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(
+                        d => d.ConnectionId == cForm.CrmConnectionDetail.ConnectionId) == null)
+                    {
+                        ConnectionManager.Instance.ConnectionsList.Connections.Add(cForm.CrmConnectionDetail);
+                    }
                 }
                 else
                 {
-                    foreach (ConnectionDetail detail in _connectionManager.ConnectionsList.Connections)
+                    foreach (ConnectionDetail detail in ConnectionManager.Instance.ConnectionsList.Connections)
                     {
                         if (detail.ConnectionId == cForm.CrmConnectionDetail.ConnectionId)
                         {
@@ -176,7 +171,7 @@ namespace McTools.Xrm.Connection.WinForms
                     }
                 }
 
-                _connectionManager.SaveConnectionsFile(_connectionManager.ConnectionsList);
+                ConnectionManager.Instance.SaveConnectionsFile();
 
                 return cForm.CrmConnectionDetail;
             }
@@ -186,12 +181,12 @@ namespace McTools.Xrm.Connection.WinForms
 
         public IWebProxy SelectProxy()
         {
-            if (_connectionManager.ConnectionsList.UseCustomProxy)
+            if (ConnectionManager.Instance.ConnectionsList.UseCustomProxy)
             {
-                var proxy = new WebProxy(_connectionManager.ConnectionsList.ProxyAddress + ":" + _connectionManager.ConnectionsList.ProxyPort, true)
+                var proxy = new WebProxy(ConnectionManager.Instance.ConnectionsList.ProxyAddress + ":" + ConnectionManager.Instance.ConnectionsList.ProxyPort, true)
                 {
                     Credentials =
-                        new NetworkCredential(_connectionManager.ConnectionsList.UserName, _connectionManager.ConnectionsList.Password)
+                        new NetworkCredential(ConnectionManager.Instance.ConnectionsList.UserName, ConnectionManager.Instance.ConnectionsList.Password)
                 };
 
                 return proxy;
@@ -206,8 +201,8 @@ namespace McTools.Xrm.Connection.WinForms
         /// <param name="connectionToDelete">Details of the connection to delete</param>
         public void DeleteConnection(ConnectionDetail connectionToDelete)
         {
-            _connectionManager.ConnectionsList.Connections.Remove(connectionToDelete);
-            _connectionManager.SaveConnectionsFile(_connectionManager.ConnectionsList);
+            ConnectionManager.Instance.ConnectionsList.Connections.Remove(connectionToDelete);
+            ConnectionManager.Instance.SaveConnectionsFile();
         }
     }
 }

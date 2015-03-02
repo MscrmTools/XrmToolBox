@@ -227,7 +227,7 @@ namespace McTools.Xrm.Connection
                     var userPasswordElement = elt.Element("UserPassword");
                     if (userPasswordElement != null)
                     {
-                        cd.SetPassword(userPasswordElement.Value);
+                        cd.SetPassword(userPasswordElement.Value, true);
                     }
 
                     var webApplicationUrlElement = elt.Element("WebApplicationUrl");

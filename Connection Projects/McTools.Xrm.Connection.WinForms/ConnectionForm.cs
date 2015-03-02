@@ -41,7 +41,6 @@ namespace McTools.Xrm.Connection.WinForms
         bool doConnect;
 
         private bool proposeToConnect;
-        public CrmConnections ConnectionList { get; set; }
 
         #endregion
 
@@ -206,7 +205,7 @@ namespace McTools.Xrm.Connection.WinForms
                 detail.OrganizationFriendlyName = selectedOrganization.FriendlyName;
                 detail.OrganizationVersion = selectedOrganization.OrganizationVersion;
             }
-            else if (initialDetail.CompareTo(detail) != 0)
+            else if (initialDetail.IsConnectionBrokenWithUpdatedData(detail))
             {
                 MessageBox.Show(this,
                     "You changed critical parameters for this connection! Please retrieve organizations to ensure your changes are valid",
@@ -216,7 +215,7 @@ namespace McTools.Xrm.Connection.WinForms
 
             try
             {
-                if (initialDetail == null || initialDetail.CompareTo(detail) != 0)
+                if (initialDetail == null || initialDetail.IsConnectionBrokenWithUpdatedData(detail))
                 {
                     if (proposeToConnect || isCreationMode)
                     {

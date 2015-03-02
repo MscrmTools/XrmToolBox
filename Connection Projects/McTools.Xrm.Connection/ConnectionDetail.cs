@@ -317,9 +317,13 @@ namespace McTools.Xrm.Connection
             userPassword = null;
         }
 
-        public void SetPassword(string password)
+        public void SetPassword(string password, bool isEncrypted = false)
         {
-            if(!string.IsNullOrEmpty(password))
+            if (isEncrypted)
+            {
+                userPassword = password;
+            }
+            else if(!string.IsNullOrEmpty(password))
             userPassword = CryptoManager.Encrypt(password, ConnectionManager.CryptoPassPhrase,
                    ConnectionManager.CryptoSaltValue,
                    ConnectionManager.CryptoHashAlgorythm,
@@ -330,34 +334,39 @@ namespace McTools.Xrm.Connection
 
         #endregion
 
+        public bool IsConnectionBrokenWithUpdatedData(ConnectionDetail updatedDetail)
+        {
+            if (updatedDetail.AuthType != AuthType
+               || updatedDetail.CrmTicket != CrmTicket
+               || updatedDetail.HomeRealmUrl != HomeRealmUrl
+               || updatedDetail.IsCustomAuth != IsCustomAuth
+               || updatedDetail.Organization != Organization
+               || updatedDetail.OrganizationFriendlyName != OrganizationFriendlyName
+               || updatedDetail.OrganizationServiceUrl != OrganizationServiceUrl
+               || updatedDetail.OrganizationUrlName != OrganizationUrlName
+               || updatedDetail.ServerName != ServerName
+               || updatedDetail.ServerPort != ServerPort
+               || updatedDetail.UseIfd != UseIfd
+               || updatedDetail.UseOnline != UseOnline
+               || updatedDetail.UseOsdp != UseOsdp
+               || updatedDetail.UseSsl != UseSsl
+               || updatedDetail.UserDomain != UserDomain
+               || updatedDetail.UserName != UserName
+               || updatedDetail.userPassword != null && updatedDetail.userPassword != userPassword)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         #region IComparable Members
 
         public int CompareTo(object obj)
         {
             var detail = (ConnectionDetail) obj;
 
-            if (detail.AuthType != AuthType
-                || detail.CrmTicket != CrmTicket
-                || detail.HomeRealmUrl != HomeRealmUrl
-                || detail.IsCustomAuth != IsCustomAuth
-                || detail.Organization != Organization
-                || detail.OrganizationFriendlyName != OrganizationFriendlyName
-                || detail.OrganizationServiceUrl != OrganizationServiceUrl
-                || detail.OrganizationUrlName != OrganizationUrlName
-                || detail.ServerName != ServerName
-                || detail.ServerPort != ServerPort
-                || detail.UseIfd != UseIfd
-                || detail.UseOnline != UseOnline
-                || detail.UseOsdp != UseOsdp
-                || detail.UseSsl != UseSsl
-                || detail.UserDomain != UserDomain
-                || detail.UserName != UserName
-                || detail.userPassword != null && detail.userPassword != userPassword)
-            {
-                return 1;
-            }
-
-            return 0;
+            return String.Compare(ConnectionName, detail.ConnectionName, StringComparison.Ordinal);
         }
 
         #endregion
