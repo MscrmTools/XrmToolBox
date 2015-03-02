@@ -194,13 +194,21 @@ namespace McTools.Xrm.Connection
                     var serverPortElement = elt.Element("ServerPort");
                     if (serverPortElement != null)
                     {
-                        cd.ServerPort = int.Parse(serverPortElement.Value);
+                        int serverPort = string.IsNullOrEmpty(serverPortElement.Value)
+                            ? 80
+                            : int.Parse(serverPortElement.Value);
+
+                        cd.ServerPort = serverPort;
                     }
 
                     var timeOutElement = elt.Element("Timeout");
                     if (timeOutElement != null)
                     {
-                        cd.TimeoutTicks = int.Parse(timeOutElement.Value);
+                         int timeoutValue = string.IsNullOrEmpty(timeOutElement.Value)
+                            ? 1200000000
+                            : int.Parse(timeOutElement.Value);
+
+                        cd.TimeoutTicks = timeoutValue;
                     }
 
                     var useIfdElement = elt.Element("UseIfd");
