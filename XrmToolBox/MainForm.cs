@@ -128,8 +128,8 @@ namespace XrmToolBox
                 ccsb.SetConnectionStatus(false, null);
                 ccsb.SetMessage(e.FailureReason);
             };
-            fHelper = new FormHelper(this, cManager);
-            ccsb = new CrmConnectionStatusBar(cManager, fHelper) { Dock = DockStyle.Bottom };
+            fHelper = new FormHelper(this);
+            ccsb = new CrmConnectionStatusBar(fHelper) { Dock = DockStyle.Bottom };
             Controls.Add(ccsb);
         }
 
