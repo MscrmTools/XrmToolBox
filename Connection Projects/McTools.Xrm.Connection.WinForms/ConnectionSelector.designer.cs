@@ -46,9 +46,10 @@
             // bValidate
             // 
             this.bValidate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bValidate.Location = new System.Drawing.Point(387, 375);
+            this.bValidate.Location = new System.Drawing.Point(580, 577);
+            this.bValidate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.bValidate.Name = "bValidate";
-            this.bValidate.Size = new System.Drawing.Size(75, 23);
+            this.bValidate.Size = new System.Drawing.Size(112, 35);
             this.bValidate.TabIndex = 6;
             this.bValidate.Text = "OK";
             this.bValidate.UseVisualStyleBackColor = true;
@@ -57,9 +58,10 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bCancel.Location = new System.Drawing.Point(468, 375);
+            this.bCancel.Location = new System.Drawing.Point(702, 577);
+            this.bCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.bCancel.Name = "bCancel";
-            this.bCancel.Size = new System.Drawing.Size(75, 23);
+            this.bCancel.Size = new System.Drawing.Size(112, 35);
             this.bCancel.TabIndex = 5;
             this.bCancel.Text = "Cancel";
             this.bCancel.UseVisualStyleBackColor = true;
@@ -77,9 +79,11 @@
             this.columnHeader4});
             this.lvConnections.FullRowSelect = true;
             this.lvConnections.GridLines = true;
-            this.lvConnections.Location = new System.Drawing.Point(12, 28);
+            this.lvConnections.Location = new System.Drawing.Point(18, 43);
+            this.lvConnections.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lvConnections.Name = "lvConnections";
-            this.lvConnections.Size = new System.Drawing.Size(531, 341);
+            this.lvConnections.Size = new System.Drawing.Size(794, 522);
+            this.lvConnections.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvConnections.TabIndex = 9;
             this.lvConnections.UseCompatibleStateImageBehavior = false;
             this.lvConnections.View = System.Windows.Forms.View.Details;
@@ -114,7 +118,8 @@
             this.tsbDeleteConnection});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
-            this.menu.Size = new System.Drawing.Size(555, 25);
+            this.menu.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.menu.Size = new System.Drawing.Size(832, 32);
             this.menu.TabIndex = 11;
             this.menu.Text = "toolStrip1";
             // 
@@ -123,7 +128,7 @@
             this.tsbNewConnection.Image = ((System.Drawing.Image)(resources.GetObject("tsbNewConnection.Image")));
             this.tsbNewConnection.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbNewConnection.Name = "tsbNewConnection";
-            this.tsbNewConnection.Size = new System.Drawing.Size(114, 22);
+            this.tsbNewConnection.Size = new System.Drawing.Size(167, 29);
             this.tsbNewConnection.Text = "New connection";
             this.tsbNewConnection.Click += new System.EventHandler(this.tsbNewConnection_Click);
             // 
@@ -132,7 +137,7 @@
             this.tsbUpdateConnection.Image = ((System.Drawing.Image)(resources.GetObject("tsbUpdateConnection.Image")));
             this.tsbUpdateConnection.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbUpdateConnection.Name = "tsbUpdateConnection";
-            this.tsbUpdateConnection.Size = new System.Drawing.Size(128, 22);
+            this.tsbUpdateConnection.Size = new System.Drawing.Size(190, 29);
             this.tsbUpdateConnection.Text = "Update connection";
             this.tsbUpdateConnection.Click += new System.EventHandler(this.tsbUpdateConnection_Click);
             // 
@@ -141,19 +146,20 @@
             this.tsbDeleteConnection.Image = ((System.Drawing.Image)(resources.GetObject("tsbDeleteConnection.Image")));
             this.tsbDeleteConnection.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDeleteConnection.Name = "tsbDeleteConnection";
-            this.tsbDeleteConnection.Size = new System.Drawing.Size(123, 22);
+            this.tsbDeleteConnection.Size = new System.Drawing.Size(182, 29);
             this.tsbDeleteConnection.Text = "Delete connection";
             this.tsbDeleteConnection.Click += new System.EventHandler(this.tsbDeleteConnection_Click);
             // 
             // ConnectionSelector
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(555, 410);
+            this.ClientSize = new System.Drawing.Size(832, 631);
             this.Controls.Add(this.menu);
             this.Controls.Add(this.bValidate);
             this.Controls.Add(this.bCancel);
             this.Controls.Add(this.lvConnections);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "ConnectionSelector";
             this.ShowIcon = false;
             this.Text = "Select connection";

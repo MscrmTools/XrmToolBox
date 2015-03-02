@@ -71,7 +71,7 @@ namespace XrmToolBox
 
         private void ManageConnectionControl()
         {
-            cManager = new ConnectionManager();
+            cManager = ConnectionManager.Instance;
             cManager.RequestPassword += (sender, e) => fHelper.RequestPassword(e.ConnectionDetail);
             cManager.StepChanged += (sender, e) => ccsb.SetMessage(e.CurrentStep);
             cManager.ConnectionSucceed += (sender, e) =>
@@ -386,7 +386,7 @@ namespace XrmToolBox
 
                 if (service != null)
                 {
-                    var clonedService = new OrganizationService(CrmConnection.Parse(currentConnectionDetail.GetOrganizationCrmConnectionString()));
+                    var clonedService = (OrganizationService)currentConnectionDetail.GetOrganizationService();
                     ((OrganizationServiceProxy)clonedService.InnerService).SdkClientVersion = currentConnectionDetail.OrganizationVersion;
 
                     ((IMsCrmToolsPluginUserControl) pluginControl).UpdateConnection(clonedService,

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace McTools.Xrm.Connection.WinForms
@@ -37,6 +38,7 @@ namespace McTools.Xrm.Connection.WinForms
 
 
             this.cManager = connectionManager;
+            cManager.ConnectionListUpdated += cManager_ConnectionListUpdated;
             _formHelper = formHelper;
 
             // Build connection control
@@ -46,6 +48,11 @@ namespace McTools.Xrm.Connection.WinForms
             ToolStripLabel informationLabel = new ToolStripLabel();
             this.Items.Add(informationLabel);
             base.RenderMode = ToolStripRenderMode.Professional;
+        }
+
+        void cManager_ConnectionListUpdated(object sender, EventArgs e)
+        {
+            RebuildConnectionList();
         }
 
         #endregion
@@ -79,10 +86,10 @@ namespace McTools.Xrm.Connection.WinForms
         /// <param name="btn">ToolStripDropDownButton where to add connections</param>
         private void AddActionsList(ToolStripDropDownButton btn)
         {
-            // Clearing existing connections
-            btn.DropDownItems.Clear();
+            var list = new List<ToolStripItem>();
 
-            if (this.cManager != null && this.cManager.ConnectionsList != null && this.cManager.ConnectionsList.Connections.Count > 0)
+            if (this.cManager != null && this.cManager.ConnectionsList != null &&
+                this.cManager.ConnectionsList.Connections.Count > 0)
             {
                 this.cManager.ConnectionsList.Connections.Sort();
 
@@ -94,38 +101,55 @@ namespace McTools.Xrm.Connection.WinForms
 
                     if (cDetail.UseOnline)
                     {
-                        item.Image = RessourceManager.GetImage("McTools.Xrm.Connection.WinForms.Resources.CRMOnlineLive_16.png");
+                        item.Image =
+                            RessourceManager.GetImage(
+                                "McTools.Xrm.Connection.WinForms.Resources.CRMOnlineLive_16.png");
                     }
                     else if (cDetail.UseOsdp)
                     {
-                        item.Image = RessourceManager.GetImage("McTools.Xrm.Connection.WinForms.Resources.CRMOnlineLive_16.png");
+                        item.Image =
+                            RessourceManager.GetImage(
+                                "McTools.Xrm.Connection.WinForms.Resources.CRMOnlineLive_16.png");
                     }
                     else if (cDetail.UseIfd)
                     {
-                        item.Image = RessourceManager.GetImage("McTools.Xrm.Connection.WinForms.Resources.server_key.png");
+                        item.Image =
+                            RessourceManager.GetImage(
+                                "McTools.Xrm.Connection.WinForms.Resources.server_key.png");
                     }
                     else
                     {
-                        item.Image = RessourceManager.GetImage("McTools.Xrm.Connection.WinForms.Resources.server.png");
+                        item.Image =
+                            RessourceManager.GetImage(
+                                "McTools.Xrm.Connection.WinForms.Resources.server.png");
                     }
 
-                    this.BuildActionItems(item);
-
-                    btn.DropDownItems.Add(item);
+                    BuildActionItems(item);
+                    list.Add(item);
                 }
 
-                if (this.cManager.ConnectionsList.Connections.Count > 0)
-                {
-                    ToolStripSeparator separator = new ToolStripSeparator();
-                    btn.DropDownItems.Add(separator);
-                }
+                list.Add(new ToolStripSeparator());
             }
 
-            ToolStripMenuItem newConnectionItem = new ToolStripMenuItem();
+            var newConnectionItem = new ToolStripMenuItem();
             newConnectionItem.Text = "Create new connection";
-            newConnectionItem.Image = ((System.Drawing.Image)(resources.GetObject("server_add")));
-            newConnectionItem.Click += new EventHandler(newConnectionItem_Click);
-            btn.DropDownItems.Add(newConnectionItem);
+            newConnectionItem.Image = ((System.Drawing.Image) (resources.GetObject("server_add")));
+            newConnectionItem.Click += newConnectionItem_Click;
+            list.Add(newConnectionItem);
+
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() =>
+                {
+                    btn.DropDownItems.Clear();
+                    btn.DropDownItems.AddRange(list.ToArray());
+                }));
+            }
+            else
+            {
+                btn.DropDownItems.Clear();
+                btn.DropDownItems.AddRange(list.ToArray());
+            }
         }
 
         /// <summary>
@@ -249,7 +273,18 @@ namespace McTools.Xrm.Connection.WinForms
             switch (clickedItem.Text)
             {
                 case "Connect":
-                    this.cManager.ConnectToServer(currentConnection);
+
+                    if (currentConnection.IsCustomAuth)
+                    {
+                        if (_formHelper.RequestPassword(currentConnection))
+                        {
+                            this.cManager.ConnectToServer(currentConnection);
+                        }
+                    }
+                    else
+                    {
+                        this.cManager.ConnectToServer(currentConnection);
+                    }
                     break;
                 case "Edit":
                     currentConnection = _formHelper.EditConnection(false, currentConnection);

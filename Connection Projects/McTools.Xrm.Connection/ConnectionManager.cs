@@ -5,7 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
+using System.Runtime.Serialization;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Xml;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Client;
 using Microsoft.Xrm.Client.Services;
@@ -65,17 +68,18 @@ namespace McTools.Xrm.Connection
     {
         #region Delegates
 
+        public delegate void ConnectionListUpdatedEventHandler(object sender, EventArgs e);
         public delegate void ConnectionSucceedEventHandler(object sender, ConnectionSucceedEventArgs e);
         public delegate void ConnectionFailedEventHandler(object sender, ConnectionFailedEventArgs e);
         public delegate void StepChangedEventHandler(object sender, StepChangedEventArgs e);
         public delegate bool RequestPasswordEventHandler(object sender, RequestPasswordEventArgs e);
         public delegate void UseProxyEventHandler(object sender, UseProxyEventArgs e);
 
-
         #endregion
 
         #region Event Handlers
 
+        public event ConnectionListUpdatedEventHandler ConnectionListUpdated;
         public event ConnectionSucceedEventHandler ConnectionSucceed;
         public event ConnectionFailedEventHandler ConnectionFailed;
         public event StepChangedEventHandler StepChanged;
@@ -87,27 +91,45 @@ namespace McTools.Xrm.Connection
         #region Constants
 
         const string ConfigFileName = "mscrmtools2011.config";
-        const string CryptoPassPhrase = "MsCrmTools";
-        const string CryptoSaltValue = "Tanguy 92*";
-        const string CryptoInitVector = "ahC3@bCa2Didfc3d";
-        const string CryptoHashAlgorythm = "SHA1";
-        const int CryptoPasswordIterations = 2;
-        const int CryptoKeySize = 256;
+        internal const string CryptoPassPhrase = "MsCrmTools";
+        internal const string CryptoSaltValue = "Tanguy 92*";
+        internal const string CryptoInitVector = "ahC3@bCa2Didfc3d";
+        internal const string CryptoHashAlgorythm = "SHA1";
+        internal const int CryptoPasswordIterations = 2;
+        internal const int CryptoKeySize = 256;
 
         #endregion Constants
+
+        private static readonly ConnectionManager instance = new ConnectionManager();
 
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of class ConnectionManager
         /// </summary>
-        public ConnectionManager()
+        private ConnectionManager()
         {
             ConnectionsList = LoadConnectionsList();
+
+            var fsw = new FileSystemWatcher(new FileInfo(ConfigFileName).Directory.FullName, ConfigFileName);
+            fsw.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
+            fsw.EnableRaisingEvents = true;
+            fsw.Changed += fsw_Changed;
 
             ServicePointManager.ServerCertificateValidationCallback += ValidateRemoteCertificate;
 
         }
+
+        void fsw_Changed(object sender, FileSystemEventArgs e)
+        {
+            if (e.ChangeType == WatcherChangeTypes.Changed)
+            {
+                ConnectionsList = LoadConnectionsList();
+
+                ConnectionListUpdated(null, new EventArgs());
+            }
+        }
+
         // callback used to validate the certificate in an SSL conversation
         private static bool ValidateRemoteCertificate(
         object sender,
@@ -126,6 +148,11 @@ namespace McTools.Xrm.Connection
         /// List of Crm connections
         /// </summary>
         public CrmConnections ConnectionsList { get; set; }
+
+        public static ConnectionManager Instance
+        {
+            get { return instance; }
+        }
 
         #endregion Properties
 
@@ -205,12 +232,16 @@ namespace McTools.Xrm.Connection
             // Connecting to Crm server
             try
             {
-                var connection = CrmConnection.Parse(detail.GetOrganizationCrmConnectionString());
-                var service = new OrganizationService(connection);
+                var service = (OrganizationService)detail.GetOrganizationService();
 
                 ((OrganizationServiceProxy) service.InnerService).SdkClientVersion = detail.OrganizationVersion;
 
                 TestConnection(service);
+
+                if (!detail.SavePassword)
+                {
+                    detail.ErasePassword();
+                }
 
                 var vRequest = new RetrieveVersionRequest();
                 var vResponse = (RetrieveVersionResponse) service.Execute(vRequest);
@@ -222,7 +253,7 @@ namespace McTools.Xrm.Connection
                 {
                     currentConnection.OrganizationVersion = vResponse.Version;
                     currentConnection.SavePassword = detail.SavePassword;
-                    currentConnection.UserPassword = detail.UserPassword;
+                    detail.CopyPasswordTo(currentConnection);
                 }
 
                 SaveConnectionsFile(ConnectionsList);
@@ -241,15 +272,12 @@ namespace McTools.Xrm.Connection
         /// <returns>List of Crm connections</returns>
         public CrmConnections LoadConnectionsList()
         {
-            CrmConnections crmConnections;
             try
             {
+                CrmConnections crmConnections;
                 if (File.Exists(ConfigFileName))
                 {
-                    using (var configReader = new StreamReader(ConfigFileName))
-                    {
-                        crmConnections = (CrmConnections)XmlSerializerHelper.Deserialize(configReader.ReadToEnd(), typeof(CrmConnections));
-                    }
+                    crmConnections = CrmConnections.LoadFromFile(ConfigFileName);
 
                     if (!string.IsNullOrEmpty(crmConnections.Password))
                     {
@@ -264,17 +292,6 @@ namespace McTools.Xrm.Connection
 
                     foreach (var detail in crmConnections.Connections)
                     {
-                        if (!string.IsNullOrEmpty(detail.UserPassword))
-                        {
-                            detail.UserPassword = CryptoManager.Decrypt(detail.UserPassword,
-                                                                        CryptoPassPhrase,
-                                                                        CryptoSaltValue,
-                                                                        CryptoHashAlgorythm,
-                                                                        CryptoPasswordIterations,
-                                                                        CryptoInitVector,
-                                                                        CryptoKeySize);
-                        }
-
                         // Fix for new connection code
                         if (string.IsNullOrEmpty(detail.OrganizationUrlName))
                         {
@@ -328,59 +345,7 @@ namespace McTools.Xrm.Connection
                     CryptoKeySize);
             }
 
-            var cache = new Dictionary<Guid, string>();
-
-            foreach (var detail in connectionsList.Connections)
-            {
-                if (!detail.ConnectionId.HasValue)
-                    continue;
-
-                cache.Add(detail.ConnectionId.Value, detail.UserPassword);
-
-                if (detail.SavePassword)
-                {
-                    if (!string.IsNullOrEmpty(detail.UserPassword))
-                    {
-
-                        detail.UserPassword = CryptoManager.Encrypt(detail.UserPassword,
-                                                                    CryptoPassPhrase,
-                                                                    CryptoSaltValue,
-                                                                    CryptoHashAlgorythm,
-                                                                    CryptoPasswordIterations,
-                                                                    CryptoInitVector,
-                                                                    CryptoKeySize);
-                    }
-                }
-                else
-                {
-                    detail.UserPassword = null;
-                }
-            }
-
-            XmlSerializerHelper.SerializeToFile(connectionsList, ConfigFileName);
-
-            foreach (var detail in connectionsList.Connections)
-            {
-                if (!detail.ConnectionId.HasValue)
-                    continue;
-
-                if (detail.UserPassword == null)
-                {
-                    detail.UserPassword = cache[detail.ConnectionId.Value];
-                    continue;
-                }
-
-                if (!string.IsNullOrEmpty(detail.UserPassword))
-                {
-                    detail.UserPassword = CryptoManager.Decrypt(detail.UserPassword,
-                                                                CryptoPassPhrase,
-                                                                CryptoSaltValue,
-                                                                CryptoHashAlgorythm,
-                                                                CryptoPasswordIterations,
-                                                                CryptoInitVector,
-                                                                CryptoKeySize);
-                }
-            }
+            connectionsList.SerializeToFile(ConfigFileName);
         }
 
         /// <summary>

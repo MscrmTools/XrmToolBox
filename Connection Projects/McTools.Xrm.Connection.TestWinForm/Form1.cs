@@ -37,7 +37,7 @@ namespace McTools.Xrm.Connection.TestWinForm
             InitializeComponent();
 
             // Create the connection manager with its events
-            this.cManager = new ConnectionManager();
+            this.cManager = ConnectionManager.Instance;
             this.cManager.ConnectionSucceed += new ConnectionManager.ConnectionSucceedEventHandler(cManager_ConnectionSucceed);
             this.cManager.ConnectionFailed += new ConnectionManager.ConnectionFailedEventHandler(cManager_ConnectionFailed);
             this.cManager.StepChanged += new ConnectionManager.StepChangedEventHandler(cManager_StepChanged);
@@ -143,5 +143,10 @@ namespace McTools.Xrm.Connection.TestWinForm
         }
 
         #endregion WhoAmI Sample methods
+
+        private void tsbManageConnections_Click(object sender, EventArgs e)
+        {
+            formHelper.DisplayConnectionsList(this);
+        }
     }
 }

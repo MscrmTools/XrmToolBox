@@ -1,18 +1,26 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 using System.ServiceModel.Description;
+using System.Xml.Linq;
 using System.Xml.Serialization;
+using Microsoft.Xrm.Client;
+using Microsoft.Xrm.Client.Services;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Sdk.Discovery;
 
 namespace McTools.Xrm.Connection
 {
     /// <summary>
     /// Stores data regarding a specific connection to Crm server
     /// </summary>
-    public class ConnectionDetail : IComparable
+    public class ConnectionDetail : IComparable, ICloneable
     {
-        #region Propriétés
+        private string userPassword;
 
+
+        #region Propriétés
         public AuthenticationProviderType AuthType { get; set; }
 
         /// <summary>
@@ -48,7 +56,6 @@ namespace McTools.Xrm.Connection
         /// <summary>
         /// Get or set the Crm Ticket
         /// </summary>
-        [System.Xml.Serialization.XmlIgnore]
         public string CrmTicket { get; set; }
 
         /// <summary>
@@ -61,11 +68,8 @@ namespace McTools.Xrm.Connection
         /// </summary>
         public string UserName { get; set; }
 
-        /// <summary>
-        /// Get or set the user password
-        /// </summary>
-        //[System.Xml.Serialization.XmlIgnore]
-        public string UserPassword { get; set; }
+     
+        public bool PasswordIsEmpty { get { return string.IsNullOrEmpty(userPassword); } }
 
         public bool SavePassword { get; set; }
 
@@ -112,10 +116,8 @@ namespace McTools.Xrm.Connection
 
         public string OrganizationVersion { get; set; }
 
-        [XmlIgnore]
         public TimeSpan Timeout { get; set; }
 
-        [XmlElement("Timeout")]
         public long TimeoutTicks
         {
             get { return Timeout.Ticks; }
@@ -153,7 +155,7 @@ namespace McTools.Xrm.Connection
             return ConnectionName;
         }
 
-        public string GetDiscoveryCrmConnectionString()
+        private string GetDiscoveryCrmConnectionString()
         {
             var connectionString = string.Format("Url={0}://{1}:{2};",
                 UseSsl ? "https" : "http",
@@ -179,7 +181,14 @@ namespace McTools.Xrm.Connection
                     }
                 }
 
-                connectionString += string.Format("Username={0};Password={1};", username, UserPassword);
+                var decryptedPassword = CryptoManager.Decrypt(userPassword, ConnectionManager.CryptoPassPhrase,
+                    ConnectionManager.CryptoSaltValue,
+                    ConnectionManager.CryptoHashAlgorythm,
+                    ConnectionManager.CryptoPasswordIterations,
+                    ConnectionManager.CryptoInitVector,
+                    ConnectionManager.CryptoKeySize);
+
+                connectionString += string.Format("Username={0};Password={1};", username, decryptedPassword);
             }
 
             if (UseOnline && !UseOsdp)
@@ -210,37 +219,8 @@ namespace McTools.Xrm.Connection
             return connectionString;
         }
 
-        public string GetOrganizationCrmConnectionString()
+        private string GetOrganizationCrmConnectionString()
         {
-            var currentServerName = string.Empty;
-
-            if (UseOsdp || UseOnline)
-            {
-                currentServerName = string.Format("{0}.{1}", OrganizationUrlName, ServerName);
-            }
-            else if (UseIfd)
-            {
-                var serverNameParts = ServerName.Split('.');
-
-                serverNameParts[0] = OrganizationUrlName;
-
-
-                currentServerName = string.Format("{0}:{1}",
-                                                  string.Join(".", serverNameParts),
-                                                  ServerPort == 0 ? (UseSsl ? 443 : 80) : ServerPort);
-            }
-            else
-            {
-                currentServerName = string.Format("{0}:{1}/{2}",
-                                                  ServerName,
-                                                  ServerPort == 0 ? (UseSsl ? 443 : 80) : ServerPort,
-                                                  Organization);
-            }
-
-            //var connectionString = string.Format("Url={0}://{1};",
-            //                                     UseSsl ? "https" : "http",
-            //                                     currentServerName);
-
             var connectionString = string.Format("Url={0};", OrganizationServiceUrl.Replace("/XRMServices/2011/Organization.svc", ""));
 
             if (IsCustomAuth)
@@ -262,7 +242,14 @@ namespace McTools.Xrm.Connection
                     }
                 }
 
-                connectionString += string.Format("Username={0};Password={1};", username, UserPassword);
+                var decryptedPassword = CryptoManager.Decrypt(userPassword, ConnectionManager.CryptoPassPhrase,
+                   ConnectionManager.CryptoSaltValue,
+                   ConnectionManager.CryptoHashAlgorythm,
+                   ConnectionManager.CryptoPasswordIterations,
+                   ConnectionManager.CryptoInitVector,
+                   ConnectionManager.CryptoKeySize);
+
+                connectionString += string.Format("Username={0};Password={1};", username, decryptedPassword);
             }
 
             if (UseOnline)
@@ -295,6 +282,51 @@ namespace McTools.Xrm.Connection
             return connectionString;
         }
 
+        public void UpdateAfterEdit(ConnectionDetail editedConnection)
+        {
+            ConnectionName = editedConnection.ConnectionName;
+            OrganizationServiceUrl = editedConnection.OrganizationServiceUrl;
+            CrmTicket = editedConnection.CrmTicket;
+            IsCustomAuth = editedConnection.IsCustomAuth;
+            Organization = editedConnection.Organization;
+            OrganizationFriendlyName = editedConnection.OrganizationFriendlyName;
+            ServerName = editedConnection.ServerName;
+            ServerPort = editedConnection.ServerPort;
+            UseIfd = editedConnection.UseIfd;
+            UseOnline = editedConnection.UseOnline;
+            UseOsdp = editedConnection.UseOsdp;
+            UserDomain = editedConnection.UserDomain;
+            UserName = editedConnection.UserName;
+            userPassword = editedConnection.userPassword;
+            UseSsl = editedConnection.UseSsl;
+            HomeRealmUrl = editedConnection.HomeRealmUrl;
+        }
+
+        public IOrganizationService GetOrganizationService()
+        {
+            return new OrganizationService(CrmConnection.Parse(GetOrganizationCrmConnectionString()));
+        }
+
+        public IDiscoveryService GetDiscoveryService()
+        {
+            return new DiscoveryService(CrmConnection.Parse(GetDiscoveryCrmConnectionString()));
+        }
+
+        public void ErasePassword()
+        {
+            userPassword = null;
+        }
+
+        public void SetPassword(string password)
+        {
+            if(!string.IsNullOrEmpty(password))
+            userPassword = CryptoManager.Encrypt(password, ConnectionManager.CryptoPassPhrase,
+                   ConnectionManager.CryptoSaltValue,
+                   ConnectionManager.CryptoHashAlgorythm,
+                   ConnectionManager.CryptoPasswordIterations,
+                   ConnectionManager.CryptoInitVector,
+                   ConnectionManager.CryptoKeySize);
+        }
 
         #endregion
 
@@ -302,9 +334,93 @@ namespace McTools.Xrm.Connection
 
         public int CompareTo(object obj)
         {
-            return String.CompareOrdinal(ConnectionName, ((ConnectionDetail)obj).ConnectionName);
+            var detail = (ConnectionDetail) obj;
+
+            if (detail.AuthType != AuthType
+                || detail.CrmTicket != CrmTicket
+                || detail.HomeRealmUrl != HomeRealmUrl
+                || detail.IsCustomAuth != IsCustomAuth
+                || detail.Organization != Organization
+                || detail.OrganizationFriendlyName != OrganizationFriendlyName
+                || detail.OrganizationServiceUrl != OrganizationServiceUrl
+                || detail.OrganizationUrlName != OrganizationUrlName
+                || detail.ServerName != ServerName
+                || detail.ServerPort != ServerPort
+                || detail.UseIfd != UseIfd
+                || detail.UseOnline != UseOnline
+                || detail.UseOsdp != UseOsdp
+                || detail.UseSsl != UseSsl
+                || detail.UserDomain != UserDomain
+                || detail.UserName != UserName
+                || detail.userPassword != null && detail.userPassword != userPassword)
+            {
+                return 1;
+            }
+
+            return 0;
         }
 
         #endregion
+
+        public object Clone()
+        {
+            return new ConnectionDetail
+            {
+                AuthType = AuthType,
+                ConnectionId = ConnectionId,
+                ConnectionName = ConnectionName,
+                CrmTicket = CrmTicket,
+                HomeRealmUrl = HomeRealmUrl,
+                IsCustomAuth = IsCustomAuth,
+                Organization = Organization,
+                OrganizationFriendlyName = OrganizationFriendlyName,
+                OrganizationServiceUrl = OrganizationServiceUrl,
+                OrganizationUrlName = OrganizationUrlName,
+                OrganizationVersion = OrganizationVersion,
+                SavePassword = SavePassword,
+                ServerName = ServerName,
+                ServerPort = ServerPort,
+                TimeoutTicks = TimeoutTicks,
+                UseIfd = UseIfd,
+                UseOnline = UseOnline,
+                UseOsdp = UseOsdp,
+                UseSsl = UseSsl,
+                UserDomain = UserDomain,
+                UserName = UserName,
+                userPassword = userPassword,
+                WebApplicationUrl = WebApplicationUrl
+            };
+        }
+
+        internal XElement GetXElement()
+        {
+            return new XElement("ConnectionDetail",
+                    new XElement("AuthType", AuthType),
+                    new XElement("ConnectionId", ConnectionId),
+                    new XElement("ConnectionName", ConnectionName),
+                    new XElement("IsCustomAuth", IsCustomAuth),
+                    new XElement("UseIfd", UseIfd),
+                    new XElement("UseOnline", UseOnline),
+                    new XElement("UseOsdp", UseOsdp),
+                    new XElement("UserDomain", UserDomain),
+                    new XElement("UserName", UserName),
+                    new XElement("UserPassword", SavePassword ? userPassword : string.Empty),
+                    new XElement("SavePassword", SavePassword),
+                    new XElement("UseSsl", UseSsl),
+                    new XElement("ServerName", ServerName),
+                    new XElement("ServerPort", ServerPort),
+                    new XElement("Organization", Organization),
+                    new XElement("OrganizationUrlName", OrganizationUrlName),
+                    new XElement("OrganizationFriendlyName", OrganizationFriendlyName),
+                    new XElement("OrganizationServiceUrl", OrganizationServiceUrl),
+                    new XElement("OrganizationVersion", OrganizationVersion),
+                    new XElement("Timeout", TimeoutTicks),
+                    new XElement("WebApplicationUrl", WebApplicationUrl));
+        }
+
+        public void CopyPasswordTo(ConnectionDetail detail)
+        {
+            detail.userPassword = userPassword;
+        }
     }
 }

@@ -48,6 +48,7 @@ namespace McTools.Xrm.Connection.WinForms
         public ConnectionSelector(CrmConnections connections, ConnectionManager cManager, bool allowMultipleSelection = false, bool isConnectionSelection = true)
         {
             InitializeComponent();
+            ConnectionList = connections;
             this.isConnectionSelection = isConnectionSelection;
             if (isConnectionSelection)
             {
@@ -186,6 +187,8 @@ namespace McTools.Xrm.Connection.WinForms
                 lvConnections.Items.Add(item);
                 lvConnections.SelectedItems.Clear();
                 item.Selected = true;
+
+                lvConnections.Sort();
 
                 if (isConnectionSelection)
                 {
