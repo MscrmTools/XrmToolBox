@@ -152,6 +152,7 @@
             this.lvFlsRoles.TabIndex = 2;
             this.lvFlsRoles.UseCompatibleStateImageBehavior = false;
             this.lvFlsRoles.View = System.Windows.Forms.View.Details;
+            this.lvFlsRoles.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.ListView_ColumnClick);
             this.lvFlsRoles.SelectedIndexChanged += new System.EventHandler(this.lvFlsRoles_SelectedIndexChanged);
             // 
             // columnHeader1
@@ -199,6 +200,7 @@
             this.LvSecuredAttributes.TabIndex = 3;
             this.LvSecuredAttributes.UseCompatibleStateImageBehavior = false;
             this.LvSecuredAttributes.View = System.Windows.Forms.View.Details;
+            this.LvSecuredAttributes.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.ListView_ColumnClick);
             // 
             // columnHeader2
             // 

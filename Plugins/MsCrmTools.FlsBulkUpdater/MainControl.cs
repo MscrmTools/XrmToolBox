@@ -240,5 +240,14 @@ namespace MsCrmTools.FlsBulkUpdater
                 }
             }
         }
+
+        private void ListView_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            var lv = (ListView)sender;
+
+            lv.Sorting = lv.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+
+            lv.ListViewItemSorter = new ListViewItemComparer(e.Column, lv.Sorting);
+        }
     }
 }
