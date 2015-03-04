@@ -730,6 +730,7 @@ namespace XrmToolBox
                 {
                     tabControl1.SelectedIndex = 0;
                     DisplayPlugins();
+                    AdaptPluginControlSize();
                 }
             }
         }
