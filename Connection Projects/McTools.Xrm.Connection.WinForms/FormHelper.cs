@@ -146,10 +146,10 @@ namespace McTools.Xrm.Connection.WinForms
                     ConnectionManager.Instance.ConnectToServer(cForm.CrmConnectionDetail);
                 }
 
-                if (!cForm.CrmConnectionDetail.PasswordIsEmpty && !cForm.CrmConnectionDetail.SavePassword)
-                {
-                    cForm.CrmConnectionDetail.ErasePassword();
-                }
+                //if (!cForm.CrmConnectionDetail.PasswordIsEmpty && !cForm.CrmConnectionDetail.SavePassword)
+                //{
+                //    cForm.CrmConnectionDetail.ErasePassword();
+                //}
 
                 if (isCreation)
                 {

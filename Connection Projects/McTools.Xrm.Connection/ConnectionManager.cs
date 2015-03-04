@@ -241,10 +241,10 @@ namespace McTools.Xrm.Connection
 
                 TestConnection(service);
 
-                if (!detail.SavePassword)
-                {
-                    detail.ErasePassword();
-                }
+                //if (!detail.SavePassword)
+                //{
+                //    detail.ErasePassword();
+                //}
 
                 var vRequest = new RetrieveVersionRequest();
                 var vResponse = (RetrieveVersionResponse) service.Execute(vRequest);
