@@ -234,7 +234,7 @@ namespace McTools.Xrm.Connection.WinForms
         {
             if (lvConnections.SelectedItems.Count > 0)
             {
-                lvConnections.Items.Remove(lvConnections.SelectedItems[0]);
+                lvConnections.Items.Remove(lvConnections.SelectedItems[0]); 
 
                 var detailToRemove = (ConnectionDetail)lvConnections.SelectedItems[0].Tag;
                 ConnectionManager.Instance.ConnectionsList.Connections.Remove(detailToRemove);
