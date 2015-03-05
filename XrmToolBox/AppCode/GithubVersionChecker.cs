@@ -32,48 +32,58 @@ namespace XrmToolBox.AppCode
 
         static async Task RunAsync()
         {
-            using (var client = new HttpClient())
+            try
             {
-                client.BaseAddress = new Uri("https://api.github.com/");
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                client.DefaultRequestHeaders.Add("User-Agent", "MscrmTools");
-
-                HttpResponseMessage response = await client.GetAsync("repos/MsCrmTools/XrmToolBox/releases").ConfigureAwait(continueOnCapturedContext: false);
-                response.EnsureSuccessStatusCode();
-                if (response.IsSuccessStatusCode)
+                using (var client = new HttpClient())
                 {
-                    var data = response.Content.ReadAsStringAsync();
-                    var jSserializer = new JavaScriptSerializer();
-                    var releases = jSserializer.Deserialize<List<RootObject>>(data.Result);
+                    client.BaseAddress = new Uri("https://api.github.com/");
+                    client.DefaultRequestHeaders.Accept.Clear();
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Add("User-Agent", "MscrmTools");
 
-                    var lastRelease = releases.OrderByDescending(r => r.created_at).FirstOrDefault();
-                    if (lastRelease != null)
+                    HttpResponseMessage response =
+                        await
+                            client.GetAsync("repos/MsCrmTools/XrmToolBox/releases")
+                                .ConfigureAwait(continueOnCapturedContext: false);
+                    response.EnsureSuccessStatusCode();
+                    if (response.IsSuccessStatusCode)
                     {
-                        var version = lastRelease.tag_name.Replace("v.", "");
-                        var versionParts = version.Split('.');
-                        int majorVersion = int.Parse(versionParts[0]);
-                        int minorVersion = int.Parse(versionParts[1]);
-                        int buildVersion = int.Parse(versionParts[2]);
-                        int revisionVersion = int.Parse(versionParts[3]);
+                        var data = response.Content.ReadAsStringAsync();
+                        var jSserializer = new JavaScriptSerializer();
+                        var releases = jSserializer.Deserialize<List<RootObject>>(data.Result);
 
-                        if (currentMajorVersion < majorVersion
-                            || currentMajorVersion == majorVersion && currentMinorVersion < minorVersion
-                            ||
-                            currentMajorVersion == majorVersion && currentMinorVersion == minorVersion &&
-                            currentBuildVersion < buildVersion
-                            ||
-                            currentMajorVersion == majorVersion && currentMinorVersion == minorVersion &&
-                            currentBuildVersion == buildVersion && currentRevisionVersion < revisionVersion)
+                        var lastRelease = releases.OrderByDescending(r => r.created_at).FirstOrDefault();
+                        if (lastRelease != null)
                         {
-                            Cpi = new GithubInformation
+                            var version = lastRelease.tag_name.Replace("v.", "");
+                            var versionParts = version.Split('.');
+                            int majorVersion = int.Parse(versionParts[0]);
+                            int minorVersion = int.Parse(versionParts[1]);
+                            int buildVersion = int.Parse(versionParts[2]);
+                            int revisionVersion = int.Parse(versionParts[3]);
+
+                            if (currentMajorVersion < majorVersion
+                                || currentMajorVersion == majorVersion && currentMinorVersion < minorVersion
+                                ||
+                                currentMajorVersion == majorVersion && currentMinorVersion == minorVersion &&
+                                currentBuildVersion < buildVersion
+                                ||
+                                currentMajorVersion == majorVersion && currentMinorVersion == minorVersion &&
+                                currentBuildVersion == buildVersion && currentRevisionVersion < revisionVersion)
                             {
-                                Description = lastRelease.body,
-                                Version = version
-                            };
+                                Cpi = new GithubInformation
+                                {
+                                    Description = lastRelease.body,
+                                    Version = version
+                                };
+                            }
                         }
                     }
                 }
+            }
+            catch
+            {
+                // Do nothing as we don't want to throw exception if something goes wrong with checking update
             }
         }
     }
