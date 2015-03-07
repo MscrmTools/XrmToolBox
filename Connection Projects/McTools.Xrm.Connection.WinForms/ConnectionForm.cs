@@ -178,7 +178,7 @@ namespace McTools.Xrm.Connection.WinForms
             detail.UseIfd = cbUseIfd.Checked;
             detail.HomeRealmUrl = (tbHomeRealmUrl.Text.Length > 0 ? tbHomeRealmUrl.Text : null);
 
-            if (tbUserPassword.Text != "@@PASSWORD@@")
+            if (tbUserPassword.Text != "@@PASSWORD@@" && tbUserPassword.Text != "Please specify the password")
             {
                 detail.SetPassword(tbUserPassword.Text);
             }
@@ -188,6 +188,14 @@ namespace McTools.Xrm.Connection.WinForms
             {
                 MessageBox.Show(this, "Wrong timeout value!\r\n\r\nExpected format : HH:mm:ss", "Warning",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (isCreationMode && comboBoxOrganizations.SelectedItem == null)
+            {
+                MessageBox.Show(this, "You must discover organizations and select one to create a connection", "Warning",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
                 return;
             }
 
@@ -205,7 +213,7 @@ namespace McTools.Xrm.Connection.WinForms
                 detail.OrganizationFriendlyName = selectedOrganization.FriendlyName;
                 detail.OrganizationVersion = selectedOrganization.OrganizationVersion;
             }
-            else if (initialDetail.IsConnectionBrokenWithUpdatedData(detail))
+            else if (initialDetail != null && initialDetail.IsConnectionBrokenWithUpdatedData(detail))
             {
                 MessageBox.Show(this,
                     "You changed critical parameters for this connection! Please retrieve organizations to ensure your changes are valid",
@@ -588,7 +596,7 @@ namespace McTools.Xrm.Connection.WinForms
             tbUserDomain.Text = detail.UserDomain;
             tbUserLogin.Text = detail.UserName;
 
-            if (detail.PasswordIsEmpty)
+            if (detail.PasswordIsEmpty || detail.SavePassword == false)
             {
                 tbUserPassword.PasswordChar = (char)0;
                 tbUserPassword.UseSystemPasswordChar = false;

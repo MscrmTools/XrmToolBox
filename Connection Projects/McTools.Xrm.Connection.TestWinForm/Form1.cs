@@ -43,10 +43,10 @@ namespace McTools.Xrm.Connection.TestWinForm
             this.cManager.StepChanged += new ConnectionManager.StepChangedEventHandler(cManager_StepChanged);
             this.cManager.RequestPassword += new ConnectionManager.RequestPasswordEventHandler(cManager_RequestPassword);
             this.cManager.UseProxy += new ConnectionManager.UseProxyEventHandler(cManager_UseProxy);
-            formHelper = new FormHelper(this, cManager);
+            formHelper = new FormHelper(this);
 
             // Instantiate and add the connection control to the form
-            ccsb = new CrmConnectionStatusBar(this.cManager, formHelper);
+            ccsb = new CrmConnectionStatusBar(formHelper);
             this.Controls.Add(ccsb);
 
             this.ccsb.SetMessage("A message to display...");

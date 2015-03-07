@@ -319,17 +319,22 @@ namespace McTools.Xrm.Connection
 
         public void SetPassword(string password, bool isEncrypted = false)
         {
-            if (isEncrypted)
+            if (!string.IsNullOrEmpty(password))
             {
-                userPassword = password;
+                if (isEncrypted)
+                {
+                    userPassword = password;
+                }
+                else
+                {
+                    userPassword = CryptoManager.Encrypt(password, ConnectionManager.CryptoPassPhrase,
+                        ConnectionManager.CryptoSaltValue,
+                        ConnectionManager.CryptoHashAlgorythm,
+                        ConnectionManager.CryptoPasswordIterations,
+                        ConnectionManager.CryptoInitVector,
+                        ConnectionManager.CryptoKeySize);
+                }
             }
-            else if(!string.IsNullOrEmpty(password))
-            userPassword = CryptoManager.Encrypt(password, ConnectionManager.CryptoPassPhrase,
-                   ConnectionManager.CryptoSaltValue,
-                   ConnectionManager.CryptoHashAlgorythm,
-                   ConnectionManager.CryptoPasswordIterations,
-                   ConnectionManager.CryptoInitVector,
-                   ConnectionManager.CryptoKeySize);
         }
 
         #endregion
@@ -352,7 +357,8 @@ namespace McTools.Xrm.Connection
                || updatedDetail.UseSsl != UseSsl
                || updatedDetail.UserDomain != UserDomain
                || updatedDetail.UserName != UserName
-               || updatedDetail.userPassword != null && updatedDetail.userPassword != userPassword)
+               || (SavePassword && updatedDetail.userPassword != userPassword)
+               || (!SavePassword && !string.IsNullOrEmpty(updatedDetail.userPassword) && updatedDetail.userPassword != userPassword))
             {
                 return true;
             }
