@@ -81,7 +81,7 @@ namespace McTools.Xrm.Connection.WinForms
             cbbOnlineEnv.SelectedIndex = 0;
 
             var tip = new ToolTip { ToolTipTitle = "Information" };
-            tip.SetToolTip(tbServerName, "For CRM Online or Office 365, use:\r\ncrm.dynamics.com for North America\r\ncrm2.dynamics.com for LATAM\r\ncrm4.dynamics.com for EMEA\r\ncrm5.dynamics.com for Asia Pacific\r\ncrm9.dynamics.com for CRM Online for Government Instances\r\n\r\nFor OnPremise:\r\nUse the server name\r\n\r\nFor IFD:\r\nUse <discovery_name>.<domain>.<extension>");
+            tip.SetToolTip(tbServerName, "For CRM Online or Office 365, use:\r\ncrm.dynamics.com for North America\r\ncrm2.dynamics.com for LATAM\r\ncrm4.dynamics.com for EMEA\r\ncrm5.dynamics.com for Asia Pacific\r\ncrm7.dynamics.com for Japan\r\ncrm9.dynamics.com for CRM Online for Government Instances\r\n\r\nFor OnPremise:\r\nUse the server name\r\n\r\nFor IFD:\r\nUse <discovery_name>.<domain>.<extension>");
             tip.SetToolTip(tbServerPort, "Specify port only if different from 80 or 443 (SSL)");
             tip.SetToolTip(tbHomeRealmUrl, "(Optional) In specific case, you should need to specify the home realm url to authenticate through ADFS");
             // allows for validation of SSL conversations

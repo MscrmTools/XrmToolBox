@@ -275,6 +275,7 @@
             "crm2.dynamics.com",
             "crm4.dynamics.com",
             "crm5.dynamics.com",
+            "crm7.dynamics.com",
             "crm9.dynamics.com"});
             this.cbbOnlineEnv.Location = new System.Drawing.Point(124, 65);
             this.cbbOnlineEnv.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -390,6 +391,7 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.bCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.bCancel.Location = new System.Drawing.Point(478, 648);
             this.bCancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.bCancel.Name = "bCancel";
