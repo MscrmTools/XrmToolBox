@@ -83,10 +83,13 @@ namespace MsCrmTools.SiteMapEditor.AppCode
                 }
                 else
                 {
-                    var commentDoc = new XmlDocument();
-                    commentDoc.LoadXml(childNode.InnerText);
+                    foreach (XmlNode commentNode in childNode.ChildNodes)
+                    {
+                        var commentDoc = new XmlDocument();
+                        commentDoc.LoadXml(commentNode.OuterXml);
 
-                    AddTreeViewNode(node, commentDoc.DocumentElement, form, true);
+                        AddTreeViewNode(node, commentDoc.DocumentElement, form, true);
+                    }
                 }
             }
         }
