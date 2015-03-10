@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using MarkdownSharp;
 
 namespace XrmToolBox.AppCode
 {
@@ -71,9 +72,12 @@ namespace XrmToolBox.AppCode
                                 currentMajorVersion == majorVersion && currentMinorVersion == minorVersion &&
                                 currentBuildVersion == buildVersion && currentRevisionVersion < revisionVersion)
                             {
+                                var mdth = new Markdown();
+                                var html = mdth.Transform(lastRelease.body).Replace("h1", "div");
+
                                 Cpi = new GithubInformation
                                 {
-                                    Description = lastRelease.body,
+                                    Description = html,
                                     Version = version
                                 };
                             }

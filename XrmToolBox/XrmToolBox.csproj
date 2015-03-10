@@ -123,6 +123,7 @@
     <Compile Include="AbstractControlDescriptionProvider.cs" />
     <Compile Include="AppCode\GithubInformation.cs" />
     <Compile Include="AppCode\Github.cs" />
+    <Compile Include="AppCode\Markdown.cs" />
     <Compile Include="Attributes\AssemblyAttributeHelper.cs" />
     <Compile Include="Attributes\BackgroundColorAttribute.cs" />
     <Compile Include="Attributes\BigImageBase64Attribute.cs" />
@@ -301,7 +302,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
