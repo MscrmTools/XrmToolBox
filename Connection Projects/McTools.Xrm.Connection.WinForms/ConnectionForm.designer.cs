@@ -275,6 +275,7 @@
             "crm2.dynamics.com",
             "crm4.dynamics.com",
             "crm5.dynamics.com",
+            "crm6.dynamics.com",
             "crm7.dynamics.com",
             "crm9.dynamics.com"});
             this.cbbOnlineEnv.Location = new System.Drawing.Point(124, 65);
