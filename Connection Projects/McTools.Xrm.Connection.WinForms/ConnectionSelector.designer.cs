@@ -163,6 +163,7 @@
             this.Name = "ConnectionSelector";
             this.ShowIcon = false;
             this.Text = "Select connection";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ConnectionSelector_FormClosing);
             this.menu.ResumeLayout(false);
             this.menu.PerformLayout();
             this.ResumeLayout(false);

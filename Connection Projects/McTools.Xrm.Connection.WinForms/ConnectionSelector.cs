@@ -15,6 +15,8 @@ namespace McTools.Xrm.Connection.WinForms
     {
         #region Variables
 
+        private bool requiresSavingConnectionsFile;
+
         /// <summary>
         /// Connexion sélectionnée
         /// </summary>
@@ -192,7 +194,7 @@ namespace McTools.Xrm.Connection.WinForms
                     ConnectionManager.Instance.ConnectionsList.Connections.Add(newConnection);
                 }
 
-                ConnectionManager.Instance.SaveConnectionsFile();
+                requiresSavingConnectionsFile = true;
             }
         }
 
@@ -225,7 +227,7 @@ namespace McTools.Xrm.Connection.WinForms
 
                     lvConnections.Refresh();
 
-                    ConnectionManager.Instance.SaveConnectionsFile();
+                    requiresSavingConnectionsFile = true;
                 }
             }
         }
@@ -234,11 +236,20 @@ namespace McTools.Xrm.Connection.WinForms
         {
             if (lvConnections.SelectedItems.Count > 0)
             {
-                lvConnections.Items.Remove(lvConnections.SelectedItems[0]); 
+                var selectedItem = lvConnections.SelectedItems[0];
+                var detailToRemove = (ConnectionDetail)selectedItem.Tag;
+                
+                lvConnections.Items.Remove(lvConnections.SelectedItems[0]);
+               
+                var realItemToDelete =
+                    ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(
+                        c => c.ConnectionId == detailToRemove.ConnectionId);
 
-                var detailToRemove = (ConnectionDetail)lvConnections.SelectedItems[0].Tag;
-                ConnectionManager.Instance.ConnectionsList.Connections.Remove(detailToRemove);
-                ConnectionManager.Instance.SaveConnectionsFile();
+                if (realItemToDelete != null)
+                {
+                    ConnectionManager.Instance.ConnectionsList.Connections.Remove(detailToRemove);
+                    requiresSavingConnectionsFile = true; 
+                }
             }
         }
 
@@ -290,6 +301,11 @@ namespace McTools.Xrm.Connection.WinForms
             }
 
             return 0;
+        }
+
+        private void ConnectionSelector_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ConnectionManager.Instance.SaveConnectionsFile();
         }
     }
 }
