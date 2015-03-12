@@ -99,6 +99,7 @@
             // 
             this.entityListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.entityListView.FullRowSelect = true;
+            this.entityListView.GridLines = true;
             this.entityListView.HideSelection = false;
             this.entityListView.Location = new System.Drawing.Point(3, 3);
             this.entityListView.Name = "entityListView";
