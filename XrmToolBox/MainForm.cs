@@ -318,7 +318,7 @@ namespace XrmToolBox
                     {
                         this.HomePageTab.Controls.Add(pm);
                     }));
-                top += 104;
+                top += pm.Height+4;
             }
             else
             {
@@ -335,7 +335,7 @@ namespace XrmToolBox
                     {
                         this.HomePageTab.Controls.Add(pm);
                     }));
-                top += 54;
+                top += pm.Height+4;
             }
         }
 
