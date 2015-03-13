@@ -187,40 +187,7 @@
       <Name>McTools.Xrm.Connection</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="bin\Release\McTools.Xrm.Connection.zip" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\Debug\antixsslibrary.dll" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.dll" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.pdb" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.WinForms.dll" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.WinForms.pdb" />
-    <Content Include="bin\Debug\microsoft.crm.outlook.sdk.dll" />
-    <Content Include="bin\Debug\microsoft.crm.sdk.proxy.dll" />
-    <Content Include="bin\Debug\microsoft.crm.tools.emailproviders.dll" />
-    <Content Include="bin\Debug\Microsoft.IdentityModel.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.client.codegeneration.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.client.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.portal.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.portal.files.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.sdk.deployment.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.sdk.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.sdk.workflow.dll" />
-    <Content Include="bin\Debug\pluginprofiler.library.dll" />
-    <Content Include="bin\Debug\pluginprofiler.plugins.dll" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.dll" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.pdb" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.WinForms.dll" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.WinForms.pdb" />
-    <Content Include="bin\Release\microsoft.crm.sdk.proxy.dll" />
-    <Content Include="bin\Release\microsoft.xrm.client.dll" />
-    <Content Include="bin\Release\microsoft.xrm.sdk.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\tools\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
