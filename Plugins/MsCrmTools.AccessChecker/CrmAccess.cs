@@ -62,7 +62,7 @@ namespace MsCrmTools.AccessChecker
             feStatus.AddCondition(ceStatus);
 
             var qe = new QueryExpression("systemuser");
-            qe.ColumnSet = new ColumnSet("systemuserid", "fullname", "lastname", "firstname");
+            qe.ColumnSet = new ColumnSet("systemuserid", "fullname", "lastname", "firstname", "domainname");
             qe.AddOrder("lastname", OrderType.Ascending);
             qe.Criteria = new FilterExpression();
             qe.Criteria.Filters.Add(new FilterExpression());

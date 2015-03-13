@@ -343,6 +343,7 @@ namespace MsCrmTools.AccessChecker
             if (lp.ShowDialog() == DialogResult.OK)
             {
                 txtObjectId.Text = lp.SelectedRecordId.ToString("B");
+                textBox_PrimaryAttribute.Text = lp.SelectedRecordText;
             }
         }
 

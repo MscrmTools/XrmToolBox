@@ -25,6 +25,7 @@ namespace MsCrmTools.AccessChecker.Forms
         }
 
         public Guid SelectedRecordId { get; private set; }
+        public string SelectedRecordText { get; private set; }
 
         private void LookupSingleLoad(object sender, EventArgs e)
         {
@@ -207,6 +208,7 @@ namespace MsCrmTools.AccessChecker.Forms
         private void BtnOkClick(object sender, EventArgs e)
         {
             SelectedRecordId = new Guid(lvResults.SelectedItems[0].Tag.ToString());
+            SelectedRecordText = lvResults.SelectedItems[0].Text;
             DialogResult = DialogResult.OK;
             Close();
         }
@@ -214,6 +216,7 @@ namespace MsCrmTools.AccessChecker.Forms
         private void BtnCancelClick(object sender, EventArgs e)
         {
             SelectedRecordId = Guid.Empty;
+            SelectedRecordText = string.Empty;
             DialogResult = DialogResult.Cancel;
             Close();
         }

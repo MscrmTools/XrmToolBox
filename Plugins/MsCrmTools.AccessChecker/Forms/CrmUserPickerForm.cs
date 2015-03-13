@@ -68,8 +68,8 @@ namespace MsCrmTools.AccessChecker.Forms
 
             foreach (var user in users)
             {
-                var item = new ListViewItem(user.GetAttributeValue<string>("lastname")) { Tag = user.Id};
-                item.SubItems.Add(user.GetAttributeValue<string>("firstname"));
+                var item = new ListViewItem(user.GetAttributeValue<string>("fullname")) { Tag = user.Id};
+                item.SubItems.Add(user.GetAttributeValue<string>("domainname"));
                 item.ImageIndex = 0;
                 lvUsers.Items.Add(item);
             }

@@ -107,12 +107,12 @@
             // 
             // columnHeader1
             // 
-            this.columnHeader1.Text = "Last name";
+            this.columnHeader1.Text = "FullName";
             this.columnHeader1.Width = 150;
             // 
             // columnHeader2
             // 
-            this.columnHeader2.Text = "First name";
+            this.columnHeader2.Text = "Domain Name";
             this.columnHeader2.Width = 150;
             // 
             // imageList1
