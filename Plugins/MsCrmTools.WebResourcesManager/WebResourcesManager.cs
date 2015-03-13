@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.ServiceModel.Security.Tokens;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using McTools.Xrm.Connection;
@@ -560,7 +561,7 @@ namespace MsCrmTools.WebResourcesManager
                 var nodes = new List<TreeNode>();
                 TreeViewHelper.GetNodes(nodes, tvWebResources, true);
 
-                SaveWebResourcesToDisk(nodes);
+                SaveWebResourcesToDisk(nodes, true);
             }
             catch (Exception error)
             {
@@ -574,7 +575,7 @@ namespace MsCrmTools.WebResourcesManager
             try
             {
                 var nodes = new List<TreeNode>();
-                TreeViewHelper.GetNodes(nodes, tvWebResources, false);
+                TreeViewHelper.GetNodes(nodes, tvWebResources, true);
 
                 SaveWebResourcesToDisk(nodes);
             }
@@ -585,12 +586,16 @@ namespace MsCrmTools.WebResourcesManager
             }
         }
 
-        private void SaveWebResourcesToDisk(IEnumerable<TreeNode> nodes)
+        private void SaveWebResourcesToDisk(IEnumerable<TreeNode> nodes, bool withRoot = false)
         {
             var fbd = new FolderBrowserDialog();
+            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.LastFolderUsed))
+                fbd.SelectedPath = Properties.Settings.Default.LastFolderUsed;
 
             if (fbd.ShowDialog() == DialogResult.OK)
             {
+                Properties.Settings.Default.LastFolderUsed = fbd.SelectedPath;
+                Properties.Settings.Default.Save();
                 foreach (var node in nodes)
                 {
                     if (node.Tag != null && ((WebResource)node.Tag).WebResourceEntity != null)
@@ -602,15 +607,17 @@ namespace MsCrmTools.WebResourcesManager
                             string[] partPath = webResource["name"].ToString().Split('/');
                             string path = fbd.SelectedPath;
 
-                            for (int i = 0; i < partPath.Length - 1; i++)
-                            {
-                                path = Path.Combine(path, partPath[i]);
+                            if (withRoot) {
+                                for (int i = 0; i < partPath.Length - 1; i++) {
+                                    path = Path.Combine(path, partPath[i]);
 
-                                if (!Directory.Exists(path))
-                                    Directory.CreateDirectory(path);
+                                    if (!Directory.Exists(path))
+                                        Directory.CreateDirectory(path);
+                                }
                             }
 
                             path = Path.Combine(path, partPath[partPath.Length - 1]);
+                        
                             byte[] bytes = Convert.FromBase64String(webResource["content"].ToString());
                             File.WriteAllBytes(path, bytes);
 
@@ -620,6 +627,8 @@ namespace MsCrmTools.WebResourcesManager
                 }
             }
         }
+
+
 
         #endregion DISK - Save web resources
 
@@ -813,6 +822,14 @@ namespace MsCrmTools.WebResourcesManager
                 selectedWr.WebResourceEntity.Id);
         }
 
+        private void TbsClearTreeClick(object sender, EventArgs e)
+        {
+            tvWebResources.Nodes.Clear();
+            panelControl.Controls.Clear();
+            tslResourceName.Text = "";
+            toolStripScriptContent.Visible = false;
+        }
+
         #endregion TREEVIEW - Manage content
 
         #region WEBRESOURCE CONTENT - Actions
@@ -830,7 +847,7 @@ namespace MsCrmTools.WebResourcesManager
             ((WebResource)tvWebResources.SelectedNode.Tag).WebResourceEntity["content"] = content;
 
             fileMenuSave.Enabled = false;
-            //TvWebResourcesAfterSelect(null, null);
+            fileMenuUpdateAndPublish.Enabled = true;
 
             if (tslResourceName.Text.Contains(" "))
             {
@@ -851,67 +868,10 @@ namespace MsCrmTools.WebResourcesManager
             {
                 var ctrl = ((IWebResourceControl)panelControl.Controls[0]);
 
-                using (var ofd = new OpenFileDialog())
-                {
+                using (var ofd = new OpenFileDialog()) {
                     #region OpenFileDialog properties
 
-                    switch (ctrl.GetWebResourceType())
-                    {
-                        case Enumerations.WebResourceType.Gif:
-                            {
-                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "image");
-                                ofd.Filter = "Gif file (*.gif)|*.gif";
-                            }
-                            break;
-                        case Enumerations.WebResourceType.Jpg:
-                            {
-                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "image");
-                                ofd.Filter = "JPG file (*.jpg)|*.jpg";
-                            }
-                            break;
-                        case Enumerations.WebResourceType.Png:
-                            {
-                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "image");
-                                ofd.Filter = "PNG file (*.png)|*.png";
-                            }
-                            break;
-                        case Enumerations.WebResourceType.Ico:
-                            {
-                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "icon");
-                                ofd.Filter = "ICO file (*.ico)|*.ico";
-                            }
-                            break;
-                        case Enumerations.WebResourceType.Script:
-                            {
-                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "script file");
-                                ofd.Filter = "Javascript file (*.js)|*.js";
-                            }
-                            break;
-                        case Enumerations.WebResourceType.WebPage:
-                            {
-                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "web page");
-                                ofd.Filter = "Web page (*.html,*.htm)|*.html;*.htm";
-                            }
-                            break;
-                        case Enumerations.WebResourceType.Css:
-                            {
-                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "css file");
-                                ofd.Filter = "Stylesheet (*.css)|*.css";
-                            }
-                            break;
-                        case Enumerations.WebResourceType.Xsl:
-                            {
-                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "xslt file");
-                                ofd.Filter = "Transformation file (*.xslt)|*.xslt";
-                            }
-                            break;
-                        case Enumerations.WebResourceType.Silverlight:
-                            {
-                                ofd.Title = string.Format(OPENFILE_TITLE_MASK, "Silverlight application");
-                                ofd.Filter = "Silverlight application file (*.xap)|*.xap";
-                            }
-                            break;
-                    }
+                    OpenFileDialogSettings(ctrl, ofd);
 
                     #endregion OpenFileDialog properties
 
@@ -924,6 +884,94 @@ namespace MsCrmTools.WebResourcesManager
             catch (AccessViolationException error)
             {
                 MessageBox.Show(error.ToString());
+            }
+        }
+
+        private void OpenFileDialogSettings(IWebResourceControl ctrl, OpenFileDialog ofd)
+        {
+            switch (ctrl.GetWebResourceType()) {
+                case Enumerations.WebResourceType.Gif: {
+                    ofd.Title = string.Format(OPENFILE_TITLE_MASK, "image");
+                    ofd.Filter = "Gif file (*.gif)|*.gif";
+                }
+                    break;
+                case Enumerations.WebResourceType.Jpg: {
+                    ofd.Title = string.Format(OPENFILE_TITLE_MASK, "image");
+                    ofd.Filter = "JPG file (*.jpg)|*.jpg";
+                }
+                    break;
+                case Enumerations.WebResourceType.Png: {
+                    ofd.Title = string.Format(OPENFILE_TITLE_MASK, "image");
+                    ofd.Filter = "PNG file (*.png)|*.png";
+                }
+                    break;
+                case Enumerations.WebResourceType.Ico: {
+                    ofd.Title = string.Format(OPENFILE_TITLE_MASK, "icon");
+                    ofd.Filter = "ICO file (*.ico)|*.ico";
+                }
+                    break;
+                case Enumerations.WebResourceType.Script: {
+                    ofd.Title = string.Format(OPENFILE_TITLE_MASK, "script file");
+                    ofd.Filter = "Javascript file (*.js)|*.js";
+                }
+                    break;
+                case Enumerations.WebResourceType.WebPage: {
+                    ofd.Title = string.Format(OPENFILE_TITLE_MASK, "web page");
+                    ofd.Filter = "Web page (*.html,*.htm)|*.html;*.htm";
+                }
+                    break;
+                case Enumerations.WebResourceType.Css: {
+                    ofd.Title = string.Format(OPENFILE_TITLE_MASK, "css file");
+                    ofd.Filter = "Stylesheet (*.css)|*.css";
+                }
+                    break;
+                case Enumerations.WebResourceType.Xsl: {
+                    ofd.Title = string.Format(OPENFILE_TITLE_MASK, "xslt file");
+                    ofd.Filter = "Transformation file (*.xslt)|*.xslt";
+                }
+                    break;
+                case Enumerations.WebResourceType.Silverlight: {
+                    ofd.Title = string.Format(OPENFILE_TITLE_MASK, "Silverlight application");
+                    ofd.Filter = "Silverlight application file (*.xap)|*.xap";
+                }
+                    break;
+            }
+        }
+
+        private void OpenCompareFileDialogSettings(IWebResourceControl ctrl, OpenFileDialog ofd)
+        {
+            switch (ctrl.GetWebResourceType())
+            {
+                case Enumerations.WebResourceType.Script:
+                    {
+                        ofd.Title = string.Format(OPENFILE_TITLE_MASK, "script file");
+                        ofd.Filter = "Javascript file (*.js)|*.js";
+                    }
+                    break;
+                case Enumerations.WebResourceType.WebPage:
+                    {
+                        ofd.Title = string.Format(OPENFILE_TITLE_MASK, "web page");
+                        ofd.Filter = "Web page (*.html,*.htm)|*.html;*.htm";
+                    }
+                    break;
+                case Enumerations.WebResourceType.Css:
+                    {
+                        ofd.Title = string.Format(OPENFILE_TITLE_MASK, "css file");
+                        ofd.Filter = "Stylesheet (*.css)|*.css";
+                    }
+                    break;
+                case Enumerations.WebResourceType.Xsl:
+                    {
+                        ofd.Title = string.Format(OPENFILE_TITLE_MASK, "xslt file");
+                        ofd.Filter = "Transformation file (*.xslt)|*.xslt";
+                    }
+                    break;
+                case Enumerations.WebResourceType.Data:
+                    {
+                        ofd.Title = string.Format(OPENFILE_TITLE_MASK, "xml file");
+                        ofd.Filter = "Xml file (*.xml)|*.xml";
+                    }
+                    break;
             }
         }
 
@@ -945,7 +993,6 @@ namespace MsCrmTools.WebResourcesManager
         {
             UpdateWebResources(true, new List<TreeNode> { node });
         }
-
 
         private void TsbMinifyJsClick(object sender, EventArgs e)
         {
@@ -997,6 +1044,76 @@ namespace MsCrmTools.WebResourcesManager
             ((CodeControl)control).Find(true, this);
         }
 
+        private void TsmCompareSettingsClick(object sender, EventArgs e)
+        {
+            OpenCompareSettings();
+        }
+
+        private void TsbCompareClick(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(Properties.Settings.Default.CompareToolPath)) {
+                OpenCompareSettings(false);
+                return;
+            }
+
+            try {
+                var ctrl = ((IWebResourceControl)panelControl.Controls[0]);
+                var content = ((IWebResourceControl)panelControl.Controls[0]).GetBase64WebResourceContent();
+
+                RemoveOldFiles();
+                var crmFileToComapre = SaveContentFileToDisk(tvWebResources.SelectedNode.Text, content);
+
+                using (var ofd = new OpenFileDialog()) {
+                    OpenCompareFileDialogSettings(ctrl, ofd);
+
+                    if (ofd.ShowDialog() == DialogResult.OK) {
+                        var diskfileToCompare = ofd.FileName;
+                        CompareFiles(crmFileToComapre, diskfileToCompare);
+                    }
+                }
+            } catch (Exception error) {
+                MessageBox.Show(string.Format("Error while performing the file compare.{0}Please go to the compare settings and validate that you configured the correct compare tool.{0}{0}Error: {1}",Environment.NewLine, error.Message),"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
+        }
+
+        private void OpenCompareSettings(bool isConfigured = true)
+        {
+            using (var compareDialog = new CompareSettingsDialog(isConfigured))
+            {
+                compareDialog.ShowDialog();
+            }
+        }
+
+        private void RemoveOldFiles()
+        {
+            var directory = new DirectoryInfo(string.Format(@"{0}\CompareTemp", Environment.CurrentDirectory));
+            if (!Directory.Exists(directory.FullName))
+                return;
+
+            Directory.Delete(directory.FullName, true);
+        }
+
+        private string SaveContentFileToDisk(string fileName, string content)
+        {
+            var path = string.Format(@"{0}\CompareTemp", Environment.CurrentDirectory);
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            var filePath = string.Format(@"{0}\{1}", path, fileName);
+            File.WriteAllBytes(filePath, Convert.FromBase64String(content));
+            return filePath;
+        }
+
+        private void CompareFiles(string crmFile, string diskFile)
+        {
+            var startInfo = new ProcessStartInfo(Properties.Settings.Default.CompareToolPath)
+            {
+                Arguments = string.Format("{0} \"{1}\" \"{2}\"", Properties.Settings.Default.CompareToolArgs, crmFile, diskFile)
+            };
+            Process.Start(startInfo);
+        }
+
         #endregion WEBRESOURCE CONTENT - Actions
 
         #region TreeView Event handlers
@@ -1046,6 +1163,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsbPreviewHtml.Visible = true;
                             tsSeparatorEdit.Visible = true;
                             tsddbEdit.Visible = true;
+                            tsddbCompare.Visible = true;
                             break;
 
                         case 2:
@@ -1057,6 +1175,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = true;
                             tsddbEdit.Visible = true;
+                            tsddbCompare.Visible = true;
                             break;
                         case 3:
                             ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
@@ -1069,6 +1188,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = true;
                             tsddbEdit.Visible = true;
+                            tsddbCompare.Visible = true;
                             break;
                         case 4:
                             ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
@@ -1080,6 +1200,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = true;
                             tsddbEdit.Visible = true;
+                            tsddbCompare.Visible = true;
                             break;
                         case 5:
                             ctrl = new ImageControl(script.GetAttributeValue<string>("content"),
@@ -1091,6 +1212,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = false;
                             tsddbEdit.Visible = false;
+                            tsddbCompare.Visible = false;
                             break;
                         case 6:
                             ctrl = new ImageControl(script.GetAttributeValue<string>("content"),
@@ -1102,6 +1224,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = false;
                             tsddbEdit.Visible = false;
+                            tsddbCompare.Visible = false;
                             break;
                         case 7:
                             ctrl = new ImageControl(script.GetAttributeValue<string>("content"),
@@ -1113,11 +1236,14 @@ namespace MsCrmTools.WebResourcesManager
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = false;
                             tsddbEdit.Visible = false;
+                            tsddbCompare.Visible = false;
                             break;
                         case 8:
                             ctrl = new UserControl();
                             tsSeparatorEdit.Visible = false;
                             tsddbEdit.Visible = false;
+                            tsbPreviewHtml.Visible = false;
+                            tsddbCompare.Visible = false;
                             break;
                         case 9:
                             ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
@@ -1129,6 +1255,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = true;
                             tsddbEdit.Visible = true;
+                            tsddbCompare.Visible = true;
                             break;
                         case 10:
                             ctrl = new IconControl(script.GetAttributeValue<string>("content"));
@@ -1139,6 +1266,7 @@ namespace MsCrmTools.WebResourcesManager
                             tsbPreviewHtml.Visible = false;
                             tsSeparatorEdit.Visible = false;
                             tsddbEdit.Visible = false;
+                            tsddbCompare.Visible = false;
                             break;
                     }
                 //}
@@ -1252,7 +1380,7 @@ namespace MsCrmTools.WebResourcesManager
         void MainFormWebResourceUpdated(object sender, WebResourceUpdatedEventArgs e)
         {
             fileMenuSave.Enabled = e.IsDirty;
-
+            fileMenuUpdateAndPublish.Enabled = !e.IsDirty;
             if (e.IsDirty)
             {
                 if (!tslResourceName.Text.Contains(" (not saved)"))
@@ -1275,6 +1403,7 @@ namespace MsCrmTools.WebResourcesManager
             tsddFileMenu.Enabled = !working;
             tvWebResources.Enabled = !working;
             chkSelectAll.Enabled = !working;
+            tsbClear.Enabled = !working;
             toolStripScriptContent.Enabled = !working;
             findUnusedWebResourcesToolStripMenuItem.Enabled = !working;
 
@@ -1440,5 +1569,6 @@ namespace MsCrmTools.WebResourcesManager
             else
                 e.Effect = DragDropEffects.None;
         }
+
     }
 }
