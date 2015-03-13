@@ -37,6 +37,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Without GemBox|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -50,7 +51,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EcmaScript.NET.modified">
-      <HintPath>..\..\..\..\..\ASSEMBLIES\Compressor\EcmaScript.NET.modified.dll</HintPath>
+      <HintPath>Referenced Assemblies\EcmaScript.NET.modified.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.TextEditor">
       <HintPath>..\..\packages\ICSharpCode.TextEditor.3.2.1.6466\lib\Net20\ICSharpCode.TextEditor.dll</HintPath>
@@ -79,7 +80,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Yahoo.Yui.Compressor">
-      <HintPath>..\..\..\..\..\ASSEMBLIES\Compressor\Yahoo.Yui.Compressor.dll</HintPath>
+      <HintPath>Referenced Assemblies\Yahoo.Yui.Compressor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +99,12 @@
     <Compile Include="DelegatesHelpers\ProgressBarDelegates.cs" />
     <Compile Include="DelegatesHelpers\TextBoxDelegates.cs" />
     <Compile Include="DelegatesHelpers\TreeViewDelegates.cs" />
+    <Compile Include="Forms\CompareSettingsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CompareSettingsDialog.Designer.cs">
+      <DependentUpon>CompareSettingsDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\CustomFolderBrowserDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -171,6 +178,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Solution.cs" />
     <Compile Include="SolutionManager.cs" />
     <Compile Include="TreeNodeSorter.cs" />
@@ -216,6 +228,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\CompareSettingsDialog.resx">
+      <DependentUpon>CompareSettingsDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\CustomFolderBrowserDialog.resx">
       <DependentUpon>CustomFolderBrowserDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -273,7 +288,12 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Connection Projects\McTools.Xrm.Connection.WinForms\McTools.Xrm.Connection.WinForms.csproj">
@@ -291,8 +311,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"C:\Program Files (x86)\Microsoft\ILMerge\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(SolutionDir)XrmToolBox\$(OutDir)$(TargetFileName)" MsCrmTools.WebResourcesManager.dll ICSharpCode.TextEditor.dll Yahoo.Yui.Compressor.dll EcmaScript.NET.modified.dll
-</PostBuildEvent>
+    <PostBuildEvent>rem "C:\Program Files (x86)\Microsoft\ILMerge\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(SolutionDir)XrmToolBox\$(OutDir)$(TargetFileName)" MsCrmTools.WebResourcesManager.dll ICSharpCode.TextEditor.dll Yahoo.Yui.Compressor.dll EcmaScript.NET.modified.dll
+xcopy /y "$(TargetPath)" "$(SolutionDir)XrmToolBox\$(OutDir)"
+xcopy /y "$(ProjectDir)$(OutDir)MsCrmTools.WebResourcesManager.pdb" "$(SolutionDir)XrmToolBox\$(OutDir)"
+xcopy /y "$(ProjectDir)$(OutDir)MsCrmTools.WebResourcesManager.dll.config" "$(SolutionDir)XrmToolBox\$(OutDir)"
+xcopy /y "$(ProjectDir)$(OutDir)EcmaScript.NET.modified.dll" "$(SolutionDir)XrmToolBox\$(OutDir)"
+xcopy /y "$(ProjectDir)$(OutDir)Yahoo.Yui.Compressor.dll" "$(SolutionDir)XrmToolBox\$(OutDir)"
+xcopy /y "$(ProjectDir)$(OutDir)ICSharpCode.TextEditor.dll" "$(SolutionDir)XrmToolBox\$(OutDir)"</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
