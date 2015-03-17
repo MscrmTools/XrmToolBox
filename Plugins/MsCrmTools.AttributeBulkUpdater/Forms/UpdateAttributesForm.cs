@@ -1,4 +1,4 @@
-﻿// PROJECT : MsCrmTools.AttributeBulkUpdater
+// PROJECT : MsCrmTools.AttributeBulkUpdater
 // This project was developed by Tanguy Touzard
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
@@ -96,6 +96,11 @@ namespace MsCrmTools.AttributeBulkUpdater.Forms
                             amd.IsAuditEnabled.Value = item.Checked;
                         }
 
+                        if (us.UpdateRequirementLevel && us.RequirementLevelValue.HasValue)
+                        {
+                            amd.RequiredLevel = new AttributeRequiredLevelManagedProperty(us.RequirementLevelValue.Value);
+                        }
+
                         innerService.Execute(new UpdateAttributeRequest
                         {
                             Attribute = amd,
@@ -150,7 +155,8 @@ namespace MsCrmTools.AttributeBulkUpdater.Forms
                 let amd = (AttributeMetadata) item.Tag
                 where
                     amd.IsValidForAdvancedFind.Value != item.Checked && us.UpdateValidForAdvancedFind ||
-                    amd.IsAuditEnabled.Value != item.Checked && us.UpdateAuditIsEnabled
+                    amd.IsAuditEnabled.Value != item.Checked && us.UpdateAuditIsEnabled ||
+                    (item.Checked && amd.RequiredLevel.Value != AttributeRequiredLevel.SystemRequired && amd.RequiredLevel.Value != us.RequirementLevelValue && us.UpdateRequirementLevel)
                 select item).ToList();
 
             if (itemsToManage.Count == 0)
