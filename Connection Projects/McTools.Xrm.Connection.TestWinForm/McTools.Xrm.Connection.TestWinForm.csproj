@@ -136,17 +136,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
-    <None Include="bin\Debug\McTools.Xrm.Connection.TestWinForm.exe.config" />
-    <None Include="bin\Debug\McTools.Xrm.Connection.TestWinForm.vshost.exe.config" />
-    <None Include="bin\Debug\McTools.Xrm.Connection.TestWinForm.vshost.exe.manifest" />
-    <None Include="bin\Debug\mscrmtools2011.config" />
-    <None Include="bin\Release\McTools.Xrm.Connection.TestWinForm.exe.config" />
-    <None Include="bin\Release\McTools.Xrm.Connection.TestWinForm.vshost.exe.config" />
-    <None Include="bin\Release\McTools.Xrm.Connection.TestWinForm.vshost.exe.manifest" />
-    <None Include="bin\Release\McTools.Xrm.Connection.TestWinForm.zip" />
-    <None Include="bin\Release\mscrmtools2011 - Copie.config" />
-    <None Include="bin\Release\mscrmtools2011.config" />
-    <None Include="bin\Release\Nouveau dossier\mscrmtools2011.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -189,41 +178,7 @@
       <Name>McTools.Xrm.Connection</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\Debug\McTools.Xrm.Connection.dll" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.pdb" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.TestWinForm.exe" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.TestWinForm.pdb" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.TestWinForm.vshost.exe" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.WinForms.dll" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.WinForms.pdb" />
-    <Content Include="bin\Debug\microsoft.crm.sdk.proxy.dll" />
-    <Content Include="bin\Debug\microsoft.crm.sdk.proxy.xml" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Client.dll" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Client.xml" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.Deployment.dll" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.Deployment.xml" />
-    <Content Include="bin\Debug\microsoft.xrm.sdk.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.sdk.xml" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.dll" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.pdb" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.TestWinForm.exe" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.TestWinForm.pdb" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.TestWinForm.vshost.exe" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.WinForms.dll" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.WinForms.pdb" />
-    <Content Include="bin\Release\microsoft.crm.sdk.proxy.dll" />
-    <Content Include="bin\Release\Microsoft.Xrm.Client.dll" />
-    <Content Include="bin\Release\Microsoft.Xrm.Client.xml" />
-    <Content Include="bin\Release\microsoft.xrm.sdk.dll" />
-    <Content Include="bin\Release\Nouveau dossier\McTools.Xrm.Connection.dll" />
-    <Content Include="bin\Release\Nouveau dossier\McTools.Xrm.Connection.TestWinForm.exe" />
-    <Content Include="bin\Release\Nouveau dossier\microsoft.crm.sdk.proxy.dll" />
-    <Content Include="bin\Release\Nouveau dossier\microsoft.xrm.sdk.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\tools\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -192,9 +192,9 @@ namespace XrmToolBox
                 this.LaunchWelcomeDialog(),
                 this.LaunchVersionCheck()
             };
-
+            
             tasks.ForEach(x => x.Start());
-
+            
             await Task.WhenAll(tasks.ToArray());
 
             // Adapt size of current form
@@ -333,28 +333,22 @@ namespace XrmToolBox
                 if (pm == null)
                 {
                     pm = new PluginModel(GetImage(plugin), title, desc, author, version, backColor, primaryColor, count)
-                    {
+                {
                         Tag = plugin
-                    };
+                };
                     pm.Clicked += PluginClicked;
                     pManager.PluginsControls.Add(pm);
                 }
-                
+
                 var localTop = top;
 
                 this.Invoke(new Action(() =>
-                {
+                    {
                     pm.Left = 4;
                     pm.Top = localTop;
                     pm.Width = width;
-                }));
-               
-               // pm.Clicked += PluginClicked;
-                //this.Invoke(new Action(() =>
-                //{
-                //    this.HomePageTab.Controls.Add(pm);
-                //}));
-                top += 104;
+                    }));
+                top += pm.Height+4;
             }
             else
             {
@@ -364,23 +358,19 @@ namespace XrmToolBox
                     pm = new SmallPluginModel(GetImage(plugin, true), title, desc, author, version, backColor, primaryColor, secondaryColor, count)
                     {
                         Tag = plugin
-                    };
-                    pm.Clicked += PluginClicked;
+                };
+                pm.Clicked += PluginClicked;
                     pManager.PluginsControls.Add(pm);
                 }
                 var localTop = top;
 
                 this.Invoke(new Action(() =>
-                {
+                    {
                     pm.Left = 4;
                     pm.Top = localTop;
                     pm.Width = width;
-                }));
-                //this.Invoke(new Action(() =>
-                //{
-                //    this.HomePageTab.Controls.Add(pm);
-                //}));
-                top += 54;
+                    }));
+                top += pm.Height+4;
             }
         }
 
@@ -770,7 +760,7 @@ namespace XrmToolBox
 
               currentOptions = oDialog.Option;
 
-                if (reinitDisplay)
+               if (reinitDisplay)
                 {
                     pManager.PluginsControls.Clear();
                     tabControl1.SelectedIndex = 0;

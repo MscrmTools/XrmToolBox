@@ -34,6 +34,22 @@ namespace MsCrmTools.MetadataBrowser
         {
             InitializeComponent();
             lvcSettings = ListViewColumnsSettings.LoadSettings();
+
+            this.Enter += MainControl_Enter;
+        }
+
+        void MainControl_Enter(object sender, EventArgs e)
+        {
+            if (sender != null)
+            {
+                if (sender is MainControl)
+                {
+                    if (((MainControl)sender).Service != null)
+                    {
+                        ExecuteMethod(LoadEntities);
+                    }
+                }
+            }
         }
 
         private void tsbClose_Click(object sender, EventArgs e)

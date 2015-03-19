@@ -89,38 +89,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="bin\Debug\McTools.Xrm.Connection.Console.exe.config" />
-    <None Include="bin\Release\McTools.Xrm.Connection.Console.exe.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="bin\Debug\McTools.Xrm.Connection.Console.exe" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.Console.pdb" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.dll" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.pdb" />
-    <Content Include="bin\Debug\Microsoft.Crm.Sdk.Proxy.dll" />
-    <Content Include="bin\Debug\Microsoft.Crm.Sdk.Proxy.xml" />
-    <Content Include="bin\Debug\microsoft.xrm.client.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.client.xml" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.Deployment.dll" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.Deployment.xml" />
-    <Content Include="bin\Debug\microsoft.xrm.sdk.dll" />
-    <Content Include="bin\Debug\microsoft.xrm.sdk.xml" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.Console.exe" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.Console.pdb" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.dll" />
-    <Content Include="bin\Release\McTools.Xrm.Connection.pdb" />
-    <Content Include="bin\Release\Microsoft.Crm.Sdk.Proxy.dll" />
-    <Content Include="bin\Release\Microsoft.Crm.Sdk.Proxy.xml" />
-    <Content Include="bin\Release\microsoft.xrm.client.dll" />
-    <Content Include="bin\Release\microsoft.xrm.client.xml" />
-    <Content Include="bin\Release\Microsoft.Xrm.Sdk.Deployment.dll" />
-    <Content Include="bin\Release\Microsoft.Xrm.Sdk.Deployment.xml" />
-    <Content Include="bin\Release\microsoft.xrm.sdk.dll" />
-    <Content Include="bin\Release\microsoft.xrm.sdk.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bin\tools\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\McTools.Xrm.Connection\McTools.Xrm.Connection.csproj">
       <Project>{c3824c2c-6e2e-4fde-a2aa-229bbc7c3b1f}</Project>
