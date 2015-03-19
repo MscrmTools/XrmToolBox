@@ -140,17 +140,17 @@ namespace XrmToolBox
             return new Task(() =>
             {
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                var cvc = new GithubVersionChecker(currentVersion);
+                var cvc = new GithubVersionChecker(currentVersion, "MsCrmTools", "XrmToolBox");
 
                 cvc.Run();
 
-                if (GithubVersionChecker.Cpi != null && !string.IsNullOrEmpty(GithubVersionChecker.Cpi.Version))
+                if (cvc.Cpi != null && !string.IsNullOrEmpty(cvc.Cpi.Version))
                 {
                     if (currentOptions.LastUpdateCheck.Date != DateTime.Now.Date)
                     {
                         this.Invoke(new Action(() =>
                         {
-                            var nvForm = new NewVersionForm(currentVersion, GithubVersionChecker.Cpi.Version, GithubVersionChecker.Cpi.Description);
+                            var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description, "MsCrmTools", "XrmToolBox");
                             nvForm.ShowDialog(this);
                         }));
                     }

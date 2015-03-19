@@ -9,29 +9,37 @@ using MarkdownSharp;
 
 namespace XrmToolBox.AppCode
 {
-    internal class GithubVersionChecker
+    public class GithubVersionChecker
     {
         private static int currentMajorVersion;
         private static int currentMinorVersion;
         private static int currentBuildVersion;
         private static int currentRevisionVersion;
-        public GithubVersionChecker(string currentVersion)
+        private readonly string userName;
+        private readonly string repositoryName;
+
+        public GithubVersionChecker(string currentVersion, string userName, string repositoryName)
         {
             var versionParts = currentVersion.Split('.');
             currentMajorVersion = int.Parse(versionParts[0]);
             currentMinorVersion = int.Parse(versionParts[1]);
             currentBuildVersion = int.Parse(versionParts[2]);
-            currentRevisionVersion = int.Parse(versionParts[3]); 
+            currentRevisionVersion = int.Parse(versionParts[3]);
+
+            this.userName = userName;
+            this.repositoryName = repositoryName;
+
+            Cpi = new GithubInformation();
         }
 
-        public static GithubInformation Cpi { get; set; }
+        public GithubInformation Cpi { get; set; }
 
         public void Run()
         {
             RunAsync().Wait();
         }
 
-        static async Task RunAsync()
+        async Task RunAsync()
         {
             try
             {
@@ -40,11 +48,11 @@ namespace XrmToolBox.AppCode
                     client.BaseAddress = new Uri("https://api.github.com/");
                     client.DefaultRequestHeaders.Accept.Clear();
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.Add("User-Agent", "MscrmTools");
+                    client.DefaultRequestHeaders.Add("User-Agent", userName);
 
                     HttpResponseMessage response =
                         await
-                            client.GetAsync("repos/MsCrmTools/XrmToolBox/releases")
+                            client.GetAsync(string.Format("repos/{0}/{1}/releases", userName, repositoryName))
                                 .ConfigureAwait(continueOnCapturedContext: false);
                     response.EnsureSuccessStatusCode();
                     if (response.IsSuccessStatusCode)
@@ -53,7 +61,7 @@ namespace XrmToolBox.AppCode
                         var jSserializer = new JavaScriptSerializer();
                         var releases = jSserializer.Deserialize<List<RootObject>>(data.Result);
 
-                        var lastRelease = releases.OrderByDescending(r => r.created_at).FirstOrDefault();
+                        var lastRelease = releases.OrderByDescending(r => r.created_at).FirstOrDefault(r=>r.prerelease == false);
                         if (lastRelease != null)
                         {
                             var version = lastRelease.tag_name.Replace("v.", "");
