@@ -65,6 +65,9 @@ namespace XrmToolBox
             this.donateDollarPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateEuroPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateGbpPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.tslFilterPlugin = new System.Windows.Forms.ToolStripLabel();
+            this.tstxtFilterPlugin = new System.Windows.Forms.ToolStripTextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.HomePageTab = new System.Windows.Forms.TabPage();
             this.pnlHelp = new System.Windows.Forms.Panel();
@@ -94,6 +97,9 @@ namespace XrmToolBox
             this.tsbManageTabs,
             this.tsbOptions,
             this.toolStripSeparator1,
+            this.tslFilterPlugin,
+            this.tstxtFilterPlugin,
+            this.toolStripSeparator6,
             this.tsbAbout,
             this.toolStripSeparator3,
             this.tsbCodePlex,
@@ -188,7 +194,7 @@ namespace XrmToolBox
             this.tsbAbout.Image = ((System.Drawing.Image)(resources.GetObject("tsbAbout.Image")));
             this.tsbAbout.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbAbout.Name = "tsbAbout";
-            this.tsbAbout.Size = new System.Drawing.Size(28, 29);
+            this.tsbAbout.Size = new System.Drawing.Size(23, 29);
             this.tsbAbout.Text = "About";
             this.tsbAbout.Click += new System.EventHandler(this.TsbAboutClick);
             // 
@@ -207,7 +213,7 @@ namespace XrmToolBox
             this.tsbCodePlex.Image = ((System.Drawing.Image)(resources.GetObject("tsbCodePlex.Image")));
             this.tsbCodePlex.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCodePlex.Name = "tsbCodePlex";
-            this.tsbCodePlex.Size = new System.Drawing.Size(129, 29);
+            this.tsbCodePlex.Size = new System.Drawing.Size(121, 29);
             this.tsbCodePlex.Text = "Feedback";
             // 
             // startADiscussionToolStripMenuItem
@@ -291,7 +297,7 @@ namespace XrmToolBox
             this.tsbDonate.Image = ((System.Drawing.Image)(resources.GetObject("tsbDonate.Image")));
             this.tsbDonate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDonate.Name = "tsbDonate";
-            this.tsbDonate.Size = new System.Drawing.Size(112, 29);
+            this.tsbDonate.Size = new System.Drawing.Size(104, 29);
             this.tsbDonate.Text = "Donate";
             // 
             // donateInUSDollarsToolStripMenuItem
@@ -357,6 +363,24 @@ namespace XrmToolBox
             this.donateGbpPluginMenuItem.Size = new System.Drawing.Size(256, 30);
             this.donateGbpPluginMenuItem.Text = "Donate in GBP";
             this.donateGbpPluginMenuItem.Click += new System.EventHandler(this.donateGbpPluginMenuItem_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 32);
+            // 
+            // tslFilterPlugin
+            // 
+            this.tslFilterPlugin.Name = "tslFilterPlugin";
+            this.tslFilterPlugin.Size = new System.Drawing.Size(64, 29);
+            this.tslFilterPlugin.Text = "Search";
+            // 
+            // tstxtFilterPlugin
+            // 
+            this.tstxtFilterPlugin.Name = "tstxtFilterPlugin";
+            this.tstxtFilterPlugin.Size = new System.Drawing.Size(150, 32);
+            this.tstxtFilterPlugin.ToolTipText = "Filter by plugin name or company name";
+            this.tstxtFilterPlugin.TextChanged += new System.EventHandler(this.tstxtFilterPlugin_TextChanged);
             // 
             // tabControl1
             // 
@@ -489,6 +513,9 @@ namespace XrmToolBox
         private System.Windows.Forms.ToolStripMenuItem donateDollarPluginMenuItem;
         private System.Windows.Forms.ToolStripMenuItem donateEuroPluginMenuItem;
         private System.Windows.Forms.ToolStripMenuItem donateGbpPluginMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripLabel tslFilterPlugin;
+        private System.Windows.Forms.ToolStripTextBox tstxtFilterPlugin;
     }
 }
 

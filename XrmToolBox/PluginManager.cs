@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace XrmToolBox
 {
@@ -20,6 +21,11 @@ namespace XrmToolBox
         /// List of loaded plugins
         /// </summary>
         public List<Type> Plugins { get; private set; }
+
+        /// <summary>
+        /// List of plugins user controls
+        /// </summary>
+        public List<UserControl> PluginsControls { get; private set; }
 
         // Not sure of a better way to do this, but I figure that the IOrganizationService isn't going anywhere anytime soon
         private AssemblyName _xrmSdkAssemblyName = typeof (Microsoft.Xrm.Sdk.IOrganizationService).Assembly.GetName();
@@ -34,6 +40,7 @@ namespace XrmToolBox
         public PluginManager()
         {
             Plugins = new List<Type>();
+            PluginsControls = new List<UserControl>();
         }
 
         #endregion Constructor
