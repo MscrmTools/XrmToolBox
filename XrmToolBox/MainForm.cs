@@ -870,7 +870,7 @@ namespace XrmToolBox
                 {
                     if (ctrl is UserControl)
                     {
-                        ((UserControl)ctrl).Width = HomePageTab.Width - 30;
+                        ((UserControl)ctrl).Width = HomePageTab.Width - 28;
                     }
                 }
             }
