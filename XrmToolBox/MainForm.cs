@@ -275,13 +275,11 @@ namespace XrmToolBox
                     foreach (UserControl ctrl in pManager.PluginsControls.Where(p=>filteredPlugins.Contains(p.Tag)))
                     {
                         ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-                        ctrl.Visible = false;
                         HomePageTab.Controls.Add(ctrl);
                     }
 
                     AdaptPluginControlSize();
 
-                    this.HomePageTab.Controls.Cast<Control>().Where(x => x.Tag != null).ToList().ForEach(x => x.Visible = true);
                     this.HomePageTab.Controls.Cast<Control>().Where(x => x.Tag == null).ToList().ForEach(x => this.HomePageTab.Controls.Remove(x));
                 }));
          }
