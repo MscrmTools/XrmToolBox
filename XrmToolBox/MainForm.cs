@@ -231,7 +231,7 @@ namespace XrmToolBox
 
             this.Invoke(new Action(() =>
                 {
-                    this.HomePageTab.Controls.Clear();
+                    this.HomePageTab.Controls.Cast<Control>().ToList<Control>().ForEach(x => x.Tag = null);
                 }));
 
             var filteredPlugins = (filter != null
@@ -272,16 +272,17 @@ namespace XrmToolBox
 
             this.Invoke(new Action(() =>
                 {
-                    //foreach (Control ctrl in this.HomePageTab.Controls)
-                    //{
-                    //    ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-                    //}
                     foreach (UserControl ctrl in pManager.PluginsControls.Where(p=>filteredPlugins.Contains(p.Tag)))
                     {
                         ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+                        ctrl.Visible = false;
                         HomePageTab.Controls.Add(ctrl);
                     }
+
                     AdaptPluginControlSize();
+
+                    this.HomePageTab.Controls.Cast<Control>().Where(x => x.Tag != null).ToList().ForEach(x => x.Visible = true);
+                    this.HomePageTab.Controls.Cast<Control>().Where(x => x.Tag == null).ToList().ForEach(x => this.HomePageTab.Controls.Remove(x));
                 }));
          }
 

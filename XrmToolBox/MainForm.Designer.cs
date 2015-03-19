@@ -450,6 +450,7 @@ namespace XrmToolBox
             this.ClientSize = new System.Drawing.Size(884, 612);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.toolStrip1);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
