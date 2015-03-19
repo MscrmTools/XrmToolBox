@@ -1,4 +1,4 @@
-﻿// PROJECT : MsCrmTools.AttributeBulkUpdater
+// PROJECT : MsCrmTools.AttributeBulkUpdater
 // This project was developed by Tanguy Touzard
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
@@ -140,6 +140,7 @@ namespace MsCrmTools.AttributeBulkUpdater
                                 item.SubItems.Add(amd.IsValidForAdvancedFind.CanBeChanged.ToString());
                                 item.SubItems.Add((amd.IsCustomizable.Value || amd.IsManaged.HasValue && amd.IsManaged.Value == false).ToString());
                                 item.SubItems.Add((allFormsDoc.SelectSingleNode("//control[@datafieldname='" + amd.LogicalName + "']") != null).ToString());
+                                item.SubItems.Add(amd.RequiredLevel.Value.ToString());
 
                                 item.Tag = amd;
                                 item.Checked = searchable && chkValidForAdvancedFind.Checked || isAuditEnabled && chkValidForAudit.Checked;
@@ -188,9 +189,9 @@ namespace MsCrmTools.AttributeBulkUpdater
 
         private void tsbSaveAttributes_Click(object sender, EventArgs e)
         {
-            if (!chkValidForAdvancedFind.Checked && !chkValidForAudit.Checked)
+            if (!chkValidForAdvancedFind.Checked && !chkValidForAudit.Checked && !chkRequirementLevel.Checked)
             {
-                MessageBox.Show(this, "It is required to select at least one property to update:\r\n- Valid for advanced find\r\n- Is audit enabled",
+                MessageBox.Show(this, "It is required to select at least one property to update:\r\n- Valid for advanced find\r\n- Is audit enabled\r\n - Requirement level",
                     "Warning",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning);
@@ -202,7 +203,9 @@ namespace MsCrmTools.AttributeBulkUpdater
             {
                 Items = lvAttributes.Items.Cast<ListViewItem>().Select(i => (ListViewItem) i.Clone()).ToList(),
                 UpdateValidForAdvancedFind = chkValidForAdvancedFind.Checked,
-                UpdateAuditIsEnabled = chkValidForAudit.Checked
+                UpdateAuditIsEnabled = chkValidForAudit.Checked,
+                UpdateRequirementLevel = chkRequirementLevel.Checked,
+                RequirementLevelValue = chkRequirementLevel.Checked ? MapSdkValue(cboRequirementLevel.SelectedIndex) : null
             };
 
             var uaForm = new Forms.UpdateAttributesForm(Service, us);
@@ -342,6 +345,17 @@ namespace MsCrmTools.AttributeBulkUpdater
             CheckItems();
         }
 
+        private AttributeRequiredLevel? MapSdkValue(int selectedValue)
+        {
+            switch(selectedValue)
+            {
+                case 0: return AttributeRequiredLevel.ApplicationRequired;
+                case 1: return AttributeRequiredLevel.Recommended;
+                case 2: return AttributeRequiredLevel.None;
+                default: return null;
+            }
+        }
+
         private void CheckItems()
         {
             foreach (ListViewItem item in lvAttributes.Items)
@@ -365,6 +379,11 @@ namespace MsCrmTools.AttributeBulkUpdater
                     item.Checked = false;
                 }
             }
+        }
+
+        private void chkRequirementLevel_CheckedChanged(object sender, EventArgs e)
+        {
+            cboRequirementLevel.Enabled = chkRequirementLevel.Checked;
         }
     }
 }
