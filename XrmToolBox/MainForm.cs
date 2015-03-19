@@ -190,12 +190,24 @@ namespace XrmToolBox
                 this.LaunchWelcomeDialog(),
                 this.LaunchVersionCheck()
             };
-            
+
             tasks.ForEach(x => x.Start());
-            
+
             await Task.WhenAll(tasks.ToArray());
 
+            // Adpat size of current form
+            if (currentOptions.Size.IsMaximized)
+            {
+                WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                currentOptions.Size.ApplyFormSize(this);
+            }
+
             AdaptPluginControlSize();
+
+            WebProxyHelper.ApplyProxy();
 
             this.Opacity = 100;
         }
@@ -540,6 +552,12 @@ namespace XrmToolBox
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Save current form size for future usage
+            currentOptions.Size.CurrentSize = Size;
+            currentOptions.Size.IsMaximized = (WindowState == FormWindowState.Maximized);
+            currentOptions.Save();
+
+            // Warn to close opened plugins
             var info = new PluginCloseInfo(e.CloseReason);
             RequestCloseTabs(GetPluginPages(), info);
             e.Cancel = info.Cancel;

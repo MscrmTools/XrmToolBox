@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
+using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace XrmToolBox
 {
@@ -16,11 +19,16 @@ namespace XrmToolBox
         public bool CheckUpdateOnStartup { get; set; }
         public List<string> HiddenPlugins { get; set; }
 
+
+        [XmlElement("FormSize")]
+        public FormSize Size { get; set; }
+
         public Options()
         {
             CheckUpdateOnStartup = true;
             DisplayLargeIcons = true;
             DisplayMostUsedFirst = false;
+            Size = new FormSize();
             MostUsedList = new List<PluginUseCount>();
         }
 
@@ -54,6 +62,44 @@ namespace XrmToolBox
                 HiddenPlugins = HiddenPlugins,
                 LastUpdateCheck = LastUpdateCheck
             };
+        }
+    }
+
+    public class FormSize
+    {
+        public bool IsMaximized { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+
+        public Size CurrentSize
+        {
+            set
+            {
+                Width = value.Width;
+                Height = value.Height;
+            }
+        }
+
+        public void ApplyFormSize(Form form)
+        {
+            var size = new Size(Width, Height);
+
+            if (Screen.PrimaryScreen.WorkingArea.Height < size.Height)
+            {
+                size.Height = Screen.PrimaryScreen.WorkingArea.Height;
+            }
+
+            if (Screen.PrimaryScreen.WorkingArea.Width < size.Width)
+            {
+                size.Width = Screen.PrimaryScreen.WorkingArea.Width;
+            }
+
+            if (size.Height != 0)
+            {
+                form.Size = size;
+                form.Top = (Screen.PrimaryScreen.WorkingArea.Height - size.Height) / 2;
+                form.Left = (Screen.PrimaryScreen.WorkingArea.Width - size.Width) / 2;
+            }
         }
     }
 }

@@ -117,6 +117,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +125,7 @@
     <Compile Include="AppCode\GithubInformation.cs" />
     <Compile Include="AppCode\Github.cs" />
     <Compile Include="AppCode\Markdown.cs" />
+    <Compile Include="AppCode\WebProxyHelper.cs" />
     <Compile Include="Attributes\AssemblyAttributeHelper.cs" />
     <Compile Include="Attributes\BackgroundColorAttribute.cs" />
     <Compile Include="Attributes\BigImageBase64Attribute.cs" />
