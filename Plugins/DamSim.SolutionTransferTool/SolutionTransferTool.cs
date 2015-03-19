@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Client.Services;
-using Microsoft.Xrm.Client.Windows.Controls.ConnectionDialog;
 using XrmToolBox;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
@@ -32,6 +35,7 @@ namespace DamSim.SolutionTransferTool
         private Panel infoPanel;
 
         private int currentsColumnOrder;
+        private Guid importId;
         #endregion
 
         #region Constructor
@@ -95,6 +99,8 @@ namespace DamSim.SolutionTransferTool
 
             tsbLoadSolutions.Enabled = true;
             tsbTransfertSolution.Enabled = true;
+            btnDownloadLog.Enabled = true;
+            btnSelectTarget.Enabled = true;
             Cursor = Cursors.Default;
 
             string message;
@@ -115,7 +121,7 @@ namespace DamSim.SolutionTransferTool
 
         #region UI Events
 
-       private void BtnCloseClick(object sender, EventArgs e)
+        private void BtnCloseClick(object sender, EventArgs e)
         {
             if (OnCloseTool != null)
             {
@@ -132,6 +138,43 @@ namespace DamSim.SolutionTransferTool
             {
                 var args = new RequestConnectionEventArgs {ActionName = "TargetOrganization", Control = this};
                 OnRequestConnection(this, args);
+            }
+        }
+
+        private void BtnDownloadLogClick(object sender, EventArgs e)
+        {
+            var dialog = new FolderBrowserDialog();
+
+            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.LastFolderUsed))
+                dialog.SelectedPath = Properties.Settings.Default.LastFolderUsed;
+
+            if (dialog.ShowDialog() == DialogResult.OK) 
+            {
+                Properties.Settings.Default.LastFolderUsed = dialog.SelectedPath;
+                Properties.Settings.Default.Save();
+
+                Cursor = Cursors.WaitCursor;
+                btnSelectTarget.Enabled = false;
+                tsbTransfertSolution.Enabled = false;
+                tsbLoadSolutions.Enabled = false;
+                btnDownloadLog.Enabled = false;
+
+                var worker = new BackgroundWorker();
+                worker.DoWork += (o, args) => DownloadLogFile(dialog.SelectedPath);
+                worker.RunWorkerCompleted += (o, args) => {
+                    if (args.Error != null) {
+                        var message = string.Format("An error was encountered while downloading the log file.{0}Error:{0}{1}", Environment.NewLine, args.Error.Message);
+                        MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    } else {
+                        MessageBox.Show("Log file download completed.", "File Download", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    btnSelectTarget.Enabled = true;
+                    tsbTransfertSolution.Enabled = true;
+                    tsbLoadSolutions.Enabled = true;
+                    btnDownloadLog.Enabled = true;
+                    Cursor = Cursors.Default;
+                };
+                worker.RunWorkerAsync();
             }
         }
 
@@ -239,6 +282,21 @@ namespace DamSim.SolutionTransferTool
             }
         }
 
+        /// <summary>
+        /// Downloads the Log file
+        /// </summary>
+        /// <param name="path"></param>
+        private void DownloadLogFile(string path)
+        {
+            var importLogRequest = new RetrieveFormattedImportJobResultsRequest
+            {
+                ImportJobId = importId
+            };
+            var importLogResponse = (RetrieveFormattedImportJobResultsResponse)targetService.Execute(importLogRequest);
+            var filePath = string.Format(@"{0}\{1}.xml", path, DateTime.Now.ToString("yyyy_MM_dd__HH_mm"));
+            File.WriteAllText(filePath, importLogResponse.FormattedResults);
+        }
+
         #endregion
 
         private void TsbLoadSolutionsClick(object sender, EventArgs e)
@@ -259,8 +317,10 @@ namespace DamSim.SolutionTransferTool
 
         private void TsbTransfertSolutionClick(object sender, EventArgs e)
         {
-            if (lstSourceSolutions.SelectedItems.Count == 1 && targetService != null)
+            if (lstSourceSolutions.SelectedItems.Count == 1 && targetService != null) 
             {
+                importId = Guid.NewGuid();
+
                 var item = lstSourceSolutions.SelectedItems[0];
 
                 infoPanel = InformationPanel.GetInformationPanel(this, "Initializing...", 340, 120);
@@ -284,15 +344,19 @@ namespace DamSim.SolutionTransferTool
                                  {
                                      ConvertToManaged = chkConvertToManaged.Checked,
                                      OverwriteUnmanagedCustomizations = chkOverwriteUnmanagedCustomizations.Checked,
-                                     PublishWorkflows = chkActivate.Checked
+                                     PublishWorkflows = chkActivate.Checked,
+                                     ImportJobId = importId
                                  });
+                
                 if (!chkExportAsManaged.Checked && chkPublish.Checked)
                 {
                     requests.Add(new PublishAllXmlRequest());
                 }
 
+                btnDownloadLog.Enabled = false;
                 tsbLoadSolutions.Enabled = false;
                 tsbTransfertSolution.Enabled = false;
+                btnSelectTarget.Enabled = false;
                 Cursor = Cursors.WaitCursor;
 
                 var worker = new BackgroundWorker();
@@ -335,7 +399,6 @@ namespace DamSim.SolutionTransferTool
             }
         }
 
-
         public void ClosingPlugin(PluginCloseInfo info)
         {
             
@@ -348,5 +411,6 @@ namespace DamSim.SolutionTransferTool
 
             info.Cancel = MessageBox.Show(@"Are you sure you want to close this tab?", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes;
         }
+        
     }
 }
