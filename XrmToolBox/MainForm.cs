@@ -231,6 +231,7 @@ namespace XrmToolBox
 
             this.Invoke(new Action(() =>
                 {
+                    // Marking old controls to removal
                     this.HomePageTab.Controls.Cast<Control>().ToList<Control>().ForEach(x => x.Tag = null);
                 }));
 
@@ -274,12 +275,14 @@ namespace XrmToolBox
                 {
                     foreach (UserControl ctrl in pManager.PluginsControls.Where(p=>filteredPlugins.Contains(p.Tag)))
                     {
+                        // Drawing new controls underneath of old ones
                         ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
                         HomePageTab.Controls.Add(ctrl);
                     }
 
                     AdaptPluginControlSize();
 
+                    // Removing old controls, thus revealing new controls
                     this.HomePageTab.Controls.Cast<Control>().Where(x => x.Tag == null).ToList().ForEach(x => this.HomePageTab.Controls.Remove(x));
                 }));
          }
