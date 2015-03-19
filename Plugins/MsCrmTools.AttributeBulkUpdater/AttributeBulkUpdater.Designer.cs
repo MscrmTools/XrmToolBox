@@ -1,4 +1,4 @@
-﻿namespace MsCrmTools.AttributeBulkUpdater
+namespace MsCrmTools.AttributeBulkUpdater
 {
     partial class AttributeBulkUpdater
     {
@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AttributeBulkUpdater));
             this.gbPropertySelection = new System.Windows.Forms.GroupBox();
+            this.cboRequirementLevel = new System.Windows.Forms.ComboBox();
+            this.chkRequirementLevel = new System.Windows.Forms.CheckBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -57,6 +59,7 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.gbPropertySelection.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -70,6 +73,8 @@
             // 
             this.gbPropertySelection.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbPropertySelection.Controls.Add(this.cboRequirementLevel);
+            this.gbPropertySelection.Controls.Add(this.chkRequirementLevel);
             this.gbPropertySelection.Controls.Add(this.panel2);
             this.gbPropertySelection.Controls.Add(this.chkValidForAudit);
             this.gbPropertySelection.Controls.Add(this.chkValidForAdvancedFind);
@@ -80,6 +85,31 @@
             this.gbPropertySelection.TabIndex = 90;
             this.gbPropertySelection.TabStop = false;
             this.gbPropertySelection.Text = "Attribute Property Selection";
+            // 
+            // cboRequirementLevel
+            // 
+            this.cboRequirementLevel.Enabled = false;
+            this.cboRequirementLevel.FormattingEnabled = true;
+            this.cboRequirementLevel.Items.AddRange(new object[] {
+            "Business Required",
+            "Business Recommended",
+            "No Constraint"});
+            this.cboRequirementLevel.Location = new System.Drawing.Point(373, 45);
+            this.cboRequirementLevel.Name = "cboRequirementLevel";
+            this.cboRequirementLevel.Size = new System.Drawing.Size(121, 21);
+            this.cboRequirementLevel.TabIndex = 10;
+            this.cboRequirementLevel.SelectedIndex = 2;
+            // 
+            // chkRequirementLevel
+            // 
+            this.chkRequirementLevel.AutoSize = true;
+            this.chkRequirementLevel.Location = new System.Drawing.Point(252, 47);
+            this.chkRequirementLevel.Name = "chkRequirementLevel";
+            this.chkRequirementLevel.Size = new System.Drawing.Size(115, 17);
+            this.chkRequirementLevel.TabIndex = 9;
+            this.chkRequirementLevel.Text = "Requirement Level";
+            this.chkRequirementLevel.UseVisualStyleBackColor = true;
+            this.chkRequirementLevel.CheckedChanged += new System.EventHandler(this.chkRequirementLevel_CheckedChanged);
             // 
             // panel2
             // 
@@ -305,7 +335,8 @@
             this.columnHeader1,
             this.columnHeader3,
             this.columnHeader5,
-            this.columnHeader6});
+            this.columnHeader6,
+            this.columnHeader8});
             this.lvAttributes.Enabled = false;
             this.lvAttributes.FullRowSelect = true;
             this.lvAttributes.GridLines = true;
@@ -341,6 +372,10 @@
             // columnHeader6
             // 
             this.columnHeader6.Text = "On Form";
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "RequirementLevel";
             // 
             // imageList1
             // 
@@ -401,5 +436,8 @@
         private System.Windows.Forms.ToolStripButton tsbCloseThisTab;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.CheckBox chkRequirementLevel;
+        private System.Windows.Forms.ComboBox cboRequirementLevel;
+        private System.Windows.Forms.ColumnHeader columnHeader8;
     }
 }
