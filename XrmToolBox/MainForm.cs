@@ -893,6 +893,19 @@ namespace XrmToolBox
             }
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            // Focus on plugins filter box on Ctrl+F
+            if (keyData == (Keys.Control | Keys.F))
+            {
+                tstxtFilterPlugin.Focus();
+
+                return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         protected static ScrollBars GetVisibleScrollbars(ScrollableControl ctl)
         {
             if (ctl.HorizontalScroll.Visible)
