@@ -786,6 +786,7 @@ namespace XrmToolBox
         {
             if (tabControl1.SelectedIndex == 0) // Home Screen
             {
+                tstxtFilterPlugin.Enabled = true;
                 CodePlexPluginMenuItem.Visible = false;
                 GithubXrmToolBoxMenuItem.Visible = false;
                 PaypalXrmToolBoxToolStripMenuItem.Visible = false;
@@ -794,6 +795,9 @@ namespace XrmToolBox
                 AssignPayPalMenuItems(tsbDonate.DropDownItems);
                 return;
             }
+            
+            // Disabling plugin search if not a home screen 
+            tstxtFilterPlugin.Enabled = false;
 
             var paypalPlugin = tabControl1.SelectedTab.GetPaypalPlugin();
             if (paypalPlugin == null)
