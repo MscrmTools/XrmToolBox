@@ -905,6 +905,16 @@ namespace XrmToolBox
                     return true;
                 }
             }
+            else
+            {
+                // Close current plugin on Ctrl+F4
+                if (keyData == (Keys.Control | Keys.F4))
+                {
+                    RequestCloseTab(tabControl1.TabPages[tabControl1.SelectedIndex], new PluginCloseInfo(ToolBoxCloseReason.CloseCurrent));
+
+                    return true;
+                }
+            }
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
