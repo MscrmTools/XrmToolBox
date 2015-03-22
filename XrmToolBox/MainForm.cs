@@ -909,7 +909,8 @@ namespace XrmToolBox
             {
                 // Close current plugin on Ctrl+F4
                 if (keyData == (Keys.Control | Keys.F4) ||
-                    keyData == (Keys.Control | Keys.W))
+                    keyData == (Keys.Control | Keys.W) ||
+                    keyData == (Keys.Control | Keys.Q))
                 {
                     RequestCloseTab(tabControl1.TabPages[tabControl1.SelectedIndex], new PluginCloseInfo(ToolBoxCloseReason.CloseHotKey));
 
