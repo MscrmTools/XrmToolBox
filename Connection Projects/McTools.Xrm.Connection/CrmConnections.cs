@@ -86,9 +86,7 @@ namespace McTools.Xrm.Connection
                     new XElement("UseDefaultCredentials", UseDefaultCredentials),
                     new XElement("ByPassProxyOnLocal", ByPassProxyOnLocal)));
 
-            foreach (
-
-                var connection in Connections)
+            foreach (var connection in Connections)
             {
                 listElement.Add(connection.GetXElement());
             }
