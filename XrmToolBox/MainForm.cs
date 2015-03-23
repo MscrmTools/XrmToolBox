@@ -907,7 +907,7 @@ namespace XrmToolBox
             }
             else
             {
-                // Close current plugin on Ctrl+F4
+                // Close current plugin on Ctrl+Q, Ctrl+W and Ctrl+F4
                 if (keyData == (Keys.Control | Keys.Q) ||
                     keyData == (Keys.Control | Keys.W) ||
                     keyData == (Keys.Control | Keys.F4))
