@@ -229,12 +229,6 @@ namespace XrmToolBox
             var top = 4;
             int lastWidth = HomePageTab.Width - 28;
 
-            //this.Invoke(new Action(() =>
-            //    {
-            //        // Marking old controls to removal
-            //        this.HomePageTab.Controls.Cast<Control>().ToList<Control>().ForEach(x => x.Tag = null);
-            //    }));
-
             var filteredPlugins = (filter != null
                 ? pManager.Plugins.Where(p 
                     => p.GetTitle().ToLower().Contains(filter.ToString().ToLower())
