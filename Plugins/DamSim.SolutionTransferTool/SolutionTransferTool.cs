@@ -166,7 +166,7 @@ namespace DamSim.SolutionTransferTool
                         var message = string.Format("An error was encountered while downloading the log file.{0}Error:{0}{1}", Environment.NewLine, args.Error.Message);
                         MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     } else {
-                        MessageBox.Show("Log file download completed.", "File Download", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Download completed!", "File Download", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     btnSelectTarget.Enabled = true;
                     tsbTransfertSolution.Enabled = true;
