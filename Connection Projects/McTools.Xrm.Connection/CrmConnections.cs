@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Xrm.Client.Windows.Controls.ConnectionDialog;
@@ -15,20 +16,15 @@ namespace McTools.Xrm.Connection
     {
         #region Variables
 
-        /// <summary>
-        /// Liste de connexions
-        /// </summary>
-        List<ConnectionDetail> _connections;
+        private string _proxyAddress;
 
-        string _proxyAddress;
+        private string _proxyPort;
 
-        string _proxyPort;
+        private string _userName;
 
-        string _userName;
+        private string _password;
 
-        string _password;
-
-        bool _useCustomProxy;
+        private bool _useCustomProxy;
 
         #endregion
 
@@ -42,11 +38,7 @@ namespace McTools.Xrm.Connection
         /// <summary>
         /// Obtient ou définit la liste des connexions
         /// </summary>
-        public List<ConnectionDetail> Connections
-        {
-            get { return _connections; }
-            set { _connections = value; }
-        }
+        public List<ConnectionDetail> Connections { get; set; }
 
         public string ProxyAddress
         {
@@ -54,20 +46,11 @@ namespace McTools.Xrm.Connection
             set { _proxyAddress = value; }
         }
 
-
-        public string ProxyPort
-        {
-            get { return _proxyPort; }
-            set { _proxyPort = value; }
-        }
-
-
         public string UserName
         {
             get { return _userName; }
             set { _userName = value; }
         }
-
 
         public string Password
         {
@@ -75,12 +58,17 @@ namespace McTools.Xrm.Connection
             set { _password = value; }
         }
 
-
         public bool UseCustomProxy
         {
             get { return _useCustomProxy; }
             set { _useCustomProxy = value; }
         }
+
+        public bool ByPassProxyOnLocal { get; set; }
+
+        public bool UseDefaultCredentials { get; set; }
+
+        public bool UseInternetExplorerProxy { get; set; }
 
         #endregion
 
@@ -88,8 +76,16 @@ namespace McTools.Xrm.Connection
 
         public void SerializeToFile(string filePath)
         {
-            var listElement = new XElement("Connections");
-                
+            var listElement = new XElement("Connections",
+                new XElement("Proxy",
+                    new XElement("UseCustomProxy", _useCustomProxy),
+                    new XElement("UseInternetExplorerProxy", UseInternetExplorerProxy),
+                    new XElement("Address", _proxyAddress),
+                    new XElement("Username", _userName),
+                    new XElement("Password", _password),
+                    new XElement("UseDefaultCredentials", UseDefaultCredentials),
+                    new XElement("ByPassProxyOnLocal", ByPassProxyOnLocal)));
+
             foreach (var connection in Connections)
             {
                 listElement.Add(connection.GetXElement());
@@ -104,7 +100,7 @@ namespace McTools.Xrm.Connection
 
             using (var fStream = File.Open(filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
             {
-                XmlWriter writer = XmlWriter.Create(fStream, new XmlWriterSettings { Indent = true });
+                XmlWriter writer = XmlWriter.Create(fStream, new XmlWriterSettings {Indent = true});
                 doc.WriteTo(writer);
                 writer.Close();
             }
@@ -127,6 +123,39 @@ namespace McTools.Xrm.Connection
                 }
 
                 var doc = XDocument.Load(fStream);
+                var crmConnectionsElt = doc.Element("CrmConnections");
+                if (crmConnectionsElt == null)
+                    return crmConnections;
+
+                var connectionsElt = crmConnectionsElt.Element("Connections");
+                if (connectionsElt == null)
+                    return crmConnections;
+
+                var proxyElt = connectionsElt.Element("Proxy");
+                if (proxyElt != null)
+                {
+                    var useCustomProxyElt = proxyElt.Element("UseCustomProxy");
+                    if(useCustomProxyElt != null)
+                        crmConnections.UseCustomProxy = useCustomProxyElt.Value == "true";
+                    var useInternetExplorerProxyElt = proxyElt.Element("UseInternetExplorerProxy");
+                    if (useInternetExplorerProxyElt != null)
+                        crmConnections.UseInternetExplorerProxy = useInternetExplorerProxyElt.Value == "true";
+                    var addressElt = proxyElt.Element("Address");
+                    if (addressElt != null)
+                        crmConnections.ProxyAddress = addressElt.Value;
+                    var usernameElt = proxyElt.Element("Username");
+                    if (usernameElt != null)
+                        crmConnections.UserName = usernameElt.Value;
+                    var passwordElt = proxyElt.Element("Password");
+                    if (passwordElt != null)
+                        crmConnections.Password = passwordElt.Value;
+                    var byPassProxyOnLocalElt = proxyElt.Element("ByPassProxyOnLocal");
+                    if (byPassProxyOnLocalElt != null)
+                        crmConnections.ByPassProxyOnLocal = byPassProxyOnLocalElt.Value == "true";
+                    var useDefaultCredentialsElt = proxyElt.Element("UseDefaultCredentials");
+                    if (useDefaultCredentialsElt != null)
+                        crmConnections.UseDefaultCredentials = useDefaultCredentialsElt.Value == "true";
+                }
 
                 foreach (var elt in doc.Descendants("ConnectionDetail"))
                 {

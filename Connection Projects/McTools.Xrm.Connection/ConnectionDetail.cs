@@ -181,6 +181,11 @@ namespace McTools.Xrm.Connection
                     }
                 }
 
+                if (string.IsNullOrEmpty(userPassword))
+                {
+                    throw new Exception("User password cannot be null. If the user password is not stored in configuration file, you should request it from the end user");
+                }
+
                 var decryptedPassword = CryptoManager.Decrypt(userPassword, ConnectionManager.CryptoPassPhrase,
                     ConnectionManager.CryptoSaltValue,
                     ConnectionManager.CryptoHashAlgorythm,
@@ -240,6 +245,11 @@ namespace McTools.Xrm.Connection
                     {
                         username = string.Format("{0}\\{1}", UserDomain, UserName);
                     }
+                }
+
+                if (string.IsNullOrEmpty(userPassword))
+                {
+                    throw new Exception("User password cannot be null. If the user password is not stored in configuration file, you should request it from the end user");
                 }
 
                 var decryptedPassword = CryptoManager.Decrypt(userPassword, ConnectionManager.CryptoPassPhrase,

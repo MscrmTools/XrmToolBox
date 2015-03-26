@@ -3,6 +3,8 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using System.ComponentModel;
+using System.Threading;
 using McTools.Xrm.Connection;
 using McTools.Xrm.Connection.WinForms;
 using Microsoft.Xrm.Client;
@@ -138,17 +140,17 @@ namespace XrmToolBox
             return new Task(() =>
             {
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                var cvc = new GithubVersionChecker(currentVersion);
+                var cvc = new GithubVersionChecker(currentVersion, "MsCrmTools", "XrmToolBox");
 
                 cvc.Run();
 
-                if (GithubVersionChecker.Cpi != null && !string.IsNullOrEmpty(GithubVersionChecker.Cpi.Version))
+                if (cvc.Cpi != null && !string.IsNullOrEmpty(cvc.Cpi.Version))
                 {
                     if (currentOptions.LastUpdateCheck.Date != DateTime.Now.Date)
                     {
                         this.Invoke(new Action(() =>
                         {
-                            var nvForm = new NewVersionForm(currentVersion, GithubVersionChecker.Cpi.Version, GithubVersionChecker.Cpi.Description);
+                            var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description, "MsCrmTools", "XrmToolBox");
                             nvForm.ShowDialog(this);
                         }));
                     }
@@ -195,12 +197,24 @@ namespace XrmToolBox
             
             await Task.WhenAll(tasks.ToArray());
 
+            // Adapt size of current form
+            if (currentOptions.Size.IsMaximized)
+            {
+                WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                currentOptions.Size.ApplyFormSize(this);
+            }
+
             AdaptPluginControlSize();
+
+            WebProxyHelper.ApplyProxy();
 
             this.Opacity = 100;
         }
 
-        private void DisplayPlugins()
+        private void DisplayPlugins(object filter = null)
         {
             if (pManager.Plugins.Count == 0)
             {
@@ -215,23 +229,24 @@ namespace XrmToolBox
             var top = 4;
             int lastWidth = HomePageTab.Width - 28;
 
-            this.Invoke(new Action(() =>
-                {
-                    this.HomePageTab.Controls.Clear();
-                }));
+            var filteredPlugins = (filter != null
+                ? pManager.Plugins.Where(p 
+                    => p.GetTitle().ToLower().Contains(filter.ToString().ToLower())
+                    || p.GetCompany().ToLower().Contains(filter.ToString().ToLower()))
+                : pManager.Plugins).ToList();
 
             if (currentOptions.DisplayMostUsedFirst)
             {
                 foreach (var item in currentOptions.MostUsedList.OrderByDescending(i => i.Count).ThenBy(i=>i.Name))
                 {
-                    var plugin = pManager.Plugins.FirstOrDefault(x => x.FullName == item.Name);
+                    var plugin = filteredPlugins.FirstOrDefault(x => x.FullName == item.Name);
                     if (plugin != null && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.GetTitle())))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth, item.Count);
                     }
                 }
 
-                foreach (var plugin in pManager.Plugins.OrderBy(p => p.GetTitle()))
+                foreach (var plugin in filteredPlugins.OrderBy(p => p.GetTitle()))
                 {
                     if (currentOptions.MostUsedList.All(i => i.Name != plugin.FullName) && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.GetTitle())))
                     {
@@ -241,7 +256,7 @@ namespace XrmToolBox
             }
             else
             {
-                foreach (var plugin in pManager.Plugins.OrderBy(p => p.GetTitle()))
+                foreach (var plugin in filteredPlugins.OrderBy(p => p.GetTitle()))
                 {
                     if (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.GetTitle()))
                     {
@@ -252,12 +267,16 @@ namespace XrmToolBox
 
             this.Invoke(new Action(() =>
                 {
-                    foreach (Control ctrl in this.HomePageTab.Controls)
+                    HomePageTab.Controls.Clear();
+
+                    foreach (UserControl ctrl in pManager.PluginsControls.Where(p => filteredPlugins.Contains(p.Tag)))
                     {
                         ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+                        HomePageTab.Controls.Add(ctrl);
                     }
-                }));
 
+                    AdaptPluginControlSize();
+                }));
          }
 
         private Image GetImage(Type plugin, bool small = false)
@@ -293,7 +312,6 @@ namespace XrmToolBox
 
         private void DisplayOnePlugin(Type plugin, ref int top, int width, int count = -1)
         {
-
             var title = plugin.GetTitle();
             var desc = plugin.GetDescription();
             var author = plugin.GetCompany();
@@ -305,35 +323,46 @@ namespace XrmToolBox
 
             if (currentOptions.DisplayLargeIcons)
             {
-                var pm = new PluginModel(GetImage(plugin), title, desc, author, version, backColor, primaryColor, count)
+                var pm = (PluginModel)pManager.PluginsControls.FirstOrDefault(t => t.Tag == plugin && t is PluginModel);
+                if (pm == null)
                 {
-                    Left = 4,
-                    Top = top,
-                    Width = width,
-                    Tag = plugin,
+                    pm = new PluginModel(GetImage(plugin), title, desc, author, version, backColor, primaryColor, count)
+                {
+                        Tag = plugin
                 };
+                    pm.Clicked += PluginClicked;
+                    pManager.PluginsControls.Add(pm);
+                }
 
-                pm.Clicked += PluginClicked;
+                var localTop = top;
+
                 this.Invoke(new Action(() =>
                     {
-                        this.HomePageTab.Controls.Add(pm);
+                    pm.Left = 4;
+                    pm.Top = localTop;
+                    pm.Width = width;
                     }));
                 top += pm.Height+4;
             }
             else
             {
-                var pm = new SmallPluginModel(GetImage(plugin, true), title, desc, author, version, backColor, primaryColor, secondaryColor, count)
+                var pm = (SmallPluginModel)pManager.PluginsControls.FirstOrDefault(t => t.Tag == plugin && t is SmallPluginModel);
+                if (pm == null)
                 {
-                    Left = 4,
-                    Top = top,
-                    Width = width,
-                    Tag = plugin,
+                    pm = new SmallPluginModel(GetImage(plugin, true), title, desc, author, version, backColor, primaryColor, secondaryColor, count)
+                    {
+                        Tag = plugin
                 };
-
                 pm.Clicked += PluginClicked;
+                    pManager.PluginsControls.Add(pm);
+                }
+                var localTop = top;
+
                 this.Invoke(new Action(() =>
                     {
-                        this.HomePageTab.Controls.Add(pm);
+                    pm.Left = 4;
+                    pm.Top = localTop;
+                    pm.Width = width;
                     }));
                 top += pm.Height+4;
             }
@@ -540,6 +569,12 @@ namespace XrmToolBox
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            // Save current form size for future usage
+            currentOptions.Size.CurrentSize = Size;
+            currentOptions.Size.IsMaximized = (WindowState == FormWindowState.Maximized);
+            currentOptions.Save();
+
+            // Warn to close opened plugins
             var info = new PluginCloseInfo(e.CloseReason);
             RequestCloseTabs(GetPluginPages(), info);
             e.Cancel = info.Cancel;
@@ -721,8 +756,9 @@ namespace XrmToolBox
 
                if (reinitDisplay)
                 {
+                    pManager.PluginsControls.Clear();
                     tabControl1.SelectedIndex = 0;
-                    DisplayPlugins();
+                    DisplayPlugins(tstxtFilterPlugin.Text);
                     AdaptPluginControlSize();
                 }
             }
@@ -742,6 +778,7 @@ namespace XrmToolBox
         {
             if (tabControl1.SelectedIndex == 0) // Home Screen
             {
+                tstxtFilterPlugin.Enabled = true;
                 CodePlexPluginMenuItem.Visible = false;
                 GithubXrmToolBoxMenuItem.Visible = false;
                 PaypalXrmToolBoxToolStripMenuItem.Visible = false;
@@ -750,6 +787,9 @@ namespace XrmToolBox
                 AssignPayPalMenuItems(tsbDonate.DropDownItems);
                 return;
             }
+            
+            // Disabling plugin search if not a home screen 
+            tstxtFilterPlugin.Enabled = false;
 
             var paypalPlugin = tabControl1.SelectedTab.GetPaypalPlugin();
             if (paypalPlugin == null)
@@ -829,7 +869,7 @@ namespace XrmToolBox
                 {
                     if (ctrl is UserControl)
                     {
-                        ((UserControl)ctrl).Width = HomePageTab.Width - 30;
+                        ((UserControl)ctrl).Width = HomePageTab.Width - 28;
                     }
                 }
             }
@@ -845,12 +885,41 @@ namespace XrmToolBox
             }
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (tabControl1.SelectedIndex == 0)
+            {
+                // Focus on plugins filter box on Ctrl+F should work on home screen only
+                if (keyData == (Keys.Control | Keys.F))
+                {
+                    tstxtFilterPlugin.Focus();
+
+                    return true;
+                }
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         protected static ScrollBars GetVisibleScrollbars(ScrollableControl ctl)
         {
             if (ctl.HorizontalScroll.Visible)
                 return ctl.VerticalScroll.Visible ? ScrollBars.Both : ScrollBars.Horizontal;
             else
                 return ctl.VerticalScroll.Visible ? ScrollBars.Vertical : ScrollBars.None;
+        }
+
+        private Thread dThread;
+
+        private void tstxtFilterPlugin_TextChanged(object sender, EventArgs e)
+        {
+            if (dThread != null)
+            {
+                dThread.Abort();
+            }
+
+            dThread = new Thread(DisplayPlugins);
+            dThread.Start(tstxtFilterPlugin.Text);
         }
     }
 

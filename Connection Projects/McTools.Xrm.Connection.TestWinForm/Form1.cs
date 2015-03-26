@@ -42,7 +42,6 @@ namespace McTools.Xrm.Connection.TestWinForm
             this.cManager.ConnectionFailed += new ConnectionManager.ConnectionFailedEventHandler(cManager_ConnectionFailed);
             this.cManager.StepChanged += new ConnectionManager.StepChangedEventHandler(cManager_StepChanged);
             this.cManager.RequestPassword += new ConnectionManager.RequestPasswordEventHandler(cManager_RequestPassword);
-            this.cManager.UseProxy += new ConnectionManager.UseProxyEventHandler(cManager_UseProxy);
             formHelper = new FormHelper(this);
 
             // Instantiate and add the connection control to the form
@@ -51,12 +50,7 @@ namespace McTools.Xrm.Connection.TestWinForm
 
             this.ccsb.SetMessage("A message to display...");
         }
-
-        void cManager_UseProxy(object sender, UseProxyEventArgs e)
-        {
-            formHelper.SelectProxy();
-        }
-
+   
         bool cManager_RequestPassword(object sender, RequestPasswordEventArgs e)
         {
             return formHelper.RequestPassword(e.ConnectionDetail);

@@ -65,6 +65,9 @@ namespace XrmToolBox
             this.donateDollarPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateEuroPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateGbpPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.tslFilterPlugin = new System.Windows.Forms.ToolStripLabel();
+            this.tstxtFilterPlugin = new System.Windows.Forms.ToolStripTextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.HomePageTab = new System.Windows.Forms.TabPage();
             this.pnlHelp = new System.Windows.Forms.Panel();
@@ -94,6 +97,9 @@ namespace XrmToolBox
             this.tsbManageTabs,
             this.tsbOptions,
             this.toolStripSeparator1,
+            this.tslFilterPlugin,
+            this.tstxtFilterPlugin,
+            this.toolStripSeparator6,
             this.tsbAbout,
             this.toolStripSeparator3,
             this.tsbCodePlex,
@@ -357,6 +363,24 @@ namespace XrmToolBox
             this.donateGbpPluginMenuItem.Text = "Donate in GBP";
             this.donateGbpPluginMenuItem.Click += new System.EventHandler(this.donateGbpPluginMenuItem_Click);
             // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 32);
+            // 
+            // tslFilterPlugin
+            // 
+            this.tslFilterPlugin.Name = "tslFilterPlugin";
+            this.tslFilterPlugin.Size = new System.Drawing.Size(64, 29);
+            this.tslFilterPlugin.Text = "Search";
+            // 
+            // tstxtFilterPlugin
+            // 
+            this.tstxtFilterPlugin.Name = "tstxtFilterPlugin";
+            this.tstxtFilterPlugin.Size = new System.Drawing.Size(150, 32);
+            this.tstxtFilterPlugin.ToolTipText = "Filter by plugin name or company name";
+            this.tstxtFilterPlugin.TextChanged += new System.EventHandler(this.tstxtFilterPlugin_TextChanged);
+            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.HomePageTab);
@@ -426,7 +450,9 @@ namespace XrmToolBox
             this.ClientSize = new System.Drawing.Size(884, 612);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.toolStrip1);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "XrmToolBox for Microsoft Dynamics CRM 2011/2013/2015";
@@ -482,6 +508,9 @@ namespace XrmToolBox
         private System.Windows.Forms.ToolStripMenuItem donateDollarPluginMenuItem;
         private System.Windows.Forms.ToolStripMenuItem donateEuroPluginMenuItem;
         private System.Windows.Forms.ToolStripMenuItem donateGbpPluginMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripLabel tslFilterPlugin;
+        private System.Windows.Forms.ToolStripTextBox tstxtFilterPlugin;
     }
 }
 

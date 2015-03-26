@@ -194,6 +194,8 @@ namespace MsCrmTools.WebResourcesManager
                         tvWebResources.Sort();
                         TvWebResourcesAfterSelect(null, null);
 
+                        tsbClear.Visible = true;
+
                         SetWorkingState(false);
                     },
                     settings);
@@ -527,9 +529,10 @@ namespace MsCrmTools.WebResourcesManager
                     }
 
                     tvWebResources.ExpandAll();
-
                     tvWebResources.TreeViewNodeSorter = new NodeSorter();
                     tvWebResources.Sort();
+
+                    tsbClear.Visible = true;
 
                     if (invalidFilenames.Count > 0)
                     {
@@ -827,7 +830,9 @@ namespace MsCrmTools.WebResourcesManager
             tvWebResources.Nodes.Clear();
             panelControl.Controls.Clear();
             tslResourceName.Text = "";
+            tslCurrentlyLoadedSolution.Text = "";
             toolStripScriptContent.Visible = false;
+            tsbClear.Visible = false;
         }
 
         #endregion TREEVIEW - Manage content
@@ -1024,6 +1029,9 @@ namespace MsCrmTools.WebResourcesManager
                 return;
             }
 
+            if (panelControl.Controls.Count == 0)
+                return;
+
             var control = ((IWebResourceControl) panelControl.Controls[0]);
             if (!(control is CodeControl)) return;
 
@@ -1037,6 +1045,9 @@ namespace MsCrmTools.WebResourcesManager
                 ((ToolStripDropDownItem)((ToolStrip)(((TabControl)(Parent).Parent).SelectedTab.Controls.Find("toolStripScriptContent", true)[0])).Items[2]).DropDownItems[1].PerformClick();
                 return;
             }
+
+            if (panelControl.Controls.Count == 0)
+                return;
 
             var control = ((IWebResourceControl)panelControl.Controls[0]);
             if (!(control is CodeControl)) return;
