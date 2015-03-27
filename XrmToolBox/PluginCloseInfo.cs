@@ -46,6 +46,7 @@ namespace XrmToolBox
         CloseAllExceptActive,
         CloseCurrent,
         CloseMiddleClick,
+        CloseHotKey,
         PluginRequest,
     }
 }
