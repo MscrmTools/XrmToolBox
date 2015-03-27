@@ -70,6 +70,7 @@ namespace MsCrmTools.Translator
                                            ExportGlobalOptionSet = chkExportGlobalOptSet.Checked,
                                            ExportOptionSet = chkExportPicklists.Checked,
                                            ExportViews = chkExportViews.Checked,
+                                           ExportCustomizedRelationships = chkExportCustomizedRelationships.Checked,
                                            ExportSiteMap = chkExportSiteMap.Checked,
                                            FilePath = sfd.FileName,
                                            Entities = entities

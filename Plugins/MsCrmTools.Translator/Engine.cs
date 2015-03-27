@@ -50,7 +50,21 @@ namespace MsCrmTools.Translator
             }
             foreach (string entityLogicalName in settings.Entities)
             {
-                var request = new RetrieveEntityRequest { LogicalName = entityLogicalName, EntityFilters = EntityFilters.Attributes };
+                var filters = EntityFilters.Default;
+                if (settings.ExportEntities)
+                {
+                    filters = filters | EntityFilters.Entity;
+                }
+                if (settings.ExportCustomizedRelationships)
+                {
+                    filters = filters | EntityFilters.Relationships;
+                }
+                if (settings.ExportAttributes)
+                {
+                    filters = filters | EntityFilters.Attributes;
+                }
+
+                var request = new RetrieveEntityRequest { LogicalName = entityLogicalName, EntityFilters = filters };
                 var response = (RetrieveEntityResponse)service.Execute(request);
                 emds.Add(response.EntityMetadata);
             }
@@ -93,6 +107,35 @@ namespace MsCrmTools.Translator
                 var sheet = file.Worksheets.Add("Attributes");
                 var at = new AttributeTranslation();
                 at.Export(emds, lcids, sheet);
+#endif
+            }
+
+
+            if (settings.ExportCustomizedRelationships && emds.Count > 0)
+            {
+                if (worker != null && worker.WorkerReportsProgress)
+                {
+                    worker.ReportProgress(0, "Exporting relationships with custom labels translations...");
+                }
+
+                #if NO_GEMBOX
+                var sheet = file.Workbook.Worksheets.Add("Relationships");
+                var rt = new RelationshipTranslation();
+                rt.Export(emds, lcids, sheet);
+                StyleMutator.FontDefaults(sheet);
+
+                var sheetNn =  file.Workbook.Worksheets.Add("RelationshipsNN");
+                var rtNn = new RelationshipNnTranslation();
+                rtNn.Export(emds, lcids, sheetNn);
+                StyleMutator.FontDefaults(sheetNn);
+#else
+                var sheet = file.Worksheets.Add("Relationships");
+                var rt = new RelationshipTranslation();
+                rt.Export(emds, lcids, sheet);
+
+                var sheetNn = file.Worksheets.Add("RelationshipsNN");
+                var rtNn = new RelationshipNnTranslation();
+                rtNn.Export(emds, lcids, sheetNn);
 #endif
             }
 
@@ -261,6 +304,28 @@ namespace MsCrmTools.Translator
                         var at = new AttributeTranslation();
                         at.Import(sheet, emds, service);
                         break;
+                    case "Relationships":
+                    {
+                        if (worker != null && worker.WorkerReportsProgress)
+                        {
+                            worker.ReportProgress(0, "Importing Relationships with custom label translations...");
+                        }
+
+                        var rt = new RelationshipTranslation();
+                        rt.Import(sheet, emds, service);
+                        break;
+                    }
+                    case "RelationshipsNN":
+                    {
+                        if (worker != null && worker.WorkerReportsProgress)
+                        {
+                            worker.ReportProgress(0, "Importing NN Relationships with custom label translations...");
+                        }
+
+                        var rtNn = new RelationshipNnTranslation();
+                        rtNn.Import(sheet, emds, service);
+                        break;
+                    }
                     case "Global OptionSets":
                         if (worker != null && worker.WorkerReportsProgress)
                         {
