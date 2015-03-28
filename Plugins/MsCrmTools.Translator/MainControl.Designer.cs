@@ -43,6 +43,7 @@
             this.btnCheckAll = new System.Windows.Forms.Button();
             this.btnClearAll = new System.Windows.Forms.Button();
             this.gbEntitiesOptions = new System.Windows.Forms.GroupBox();
+            this.chkExportCustomizedRelationships = new System.Windows.Forms.CheckBox();
             this.chkExportEntity = new System.Windows.Forms.CheckBox();
             this.chkExportAttributes = new System.Windows.Forms.CheckBox();
             this.chkExportFormsFields = new System.Windows.Forms.CheckBox();
@@ -104,7 +105,7 @@
             this.tsbClose.Image = ((System.Drawing.Image)(resources.GetObject("tsbClose.Image")));
             this.tsbClose.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(23, 29);
+            this.tsbClose.Size = new System.Drawing.Size(28, 29);
             this.tsbClose.Text = "Close this tool";
             this.tsbClose.Click += new System.EventHandler(this.TsbCloseClick);
             // 
@@ -118,7 +119,7 @@
             this.tsbLoadEntities.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadEntities.Image")));
             this.tsbLoadEntities.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbLoadEntities.Name = "tsbLoadEntities";
-            this.tsbLoadEntities.Size = new System.Drawing.Size(132, 29);
+            this.tsbLoadEntities.Size = new System.Drawing.Size(140, 29);
             this.tsbLoadEntities.Text = "Load entities";
             this.tsbLoadEntities.Click += new System.EventHandler(this.TsbLoadEntitiesClick);
             // 
@@ -132,7 +133,7 @@
             this.tsbExportTranslations.Image = ((System.Drawing.Image)(resources.GetObject("tsbExportTranslations.Image")));
             this.tsbExportTranslations.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbExportTranslations.Name = "tsbExportTranslations";
-            this.tsbExportTranslations.Size = new System.Drawing.Size(179, 29);
+            this.tsbExportTranslations.Size = new System.Drawing.Size(187, 29);
             this.tsbExportTranslations.Text = "Export translations";
             this.tsbExportTranslations.Click += new System.EventHandler(this.BtnExportTranslationsClick);
             // 
@@ -146,7 +147,7 @@
             this.tsbImportTranslations.Image = ((System.Drawing.Image)(resources.GetObject("tsbImportTranslations.Image")));
             this.tsbImportTranslations.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbImportTranslations.Name = "tsbImportTranslations";
-            this.tsbImportTranslations.Size = new System.Drawing.Size(183, 29);
+            this.tsbImportTranslations.Size = new System.Drawing.Size(191, 29);
             this.tsbImportTranslations.Text = "Import translations";
             this.tsbImportTranslations.Click += new System.EventHandler(this.BtnImportTranslationsClick);
             // 
@@ -221,6 +222,7 @@
             // 
             this.gbEntitiesOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbEntitiesOptions.Controls.Add(this.chkExportCustomizedRelationships);
             this.gbEntitiesOptions.Controls.Add(this.chkExportEntity);
             this.gbEntitiesOptions.Controls.Add(this.chkExportAttributes);
             this.gbEntitiesOptions.Controls.Add(this.chkExportFormsFields);
@@ -239,6 +241,19 @@
             this.gbEntitiesOptions.TabIndex = 93;
             this.gbEntitiesOptions.TabStop = false;
             this.gbEntitiesOptions.Text = "Entity related options";
+            // 
+            // chkExportCustomizedRelationships
+            // 
+            this.chkExportCustomizedRelationships.AutoSize = true;
+            this.chkExportCustomizedRelationships.Checked = true;
+            this.chkExportCustomizedRelationships.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkExportCustomizedRelationships.Location = new System.Drawing.Point(9, 346);
+            this.chkExportCustomizedRelationships.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkExportCustomizedRelationships.Name = "chkExportCustomizedRelationships";
+            this.chkExportCustomizedRelationships.Size = new System.Drawing.Size(383, 24);
+            this.chkExportCustomizedRelationships.TabIndex = 90;
+            this.chkExportCustomizedRelationships.Text = "Export Relationships that are using custom labels";
+            this.chkExportCustomizedRelationships.UseVisualStyleBackColor = true;
             // 
             // chkExportEntity
             // 
@@ -624,5 +639,6 @@
         private System.Windows.Forms.Button btnCheckAll;
         private System.Windows.Forms.Button btnClearAll;
         private System.Windows.Forms.CheckBox chkExportSiteMap;
+        private System.Windows.Forms.CheckBox chkExportCustomizedRelationships;
     }
 }

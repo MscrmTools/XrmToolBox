@@ -210,7 +210,7 @@ namespace MsCrmTools.Translator.AppCode
                     var request = new RetrieveEntityRequest
                                   {
                                       LogicalName = row.Cells[1].Value.ToString(),
-                                      EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
+                                      EntityFilters = EntityFilters.Entity | EntityFilters.Attributes | EntityFilters.Relationships
                                   };
 
                     var response = ((RetrieveEntityResponse) service.Execute(request));

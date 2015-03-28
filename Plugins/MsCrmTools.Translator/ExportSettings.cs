@@ -32,5 +32,7 @@ namespace MsCrmTools.Translator
         public bool ExportForms { get; set; }
 
         public bool ExportSiteMap { get; set; }
+
+        public bool ExportCustomizedRelationships { get; set; }
     }
 }
