@@ -1284,8 +1284,7 @@ namespace MsCrmTools.WebResourcesManager
 
                 if (ctrl != null)
                 {
-                    ctrl.Size = panelControl.Size;
-                    ctrl.Anchor = AnchorStyles.Bottom | AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+                    ctrl.Dock = DockStyle.Fill;
                     panelControl.Controls.Add(ctrl);
 
                     fileMenuSave.Enabled = false;
