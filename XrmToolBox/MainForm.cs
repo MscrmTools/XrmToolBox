@@ -54,7 +54,7 @@ namespace XrmToolBox
 
         #region Constructor
 
-        public MainForm()
+        public MainForm(string[] args)
         {
             InitializeComponent();
 
