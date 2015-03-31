@@ -50,9 +50,9 @@ namespace XrmToolBox
 
         private Panel infoPanel;
 
-        private object initialConnectionName;
-        
-        private object initialPluginName;
+        private string initialConnectionName;
+
+        private string initialPluginName;
 
         #endregion Variables
 
@@ -184,6 +184,22 @@ namespace XrmToolBox
             });
         }
 
+        private Task launchInitialConnection()
+        {
+            return new Task(() =>
+            {
+                var connectionDetail = ConnectionManager.Instance.ConnectionsList.Connections.Where(x => x.ConnectionName == this.initialConnectionName).FirstOrDefault(); ;
+
+                if (connectionDetail != null)
+                {
+                    ConnectionManager.Instance.ConnectToServer(connectionDetail);
+                }
+
+                // Resetting initial connection
+                this.initialConnectionName = string.Empty;
+            });
+        }
+
         #endregion Initialization methods
 
         #region Form events
@@ -202,6 +218,11 @@ namespace XrmToolBox
                 this.LaunchWelcomeDialog(),
                 this.LaunchVersionCheck()
             };
+
+            if (!string.IsNullOrEmpty(this.initialConnectionName))
+            {
+                tasks.Add(this.launchInitialConnection());
+            }
             
             tasks.ForEach(x => x.Start());
             
