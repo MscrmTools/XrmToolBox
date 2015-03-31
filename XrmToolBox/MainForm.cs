@@ -62,8 +62,8 @@ namespace XrmToolBox
         {
             if (args.Length > 0)
             {
-                this.initialConnectionName = ExtractConnectionName(ref args);
-                this.initialPluginName = ExtractPluginName(ref args);
+                this.initialConnectionName = ExtractSwitchValue("/connection:", ref args);
+                this.initialPluginName = ExtractSwitchValue("/plugin:", ref args);
             }
 
             InitializeComponent();
@@ -515,14 +515,19 @@ namespace XrmToolBox
             }
         }
 
-        private string ExtractPluginName(ref string[] args)
+        private string ExtractSwitchValue(string key, ref string[] args)
         {
-            throw new NotImplementedException();
-        }
+            var name = string.Empty;
 
-        private string ExtractConnectionName(ref string[] args)
-        {
-            throw new NotImplementedException();
+            foreach (var arg in args)
+            {
+                if (arg.StartsWith(key))
+                {
+                    name = arg.Substring(key.Length);
+                }
+            }
+
+            return name;
         }
 
         void MainForm_OnCloseTool(object sender, EventArgs e)
