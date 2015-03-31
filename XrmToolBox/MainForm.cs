@@ -50,12 +50,22 @@ namespace XrmToolBox
 
         private Panel infoPanel;
 
+        private object initialConnectionName;
+        
+        private object initialPluginName;
+
         #endregion Variables
 
         #region Constructor
 
         public MainForm(string[] args)
         {
+            if (args.Length > 0)
+            {
+                this.initialConnectionName = ExtractConnectionName(ref args);
+                this.initialPluginName = ExtractPluginName(ref args);
+            }
+
             InitializeComponent();
 
             ProcessMenuItemsForPlugin();
@@ -503,6 +513,16 @@ namespace XrmToolBox
                 MessageBox.Show(this, "An error occured when trying to display this plugin: " + error.Message, "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private string ExtractPluginName(ref string[] args)
+        {
+            throw new NotImplementedException();
+        }
+
+        private string ExtractConnectionName(ref string[] args)
+        {
+            throw new NotImplementedException();
         }
 
         void MainForm_OnCloseTool(object sender, EventArgs e)
