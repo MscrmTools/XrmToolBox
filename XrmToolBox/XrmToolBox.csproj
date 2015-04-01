@@ -149,6 +149,7 @@
     <Compile Include="IGitHubPlugin.cs" />
     <Compile Include="ICodePlexPlugin.cs" />
     <Compile Include="InvalidXrmSdkReferenceException.cs" />
+    <Compile Include="MessageBusEventArgs.cs" />
     <Compile Include="PluginCloseInfo.cs" />
     <Compile Include="AppCode\GithubVersionChecker.cs" />
     <Compile Include="CrmExceptionHelper.cs" />
