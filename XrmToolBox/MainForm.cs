@@ -253,6 +253,10 @@ namespace XrmToolBox
             {
                 tasks.Add(this.launchInitialConnection());
             }
+            else if (!string.IsNullOrEmpty(this.initialPluginName))
+            {
+                this.StartPluginWithoutConnection();
+            }
             
             tasks.ForEach(x => x.Start());
             
