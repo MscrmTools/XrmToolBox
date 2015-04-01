@@ -251,10 +251,13 @@ namespace XrmToolBox
 
             if (!string.IsNullOrEmpty(this.initialConnectionName))
             {
+                // If initiall connection is present, connect to given sever is initiated.
+                // After connection try to open intial plugin will be attempted.
                 tasks.Add(this.launchInitialConnection());
             }
             else if (!string.IsNullOrEmpty(this.initialPluginName))
             {
+                // If there is no initial connection, but initial plugin is set, openning plugin
                 this.StartPluginWithoutConnection();
             }
             
