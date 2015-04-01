@@ -173,7 +173,7 @@ namespace XrmToolBox
                 {
                     this.Invoke(new Action(() =>
                     {
-                        this.PluginClicked(pluginControl, null);
+                        this.DisplayPluginControl(pluginControl);
                     }));
                 }
 
