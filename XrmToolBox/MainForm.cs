@@ -221,16 +221,11 @@ namespace XrmToolBox
             });
         }
 
-        private Task launchInitialConnection()
+        private Task launchInitialConnection(ConnectionDetail connectionDetail)
         {
             return new Task(() =>
             {
-                var connectionDetail = ConnectionManager.Instance.ConnectionsList.Connections.Where(x => x.ConnectionName == this.initialConnectionName).FirstOrDefault(); ;
-
-                if (connectionDetail != null)
-                {
-                    ConnectionManager.Instance.ConnectToServer(connectionDetail);
-                }
+                ConnectionManager.Instance.ConnectToServer(connectionDetail);
             });
         }
 
@@ -255,9 +250,23 @@ namespace XrmToolBox
 
             if (!string.IsNullOrEmpty(this.initialConnectionName))
             {
-                // If initiall connection is present, connect to given sever is initiated.
-                // After connection try to open intial plugin will be attempted.
-                tasks.Add(this.launchInitialConnection());
+                var connectionDetail = ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(x => x.ConnectionName == this.initialConnectionName); ;
+
+                if (connectionDetail != null)
+                {
+                    // If initiall connection is present, connect to given sever is initiated.
+                    // After connection try to open intial plugin will be attempted.
+                    tasks.Add(this.launchInitialConnection(connectionDetail));
+                }
+                else
+                {
+                    // Connection detail was not found, so name provided was incorrect.
+                    // But if name of the plugin is set, it should be started
+                    if (!string.IsNullOrEmpty(this.initialPluginName))
+                    {
+                        this.StartPluginWithoutConnection();
+                    }
+                }
             }
             else if (!string.IsNullOrEmpty(this.initialPluginName))
             {
