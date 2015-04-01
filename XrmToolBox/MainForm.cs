@@ -162,7 +162,7 @@ namespace XrmToolBox
 
         private void StartPluginWithoutConnection()
         {
-            if (!string.IsNullOrEmpty(this.initialPluginName))
+            if (!string.IsNullOrEmpty(this.initialPluginName) && this.pManager != null && this.pManager.PluginsControls != null)
             {
                 var pluginControl = this.pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == this.initialPluginName);
                 if (pluginControl != null)
