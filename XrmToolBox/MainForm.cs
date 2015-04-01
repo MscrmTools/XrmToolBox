@@ -132,26 +132,30 @@ namespace XrmToolBox
             };
             cManager.ConnectionFailed += (sender, e) =>
             {
-                Controls.Remove(infoPanel);
-                if (infoPanel != null) infoPanel.Dispose();
+                this.Invoke(new Action(() =>
+                {
+                    Controls.Remove(infoPanel);
+                    if (infoPanel != null) infoPanel.Dispose();
 
-                MessageBox.Show(this, e.FailureReason, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, e.FailureReason, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                currentConnectionDetail = null;
-                service = null;
-                ccsb.SetConnectionStatus(false, null);
-                ccsb.SetMessage(e.FailureReason);
+                    currentConnectionDetail = null;
+                    service = null;
+                    ccsb.SetConnectionStatus(false, null);
+                    ccsb.SetMessage(e.FailureReason);
+
+                    this.StartPluginWithConnection();
+                }));
             };
+
             fHelper = new FormHelper(this);
             ccsb = new CrmConnectionStatusBar(fHelper) { Dock = DockStyle.Bottom };
             Controls.Add(ccsb);
-
-            this.StartPluginWithConnection();
         }
 
         private void StartPluginWithConnection()
         {
-            if (!string.IsNullOrEmpty(this.initialConnectionName) && string.IsNullOrEmpty(this.initialPluginName))
+            if (!string.IsNullOrEmpty(this.initialConnectionName) && !string.IsNullOrEmpty(this.initialPluginName))
             {
                 this.StartPluginWithoutConnection();
 
