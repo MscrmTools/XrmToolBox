@@ -127,6 +127,8 @@ namespace XrmToolBox
                 {
                     ApplyConnectionToTabs();
                 }
+
+                this.StartPluginWithConnection();
             };
             cManager.ConnectionFailed += (sender, e) =>
             {
@@ -143,6 +145,37 @@ namespace XrmToolBox
             fHelper = new FormHelper(this);
             ccsb = new CrmConnectionStatusBar(fHelper) { Dock = DockStyle.Bottom };
             Controls.Add(ccsb);
+
+            this.StartPluginWithConnection();
+        }
+
+        private void StartPluginWithConnection()
+        {
+            if (!string.IsNullOrEmpty(this.initialConnectionName) && string.IsNullOrEmpty(this.initialPluginName))
+            {
+                this.StartPluginWithoutConnection();
+
+                // Resetting initial connection name
+                this.initialConnectionName = string.Empty;
+            }
+        }
+
+        private void StartPluginWithoutConnection()
+        {
+            if (!string.IsNullOrEmpty(this.initialPluginName))
+            {
+                var pluginControl = this.pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == this.initialPluginName);
+                if (pluginControl != null)
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        this.PluginClicked(pluginControl, null);
+                    }));
+                }
+
+                // Resetting initial plugin name
+                this.initialPluginName = string.Empty;
+            }
         }
 
         private Task LaunchVersionCheck()
@@ -194,9 +227,6 @@ namespace XrmToolBox
                 {
                     ConnectionManager.Instance.ConnectToServer(connectionDetail);
                 }
-
-                // Resetting initial connection
-                this.initialConnectionName = string.Empty;
             });
         }
 
