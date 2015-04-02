@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Controls;
 
 namespace XrmToolBox
 {
@@ -7,8 +8,11 @@ namespace XrmToolBox
     /// </summary>
     public class MessageBusEventArgs : EventArgs
     {
-        public string TargetConnection;
-        
+        /// <summary>
+        /// Plugin to start
+        /// </summary>
         public string TargetPlugin;
+
+        public delegate void TargetAction(UserControl plugin);
     }
 }
