@@ -19,7 +19,7 @@ namespace XrmToolBox
         /// Point d'entrée principal de l'application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace XrmToolBox
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new MainForm());
+                Application.Run(new MainForm(args));
             }
             catch (Exception error)
             {

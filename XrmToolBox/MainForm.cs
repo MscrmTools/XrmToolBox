@@ -50,12 +50,22 @@ namespace XrmToolBox
 
         private Panel infoPanel;
 
+        private string initialConnectionName;
+
+        private string initialPluginName;
+
         #endregion Variables
 
         #region Constructor
 
-        public MainForm()
+        public MainForm(string[] args)
         {
+            if (args.Length > 0)
+            {
+                this.initialConnectionName = ExtractSwitchValue("/connection:", ref args);
+                this.initialPluginName = ExtractSwitchValue("/plugin:", ref args);
+            }
+
             InitializeComponent();
 
             ProcessMenuItemsForPlugin();
@@ -117,22 +127,59 @@ namespace XrmToolBox
                 {
                     ApplyConnectionToTabs();
                 }
+
+                this.StartPluginWithConnection();
             };
             cManager.ConnectionFailed += (sender, e) =>
             {
-                Controls.Remove(infoPanel);
-                if (infoPanel != null) infoPanel.Dispose();
+                this.Invoke(new Action(() =>
+                {
+                    Controls.Remove(infoPanel);
+                    if (infoPanel != null) infoPanel.Dispose();
 
-                MessageBox.Show(this, e.FailureReason, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, e.FailureReason, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                currentConnectionDetail = null;
-                service = null;
-                ccsb.SetConnectionStatus(false, null);
-                ccsb.SetMessage(e.FailureReason);
+                    currentConnectionDetail = null;
+                    service = null;
+                    ccsb.SetConnectionStatus(false, null);
+                    ccsb.SetMessage(e.FailureReason);
+
+                    this.StartPluginWithConnection();
+                }));
             };
+
             fHelper = new FormHelper(this);
             ccsb = new CrmConnectionStatusBar(fHelper) { Dock = DockStyle.Bottom };
             Controls.Add(ccsb);
+        }
+
+        private void StartPluginWithConnection()
+        {
+            if (!string.IsNullOrEmpty(this.initialConnectionName) && !string.IsNullOrEmpty(this.initialPluginName))
+            {
+                this.StartPluginWithoutConnection();
+
+                // Resetting initial connection name
+                this.initialConnectionName = string.Empty;
+            }
+        }
+
+        private void StartPluginWithoutConnection()
+        {
+            if (!string.IsNullOrEmpty(this.initialPluginName) && this.pManager != null && this.pManager.PluginsControls != null)
+            {
+                var pluginControl = this.pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == this.initialPluginName);
+                if (pluginControl != null)
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        this.DisplayPluginControl(pluginControl);
+                    }));
+                }
+
+                // Resetting initial plugin name
+                this.initialPluginName = string.Empty;
+            }
         }
 
         private Task LaunchVersionCheck()
@@ -174,6 +221,14 @@ namespace XrmToolBox
             });
         }
 
+        private Task launchInitialConnection(ConnectionDetail connectionDetail)
+        {
+            return new Task(() =>
+            {
+                ConnectionManager.Instance.ConnectToServer(connectionDetail);
+            });
+        }
+
         #endregion Initialization methods
 
         #region Form events
@@ -192,6 +247,32 @@ namespace XrmToolBox
                 this.LaunchWelcomeDialog(),
                 this.LaunchVersionCheck()
             };
+
+            if (!string.IsNullOrEmpty(this.initialConnectionName))
+            {
+                var connectionDetail = ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(x => x.ConnectionName == this.initialConnectionName); ;
+
+                if (connectionDetail != null)
+                {
+                    // If initiall connection is present, connect to given sever is initiated.
+                    // After connection try to open intial plugin will be attempted.
+                    tasks.Add(this.launchInitialConnection(connectionDetail));
+                }
+                else
+                {
+                    // Connection detail was not found, so name provided was incorrect.
+                    // But if name of the plugin is set, it should be started
+                    if (!string.IsNullOrEmpty(this.initialPluginName))
+                    {
+                        this.StartPluginWithoutConnection();
+                    }
+                }
+            }
+            else if (!string.IsNullOrEmpty(this.initialPluginName))
+            {
+                // If there is no initial connection, but initial plugin is set, openning plugin
+                this.StartPluginWithoutConnection();
+            }
             
             tasks.ForEach(x => x.Start());
             
@@ -503,6 +584,21 @@ namespace XrmToolBox
                 MessageBox.Show(this, "An error occured when trying to display this plugin: " + error.Message, "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private string ExtractSwitchValue(string key, ref string[] args)
+        {
+            var name = string.Empty;
+
+            foreach (var arg in args)
+            {
+                if (arg.StartsWith(key))
+                {
+                    name = arg.Substring(key.Length);
+                }
+            }
+
+            return name;
         }
 
         void MainForm_OnCloseTool(object sender, EventArgs e)
