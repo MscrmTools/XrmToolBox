@@ -408,10 +408,15 @@ namespace XrmToolBox
                 if (pm == null)
                 {
                     pm = new PluginModel(GetImage(plugin), title, desc, author, version, backColor, primaryColor, count)
-                {
+                    {
                         Tag = plugin
-                };
+                    };
                     pm.Clicked += PluginClicked;
+
+                    if (plugin is IMessageBus)
+                    {
+                        ((IMessageBus)plugin).OnOutgoingMessage += MainForm_OnOutgoingMessage;
+                    }
                     pManager.PluginsControls.Add(pm);
                 }
 
@@ -433,8 +438,12 @@ namespace XrmToolBox
                     pm = new SmallPluginModel(GetImage(plugin, true), title, desc, author, version, backColor, primaryColor, secondaryColor, count)
                     {
                         Tag = plugin
-                };
-                pm.Clicked += PluginClicked;
+                    };
+                    pm.Clicked += PluginClicked;
+                    if (plugin is IMessageBus)
+                    {
+                        ((IMessageBus)plugin).OnOutgoingMessage += MainForm_OnOutgoingMessage;
+                    }
                     pManager.PluginsControls.Add(pm);
                 }
                 var localTop = top;
@@ -447,6 +456,11 @@ namespace XrmToolBox
                     }));
                 top += pm.Height+4;
             }
+        }
+
+        void MainForm_OnOutgoingMessage(object sender, MessageBusEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void PluginClicked(object sender, EventArgs e)
