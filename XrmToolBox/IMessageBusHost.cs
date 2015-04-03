@@ -5,7 +5,7 @@ namespace XrmToolBox
     /// <summary>
     /// Interface which plugins should implement to be able communicate between each other
     /// </summary>
-    public interface IMessageBus
+    public interface IMessageBusHost
     {
         /// <summary>
         /// Event raised by plugin notifying broker that new message is ready to dispatch

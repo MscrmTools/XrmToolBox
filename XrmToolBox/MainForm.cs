@@ -491,9 +491,9 @@ namespace XrmToolBox
                 var controlType = (Type) plugin.Tag;
                 var pluginControl = (UserControl) PluginManager.CreateInstance(controlType.Assembly.Location, controlType.FullName);
 
-                if (pluginControl is IMessageBus)
+                if (pluginControl is IMessageBusHost)
                 {
-                    ((IMessageBus)pluginControl).OnOutgoingMessage += MainForm_OnOutgoingMessage;
+                    ((IMessageBusHost)pluginControl).OnOutgoingMessage += MainForm_OnOutgoingMessage;
                 }
 
                 if (service != null)
