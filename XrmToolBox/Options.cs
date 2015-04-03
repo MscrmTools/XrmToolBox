@@ -94,6 +94,16 @@ namespace XrmToolBox
                 size.Width = Screen.PrimaryScreen.WorkingArea.Width;
             }
 
+            if (form.MinimumSize.Width > size.Width)
+            {
+                size.Width = form.MinimumSize.Width;
+            }
+
+            if (form.MinimumSize.Height > size.Height)
+            {
+                size.Height = form.MinimumSize.Height;
+            }
+
             if (size.Height != 0)
             {
                 form.Size = size;
