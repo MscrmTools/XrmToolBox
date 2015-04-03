@@ -10,7 +10,7 @@ using XrmToolBox;
 
 namespace MsCrmTools.SampleTool
 {
-    public partial class SampleTool : PluginBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin
+    public partial class SampleTool : PluginBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IMessageBus
     {
         public SampleTool()
         {
@@ -24,24 +24,26 @@ namespace MsCrmTools.SampleTool
 
         public void ProcessWhoAmI()
         {
-            WorkAsync(null, (w, e) =>
-            {
-                var request = new WhoAmIRequest();
-                var response = (WhoAmIResponse) Service.Execute(request);
+            OnOutgoingMessage(this, null);
 
-                e.Result = response.UserId;
-            },
-                e =>
-                {
-                    MessageBox.Show(string.Format("You are {0}", (Guid) e.Result));
-                },
-                e =>
-                {
+            //WorkAsync(null, (w, e) =>
+            //{
+            //    var request = new WhoAmIRequest();
+            //    var response = (WhoAmIResponse) Service.Execute(request);
 
-                },
-                "Retrieving your user id...",
-                340,
-                150);
+            //    e.Result = response.UserId;
+            //},
+            //    e =>
+            //    {
+            //        MessageBox.Show(string.Format("You are {0}", (Guid) e.Result));
+            //    },
+            //    e =>
+            //    {
+
+            //    },
+            //    "Retrieving your user id...",
+            //    340,
+            //    150);
         }
 
         private void BtnCloseClick(object sender, EventArgs e)
@@ -72,6 +74,13 @@ namespace MsCrmTools.SampleTool
         public string DonationDescription
         {
             get { return "paypal description"; }
+        }
+
+        public event EventHandler<MessageBusEventArgs> OnOutgoingMessage;
+
+        public void OnIncomingMessage(MessageBusEventArgs message)
+        {
+            throw new NotImplementedException();
         }
     }
 }

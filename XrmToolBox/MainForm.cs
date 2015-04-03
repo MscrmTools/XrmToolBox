@@ -412,11 +412,6 @@ namespace XrmToolBox
                         Tag = plugin
                     };
                     pm.Clicked += PluginClicked;
-
-                    if (plugin is IMessageBus)
-                    {
-                        ((IMessageBus)plugin).OnOutgoingMessage += MainForm_OnOutgoingMessage;
-                    }
                     pManager.PluginsControls.Add(pm);
                 }
 
@@ -440,10 +435,6 @@ namespace XrmToolBox
                         Tag = plugin
                     };
                     pm.Clicked += PluginClicked;
-                    if (plugin is IMessageBus)
-                    {
-                        ((IMessageBus)plugin).OnOutgoingMessage += MainForm_OnOutgoingMessage;
-                    }
                     pManager.PluginsControls.Add(pm);
                 }
                 var localTop = top;
@@ -498,8 +489,12 @@ namespace XrmToolBox
             try
             {
                 var controlType = (Type) plugin.Tag;
-                var pluginControl =
-                    (UserControl) PluginManager.CreateInstance(controlType.Assembly.Location, controlType.FullName);
+                var pluginControl = (UserControl) PluginManager.CreateInstance(controlType.Assembly.Location, controlType.FullName);
+
+                if (pluginControl is IMessageBus)
+                {
+                    ((IMessageBus)pluginControl).OnOutgoingMessage += MainForm_OnOutgoingMessage;
+                }
 
                 if (service != null)
                 {
