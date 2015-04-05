@@ -13,6 +13,11 @@ namespace XrmToolBox
         /// </summary>
         public string TargetPlugin;
 
+        /// <summary>
+        /// Plugin to return
+        /// </summary>
+        public string SourcePlugin;
+
         public delegate void TargetAction(UserControl plugin);
     }
 }

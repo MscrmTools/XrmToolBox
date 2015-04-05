@@ -451,6 +451,11 @@ namespace XrmToolBox
 
         void MainForm_OnOutgoingMessage(object sender, MessageBusEventArgs e)
         {
+            var sourceControl = (UserControl)sender;
+            var targetControl = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == e.TargetPlugin);
+
+            e.SourcePlugin = ((Type)sourceControl.Tag).GetTitle();
+
             throw new NotImplementedException();
         }
 
@@ -493,6 +498,7 @@ namespace XrmToolBox
 
                 if (pluginControl is IMessageBusHost)
                 {
+                    pluginControl.Tag = (Type)plugin.Tag;
                     ((IMessageBusHost)pluginControl).OnOutgoingMessage += MainForm_OnOutgoingMessage;
                 }
 
