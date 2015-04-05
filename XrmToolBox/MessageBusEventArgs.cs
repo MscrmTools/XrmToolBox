@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Windows.Controls;
+using System.Windows.Forms;
 
 namespace XrmToolBox
 {
@@ -9,15 +9,34 @@ namespace XrmToolBox
     public class MessageBusEventArgs : EventArgs
     {
         /// <summary>
-        /// Plugin to start
-        /// </summary>
-        public string TargetPlugin;
-
-        /// <summary>
         /// Plugin to return
         /// </summary>
-        public string SourcePlugin;
+        public string SourcePlugin
+        {
+            get;
+            set;
+        }
 
-        public delegate void TargetAction(UserControl plugin);
+        /// <summary>
+        /// Plugin to start
+        /// </summary>
+        public string TargetPlugin
+        {
+            get;
+            private set;
+        }
+
+        public Action<UserControl> TargetAction;
+
+        public MessageBusEventArgs(UserControl sourceControl, string targetPlugin, Action<UserControl> targetAction)
+        {
+            if (sourceControl != null && sourceControl.Tag != null)
+            {
+                this.SourcePlugin = ((Type)sourceControl.Tag).GetTitle();
+            }
+
+            this.TargetPlugin = targetPlugin;
+            this.TargetAction = targetAction;
+        }
     }
 }

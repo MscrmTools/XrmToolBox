@@ -451,10 +451,38 @@ namespace XrmToolBox
 
         void MainForm_OnOutgoingMessage(object sender, MessageBusEventArgs e)
         {
-            var sourceControl = (UserControl)sender;
-            var targetControl = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == e.TargetPlugin);
+            if (string.IsNullOrEmpty(e.SourcePlugin) && sender == null)
+            {
+                // TODO: show error
+                return;
+            }
 
-            e.SourcePlugin = ((Type)sourceControl.Tag).GetTitle();
+            if (sender != null)
+            {
+                var sourceControl = (UserControl)sender;
+                if (string.IsNullOrEmpty(e.SourcePlugin))
+                {
+                    if (sourceControl.Tag != null)
+                    {
+                        e.SourcePlugin = ((Type)sourceControl.Tag).GetTitle();
+                    }
+                    else
+                    {
+                        // TODO: show error
+                        return;
+                    }
+                }
+                else
+                {
+                    if (sourceControl.Tag == null || e.SourcePlugin != ((Type)sourceControl.Tag).GetTitle())
+                    {
+                        // TODO: show error
+                        return;
+                    }
+                }
+            }
+
+            var targetControl = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == e.TargetPlugin);
 
             throw new NotImplementedException();
         }
