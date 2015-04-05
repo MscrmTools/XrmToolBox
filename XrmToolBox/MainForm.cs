@@ -464,7 +464,7 @@ namespace XrmToolBox
                 {
                     if (sourceControl.Tag != null)
                     {
-                        e.SourcePlugin = ((Type)sourceControl.Tag).GetTitle();
+                        e.SourcePlugin = sourceControl.GetType().GetTitle();
                     }
                     else
                     {
@@ -474,7 +474,7 @@ namespace XrmToolBox
                 }
                 else
                 {
-                    if (sourceControl.Tag == null | e.SourcePlugin != ((Type)sourceControl.Tag).GetTitle())
+                    if (sourceControl.Tag == null | e.SourcePlugin != sourceControl.GetType().GetTitle())
                     {
                         // TODO: show error
                         return;
@@ -528,7 +528,6 @@ namespace XrmToolBox
             {
                 var controlType = (Type) plugin.Tag;
                 var pluginControl = (UserControl) PluginManager.CreateInstance(controlType.Assembly.Location, controlType.FullName);
-                pluginControl.Tag = (Type)plugin.Tag;
 
                 if (service != null)
                 {
@@ -553,6 +552,7 @@ namespace XrmToolBox
                         : "Not connected");
 
                 var newTab = new TabPage(name);
+                newTab.Tag = pluginControl.GetType();
                 tabControl1.TabPages.Add(newTab);
 
                 pluginControl.Dock = DockStyle.Fill;
