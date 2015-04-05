@@ -474,7 +474,7 @@ namespace XrmToolBox
                 }
                 else
                 {
-                    if (sourceControl.Tag == null || e.SourcePlugin != ((Type)sourceControl.Tag).GetTitle())
+                    if (sourceControl.Tag == null | e.SourcePlugin != ((Type)sourceControl.Tag).GetTitle())
                     {
                         // TODO: show error
                         return;
@@ -484,7 +484,12 @@ namespace XrmToolBox
 
             var targetControl = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == e.TargetPlugin);
 
-            throw new NotImplementedException();
+            DisplayPluginControl((UserControl)targetControl);
+
+            //if (targetControl is IMessageBusHost)
+            //{
+            //    ((IMessageBusHost)targetControl).OnIncomingMessage(e);
+            //}
         }
 
         private void PluginClicked(object sender, EventArgs e)
@@ -523,12 +528,7 @@ namespace XrmToolBox
             {
                 var controlType = (Type) plugin.Tag;
                 var pluginControl = (UserControl) PluginManager.CreateInstance(controlType.Assembly.Location, controlType.FullName);
-
-                if (pluginControl is IMessageBusHost)
-                {
-                    pluginControl.Tag = (Type)plugin.Tag;
-                    ((IMessageBusHost)pluginControl).OnOutgoingMessage += MainForm_OnOutgoingMessage;
-                }
+                pluginControl.Tag = (Type)plugin.Tag;
 
                 if (service != null)
                 {
@@ -537,6 +537,11 @@ namespace XrmToolBox
 
                     ((IMsCrmToolsPluginUserControl) pluginControl).UpdateConnection(clonedService,
                         currentConnectionDetail);
+                }
+
+                if (pluginControl is IMessageBusHost)
+                {
+                    ((IMessageBusHost)pluginControl).OnOutgoingMessage += MainForm_OnOutgoingMessage;
                 }
 
                 ((IMsCrmToolsPluginUserControl) pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
