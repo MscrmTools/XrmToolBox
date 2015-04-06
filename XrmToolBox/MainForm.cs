@@ -476,7 +476,7 @@ namespace XrmToolBox
 
             var tab = tabControl1.TabPages.Cast<TabPage>().FirstOrDefault(x => x.Controls[0].GetType().GetTitle() == e.TargetPlugin);
 
-            if (tab != null)
+            if (tab != null & !e.NewInstance)
             {
                 tabControl1.SelectTab(tabControl1.TabPages.IndexOf(tab));
             }

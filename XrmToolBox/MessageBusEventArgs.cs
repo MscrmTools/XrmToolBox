@@ -26,7 +26,7 @@ namespace XrmToolBox
             private set;
         }
 
-        public bool ExistingInstance
+        public bool NewInstance
         {
             get;
             private set;
@@ -34,7 +34,7 @@ namespace XrmToolBox
 
         public Action<UserControl> TargetAction;
 
-        public MessageBusEventArgs(UserControl sourceControl, string targetPlugin, Action<UserControl> targetAction, bool existingInstance = true)
+        public MessageBusEventArgs(UserControl sourceControl, string targetPlugin, Action<UserControl> targetAction, bool newInstance = false)
         {
             if (sourceControl != null && sourceControl.Tag != null)
             {
@@ -43,7 +43,7 @@ namespace XrmToolBox
 
             this.TargetPlugin = targetPlugin;
             this.TargetAction = targetAction;
-            this.ExistingInstance = existingInstance;
+            this.NewInstance = newInstance;
         }
     }
 }
