@@ -9,7 +9,7 @@ namespace XrmToolBox
     public class MessageBusEventArgs : EventArgs
     {
         /// <summary>
-        /// Plugin to return
+        /// Gets or sets name of plugin to return
         /// </summary>
         public string SourcePlugin
         {
@@ -18,7 +18,7 @@ namespace XrmToolBox
         }
 
         /// <summary>
-        /// Plugin to start
+        /// Gets name of the plugin to start
         /// </summary>
         public string TargetPlugin
         {
@@ -26,23 +26,36 @@ namespace XrmToolBox
             private set;
         }
 
+        /// <summary>
+        /// Indicates if new instance of target plugin should be created
+        /// </summary>
         public bool NewInstance
         {
             get;
             private set;
         }
 
-        public Action<UserControl> TargetAction;
-
-        public MessageBusEventArgs(UserControl sourceControl, string targetPlugin, Action<UserControl> targetAction, bool newInstance = false)
+        /// <summary>
+        /// Gets or sets action should be executed inside target plugin
+        /// </summary>
+        public Action<UserControl> TargetAction
         {
-            if (sourceControl != null && sourceControl.Tag != null)
-            {
-                this.SourcePlugin = ((Type)sourceControl.Tag).GetTitle();
-            }
+            get;
+            set;
+        }
 
+        /// <summary>
+        /// Gets or sets data will be passed to target plugin
+        /// </summary>
+        public object TargetArgument
+        {
+            get;
+            set;
+        }
+
+        public MessageBusEventArgs(string targetPlugin, bool newInstance = false)
+        {
             this.TargetPlugin = targetPlugin;
-            this.TargetAction = targetAction;
             this.NewInstance = newInstance;
         }
     }
