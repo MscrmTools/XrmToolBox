@@ -556,7 +556,6 @@ namespace XrmToolBox
                         : "Not connected");
 
                 var newTab = new TabPage(name);
-                newTab.Tag = pluginControl.GetType();
                 tabControl1.TabPages.Add(newTab);
 
                 pluginControl.Dock = DockStyle.Fill;
@@ -569,7 +568,7 @@ namespace XrmToolBox
 
                 tabControl1.SelectTab(tabIndex);
 
-                var pluginInOption =
+                var pluginInOption = 
                     currentOptions.MostUsedList.FirstOrDefault(i => i.Name == pluginControl.GetType().FullName);
                 if (pluginInOption == null)
                 {
