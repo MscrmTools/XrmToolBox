@@ -451,7 +451,7 @@ namespace XrmToolBox
 
         void MainForm_OnOutgoingMessage(object sender, MessageBusEventArgs e)
         {
-            if (string.IsNullOrEmpty(e.SourcePlugin) && sender == null)
+            if (e == null || (string.IsNullOrEmpty(e.SourcePlugin) && sender == null))
             {
                 // TODO: show error
                 return;
