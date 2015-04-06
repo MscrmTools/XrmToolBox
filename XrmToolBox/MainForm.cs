@@ -462,15 +462,7 @@ namespace XrmToolBox
                 var sourceControl = (UserControl)sender;
                 if (string.IsNullOrEmpty(e.SourcePlugin))
                 {
-                    if (sourceControl.Tag != null)
-                    {
-                        e.SourcePlugin = sourceControl.GetType().GetTitle();
-                    }
-                    else
-                    {
-                        // TODO: show error
-                        return;
-                    }
+                    e.SourcePlugin = sourceControl.GetType().GetTitle();
                 }
                 else
                 {
@@ -482,10 +474,18 @@ namespace XrmToolBox
                 }
             }
 
-            var targetControl = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == e.TargetPlugin);
+            var tab = tabControl1.TabPages.Cast<TabPage>().FirstOrDefault(x => x.Controls[0].GetType().GetTitle() == e.TargetPlugin);
 
-            DisplayPluginControl((UserControl)targetControl);
-
+            if (tab != null)
+            {
+                var targetControl = (UserControl)tab.Controls[0];
+                tab.Show();
+            }
+            else
+            {
+                var targetModel = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == e.TargetPlugin);
+                DisplayPluginControl((UserControl)targetModel);
+            }
             //if (targetControl is IMessageBusHost)
             //{
             //    ((IMessageBusHost)targetControl).OnIncomingMessage(e);
