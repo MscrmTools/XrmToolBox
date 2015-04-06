@@ -478,14 +478,16 @@ namespace XrmToolBox
 
             if (tab != null)
             {
-                var targetControl = (UserControl)tab.Controls[0];
-                tab.Show();
+                tabControl1.SelectTab(tabControl1.TabPages.IndexOf(tab));
             }
             else
             {
                 var targetModel = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == e.TargetPlugin);
-                DisplayPluginControl((UserControl)targetModel);
+                tab = tabControl1.TabPages[DisplayPluginControl((UserControl)targetModel)];
             }
+
+            var targetControl = (UserControl)tab.Controls[0];
+
             //if (targetControl is IMessageBusHost)
             //{
             //    ((IMessageBusHost)targetControl).OnIncomingMessage(e);
@@ -522,8 +524,10 @@ namespace XrmToolBox
         
         #endregion Form events
 
-        private void DisplayPluginControl(UserControl plugin)
+        private int DisplayPluginControl(UserControl plugin)
         {
+            var tabIndex = 0;
+
             try
             {
                 var controlType = (Type) plugin.Tag;
@@ -561,7 +565,9 @@ namespace XrmToolBox
 
                 newTab.Controls.Add(pluginControl);
 
-                tabControl1.SelectTab(tabControl1.TabPages.Count - 1);
+                tabIndex = tabControl1.TabPages.Count - 1;
+
+                tabControl1.SelectTab(tabIndex);
 
                 var pluginInOption =
                     currentOptions.MostUsedList.FirstOrDefault(i => i.Name == pluginControl.GetType().FullName);
@@ -632,6 +638,8 @@ namespace XrmToolBox
                 MessageBox.Show(this, "An error occured when trying to display this plugin: " + error.Message, "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            return tabIndex;
         }
 
         private string ExtractSwitchValue(string key, ref string[] args)
