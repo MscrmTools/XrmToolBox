@@ -488,10 +488,10 @@ namespace XrmToolBox
 
             var targetControl = (UserControl)tab.Controls[0];
 
-            //if (targetControl is IMessageBusHost)
-            //{
-            //    ((IMessageBusHost)targetControl).OnIncomingMessage(e);
-            //}
+            if (targetControl is IMessageBusHost)
+            {
+                ((IMessageBusHost)targetControl).OnIncomingMessage(e);
+            }
         }
 
         private void PluginClicked(object sender, EventArgs e)
