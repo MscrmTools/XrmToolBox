@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace XrmToolBox.UserControls
 {
-    public partial class SmallPluginModel : PluginModel
+    public partial class LargePluginModel : PluginModel
     {
         #region Event Handlers
 
@@ -20,34 +20,36 @@ namespace XrmToolBox.UserControls
 
         #region Constructors
 
-        public SmallPluginModel()
+        public LargePluginModel()
         {
             InitializeComponent();
         }
 
-        public SmallPluginModel(Image image, string title, string description, string company, string version, Color backColor, Color primaryColor, Color secondaryColor, int count)
+        public LargePluginModel(Image image, string title, string description, string company, string version, Color backColor, Color primaryColor, Color secondaryColor, int count)
         {
             InitializeComponent();
 
             picture.Image = image;
-            lblTitle.PrimaryFontColor = primaryColor;
-            lblTitle.SecondaryFontColor = secondaryColor;
-            lblTitle.Text = string.Format("{0} by {1} - {2}", title, company, version);
+            lblTitle.Text = title;
+            lblDescription.Text = description;
+            lblAuthor.Text = "Author: " + company;
+            lblVersion.Text = "Version: " + version;
+
+            lblTitle.ForeColor = primaryColor;
+            lblDescription.ForeColor = primaryColor;
+            lblAuthor.ForeColor = primaryColor;
+            lblVersion.ForeColor = primaryColor;
+                
+            BackColor = backColor;
 
             if (count > 0)
             {
                 lblCount.Text = count.ToString();
-                lblCount.ForeColor = secondaryColor;
             }
             else
             {
                 lblCount.Visible = false;
             }
-
-            var tip = new ToolTip();
-            tip.SetToolTip(lblTitle, description);
-
-                BackColor = backColor;
         }
 
         #endregion Constructors
@@ -58,15 +60,9 @@ namespace XrmToolBox.UserControls
                 Clicked(this, new EventArgs());
         }
 
-        private void LblTitleClick(object sender, EventArgs e)
-        {
-            MouseClick(null, null);
-        }
-
         public void UpdateCount(int count)
         {
             lblCount.Text = count.ToString();
-            Refresh();
         }
     }
 }

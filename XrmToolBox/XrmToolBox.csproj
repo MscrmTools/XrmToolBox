@@ -195,6 +195,12 @@
     <Compile Include="Forms\TabConnectionUpdater.Designer.cs">
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\LargePluginModel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\LargePluginModel.Designer.cs">
+      <DependentUpon>LargePluginModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\SmallPluginLabel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -206,9 +212,6 @@
     </Compile>
     <Compile Include="UserControls\PluginModel.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\PluginModel.Designer.cs">
-      <DependentUpon>PluginModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Worker.cs" />
     <Compile Include="XmlSerializerHelper.cs" />
@@ -243,11 +246,11 @@
     <EmbeddedResource Include="Forms\TabConnectionUpdater.resx">
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\LargePluginModel.resx">
+      <DependentUpon>LargePluginModel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\SmallPluginModel.resx">
       <DependentUpon>SmallPluginModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\PluginModel.resx">
-      <DependentUpon>PluginModel.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config">
       <SubType>Designer</SubType>
@@ -304,7 +307,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
