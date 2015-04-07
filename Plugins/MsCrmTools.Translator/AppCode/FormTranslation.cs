@@ -531,103 +531,58 @@ namespace MsCrmTools.Translator.AppCode
 
         public void ImportFormName(ExcelWorksheet sheet, IOrganizationService service)
         {
-            var forms = new List<Tuple<int, Entity>>();
-            //int lastColumnIndex = sheet.Rows[0].Cells.LastColumnIndex;
-
 #if NO_GEMBOX
             var rowsCount = sheet.Dimension.Rows;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
                 var currentFormId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString());
-                var columnIndex = 4;
 
+                var request = new SetLocLabelsRequest
+                {
+                    EntityMoniker = new EntityReference("systemform", currentFormId),
+                    AttributeName = ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Name" ? "name" : "description"
+                };
+
+                var labels = new List<LocalizedLabel>();
+
+                var columnIndex = 4;
                 while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                 {
-                    var currentLcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
-                    var formRecord = forms.FirstOrDefault(t => t.Item1 == currentLcid && t.Item2.Id == currentFormId);
-                    if (formRecord == null)
-                    {
-                        formRecord = new Tuple<int, Entity>(currentLcid, new Entity("systemform") { Id = currentFormId });
-                        forms.Add(formRecord);
-                    }
-
-                    if (ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Name")
-                    {
-                        formRecord.Item2["name"] = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
-                    }
-                    else if (ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Description")
-                    {
-                        formRecord.Item2["description"] = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
-                    }
-
+                    var currentLcid = int.Parse(ZeroBasedSheet.Cell(sheet, 1, columnIndex).Value.ToString());
+                    labels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), currentLcid));
                     columnIndex++;
                 }
+
+                request.Labels = labels.ToArray();
+
+                service.Execute(request);
             }
 #else
             foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
             {
                 var currentFormId = new Guid(row.Cells[1].Value.ToString());
+
+                var request = new SetLocLabelsRequest
+                {
+                    EntityMoniker = new EntityReference("systemform", currentFormId),
+                    AttributeName = row.Cells[3].Value.ToString() == "Name" ? "name" : "description"
+                };
+
+                var labels = new List<LocalizedLabel>();
+
                 var columnIndex = 4;
-                //while (columnIndex <= lastColumnIndex)
                 while (row.Cells[columnIndex].Value != null)
                 {
                     var currentLcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
-                    var formRecord = forms.FirstOrDefault(t => t.Item1 == currentLcid && t.Item2.Id == currentFormId);
-                    if (formRecord == null)
-                    {
-                        formRecord = new Tuple<int, Entity>(currentLcid, new Entity("systemform") {Id = currentFormId});
-                        forms.Add(formRecord);
-                    }
-
-                    if (row.Cells[3].Value.ToString() == "Name")
-                    {
-                        formRecord.Item2["name"] = row.Cells[columnIndex].Value.ToString();
-                    }
-                    else if (row.Cells[3].Value.ToString() == "Description")
-                    {
-                        formRecord.Item2["description"] = row.Cells[columnIndex].Value.ToString();
-                    }
-
+                    labels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(), currentLcid));
                     columnIndex++;
                 }
+
+                request.Labels = labels.ToArray();
+
+                service.Execute(request);
             }
 #endif
-            // Retrieve current user language information
-            var qe = new QueryExpression("usersettings")
-            {
-                ColumnSet = new ColumnSet("uilanguageid", "localeid"),
-                Criteria = new FilterExpression()
-            };
-            qe.Criteria.AddCondition("systemuserid", ConditionOperator.EqualUserId);
-            var settings = service.RetrieveMultiple(qe);
-            var userSettingLcid = settings[0].GetAttributeValue<int>("uilanguageid");
-            var currentSetting = userSettingLcid;
-
-            var languages = forms.Select(f => f.Item1).Distinct().ToList();
-            foreach (var lcid in languages)
-            {
-                // Define correct user language for update
-                if (userSettingLcid != lcid)
-                {
-                    settings[0]["localeid"] = lcid;
-                    settings[0]["uilanguageid"] = lcid;
-                    service.Update(settings[0]);
-                    currentSetting = lcid;
-                }
-
-                foreach (var form in forms.Where(f => f.Item1 == lcid))
-                {
-                    service.Update(form.Item2);
-                }
-            }
-
-            // Reinit user language
-            if (userSettingLcid != currentSetting)
-            {
-                settings[0]["localeid"] = userSettingLcid;
-                settings[0]["uilanguageid"] = userSettingLcid;
-                service.Update(settings[0]);
-            }
         }
 
 #if NO_GEMBOX
