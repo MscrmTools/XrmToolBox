@@ -393,60 +393,80 @@ namespace XrmToolBox
 
         private void DisplayOnePlugin(Type plugin, ref int top, int width, int count = -1)
         {
-            var title = plugin.GetTitle();
-            var desc = plugin.GetDescription();
-            var author = plugin.GetCompany();
-            var version = plugin.Assembly.GetName().Version.ToString();
-
-            var backColor = AssemblyAttributeHelper.GetColor(plugin.Assembly, typeof(BackgroundColorAttribute));
-            var primaryColor = AssemblyAttributeHelper.GetColor(plugin.Assembly, typeof(PrimaryFontColorAttribute));
-            var secondaryColor = AssemblyAttributeHelper.GetColor(plugin.Assembly, typeof(SecondaryFontColorAttribute));
+            PluginModel pm;
 
             if (currentOptions.DisplayLargeIcons)
             {
-                var pm = (PluginModel)pManager.PluginsControls.FirstOrDefault(t => t.Tag == plugin && t is PluginModel);
-                if (pm == null)
-                {
-                    pm = new PluginModel(GetImage(plugin), title, desc, author, version, backColor, primaryColor, count)
-                {
-                        Tag = plugin
-                };
-                    pm.Clicked += PluginClicked;
-                    pManager.PluginsControls.Add(pm);
-                }
-
-                var localTop = top;
-
-                this.Invoke(new Action(() =>
-                    {
-                    pm.Left = 4;
-                    pm.Top = localTop;
-                    pm.Width = width;
-                    }));
-                top += pm.Height+4;
+                pm = this.CreateModel<LargePluginModel>(plugin, ref top, width, count);
             }
             else
             {
-                var pm = (SmallPluginModel)pManager.PluginsControls.FirstOrDefault(t => t.Tag == plugin && t is SmallPluginModel);
-                if (pm == null)
-                {
-                    pm = new SmallPluginModel(GetImage(plugin, true), title, desc, author, version, backColor, primaryColor, secondaryColor, count)
-                    {
-                        Tag = plugin
-                };
-                pm.Clicked += PluginClicked;
-                    pManager.PluginsControls.Add(pm);
-                }
-                var localTop = top;
-
-                this.Invoke(new Action(() =>
-                    {
-                    pm.Left = 4;
-                    pm.Top = localTop;
-                    pm.Width = width;
-                    }));
-                top += pm.Height+4;
+                pm = this.CreateModel<SmallPluginModel>(plugin, ref top, width, count);
             }
+        }
+
+        private PluginModel CreateModel<T>(Type plugin, ref int top, int width, int count) 
+            where T : PluginModel
+        {
+            var pm = (T)this.pManager.PluginsControls.FirstOrDefault(t => (Type)t.Tag == plugin && t is T);
+
+            if (pm == null)
+            {
+                var title = plugin.GetTitle();
+                var desc = plugin.GetDescription();
+                var author = plugin.GetCompany();
+                var version = plugin.Assembly.GetName().Version.ToString();
+
+                var backColor = AssemblyAttributeHelper.GetColor(plugin.Assembly, typeof(BackgroundColorAttribute));
+                var primaryColor = AssemblyAttributeHelper.GetColor(plugin.Assembly, typeof(PrimaryFontColorAttribute));
+                var secondaryColor = AssemblyAttributeHelper.GetColor(plugin.Assembly, typeof(SecondaryFontColorAttribute));
+
+                var args = new Type[] 
+                {
+                    typeof(Image), 
+                    typeof(string), 
+                    typeof(string), 
+                    typeof(string), 
+                    typeof(string), 
+                    typeof(Color), 
+                    typeof(Color),
+                    typeof(Color), 
+                    typeof(int)
+                };
+
+                var vals = new object[]
+                {
+                    GetImage(plugin), 
+                    title,
+                    desc, 
+                    author, 
+                    version, 
+                    backColor, 
+                    primaryColor,
+                    secondaryColor,
+                    count
+                };
+
+                var ctor = typeof(T).GetConstructor(args);
+                pm = (T)ctor.Invoke(vals);
+                
+                pm.Tag = plugin;
+                pm.Clicked += PluginClicked;
+
+                this.pManager.PluginsControls.Add(pm);
+            }
+
+            var localTop = top;
+
+            this.Invoke(new Action(() =>
+            {
+                pm.Left = 4;
+                pm.Top = localTop;
+                pm.Width = width;
+            }));
+            top += pm.Height + 4;
+
+            return pm;
         }
 
         private void PluginClicked(object sender, EventArgs e)
@@ -530,7 +550,7 @@ namespace XrmToolBox
                     p1.UpdateCount(pluginInOption.Count);
                 else
                 {
-                    var p2 = plugin as PluginModel;
+                    var p2 = plugin as LargePluginModel;
                     if (p2 != null)
                     {
                         p2.UpdateCount(pluginInOption.Count);

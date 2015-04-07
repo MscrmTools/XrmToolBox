@@ -1,6 +1,6 @@
 ﻿namespace XrmToolBox.UserControls
 {
-    partial class PluginModel
+    partial class LargePluginModel
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.
