@@ -412,17 +412,17 @@ namespace XrmToolBox
 
             if (pm == null)
             {
-                var title = plugin.GetTitle();
-                var desc = plugin.GetDescription();
-                var author = plugin.GetCompany();
-                var version = plugin.Assembly.GetName().Version.ToString();
+            var title = plugin.GetTitle();
+            var desc = plugin.GetDescription();
+            var author = plugin.GetCompany();
+            var version = plugin.Assembly.GetName().Version.ToString();
 
-                var backColor = AssemblyAttributeHelper.GetColor(plugin.Assembly, typeof(BackgroundColorAttribute));
-                var primaryColor = AssemblyAttributeHelper.GetColor(plugin.Assembly, typeof(PrimaryFontColorAttribute));
-                var secondaryColor = AssemblyAttributeHelper.GetColor(plugin.Assembly, typeof(SecondaryFontColorAttribute));
+            var backColor = AssemblyAttributeHelper.GetColor(plugin.Assembly, typeof(BackgroundColorAttribute));
+            var primaryColor = AssemblyAttributeHelper.GetColor(plugin.Assembly, typeof(PrimaryFontColorAttribute));
+            var secondaryColor = AssemblyAttributeHelper.GetColor(plugin.Assembly, typeof(SecondaryFontColorAttribute));
 
                 var args = new Type[] 
-                {
+            {
                     typeof(Image), 
                     typeof(string), 
                     typeof(string), 
@@ -451,22 +451,67 @@ namespace XrmToolBox
                 pm = (T)ctor.Invoke(vals);
                 
                 pm.Tag = plugin;
-                pm.Clicked += PluginClicked;
+                    pm.Clicked += PluginClicked;
 
                 this.pManager.PluginsControls.Add(pm);
-            }
+                }
 
-            var localTop = top;
+                var localTop = top;
 
-            this.Invoke(new Action(() =>
-            {
-                pm.Left = 4;
-                pm.Top = localTop;
-                pm.Width = width;
-            }));
+                this.Invoke(new Action(() =>
+                    {
+                    pm.Left = 4;
+                    pm.Top = localTop;
+                    pm.Width = width;
+                    }));
             top += pm.Height + 4;
 
             return pm;
+        }
+
+        void MainForm_OnOutgoingMessage(object sender, MessageBusEventArgs e)
+        {
+            if (e == null || (string.IsNullOrEmpty(e.SourcePlugin) && sender == null))
+            {
+                // TODO: show error
+                return;
+            }
+
+            if (sender != null)
+            {
+                var sourceControl = (UserControl)sender;
+                if (string.IsNullOrEmpty(e.SourcePlugin))
+                {
+                    e.SourcePlugin = sourceControl.GetType().GetTitle();
+                }
+                else
+                {
+                    if (sourceControl.Tag == null | e.SourcePlugin != sourceControl.GetType().GetTitle())
+                    {
+                        // TODO: show error
+                        return;
+                    }
+                }
+            }
+
+            var tab = tabControl1.TabPages.Cast<TabPage>().FirstOrDefault(x => x.Controls[0].GetType().GetTitle() == e.TargetPlugin);
+
+            if (tab != null & !e.NewInstance)
+            {
+                tabControl1.SelectTab(tabControl1.TabPages.IndexOf(tab));
+            }
+            else
+            {
+                var targetModel = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == e.TargetPlugin);
+                tab = tabControl1.TabPages[DisplayPluginControl((UserControl)targetModel)];
+            }
+
+            var targetControl = (UserControl)tab.Controls[0];
+
+            if (targetControl is IMessageBusHost)
+            {
+                ((IMessageBusHost)targetControl).OnIncomingMessage(e);
+            }
         }
 
         private void PluginClicked(object sender, EventArgs e)
@@ -499,13 +544,14 @@ namespace XrmToolBox
         
         #endregion Form events
 
-        private void DisplayPluginControl(UserControl plugin)
+        private int DisplayPluginControl(UserControl plugin)
         {
+            var tabIndex = 0;
+
             try
             {
                 var controlType = (Type) plugin.Tag;
-                var pluginControl =
-                    (UserControl) PluginManager.CreateInstance(controlType.Assembly.Location, controlType.FullName);
+                var pluginControl = (UserControl) PluginManager.CreateInstance(controlType.Assembly.Location, controlType.FullName);
 
                 if (service != null)
                 {
@@ -514,6 +560,11 @@ namespace XrmToolBox
 
                     ((IMsCrmToolsPluginUserControl) pluginControl).UpdateConnection(clonedService,
                         currentConnectionDetail);
+                }
+
+                if (pluginControl is IMessageBusHost)
+                {
+                    ((IMessageBusHost)pluginControl).OnOutgoingMessage += MainForm_OnOutgoingMessage;
                 }
 
                 ((IMsCrmToolsPluginUserControl) pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
@@ -533,7 +584,9 @@ namespace XrmToolBox
 
                 newTab.Controls.Add(pluginControl);
 
-                tabControl1.SelectTab(tabControl1.TabPages.Count - 1);
+                tabIndex = tabControl1.TabPages.Count - 1;
+
+                tabControl1.SelectTab(tabIndex);
 
                 var pluginInOption =
                     currentOptions.MostUsedList.FirstOrDefault(i => i.Name == pluginControl.GetType().FullName);
@@ -604,6 +657,8 @@ namespace XrmToolBox
                 MessageBox.Show(this, "An error occured when trying to display this plugin: " + error.Message, "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            return tabIndex;
         }
 
         private string ExtractSwitchValue(string key, ref string[] args)
