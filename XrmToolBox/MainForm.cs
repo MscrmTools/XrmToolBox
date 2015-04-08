@@ -486,7 +486,7 @@ namespace XrmToolBox
                 }
                 else
                 {
-                    if (sourceControl.Tag == null | message.SourcePlugin != sourceControl.GetType().GetTitle())
+                    if (message.SourcePlugin != sourceControl.GetType().GetTitle())
                     {
                         // TODO: show error
                         return;
