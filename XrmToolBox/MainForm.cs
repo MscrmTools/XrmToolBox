@@ -487,7 +487,7 @@ namespace XrmToolBox
             else
             {
                 // Searching for suitable plugin
-                var targetModel = pManager.PluginsControls.FirstOrDefault(x => x.GetType().GetTitle() == message.TargetPlugin);
+                var targetModel = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == message.TargetPlugin);
                 // Displaying plugin and keeping number of the tab where it was opened
                 var tabIndex = DisplayPluginControl((UserControl)targetModel);
                 // Getting the tab where plugin was opened
