@@ -36,7 +36,8 @@ namespace XrmToolBox
         }
 
         /// <summary>
-        /// Gets or sets data will be passed to target plugin
+        /// Gets or sets data will be passed to target plugin.
+        /// This is dynamic data type. New properties and methods could be added on the fly.
         /// </summary>
         public dynamic TargetArgument
         {
