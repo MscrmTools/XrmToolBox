@@ -29,12 +29,12 @@ namespace XrmToolBox
         }
 
         /// <summary>
-        /// Gets a value indicating whether new instance of target plugin should be created.
+        /// Gets or sets value indicating whether new instance of target plugin should be created.
         /// </summary>
         public bool NewInstance
         {
             get;
-            private set;
+            set;
         }
 
         /// <summary>

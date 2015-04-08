@@ -476,16 +476,24 @@ namespace XrmToolBox
                 return;
             }
 
+            // Trying to find the tab where plugin is located
             var tab = tabControl1.TabPages.Cast<TabPage>().FirstOrDefault(x => x.Controls[0].GetType().GetTitle() == message.TargetPlugin);
 
-            if (tab != null & !message.NewInstance)
+            if (tab != null && !message.NewInstance)
             {
+                // Using existing plugin instance, switching to plugin tab
                 tabControl1.SelectTab(tabControl1.TabPages.IndexOf(tab));
             }
             else
             {
-                var targetModel = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == message.TargetPlugin);
-                tab = tabControl1.TabPages[DisplayPluginControl((UserControl)targetModel)];
+                // Searching for suitable plugin
+                var targetModel = pManager.PluginsControls.FirstOrDefault(x => x.GetType().GetTitle() == message.TargetPlugin);
+                // Displaying plugin and keeping number of the tab where it was opened
+                var tabIndex = DisplayPluginControl((UserControl)targetModel);
+                // Getting the tab where plugin was opened
+                tab = tabControl1.TabPages[tabIndex];
+                // New intance of the plugin was created, even if user did not explicitly asked about this.
+                message.NewInstance = true;
             }
 
             var targetControl = (UserControl)tab.Controls[0];
