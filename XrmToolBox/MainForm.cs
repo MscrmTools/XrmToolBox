@@ -471,27 +471,9 @@ namespace XrmToolBox
 
         void MainForm_MessageBrocker(object sender, MessageBusEventArgs message)
         {
-            if (message == null || (string.IsNullOrEmpty(message.SourcePlugin) && sender == null))
+            if (!IsMessageValid(sender, message))
             {
-                // TODO: show error
                 return;
-            }
-
-            if (sender != null)
-            {
-                var sourceControl = (UserControl)sender;
-                if (string.IsNullOrEmpty(message.SourcePlugin))
-                {
-                    message.SourcePlugin = sourceControl.GetType().GetTitle();
-                }
-                else
-                {
-                    if (message.SourcePlugin != sourceControl.GetType().GetTitle())
-                    {
-                        // TODO: show error
-                        return;
-                    }
-                }
             }
 
             var tab = tabControl1.TabPages.Cast<TabPage>().FirstOrDefault(x => x.Controls[0].GetType().GetTitle() == message.TargetPlugin);
@@ -512,6 +494,34 @@ namespace XrmToolBox
             {
                 ((IMessageBusHost)targetControl).OnIncomingMessage(message);
             }
+        }
+
+        private bool IsMessageValid(object sender, MessageBusEventArgs message)
+        {
+            if (message == null || sender == null || !(sender is UserControl) || !(sender is IMsCrmToolsPluginUserControl))
+            {
+                // Error. Possible reasons are:
+                // * empty sender 
+                // * empty message
+                // * sender is not UserControl
+                // * sender is not XrmToolBox Plugin
+                return false;
+            }
+            
+            var sourceControl = (UserControl)sender;
+            
+            if (string.IsNullOrEmpty(message.SourcePlugin))
+            {
+                message.SourcePlugin = sourceControl.GetType().GetTitle();
+            }
+            else if (message.SourcePlugin != sourceControl.GetType().GetTitle())
+            {
+                // For some reason incorrect name was set in Source Plugin field
+                return false;
+            }
+            
+            // Everything went ok
+            return true;
         }
 
         private void PluginClicked(object sender, EventArgs e)
