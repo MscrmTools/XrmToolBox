@@ -38,7 +38,7 @@ namespace XrmToolBox
         /// <summary>
         /// Gets or sets data will be passed to target plugin
         /// </summary>
-        public object TargetArgument
+        public dynamic TargetArgument
         {
             get;
             set;
