@@ -13,10 +13,9 @@ namespace XrmToolBox.Forms
     public partial class NewVersionForm : Form
     {
         private const string style = "<style>*{font-family:Segoe UI;}</style>";
-        private readonly string userName;
-        private readonly string repositoryName;
+        private readonly Uri downloadUrl;
 
-        public NewVersionForm(string currentVersion, string newVersion, string description, string userName, string repositoryName)
+        public NewVersionForm(string currentVersion, string newVersion, string description, string userName, string repositoryName, Uri downloadUrl = null)
         {
             InitializeComponent();
 
@@ -25,8 +24,14 @@ namespace XrmToolBox.Forms
             webBrowser1.DocumentText = style + description;
             webBrowser1.ScriptErrorsSuppressed = true;
 
-            this.userName = userName;
-            this.repositoryName = repositoryName;
+            if (downloadUrl == null)
+            {
+                this.downloadUrl = new Uri(string.Format("https://github.com/{0}/{1}/releases", userName, repositoryName));
+            }
+            else
+            {
+                this.downloadUrl = downloadUrl;
+            }
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -36,7 +41,7 @@ namespace XrmToolBox.Forms
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
-            Process.Start(string.Format("https://github.com/{0}/{1}/releases",userName, repositoryName));
+            Process.Start(downloadUrl.ToString());
         }
     }
 }
