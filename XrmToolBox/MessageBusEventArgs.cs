@@ -36,15 +36,6 @@ namespace XrmToolBox
         }
 
         /// <summary>
-        /// Gets or sets action should be executed inside target plugin
-        /// </summary>
-        public Action<UserControl> TargetAction
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// Gets or sets data will be passed to target plugin
         /// </summary>
         public object TargetArgument
