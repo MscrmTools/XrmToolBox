@@ -469,9 +469,9 @@ namespace XrmToolBox
             return pm;
         }
 
-        void MainForm_OnOutgoingMessage(object sender, MessageBusEventArgs e)
+        void MainForm_OnOutgoingMessage(object sender, MessageBusEventArgs message)
         {
-            if (e == null || (string.IsNullOrEmpty(e.SourcePlugin) && sender == null))
+            if (message == null || (string.IsNullOrEmpty(message.SourcePlugin) && sender == null))
             {
                 // TODO: show error
                 return;
@@ -480,13 +480,13 @@ namespace XrmToolBox
             if (sender != null)
             {
                 var sourceControl = (UserControl)sender;
-                if (string.IsNullOrEmpty(e.SourcePlugin))
+                if (string.IsNullOrEmpty(message.SourcePlugin))
                 {
-                    e.SourcePlugin = sourceControl.GetType().GetTitle();
+                    message.SourcePlugin = sourceControl.GetType().GetTitle();
                 }
                 else
                 {
-                    if (sourceControl.Tag == null | e.SourcePlugin != sourceControl.GetType().GetTitle())
+                    if (sourceControl.Tag == null | message.SourcePlugin != sourceControl.GetType().GetTitle())
                     {
                         // TODO: show error
                         return;
@@ -494,15 +494,15 @@ namespace XrmToolBox
                 }
             }
 
-            var tab = tabControl1.TabPages.Cast<TabPage>().FirstOrDefault(x => x.Controls[0].GetType().GetTitle() == e.TargetPlugin);
+            var tab = tabControl1.TabPages.Cast<TabPage>().FirstOrDefault(x => x.Controls[0].GetType().GetTitle() == message.TargetPlugin);
 
-            if (tab != null & !e.NewInstance)
+            if (tab != null & !message.NewInstance)
             {
                 tabControl1.SelectTab(tabControl1.TabPages.IndexOf(tab));
             }
             else
             {
-                var targetModel = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == e.TargetPlugin);
+                var targetModel = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == message.TargetPlugin);
                 tab = tabControl1.TabPages[DisplayPluginControl((UserControl)targetModel)];
             }
 
@@ -510,7 +510,7 @@ namespace XrmToolBox
 
             if (targetControl is IMessageBusHost)
             {
-                ((IMessageBusHost)targetControl).OnIncomingMessage(e);
+                ((IMessageBusHost)targetControl).OnIncomingMessage(message);
             }
         }
 
