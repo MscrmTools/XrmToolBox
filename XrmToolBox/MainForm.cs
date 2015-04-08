@@ -469,7 +469,7 @@ namespace XrmToolBox
             return pm;
         }
 
-        void MainForm_MessageBrocker(object sender, MessageBusEventArgs message)
+        void MainForm_MessageBroker(object sender, MessageBusEventArgs message)
         {
             if (!IsMessageValid(sender, message))
             {
@@ -582,7 +582,7 @@ namespace XrmToolBox
 
                 if (pluginControl is IMessageBusHost)
                 {
-                    ((IMessageBusHost)pluginControl).OnOutgoingMessage += MainForm_MessageBrocker;
+                    ((IMessageBusHost)pluginControl).OnOutgoingMessage += MainForm_MessageBroker;
                 }
 
                 ((IMsCrmToolsPluginUserControl) pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
