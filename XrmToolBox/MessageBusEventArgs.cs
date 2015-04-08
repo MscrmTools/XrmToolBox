@@ -9,7 +9,8 @@ namespace XrmToolBox
     public class MessageBusEventArgs : EventArgs
     {
         /// <summary>
-        /// Gets or sets name of plugin to return
+        /// Gets or sets name of plugin to return.
+        /// This value if not set is resolved by message broker.
         /// </summary>
         public string SourcePlugin
         {
@@ -18,7 +19,8 @@ namespace XrmToolBox
         }
 
         /// <summary>
-        /// Gets name of the plugin to start
+        /// Gets name of the plugin to start.
+        /// This value should be set in the <see cref="MessageBusEventArgs" /> constructor.
         /// </summary>
         public string TargetPlugin
         {
@@ -27,7 +29,7 @@ namespace XrmToolBox
         }
 
         /// <summary>
-        /// Indicates if new instance of target plugin should be created
+        /// Gets a value indicating whether new instance of target plugin should be created.
         /// </summary>
         public bool NewInstance
         {
@@ -45,6 +47,11 @@ namespace XrmToolBox
             set;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageBusEventArgs" /> class.
+        /// </summary>
+        /// <param name="targetPlugin">Unique string name (title) of plugin to call</param>
+        /// <param name="newInstance">Switch instructing message broker start new instance of the plugin even if one is already present</param>
         public MessageBusEventArgs(string targetPlugin, bool newInstance = false)
         {
             this.TargetPlugin = targetPlugin;
