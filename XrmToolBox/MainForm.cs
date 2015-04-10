@@ -469,49 +469,67 @@ namespace XrmToolBox
             return pm;
         }
 
-        void MainForm_OnOutgoingMessage(object sender, MessageBusEventArgs e)
+        void MainForm_MessageBroker(object sender, MessageBusEventArgs message)
         {
-            if (e == null || (string.IsNullOrEmpty(e.SourcePlugin) && sender == null))
+            if (!IsMessageValid(sender, message))
             {
-                // TODO: show error
                 return;
             }
 
-            if (sender != null)
-            {
-                var sourceControl = (UserControl)sender;
-                if (string.IsNullOrEmpty(e.SourcePlugin))
-                {
-                    e.SourcePlugin = sourceControl.GetType().GetTitle();
-                }
-                else
-                {
-                    if (sourceControl.Tag == null | e.SourcePlugin != sourceControl.GetType().GetTitle())
-                    {
-                        // TODO: show error
-                        return;
-                    }
-                }
-            }
+            // Trying to find the tab where plugin is located
+            var tab = tabControl1.TabPages.Cast<TabPage>().FirstOrDefault(x => x.Controls[0].GetType().GetTitle() == message.TargetPlugin);
 
-            var tab = tabControl1.TabPages.Cast<TabPage>().FirstOrDefault(x => x.Controls[0].GetType().GetTitle() == e.TargetPlugin);
-
-            if (tab != null & !e.NewInstance)
+            if (tab != null && !message.NewInstance)
             {
+                // Using existing plugin instance, switching to plugin tab
                 tabControl1.SelectTab(tabControl1.TabPages.IndexOf(tab));
             }
             else
             {
-                var targetModel = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == e.TargetPlugin);
-                tab = tabControl1.TabPages[DisplayPluginControl((UserControl)targetModel)];
+                // Searching for suitable plugin
+                var targetModel = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == message.TargetPlugin);
+                // Displaying plugin and keeping number of the tab where it was opened
+                var tabIndex = DisplayPluginControl((UserControl)targetModel);
+                // Getting the tab where plugin was opened
+                tab = tabControl1.TabPages[tabIndex];
+                // New intance of the plugin was created, even if user did not explicitly asked about this.
+                message.NewInstance = true;
             }
 
             var targetControl = (UserControl)tab.Controls[0];
 
             if (targetControl is IMessageBusHost)
             {
-                ((IMessageBusHost)targetControl).OnIncomingMessage(e);
+                ((IMessageBusHost)targetControl).OnIncomingMessage(message);
             }
+        }
+
+        private bool IsMessageValid(object sender, MessageBusEventArgs message)
+        {
+            if (message == null || sender == null || !(sender is UserControl) || !(sender is IMsCrmToolsPluginUserControl))
+            {
+                // Error. Possible reasons are:
+                // * empty sender 
+                // * empty message
+                // * sender is not UserControl
+                // * sender is not XrmToolBox Plugin
+                return false;
+            }
+            
+            var sourceControl = (UserControl)sender;
+            
+            if (string.IsNullOrEmpty(message.SourcePlugin))
+            {
+                message.SourcePlugin = sourceControl.GetType().GetTitle();
+            }
+            else if (message.SourcePlugin != sourceControl.GetType().GetTitle())
+            {
+                // For some reason incorrect name was set in Source Plugin field
+                return false;
+            }
+            
+            // Everything went ok
+            return true;
         }
 
         private void PluginClicked(object sender, EventArgs e)
@@ -564,7 +582,7 @@ namespace XrmToolBox
 
                 if (pluginControl is IMessageBusHost)
                 {
-                    ((IMessageBusHost)pluginControl).OnOutgoingMessage += MainForm_OnOutgoingMessage;
+                    ((IMessageBusHost)pluginControl).OnOutgoingMessage += MainForm_MessageBroker;
                 }
 
                 ((IMsCrmToolsPluginUserControl) pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
