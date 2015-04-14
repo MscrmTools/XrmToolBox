@@ -488,6 +488,10 @@ namespace XrmToolBox
             {
                 // Searching for suitable plugin
                 var targetModel = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == message.TargetPlugin);
+                if (targetModel == null)
+                {
+                    throw new PluginNotFoundException("Plugin {0} was not found", message.TargetPlugin);
+                }
                 // Displaying plugin and keeping number of the tab where it was opened
                 var tabIndex = DisplayPluginControl((UserControl)targetModel);
                 // Getting the tab where plugin was opened
