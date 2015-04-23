@@ -192,7 +192,8 @@ namespace MsCrmTools.MetadataDocumentGenerator
                         lblSubSelect.Visible = false;
                     }
                     break;
-                case (int) AttributeSelectionOption.AttributesOnForm:
+                case (int)AttributeSelectionOption.AttributesOnForm:
+                case (int)AttributeSelectionOption.AttributesNotOnForm:
                     {
                         lvAttributes.Visible = false;
                         lvForms.Visible = true;
@@ -435,7 +436,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
             settings.AttributesSelection = (AttributeSelectionOption)cbbSelectionType.SelectedIndex;
             settings.IncludeOnlyAttributesOnForms = cbbSelectionType.SelectedIndex == (int)AttributeSelectionOption.AttributesOnForm;
 
-            settings.Prefixes = txtPrefixes.Text.Split(';').ToList();
+            settings.Prefixes = chkFilterByPrefix.Checked ? txtPrefixes.Text.Split(';').ToList() : new List<string>();
 
             SetWorkingState(true);
 
