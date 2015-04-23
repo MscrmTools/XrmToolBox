@@ -18,8 +18,7 @@ namespace McTools.Xrm.Connection
     public class ConnectionDetail : IComparable, ICloneable
     {
         private string userPassword;
-
-
+        
         #region Propriétés
         public AuthenticationProviderType AuthType { get; set; }
 
@@ -68,9 +67,14 @@ namespace McTools.Xrm.Connection
         /// </summary>
         public string UserName { get; set; }
 
-     
+        /// <summary>
+        /// Gets an information if the password is empty
+        /// </summary>
         public bool PasswordIsEmpty { get { return string.IsNullOrEmpty(userPassword); } }
 
+        /// <summary>
+        /// Gets or sets the information if the password must be saved
+        /// </summary>
         public bool SavePassword { get; set; }
 
         /// <summary>

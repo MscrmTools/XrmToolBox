@@ -233,9 +233,9 @@ namespace McTools.Xrm.Connection
                     var timeOutElement = elt.Element("Timeout");
                     if (timeOutElement != null)
                     {
-                         int timeoutValue = string.IsNullOrEmpty(timeOutElement.Value)
+                         long timeoutValue = string.IsNullOrEmpty(timeOutElement.Value)
                             ? 1200000000
-                            : int.Parse(timeOutElement.Value);
+                            : long.Parse(timeOutElement.Value);
 
                         cd.TimeoutTicks = timeoutValue;
                     }
