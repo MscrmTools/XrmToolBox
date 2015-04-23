@@ -36,10 +36,9 @@
             // 
             // picture
             // 
-            this.picture.Location = new System.Drawing.Point(12, 11);
-            this.picture.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.picture.Location = new System.Drawing.Point(4, 4);
             this.picture.Name = "picture";
-            this.picture.Size = new System.Drawing.Size(43, 39);
+            this.picture.Size = new System.Drawing.Size(40, 40);
             this.picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picture.TabIndex = 0;
             this.picture.TabStop = false;
@@ -50,10 +49,9 @@
             this.lblTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 14F);
-            this.lblTitle.Location = new System.Drawing.Point(63, 11);
-            this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTitle.Location = new System.Drawing.Point(50, 9);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(529, 52);
+            this.lblTitle.Size = new System.Drawing.Size(423, 42);
             this.lblTitle.TabIndex = 2;
             this.lblTitle.Text = "[Label]";
             this.lblTitle.Click += new System.EventHandler(this.LblTitleClick);
@@ -63,17 +61,16 @@
             this.lblCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCount.AutoEllipsis = true;
             this.lblCount.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCount.Location = new System.Drawing.Point(605, 0);
-            this.lblCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblCount.Location = new System.Drawing.Point(484, 0);
             this.lblCount.Name = "lblCount";
-            this.lblCount.Size = new System.Drawing.Size(57, 28);
+            this.lblCount.Size = new System.Drawing.Size(46, 22);
             this.lblCount.TabIndex = 6;
             this.lblCount.Text = "[NB]";
             this.lblCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // SmallPluginModel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Lavender;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -81,9 +78,8 @@
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.picture);
             this.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "SmallPluginModel";
-            this.Size = new System.Drawing.Size(667, 62);
+            this.Size = new System.Drawing.Size(534, 50);
             this.Click += new System.EventHandler(this.MouseClick);
             ((System.ComponentModel.ISupportInitialize)(this.picture)).EndInit();
             this.ResumeLayout(false);
