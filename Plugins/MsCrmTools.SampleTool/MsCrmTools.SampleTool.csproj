@@ -101,8 +101,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.SampleTool.dll" "$(SolutionDir)XrmToolBox\bin\Debug"
-xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.SampleTool.pdb" "$(SolutionDir)XrmToolBox\bin\Debug"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y "$(TargetPath)" "$(SolutionDir)XrmToolBox\$(OutDir)Plugins"</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

@@ -12,7 +12,7 @@
             <Debugging />
         </Options>
         <ApplicationName />
-        <Destination DestinationFileName="..\..\XrmToolBox\bin\Release\MsCrmTools.MetadataDocumentGenerator.dll" />
+        <Destination DestinationFileName="..\..\XrmToolBox\bin\Release\Plugins\MsCrmTools.MetadataDocumentGenerator.dll" />
         <Assemblies>
             <Assembly AssemblyName="MsCrmTools.MetadataDocumentGenerator, Culture=neutral, PublicKeyToken=null">
                 <Merging>

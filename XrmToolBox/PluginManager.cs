@@ -59,7 +59,16 @@ namespace XrmToolBox
 
             if (directoryInfo != null)
             {
-                var files = Directory.GetFileSystemEntries(directoryInfo.FullName, "*.dll");
+                string[] files;
+                var pluginsFolder = Path.Combine(directoryInfo.FullName, "Plugins");
+                if (Directory.Exists(pluginsFolder))
+                {
+                    files = Directory.GetFileSystemEntries(pluginsFolder, "*.dll");
+                }
+                else
+                {
+                    files = Directory.GetFileSystemEntries(directoryInfo.FullName, "*.dll");
+                }
 
                 Parallel.ForEach(files, file =>
                 {
