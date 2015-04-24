@@ -2,11 +2,13 @@
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Text;
+using System.Windows.Forms;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using System;
-
+using Label = Microsoft.Xrm.Sdk.Label;
 #if NO_GEMBOX
 using OfficeOpenXml;
 #else
@@ -242,14 +244,32 @@ namespace MsCrmTools.Translator.AppCode
                 }
             }
 
+            var sbError = new StringBuilder();
+
             foreach (var amd in amds)
             {
                 if (amd.Amd.DisplayName.LocalizedLabels.All(l => string.IsNullOrEmpty(l.Label))
                     || amd.Amd.IsRenameable.Value == false)
                     continue;
 
-                var request = new UpdateAttributeRequest { Attribute = amd.Amd, EntityName = amd.Amd.EntityLogicalName};
-                service.Execute(request);
+                try
+                {
+                    var request = new UpdateAttributeRequest
+                    {
+                        Attribute = amd.Amd,
+                        EntityName = amd.Amd.EntityLogicalName
+                    };
+                    service.Execute(request);
+                }
+                catch
+                {
+                    sbError.AppendLine(string.Format("- {0} ({1})", amd.Amd.LogicalName, amd.Amd.EntityLogicalName));
+                }
+            }
+
+            if (sbError.Length > 0)
+            {
+                MessageBox.Show("Following attributes were not updated due to errors:\r\n" + sbError, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 #endif
