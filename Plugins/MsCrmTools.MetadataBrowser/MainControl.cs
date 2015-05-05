@@ -26,6 +26,7 @@ namespace MsCrmTools.MetadataBrowser
 {
     public partial class MainControl : PluginBase
     {
+        private bool initialized;
         private ListViewColumnsSettings lvcSettings;        
         private EntityMetadata[] currentAllMetadata;
         private EntityMetadata currentMetadata;
@@ -44,9 +45,10 @@ namespace MsCrmTools.MetadataBrowser
             {
                 if (sender is MainControl)
                 {
-                    if (((MainControl)sender).Service != null)
+                    if (((MainControl)sender).Service != null && !initialized)
                     {
                         ExecuteMethod(LoadEntities);
+                        initialized = true;
                     }
                 }
             }
