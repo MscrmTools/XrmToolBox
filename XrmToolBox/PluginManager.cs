@@ -77,16 +77,13 @@ namespace XrmToolBox
                         var assembly = Assembly.UnsafeLoadFrom(file);
 
                         AssertAssemblyReferencesCorrectXrmSdkVersion(assembly, file);
-                        foreach (var type in assembly.GetTypes())
+                        Parallel.ForEach(assembly.GetTypes(), type =>
                         {
                             if (type.IsPublic && !type.IsAbstract)
                             {
-                                if ((type.Attributes & TypeAttributes.Abstract) != TypeAttributes.Abstract &&
-                                    !type.GetCustomAttributes(typeof(IgnorePluginAttribute), false).Any())
+                                if ((type.Attributes & TypeAttributes.Abstract) != TypeAttributes.Abstract && !type.GetCustomAttributes(typeof(IgnorePluginAttribute), false).Any())
                                 {
-                                    var iConnector = type.GetInterface("IMsCrmToolsPluginUserControl", true);
-
-                                    if (iConnector != null)
+                                    if (type.GetInterface("IMsCrmToolsPluginUserControl", true) != null)
                                     {
                                         try
                                         {
@@ -98,7 +95,7 @@ namespace XrmToolBox
                                     }
                                 }
                             }
-                        }
+                        });
                     }
                     catch (InvalidXrmSdkReferenceException)
                     {
@@ -113,6 +110,46 @@ namespace XrmToolBox
                     }
                 });
             }
+        }
+
+        /// <summary>
+        /// Checking was plugin already loaded to application domain
+        /// </summary>
+        /// <param name="pluginTitle">Title of plugin to search for</param>
+        /// <returns>`true` if plugin exists, `false` overwise</returns>
+        public static bool IsLoaded(string pluginTitle)
+        {
+            bool result = false;
+
+            Parallel.ForEach(AppDomain.CurrentDomain.GetAssemblies().Where(x => 
+                {
+                    var attribute = x.GetCustomAttributes(typeof (AssemblyTitleAttribute), true);
+                    if (attribute.Length > 0 && ((AssemblyTitleAttribute)attribute[0]).Title == pluginTitle)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }), 
+                assembly =>
+            {
+                Parallel.ForEach(assembly.GetTypes(), type =>
+                {
+                    if (type.IsPublic && !type.IsAbstract)
+                    {
+                        if ((type.Attributes & TypeAttributes.Abstract) != TypeAttributes.Abstract && !type.GetCustomAttributes(typeof(IgnorePluginAttribute), false).Any())
+                        {
+                            if (type.GetInterface("IMsCrmToolsPluginUserControl", true) != null)
+                            {
+                                result = true;
+                            }
+                        }
+                    }
+                });
+            });
+            return result;
         }
 
         private void AssertAssemblyReferencesCorrectXrmSdkVersion(Assembly assembly, string filePath)
