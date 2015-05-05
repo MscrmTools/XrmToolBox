@@ -457,14 +457,17 @@ namespace DamSim.ViewTransferTool
                         header.Text = MetadataHelper.RetrieveAttributeDisplayName(emdWithItems,
                                                                                   columnNode.Attributes["name"].Value,
                                                                                   fetchXml, service);
-                        header.Width = int.Parse(columnNode.Attributes["width"].Value);
+
+                        int columnWidth = columnNode.Attributes["width"] == null ? 0 : int.Parse(columnNode.Attributes["width"].Value);
+
+                        header.Width = columnWidth;
 
                         ListViewDelegates.AddColumn(lvSourceViewLayoutPreview, header);
 
                         if (string.IsNullOrEmpty(item.Text))
-                            item.Text = columnNode.Attributes["width"].Value + "px";
+                            item.Text = columnWidth == 0 ? "(undefined)": (columnWidth + "px");
                         else
-                            item.SubItems.Add(columnNode.Attributes["width"].Value + "px");
+                            item.SubItems.Add(columnWidth == 0 ? "(undefined)": (columnWidth + "px"));
                     }
 
                     ListViewDelegates.AddItem(lvSourceViewLayoutPreview, item);
