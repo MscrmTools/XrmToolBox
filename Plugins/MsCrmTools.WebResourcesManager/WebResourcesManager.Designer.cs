@@ -201,7 +201,6 @@
             // toolStripScriptContent
             // 
             this.toolStripScriptContent.AutoSize = false;
-            this.toolStripScriptContent.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStripScriptContent.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripDropDownButton1,
             this.tsSeparatorEdit,
@@ -239,7 +238,7 @@
             this.fileMenuSave.Image = ((System.Drawing.Image)(resources.GetObject("fileMenuSave.Image")));
             this.fileMenuSave.Name = "fileMenuSave";
             this.fileMenuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.fileMenuSave.Size = new System.Drawing.Size(318, 30);
+            this.fileMenuSave.Size = new System.Drawing.Size(310, 30);
             this.fileMenuSave.Text = "Save";
             this.fileMenuSave.ToolTipText = "Save this content in memory. This does not update the web resource content of the" +
     " connected organization";
@@ -251,7 +250,7 @@
             this.fileMenuReplace.Image = ((System.Drawing.Image)(resources.GetObject("fileMenuReplace.Image")));
             this.fileMenuReplace.Name = "fileMenuReplace";
             this.fileMenuReplace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.fileMenuReplace.Size = new System.Drawing.Size(318, 30);
+            this.fileMenuReplace.Size = new System.Drawing.Size(310, 30);
             this.fileMenuReplace.Text = "Replace with new file";
             this.fileMenuReplace.ToolTipText = "Replace this web resource content with content of a local file";
             this.fileMenuReplace.Click += new System.EventHandler(this.FileMenuReplaceClick);
@@ -262,7 +261,7 @@
             this.fileMenuUpdateAndPublish.Image = ((System.Drawing.Image)(resources.GetObject("fileMenuUpdateAndPublish.Image")));
             this.fileMenuUpdateAndPublish.Name = "fileMenuUpdateAndPublish";
             this.fileMenuUpdateAndPublish.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
-            this.fileMenuUpdateAndPublish.Size = new System.Drawing.Size(318, 30);
+            this.fileMenuUpdateAndPublish.Size = new System.Drawing.Size(310, 30);
             this.fileMenuUpdateAndPublish.Text = "Update and publish";
             this.fileMenuUpdateAndPublish.ToolTipText = "Update the web resource content of the connected organization and publish it";
             this.fileMenuUpdateAndPublish.Click += new System.EventHandler(this.FileMenuUpdateAndPublishClick);
@@ -399,7 +398,6 @@
             // tsMain
             // 
             this.tsMain.AutoSize = false;
-            this.tsMain.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.tsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbCloseThisTab,
             this.toolStripSeparator2,
@@ -455,7 +453,7 @@
             this.tsddCrmMenu.Image = ((System.Drawing.Image)(resources.GetObject("tsddCrmMenu.Image")));
             this.tsddCrmMenu.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddCrmMenu.Name = "tsddCrmMenu";
-            this.tsddCrmMenu.Size = new System.Drawing.Size(88, 36);
+            this.tsddCrmMenu.Size = new System.Drawing.Size(84, 36);
             this.tsddCrmMenu.Text = "CRM";
             // 
             // loadWebResourcesToolStripMenuItem
@@ -511,14 +509,14 @@
             this.tsddFileMenu.Image = ((System.Drawing.Image)(resources.GetObject("tsddFileMenu.Image")));
             this.tsddFileMenu.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddFileMenu.Name = "tsddFileMenu";
-            this.tsddFileMenu.Size = new System.Drawing.Size(76, 36);
+            this.tsddFileMenu.Size = new System.Drawing.Size(72, 36);
             this.tsddFileMenu.Text = "File";
             // 
             // loadWebResourcesToolStripMenuItem1
             // 
             this.loadWebResourcesToolStripMenuItem1.Image = ((System.Drawing.Image)(resources.GetObject("loadWebResourcesToolStripMenuItem1.Image")));
             this.loadWebResourcesToolStripMenuItem1.Name = "loadWebResourcesToolStripMenuItem1";
-            this.loadWebResourcesToolStripMenuItem1.Size = new System.Drawing.Size(470, 30);
+            this.loadWebResourcesToolStripMenuItem1.Size = new System.Drawing.Size(474, 30);
             this.loadWebResourcesToolStripMenuItem1.Text = "Load Web resources";
             this.loadWebResourcesToolStripMenuItem1.Click += new System.EventHandler(this.LoadWebResourcesToolStripMenuItem1Click);
             // 
@@ -526,7 +524,7 @@
             // 
             this.saveCheckedWebResourcesToDiskToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveCheckedWebResourcesToDiskToolStripMenuItem.Image")));
             this.saveCheckedWebResourcesToDiskToolStripMenuItem.Name = "saveCheckedWebResourcesToDiskToolStripMenuItem";
-            this.saveCheckedWebResourcesToDiskToolStripMenuItem.Size = new System.Drawing.Size(470, 30);
+            this.saveCheckedWebResourcesToDiskToolStripMenuItem.Size = new System.Drawing.Size(474, 30);
             this.saveCheckedWebResourcesToDiskToolStripMenuItem.Text = "Save checked Web resources (with roots) to disk";
             this.saveCheckedWebResourcesToDiskToolStripMenuItem.Click += new System.EventHandler(this.SaveCheckedWebResourcesToDiskToolStripMenuItemClick);
             // 
@@ -534,7 +532,7 @@
             // 
             this.saveAllWebResourcesToDiskToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveAllWebResourcesToDiskToolStripMenuItem.Image")));
             this.saveAllWebResourcesToDiskToolStripMenuItem.Name = "saveAllWebResourcesToDiskToolStripMenuItem";
-            this.saveAllWebResourcesToDiskToolStripMenuItem.Size = new System.Drawing.Size(470, 30);
+            this.saveAllWebResourcesToDiskToolStripMenuItem.Size = new System.Drawing.Size(474, 30);
             this.saveAllWebResourcesToDiskToolStripMenuItem.Text = "Save checked Web resources to disk";
             this.saveAllWebResourcesToDiskToolStripMenuItem.Click += new System.EventHandler(this.SaveAllWebResourcesToDiskToolStripMenuItemClick);
             // 
@@ -548,7 +546,7 @@
             this.tsbNewRoot.Image = ((System.Drawing.Image)(resources.GetObject("tsbNewRoot.Image")));
             this.tsbNewRoot.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbNewRoot.Name = "tsbNewRoot";
-            this.tsbNewRoot.Size = new System.Drawing.Size(110, 36);
+            this.tsbNewRoot.Size = new System.Drawing.Size(106, 36);
             this.tsbNewRoot.Text = "New root";
             this.tsbNewRoot.Click += new System.EventHandler(this.TsbNewRootClick);
             // 

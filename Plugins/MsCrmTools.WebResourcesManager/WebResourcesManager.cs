@@ -456,6 +456,12 @@ namespace MsCrmTools.WebResourcesManager
                         MessageBox.Show(this, "An error occured: " + e.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
+                    if (tslResourceName.Text.Contains(" (not published)"))
+                    {
+                        tslResourceName.Text = tslResourceName.Text.Replace(" (not published)", "");
+                        tslResourceName.ForeColor = Color.Black;
+                    }
+
                     SetWorkingState(false);
                 },
                 e=>SetWorkingMessage(e.UserState.ToString()),
@@ -854,10 +860,10 @@ namespace MsCrmTools.WebResourcesManager
             fileMenuSave.Enabled = false;
             fileMenuUpdateAndPublish.Enabled = true;
 
-            if (tslResourceName.Text.Contains(" "))
+            if (tslResourceName.Text.Contains(" (not saved)"))
             {
-                tslResourceName.ForeColor = Color.Black;
-                tslResourceName.Text = tslResourceName.Text.Split(' ')[0];
+                tslResourceName.Text = tslResourceName.Text.Replace(" (not saved)", " (not published)");
+                tslResourceName.ForeColor = Color.Blue;
             }
         }
 
