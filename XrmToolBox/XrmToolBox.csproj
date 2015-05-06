@@ -145,17 +145,20 @@
     <Compile Include="Forms\WelcomeDialog.Designer.cs">
       <DependentUpon>WelcomeDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="IMessageBusHost.cs" />
-    <Compile Include="PluginNotFoundException.cs" />
-    <Compile Include="IPayPalPlugin.cs" />
-    <Compile Include="IGitHubPlugin.cs" />
-    <Compile Include="ICodePlexPlugin.cs" />
+    <Compile Include="Extensibility\IMessageBusHost.cs" />
+    <Compile Include="Extensibility\PluginNotFoundException.cs" />
+    <Compile Include="Extensibility\IPayPalPlugin.cs" />
+    <Compile Include="Extensibility\IGitHubPlugin.cs" />
+    <Compile Include="Extensibility\ICodePlexPlugin.cs" />
     <Compile Include="InvalidXrmSdkReferenceException.cs" />
-    <Compile Include="MessageBusEventArgs.cs" />
+    <Compile Include="Extensibility\MessageBusEventArgs.cs" />
+    <Compile Include="MainForm.PluginsManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="PluginCloseInfo.cs" />
     <Compile Include="AppCode\GithubVersionChecker.cs" />
     <Compile Include="CrmExceptionHelper.cs" />
-    <Compile Include="ExternalMethodCallerInfo.cs" />
+    <Compile Include="Extensibility\ExternalMethodCallerInfo.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -174,18 +177,18 @@
     <Compile Include="Forms\OptionsDialog.Designer.cs">
       <DependentUpon>OptionsDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="IgnorePluginAttribute.cs" />
+    <Compile Include="Extensibility\IgnorePluginAttribute.cs" />
     <Compile Include="InformationPanel.cs" />
-    <Compile Include="IWorkerHost.cs" />
+    <Compile Include="Extensibility\IWorkerHost.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IMsCrmToolsPlugin.cs" />
+    <Compile Include="Extensibility\IMsCrmToolsPlugin.cs" />
     <Compile Include="Options.cs" />
-    <Compile Include="PluginBase.cs">
+    <Compile Include="Extensibility\PluginBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PluginManager.cs" />
@@ -259,6 +262,9 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <Compile Include="MainForm.Community.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -311,7 +317,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
