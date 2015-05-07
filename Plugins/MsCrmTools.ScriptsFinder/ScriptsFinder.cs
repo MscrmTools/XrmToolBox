@@ -11,6 +11,7 @@ using System.Text;
 using System.Windows.Forms;
 using XrmToolBox;
 using XrmToolBox.Attributes;
+using System.Linq;
 
 [assembly: BackgroundColor("")]
 [assembly: PrimaryFontColor("")]
@@ -101,37 +102,17 @@ namespace MsCrmTools.ScriptsFinder
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                using (var fs = new FileStream(sfd.FileName, FileMode.OpenOrCreate,FileAccess.ReadWrite))
+                StringBuilder sb = new StringBuilder();
+                sb.AppendFormat("Type,Entity Display Name,Entity Logical Name,Form name,Event,Attribute Display Name,Attribute Logical Name,Script Location,Method Called{0}", Environment.NewLine);
+                foreach (ListViewItem item in lvScripts.Items)
                 {
-                    var preamble = new UTF8Encoding(true).GetPreamble();
-                    fs.Write(preamble,0,preamble.Length);
-                    
-                    var header = System.Text.Encoding.UTF8.GetBytes(
-                        "Type,Entity Display Name,Entity Logical Name,Form name,Event,Attribute Display Name,Attribute Logical Name,Script Location,Method Called,Enabled" +
-                        Environment.NewLine);
-                    fs.Write(header, 0, header.Length);
-                    
-                    foreach (ListViewItem item in lvScripts.Items)
-                    {
-                        var line = System.Text.Encoding.UTF8.GetBytes(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8}{9}",
-                            item.SubItems[0].Text,
-                            item.SubItems[1].Text,
-                            item.SubItems[2].Text,
-                            item.SubItems[3].Text,
-                            item.SubItems[4].Text,
-                            item.SubItems[5].Text,
-                            item.SubItems[6].Text,
-                            item.SubItems[7].Text,
-                            item.SubItems[8].Text,
-                            item.SubItems[9].Text,
-                            Environment.NewLine));
-
-                        fs.Write(line, 0, line.Length);
-                  
-                    }
-
-                    MessageBox.Show(this, string.Format("File saved to '{0}'!", sfd.FileName), "Information",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    var strings = item.SubItems.Cast<ListViewItem.ListViewSubItem>().Select(i => i.Text).ToList();
+                    strings.Add(Environment.NewLine);
+                    sb.AppendFormat("{0},{1},{2},{3},{4},{5},{6},{7},{8}{9}", strings.ToArray());
+                }
+                File.WriteAllText(sfd.FileName, sb.ToString(), Encoding.UTF8);
+                MessageBox.Show(this, string.Format("File saved to '{0}'!", sfd.FileName), "Information",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
