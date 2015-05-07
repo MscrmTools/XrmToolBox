@@ -73,6 +73,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ListViewItemComparer.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="SolutionTransferTool.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -109,9 +114,17 @@
       <Name>XrmToolBox</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y "$(TargetPath)" "$(SolutionDir)XrmToolBox\$(OutDir)"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y "$(TargetPath)" "$(SolutionDir)XrmToolBox\$(OutDir)Plugins"
+</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

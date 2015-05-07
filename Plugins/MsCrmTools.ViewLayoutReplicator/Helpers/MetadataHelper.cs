@@ -84,49 +84,33 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
                     XmlNode aliasNode = fetchDoc.SelectSingleNode("//link-entity[@alias='" + data[0] + "']");
                     if (aliasNode != null)
                     {
-                        data[0] = string.Format("{0}{1}{2}{3}",
-                                                emd.LogicalName,
-                                                aliasNode.Attributes["to"].Value,
-                                                aliasNode.Attributes["name"].Value,
-                                                aliasNode.Attributes["from"].Value);
+                        EntityMetadata relatedEmd = RetrieveEntity(aliasNode.Attributes["name"].Value, oService);
+
+                        AttributeMetadata relatedamd = (from attr in relatedEmd.Attributes
+                                                        where attr.LogicalName == data[1]
+                                                        select attr).FirstOrDefault();
+
+                        if (relatedamd == null)
+                        {
+                            return string.Format("(unknown:{0})", attributeName);
+                        }
+
+                        return relatedamd.DisplayName.UserLocalizedLabel.Label;
                     }
                 }
 
-                foreach (OneToManyRelationshipMetadata otmmd in emd.ManyToOneRelationships)
-                {
-                    string referencing = otmmd.ReferencingEntity;
-                    string attrreferencing = otmmd.ReferencingAttribute;
-                    string referenced = otmmd.ReferencedEntity;
-                    string attrreferenced = otmmd.ReferencedAttribute;
-
-                    string name = referencing + attrreferencing + referenced + attrreferenced;
-
-                    if (name == data[0])
-                    {
-                        rAttributeName = data[1];
-                        rEntityName = referenced;
-                        break;
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(rEntityName) && !string.IsNullOrEmpty(rAttributeName))
-                {
-                    EntityMetadata relatedEmd = RetrieveEntity(rEntityName, oService);
-
-                    AttributeMetadata relatedamd = (from attr in relatedEmd.Attributes
-                                                    where attr.LogicalName == rAttributeName
-                                                    select attr).First<AttributeMetadata>();
-
-                    return relatedamd.DisplayName.UserLocalizedLabel.Label;
-                }
-
-                return string.Empty;
+                return "(not found)";
             }
             else
             {
                 AttributeMetadata attribute = (from attr in emd.Attributes
                                                 where attr.LogicalName == attributeName
-                                                select attr).First<AttributeMetadata>();
+                                                select attr).FirstOrDefault();
+
+                if (attribute == null)
+                {
+                    return string.Format("(unknown:{0})", attributeName);
+                }
 
                 return attribute.DisplayName.UserLocalizedLabel.Label;
             }

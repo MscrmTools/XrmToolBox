@@ -179,22 +179,6 @@ namespace McTools.Xrm.Connection.WinForms
             return null;
         }
 
-        public IWebProxy SelectProxy()
-        {
-            if (ConnectionManager.Instance.ConnectionsList.UseCustomProxy)
-            {
-                var proxy = new WebProxy(ConnectionManager.Instance.ConnectionsList.ProxyAddress + ":" + ConnectionManager.Instance.ConnectionsList.ProxyPort, true)
-                {
-                    Credentials =
-                        new NetworkCredential(ConnectionManager.Instance.ConnectionsList.UserName, ConnectionManager.Instance.ConnectionsList.Password)
-                };
-
-                return proxy;
-            }
-
-            return null;
-        }
-
         /// <summary>
         /// Deletes a Crm connection from the connections list
         /// </summary>

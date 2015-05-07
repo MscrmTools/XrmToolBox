@@ -194,7 +194,7 @@ namespace McTools.Xrm.Connection.WinForms
                     ConnectionManager.Instance.ConnectionsList.Connections.Add(newConnection);
                 }
 
-                requiresSavingConnectionsFile = true;
+                ConnectionManager.Instance.SaveConnectionsFile();
             }
         }
 
@@ -227,7 +227,7 @@ namespace McTools.Xrm.Connection.WinForms
 
                     lvConnections.Refresh();
 
-                    requiresSavingConnectionsFile = true;
+                    ConnectionManager.Instance.SaveConnectionsFile();
                 }
             }
         }
@@ -237,19 +237,12 @@ namespace McTools.Xrm.Connection.WinForms
             if (lvConnections.SelectedItems.Count > 0)
             {
                 var selectedItem = lvConnections.SelectedItems[0];
-                var detailToRemove = (ConnectionDetail)selectedItem.Tag;
-                
-                lvConnections.Items.Remove(lvConnections.SelectedItems[0]);
-               
-                var realItemToDelete =
-                    ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(
-                        c => c.ConnectionId == detailToRemove.ConnectionId);
+                var detailToRemove = (ConnectionDetail) selectedItem.Tag;
 
-                if (realItemToDelete != null)
-                {
-                    ConnectionManager.Instance.ConnectionsList.Connections.Remove(detailToRemove);
-                    requiresSavingConnectionsFile = true; 
-                }
+                lvConnections.Items.Remove(lvConnections.SelectedItems[0]);
+
+                ConnectionManager.Instance.ConnectionsList.Connections.RemoveAll(d => d.ConnectionId == detailToRemove.ConnectionId);
+                ConnectionManager.Instance.SaveConnectionsFile();
             }
         }
 
@@ -301,11 +294,6 @@ namespace McTools.Xrm.Connection.WinForms
             }
 
             return 0;
-        }
-
-        private void ConnectionSelector_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            ConnectionManager.Instance.SaveConnectionsFile();
         }
     }
 }

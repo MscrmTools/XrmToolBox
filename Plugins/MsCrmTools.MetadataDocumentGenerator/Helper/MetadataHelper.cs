@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -66,29 +67,38 @@ namespace MsCrmTools.MetadataDocumentGenerator.Helper
         /// <param name="logicalName">Entity logical name</param>
         /// <param name="oService">Crm organization service</param>
         /// <returns>Document containing all forms definition</returns>
-        public static XmlDocument RetrieveEntityForms(string logicalName, IOrganizationService oService)
+        public static List<XmlDocument> RetrieveEntityForms(string logicalName, List<Guid> formsIds, IOrganizationService oService)
         {
-            var qba = new QueryByAttribute("systemform");
-            qba.Attributes.AddRange("objecttypecode", "type");
-            qba.Values.AddRange(logicalName, 2);
-            qba.ColumnSet = new ColumnSet(true);
-
-            var ec = oService.RetrieveMultiple(qba);
-
-            var allFormsXml = new StringBuilder();
-            allFormsXml.Append("<root>");
-
-            foreach (var form in ec.Entities)
+            var qe = new QueryExpression("systemform")
             {
-                allFormsXml.Append(form.GetAttributeValue<string>("formxml"));
+                ColumnSet = new ColumnSet(true),
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("objecttypecode", ConditionOperator.Equal, logicalName),
+                        new ConditionExpression("type", ConditionOperator.Equal, 2),
+                       
+                    }
+                }
+            };
+
+            if (formsIds.Count > 0)
+            {
+                qe.Criteria.AddCondition("formid", ConditionOperator.In, formsIds.Select(f=>f.ToString()).ToArray());
             }
 
-            allFormsXml.Append("</root>");
+            var ec = oService.RetrieveMultiple(qe);
 
-            var docAllForms = new XmlDocument();
-            docAllForms.LoadXml(allFormsXml.ToString());
+            var docs = new List<XmlDocument>();
+            foreach (var form in ec.Entities)
+            {
+                var doc = new XmlDocument();
+                doc.LoadXml(form.GetAttributeValue<string>("formxml"));
+                docs.Add(doc);
+            }
 
-            return docAllForms;
+            return docs;
         }
 
         /// <summary>

@@ -63,7 +63,7 @@
             this.tsbClose.Image = ((System.Drawing.Image)(resources.GetObject("tsbClose.Image")));
             this.tsbClose.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(23, 29);
+            this.tsbClose.Size = new System.Drawing.Size(28, 29);
             this.tsbClose.Text = "Close this tool";
             this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             // 
@@ -77,7 +77,7 @@
             this.tsbLoadEntities.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadEntities.Image")));
             this.tsbLoadEntities.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbLoadEntities.Name = "tsbLoadEntities";
-            this.tsbLoadEntities.Size = new System.Drawing.Size(132, 29);
+            this.tsbLoadEntities.Size = new System.Drawing.Size(140, 29);
             this.tsbLoadEntities.Text = "Load Entities";
             this.tsbLoadEntities.Click += new System.EventHandler(this.tsbLoadEntities_Click);
             // 
@@ -91,7 +91,7 @@
             this.tsbEntityColumns.Image = ((System.Drawing.Image)(resources.GetObject("tsbEntityColumns.Image")));
             this.tsbEntityColumns.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbEntityColumns.Name = "tsbEntityColumns";
-            this.tsbEntityColumns.Size = new System.Drawing.Size(114, 29);
+            this.tsbEntityColumns.Size = new System.Drawing.Size(122, 29);
             this.tsbEntityColumns.Text = "Columns...";
             this.tsbEntityColumns.Click += new System.EventHandler(this.tsbColumns_Click);
             // 

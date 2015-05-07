@@ -10,17 +10,11 @@ using System.Windows.Forms;
 
 namespace XrmToolBox.UserControls
 {
-    public partial class SmallPluginModel : UserControl
+    public partial class SmallPluginModel : PluginModel
     {
-        #region Delegates
-
-        public delegate void ClickedEventHandler(object sender, EventArgs e);
-
-        #endregion
-
         #region Event Handlers
 
-        public event ClickedEventHandler Clicked;
+        public override event ClickedEventHandler Clicked;
 
         #endregion
 
@@ -54,21 +48,6 @@ namespace XrmToolBox.UserControls
             tip.SetToolTip(lblTitle, description);
 
                 BackColor = backColor;
-        }
-
-        public SmallPluginModel(Stream imageStream, string title, string description, string company, string version, Color backColor, Color primaryColor, Color secondaryColor)
-        {
-            InitializeComponent();
-
-            picture.Image = Image.FromStream(imageStream);
-            lblTitle.PrimaryFontColor = primaryColor;
-            lblTitle.SecondaryFontColor = secondaryColor;
-            lblTitle.Text = string.Format("{0} by {1} - {2}", title, company, version);
-
-            var tip = new ToolTip();
-            tip.SetToolTip(lblTitle, description);
-
-            BackColor = backColor;
         }
 
         #endregion Constructors

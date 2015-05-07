@@ -18,9 +18,8 @@ namespace MsCrmTools.ScriptsFinder
         public string Attribute { get; set; }
         public string AttributeLogicalName { get; set; }
         public List<string> Dependencies { get; set; }
-
+        public bool? IsActive { get; set; }
         public string Type { get; set; }
-
         public bool HasProblem { get; set; }
     }
 }

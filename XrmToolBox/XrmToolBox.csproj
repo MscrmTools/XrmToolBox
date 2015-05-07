@@ -109,6 +109,7 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -117,6 +118,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Serialization" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +126,7 @@
     <Compile Include="AppCode\GithubInformation.cs" />
     <Compile Include="AppCode\Github.cs" />
     <Compile Include="AppCode\Markdown.cs" />
+    <Compile Include="AppCode\WebProxyHelper.cs" />
     <Compile Include="Attributes\AssemblyAttributeHelper.cs" />
     <Compile Include="Attributes\BackgroundColorAttribute.cs" />
     <Compile Include="Attributes\BigImageBase64Attribute.cs" />
@@ -142,14 +145,20 @@
     <Compile Include="Forms\WelcomeDialog.Designer.cs">
       <DependentUpon>WelcomeDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="IPayPalPlugin.cs" />
-    <Compile Include="IGitHubPlugin.cs" />
-    <Compile Include="ICodePlexPlugin.cs" />
+    <Compile Include="Extensibility\IMessageBusHost.cs" />
+    <Compile Include="Extensibility\PluginNotFoundException.cs" />
+    <Compile Include="Extensibility\IPayPalPlugin.cs" />
+    <Compile Include="Extensibility\IGitHubPlugin.cs" />
+    <Compile Include="Extensibility\ICodePlexPlugin.cs" />
     <Compile Include="InvalidXrmSdkReferenceException.cs" />
+    <Compile Include="Extensibility\MessageBusEventArgs.cs" />
+    <Compile Include="MainForm.PluginsManagement.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="PluginCloseInfo.cs" />
     <Compile Include="AppCode\GithubVersionChecker.cs" />
     <Compile Include="CrmExceptionHelper.cs" />
-    <Compile Include="ExternalMethodCallerInfo.cs" />
+    <Compile Include="Extensibility\ExternalMethodCallerInfo.cs" />
     <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -168,18 +177,18 @@
     <Compile Include="Forms\OptionsDialog.Designer.cs">
       <DependentUpon>OptionsDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="IgnorePluginAttribute.cs" />
+    <Compile Include="Extensibility\IgnorePluginAttribute.cs" />
     <Compile Include="InformationPanel.cs" />
-    <Compile Include="IWorkerHost.cs" />
+    <Compile Include="Extensibility\IWorkerHost.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IMsCrmToolsPlugin.cs" />
+    <Compile Include="Extensibility\IMsCrmToolsPlugin.cs" />
     <Compile Include="Options.cs" />
-    <Compile Include="PluginBase.cs">
+    <Compile Include="Extensibility\PluginBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PluginManager.cs" />
@@ -193,6 +202,12 @@
     <Compile Include="Forms\TabConnectionUpdater.Designer.cs">
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\LargePluginModel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\LargePluginModel.Designer.cs">
+      <DependentUpon>LargePluginModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\SmallPluginLabel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -204,9 +219,6 @@
     </Compile>
     <Compile Include="UserControls\PluginModel.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\PluginModel.Designer.cs">
-      <DependentUpon>PluginModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Worker.cs" />
     <Compile Include="XmlSerializerHelper.cs" />
@@ -241,15 +253,18 @@
     <EmbeddedResource Include="Forms\TabConnectionUpdater.resx">
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\LargePluginModel.resx">
+      <DependentUpon>LargePluginModel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\SmallPluginModel.resx">
       <DependentUpon>SmallPluginModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\PluginModel.resx">
-      <DependentUpon>PluginModel.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <Compile Include="MainForm.Community.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -305,6 +320,10 @@
       <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

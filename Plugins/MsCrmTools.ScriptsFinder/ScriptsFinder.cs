@@ -61,6 +61,7 @@ namespace MsCrmTools.ScriptsFinder
                         item.SubItems.Add(script.AttributeLogicalName);
                         item.SubItems.Add(script.ScriptLocation);
                         item.SubItems.Add(script.MethodCalled);
+                        item.SubItems.Add(script.IsActive.HasValue ?script.IsActive.Value.ToString() : "");
 
                         if (script.HasProblem)
                         {
@@ -106,7 +107,7 @@ namespace MsCrmTools.ScriptsFinder
                     fs.Write(preamble,0,preamble.Length);
                     
                     var header = System.Text.Encoding.UTF8.GetBytes(
-                        "Type,Entity Display Name,Entity Logical Name,Form name,Event,Attribute Display Name,Attribute Logical Name,Script Location,Method Called" +
+                        "Type,Entity Display Name,Entity Logical Name,Form name,Event,Attribute Display Name,Attribute Logical Name,Script Location,Method Called,Enabled" +
                         Environment.NewLine);
                     fs.Write(header, 0, header.Length);
                     
@@ -122,6 +123,7 @@ namespace MsCrmTools.ScriptsFinder
                             item.SubItems[6].Text,
                             item.SubItems[7].Text,
                             item.SubItems[8].Text,
+                            item.SubItems[9].Text,
                             Environment.NewLine));
 
                         fs.Write(line, 0, line.Length);

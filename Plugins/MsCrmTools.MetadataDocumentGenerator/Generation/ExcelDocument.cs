@@ -136,45 +136,50 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                     AddEntityMetadata(emd, sheet);
                 }
 
-                var formsDoc = MetadataHelper.RetrieveEntityForms(emd.LogicalName, service);
+                var docs = MetadataHelper.RetrieveEntityForms(emd.LogicalName, entity.Forms, service);
 
                 if (settings.AddFormLocation)
                 {
                     currentEntityForms  = MetadataHelper.RetrieveEntityFormList(emd.LogicalName, service);
                 }
 
-                IEnumerable<AttributeMetadata> amds = new List<AttributeMetadata>();
+                List<AttributeMetadata> amds = new List<AttributeMetadata>();
 
                 switch (settings.AttributesSelection)
                 {
                     case AttributeSelectionOption.AllAttributes:
-                        amds = emd.Attributes;
+                        amds = emd.Attributes.ToList();
                         break;
                     case AttributeSelectionOption.AttributesOptionSet:
-                        amds = emd.Attributes.Where(x => x.AttributeType != null && (x.AttributeType.Value == AttributeTypeCode.Boolean
-                                                                                     || x.AttributeType.Value == AttributeTypeCode.Picklist
-                                                                                     || x.AttributeType.Value == AttributeTypeCode.State
-                                                                                     || x.AttributeType.Value == AttributeTypeCode.Status));
+                        amds =
+                            emd.Attributes.Where(
+                                x => x.AttributeType != null && (x.AttributeType.Value == AttributeTypeCode.Boolean
+                                                                 || x.AttributeType.Value == AttributeTypeCode.Picklist
+                                                                 || x.AttributeType.Value == AttributeTypeCode.State
+                                                                 || x.AttributeType.Value == AttributeTypeCode.Status)).ToList();
                         break;
                     case AttributeSelectionOption.AttributeManualySelected:
                         amds =
                             emd.Attributes.Where(
                                 x =>
                                 settings.EntitiesToProceed.First(y => y.Name == emd.LogicalName).Attributes.Contains(
-                                    x.LogicalName));
+                                    x.LogicalName)).ToList();
                         break;
                     case AttributeSelectionOption.AttributesOnForm:
-                        amds =
-                            emd.Attributes.Where(
-                                x =>
-                                formsDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") != null);
+
+                        foreach (var doc in docs)
+                        {
+                            amds.AddRange(emd.Attributes.Where(x =>
+                                doc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") != null));
+                        }
+
                         break;
                     case AttributeSelectionOption.AttributesNotOnForm:
-                        amds =
-                            emd.Attributes.Where(
-                                x =>
-                                formsDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") == null);
-                        break;
+                        foreach (var doc in docs)
+                        {
+                            amds.AddRange(emd.Attributes.Where(x =>
+                                doc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") == null));
+                        } break;
                 }
 
                 if (settings.Prefixes != null && settings.Prefixes.Count > 0)
@@ -183,7 +188,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
 
                     foreach (var prefix in settings.Prefixes)
                     {
-                        filteredAmds.AddRange(amds.Where(a => a.LogicalName.StartsWith(prefix) || a.IsCustomAttribute.Value == false));
+                        filteredAmds.AddRange(amds.Where(a => a.LogicalName.StartsWith(prefix) /*|| a.IsCustomAttribute.Value == false*/));
                     }
 
                     amds = filteredAmds;

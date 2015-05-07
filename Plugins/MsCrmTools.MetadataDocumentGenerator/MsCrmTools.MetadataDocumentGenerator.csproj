@@ -143,16 +143,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>rem Obfuscation
-rem "%25ProgramFiles%25\Red Gate\SmartAssembly 6\SmartAssembly.exe" /build "$(ProjectDir)bin\debug\MsCrmTools.MetadataDocumentGenerator.saproj" 
-rem ILMerge
-rem "C:\Program Files (x86)\Microsoft\ILMerge\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /allowDup:"DotfuscatorAttribute" /out:"$(TargetDir)MsCrmTools.MetadataDocumentGenerator.dll" MsCrmTools.MetadataDocumentGenerator.dll LicenseKey.dll GemBox.Spreadsheet.DLL GemBox.Document.dll
-xcopy /y "$(ProjectDir)bin\debug\obfuscated\MsCrmTools.MetadataDocumentGenerator.dll" "$(SolutionDir)XrmToolBox\bin\Debug"
-xcopy /y "$(ProjectDir)bin\debug\MsCrmTools.MetadataDocumentGenerator.pdb" "$(SolutionDir)XrmToolBox\bin\Debug"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

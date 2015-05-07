@@ -1,6 +1,6 @@
 ﻿namespace XrmToolBox.UserControls
 {
-    partial class PluginModel
+    partial class LargePluginModel
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.
@@ -39,10 +39,9 @@
             // 
             // picture
             // 
-            this.picture.Location = new System.Drawing.Point(13, 12);
-            this.picture.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.picture.Location = new System.Drawing.Point(9, 9);
             this.picture.Name = "picture";
-            this.picture.Size = new System.Drawing.Size(107, 98);
+            this.picture.Size = new System.Drawing.Size(80, 80);
             this.picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picture.TabIndex = 0;
             this.picture.TabStop = false;
@@ -54,10 +53,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblTitle.AutoEllipsis = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitle.Location = new System.Drawing.Point(139, 2);
-            this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTitle.Location = new System.Drawing.Point(111, 2);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(472, 28);
+            this.lblTitle.Size = new System.Drawing.Size(378, 22);
             this.lblTitle.TabIndex = 1;
             this.lblTitle.Text = "[Label]";
             this.lblTitle.Click += new System.EventHandler(this.MouseClick);
@@ -69,10 +67,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDescription.AutoEllipsis = true;
             this.lblDescription.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDescription.Location = new System.Drawing.Point(141, 78);
-            this.lblDescription.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDescription.Location = new System.Drawing.Point(113, 62);
             this.lblDescription.Name = "lblDescription";
-            this.lblDescription.Size = new System.Drawing.Size(521, 34);
+            this.lblDescription.Size = new System.Drawing.Size(417, 29);
             this.lblDescription.TabIndex = 2;
             this.lblDescription.Text = "[Description]";
             this.lblDescription.Click += new System.EventHandler(this.MouseClick);
@@ -85,10 +82,9 @@
             this.lblVersion.AutoEllipsis = true;
             this.lblVersion.AutoSize = true;
             this.lblVersion.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVersion.Location = new System.Drawing.Point(141, 30);
-            this.lblVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblVersion.Location = new System.Drawing.Point(113, 24);
             this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(77, 23);
+            this.lblVersion.Size = new System.Drawing.Size(63, 19);
             this.lblVersion.TabIndex = 3;
             this.lblVersion.Text = "[Version]";
             this.lblVersion.Click += new System.EventHandler(this.MouseClick);
@@ -101,10 +97,9 @@
             this.lblAuthor.AutoEllipsis = true;
             this.lblAuthor.AutoSize = true;
             this.lblAuthor.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAuthor.Location = new System.Drawing.Point(141, 54);
-            this.lblAuthor.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblAuthor.Location = new System.Drawing.Point(113, 43);
             this.lblAuthor.Name = "lblAuthor";
-            this.lblAuthor.Size = new System.Drawing.Size(73, 23);
+            this.lblAuthor.Size = new System.Drawing.Size(60, 19);
             this.lblAuthor.TabIndex = 4;
             this.lblAuthor.Text = "[Author]";
             this.lblAuthor.Click += new System.EventHandler(this.MouseClick);
@@ -114,18 +109,17 @@
             this.lblCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCount.AutoEllipsis = true;
             this.lblCount.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCount.Location = new System.Drawing.Point(605, 2);
-            this.lblCount.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblCount.Location = new System.Drawing.Point(484, 2);
             this.lblCount.Name = "lblCount";
-            this.lblCount.Size = new System.Drawing.Size(57, 28);
+            this.lblCount.Size = new System.Drawing.Size(46, 22);
             this.lblCount.TabIndex = 5;
             this.lblCount.Text = "[NB]";
             this.lblCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.lblCount.Click += new System.EventHandler(this.MouseClick);
             // 
-            // PluginModel
+            // LargePluginModel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.Lavender;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -136,9 +130,8 @@
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.picture);
             this.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.Name = "PluginModel";
-            this.Size = new System.Drawing.Size(667, 123);
+            this.Name = "LargePluginModel";
+            this.Size = new System.Drawing.Size(534, 100);
             this.Click += new System.EventHandler(this.MouseClick);
             ((System.ComponentModel.ISupportInitialize)(this.picture)).EndInit();
             this.ResumeLayout(false);

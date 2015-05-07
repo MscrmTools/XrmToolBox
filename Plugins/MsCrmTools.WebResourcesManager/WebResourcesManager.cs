@@ -194,6 +194,8 @@ namespace MsCrmTools.WebResourcesManager
                         tvWebResources.Sort();
                         TvWebResourcesAfterSelect(null, null);
 
+                        tsbClear.Visible = true;
+
                         SetWorkingState(false);
                     },
                     settings);
@@ -454,6 +456,12 @@ namespace MsCrmTools.WebResourcesManager
                         MessageBox.Show(this, "An error occured: " + e.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
+                    if (tslResourceName.Text.Contains(" (not published)"))
+                    {
+                        tslResourceName.Text = tslResourceName.Text.Replace(" (not published)", "");
+                        tslResourceName.ForeColor = Color.Black;
+                    }
+
                     SetWorkingState(false);
                 },
                 e=>SetWorkingMessage(e.UserState.ToString()),
@@ -527,9 +535,10 @@ namespace MsCrmTools.WebResourcesManager
                     }
 
                     tvWebResources.ExpandAll();
-
                     tvWebResources.TreeViewNodeSorter = new NodeSorter();
                     tvWebResources.Sort();
+
+                    tsbClear.Visible = true;
 
                     if (invalidFilenames.Count > 0)
                     {
@@ -827,7 +836,9 @@ namespace MsCrmTools.WebResourcesManager
             tvWebResources.Nodes.Clear();
             panelControl.Controls.Clear();
             tslResourceName.Text = "";
+            tslCurrentlyLoadedSolution.Text = "";
             toolStripScriptContent.Visible = false;
+            tsbClear.Visible = false;
         }
 
         #endregion TREEVIEW - Manage content
@@ -849,10 +860,10 @@ namespace MsCrmTools.WebResourcesManager
             fileMenuSave.Enabled = false;
             fileMenuUpdateAndPublish.Enabled = true;
 
-            if (tslResourceName.Text.Contains(" "))
+            if (tslResourceName.Text.Contains(" (not saved)"))
             {
-                tslResourceName.ForeColor = Color.Black;
-                tslResourceName.Text = tslResourceName.Text.Split(' ')[0];
+                tslResourceName.Text = tslResourceName.Text.Replace(" (not saved)", " (not published)");
+                tslResourceName.ForeColor = Color.Blue;
             }
         }
 
@@ -1024,6 +1035,9 @@ namespace MsCrmTools.WebResourcesManager
                 return;
             }
 
+            if (panelControl.Controls.Count == 0)
+                return;
+
             var control = ((IWebResourceControl) panelControl.Controls[0]);
             if (!(control is CodeControl)) return;
 
@@ -1037,6 +1051,9 @@ namespace MsCrmTools.WebResourcesManager
                 ((ToolStripDropDownItem)((ToolStrip)(((TabControl)(Parent).Parent).SelectedTab.Controls.Find("toolStripScriptContent", true)[0])).Items[2]).DropDownItems[1].PerformClick();
                 return;
             }
+
+            if (panelControl.Controls.Count == 0)
+                return;
 
             var control = ((IWebResourceControl)panelControl.Controls[0]);
             if (!(control is CodeControl)) return;
@@ -1148,133 +1165,129 @@ namespace MsCrmTools.WebResourcesManager
                 Entity script = ((WebResource)tvWebResources.SelectedNode.Tag).WebResourceEntity;
                 UserControl ctrl = null;
 
-                //if (script.Contains("content") && script["content"] != null)
-                //{
-                    switch (((OptionSetValue) script["webresourcetype"]).Value)
-                    {
-                        case 1:
-                            ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
-                                                   Enumerations.WebResourceType.WebPage);
-                            ((CodeControl) ctrl).WebResourceUpdated +=
-                                MainFormWebResourceUpdated;
-                            toolStripSeparatorMinifyJS.Visible = true;
-                            tsbMinifyJS.Visible = false;
-                            tsbBeautify.Visible = false;
-                            tsbPreviewHtml.Visible = true;
-                            tsSeparatorEdit.Visible = true;
-                            tsddbEdit.Visible = true;
-                            tsddbCompare.Visible = true;
-                            break;
+                switch (((OptionSetValue) script["webresourcetype"]).Value)
+                {
+                    case 1:
+                        ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
+                                                Enumerations.WebResourceType.WebPage);
+                        ((CodeControl) ctrl).WebResourceUpdated +=
+                            MainFormWebResourceUpdated;
+                        toolStripSeparatorMinifyJS.Visible = true;
+                        tsbMinifyJS.Visible = false;
+                        tsbBeautify.Visible = false;
+                        tsbPreviewHtml.Visible = true;
+                        tsSeparatorEdit.Visible = true;
+                        tsddbEdit.Visible = true;
+                        tsddbCompare.Visible = true;
+                        break;
 
-                        case 2:
-                            ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
-                                                   Enumerations.WebResourceType.Css);
-                            ((CodeControl) ctrl).WebResourceUpdated += MainFormWebResourceUpdated;
-                            tsbMinifyJS.Visible = false;
-                            tsbBeautify.Visible = false;
-                            tsbPreviewHtml.Visible = false;
-                            tsSeparatorEdit.Visible = true;
-                            tsddbEdit.Visible = true;
-                            tsddbCompare.Visible = true;
-                            break;
-                        case 3:
-                            ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
-                                                   Enumerations.WebResourceType.Script);
-                            ((CodeControl) ctrl).WebResourceUpdated +=
-                                MainFormWebResourceUpdated;
-                            toolStripSeparatorMinifyJS.Visible = true;
-                            tsbMinifyJS.Visible = true;
-                            tsbBeautify.Visible = true;
-                            tsbPreviewHtml.Visible = false;
-                            tsSeparatorEdit.Visible = true;
-                            tsddbEdit.Visible = true;
-                            tsddbCompare.Visible = true;
-                            break;
-                        case 4:
-                            ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
-                                                   Enumerations.WebResourceType.Data);
-                            ((CodeControl) ctrl).WebResourceUpdated +=
-                                MainFormWebResourceUpdated;
-                            tsbMinifyJS.Visible = false;
-                            tsbBeautify.Visible = false;
-                            tsbPreviewHtml.Visible = false;
-                            tsSeparatorEdit.Visible = true;
-                            tsddbEdit.Visible = true;
-                            tsddbCompare.Visible = true;
-                            break;
-                        case 5:
-                            ctrl = new ImageControl(script.GetAttributeValue<string>("content"),
-                                                    Enumerations.WebResourceType.Png);
-                            ((ImageControl) ctrl).WebResourceUpdated +=
-                                MainFormWebResourceUpdated;
-                            tsbMinifyJS.Visible = false;
-                            tsbBeautify.Visible = false;
-                            tsbPreviewHtml.Visible = false;
-                            tsSeparatorEdit.Visible = false;
-                            tsddbEdit.Visible = false;
-                            tsddbCompare.Visible = false;
-                            break;
-                        case 6:
-                            ctrl = new ImageControl(script.GetAttributeValue<string>("content"),
-                                                    Enumerations.WebResourceType.Jpg);
-                            ((ImageControl) ctrl).WebResourceUpdated +=
-                                MainFormWebResourceUpdated;
-                            tsbMinifyJS.Visible = false;
-                            tsbBeautify.Visible = false;
-                            tsbPreviewHtml.Visible = false;
-                            tsSeparatorEdit.Visible = false;
-                            tsddbEdit.Visible = false;
-                            tsddbCompare.Visible = false;
-                            break;
-                        case 7:
-                            ctrl = new ImageControl(script.GetAttributeValue<string>("content"),
-                                                    Enumerations.WebResourceType.Gif);
-                            ((ImageControl) ctrl).WebResourceUpdated +=
-                                MainFormWebResourceUpdated;
-                            tsbMinifyJS.Visible = false;
-                            tsbBeautify.Visible = false;
-                            tsbPreviewHtml.Visible = false;
-                            tsSeparatorEdit.Visible = false;
-                            tsddbEdit.Visible = false;
-                            tsddbCompare.Visible = false;
-                            break;
-                        case 8:
-                            ctrl = new UserControl();
-                            tsSeparatorEdit.Visible = false;
-                            tsddbEdit.Visible = false;
-                            tsbPreviewHtml.Visible = false;
-                            tsddbCompare.Visible = false;
-                            break;
-                        case 9:
-                            ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
-                                                   Enumerations.WebResourceType.Xsl);
-                            ((CodeControl) ctrl).WebResourceUpdated +=
-                                MainFormWebResourceUpdated;
-                            tsbMinifyJS.Visible = false;
-                            tsbBeautify.Visible = false;
-                            tsbPreviewHtml.Visible = false;
-                            tsSeparatorEdit.Visible = true;
-                            tsddbEdit.Visible = true;
-                            tsddbCompare.Visible = true;
-                            break;
-                        case 10:
-                            ctrl = new IconControl(script.GetAttributeValue<string>("content"));
-                            ((IconControl) ctrl).WebResourceUpdated +=
-                                MainFormWebResourceUpdated;
-                            tsbMinifyJS.Visible = false;
-                            tsbBeautify.Visible = false;
-                            tsbPreviewHtml.Visible = false;
-                            tsSeparatorEdit.Visible = false;
-                            tsddbEdit.Visible = false;
-                            tsddbCompare.Visible = false;
-                            break;
-                    }
-                //}
+                    case 2:
+                        ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
+                                                Enumerations.WebResourceType.Css);
+                        ((CodeControl) ctrl).WebResourceUpdated += MainFormWebResourceUpdated;
+                        tsbMinifyJS.Visible = false;
+                        tsbBeautify.Visible = false;
+                        tsbPreviewHtml.Visible = false;
+                        tsSeparatorEdit.Visible = true;
+                        tsddbEdit.Visible = true;
+                        tsddbCompare.Visible = true;
+                        break;
+                    case 3:
+                        ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
+                                                Enumerations.WebResourceType.Script);
+                        ((CodeControl) ctrl).WebResourceUpdated +=
+                            MainFormWebResourceUpdated;
+                        toolStripSeparatorMinifyJS.Visible = true;
+                        tsbMinifyJS.Visible = true;
+                        tsbBeautify.Visible = true;
+                        tsbPreviewHtml.Visible = false;
+                        tsSeparatorEdit.Visible = true;
+                        tsddbEdit.Visible = true;
+                        tsddbCompare.Visible = true;
+                        break;
+                    case 4:
+                        ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
+                                                Enumerations.WebResourceType.Data);
+                        ((CodeControl) ctrl).WebResourceUpdated +=
+                            MainFormWebResourceUpdated;
+                        tsbMinifyJS.Visible = false;
+                        tsbBeautify.Visible = false;
+                        tsbPreviewHtml.Visible = false;
+                        tsSeparatorEdit.Visible = true;
+                        tsddbEdit.Visible = true;
+                        tsddbCompare.Visible = true;
+                        break;
+                    case 5:
+                        ctrl = new ImageControl(script.GetAttributeValue<string>("content"),
+                                                Enumerations.WebResourceType.Png);
+                        ((ImageControl) ctrl).WebResourceUpdated +=
+                            MainFormWebResourceUpdated;
+                        tsbMinifyJS.Visible = false;
+                        tsbBeautify.Visible = false;
+                        tsbPreviewHtml.Visible = false;
+                        tsSeparatorEdit.Visible = false;
+                        tsddbEdit.Visible = false;
+                        tsddbCompare.Visible = false;
+                        break;
+                    case 6:
+                        ctrl = new ImageControl(script.GetAttributeValue<string>("content"),
+                                                Enumerations.WebResourceType.Jpg);
+                        ((ImageControl) ctrl).WebResourceUpdated +=
+                            MainFormWebResourceUpdated;
+                        tsbMinifyJS.Visible = false;
+                        tsbBeautify.Visible = false;
+                        tsbPreviewHtml.Visible = false;
+                        tsSeparatorEdit.Visible = false;
+                        tsddbEdit.Visible = false;
+                        tsddbCompare.Visible = false;
+                        break;
+                    case 7:
+                        ctrl = new ImageControl(script.GetAttributeValue<string>("content"),
+                                                Enumerations.WebResourceType.Gif);
+                        ((ImageControl) ctrl).WebResourceUpdated +=
+                            MainFormWebResourceUpdated;
+                        tsbMinifyJS.Visible = false;
+                        tsbBeautify.Visible = false;
+                        tsbPreviewHtml.Visible = false;
+                        tsSeparatorEdit.Visible = false;
+                        tsddbEdit.Visible = false;
+                        tsddbCompare.Visible = false;
+                        break;
+                    case 8:
+                        ctrl = new UserControl();
+                        tsSeparatorEdit.Visible = false;
+                        tsddbEdit.Visible = false;
+                        tsbPreviewHtml.Visible = false;
+                        tsddbCompare.Visible = false;
+                        break;
+                    case 9:
+                        ctrl = new CodeControl(script.GetAttributeValue<string>("content"),
+                                                Enumerations.WebResourceType.Xsl);
+                        ((CodeControl) ctrl).WebResourceUpdated +=
+                            MainFormWebResourceUpdated;
+                        tsbMinifyJS.Visible = false;
+                        tsbBeautify.Visible = false;
+                        tsbPreviewHtml.Visible = false;
+                        tsSeparatorEdit.Visible = true;
+                        tsddbEdit.Visible = true;
+                        tsddbCompare.Visible = true;
+                        break;
+                    case 10:
+                        ctrl = new IconControl(script.GetAttributeValue<string>("content"));
+                        ((IconControl) ctrl).WebResourceUpdated +=
+                            MainFormWebResourceUpdated;
+                        tsbMinifyJS.Visible = false;
+                        tsbBeautify.Visible = false;
+                        tsbPreviewHtml.Visible = false;
+                        tsSeparatorEdit.Visible = false;
+                        tsddbEdit.Visible = false;
+                        tsddbCompare.Visible = false;
+                        break;
+                }
 
                 if (ctrl != null)
                 {
-                    ctrl.Size = panelControl.Size;
-                    ctrl.Anchor = AnchorStyles.Bottom | AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+                    ctrl.Dock = DockStyle.Fill;
                     panelControl.Controls.Add(ctrl);
 
                     fileMenuSave.Enabled = false;

@@ -356,7 +356,14 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
 
                         try
                         {
-                            service.Update(targetView);
+                            var viewToUpdate = new Entity(targetView.LogicalName)
+                            {
+                                Id = targetView.Id
+                            };
+                            viewToUpdate["fetchxml"] = targetView["fetchxml"];
+                            viewToUpdate["layoutxml"] = targetView["layoutxml"];
+
+                            service.Update(viewToUpdate);
                         }
                         catch (Exception error)
                         {

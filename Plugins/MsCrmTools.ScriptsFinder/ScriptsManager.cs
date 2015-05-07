@@ -61,6 +61,7 @@ namespace MsCrmTools.ScriptsFinder
                         script.EntityName = emd.DisplayName.UserLocalizedLabel.Label;
                         script.ScriptLocation = handlerNode.Attributes["libraryName"].Value;
                         script.MethodCalled = handlerNode.Attributes["functionName"].Value;
+                        script.IsActive = handlerNode.Attributes["enabled"].Value == "true";
                         script.Event = eventName;
 
                         if (eventName == "onchange")
@@ -137,7 +138,16 @@ namespace MsCrmTools.ScriptsFinder
 
                 foreach (XmlNode actionNode in actionsNode.ChildNodes)
                 {
-                    var libraryName = actionNode.Attributes["Library"].Value;
+                    if (actionNode.Attributes == null)
+                        continue;
+
+                    var libraryNode = actionNode.Attributes["Library"];
+                    if (libraryNode == null)
+                    {
+                        continue;
+                    }
+
+                    var libraryName = libraryNode.Value;
 
                     if (libraryName.Split(':').Length == 1)
                         continue;
