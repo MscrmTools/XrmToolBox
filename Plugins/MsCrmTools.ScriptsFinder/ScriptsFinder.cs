@@ -113,7 +113,7 @@ namespace MsCrmTools.ScriptsFinder
                     
                     foreach (ListViewItem item in lvScripts.Items)
                     {
-                        var line = System.Text.Encoding.UTF8.GetBytes(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8}{9}",
+                        var line = System.Text.Encoding.UTF8.GetBytes(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}{10}",
                             item.SubItems[0].Text,
                             item.SubItems[1].Text,
                             item.SubItems[2].Text,
