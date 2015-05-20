@@ -1,0 +1,164 @@
+<SiteMap IntroducedVersion="7.0.0.0">
+  <Area Id="SFA" ResourceId="Area_Sales" DescriptionResourceId="Sales_Description" Icon="/_imgs/sales_24x24.gif" ShowGroups="true" IntroducedVersion="7.0.0.0">
+    <Group Id="MyWork" ResourceId="Group_MyWork" DescriptionResourceId="My_Work_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_dashboards" ResourceId="Homepage_Dashboards" DescriptionResourceId="Dashboards_Description" Icon="/_imgs/area/18_home.gif" Url="/workplace/home_dashboards.aspx" GetStartedPanePath="Dashboards_Web_User_Visor.html" GetStartedPanePathAdmin="Dashboards_Web_Admin_Visor.html" GetStartedPanePathOutlook="Dashboards_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Dashboards_Outlook_Admin_Visor.html" DefaultDashboard="2701de60-8f2a-48a4-8262-4a35ca7441fa" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_personalwall" ResourceId="Whats_New_Label" DescriptionResourceId="Whats_New_Description" Icon="$webresource:msdyn_/Images/Wall_16.png" OutlookShortcutIcon="$webresource:msdyn_/Images/Wall_16.png" AvailableOffline="false" Url="$webresource:msdyn_/PersonalWall.htm?data=HideUserProfile%3D0" GetStartedPanePath="Dashboards_Web_User_Visor.html" GetStartedPanePathAdmin="Dashboards_Web_Admin_Visor.html" GetStartedPanePathOutlook="Dashboards_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Dashboards_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0">
+        <Privilege Entity="post" Privilege="Read" />
+      </SubArea>
+      <SubArea Id="nav_activities" DescriptionResourceId="Activities_SubArea_Description" Url="/_root/homepage.aspx?etc=4200" Entity="activitypointer" GetStartedPanePath="Activities_Web_User_Visor.html" GetStartedPanePathAdmin="Activities_Web_Admin_Visor.html" GetStartedPanePathOutlook="Activities_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Activities_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+    </Group>
+    <Group Id="Customers" ResourceId="Group_Customers" DescriptionResourceId="Customers_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_accts" DescriptionResourceId="Account_SubArea_Description" Entity="account" GetStartedPanePath="Accounts_Web_User_Visor.html" GetStartedPanePathAdmin="Accounts_Web_Admin_Visor.html" GetStartedPanePathOutlook="Accounts_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Accounts_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_conts" DescriptionResourceId="Contact_SubArea_Description" Entity="contact" GetStartedPanePath="Contacts_Web_User_Visor.html" GetStartedPanePathAdmin="Contacts_Web_Admin_Visor.html" GetStartedPanePathOutlook="Contacts_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Contacts_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+    </Group>
+    <Group Id="SFA" ResourceId="Area_Sales" DescriptionResourceId="Sales_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_leads" DescriptionResourceId="Lead_SubArea_Description" Entity="lead" GetStartedPanePath="Leads_Web_User_Visor.html" GetStartedPanePathAdmin="Leads_Web_Admin_Visor.html" GetStartedPanePathOutlook="Leads_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Leads_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_oppts" DescriptionResourceId="Opportunity_SubArea_Description" Entity="opportunity" GetStartedPanePath="Opportunities_Web_User_Visor.html" GetStartedPanePathAdmin="Opportunities_Web_Admin_Visor.html" GetStartedPanePathOutlook="Opportunities_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Opportunities_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_comps" DescriptionResourceId="Competitor_SubArea_Description" Entity="competitor" IntroducedVersion="7.0.0.0" />
+    </Group>
+    <Group Id="Collateral" ResourceId="Area_Collateral" DescriptionResourceId="Area_Collateral_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_quotes" DescriptionResourceId="Quote_SubArea_Description" Entity="quote" GetStartedPanePath="Quotes_Web_User_Visor.html" GetStartedPanePathAdmin="Quotes_Web_Admin_Visor.html" GetStartedPanePathOutlook="Quotes_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Quotes_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_orders" DescriptionResourceId="Orders_SubArea_Description" Entity="salesorder" GetStartedPanePath="Orders_Web_User_Visor.html" GetStartedPanePathAdmin="Orders_Web_Admin_Visor.html" GetStartedPanePathOutlook="Orders_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Orders_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_invoices" DescriptionResourceId="Invoice_SubArea_Description" Entity="invoice" GetStartedPanePath="Invoices_Web_User_Visor.html" GetStartedPanePathAdmin="Invoices_Web_Admin_Visor.html" GetStartedPanePathOutlook="Invoices_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Invoices_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_products" DescriptionResourceId="Product_SubArea_Description" Entity="product" GetStartedPanePath="Products_Web_User_Visor.html" GetStartedPanePathAdmin="Products_Web_Admin_Visor.html" GetStartedPanePathOutlook="Products_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Products_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_saleslit" DescriptionResourceId="SalesLit_SubArea_Description" Entity="salesliterature" IntroducedVersion="7.0.0.0" />
+    </Group>
+    <Group Id="MA" ResourceId="Area_Marketing" DescriptionResourceId="Marketing_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_lists" DescriptionResourceId="MarketingList_SubArea_Description" Entity="list" GetStartedPanePath="Marketing-Lists_Web_User_Visor.html" GetStartedPanePathAdmin="Marketing-Lists_Web_Admin_Visor.html" GetStartedPanePathOutlook="Marketing-Lists_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Marketing-Lists_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_minicamps" DescriptionResourceId="Quick_Campaign_Description" Icon="/_imgs/ico_18_minicamps.gif" Entity="bulkoperation" GetStartedPanePath="Quick-Campaigns_Web_User_Visor.html" GetStartedPanePathAdmin="Quick-Campaigns_Web_Admin_Visor.html" GetStartedPanePathOutlook="Quick-Campaigns_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Quick-Campaigns_Outlook_Admin_Visor.html" OutlookShortcutIcon="/_imgs/olk_4400.ico" IntroducedVersion="7.0.0.0">
+        <Privilege Privilege="AllowQuickCampaign" />
+      </SubArea>
+    </Group>
+    <Group Id="Goals" ResourceId="Area_Goals" DescriptionResourceId="Area_Goals_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_goals" DescriptionResourceId="Goals_SubArea_Description" Icon="/_imgs/ico_18_9600.png" Entity="goal" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_metric" DescriptionResourceId="Metrics_SubArea_Description" Entity="metric" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_goalrollupqueries" DescriptionResourceId="GoalQueries_SubArea_Description" Icon="/_imgs/ico_18_9602.png" Entity="goalrollupquery" IntroducedVersion="7.0.0.0" />
+    </Group>
+    <Group Id="Tools" ResourceId="Area_Tools" IsProfile="true" DescriptionResourceId="Area_Tools_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_reports" Entity="report" DescriptionResourceId="Reports_Description" IntroducedVersion="7.0.0.0">
+        <Privilege Entity="report" Privilege="Read" />
+      </SubArea>
+      <SubArea Id="nav_traces" Icon="/_imgs/area/18_alerts.png" Url="/_root/tracewall.aspx" ResourceId="Homepage_Alerts" AvailableOffline="false" DescriptionResourceId="Alerts_SubArea_Description" IntroducedVersion="7.0.0.0">
+        <Privilege Entity="tracelog" Privilege="Read" />
+      </SubArea>
+      <SubArea Id="nav_calendar" ResourceId="Homepage_Calendar" Icon="/_imgs/area/18_calendar.gif" Url="/workplace/home_calendar.aspx" Client="Web" IntroducedVersion="7.0.0.0">
+        <Privilege Entity="activitypointer" Privilege="Read" />
+      </SubArea>
+    </Group>
+  </Area>
+  <Area Id="CS" ResourceId="Area_Service" DescriptionResourceId="Customer_Service_Description" Icon="/_imgs/services_24x24.gif" ShowGroups="true" IntroducedVersion="7.0.0.0">
+    <Group Id="MyWork" ResourceId="Group_MyWork" DescriptionResourceId="My_Work_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_dashboards" ResourceId="Homepage_Dashboards" DescriptionResourceId="Dashboards_Description" Icon="/_imgs/area/18_home.gif" Url="/workplace/home_dashboards.aspx" GetStartedPanePath="Dashboards_Web_User_Visor.html" GetStartedPanePathAdmin="Dashboards_Web_Admin_Visor.html" GetStartedPanePathOutlook="Dashboards_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Dashboards_Outlook_Admin_Visor.html" DefaultDashboard="063e7659-05d9-4030-960d-10fe269a5a8b" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_activities" DescriptionResourceId="Activities_SubArea_Description" Url="/_root/homepage.aspx?etc=4200" Entity="activitypointer" GetStartedPanePath="Activities_Web_User_Visor.html" GetStartedPanePathAdmin="Activities_Web_Admin_Visor.html" GetStartedPanePathOutlook="Activities_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Activities_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+    </Group>
+    <Group Id="Customers" ResourceId="Group_Customers" DescriptionResourceId="Customers_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_accts" DescriptionResourceId="Account_SubArea_Description" Entity="account" GetStartedPanePath="Accounts_Web_User_Visor.html" GetStartedPanePathAdmin="Accounts_Web_Admin_Visor.html" GetStartedPanePathOutlook="Accounts_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Accounts_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_contacts" DescriptionResourceId="Contact_SubArea_Description" Entity="contact" GetStartedPanePath="Contacts_Web_User_Visor.html" GetStartedPanePathAdmin="Contacts_Web_Admin_Visor.html" GetStartedPanePathOutlook="Contacts_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Contacts_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_socialprofiles" DescriptionResourceId="SocialProfile_SubArea_Description" Entity="socialprofile" IntroducedVersion="7.0.0.0" />
+    </Group>
+    <Group Id="CS" ResourceId="Area_Service" DescriptionResourceId="Customer_Service_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_cases" DescriptionResourceId="Cases_SubArea_Description" Entity="incident" GetStartedPanePath="Cases_Web_User_Visor.html" GetStartedPanePathAdmin="Cases_Web_Admin_Visor.html" GetStartedPanePathOutlook="Cases_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Cases_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_apptbook" ResourceId="Homepage_AppointmentBook" DescriptionResourceId="AppointmentBook_SubArea_Description" Icon="/_imgs/ico_18_servicecal.gif" Url="/sm/home_apptbook.aspx" AvailableOffline="false" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_queues" ResourceId="Homepage_Queues" Entity="queueitem" DescriptionResourceId="Queues_SubArea_Description" Icon="/_imgs/ico_18_2020.gif" Url="/_root/homepage.aspx?etc=2029" GetStartedPanePath="Queues_Web_User_Visor.html" GetStartedPanePathAdmin="Queues_Web_Admin_Visor.html" GetStartedPanePathOutlook="Queues_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Queues_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0">
+        <Privilege Entity="queue" Privilege="Read" />
+      </SubArea>
+    </Group>
+    <Group Id="Collateral" ResourceId="Area_Collateral" DescriptionResourceId="Area_Collateral_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_answers" DescriptionResourceId="Article_SubArea_Description" Entity="kbarticle" GetStartedPanePath="KB_Web_User_Visor.html" GetStartedPanePathAdmin="KB_Web_Admin_Visor.html" GetStartedPanePathOutlook="KB_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="KB_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0">
+        <Privilege Entity="kbarticle" Privilege="Create,Read,Write" />
+      </SubArea>
+      <SubArea Id="nav_contracts" DescriptionResourceId="Contract_SubArea_Description" Entity="contract" GetStartedPanePath="Contracts_Web_User_Visor.html" GetStartedPanePathAdmin="Contracts_Web_Admin_Visor.html" GetStartedPanePathOutlook="Contracts_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Contracts_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_products" DescriptionResourceId="Product_SubArea_Description" Entity="product" GetStartedPanePath="Products_Web_User_Visor.html" GetStartedPanePathAdmin="Products_Web_Admin_Visor.html" GetStartedPanePathOutlook="Products_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Products_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_services" DescriptionResourceId="Service_SubArea_Description" Entity="service" GetStartedPanePath="Services_Web_User_Visor.html" GetStartedPanePathAdmin="Services_Web_Admin_Visor.html" GetStartedPanePathOutlook="Services_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Services_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+    </Group>
+    <Group Id="Goals" ResourceId="Area_Goals" DescriptionResourceId="Area_Goals_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_goals" DescriptionResourceId="Goals_SubArea_Description" Icon="/_imgs/ico_18_9600.png" Entity="goal" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_metric" DescriptionResourceId="Metrics_SubArea_Description" Entity="metric" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_goalrollupqueries" DescriptionResourceId="GoalQueries_SubArea_Description" Icon="/_imgs/ico_18_9602.png" Entity="goalrollupquery" IntroducedVersion="7.0.0.0" />
+    </Group>
+    <Group Id="Tools" ResourceId="Area_Tools" IsProfile="true" DescriptionResourceId="Area_Tools_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_reports" Entity="report" DescriptionResourceId="Reports_Description" IntroducedVersion="7.0.0.0">
+        <Privilege Entity="report" Privilege="Read" />
+      </SubArea>
+      <SubArea Id="nav_traces" Icon="/_imgs/area/18_alerts.png" Url="/_root/tracewall.aspx" ResourceId="Homepage_Alerts" AvailableOffline="false" DescriptionResourceId="Alerts_SubArea_Description" IntroducedVersion="7.0.0.0">
+        <Privilege Entity="tracelog" Privilege="Read" />
+      </SubArea>
+      <SubArea Id="nav_calendar" ResourceId="Homepage_Calendar" Icon="/_imgs/area/18_calendar.gif" Url="/workplace/home_calendar.aspx" Client="Web" IntroducedVersion="7.0.0.0">
+        <Privilege Entity="activitypointer" Privilege="Read" />
+      </SubArea>
+    </Group>
+  </Area>
+  <Area Id="MA" ResourceId="Area_Marketing" DescriptionResourceId="Marketing_Description" Icon="/_imgs/marketing_24x24.gif" ShowGroups="true" IntroducedVersion="7.0.0.0">
+    <Group Id="MyWork" ResourceId="Group_MyWork" DescriptionResourceId="My_Work_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_dashboards" ResourceId="Homepage_Dashboards" DescriptionResourceId="Dashboards_Description" Icon="/_imgs/area/18_home.gif" Url="/workplace/home_dashboards.aspx" GetStartedPanePath="Dashboards_Web_User_Visor.html" GetStartedPanePathAdmin="Dashboards_Web_Admin_Visor.html" GetStartedPanePathOutlook="Dashboards_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Dashboards_Outlook_Admin_Visor.html" DefaultDashboard="B46AEB74-BF0C-44FB-8158-9575588D1B57" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_activities" DescriptionResourceId="Activities_SubArea_Description" Url="/_root/homepage.aspx?etc=4200" Entity="activitypointer" GetStartedPanePath="Activities_Web_User_Visor.html" GetStartedPanePathAdmin="Activities_Web_Admin_Visor.html" GetStartedPanePathOutlook="Activities_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Activities_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+    </Group>
+    <Group Id="Customers" ResourceId="Group_Customers" DescriptionResourceId="Customers_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_accts" DescriptionResourceId="Account_SubArea_Description" Entity="account" GetStartedPanePath="Accounts_Web_User_Visor.html" GetStartedPanePathAdmin="Accounts_Web_Admin_Visor.html" GetStartedPanePathOutlook="Accounts_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Accounts_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_conts" DescriptionResourceId="Contact_SubArea_Description" Entity="contact" GetStartedPanePath="Contacts_Web_User_Visor.html" GetStartedPanePathAdmin="Contacts_Web_Admin_Visor.html" GetStartedPanePathOutlook="Contacts_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Contacts_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+    </Group>
+    <Group Id="MA" ResourceId="Area_Marketing" DescriptionResourceId="Marketing_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_leads" Entity="lead" DescriptionResourceId="Lead_SubArea_Description" GetStartedPanePath="Leads_Web_User_Visor.html" GetStartedPanePathAdmin="Leads_Web_Admin_Visor.html" GetStartedPanePathOutlook="Leads_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Leads_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_lists" DescriptionResourceId="MarketingList_SubArea_Description" Entity="list" GetStartedPanePath="Marketing-Lists_Web_User_Visor.html" GetStartedPanePathAdmin="Marketing-Lists_Web_Admin_Visor.html" GetStartedPanePathOutlook="Marketing-Lists_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Marketing-Lists_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_campaigns" DescriptionResourceId="Campaign_SubArea_Description" Entity="campaign" GetStartedPanePath="Campaigns_Web_User_Visor.html" GetStartedPanePathAdmin="Campaigns_Web_Admin_Visor.html" GetStartedPanePathOutlook="Campaigns_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Campaigns_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_minicamps" DescriptionResourceId="Quick_Campaign_Description" Icon="/_imgs/ico_18_minicamps.gif" Entity="bulkoperation" GetStartedPanePath="Quick-Campaigns_Web_User_Visor.html" GetStartedPanePathAdmin="Quick-Campaigns_Web_Admin_Visor.html" GetStartedPanePathOutlook="Quick-Campaigns_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Quick-Campaigns_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+    </Group>
+    <Group Id="Collateral" ResourceId="Area_Collateral" DescriptionResourceId="Area_Collateral_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_products" DescriptionResourceId="Product_SubArea_Description" Entity="product" GetStartedPanePath="Products_Web_User_Visor.html" GetStartedPanePathAdmin="Products_Web_Admin_Visor.html" GetStartedPanePathOutlook="Products_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Products_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_saleslit" DescriptionResourceId="SalesLit_SubArea_Description" Entity="salesliterature" IntroducedVersion="7.0.0.0" />
+    </Group>
+    <Group Id="Tools" ResourceId="Area_Tools" IsProfile="true" DescriptionResourceId="Area_Tools_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_reports" Entity="report" DescriptionResourceId="Reports_Description" IntroducedVersion="7.0.0.0">
+        <Privilege Entity="report" Privilege="Read" />
+      </SubArea>
+      <SubArea Id="nav_traces" Icon="/_imgs/area/18_alerts.png" Url="/_root/tracewall.aspx" ResourceId="Homepage_Alerts" AvailableOffline="false" DescriptionResourceId="Alerts_SubArea_Description" IntroducedVersion="7.0.0.0">
+        <Privilege Entity="tracelog" Privilege="Read" />
+      </SubArea>
+      <SubArea Id="nav_calendar" ResourceId="Homepage_Calendar" Icon="/_imgs/area/18_calendar.gif" Url="/workplace/home_calendar.aspx" Client="Web" IntroducedVersion="7.0.0.0">
+        <Privilege Entity="activitypointer" Privilege="Read" />
+      </SubArea>
+    </Group>
+  </Area>
+  <Area Id="Settings" ResourceId="Area_Settings" ShowGroups="true" Icon="/_imgs/settings_24x24.gif" DescriptionResourceId="Settings_Area_Description" IntroducedVersion="7.0.0.0">
+    <Group Id="Business_Setting" ResourceId="Menu_Label_Business" DescriptionResourceId="Menu_Label_Business" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_businessmanagement" ResourceId="Homepage_BusinessManagement" DescriptionResourceId="BizManagement_SubArea_Description" Icon="/_imgs/ico_18_busmanagement.gif" Url="/tools/business/business.aspx" AvailableOffline="false" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_template" ResourceId="Homepage_Template" DescriptionResourceId="Template_SubArea_Description" Icon="/_imgs/ico_18_templates.gif" Url="/tools/templates/templates.aspx" AvailableOffline="false" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_productcatalog" ResourceId="Homepage_ProductCatalog" DescriptionResourceId="ProductCatalog_SubArea_Description" Icon="/_imgs/ico_18_productcatalog.gif" Url="/tools/productcatalog/productcatalog.aspx" AvailableOffline="false" IntroducedVersion="7.0.0.0">
+        <Privilege Entity="product" Privilege="Read" />
+      </SubArea>
+      <SubArea Id="nav_servicemanagement" ResourceId="Homepage_ServiceManagement" DescriptionResourceId="ServiceManagement_SubArea_Description" Url="/tools/servicemanagement/servicemanagement.aspx" AvailableOffline="false" IntroducedVersion="7.0.0.0" />
+    </Group>
+    <Group Id="Customizations" ResourceId="Homepage_SystemCustomization" DescriptionResourceId="Homepage_SystemCustomization" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_syscust" ResourceId="Menu_Label_Customizations" DescriptionResourceId="Customization_SubArea_Description" Icon="/_imgs/area/18_syscust.gif" Url="/tools/systemcustomization/systemcustomization.aspx" AvailableOffline="false" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_solution" Entity="solution" ResourceId="Web.Tools.Solution.map_xml.aspx_1" AvailableOffline="false" GetStartedPanePath="Solutions_Web_Admin_Visor.html" GetStartedPanePathAdmin="Solutions_Web_Admin_Visor.html" GetStartedPanePathOutlook="Solutions_Outlook_Admin_Visor.html" GetStartedPanePathAdminOutlook="Solutions_Outlook_Admin_Visor.html" DescriptionResourceId="Web.Tools.Solution.map_xml.aspx_2" Url="/tools/Solution/home_solution.aspx?etc=7100" IntroducedVersion="7.0.0.0">
+        <Privilege Entity="solution" Privilege="Read" />
+      </SubArea>
+      <SubArea Id="nav_marketplace" ResourceId="Homepage_Marketplace" DescriptionResourceId="Marketplace_SubArea_Description" Icon="/_imgs/SystemCustomization/ico_18_marketplace.png" Url="/tools/SystemCustomization/SolutionsMarketplace/SolutionsMarketplace.aspx" Client="Web" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_plugintrace" ResourceId="Homepage_PluginTraceLog" Icon="/_imgs/area/Plugin_TraceLog_32.png" Entity="plugintracelog" Client="Web" IntroducedVersion="7.1.0.0">
+        <Privilege Entity="plugintracelog" Privilege="Read" />
+      </SubArea>
+    </Group>
+    <Group Id="System_Setting" ResourceId="Menu_Label_System" DescriptionResourceId="Menu_Label_System" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_administration" ResourceId="Homepage_Administration" DescriptionResourceId="Administration_SubArea_Description" Icon="/_imgs/ico_18_administration.gif" Url="/tools/Admin/admin.aspx" AvailableOffline="false" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_security" ResourceId="AdminSecurity_SubArea_Title" DescriptionResourceId="AdminSecurity_SubArea_Description" Icon="/_imgs/area/Security_32.png" Url="/tools/AdminSecurity/adminsecurity_area.aspx" AvailableOffline="false" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_datamanagement" ResourceId="Homepage_DataManagement" DescriptionResourceId="DataManagement_SubArea_Description" Icon="/_imgs/ico_18_datamanagement.gif" Url="/tools/DataManagement/datamanagement.aspx" AvailableOffline="false" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_systemjobs" ResourceId="Homepage_SystemJobs" DescriptionResourceId="SystemJobs_SubArea_Description" Entity="asyncoperation" Url="/tools/business/home_asyncoperation.aspx" AvailableOffline="false" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_documentmanagement" ResourceId="DocumentManagement.SettingsArea.Heading" DescriptionResourceId="DocumentManagement.SettingsArea.Description" Icon="/_imgs/DocumentManagement_16.png" Url="/tools/documentmanagement/documentmanagement.aspx" AvailableOffline="false" IntroducedVersion="7.0.0.0">
+        <Privilege Entity="sharepointsite" Privilege="Read" />
+        <Privilege Entity="sharepointdocumentlocation" Privilege="Read" />
+      </SubArea>
+      <SubArea Id="nav_audit" ResourceId="Audit_SubArea_Title" DescriptionResourceId="Audit_SubArea_Description" Icon="/_imgs/area/16_audit.png" Url="/tools/audit/audit_area.aspx" AvailableOffline="false" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="nav_social" ResourceId="Social_SubArea_Title" DescriptionResourceId="Social_SubArea_Description" Icon="/_imgs/area/16_social.png" Url="/tools/social/social_area.aspx" AvailableOffline="false" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="msdyn_postconfig" ResourceId="Activity_Feed_Configuration" Entity="msdyn_postconfig" IntroducedVersion="7.0.0.0" />
+      <SubArea Id="msdyn_postruleconfig" ResourceId="Activity_Feed_Rules_Configuration" Entity="msdyn_postruleconfig" IntroducedVersion="7.0.0.0" />
+    </Group>
+    <Group Id="ProcessCenter" ResourceId="Menu_Label_ProcessCenter" DescriptionResourceId="Menu_Label_ProcessCenter" IntroducedVersion="7.0.0.0">
+      <SubArea Id="nav_workflow" Entity="workflow" DescriptionResourceId="Workflow_SubArea_Description" AvailableOffline="false" GetStartedPanePath="Workflows_Web_User_Visor.html" GetStartedPanePathAdmin="Workflows_Web_Admin_Visor.html" GetStartedPanePathOutlook="Workflows_Outlook_User_Visor.html" GetStartedPanePathAdminOutlook="Workflows_Outlook_Admin_Visor.html" IntroducedVersion="7.0.0.0" />
+    </Group>
+  </Area>
+  <Area Id="HLP" ResourceId="Area_Help" ShowGroups="true" Icon="/_imgs/icn_help16.png" DescriptionResourceId="Help_Area_Description" IntroducedVersion="7.0.0.0">
+    <Group Id="HLP_GRP" ResourceId="Group_Help" DescriptionResourceId="Help_Description" IntroducedVersion="7.0.0.0">
+      <SubArea Id="Help_Resource_Center" Url="http://go.microsoft.com/fwlink/?LinkId=296269&amp;clcid=0x409" ResourceId="Area_CustomerCenter" DescriptionResourceId="ResourceCenter_Area_Description" AvailableOffline="false" IntroducedVersion="7.0.0.0" />
+    </Group>
+  </Area>
+</SiteMap>

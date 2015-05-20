@@ -158,7 +158,7 @@ namespace MsCrmTools.SiteMapEditor
 
         private void resetCRM2015SiteMapToDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ConnectionDetail.OrganizationMajorVersion != 7)
+            if (ConnectionDetail.OrganizationMajorVersion != 7 || ConnectionDetail.OrganizationMajorVersion == 7 && ConnectionDetail.OrganizationMinorVersion != 0)
             {
                 if (DialogResult.No == MessageBox.Show(this,
                     "Your current organization is not a CRM 2015 organization! Are you sure you want to continue?",
@@ -168,7 +168,21 @@ namespace MsCrmTools.SiteMapEditor
 
             ResetSiteMap(2015);
         }
-        private void ResetSiteMap(int version)
+
+        private void resetCRM2015Update1SiteMapToDefaultToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ConnectionDetail.OrganizationMajorVersion != 7 || ConnectionDetail.OrganizationMajorVersion == 7 && ConnectionDetail.OrganizationMinorVersion != 1)
+            {
+                if (DialogResult.No == MessageBox.Show(this,
+                    "Your current organization is not a CRM 2015 Update 1 organization! Are you sure you want to continue?",
+                    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                    return;
+            }
+
+            ResetSiteMap("2015SP1");
+        }
+
+        private void ResetSiteMap(object version)
         {
             if (DialogResult.Yes ==
                MessageBox.Show(this,
@@ -578,9 +592,22 @@ namespace MsCrmTools.SiteMapEditor
                 string nodeText = e.ClickedItem.Name.Remove(0, 9);
                 nodeText = nodeText.Substring(0, nodeText.IndexOf("ToolStripMenuItem"));
 
-                var version = ConnectionDetail.OrganizationMajorVersion == 5
-                    ? "2011"
-                    : ConnectionDetail.OrganizationMajorVersion == 6 ? "2013" : "2015";
+                string version = "2011";
+                switch (ConnectionDetail.OrganizationMajorVersion)
+                {
+                    case 5:
+                        version = "2011";
+                        break;
+                    case 6:
+                        version = "2013";
+                        break;
+                    case 7:
+                        if (ConnectionDetail.OrganizationMinorVersion == 0)
+                            version = "2015";
+                        else
+                            version = "2015SP1";
+                        break;
+                }
 
                 var smcPicker = new SiteMapComponentPicker(nodeText, version);
                 smcPicker.StartPosition = FormStartPosition.CenterParent;
@@ -699,6 +726,7 @@ namespace MsCrmTools.SiteMapEditor
 
                     // Recherche des métadonnées
                     entityCache = new List<EntityMetadata>();
+                    webResourcesHtmlCache = new List<Entity>();
 
                     var request = new RetrieveAllEntitiesRequest
                     {
@@ -719,7 +747,7 @@ namespace MsCrmTools.SiteMapEditor
                     webResourcesImageCache = new List<Entity>();
 
                     var wrQuery = new QueryExpression("webresource");
-                    wrQuery.Criteria.AddCondition("webresourcetype", ConditionOperator.In, new[] { 2, 5, 6, 7 });
+                    wrQuery.Criteria.AddCondition("webresourcetype", ConditionOperator.In, new object[] { 2, 5, 6, 7 });
                     wrQuery.ColumnSet.AllColumns = true;
 
                     EntityCollection results = Service.RetrieveMultiple(wrQuery);
@@ -941,6 +969,8 @@ namespace MsCrmTools.SiteMapEditor
         {
             CloseTool();
         }
+
+       
 
       
     }

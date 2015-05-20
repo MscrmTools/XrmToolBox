@@ -56,6 +56,8 @@
             this.toolStripDropDownButtonMoreActions = new System.Windows.Forms.ToolStripDropDownButton();
             this.resetSiteMapToDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resetCRM2013SiteMapToDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetCRM2015SiteMapToDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetCRM2015Update1SiteMapToDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nodeMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addSystemAreaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addSystemGroupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,7 +82,6 @@
             this.treeviewMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addRuleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.resetCRM2015SiteMapToDefaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gbProperties.SuspendLayout();
             this.toolStripItem.SuspendLayout();
             this.gbSiteMap.SuspendLayout();
@@ -126,7 +127,7 @@
             this.tsbItemSave.Image = ((System.Drawing.Image)(resources.GetObject("tsbItemSave.Image")));
             this.tsbItemSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbItemSave.Name = "tsbItemSave";
-            this.tsbItemSave.Size = new System.Drawing.Size(69, 35);
+            this.tsbItemSave.Size = new System.Drawing.Size(77, 35);
             this.tsbItemSave.Text = "Save";
             this.tsbItemSave.ToolTipText = "Save the current configuration to the selected node";
             this.tsbItemSave.Click += new System.EventHandler(this.TsbItemSaveClick);
@@ -186,7 +187,7 @@
             this.toolStripButtonMoveDown.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonMoveDown.Image")));
             this.toolStripButtonMoveDown.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonMoveDown.Name = "toolStripButtonMoveDown";
-            this.toolStripButtonMoveDown.Size = new System.Drawing.Size(23, 35);
+            this.toolStripButtonMoveDown.Size = new System.Drawing.Size(28, 35);
             this.toolStripButtonMoveDown.Text = "toolStripButtonMoveDown";
             this.toolStripButtonMoveDown.ToolTipText = "Move the selected node down";
             this.toolStripButtonMoveDown.Click += new System.EventHandler(this.ToolStripButtonMoveDownClick);
@@ -198,7 +199,7 @@
             this.toolStripButtonMoveUp.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonMoveUp.Image")));
             this.toolStripButtonMoveUp.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonMoveUp.Name = "toolStripButtonMoveUp";
-            this.toolStripButtonMoveUp.Size = new System.Drawing.Size(23, 35);
+            this.toolStripButtonMoveUp.Size = new System.Drawing.Size(28, 35);
             this.toolStripButtonMoveUp.Text = "toolStripButtonMoveUp";
             this.toolStripButtonMoveUp.ToolTipText = "Move the selected node up";
             this.toolStripButtonMoveUp.Click += new System.EventHandler(this.ToolStripButtonMoveUpClick);
@@ -215,7 +216,7 @@
             this.toolStripButtonDelete.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDelete.Image")));
             this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDelete.Name = "toolStripButtonDelete";
-            this.toolStripButtonDelete.Size = new System.Drawing.Size(23, 35);
+            this.toolStripButtonDelete.Size = new System.Drawing.Size(28, 35);
             this.toolStripButtonDelete.Text = "toolStripButtonDelete";
             this.toolStripButtonDelete.ToolTipText = "Delete the selected node";
             this.toolStripButtonDelete.Click += new System.EventHandler(this.ToolStripButtonDeleteClick);
@@ -232,7 +233,7 @@
             this.toolStripButtonDisplayXml.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDisplayXml.Image")));
             this.toolStripButtonDisplayXml.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonDisplayXml.Name = "toolStripButtonDisplayXml";
-            this.toolStripButtonDisplayXml.Size = new System.Drawing.Size(23, 35);
+            this.toolStripButtonDisplayXml.Size = new System.Drawing.Size(28, 35);
             this.toolStripButtonDisplayXml.Text = "Display Xml";
             this.toolStripButtonDisplayXml.Click += new System.EventHandler(this.ToolStripButtonDisplayXmlClick);
             // 
@@ -243,7 +244,7 @@
             this.toolStripButtonAddXml.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAddXml.Image")));
             this.toolStripButtonAddXml.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonAddXml.Name = "toolStripButtonAddXml";
-            this.toolStripButtonAddXml.Size = new System.Drawing.Size(23, 35);
+            this.toolStripButtonAddXml.Size = new System.Drawing.Size(28, 35);
             this.toolStripButtonAddXml.Text = "Add Component with Xml";
             this.toolStripButtonAddXml.Click += new System.EventHandler(this.ToolStripButtonAddXmlClick);
             // 
@@ -289,7 +290,7 @@
             this.tsbCloseThisTab.Image = ((System.Drawing.Image)(resources.GetObject("tsbCloseThisTab.Image")));
             this.tsbCloseThisTab.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCloseThisTab.Name = "tsbCloseThisTab";
-            this.tsbCloseThisTab.Size = new System.Drawing.Size(23, 35);
+            this.tsbCloseThisTab.Size = new System.Drawing.Size(28, 35);
             this.tsbCloseThisTab.Text = "Close this tab";
             this.tsbCloseThisTab.Click += new System.EventHandler(this.TsbCloseThisTabClick);
             // 
@@ -303,7 +304,7 @@
             this.tsbMainOpenSiteMap.Image = ((System.Drawing.Image)(resources.GetObject("tsbMainOpenSiteMap.Image")));
             this.tsbMainOpenSiteMap.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbMainOpenSiteMap.Name = "tsbMainOpenSiteMap";
-            this.tsbMainOpenSiteMap.Size = new System.Drawing.Size(141, 35);
+            this.tsbMainOpenSiteMap.Size = new System.Drawing.Size(149, 35);
             this.tsbMainOpenSiteMap.Text = "Load SiteMap";
             this.tsbMainOpenSiteMap.ToolTipText = "Load the SiteMap from a CRM Server\r\n\r\nRequires a connection to a CRM server";
             this.tsbMainOpenSiteMap.Click += new System.EventHandler(this.TsbMainOpenSiteMapClick);
@@ -314,7 +315,7 @@
             this.tsbUpdateSiteMap.Image = ((System.Drawing.Image)(resources.GetObject("tsbUpdateSiteMap.Image")));
             this.tsbUpdateSiteMap.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbUpdateSiteMap.Name = "tsbUpdateSiteMap";
-            this.tsbUpdateSiteMap.Size = new System.Drawing.Size(160, 35);
+            this.tsbUpdateSiteMap.Size = new System.Drawing.Size(168, 35);
             this.tsbUpdateSiteMap.Text = "Update SiteMap";
             this.tsbUpdateSiteMap.ToolTipText = "Update SiteMap into CRM server";
             this.tsbUpdateSiteMap.Click += new System.EventHandler(this.TsbMainImportClick);
@@ -329,7 +330,7 @@
             this.toolStripButtonLoadSiteMapFromDisk.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonLoadSiteMapFromDisk.Image")));
             this.toolStripButtonLoadSiteMapFromDisk.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonLoadSiteMapFromDisk.Name = "toolStripButtonLoadSiteMapFromDisk";
-            this.toolStripButtonLoadSiteMapFromDisk.Size = new System.Drawing.Size(146, 35);
+            this.toolStripButtonLoadSiteMapFromDisk.Size = new System.Drawing.Size(154, 35);
             this.toolStripButtonLoadSiteMapFromDisk.Text = "Open SiteMap";
             this.toolStripButtonLoadSiteMapFromDisk.ToolTipText = "Open SiteMap by selecting a Xml file";
             this.toolStripButtonLoadSiteMapFromDisk.Click += new System.EventHandler(this.ToolStripButtonLoadSiteMapFromDiskClick);
@@ -340,7 +341,7 @@
             this.toolStripButtonSaveSiteMapToDisk.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSaveSiteMapToDisk.Image")));
             this.toolStripButtonSaveSiteMapToDisk.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonSaveSiteMapToDisk.Name = "toolStripButtonSaveSiteMapToDisk";
-            this.toolStripButtonSaveSiteMapToDisk.Size = new System.Drawing.Size(139, 35);
+            this.toolStripButtonSaveSiteMapToDisk.Size = new System.Drawing.Size(147, 35);
             this.toolStripButtonSaveSiteMapToDisk.Text = "Save SiteMap";
             this.toolStripButtonSaveSiteMapToDisk.ToolTipText = "Save SiteMap in a Xml file";
             this.toolStripButtonSaveSiteMapToDisk.Click += new System.EventHandler(this.ToolStripButtonSaveSiteMapToDiskClick);
@@ -356,18 +357,19 @@
             this.toolStripDropDownButtonMoreActions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.resetSiteMapToDefaultToolStripMenuItem,
             this.resetCRM2013SiteMapToDefaultToolStripMenuItem,
-            this.resetCRM2015SiteMapToDefaultToolStripMenuItem});
+            this.resetCRM2015SiteMapToDefaultToolStripMenuItem,
+            this.resetCRM2015Update1SiteMapToDefaultToolStripMenuItem});
             this.toolStripDropDownButtonMoreActions.Enabled = false;
             this.toolStripDropDownButtonMoreActions.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButtonMoreActions.Image")));
             this.toolStripDropDownButtonMoreActions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButtonMoreActions.Name = "toolStripDropDownButtonMoreActions";
-            this.toolStripDropDownButtonMoreActions.Size = new System.Drawing.Size(128, 35);
+            this.toolStripDropDownButtonMoreActions.Size = new System.Drawing.Size(133, 35);
             this.toolStripDropDownButtonMoreActions.Text = "More actions";
             // 
             // resetSiteMapToDefaultToolStripMenuItem
             // 
             this.resetSiteMapToDefaultToolStripMenuItem.Name = "resetSiteMapToDefaultToolStripMenuItem";
-            this.resetSiteMapToDefaultToolStripMenuItem.Size = new System.Drawing.Size(367, 30);
+            this.resetSiteMapToDefaultToolStripMenuItem.Size = new System.Drawing.Size(445, 30);
             this.resetSiteMapToDefaultToolStripMenuItem.Text = "Reset CRM 2011 SiteMap to default";
             this.resetSiteMapToDefaultToolStripMenuItem.ToolTipText = "Reset the current SiteMap to the default (post installation) SiteMap\r\n\r\nThis does" +
     " not apply to the SiteMap on the CRM server until you use the \"Import Solution\" " +
@@ -377,12 +379,27 @@
             // resetCRM2013SiteMapToDefaultToolStripMenuItem
             // 
             this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Name = "resetCRM2013SiteMapToDefaultToolStripMenuItem";
-            this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Size = new System.Drawing.Size(367, 30);
+            this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Size = new System.Drawing.Size(445, 30);
             this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Text = "Reset CRM 2013 SiteMap to default";
             this.resetCRM2013SiteMapToDefaultToolStripMenuItem.Click += new System.EventHandler(this.resetCRM2013SiteMapToDefaultToolStripMenuItem_Click);
             // 
+            // resetCRM2015SiteMapToDefaultToolStripMenuItem
+            // 
+            this.resetCRM2015SiteMapToDefaultToolStripMenuItem.Name = "resetCRM2015SiteMapToDefaultToolStripMenuItem";
+            this.resetCRM2015SiteMapToDefaultToolStripMenuItem.Size = new System.Drawing.Size(445, 30);
+            this.resetCRM2015SiteMapToDefaultToolStripMenuItem.Text = "Reset CRM 2015 SiteMap to default";
+            this.resetCRM2015SiteMapToDefaultToolStripMenuItem.Click += new System.EventHandler(this.resetCRM2015SiteMapToDefaultToolStripMenuItem_Click);
+            // 
+            // resetCRM2015Update1SiteMapToDefaultToolStripMenuItem
+            // 
+            this.resetCRM2015Update1SiteMapToDefaultToolStripMenuItem.Name = "resetCRM2015Update1SiteMapToDefaultToolStripMenuItem";
+            this.resetCRM2015Update1SiteMapToDefaultToolStripMenuItem.Size = new System.Drawing.Size(445, 30);
+            this.resetCRM2015Update1SiteMapToDefaultToolStripMenuItem.Text = "Reset CRM 2015 Update 1 SiteMap to default";
+            this.resetCRM2015Update1SiteMapToDefaultToolStripMenuItem.Click += new System.EventHandler(this.resetCRM2015Update1SiteMapToDefaultToolStripMenuItem_Click);
+            // 
             // nodeMenu
             // 
+            this.nodeMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.nodeMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addSystemAreaToolStripMenuItem,
             this.addSystemGroupToolStripMenuItem,
@@ -405,136 +422,137 @@
             this.toolStripSeparator7,
             this.deleteToolStripMenuItem});
             this.nodeMenu.Name = "nodeMenu";
-            this.nodeMenu.Size = new System.Drawing.Size(326, 508);
+            this.nodeMenu.Size = new System.Drawing.Size(334, 508);
             this.nodeMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.NodeMenuItemClicked);
             // 
             // addSystemAreaToolStripMenuItem
             // 
             this.addSystemAreaToolStripMenuItem.Name = "addSystemAreaToolStripMenuItem";
-            this.addSystemAreaToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.addSystemAreaToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.addSystemAreaToolStripMenuItem.Text = "Add default SiteMap Area";
             // 
             // addSystemGroupToolStripMenuItem
             // 
             this.addSystemGroupToolStripMenuItem.Name = "addSystemGroupToolStripMenuItem";
-            this.addSystemGroupToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.addSystemGroupToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.addSystemGroupToolStripMenuItem.Text = "Add  default SiteMap Group";
             // 
             // addSystemSubAreaToolStripMenuItem
             // 
             this.addSystemSubAreaToolStripMenuItem.Name = "addSystemSubAreaToolStripMenuItem";
-            this.addSystemSubAreaToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.addSystemSubAreaToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.addSystemSubAreaToolStripMenuItem.Text = "Add  default SiteMap SubArea";
             // 
             // toolStripSeparatorSystem
             // 
             this.toolStripSeparatorSystem.Name = "toolStripSeparatorSystem";
-            this.toolStripSeparatorSystem.Size = new System.Drawing.Size(322, 6);
+            this.toolStripSeparatorSystem.Size = new System.Drawing.Size(330, 6);
             // 
             // addAreaToolStripMenuItem
             // 
             this.addAreaToolStripMenuItem.Name = "addAreaToolStripMenuItem";
-            this.addAreaToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.addAreaToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.addAreaToolStripMenuItem.Text = "Add Area";
             // 
             // addGroupToolStripMenuItem
             // 
             this.addGroupToolStripMenuItem.Name = "addGroupToolStripMenuItem";
-            this.addGroupToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.addGroupToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.addGroupToolStripMenuItem.Text = "Add Group";
             // 
             // addSubAreaToolStripMenuItem
             // 
             this.addSubAreaToolStripMenuItem.Name = "addSubAreaToolStripMenuItem";
-            this.addSubAreaToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.addSubAreaToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.addSubAreaToolStripMenuItem.Text = "Add SubArea";
             // 
             // addDescriptionsToolStripMenuItem
             // 
             this.addDescriptionsToolStripMenuItem.Name = "addDescriptionsToolStripMenuItem";
-            this.addDescriptionsToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.addDescriptionsToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.addDescriptionsToolStripMenuItem.Text = "Add Descriptions";
             // 
             // addDescriptionToolStripMenuItem
             // 
             this.addDescriptionToolStripMenuItem.Name = "addDescriptionToolStripMenuItem";
-            this.addDescriptionToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.addDescriptionToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.addDescriptionToolStripMenuItem.Text = "Add Description";
             // 
             // addTitlesToolStripMenuItem
             // 
             this.addTitlesToolStripMenuItem.Name = "addTitlesToolStripMenuItem";
-            this.addTitlesToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.addTitlesToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.addTitlesToolStripMenuItem.Text = "Add Titles";
             this.addTitlesToolStripMenuItem.Visible = false;
             // 
             // addTitleToolStripMenuItem
             // 
             this.addTitleToolStripMenuItem.Name = "addTitleToolStripMenuItem";
-            this.addTitleToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.addTitleToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.addTitleToolStripMenuItem.Text = "Add Title";
             this.addTitleToolStripMenuItem.Visible = false;
             // 
             // addPrivilegeToolStripMenuItem
             // 
             this.addPrivilegeToolStripMenuItem.Name = "addPrivilegeToolStripMenuItem";
-            this.addPrivilegeToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.addPrivilegeToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.addPrivilegeToolStripMenuItem.Text = "Add Privilege";
             this.addPrivilegeToolStripMenuItem.Visible = false;
             // 
             // toolStripSeparatorBeginOfEdition
             // 
             this.toolStripSeparatorBeginOfEdition.Name = "toolStripSeparatorBeginOfEdition";
-            this.toolStripSeparatorBeginOfEdition.Size = new System.Drawing.Size(322, 6);
+            this.toolStripSeparatorBeginOfEdition.Size = new System.Drawing.Size(330, 6);
             // 
             // cutToolStripMenuItem
             // 
             this.cutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("cutToolStripMenuItem.Image")));
             this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-            this.cutToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.cutToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.cutToolStripMenuItem.Text = "Cut";
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copyToolStripMenuItem.Image")));
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.copyToolStripMenuItem.Text = "Copy";
             // 
             // pasteToolStripMenuItem
             // 
             this.pasteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pasteToolStripMenuItem.Image")));
             this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.pasteToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.pasteToolStripMenuItem.Text = "Paste";
             // 
             // toolStripSeparatorAction
             // 
             this.toolStripSeparatorAction.Name = "toolStripSeparatorAction";
-            this.toolStripSeparatorAction.Size = new System.Drawing.Size(322, 6);
+            this.toolStripSeparatorAction.Size = new System.Drawing.Size(330, 6);
             this.toolStripSeparatorAction.Visible = false;
             // 
             // disableToolStripMenuItem
             // 
             this.disableToolStripMenuItem.Name = "disableToolStripMenuItem";
-            this.disableToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.disableToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.disableToolStripMenuItem.Text = "Disable";
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(322, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(330, 6);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deleteToolStripMenuItem.Image")));
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(325, 30);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(333, 30);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Visible = false;
             // 
             // treeviewMenuStrip
             // 
+            this.treeviewMenuStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.treeviewMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addRuleToolStripMenuItem});
             this.treeviewMenuStrip.Name = "treeviewMenuStrip";
@@ -552,13 +570,6 @@
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "Icon.png");
-            // 
-            // resetCRM2015SiteMapToDefaultToolStripMenuItem
-            // 
-            this.resetCRM2015SiteMapToDefaultToolStripMenuItem.Name = "resetCRM2015SiteMapToDefaultToolStripMenuItem";
-            this.resetCRM2015SiteMapToDefaultToolStripMenuItem.Size = new System.Drawing.Size(367, 30);
-            this.resetCRM2015SiteMapToDefaultToolStripMenuItem.Text = "Reset CRM 2015 SiteMap to default";
-            this.resetCRM2015SiteMapToDefaultToolStripMenuItem.Click += new System.EventHandler(this.resetCRM2015SiteMapToDefaultToolStripMenuItem_Click);
             // 
             // SiteMapEditor
             // 
@@ -637,5 +648,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem resetCRM2013SiteMapToDefaultToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetCRM2015SiteMapToDefaultToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resetCRM2015Update1SiteMapToDefaultToolStripMenuItem;
     }
 }
