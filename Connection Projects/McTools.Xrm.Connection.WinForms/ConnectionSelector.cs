@@ -234,16 +234,16 @@ namespace McTools.Xrm.Connection.WinForms
 
         private void tsbDeleteConnection_Click(object sender, EventArgs e)
         {
-            if (lvConnections.SelectedItems.Count > 0)
+            foreach(ListViewItem connectionItem in lvConnections.SelectedItems)
             {
-                var selectedItem = lvConnections.SelectedItems[0];
-                var detailToRemove = (ConnectionDetail) selectedItem.Tag;
+                var detailToRemove = (ConnectionDetail)connectionItem.Tag;
 
                 lvConnections.Items.Remove(lvConnections.SelectedItems[0]);
 
                 ConnectionManager.Instance.ConnectionsList.Connections.RemoveAll(d => d.ConnectionId == detailToRemove.ConnectionId);
-                ConnectionManager.Instance.SaveConnectionsFile();
             }
+
+            ConnectionManager.Instance.SaveConnectionsFile();
         }
 
         private ListViewGroup GetGroup(AuthenticationProviderType type)
