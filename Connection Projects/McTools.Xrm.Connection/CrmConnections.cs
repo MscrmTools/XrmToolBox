@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -70,6 +71,8 @@ namespace McTools.Xrm.Connection
 
         public bool UseInternetExplorerProxy { get; set; }
 
+        public bool UseMruDisplay { get; set; }
+
         #endregion
 
         #region methods
@@ -84,7 +87,8 @@ namespace McTools.Xrm.Connection
                     new XElement("Username", _userName),
                     new XElement("Password", _password),
                     new XElement("UseDefaultCredentials", UseDefaultCredentials),
-                    new XElement("ByPassProxyOnLocal", ByPassProxyOnLocal)));
+                    new XElement("ByPassProxyOnLocal", ByPassProxyOnLocal)),
+                new XElement("UseMruDisplay", UseMruDisplay));
 
             foreach (var connection in Connections)
             {
@@ -130,6 +134,12 @@ namespace McTools.Xrm.Connection
                 var connectionsElt = crmConnectionsElt.Element("Connections");
                 if (connectionsElt == null)
                     return crmConnections;
+
+                 var useMruDisplayElt = connectionsElt.Element("UseMruDisplay");
+                if (useMruDisplayElt != null)
+                {
+                    crmConnections.UseMruDisplay = useMruDisplayElt.Value == "true";
+                }
 
                 var proxyElt = connectionsElt.Element("Proxy");
                 if (proxyElt != null)
@@ -271,6 +281,12 @@ namespace McTools.Xrm.Connection
                     if (webApplicationUrlElement != null)
                     {
                         cd.WebApplicationUrl = webApplicationUrlElement.Value;
+                    }
+
+                    var lastUsedOnElt = elt.Element("LastUsedOn");
+                    if (lastUsedOnElt != null)
+                    {
+                        cd.LastUsedOn = DateTime.Parse(lastUsedOnElt.Value, CultureInfo.InvariantCulture.DateTimeFormat);
                     }
 
                     crmConnections.Connections.Add(cd);

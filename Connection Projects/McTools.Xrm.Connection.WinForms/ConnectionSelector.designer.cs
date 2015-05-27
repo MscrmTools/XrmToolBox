@@ -40,6 +40,8 @@
             this.tsbNewConnection = new System.Windows.Forms.ToolStripButton();
             this.tsbUpdateConnection = new System.Windows.Forms.ToolStripButton();
             this.tsbDeleteConnection = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsb_UseMru = new System.Windows.Forms.ToolStripButton();
             this.menu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -83,7 +85,6 @@
             this.lvConnections.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lvConnections.Name = "lvConnections";
             this.lvConnections.Size = new System.Drawing.Size(794, 522);
-            this.lvConnections.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvConnections.TabIndex = 9;
             this.lvConnections.UseCompatibleStateImageBehavior = false;
             this.lvConnections.View = System.Windows.Forms.View.Details;
@@ -115,7 +116,9 @@
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbNewConnection,
             this.tsbUpdateConnection,
-            this.tsbDeleteConnection});
+            this.tsbDeleteConnection,
+            this.toolStripSeparator1,
+            this.tsb_UseMru});
             this.menu.Location = new System.Drawing.Point(0, 0);
             this.menu.Name = "menu";
             this.menu.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
@@ -150,6 +153,21 @@
             this.tsbDeleteConnection.Text = "Delete connection";
             this.tsbDeleteConnection.Click += new System.EventHandler(this.tsbDeleteConnection_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
+            // 
+            // tsb_UseMru
+            // 
+            this.tsb_UseMru.CheckOnClick = true;
+            this.tsb_UseMru.Image = ((System.Drawing.Image)(resources.GetObject("tsb_UseMru.Image")));
+            this.tsb_UseMru.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsb_UseMru.Name = "tsb_UseMru";
+            this.tsb_UseMru.Size = new System.Drawing.Size(169, 29);
+            this.tsb_UseMru.Text = "Display MRU first";
+            this.tsb_UseMru.ToolTipText = "Display Most Recently Used connections first";
+            // 
             // ConnectionSelector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -183,6 +201,8 @@
         private System.Windows.Forms.ToolStripButton tsbNewConnection;
         private System.Windows.Forms.ToolStripButton tsbUpdateConnection;
         private System.Windows.Forms.ToolStripButton tsbDeleteConnection;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton tsb_UseMru;
 
     }
 }

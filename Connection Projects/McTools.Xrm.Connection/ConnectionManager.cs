@@ -266,6 +266,8 @@ namespace McTools.Xrm.Connection
                     detail.CopyPasswordTo(currentConnection);
                 }
 
+                detail.LastUsedOn = DateTime.Now;
+
                 SaveConnectionsFile();
 
                 return service;

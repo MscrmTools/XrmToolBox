@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.Serialization;
 using System.ServiceModel.Description;
 using System.Xml.Linq;
@@ -145,6 +146,8 @@ namespace McTools.Xrm.Connection
         }
 
         public string WebApplicationUrl { get; set; }
+
+        public DateTime LastUsedOn { get; set; }
 
         #endregion
 
@@ -444,7 +447,8 @@ namespace McTools.Xrm.Connection
                     new XElement("OrganizationServiceUrl", OrganizationServiceUrl),
                     new XElement("OrganizationVersion", OrganizationVersion),
                     new XElement("Timeout", TimeoutTicks),
-                    new XElement("WebApplicationUrl", WebApplicationUrl));
+                    new XElement("WebApplicationUrl", WebApplicationUrl),
+                    new XElement("LastUsedOn", LastUsedOn.ToString(CultureInfo.InvariantCulture.DateTimeFormat)));
         }
 
         public void CopyPasswordTo(ConnectionDetail detail)

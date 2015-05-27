@@ -33,6 +33,7 @@ namespace McTools.Xrm.Connection.WinForms
         private bool hadCreatedNewConnection;
 
         private readonly bool isConnectionSelection;
+        private readonly bool allowMultipleSelection;
 
         #endregion
 
@@ -44,7 +45,12 @@ namespace McTools.Xrm.Connection.WinForms
         public ConnectionSelector(bool allowMultipleSelection = false, bool isConnectionSelection = true)
         {
             InitializeComponent();
+
+            tsb_UseMru.Checked = ConnectionManager.Instance.ConnectionsList.UseMruDisplay;
+            tsb_UseMru.CheckedChanged += tsb_UseMru_CheckedChanged;
+
             this.isConnectionSelection = isConnectionSelection;
+            this.allowMultipleSelection = allowMultipleSelection;
             if (isConnectionSelection)
             {
                 Text = "Select a connection";
@@ -62,38 +68,59 @@ namespace McTools.Xrm.Connection.WinForms
                 bValidate.Visible = false;
             }
 
+            DisplayConnections(allowMultipleSelection);
+        }
+
+        private void DisplayConnections(bool allowMultipleSelection)
+        {
+            lvConnections.Items.Clear();
+            lvConnections.Groups.Clear();
+
             ConnectionManager.Instance.ConnectionsList.Connections.Sort();
 
             lvConnections.MultiSelect = allowMultipleSelection;
 
             LoadImages();
 
-            foreach (ConnectionDetail detail in ConnectionManager.Instance.ConnectionsList.Connections)
+            var details = ConnectionManager.Instance.ConnectionsList.Connections;
+            if (ConnectionManager.Instance.ConnectionsList.UseMruDisplay)
+            {
+                details = ConnectionManager.Instance.ConnectionsList.Connections.OrderByDescending(c => c.LastUsedOn).ThenBy(c=>c.ConnectionName).ToList();
+            }
+
+            foreach (ConnectionDetail detail in details)
             {
                 var item = new ListViewItem(detail.ConnectionName);
                 item.SubItems.Add(detail.ServerName);
                 item.SubItems.Add(detail.Organization);
                 item.SubItems.Add(detail.OrganizationVersion);
                 item.Tag = detail;
-                item.Group = GetGroup(detail.AuthType);
                 item.ImageIndex = GetImageIndex(detail);
+
+                if (!ConnectionManager.Instance.ConnectionsList.UseMruDisplay)
+                {
+                    item.Group = GetGroup(detail.AuthType);
+                }
 
                 lvConnections.Items.Add(item);
             }
 
-            var groups = new ListViewGroup[lvConnections.Groups.Count];
+            if (!ConnectionManager.Instance.ConnectionsList.UseMruDisplay)
+            {
+                var groups = new ListViewGroup[lvConnections.Groups.Count];
 
-            lvConnections.Groups.CopyTo(groups, 0);
+                lvConnections.Groups.CopyTo(groups, 0);
 
-            Array.Sort(groups, new GroupComparer());
+                Array.Sort(groups, new GroupComparer());
 
-            lvConnections.BeginUpdate();
-            lvConnections.Groups.Clear();
-            lvConnections.Groups.AddRange(groups);
-            lvConnections.EndUpdate();
+                lvConnections.BeginUpdate();
+                lvConnections.Groups.Clear();
+                lvConnections.Groups.AddRange(groups);
+                lvConnections.EndUpdate();
+            }
         }
 
-       
+
         private void LoadImages()
         {
             lvConnections.SmallImageList = new ImageList();
@@ -294,6 +321,14 @@ namespace McTools.Xrm.Connection.WinForms
             }
 
             return 0;
+        }
+
+        private void tsb_UseMru_CheckedChanged(object sender, EventArgs e)
+        {
+            var tsb = (ToolStripButton) sender;
+            ConnectionManager.Instance.ConnectionsList.UseMruDisplay = tsb_UseMru.Checked;
+
+            DisplayConnections(allowMultipleSelection);
         }
     }
 }
