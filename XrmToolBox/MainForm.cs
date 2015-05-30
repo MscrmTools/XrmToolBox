@@ -225,6 +225,8 @@ namespace XrmToolBox
         {
             this.Opacity = 0;
 
+            tstxtFilterPlugin.Focus();
+
             pManager = new PluginManager();
             pManager.LoadPlugins();
 
