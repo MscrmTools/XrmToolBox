@@ -144,53 +144,58 @@ namespace MsCrmTools.Iconator
 
                     var queryWebResources =
                         from webResourceList in WebResourcesManager.GetWebResourcesOnSolution(Service).Entities
-                        orderby webResourceList.Attributes["name"]
+                        orderby webResourceList.GetAttributeValue<string>("name")
                         select webResourceList;
 
                     foreach (var webResource in queryWebResources)
                     {
-                        var imageConverted =
-                            ImageHelper.ConvertWebResContent(webResource.Attributes["content"].ToString());
-
-
-
-                        if (imageConverted.Size.Height == 32 && imageConverted.Size.Width == 32)
+                        try
                         {
-                            var lvi = new ListViewItem(webResource.Attributes["name"].ToString())
-                            {
-                                Tag = webResource,
-                                ImageIndex = cc.Images32.Count
-                            };
-                            cc.Icons32.Add(lvi);
-                            cc.Images32.Add(imageConverted);
-                        }
-                        else if (imageConverted.Size.Height == 16 && imageConverted.Size.Width == 16)
-                        {
-                            var lvi = new ListViewItem(webResource.Attributes["name"].ToString())
-                            {
-                                Tag = webResource,
-                                ImageIndex = cc.Images16.Count
-                            };
-                            cc.Icons16.Add(lvi);
-                            cc.Images16.Add(imageConverted);
-                        }
-                        else
-                        {
-                            var listWrImage = new WebResourcesManager.WebResourceAndImage
-                            {
-                                Image = imageConverted,
-                                Webresource = webResource
-                            };
-                            var lvi = new ListViewItem(webResource.Attributes["name"].ToString())
-                            {
-                                Tag = listWrImage,
-                                ImageIndex = cc.ImagesOthers.Count,
-                            };
-                            cc.IconsOthers.Add(lvi);
-                            cc.ImagesOthers.Add(imageConverted);
-                        }
+                            var imageConverted =
+                                ImageHelper.ConvertWebResContent(webResource.GetAttributeValue<string>("content"));
 
-                        webResourceRetrivedList.Add(webResource);
+                            if (imageConverted == null)
+                                continue;
+
+                            if (imageConverted.Size.Height == 32 && imageConverted.Size.Width == 32)
+                            {
+                                var lvi = new ListViewItem(webResource.GetAttributeValue<string>("name"))
+                                {
+                                    Tag = webResource,
+                                    ImageIndex = cc.Images32.Count
+                                };
+                                cc.Icons32.Add(lvi);
+                                cc.Images32.Add(imageConverted);
+                            }
+                            else if (imageConverted.Size.Height == 16 && imageConverted.Size.Width == 16)
+                            {
+                                var lvi = new ListViewItem(webResource.GetAttributeValue<string>("name"))
+                                {
+                                    Tag = webResource,
+                                    ImageIndex = cc.Images16.Count
+                                };
+                                cc.Icons16.Add(lvi);
+                                cc.Images16.Add(imageConverted);
+                            }
+                            else
+                            {
+                                var listWrImage = new WebResourcesManager.WebResourceAndImage
+                                {
+                                    Image = imageConverted,
+                                    Webresource = webResource
+                                };
+                                var lvi = new ListViewItem(webResource.GetAttributeValue<string>("name"))
+                                {
+                                    Tag = listWrImage,
+                                    ImageIndex = cc.ImagesOthers.Count,
+                                };
+                                cc.IconsOthers.Add(lvi);
+                                cc.ImagesOthers.Add(imageConverted);
+                            }
+
+                            webResourceRetrivedList.Add(webResource);
+                        }
+                        catch { }
                     }
 
                     e.Result = cc;

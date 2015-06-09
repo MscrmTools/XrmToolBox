@@ -607,7 +607,7 @@ namespace MsCrmTools.Translator.AppCode
                 var docXml = new XmlDocument();
                 docXml.LoadXml(formXml);
 
-                var tabNode = docXml.DocumentElement.SelectSingleNode(string.Format("tabs/tab[@id='{0}']", tabId));
+                var tabNode = docXml.DocumentElement.SelectSingleNode(string.Format("tabs/tab[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{0}']", tabId.ToLower()));
                 if (tabNode != null)
                 {
                     var columnIndex = 5;
@@ -642,7 +642,7 @@ namespace MsCrmTools.Translator.AppCode
                 var docXml = new XmlDocument();
                 docXml.LoadXml(formXml);
 
-                var tabNode = docXml.DocumentElement.SelectSingleNode(string.Format("tabs/tab[@id='{0}']", tabId));
+                var tabNode = docXml.DocumentElement.SelectSingleNode(string.Format("tabs/tab[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{0}']", tabId.ToLower()));
                 if (tabNode != null)
                 {
                     var columnIndex = 5;
@@ -683,7 +683,7 @@ namespace MsCrmTools.Translator.AppCode
 
                 var sectionNode =
                     docXml.DocumentElement.SelectSingleNode(
-                        string.Format("tabs/tab/columns/column/sections/section[@id='{0}']", sectionId));
+                        string.Format("tabs/tab/columns/column/sections/section[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{0}']", sectionId.ToLower()));
                 if (sectionNode != null)
                 {
                     var columnIndex = 6;
@@ -720,7 +720,7 @@ namespace MsCrmTools.Translator.AppCode
 
                 var sectionNode =
                     docXml.DocumentElement.SelectSingleNode(
-                        string.Format("tabs/tab/columns/column/sections/section[@id='{0}']", sectionId));
+                        string.Format("tabs/tab/columns/column/sections/section[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{0}']", sectionId.ToLower()));
                 if (sectionNode != null)
                 {
                     var columnIndex = 6;
@@ -761,7 +761,7 @@ namespace MsCrmTools.Translator.AppCode
 
                 var cellNode =
                     docXml.DocumentElement.SelectSingleNode(
-                        string.Format("tabs/tab/columns/column/sections/section/rows/row/cell[@id='{0}']", labelId));
+                        string.Format("tabs/tab/columns/column/sections/section/rows/row/cell[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{0}']", labelId.ToLower()));
                 if (cellNode != null)
                 {
                     var columnIndex = 8;
@@ -798,7 +798,7 @@ namespace MsCrmTools.Translator.AppCode
 
                 var cellNode =
                     docXml.DocumentElement.SelectSingleNode(
-                        string.Format("tabs/tab/columns/column/sections/section/rows/row/cell[@id='{0}']", labelId));
+                        string.Format("tabs/tab/columns/column/sections/section/rows/row/cell[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{0}']", labelId.ToLower()));
                 if (cellNode != null)
                 {
                     var columnIndex = 8;
