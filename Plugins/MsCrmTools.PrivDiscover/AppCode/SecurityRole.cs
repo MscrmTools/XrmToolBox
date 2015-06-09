@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace MsCrmTools.RolePrivilegeAnalyzer.AppCode
+namespace MsCrmTools.PrivDiscover.AppCode
 {
     class SecurityRole
     {

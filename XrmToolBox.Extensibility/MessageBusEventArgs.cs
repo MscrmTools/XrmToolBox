@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Windows.Forms;
 
-namespace XrmToolBox
+namespace XrmToolBox.Extensibility
 {
     /// <summary>
     /// Object that passed as argument in message bus communication

@@ -4,7 +4,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 
-namespace MsCrmTools.RolePrivilegeAnalyzer.AppCode
+namespace MsCrmTools.PrivDiscover.AppCode
 {
     internal class MetadataManager
     {

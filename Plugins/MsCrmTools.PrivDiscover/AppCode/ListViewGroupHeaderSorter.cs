@@ -6,7 +6,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace MsCrmTools.RolePrivilegeAnalyzer.AppCode
+namespace MsCrmTools.PrivDiscover.AppCode
 {
     public class ListViewGroupHeaderSorter : IComparer<ListViewGroup>
     {

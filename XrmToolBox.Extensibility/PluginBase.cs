@@ -2,15 +2,17 @@
 // Author : Daryl LaBar http://www.linkedin.com/pub/daryl-labar/4/988/5b8/
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://www.dotnetdust.blogspot.com/
-using Microsoft.Xrm.Sdk;
+
 using System;
-using System.Drawing;
+using System.ComponentModel;
+using System.ComponentModel.Composition;
 using System.Reflection;
 using System.Windows.Forms;
-using System.ComponentModel;
 using McTools.Xrm.Connection;
+using Microsoft.Xrm.Sdk;
+using XrmToolBox.Extensibility.Interfaces;
 
-namespace XrmToolBox
+namespace XrmToolBox.Extensibility
 {
     /// <summary>
     /// This class adds the following three major features:
@@ -18,8 +20,7 @@ namespace XrmToolBox
     /// Defines an Event for when the Connection is Updated, useful if needing to know when to refresh a connection specific cache
     /// Fully Implements the IWorkerHost which provides a much nicer api for requesting a connection then calling a method
     /// </summary>
-
-    [IgnorePlugin]
+    [PartNotDiscoverable]
     public class PluginBase : UserControl, IMsCrmToolsPluginUserControl, IWorkerHost
     {
         public ConnectionDetail ConnectionDetail { get; set; }
@@ -40,11 +41,6 @@ namespace XrmToolBox
         public event EventHandler OnCloseTool;
 
         public event EventHandler OnRequestConnection;
-
-        public virtual Image PluginLogo
-        {
-            get { return null; }
-        }
 
         public IOrganizationService Service { get; private set; }
 
@@ -237,5 +233,20 @@ namespace XrmToolBox
         }
 
         #endregion // Connection Updated
+
+        public string GetMyType()
+        {
+            return GetType().FullName;
+        }
+
+        public string GetCompany()
+        {
+            return GetType().GetCompany();
+        }
+
+        public string GetVersion()
+        {
+            return GetType().Assembly.GetName().Version.ToString();
+        }
     }
 }

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Windows.Forms;
 using MscrmTools.SyncFilterManager.Forms;
 using XrmToolBox;
+using XrmToolBox.Extensibility;
 
 namespace MscrmTools.SyncFilterManager.Controls
 {

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
+using XrmToolBox.Extensibility;
 
 namespace XrmToolBox
 {

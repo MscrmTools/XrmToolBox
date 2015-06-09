@@ -15,6 +15,7 @@ using Microsoft.Xrm.Sdk.Query;
 using MsCrmTools.Iconator.AppCode;
 using MsCrmTools.Iconator.Delegates;
 using XrmToolBox;
+using XrmToolBox.Extensibility;
 
 namespace MsCrmTools.Iconator
 {

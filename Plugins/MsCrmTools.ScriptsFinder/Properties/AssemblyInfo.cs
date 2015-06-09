@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations
 // associées à un assembly.
 [assembly: AssemblyTitle("Script Finder")]
-[assembly: AssemblyDescription("List all events defined in an organization")]
+[assembly: AssemblyDescription("List all client events defined in an organization")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MscrmTools")]
 [assembly: AssemblyProduct("MsCrmTools.ScriptsFinder")]

@@ -13,6 +13,7 @@ using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.RoleUpdater.DelegatesHelpers;
 using XrmToolBox;
+using XrmToolBox.Extensibility;
 
 namespace MsCrmTools.RoleUpdater.Controls
 {

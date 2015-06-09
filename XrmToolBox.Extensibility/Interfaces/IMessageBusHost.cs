@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XrmToolBox
+namespace XrmToolBox.Extensibility.Interfaces
 {
     /// <summary>
     /// Interface which plugins should implement to be able communicate between each other

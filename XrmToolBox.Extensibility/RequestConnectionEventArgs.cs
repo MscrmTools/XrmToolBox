@@ -4,8 +4,9 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using System;
+using XrmToolBox.Extensibility.Interfaces;
 
-namespace XrmToolBox
+namespace XrmToolBox.Extensibility
 {
     public class RequestConnectionEventArgs : EventArgs
     {

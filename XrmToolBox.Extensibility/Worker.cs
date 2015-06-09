@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace XrmToolBox
+namespace XrmToolBox.Extensibility
 {
     public class Worker
     {

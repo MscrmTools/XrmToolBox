@@ -9,6 +9,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
 using MsCrmTools.FormAttributeManager.AppCode;
 using XrmToolBox;
+using XrmToolBox.Extensibility;
 
 namespace MsCrmTools.FormAttributeManager.UserControls
 {

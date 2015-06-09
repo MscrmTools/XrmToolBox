@@ -4,11 +4,10 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using System;
-using System.Drawing;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 
-namespace XrmToolBox
+namespace XrmToolBox.Extensibility.Interfaces
 {
     public interface IMsCrmToolsPluginUserControl
     {
@@ -17,10 +16,11 @@ namespace XrmToolBox
         /// </summary>
         IOrganizationService Service { get; }
 
-        /// <summary>
-        /// Gets the logo to display in the tools list
-        /// </summary>
-        Image PluginLogo { get; }
+        string GetMyType();
+
+        string GetCompany();
+
+        string GetVersion();
 
         /// <summary>
         /// EventHandler to request a connection to an organization

@@ -14,6 +14,9 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
+using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Interfaces;
+using XrmToolBox.Extensibility.UserControls;
 using XrmToolBox.Forms;
 
 namespace XrmToolBox
@@ -32,7 +35,7 @@ namespace XrmToolBox
 
         private ConnectionDetail currentConnectionDetail;
 
-        private PluginManager pManager;
+        private PluginManagerExtended pManager;
 
         private Options currentOptions;
 
@@ -58,6 +61,7 @@ namespace XrmToolBox
 
             InitializeComponent();
 
+            pluginsModels = new List<PluginModel>();
             ProcessMenuItemsForPlugin();
             MouseWheel += (sender, e) => HomePageTab.Focus();
 
@@ -227,8 +231,9 @@ namespace XrmToolBox
 
             tstxtFilterPlugin.Focus();
 
-            pManager = new PluginManager();
-            pManager.LoadPlugins();
+            pManager = new PluginManagerExtended(this);
+            pManager.Initialize();
+            pManager.PluginsListUpdated += pManager_PluginsListUpdated;
 
             this.DisplayPlugins();
 
@@ -393,7 +398,7 @@ namespace XrmToolBox
 
         private void TsbOptionsClick(object sender, EventArgs e)
         {
-            var oDialog = new OptionsDialog(currentOptions);
+            var oDialog = new OptionsDialog(currentOptions, pManager);
             if (oDialog.ShowDialog(this) == DialogResult.OK)
             {
                 bool reinitDisplay = currentOptions.DisplayMostUsedFirst != oDialog.Option.DisplayMostUsedFirst
@@ -405,7 +410,8 @@ namespace XrmToolBox
 
                 if (reinitDisplay)
                 {
-                    pManager.PluginsControls.Clear();
+                    //pManager.PluginsControls.Clear();
+                    pluginsModels.Clear();
                     tabControl1.SelectedIndex = 0;
                     DisplayPlugins(tstxtFilterPlugin.Text);
                     AdaptPluginControlSize();
@@ -658,52 +664,6 @@ namespace XrmToolBox
         }
 
         #endregion Other methods
-    }
-
-    public static class Extensions
-    {
-        public static IMsCrmToolsPluginUserControl GetPlugin(this TabPage page)
-        {
-            return (IMsCrmToolsPluginUserControl)page.Controls[0];
-        }
-
-        public static ICodePlexPlugin GetCodePlexPlugin(this TabPage page)
-        {
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            return page.Controls[0] as ICodePlexPlugin;
-        }
-
-        public static IGitHubPlugin GetGithubPlugin(this TabPage page)
-        {
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            return page.Controls[0] as IGitHubPlugin;
-        }
-
-        public static IPayPalPlugin GetPaypalPlugin(this TabPage page)
-        {
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            return page.Controls[0] as IPayPalPlugin;
-        }
-
-        public static string GetTitle(this Type pluginType)
-        {
-            return ((AssemblyTitleAttribute) GetAssemblyAttribute(pluginType.Assembly, typeof (AssemblyTitleAttribute))).Title;
-        }
-
-        public static string GetDescription(this Type pluginType)
-        {
-            return ((AssemblyDescriptionAttribute)GetAssemblyAttribute(pluginType.Assembly, typeof(AssemblyDescriptionAttribute))).Description;
-        }
-
-        public static string GetCompany(this Type pluginType)
-        {
-            return ((AssemblyCompanyAttribute)GetAssemblyAttribute(pluginType.Assembly, typeof(AssemblyCompanyAttribute))).Company;
-        }
-
-        private static object GetAssemblyAttribute(Assembly assembly, Type attributeType)
-        {
-            return assembly.GetCustomAttributes(attributeType, true)[0];
-        }
     }
 }
 

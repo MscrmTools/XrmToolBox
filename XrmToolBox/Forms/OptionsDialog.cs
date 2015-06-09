@@ -13,11 +13,14 @@ namespace XrmToolBox.Forms
     {
         private readonly Options option;
 
-        public OptionsDialog(Options option)
+        private readonly PluginManagerExtended pManager;
+
+        public OptionsDialog(Options option, PluginManagerExtended pManager)
         {
             InitializeComponent();
 
             this.option = (Options)option.Clone();
+            this.pManager = pManager;
 
             rdbToolsListLarge.Checked = option.DisplayLargeIcons;
             rdbToolsListSmall.Checked = !option.DisplayLargeIcons;
@@ -28,14 +31,11 @@ namespace XrmToolBox.Forms
 
         private void OptionsDialog_Load(object sender, EventArgs e)
         {
-            var pManager = new PluginManager();
-            pManager.LoadPlugins();
-
             foreach (var plugin in pManager.Plugins)
             {
-                var title = ((AssemblyTitleAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyTitleAttribute))).Title;
-                var author = ((AssemblyCompanyAttribute)GetAssemblyAttribute(plugin.Assembly, typeof(AssemblyCompanyAttribute))).Company;
-                var version = plugin.Assembly.GetName().Version.ToString();
+                var title = plugin.Metadata.Name;
+                var author = plugin.Value.GetCompany();
+                var version = plugin.Value.GetVersion();
 
                 var item = new ListViewItem(title);
                 item.SubItems.Add(author);

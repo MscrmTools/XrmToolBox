@@ -1,4 +1,4 @@
-﻿namespace MsCrmTools.RolePrivilegeAnalyzer
+﻿namespace MsCrmTools.PrivDiscover
 {
     partial class MainControl
     {
