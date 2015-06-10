@@ -15,6 +15,7 @@ namespace XrmToolBox.AppCode
     {
         public static async Task DoLog(Lazy<IMsCrmToolsPluginUserControl, IPluginMetadata> plugin)
         {
+#if !DEBUG
             try
             {
                 var assembly = Assembly.GetExecutingAssembly().GetName();
@@ -37,6 +38,8 @@ namespace XrmToolBox.AppCode
                 }
             }
             catch { }
+
+#endif
         }
 
         internal static bool PromptToLog()
