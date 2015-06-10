@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk.Client;
+using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.UserControls;
@@ -278,6 +279,11 @@ namespace XrmToolBox
                         sc.ShowDialog(this);
                         currentOptions.LastAdvertisementDisplay = DateTime.Now;
                     }
+                }
+
+                if (currentOptions.AllowLogUsage.HasValue && currentOptions.AllowLogUsage.Value)
+                {
+                    LogUsage.DoLog(control);
                 }
 
                 currentOptions.Save();

@@ -125,6 +125,7 @@
   <ItemGroup>
     <Compile Include="AppCode\GithubInformation.cs" />
     <Compile Include="AppCode\Github.cs" />
+    <Compile Include="AppCode\LogUsage.cs" />
     <Compile Include="AppCode\Markdown.cs" />
     <Compile Include="AppCode\WebProxyHelper.cs" />
     <Compile Include="Forms\NewVersionForm.cs">

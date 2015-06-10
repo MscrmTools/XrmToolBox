@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -23,6 +24,8 @@ namespace XrmToolBox
         [XmlElement("FormSize")]
         public FormSize Size { get; set; }
 
+        public bool? AllowLogUsage { get; set; }
+
         public Options()
         {
             CheckUpdateOnStartup = true;
@@ -30,6 +33,7 @@ namespace XrmToolBox
             DisplayMostUsedFirst = false;
             Size = new FormSize();
             MostUsedList = new List<PluginUseCount>();
+            AllowLogUsage = null;
         }
 
         public static Options Load()
@@ -60,7 +64,8 @@ namespace XrmToolBox
                 MostUsedList = MostUsedList,
                 LastAdvertisementDisplay = LastAdvertisementDisplay,
                 HiddenPlugins = HiddenPlugins,
-                LastUpdateCheck = LastUpdateCheck
+                LastUpdateCheck = LastUpdateCheck,
+                AllowLogUsage = AllowLogUsage
             };
         }
     }

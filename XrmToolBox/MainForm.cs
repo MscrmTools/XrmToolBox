@@ -66,6 +66,7 @@ namespace XrmToolBox
             MouseWheel += (sender, e) => HomePageTab.Focus();
 
             currentOptions = Options.Load();
+
             Text = string.Format("{0} (v{1})", Text, Assembly.GetExecutingAssembly().GetName().Version);
 
             ManageConnectionControl();
@@ -288,6 +289,12 @@ namespace XrmToolBox
             WebProxyHelper.ApplyProxy();
 
             this.Opacity = 100;
+
+            if (!currentOptions.AllowLogUsage.HasValue)
+            {
+                currentOptions.AllowLogUsage = LogUsage.PromptToLog();
+                currentOptions.Save();
+            }
         }
 
         private void MainForm_OnCloseTool(object sender, EventArgs e)

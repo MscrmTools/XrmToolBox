@@ -25,6 +25,7 @@ namespace XrmToolBox.Forms
             rdbToolsListLarge.Checked = option.DisplayLargeIcons;
             rdbToolsListSmall.Checked = !option.DisplayLargeIcons;
             chkDisplayMuFirst.Checked = option.DisplayMostUsedFirst;
+            chkAllowUsageStatistics.Checked = option.AllowLogUsage.HasValue && option.AllowLogUsage.Value;
         }
 
         public Options Option { get { return option; } }
@@ -57,6 +58,7 @@ namespace XrmToolBox.Forms
 
         private void BtnOkClick(object sender, EventArgs e)
         {
+            option.AllowLogUsage = chkAllowUsageStatistics.Checked;
             option.DisplayLargeIcons = rdbToolsListLarge.Checked;
             option.DisplayMostUsedFirst = chkDisplayMuFirst.Checked;
 
