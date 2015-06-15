@@ -44,7 +44,7 @@ namespace XrmToolBox.AppCode
 
         internal static bool PromptToLog()
         {
-            var msg = "All XrmToolBox to collect anonymous usage statistics (Only plugin opening is collected)?\n\n" +
+            var msg = "Allow XrmToolBox to collect anonymous usage statistics (Only plugin opening is collected)?\n\n" +
                       "Statistics will be used to understand which plugins are most used.\n\n" +
                       "You can change this setting in XrmToolBox options anytime.\n\n" +
                       "Thanks!";
