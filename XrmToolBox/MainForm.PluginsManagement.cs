@@ -78,7 +78,7 @@ namespace XrmToolBox
             {
                 HomePageTab.Controls.Clear();
 
-                foreach (PluginModel ctrl in pluginsModels.Where(p=> filteredPlugins.Contains((Lazy<IMsCrmToolsPluginUserControl, IPluginMetadata>)p.Tag)))
+                foreach (PluginModel ctrl in pluginsModels.Where(p=> filteredPlugins.Contains((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)p.Tag)))
                 //foreach (PluginModel ctrl in pluginsModels)
                 {
                     ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
@@ -89,38 +89,38 @@ namespace XrmToolBox
             }));
         }
 
-        private void DisplayOnePlugin(Lazy<IMsCrmToolsPluginUserControl, IPluginMetadata> control, ref int top, int width, int count = -1)
+        private void DisplayOnePlugin(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count = -1)
         {
             if (currentOptions.DisplayLargeIcons)
             {
-                CreateModel<LargePluginModel>(control, ref top, width, count);
+                CreateModel<LargePluginModel>(plugin, ref top, width, count);
             }
             else
             {
-                CreateModel<SmallPluginModel>(control, ref top, width, count);
+                CreateModel<SmallPluginModel>(plugin, ref top, width, count);
             }
         }
 
-        private void CreateModel<T>(Lazy<IMsCrmToolsPluginUserControl, IPluginMetadata> control, ref int top, int width, int count)
+        private void CreateModel<T>(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count)
              where T : PluginModel
         {
-            var type = control.Value.GetMyType();
+            var type = plugin.Value.GetMyType();
             //var pm = (T)pManager.PluginsControls.FirstOrDefault(t => ((Type)t.Tag).FullName == type && t is T);
 
-            var pm = (T) pluginsModels.FirstOrDefault(t => ((Lazy<IMsCrmToolsPluginUserControl, IPluginMetadata>) t.Tag).Value.GetType().FullName == type && t is T);
+            var pm = (T) pluginsModels.FirstOrDefault(t => ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>) t.Tag).Value.GetType().FullName == type && t is T);
             var small = (typeof(T) == typeof (SmallPluginModel));
             
             if (pm == null)
             {
-                var title = control.Metadata.Name;
-                var desc = control.Metadata.Description;
+                var title = plugin.Metadata.Name;
+                var desc = plugin.Metadata.Description;
 
-                var author = control.Value.GetCompany();
-                var version = control.Value.GetVersion();
+                var author = plugin.Value.GetCompany();
+                var version = plugin.Value.GetVersion();
 
-                var backColor = ColorTranslator.FromHtml(control.Metadata.BackgroundColor);
-                var primaryColor = ColorTranslator.FromHtml(control.Metadata.PrimaryFontColor);
-                var secondaryColor = ColorTranslator.FromHtml(control.Metadata.SecondaryFontColor);
+                var backColor = ColorTranslator.FromHtml(plugin.Metadata.BackgroundColor);
+                var primaryColor = ColorTranslator.FromHtml(plugin.Metadata.PrimaryFontColor);
+                var secondaryColor = ColorTranslator.FromHtml(plugin.Metadata.SecondaryFontColor);
 
                 var args = new[] 
             {
@@ -137,7 +137,7 @@ namespace XrmToolBox
 
                 var vals = new object[]
                 {
-                    GetImage(small ? control.Metadata.SmallImageBase64 : control.Metadata.BigImageBase64, small), 
+                    GetImage(small ? plugin.Metadata.SmallImageBase64 : plugin.Metadata.BigImageBase64, small), 
                     title,
                     desc, 
                     author, 
@@ -153,7 +153,7 @@ namespace XrmToolBox
                 {
                     pm = (T) ctor.Invoke(vals);
 
-                    pm.Tag = control;
+                    pm.Tag = plugin;
                     pm.Clicked += PluginClicked;
 
                     pluginsModels.Add(pm);
@@ -179,15 +179,15 @@ namespace XrmToolBox
 
             try
             {
-                var control = (Lazy<IMsCrmToolsPluginUserControl, IPluginMetadata>) plugin.Tag;
-                var pluginControl = (UserControl)control.Value;
+                var control = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)plugin.Tag;
+                var pluginControl = (UserControl)control.Value.GetControl();
              
                 if (service != null)
                 {
                     var clonedService = (OrganizationService)currentConnectionDetail.GetOrganizationService();
                     ((OrganizationServiceProxy)clonedService.InnerService).SdkClientVersion = currentConnectionDetail.OrganizationVersion;
 
-                    ((IMsCrmToolsPluginUserControl)pluginControl).UpdateConnection(clonedService,
+                    ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService,
                         currentConnectionDetail);
                 }
 
@@ -198,8 +198,8 @@ namespace XrmToolBox
                     host.OnOutgoingMessage += MainForm_MessageBroker;
                 }
 
-                ((IMsCrmToolsPluginUserControl)pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
-                ((IMsCrmToolsPluginUserControl)pluginControl).OnCloseTool += MainForm_OnCloseTool;
+                ((IXrmToolBoxPluginControl)pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
+                ((IXrmToolBoxPluginControl)pluginControl).OnCloseTool += MainForm_OnCloseTool;
 
                 string name = string.Format("{0} ({1})", control.Metadata.Name,
                     currentConnectionDetail != null

@@ -358,7 +358,7 @@ namespace XrmToolBox
 
         private bool IsMessageValid(object sender, MessageBusEventArgs message)
         {
-            if (message == null || sender == null || !(sender is UserControl) || !(sender is IMsCrmToolsPluginUserControl))
+            if (message == null || sender == null || !(sender is UserControl) || !(sender is IXrmToolBoxPluginControl))
             {
                 // Error. Possible reasons are:
                 // * empty sender 

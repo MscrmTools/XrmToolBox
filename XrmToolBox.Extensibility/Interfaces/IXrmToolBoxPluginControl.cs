@@ -9,20 +9,14 @@ using Microsoft.Xrm.Sdk;
 
 namespace XrmToolBox.Extensibility.Interfaces
 {
-    public interface IMsCrmToolsPluginUserControl
+    public interface IXrmToolBoxPluginControl
     {
         /// <summary>
         /// Gets the organization service used by the tool
         /// </summary>
         IOrganizationService Service { get; }
 
-        string GetMyType();
-
-        string GetCompany();
-
-        string GetVersion();
-
-        /// <summary>
+     /// <summary>
         /// EventHandler to request a connection to an organization
         /// </summary>
         event EventHandler OnRequestConnection;

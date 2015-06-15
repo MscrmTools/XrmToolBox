@@ -13,7 +13,7 @@ namespace XrmToolBox.AppCode
     /// </summary>
     public class LogUsage
     {
-        public static async Task DoLog(Lazy<IMsCrmToolsPluginUserControl, IPluginMetadata> plugin)
+        public static async Task DoLog(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin)
         {
 #if !DEBUG
             try

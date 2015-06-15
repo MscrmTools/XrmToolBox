@@ -58,18 +58,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions.cs" />
+    <Compile Include="Extensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ExternalMethodCallerInfo.cs" />
     <Compile Include="InformationPanel.cs" />
     <Compile Include="Interfaces\ICodePlexPlugin.cs" />
     <Compile Include="Interfaces\IGitHubPlugin.cs" />
     <Compile Include="Interfaces\IMessageBusHost.cs" />
-    <Compile Include="Interfaces\IMsCrmToolsPlugin.cs" />
+    <Compile Include="Interfaces\IXrmToolBoxPluginControl.cs" />
     <Compile Include="Interfaces\IPayPalPlugin.cs" />
     <Compile Include="Interfaces\IPluginMetadata.cs" />
     <Compile Include="Interfaces\IWorkerHost.cs" />
+    <Compile Include="Interfaces\IXrmToolBoxPlugin.cs" />
     <Compile Include="MessageBusEventArgs.cs" />
-    <Compile Include="PluginBase.cs">
+    <Compile Include="PluginBase.cs" />
+    <Compile Include="PluginControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="PluginCloseInfo.cs" />

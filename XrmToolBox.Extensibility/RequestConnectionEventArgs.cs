@@ -13,7 +13,7 @@ namespace XrmToolBox.Extensibility
         /// <summary>
         /// The control that required a connection
         /// </summary>
-        public IMsCrmToolsPluginUserControl Control;
+        public IXrmToolBoxPluginControl Control;
 
         /// <summary>
         /// The name of the action

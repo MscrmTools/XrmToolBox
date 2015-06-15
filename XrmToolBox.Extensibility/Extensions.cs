@@ -7,9 +7,9 @@ namespace XrmToolBox.Extensibility
 {
     public static class Extensions
     {
-        public static IMsCrmToolsPluginUserControl GetPlugin(this TabPage page)
+        public static IXrmToolBoxPluginControl GetPlugin(this TabPage page)
         {
-            return (IMsCrmToolsPluginUserControl)page.Controls[0];
+            return (IXrmToolBoxPluginControl)page.Controls[0];
         }
 
         public static ICodePlexPlugin GetCodePlexPlugin(this TabPage page)

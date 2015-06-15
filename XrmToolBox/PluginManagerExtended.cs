@@ -29,7 +29,7 @@ namespace XrmToolBox
         }
 
         [ImportMany(AllowRecomposition = true)]
-        public IEnumerable<Lazy<IMsCrmToolsPluginUserControl, IPluginMetadata>> Plugins { get; set; }
+        public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> Plugins { get; set; }
 
         /// <summary>
         /// List of plugins user controls
