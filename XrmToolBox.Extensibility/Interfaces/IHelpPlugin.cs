@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XrmToolBox.Extensibility.Interfaces
 {
-    public interface IHelpedPlugin
+    public interface IHelpPlugin
     {
         string HelpUrl { get; }
     }
