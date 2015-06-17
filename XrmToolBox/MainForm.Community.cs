@@ -13,6 +13,16 @@ namespace XrmToolBox
     partial class MainForm
     {
         #region Events
+        
+        private void displayXrmToolBoxHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/MscrmTools/XrmToolBox/wiki");
+        }
+
+        private void displayHelpPluginToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(GetHelpUrl());
+        }
 
         private void TsbRatePluginClick(object sender, EventArgs e)
         {
@@ -85,6 +95,8 @@ namespace XrmToolBox
                 GithubXrmToolBoxMenuItem.Visible = false;
                 PaypalXrmToolBoxToolStripMenuItem.Visible = false;
                 PayPalSelectedPluginToolStripMenuItem.Visible = false;
+                HelpSelectedPluginToolStripMenuItem.Visible = false;
+                xrmToolBoxHelpToolStripMenuItem.Visible = false;
                 AssignCodePlexMenuItems(tsbCodePlex.DropDownItems);
                 AssignPayPalMenuItems(tsbDonate.DropDownItems);
                 return;
@@ -92,6 +104,21 @@ namespace XrmToolBox
 
             // Disabling plugin search if not a home screen 
             tstxtFilterPlugin.Enabled = false;
+
+            var helpedPlugin = tabControl1.SelectedTab.GetHelpEnabledPlugin();
+            if (helpedPlugin == null)
+            {
+                HelpSelectedPluginToolStripMenuItem.Visible = false;
+                xrmToolBoxHelpToolStripMenuItem.Visible = false;
+                AssignHelpMenuItems(tsbHelp.DropDownItems);
+            }
+            else
+            {
+                HelpSelectedPluginToolStripMenuItem.Visible = true;
+                xrmToolBoxHelpToolStripMenuItem.Visible = true;
+                HelpSelectedPluginToolStripMenuItem.Text = helpedPlugin.GetType().GetTitle();
+                AssignHelpMenuItems(xrmToolBoxHelpToolStripMenuItem.DropDownItems);
+            }
 
             var paypalPlugin = tabControl1.SelectedTab.GetPaypalPlugin();
             if (paypalPlugin == null)
@@ -138,6 +165,12 @@ namespace XrmToolBox
                 AssignCodePlexMenuItems(GithubXrmToolBoxMenuItem.DropDownItems);
             }
         }
+
+        private void AssignHelpMenuItems(ToolStripItemCollection dropDownItems)
+        {
+            dropDownItems.AddRange(new ToolStripItem[] {
+                displayXrmToolBoxHelpToolStripMenuItem});
+        }
 		
         private void AssignCodePlexMenuItems(ToolStripItemCollection dropDownItems)
         {
@@ -167,6 +200,12 @@ namespace XrmToolBox
         {
             var plugin = tabControl1.SelectedTab.GetGithubPlugin();
             return String.Format("https://github.com/{0}/{1}/{2}", plugin.UserName, plugin.RepositoryName, page);
+        }
+
+        private string GetHelpUrl()
+        {
+            var plugin = tabControl1.SelectedTab.GetHelpEnabledPlugin();
+            return plugin.HelpUrl;
         }
 		
         private void Donate(string language, string currency, string emailAccount, string description)

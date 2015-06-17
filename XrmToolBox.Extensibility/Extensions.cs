@@ -24,11 +24,11 @@ namespace XrmToolBox.Extensibility
             return page.Controls[0] as IGitHubPlugin;
         }
 
-        //public static IHelpedPlugin GetHelpEnabledPlugin(this TabPage page)
-        //{
-        //    // ReSharper disable once SuspiciousTypeConversion.Global
-        //    return page.Controls[0] as IHelpedPlugin;
-        //}
+        public static IHelpedPlugin GetHelpEnabledPlugin(this TabPage page)
+        {
+            // ReSharper disable once SuspiciousTypeConversion.Global
+            return page.Controls[0] as IHelpedPlugin;
+        }
 
         public static IPayPalPlugin GetPaypalPlugin(this TabPage page)
         {

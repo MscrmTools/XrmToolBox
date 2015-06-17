@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.Composition;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SampleTool
 {
     /// <summary>
-    /// This class describe how to write a plugin for XrmToolBox
+    /// This class describe how to expose a plugin for XrmToolBox
     /// </summary>
     /// <remarks>
     /// A plugin is exposed to XrmToolBox through a class decorated with attribute
-    /// [Export(typeof(IMsCrmToolsPluginUserControl))]
+    /// [Export(typeof(IXrmToolBoxPlugin))]
     /// All ExportMetadata described in this plugin are mandatory
     /// Name and Description are not more used from Assembly information
     /// For image Metadata, paste your base64 encoded image or null to use "No logo" logo
@@ -38,6 +33,11 @@ namespace MsCrmTools.SampleTool
     ExportMetadata("SecondaryFontColor", "DarkGray")]
     public class Plugin : PluginBase
     {
+        /// <summary>
+        /// This method return the actual usercontrol that will
+        /// be used in XrmToolBox
+        /// </summary>
+        /// <returns>User control to display</returns>
         public override IXrmToolBoxPluginControl GetControl()
         {
             return new SampleTool();

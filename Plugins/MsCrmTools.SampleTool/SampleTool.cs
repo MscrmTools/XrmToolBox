@@ -12,7 +12,7 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SampleTool
 {
-   public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin
+   public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpedPlugin
     {
         #region Base tool implementation
 
@@ -92,5 +92,14 @@ namespace MsCrmTools.SampleTool
         }
 
         #endregion PayPal implementation
+
+        #region Help implementation
+
+        public string HelpUrl
+        {
+            get { return "http://www.google.com"; }
+        }
+
+        #endregion
     }
 }

@@ -65,6 +65,7 @@
     <Compile Include="InformationPanel.cs" />
     <Compile Include="Interfaces\ICodePlexPlugin.cs" />
     <Compile Include="Interfaces\IGitHubPlugin.cs" />
+    <Compile Include="Interfaces\IHelpedPlugin.cs" />
     <Compile Include="Interfaces\IMessageBusHost.cs" />
     <Compile Include="Interfaces\IXrmToolBoxPluginControl.cs" />
     <Compile Include="Interfaces\IPayPalPlugin.cs" />
