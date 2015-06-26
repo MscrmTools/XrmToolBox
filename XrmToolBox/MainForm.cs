@@ -469,8 +469,7 @@ namespace XrmToolBox
 
                 if (plugin != null)
                 {
-                    this.DisplayPluginControl(new UserControl { Tag = plugin });
-                    tstxtFilterPlugin.Text = string.Empty;
+                    this.PluginClicked(new UserControl { Tag = plugin }, new EventArgs());
                 }
             }
         }
