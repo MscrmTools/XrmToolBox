@@ -203,6 +203,7 @@ namespace XrmToolBox
             this.tstxtFilterPlugin.Name = "tstxtFilterPlugin";
             this.tstxtFilterPlugin.Size = new System.Drawing.Size(223, 32);
             this.tstxtFilterPlugin.ToolTipText = "Filter by plugin name or company name";
+            this.tstxtFilterPlugin.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tstxtFilterPlugin_KeyDown);
             this.tstxtFilterPlugin.TextChanged += new System.EventHandler(this.tstxtFilterPlugin_TextChanged);
             // 
             // toolStripSeparator6

@@ -460,6 +460,15 @@ namespace XrmToolBox
             searchThread.Start(tstxtFilterPlugin.Text);
         }
 
+        private void tstxtFilterPlugin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                var text = (((ToolStripTextBox)(sender)).TextBox).Text;
+                var plugin = pManager.Plugins.Where(p => p.Metadata.Name.ToLower().Contains(text)).FirstOrDefault();
+            }
+        }
+
         #endregion Form events
         
         #region Close Tabs/Plugins
