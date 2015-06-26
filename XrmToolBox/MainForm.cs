@@ -464,8 +464,14 @@ namespace XrmToolBox
         {
             if (e.KeyData == Keys.Enter)
             {
-                var text = (((ToolStripTextBox)(sender)).TextBox).Text;
-                var plugin = pManager.Plugins.Where(p => p.Metadata.Name.ToLower().Contains(text)).FirstOrDefault();
+                var name = ((ToolStripTextBox)(sender)).Text.ToLower();
+                var plugin = pManager.Plugins.Where(p => p.Metadata.Name.ToLower().Contains(name)).FirstOrDefault();
+
+                if (plugin != null)
+                {
+                    this.DisplayPluginControl(new UserControl { Tag = plugin });
+                    tstxtFilterPlugin.Text = string.Empty;
+                }
             }
         }
 
