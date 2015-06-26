@@ -68,7 +68,7 @@ namespace XrmToolBox.Extensibility
             panel.Controls.Add(hyperlink);
 
             var assembly = Assembly.GetExecutingAssembly();
-            var file = assembly.GetManifestResourceStream("XrmToolBox.Images.progress.gif");
+            var file = assembly.GetManifestResourceStream("XrmToolBox.Extensibility.Images.progress.gif");
             if (file != null)
             {
                 var pBox = new PictureBox
