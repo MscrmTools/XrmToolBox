@@ -236,6 +236,8 @@ namespace XrmToolBox
             pManager.Initialize();
             pManager.PluginsListUpdated += pManager_PluginsListUpdated;
 
+            tstxtFilterPlugin.AutoCompleteCustomSource.AddRange(pManager.Plugins.Select(p => p.Metadata.Name).ToArray());
+
             this.DisplayPlugins();
 
             var tasks = new List<Task>
