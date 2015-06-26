@@ -681,7 +681,7 @@
 
 This is also not supported to run this application from a network share.
 
-Or, there is no plugin file in the same directory where is this application.</value>
+Or, there is no plugin file in 'Plugins' application subfolder.</value>
   </data>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>49</value>
