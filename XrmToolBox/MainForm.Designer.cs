@@ -200,6 +200,8 @@ namespace XrmToolBox
             // 
             // tstxtFilterPlugin
             // 
+            this.tstxtFilterPlugin.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.tstxtFilterPlugin.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.tstxtFilterPlugin.Name = "tstxtFilterPlugin";
             this.tstxtFilterPlugin.Size = new System.Drawing.Size(223, 32);
             this.tstxtFilterPlugin.ToolTipText = "Filter by plugin name or company name";
