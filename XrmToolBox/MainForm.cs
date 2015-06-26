@@ -236,6 +236,8 @@ namespace XrmToolBox
             pManager.Initialize();
             pManager.PluginsListUpdated += pManager_PluginsListUpdated;
 
+            tstxtFilterPlugin.AutoCompleteCustomSource.AddRange(pManager.Plugins.Select(p => p.Metadata.Name).ToArray());
+
             this.DisplayPlugins();
 
             var tasks = new List<Task>
@@ -456,6 +458,20 @@ namespace XrmToolBox
 
             searchThread = new Thread(DisplayPlugins);
             searchThread.Start(tstxtFilterPlugin.Text);
+        }
+
+        private void tstxtFilterPlugin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                var name = ((ToolStripTextBox)(sender)).Text.ToLower();
+                var plugin = pManager.Plugins.Where(p => p.Metadata.Name.ToLower().Contains(name)).FirstOrDefault();
+
+                if (plugin != null)
+                {
+                    this.PluginClicked(new UserControl { Tag = plugin }, new EventArgs());
+                }
+            }
         }
 
         #endregion Form events
