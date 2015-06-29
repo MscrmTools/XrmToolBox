@@ -560,6 +560,9 @@ namespace MsCrmTools.SiteMapEditor
 
         private void TvSiteMapKeyDown(object sender, KeyEventArgs e)
         {
+            if (tvSiteMap.SelectedNode == null)
+                return;
+
             if (tvSiteMap.SelectedNode.Text != "SiteMap")
             {
                 // Cut
