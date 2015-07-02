@@ -238,7 +238,7 @@
             this.fileMenuSave.Image = ((System.Drawing.Image)(resources.GetObject("fileMenuSave.Image")));
             this.fileMenuSave.Name = "fileMenuSave";
             this.fileMenuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.fileMenuSave.Size = new System.Drawing.Size(310, 30);
+            this.fileMenuSave.Size = new System.Drawing.Size(318, 30);
             this.fileMenuSave.Text = "Save";
             this.fileMenuSave.ToolTipText = "Save this content in memory. This does not update the web resource content of the" +
     " connected organization";
@@ -250,7 +250,7 @@
             this.fileMenuReplace.Image = ((System.Drawing.Image)(resources.GetObject("fileMenuReplace.Image")));
             this.fileMenuReplace.Name = "fileMenuReplace";
             this.fileMenuReplace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.fileMenuReplace.Size = new System.Drawing.Size(310, 30);
+            this.fileMenuReplace.Size = new System.Drawing.Size(318, 30);
             this.fileMenuReplace.Text = "Replace with new file";
             this.fileMenuReplace.ToolTipText = "Replace this web resource content with content of a local file";
             this.fileMenuReplace.Click += new System.EventHandler(this.FileMenuReplaceClick);
@@ -261,7 +261,7 @@
             this.fileMenuUpdateAndPublish.Image = ((System.Drawing.Image)(resources.GetObject("fileMenuUpdateAndPublish.Image")));
             this.fileMenuUpdateAndPublish.Name = "fileMenuUpdateAndPublish";
             this.fileMenuUpdateAndPublish.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.U)));
-            this.fileMenuUpdateAndPublish.Size = new System.Drawing.Size(310, 30);
+            this.fileMenuUpdateAndPublish.Size = new System.Drawing.Size(318, 30);
             this.fileMenuUpdateAndPublish.Text = "Update and publish";
             this.fileMenuUpdateAndPublish.ToolTipText = "Update the web resource content of the connected organization and publish it";
             this.fileMenuUpdateAndPublish.Click += new System.EventHandler(this.FileMenuUpdateAndPublishClick);
@@ -315,7 +315,7 @@
             this.tsddbCompare.Image = ((System.Drawing.Image)(resources.GetObject("tsddbCompare.Image")));
             this.tsddbCompare.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbCompare.Name = "tsddbCompare";
-            this.tsddbCompare.Size = new System.Drawing.Size(123, 36);
+            this.tsddbCompare.Size = new System.Drawing.Size(119, 36);
             this.tsddbCompare.Text = "Compare";
             this.tsddbCompare.ToolTipText = "Compare the web resource in CRM with a local webresource";
             this.tsddbCompare.Visible = false;
@@ -343,7 +343,7 @@
             this.tsbMinifyJS.Image = ((System.Drawing.Image)(resources.GetObject("tsbMinifyJS.Image")));
             this.tsbMinifyJS.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbMinifyJS.Name = "tsbMinifyJS";
-            this.tsbMinifyJS.Size = new System.Drawing.Size(116, 36);
+            this.tsbMinifyJS.Size = new System.Drawing.Size(112, 36);
             this.tsbMinifyJS.Text = "Compress";
             this.tsbMinifyJS.ToolTipText = "This feature compress/minify a script web resource. It does not obfuscate the cod" +
     "e, just remove useless formatting.\r\nBe careful when using this feature! There is" +
@@ -356,7 +356,7 @@
             this.tsbPreviewHtml.Image = ((System.Drawing.Image)(resources.GetObject("tsbPreviewHtml.Image")));
             this.tsbPreviewHtml.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbPreviewHtml.Name = "tsbPreviewHtml";
-            this.tsbPreviewHtml.Size = new System.Drawing.Size(96, 36);
+            this.tsbPreviewHtml.Size = new System.Drawing.Size(92, 36);
             this.tsbPreviewHtml.Text = "Preview";
             this.tsbPreviewHtml.ToolTipText = "This feature allows you to preview HTML pages. It does not warn about script erro" +
     "r, so the HTML page could not render or behave as expected";
@@ -368,7 +368,7 @@
             this.tsbBeautify.Image = ((System.Drawing.Image)(resources.GetObject("tsbBeautify.Image")));
             this.tsbBeautify.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbBeautify.Name = "tsbBeautify";
-            this.tsbBeautify.Size = new System.Drawing.Size(99, 36);
+            this.tsbBeautify.Size = new System.Drawing.Size(95, 36);
             this.tsbBeautify.Text = "Beautify";
             this.tsbBeautify.ToolTipText = "This feature make uglified JavaScript readable \r\n\r\nThanks to ghost6991 for his wo" +
     "rk on the beautifier in C# : https://github.com/ghost6991/Jsbeautifier";
@@ -380,7 +380,7 @@
             this.tsbGetLatestVersion.Image = ((System.Drawing.Image)(resources.GetObject("tsbGetLatestVersion.Image")));
             this.tsbGetLatestVersion.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbGetLatestVersion.Name = "tsbGetLatestVersion";
-            this.tsbGetLatestVersion.Size = new System.Drawing.Size(114, 36);
+            this.tsbGetLatestVersion.Size = new System.Drawing.Size(110, 36);
             this.tsbGetLatestVersion.Text = "Get Latest";
             this.tsbGetLatestVersion.Click += new System.EventHandler(this.getLatestVersionToolStripMenuItem_Click);
             // 
@@ -422,7 +422,7 @@
             this.tsbCloseThisTab.Image = ((System.Drawing.Image)(resources.GetObject("tsbCloseThisTab.Image")));
             this.tsbCloseThisTab.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCloseThisTab.Name = "tsbCloseThisTab";
-            this.tsbCloseThisTab.Size = new System.Drawing.Size(24, 36);
+            this.tsbCloseThisTab.Size = new System.Drawing.Size(28, 36);
             this.tsbCloseThisTab.Text = "Close this tab";
             this.tsbCloseThisTab.Click += new System.EventHandler(this.TsbCloseThisTabClick);
             // 
@@ -588,7 +588,6 @@
             // 
             // contextMenuStripTreeView
             // 
-            this.contextMenuStripTreeView.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStripTreeView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.addNewWebResourceToolStripMenuItem,
             this.addNewEmptyWebResourceToolStripMenuItem,
@@ -608,13 +607,13 @@
             this.toolStripSeparator7,
             this.propertiesToolStripMenuItem});
             this.contextMenuStripTreeView.Name = "contextMenuStripTreeView";
-            this.contextMenuStripTreeView.Size = new System.Drawing.Size(484, 394);
+            this.contextMenuStripTreeView.Size = new System.Drawing.Size(480, 394);
             // 
             // addNewWebResourceToolStripMenuItem
             // 
             this.addNewWebResourceToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("addNewWebResourceToolStripMenuItem.Image")));
             this.addNewWebResourceToolStripMenuItem.Name = "addNewWebResourceToolStripMenuItem";
-            this.addNewWebResourceToolStripMenuItem.Size = new System.Drawing.Size(483, 30);
+            this.addNewWebResourceToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.addNewWebResourceToolStripMenuItem.Text = "Add existing file(s) as Web resource(s)";
             this.addNewWebResourceToolStripMenuItem.Click += new System.EventHandler(this.AddNewWebResourceToolStripMenuItemClick);
             // 
@@ -628,7 +627,7 @@
             this.xSLTToolStripMenuItem});
             this.addNewEmptyWebResourceToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("addNewEmptyWebResourceToolStripMenuItem.Image")));
             this.addNewEmptyWebResourceToolStripMenuItem.Name = "addNewEmptyWebResourceToolStripMenuItem";
-            this.addNewEmptyWebResourceToolStripMenuItem.Size = new System.Drawing.Size(483, 30);
+            this.addNewEmptyWebResourceToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.addNewEmptyWebResourceToolStripMenuItem.Text = "Add new empty web resource";
             // 
             // hTMLToolStripMenuItem
@@ -670,19 +669,19 @@
             // 
             this.addNewFolderToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("addNewFolderToolStripMenuItem.Image")));
             this.addNewFolderToolStripMenuItem.Name = "addNewFolderToolStripMenuItem";
-            this.addNewFolderToolStripMenuItem.Size = new System.Drawing.Size(483, 30);
+            this.addNewFolderToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.addNewFolderToolStripMenuItem.Text = "Add new folder";
             this.addNewFolderToolStripMenuItem.Click += new System.EventHandler(this.AddNewFolderToolStripMenuItemClick);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(480, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(476, 6);
             // 
             // updateFromDiskToolStripMenuItem
             // 
             this.updateFromDiskToolStripMenuItem.Name = "updateFromDiskToolStripMenuItem";
-            this.updateFromDiskToolStripMenuItem.Size = new System.Drawing.Size(483, 30);
+            this.updateFromDiskToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.updateFromDiskToolStripMenuItem.Text = "Update web resources in this folder with local files";
             this.updateFromDiskToolStripMenuItem.Click += new System.EventHandler(this.UpdateFromDiskToolStripMenuItemClick);
             // 
@@ -690,20 +689,20 @@
             // 
             this.getLatestVersionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("getLatestVersionToolStripMenuItem.Image")));
             this.getLatestVersionToolStripMenuItem.Name = "getLatestVersionToolStripMenuItem";
-            this.getLatestVersionToolStripMenuItem.Size = new System.Drawing.Size(483, 30);
+            this.getLatestVersionToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.getLatestVersionToolStripMenuItem.Text = "Get latest version";
             this.getLatestVersionToolStripMenuItem.Click += new System.EventHandler(this.getLatestVersionToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(480, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(476, 6);
             // 
             // saveToCRMServerToolStripMenuItem
             // 
             this.saveToCRMServerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveToCRMServerToolStripMenuItem.Image")));
             this.saveToCRMServerToolStripMenuItem.Name = "saveToCRMServerToolStripMenuItem";
-            this.saveToCRMServerToolStripMenuItem.Size = new System.Drawing.Size(483, 30);
+            this.saveToCRMServerToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.saveToCRMServerToolStripMenuItem.Text = "Save to CRM server";
             this.saveToCRMServerToolStripMenuItem.Click += new System.EventHandler(this.SaveToCrmServerToolStripMenuItemClick);
             // 
@@ -711,7 +710,7 @@
             // 
             this.saveAndPublishToCRMServerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveAndPublishToCRMServerToolStripMenuItem.Image")));
             this.saveAndPublishToCRMServerToolStripMenuItem.Name = "saveAndPublishToCRMServerToolStripMenuItem";
-            this.saveAndPublishToCRMServerToolStripMenuItem.Size = new System.Drawing.Size(483, 30);
+            this.saveAndPublishToCRMServerToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.saveAndPublishToCRMServerToolStripMenuItem.Text = "Save and Publish to CRM server";
             this.saveAndPublishToCRMServerToolStripMenuItem.Click += new System.EventHandler(this.SaveAndPublishToCrmServerToolStripMenuItemClick);
             // 
@@ -719,33 +718,33 @@
             // 
             this.savePublishAndAddToSolutionToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("savePublishAndAddToSolutionToolStripMenuItem.Image")));
             this.savePublishAndAddToSolutionToolStripMenuItem.Name = "savePublishAndAddToSolutionToolStripMenuItem";
-            this.savePublishAndAddToSolutionToolStripMenuItem.Size = new System.Drawing.Size(483, 30);
+            this.savePublishAndAddToSolutionToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.savePublishAndAddToSolutionToolStripMenuItem.Text = "Save, publish and add to solution";
             this.savePublishAndAddToSolutionToolStripMenuItem.Click += new System.EventHandler(this.SavePublishAndAddToSolutionToolStripMenuItemClick);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(480, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(476, 6);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("deleteToolStripMenuItem.Image")));
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(483, 30);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.deleteToolStripMenuItem.Text = "Delete";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteToolStripMenuItemClick);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(480, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(476, 6);
             // 
             // openWebResourceRecordInCRMApplicationToolStripMenuItem
             // 
             this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openWebResourceRecordInCRMApplicationToolStripMenuItem.Image")));
             this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Name = "openWebResourceRecordInCRMApplicationToolStripMenuItem";
-            this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Size = new System.Drawing.Size(483, 30);
+            this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Text = "Open web resource record in CRM application";
             this.openWebResourceRecordInCRMApplicationToolStripMenuItem.Click += new System.EventHandler(this.OpenWebResourceRecordInCrmApplicationToolStripMenuItemClick);
             // 
@@ -753,20 +752,20 @@
             // 
             this.copyWebResourceNameToClipboardToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copyWebResourceNameToClipboardToolStripMenuItem.Image")));
             this.copyWebResourceNameToClipboardToolStripMenuItem.Name = "copyWebResourceNameToClipboardToolStripMenuItem";
-            this.copyWebResourceNameToClipboardToolStripMenuItem.Size = new System.Drawing.Size(483, 30);
+            this.copyWebResourceNameToClipboardToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.copyWebResourceNameToClipboardToolStripMenuItem.Text = "Copy web resource name to clipboard ";
             this.copyWebResourceNameToClipboardToolStripMenuItem.Click += new System.EventHandler(this.CopyWebResourceNameToClipboardToolStripMenuItemClick);
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(480, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(476, 6);
             // 
             // propertiesToolStripMenuItem
             // 
             this.propertiesToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("propertiesToolStripMenuItem.Image")));
             this.propertiesToolStripMenuItem.Name = "propertiesToolStripMenuItem";
-            this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(483, 30);
+            this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(479, 30);
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.PropertiesToolStripMenuItemClick);
             // 
