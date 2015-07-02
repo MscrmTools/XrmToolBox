@@ -82,6 +82,8 @@
             this.treeviewMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.addRuleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.loadEntitiesAndWebResourcesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.gbProperties.SuspendLayout();
             this.toolStripItem.SuspendLayout();
             this.gbSiteMap.SuspendLayout();
@@ -112,6 +114,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.toolStripItem.AutoSize = false;
             this.toolStripItem.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStripItem.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStripItem.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbItemSave});
             this.toolStripItem.Location = new System.Drawing.Point(9, 25);
@@ -165,6 +168,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.toolStrip1.AutoSize = false;
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonMoveDown,
             this.toolStripButtonMoveUp,
@@ -355,6 +359,8 @@
             // 
             this.toolStripDropDownButtonMoreActions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripDropDownButtonMoreActions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadEntitiesAndWebResourcesToolStripMenuItem,
+            this.toolStripSeparator6,
             this.resetSiteMapToDefaultToolStripMenuItem,
             this.resetCRM2013SiteMapToDefaultToolStripMenuItem,
             this.resetCRM2015SiteMapToDefaultToolStripMenuItem,
@@ -571,6 +577,18 @@
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "Icon.png");
             // 
+            // loadEntitiesAndWebResourcesToolStripMenuItem
+            // 
+            this.loadEntitiesAndWebResourcesToolStripMenuItem.Name = "loadEntitiesAndWebResourcesToolStripMenuItem";
+            this.loadEntitiesAndWebResourcesToolStripMenuItem.Size = new System.Drawing.Size(445, 30);
+            this.loadEntitiesAndWebResourcesToolStripMenuItem.Text = "Load Entities and Web resources";
+            this.loadEntitiesAndWebResourcesToolStripMenuItem.Click += new System.EventHandler(this.loadEntitiesAndWebResourcesToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(442, 6);
+            // 
             // SiteMapEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -649,5 +667,7 @@
         private System.Windows.Forms.ToolStripMenuItem resetCRM2013SiteMapToDefaultToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetCRM2015SiteMapToDefaultToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem resetCRM2015Update1SiteMapToDefaultToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadEntitiesAndWebResourcesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
     }
 }
