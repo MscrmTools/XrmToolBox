@@ -446,6 +446,7 @@ namespace McTools.Xrm.Connection
                     new XElement("OrganizationFriendlyName", OrganizationFriendlyName),
                     new XElement("OrganizationServiceUrl", OrganizationServiceUrl),
                     new XElement("OrganizationVersion", OrganizationVersion),
+                    new XElement("HomeRealmUrl", HomeRealmUrl),
                     new XElement("Timeout", TimeoutTicks),
                     new XElement("WebApplicationUrl", WebApplicationUrl),
                     new XElement("LastUsedOn", LastUsedOn.ToString(CultureInfo.InvariantCulture.DateTimeFormat)));
