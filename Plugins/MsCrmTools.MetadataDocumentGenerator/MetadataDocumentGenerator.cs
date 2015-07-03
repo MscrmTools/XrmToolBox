@@ -313,6 +313,9 @@ namespace MsCrmTools.MetadataDocumentGenerator
                 var entityName = lvEntities.SelectedItems[0].Tag.ToString();
                 SetWorkingState(true);
 
+                var theEntity = settings.EntitiesToProceed.First(x => x.Name == lvEntities.SelectedItems[0].Tag.ToString());
+                theEntity.FormsDefinitions.Clear();
+
                 WorkAsync("Retrieving forms...",
                     evt =>
                     {
@@ -329,6 +332,8 @@ namespace MsCrmTools.MetadataDocumentGenerator
 
                         foreach (var form in (DataCollection<Entity>)evt.Result)
                         {
+                            currentEntityMd.FormsDefinitions.Add(form);
+
                             var item = new ListViewItem(form.GetAttributeValue<string>("name")) { Tag = form };
 
                             if (currentEntityMd != null && currentEntityMd.Forms.Contains(form.Id))
@@ -430,7 +435,6 @@ namespace MsCrmTools.MetadataDocumentGenerator
             settings.OutputDocumentType = cbbOutputType.SelectedIndex == 0 ? Output.Excel : Output.Word;
             settings.AttributesSelection = (AttributeSelectionOption)cbbSelectionType.SelectedIndex;
             settings.IncludeOnlyAttributesOnForms = cbbSelectionType.SelectedIndex == (int)AttributeSelectionOption.AttributesOnForm;
-
             settings.Prefixes = chkFilterByPrefix.Checked ? txtPrefixes.Text.Split(';').ToList() : new List<string>();
 
             SetWorkingState(true);
