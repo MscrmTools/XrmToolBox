@@ -146,7 +146,5 @@ namespace MsCrmTools.MetadataDocumentGenerator
         }
 
         #endregion Methods
-
-        public IEnumerable<Microsoft.Xrm.Sdk.Entity> FormsToInclude { get; set; }
     }
 }
