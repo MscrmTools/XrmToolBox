@@ -32,7 +32,7 @@ namespace Javista.XrmToolBox.ImportNN
                 e =>
                 {
                     var request = new RetrieveAllEntitiesRequest {EntityFilters = EntityFilters.All};
-                    var response = (RetrieveAllEntitiesResponse) service.Execute(request);
+                    var response = (RetrieveAllEntitiesResponse) Service.Execute(request);
                     e.Result = response.EntityMetadata.ToList();
                 },
                 e =>
