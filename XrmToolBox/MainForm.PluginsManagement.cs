@@ -48,7 +48,7 @@ namespace XrmToolBox
             {
                 foreach (var item in currentOptions.MostUsedList.OrderByDescending(i => i.Count).ThenBy(i => i.Name))
                 {
-                    var plugin = filteredPlugins.FirstOrDefault(x => x.GetType().FullName == item.Name);
+                    var plugin = filteredPlugins.FirstOrDefault(x => x.Value.GetType().FullName == item.Name);
                     if (plugin != null && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.GetType().GetTitle())))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth, item.Count);
@@ -57,7 +57,7 @@ namespace XrmToolBox
 
                 foreach (var plugin in filteredPlugins.OrderBy(p => p.Metadata.Name))
                 {
-                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.GetType().FullName) && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.GetType().GetTitle())))
+                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.Value.GetType().FullName) && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.Value.GetType().GetTitle())))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth);
                     }
@@ -220,10 +220,10 @@ namespace XrmToolBox
                 tabControl1.SelectTab(tabIndex);
 
                 var pluginInOption =
-                    currentOptions.MostUsedList.FirstOrDefault(i => i.Name == pluginControl.GetType().FullName);
+                    currentOptions.MostUsedList.FirstOrDefault(i => i.Name == control.Value.GetType().FullName);
                 if (pluginInOption == null)
                 {
-                    pluginInOption = new PluginUseCount { Name = pluginControl.GetType().FullName, Count = 0 };
+                    pluginInOption = new PluginUseCount { Name = control.Value.GetType().FullName, Count = 0 };
                     currentOptions.MostUsedList.Add(pluginInOption);
                 }
 
