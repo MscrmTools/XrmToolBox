@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.Composition;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -18,13 +17,13 @@ using MsCrmTools.ViewLayoutReplicator.Forms;
 using MsCrmTools.ViewLayoutReplicator.Helpers;
 using Tanguy.WinForm.Utilities.DelegatesHelpers;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.ViewLayoutReplicator
 {
     public partial class ViewLayoutReplicator : PluginControlBase
-    {
-        private List<EntityMetadata> entitiesCache; 
+	{
+		private List<EntityMetadata> entitiesCache;
+		private ListViewItem[] listViewItemsCache; 
 
         #region Constructor
 
@@ -49,6 +48,7 @@ namespace MsCrmTools.ViewLayoutReplicator
 
         private void LoadEntities()
         {
+			txtSearchEntity.Text = string.Empty;
             lvEntities.Items.Clear();
             gbEntities.Enabled = false;
             tsbPublishEntity.Enabled = false;
@@ -84,9 +84,10 @@ namespace MsCrmTools.ViewLayoutReplicator
                             list.Add(item);
                         }
 
-                        lvEntities.Items.AddRange(list.ToArray());
+	                    this.listViewItemsCache = list.ToArray();
+	                    lvEntities.Items.AddRange(listViewItemsCache);
 
-                        gbEntities.Enabled = true;
+	                    gbEntities.Enabled = true;
                         tsbPublishEntity.Enabled = true;
                         tsbPublishAll.Enabled = true;
                         tsbSaveViews.Enabled = true;
@@ -320,7 +321,7 @@ namespace MsCrmTools.ViewLayoutReplicator
 
         #region Display View
 
-        private void LvSourceViewsSelectedIndexChanged(object sender, System.EventArgs e)
+        private void LvSourceViewsSelectedIndexChanged(object sender, EventArgs e)
         {
             lvSourceViewLayoutPreview.Columns.Clear();
 
@@ -469,5 +470,27 @@ namespace MsCrmTools.ViewLayoutReplicator
                     tsbLoadEntities.Enabled = true;
                 });
         }
+
+		private void OnSearchKeyUp(object sender, KeyEventArgs e)
+		{
+			var entityName = txtSearchEntity.Text;
+			if (string.IsNullOrWhiteSpace(entityName))
+			{
+				lvEntities.BeginUpdate();
+				lvEntities.Items.Clear();
+				lvEntities.Items.AddRange(listViewItemsCache);
+				lvEntities.EndUpdate();
+			}
+			else
+			{
+				lvEntities.BeginUpdate();
+				lvEntities.Items.Clear();
+				var filteredItems = listViewItemsCache
+					.Where(item => item.Text.StartsWith(entityName, StringComparison.OrdinalIgnoreCase))
+				    .ToArray();
+				lvEntities.Items.AddRange(filteredItems);
+				lvEntities.EndUpdate();
+			}
+		}
     }
 }
