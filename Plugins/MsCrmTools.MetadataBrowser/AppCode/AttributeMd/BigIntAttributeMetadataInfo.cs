@@ -1,10 +1,7 @@
-﻿using System.ComponentModel;
-using Microsoft.Xrm.Sdk.Metadata;
-using MsCrmTools.MetadataBrowser.AppCode.AttributeMd;
+﻿using Microsoft.Xrm.Sdk.Metadata;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
 {
-    [TypeConverter(typeof (AttributeMetadataInfoConverter))]
     public class BigIntAttributeMetadataInfo : AttributeMetadataInfo
     {
         private readonly BigIntAttributeMetadata amd;

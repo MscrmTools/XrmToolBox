@@ -13,6 +13,10 @@ namespace MsCrmTools.MetadataBrowser.AppCode.BooleanOptionSetMd
         {
             list = new List<BooleanOptionSetMetadataInfo>();
         }
+        public new int Count
+        {
+            get { return list.Count; }
+        }
 
         public BooleanOptionSetMetadataInfo this[int index]
         {

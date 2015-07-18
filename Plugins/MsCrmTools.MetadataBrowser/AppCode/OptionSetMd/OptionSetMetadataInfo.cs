@@ -9,7 +9,7 @@ using OptionMetadataCollection = MsCrmTools.MetadataBrowser.AppCode.OptionMd.Opt
 
 namespace MsCrmTools.MetadataBrowser.AppCode.OptionSetMd
 {
-    [TypeConverter(typeof (OptionSetAttributeMetadataInfoConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class OptionSetMetadataInfo
     {
         private readonly OptionSetMetadata amd;
@@ -19,13 +19,13 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OptionSetMd
             this.amd = amd;
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo Description
         {
             get { return new LabelInfo(amd.Description); }
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo DisplayName
         {
             get { return new LabelInfo(amd.DisplayName); }
@@ -51,7 +51,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OptionSetMd
             get { return amd.IsCustomOptionSet.HasValue && amd.IsCustomOptionSet.Value; }
         }
 
-        [TypeConverter(typeof(BooleanManagedPropertyInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public BooleanManagedPropertyInfo IsCustomizable
         {
             get { return new BooleanManagedPropertyInfo(amd.IsCustomizable); }
@@ -91,6 +91,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OptionSetMd
 
                 return collec;
             }
+        }
+
+        public override string ToString()
+        {
+            return amd.Name;
         }
     }
 }

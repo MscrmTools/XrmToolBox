@@ -14,6 +14,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.ManyToManyRelationship
             list = new List<ManyToManyRelationshipMetadataInfo>();
         }
 
+        public new int Count
+        {
+            get { return list.Count; }
+        }
+
         public ManyToManyRelationshipMetadataInfo this[int index]
         {
             get { return list[index]; }

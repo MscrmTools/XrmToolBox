@@ -8,7 +8,7 @@ using MsCrmTools.MetadataBrowser.AppCode.LabelMd;
 
 namespace MsCrmTools.MetadataBrowser.AppCode
 {
-    [TypeConverter(typeof(AssociatedMenuConfigurationInfoConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class AssociatedMenuConfigurationInfo
     {
         private readonly AssociatedMenuConfiguration configuration;
@@ -28,7 +28,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode
             get { return configuration.Group != null ? configuration.Group.Value : AssociatedMenuGroup.Details; }
         }
 
-        [TypeConverter(typeof(LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo Label
         {
             get { return new LabelInfo(configuration.Label); }
@@ -37,6 +37,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode
         public int Order
         {
             get { return configuration.Order.HasValue ? configuration.Order.Value : -1; }
+        }
+
+        public override string ToString()
+        {
+            return "Expand to see properties";
         }
     }
 }

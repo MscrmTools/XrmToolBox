@@ -14,6 +14,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.SecurityPrivilege
             list = new List<SecurityPrivilegeInfo>();
         }
 
+        public new int Count
+        {
+            get { return list.Count; }
+        }
+
         public SecurityPrivilegeInfo this[int index]
         {
             get { return list[index]; }
