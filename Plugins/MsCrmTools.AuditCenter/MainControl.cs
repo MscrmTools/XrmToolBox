@@ -126,7 +126,6 @@ namespace MsCrmTools.AuditCenter
                                 item.SubItems.Add(emd.LogicalName);
                                 lvEntities.Items.Add(item);
 
-                                AddEntityAttributesToList(emd);
                             }
 
                             SortGroups(lvAttributes);
@@ -147,31 +146,48 @@ namespace MsCrmTools.AuditCenter
 
         private void AddEntityAttributesToList(EntityMetadata emd)
         {
-            string groupName = string.Format("{0} ({1})",
-                emd.DisplayName.UserLocalizedLabel.Label,
-                emd.LogicalName);
-
-            var group = new ListViewGroup {Header = groupName, Name = groupName};
-
-            lvAttributes.Groups.Add(@group);
-
+            lvAttributes.Items.Clear();
+            
             foreach (AttributeMetadata amd in emd.Attributes.Where(a => a.IsAuditEnabled != null
                                                                         && a.IsAuditEnabled.Value
                                                                         && a.AttributeOf == null))
             {
-                attributeInfos.Add(new AttributeInfo {Action = ActionState.None, InitialState = true, Amd = amd});
+                var attributeInfo = attributeInfos.FirstOrDefault(a => a.Amd == amd);
+                if (attributeInfo == null)
+                {
+                    attributeInfos.Add(new AttributeInfo {Action = ActionState.None, InitialState = true, Amd = amd});
+                }
+                else if (attributeInfo.Action == ActionState.Removed)
+                {
+                    continue;
+                }
 
                 string displayName = amd.DisplayName != null && amd.DisplayName.UserLocalizedLabel != null
                     ? amd.DisplayName.UserLocalizedLabel.Label
                     : "N/A";
 
-                var itemAttr = new ListViewItem {Text = displayName, Tag = amd, Group = @group};
+                var itemAttr = new ListViewItem {Text = displayName, Tag = amd };
                 itemAttr.SubItems.Add(amd.LogicalName);
                 lvAttributes.Items.Add(itemAttr);
             }
         }
 
         #endregion Load Entities
+
+        #region Entity selection
+
+        private void lvEntities_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var list = (ListView) sender;
+            if (list.SelectedItems.Count == 1)
+            {
+                var emd = (EntityMetadata)list.SelectedItems[0].Tag;
+
+                AddEntityAttributesToList(emd);
+            }
+        }
+
+        #endregion
 
         #region Add/Remove Entities/Attributes
 
@@ -196,9 +212,10 @@ namespace MsCrmTools.AuditCenter
 
                     var item = new ListViewItem { Text = emd.DisplayName.UserLocalizedLabel.Label, Tag = emd };
                     item.SubItems.Add(emd.LogicalName);
+                    item.Selected = true;
                     lvEntities.Items.Add(item);
                     
-                    AddEntityAttributesToList(emd);
+                    // AddEntityAttributesToList(emd);
 
                     SortGroups(lvAttributes);
                 }
@@ -239,18 +256,8 @@ namespace MsCrmTools.AuditCenter
             }
 
             var emd = (EntityMetadata)lvEntities.SelectedItems[0].Tag;
-            string groupName = string.Format("{0} ({1})",
-                      emd.DisplayName.UserLocalizedLabel.Label,
-                      emd.LogicalName);
-
-            ListViewGroup group = null;
-            foreach (ListViewGroup existingGroup in lvAttributes.Groups)
-            {
-                if (existingGroup.Name == groupName)
-                    group = existingGroup;
-            }
-
-            var list = group.Items.Cast<ListViewItem>().Select(i => i.SubItems[1].Text);
+           
+            var list = lvAttributes.Items.Cast<ListViewItem>().Select(i => i.SubItems[1].Text);
 
             var apForm = new AttributePicker(emd, list, Service);
             if (apForm.ShowDialog(this) == DialogResult.OK)
@@ -265,7 +272,6 @@ namespace MsCrmTools.AuditCenter
                     
                     var item = new ListViewItem { Text = displayName, Tag = amd };
                     item.SubItems.Add(amd.LogicalName);
-                    item.Group = group;
                     lvAttributes.Items.Add(item);
                 }
 
@@ -531,5 +537,7 @@ namespace MsCrmTools.AuditCenter
             lv.Groups.AddRange(groups);
             lv.EndUpdate();
         }
+
+     
     }
 }
