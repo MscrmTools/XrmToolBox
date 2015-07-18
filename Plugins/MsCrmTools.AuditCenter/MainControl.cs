@@ -37,6 +37,8 @@ namespace MsCrmTools.AuditCenter
 
         private List<EntityMetadata> emds;
 
+       private List<SortingConfiguration> sortingConfigurations; 
+
         #endregion Variables
 
         #region Constructor
@@ -49,23 +51,10 @@ namespace MsCrmTools.AuditCenter
             InitializeComponent();
             entityInfos = new List<EntityInfo>();
             attributeInfos = new List<AttributeInfo>();
+            sortingConfigurations = new List<SortingConfiguration>();
         }
 
         #endregion Constructor
-
-        #region EventHandlers
-
-        /// <summary>
-        /// EventHandler to request a connection to an organization
-        /// </summary>
-        public event EventHandler OnRequestConnection;
-
-        /// <summary>
-        /// EventHandler to close the current tool
-        /// </summary>
-        public event EventHandler OnCloseTool;
-
-        #endregion EventHandlers
 
         #region Methods
 
@@ -213,6 +202,8 @@ namespace MsCrmTools.AuditCenter
 
                     SortGroups(lvAttributes);
                 }
+
+                RefreshSorting(lvEntities);
             }
         }
 
@@ -234,6 +225,8 @@ namespace MsCrmTools.AuditCenter
                     lvAttributes.Items.Remove(attrItem);
                 }
             }
+
+            RefreshSorting(lvEntities);
         }
 
         private void PbAddAttributeClick(object sender, EventArgs e)
@@ -275,6 +268,8 @@ namespace MsCrmTools.AuditCenter
                     item.Group = group;
                     lvAttributes.Items.Add(item);
                 }
+
+                RefreshSorting(lvAttributes);
             }
         }
 
@@ -286,6 +281,8 @@ namespace MsCrmTools.AuditCenter
                 UpdateAttributeDictionary(amd, ActionState.Removed);
                 lvAttributes.Items.Remove(item);
             }
+
+            RefreshSorting(lvAttributes);
         }
 
         private void UpdateEntityDictionary(EntityMetadata emd, ActionState actionState)
@@ -492,9 +489,36 @@ namespace MsCrmTools.AuditCenter
             lv.Sorting = lv.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
 
             lv.ListViewItemSorter = new ListViewItemComparer(e.Column, lv.Sorting);
+
+            var configuration = sortingConfigurations.FirstOrDefault(sc => sc.List == lv);
+            if (configuration == null)
+            {
+                configuration = new SortingConfiguration
+                {
+                    ColumnIndex = e.Column,
+                    List = lv,
+                    Order = lv.Sorting
+                };
+
+                sortingConfigurations.Add(configuration);
+            }
+            else
+            {
+                configuration.ColumnIndex = e.Column;
+                configuration.Order = lv.Sorting;
+            }
         }
 
-        private void SortGroups(ListView lv)
+       private void RefreshSorting(ListView list)
+       {
+           var configuration = sortingConfigurations.FirstOrDefault(sc => sc.List == list);
+           if (configuration != null)
+           {
+               list.ListViewItemSorter = new ListViewItemComparer(configuration.ColumnIndex, configuration.Order);
+           }
+       }
+
+       private void SortGroups(ListView lv)
         {
             var groups = new ListViewGroup[lv.Groups.Count];
 
