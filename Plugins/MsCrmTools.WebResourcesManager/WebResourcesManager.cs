@@ -426,7 +426,7 @@ namespace MsCrmTools.WebResourcesManager
                     }
 
                     // if publish
-                    if ((bool)((object[])e.Argument)[1] && wrDifferentFromServer.Count < localNodes.Count())
+                    if ((bool)((object[])e.Argument)[1] && wrDifferentFromServer.Count <= localNodes.Count())
                     {
                         bw.ReportProgress(2, "Publishing web resources...");
 
