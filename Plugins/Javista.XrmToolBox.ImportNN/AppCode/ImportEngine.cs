@@ -40,7 +40,7 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                     lineNumber++;
                     try
                     {
-                        var data = line.Split(';');
+                        var data = line.Split(',');
 
                         Guid firstGuid = Guid.Empty;
                         Guid secondGuid = Guid.Empty;

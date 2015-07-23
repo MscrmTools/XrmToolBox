@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Windows.Forms;
+using Microsoft.Xrm.Sdk;
 
 namespace MsCrmTools.MetadataDocumentGenerator
 {
@@ -28,9 +29,16 @@ namespace MsCrmTools.MetadataDocumentGenerator
     /// </summary>
     public class EntityItem
     {
+        public EntityItem()
+        {
+            Forms = new List<Guid>();
+            FormsDefinitions = new List<Entity>();
+        }
+
         public string Name { get; set; }
         public List<string> Attributes { get; set; }
-        public List<Guid> Forms { get; set; }  
+        public List<Guid> Forms { get; set; }
+        public List<Entity> FormsDefinitions { get; set; }
     }
 
     /// <summary>

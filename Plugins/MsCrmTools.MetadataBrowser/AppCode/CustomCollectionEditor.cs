@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing.Design;
+using MsCrmTools.MetadataBrowser.AppCode.AttributeMd;
 
 namespace MsCrmTools.MetadataBrowser.AppCode
 {
@@ -15,5 +16,17 @@ namespace MsCrmTools.MetadataBrowser.AppCode
         {
             return UITypeEditorEditStyle.None;
         }
+
+        protected override string GetDisplayText(object value)
+        {
+            var ami = value as AttributeMetadataInfo;
+            if (ami != null)
+            {
+                return base.GetDisplayText(ami.SchemaName);
+            }
+
+            return base.GetDisplayText(value);
+        }
+
     }
 }

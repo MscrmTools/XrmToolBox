@@ -7,7 +7,7 @@ using MsCrmTools.MetadataBrowser.AppCode.OptionMd;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.BooleanOptionSetMd
 {
-    [TypeConverter(typeof (AttributeMetadataInfoConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class BooleanOptionSetMetadataInfo
     {
         private readonly BooleanOptionSetMetadata amd;
@@ -17,13 +17,13 @@ namespace MsCrmTools.MetadataBrowser.AppCode.BooleanOptionSetMd
             this.amd = amd;
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo Description
         {
             get { return new LabelInfo(amd.Description); }
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo DisplayName
         {
             get { return new LabelInfo(amd.DisplayName); }
@@ -49,7 +49,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.BooleanOptionSetMd
             get { return amd.IsCustomOptionSet.HasValue && amd.IsCustomOptionSet.Value; }
         }
 
-        [TypeConverter(typeof(BooleanManagedPropertyInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public BooleanManagedPropertyInfo IsCustomizable
         {
             get { return new BooleanManagedPropertyInfo(amd.IsCustomizable); }
@@ -75,16 +75,21 @@ namespace MsCrmTools.MetadataBrowser.AppCode.BooleanOptionSetMd
             get { return amd.OptionSetType.Value; }
         }
 
-        [TypeConverter(typeof (OptionAttributeMetadataInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public OptionMetadataInfo FalseOption
         {
             get { return new OptionMetadataInfo(amd.FalseOption); }
         }
 
-        [TypeConverter(typeof (OptionAttributeMetadataInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public OptionMetadataInfo TrueOption
         {
             get { return new OptionMetadataInfo(amd.TrueOption); }
+        }
+
+        public override string ToString()
+        {
+            return amd.Name;
         }
     }
 }

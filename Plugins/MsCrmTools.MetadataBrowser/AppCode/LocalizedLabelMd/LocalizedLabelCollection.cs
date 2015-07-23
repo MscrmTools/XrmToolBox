@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.Remoting.Messaging;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd
 {
+   // [TypeConverter(typeof(LocalizedLabelCollectionConverter))]
     public class LocalizedLabelCollection : CollectionBase, ICustomTypeDescriptor
     {
         private readonly List<LocalizedLabelInfo> list;
@@ -12,6 +14,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd
         public LocalizedLabelCollection()
         {
             list = new List<LocalizedLabelInfo>();
+        }
+
+        public new int Count
+        {
+            get { return list.Count; }
         }
 
         public LocalizedLabelInfo this[int index]

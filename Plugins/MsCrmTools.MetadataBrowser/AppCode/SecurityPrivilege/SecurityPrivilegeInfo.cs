@@ -4,7 +4,7 @@ using Microsoft.Xrm.Sdk.Metadata;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.SecurityPrivilege
 {
-    [TypeConverter(typeof (SecurityPrivilegeInfoConverter))]
+    [TypeConverter(typeof (ExpandableObjectConverter))] //SecurityPrivilegeInfoConverter
     public class SecurityPrivilegeInfo
     {
         private readonly SecurityPrivilegeMetadata p;
@@ -52,6 +52,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.SecurityPrivilege
         public string ExtensionData
         {
             get { return p.ExtensionData != null ? p.ExtensionData.ToString() : ""; }
+        }
+
+        public override string ToString()
+        {
+            return p.Name;
         }
     }
 }

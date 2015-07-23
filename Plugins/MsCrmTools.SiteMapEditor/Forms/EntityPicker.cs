@@ -46,25 +46,15 @@ namespace MsCrmTools.SiteMapEditor.Forms
         /// </summary>
         private void FillEntities()
         {
-            // Checks the application cache and load it if needed
-            //if (entityCache == null || entityCache.Count == 0)
-            //{
-            //    entityCache = new List<EntityMetadata>();
-
-            //    var request = new RetrieveAllEntitiesRequest
-            //    {
-            //        EntityFilters = EntityFilters.Entity
-            //    };
-
-            //    var response = (RetrieveAllEntitiesResponse)SiteMapEditor.service.Execute(request);
-
-            //    foreach (var emd in response.EntityMetadata)
-            //    {
-            //        SiteMapEditor.entityCache.Add(emd);
-            //    }
-            //}
-
             // Displays entities
+            if (entityCache == null)
+            {
+                MessageBox.Show(this,
+                    "You are not connected to an organization, so it is not possible to display a list of entities\n\nPlease use menu \"More actions\" to load entities and web resources",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Close();
+            }
+
             foreach (var emd in entityCache)
             {
                 if ((emd.IsCustomizable.Value || emd.IsManaged.Value == false) && emd.DisplayName.UserLocalizedLabel != null)

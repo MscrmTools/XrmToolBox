@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations
 // associées à un assembly.
 [assembly: AssemblyTitle("Script Finder")]
-[assembly: AssemblyDescription("List all events defined in an organization")]
+[assembly: AssemblyDescription("List all client events defined in an organization")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MscrmTools")]
 [assembly: AssemblyProduct("MsCrmTools.ScriptsFinder")]
@@ -36,5 +36,5 @@ using System.Runtime.InteropServices;
 // Vous pouvez spécifier toutes les valeurs ou indiquer les numéros de build et de révision par défaut 
 // en utilisant '*', comme indiqué ci-dessous :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.2015.6.9")]
-[assembly: AssemblyFileVersion("1.2015.6.9")]
+[assembly: AssemblyVersion("1.2015.7.6")]
+[assembly: AssemblyFileVersion("1.2015.7.6")]

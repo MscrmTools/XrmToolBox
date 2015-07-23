@@ -136,8 +136,6 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                     AddEntityMetadata(emd, sheet);
                 }
 
-                var docs = MetadataHelper.RetrieveEntityForms(emd.LogicalName, entity.Forms, service);
-
                 if (settings.AddFormLocation)
                 {
                     currentEntityForms  = MetadataHelper.RetrieveEntityFormList(emd.LogicalName, service);
@@ -167,19 +165,69 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                         break;
                     case AttributeSelectionOption.AttributesOnForm:
 
-                        foreach (var doc in docs)
+                        // If no forms selected, we search attributes in all forms
+                        if (entity.Forms.Count == 0)
                         {
-                            amds.AddRange(emd.Attributes.Where(x =>
-                                doc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") != null));
+                            foreach (var form in entity.FormsDefinitions)
+                            {
+                                var tempStringDoc = form.GetAttributeValue<string>("formxml");
+                                var tempDoc = new XmlDocument();
+                                tempDoc.LoadXml(tempStringDoc);
+
+                                amds.AddRange(emd.Attributes.Where(x =>
+                                    tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") !=
+                                    null));
+                            }
+                        }
+                        else
+                        {
+                            // else we parse selected forms
+                            foreach (var formId in entity.Forms)
+                            {
+                                var form = entity.FormsDefinitions.First(f => f.Id == formId);
+                                var tempStringDoc = form.GetAttributeValue<string>("formxml");
+                                var tempDoc = new XmlDocument();
+                                tempDoc.LoadXml(tempStringDoc);
+
+                                amds.AddRange(emd.Attributes.Where(x =>
+                                    tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") !=
+                                    null));
+                            }
                         }
 
                         break;
                     case AttributeSelectionOption.AttributesNotOnForm:
-                        foreach (var doc in docs)
+                        // If no forms selected, we search attributes in all forms
+                        if (entity.Forms.Count == 0)
                         {
-                            amds.AddRange(emd.Attributes.Where(x =>
-                                doc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") == null));
-                        } break;
+                            foreach (var form in entity.FormsDefinitions)
+                            {
+                                var tempStringDoc = form.GetAttributeValue<string>("formxml");
+                                var tempDoc = new XmlDocument();
+                                tempDoc.LoadXml(tempStringDoc);
+
+                                amds.AddRange(emd.Attributes.Where(x =>
+                                    tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") ==
+                                    null));
+                            }
+                        }
+                        else
+                        {
+                            // else we parse selected forms
+                            foreach (var formId in entity.Forms)
+                            {
+                                var form = entity.FormsDefinitions.First(f => f.Id == formId);
+                                var tempStringDoc = form.GetAttributeValue<string>("formxml");
+                                var tempDoc = new XmlDocument();
+                                tempDoc.LoadXml(tempStringDoc);
+
+                                amds.AddRange(emd.Attributes.Where(x =>
+                                    tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") ==
+                                    null));
+                            }
+                        }
+
+                        break;
                 }
 
                 if (settings.Prefixes != null && settings.Prefixes.Count > 0)
@@ -196,7 +244,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
 
                 if (amds.Any())
                 {
-                    foreach (var amd in amds)
+                    foreach (var amd in amds.Distinct(new AttributeMetadataComparer()))
                     {
                         AddAttribute(emd.Attributes.First(x => x.LogicalName == amd.LogicalName), sheet);
                     }
@@ -395,7 +443,9 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
 
             if (settings.AddFormLocation)
             {
-                foreach (var form in currentEntityForms)
+                var entity = settings.EntitiesToProceed.First(e => e.Name == amd.EntityLogicalName);
+
+                foreach (var form in entity.FormsDefinitions.Where(fd => entity.Forms.Contains(fd.Id) || entity.Forms.Count == 0))
                 {
                     var formName = form.GetAttributeValue<string>("name");
                     var xmlDocument = new XmlDocument();

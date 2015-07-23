@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using MsCrmTools.MetadataBrowser.AppCode.AttributeMd;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
 {

@@ -5,7 +5,7 @@ using MsCrmTools.MetadataBrowser.AppCode.LabelMd;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.OptionMd
 {
-    [TypeConverter(typeof (OptionAttributeMetadataInfoConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class OptionMetadataInfo
     {
         private readonly OptionMetadata amd;
@@ -15,7 +15,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OptionMd
             this.amd = amd;
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo Description
         {
             get { return new LabelInfo(amd.Description); }
@@ -36,7 +36,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OptionMd
             get { return amd.IsManaged.HasValue && amd.IsManaged.Value; }
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo Label
         {
             get { return new LabelInfo(amd.Label); }
@@ -50,6 +50,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OptionMd
         public int Value
         {
             get { return amd.Value.Value; }
+        }
+
+        public override string ToString()
+        {
+            return amd.Label.UserLocalizedLabel != null ? amd.Label.UserLocalizedLabel.Label : "N/A";
         }
     }
 }

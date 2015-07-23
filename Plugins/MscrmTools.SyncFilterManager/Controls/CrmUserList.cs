@@ -8,6 +8,7 @@ using Microsoft.Xrm.Sdk.Query;
 using MscrmTools.SyncFilterManager.AppCode;
 using MscrmTools.SyncFilterManager.Forms;
 using XrmToolBox;
+using XrmToolBox.Extensibility;
 
 namespace MscrmTools.SyncFilterManager.Controls
 {

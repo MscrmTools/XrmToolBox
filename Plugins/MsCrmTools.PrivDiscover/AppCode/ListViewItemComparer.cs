@@ -7,7 +7,7 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 
-namespace MsCrmTools.RolePrivilegeAnalyzer.AppCode
+namespace MsCrmTools.PrivDiscover.AppCode
 {
     /// <summary>
     /// Compares two listview items for sorting

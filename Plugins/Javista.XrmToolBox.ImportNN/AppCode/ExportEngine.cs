@@ -100,7 +100,7 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
 
                             }
 
-                            writer.WriteLine("{0};{1}", dataFirst, dataSecond);
+                            writer.WriteLine("{0},{1}", dataFirst, dataSecond);
 
                             OnRaiseSuccess(new ExportResultEventArgs());
                         }

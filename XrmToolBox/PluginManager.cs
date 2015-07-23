@@ -81,7 +81,7 @@ namespace XrmToolBox
                         {
                             if (type.IsPublic && !type.IsAbstract)
                             {
-                                if ((type.Attributes & TypeAttributes.Abstract) != TypeAttributes.Abstract && !type.GetCustomAttributes(typeof(IgnorePluginAttribute), false).Any())
+                                if ((type.Attributes & TypeAttributes.Abstract) != TypeAttributes.Abstract)
                                 {
                                     if (type.GetInterface("IMsCrmToolsPluginUserControl", true) != null)
                                     {
@@ -139,7 +139,7 @@ namespace XrmToolBox
                 {
                     if (type.IsPublic && !type.IsAbstract)
                     {
-                        if ((type.Attributes & TypeAttributes.Abstract) != TypeAttributes.Abstract && !type.GetCustomAttributes(typeof(IgnorePluginAttribute), false).Any())
+                        if ((type.Attributes & TypeAttributes.Abstract) != TypeAttributes.Abstract)
                         {
                             if (type.GetInterface("IMsCrmToolsPluginUserControl", true) != null)
                             {

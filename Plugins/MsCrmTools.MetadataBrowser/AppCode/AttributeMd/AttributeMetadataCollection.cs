@@ -13,6 +13,10 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
         {
             list = new List<AttributeMetadataInfo>();
         }
+        public new int Count
+        {
+            get { return list.Count; }
+        }
 
         public AttributeMetadataInfo this[int index]
         {

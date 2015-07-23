@@ -64,6 +64,8 @@
             this.rbCustomAuthNo = new System.Windows.Forms.RadioButton();
             this.label5 = new System.Windows.Forms.Label();
             this.cbbProxyUsage = new System.Windows.Forms.ComboBox();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.chkAllowUsageStatistics = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -75,6 +77,7 @@
             this.gbCustomProxy.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -145,6 +148,7 @@
             // 
             this.tabControl1.Controls.Add(this.tbDisplay);
             this.tabControl1.Controls.Add(this.tbProxy);
+            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 117);
             this.tabControl1.Name = "tabControl1";
@@ -306,7 +310,7 @@
             this.tbProxy.Location = new System.Drawing.Point(4, 29);
             this.tbProxy.Name = "tbProxy";
             this.tbProxy.Padding = new System.Windows.Forms.Padding(3);
-            this.tbProxy.Size = new System.Drawing.Size(789, 500);
+            this.tbProxy.Size = new System.Drawing.Size(789, 483);
             this.tbProxy.TabIndex = 1;
             this.tbProxy.Text = "Proxy";
             this.tbProxy.UseVisualStyleBackColor = true;
@@ -474,6 +478,27 @@
             this.cbbProxyUsage.TabIndex = 14;
             this.cbbProxyUsage.SelectedIndexChanged += new System.EventHandler(this.cbbProxyUsage_SelectedIndexChanged);
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.chkAllowUsageStatistics);
+            this.tabPage1.Location = new System.Drawing.Point(4, 29);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(789, 483);
+            this.tabPage1.TabIndex = 2;
+            this.tabPage1.Text = "Miscellaneous";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // chkAllowUsageStatistics
+            // 
+            this.chkAllowUsageStatistics.AutoSize = true;
+            this.chkAllowUsageStatistics.Location = new System.Drawing.Point(15, 22);
+            this.chkAllowUsageStatistics.Name = "chkAllowUsageStatistics";
+            this.chkAllowUsageStatistics.Size = new System.Drawing.Size(553, 24);
+            this.chkAllowUsageStatistics.TabIndex = 1;
+            this.chkAllowUsageStatistics.Text = "Allow to send usage statistics (only anonymous data : plugin usage count)";
+            this.chkAllowUsageStatistics.UseVisualStyleBackColor = true;
+            // 
             // OptionsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -506,6 +531,8 @@
             this.panel3.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -548,5 +575,7 @@
         private System.Windows.Forms.ComboBox cbbProxyUsage;
         private System.Windows.Forms.GroupBox gbCustomProxy;
         private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.CheckBox chkAllowUsageStatistics;
     }
 }

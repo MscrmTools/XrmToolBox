@@ -14,6 +14,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OptionMd
             list = new List<OptionMetadataInfo>();
         }
 
+        public new int Count
+        {
+            get { return list.Count; }
+        }
+
         public OptionMetadataInfo this[int index]
         {
             get { return list[index]; }

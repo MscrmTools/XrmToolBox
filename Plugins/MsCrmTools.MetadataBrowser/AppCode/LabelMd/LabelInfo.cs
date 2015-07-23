@@ -7,7 +7,7 @@ using LocalizedLabelCollection = MsCrmTools.MetadataBrowser.AppCode.LocalizedLab
 
 namespace MsCrmTools.MetadataBrowser.AppCode.LabelMd
 {
-    [TypeConverter(typeof (LabelInfoConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class LabelInfo
     {
         private readonly Label amd;
@@ -38,10 +38,15 @@ namespace MsCrmTools.MetadataBrowser.AppCode.LabelMd
             }
         }
 
-        [TypeConverter(typeof (LocalizedLabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LocalizedLabelInfo UserLocalizedLabel
         {
             get { return new LocalizedLabelInfo(amd.UserLocalizedLabel); }
+        }
+
+        public override string ToString()
+        {
+            return amd.UserLocalizedLabel != null ? amd.UserLocalizedLabel.Label : "N/A";
         }
     }
 }

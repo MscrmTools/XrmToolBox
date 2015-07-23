@@ -181,19 +181,19 @@ namespace MsCrmTools.MetadataBrowser.AppCode
             get { return emd.CanTriggerWorkflow.HasValue && emd.CanTriggerWorkflow.Value; }
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo Description
         {
             get { return new LabelInfo(emd.Description); }
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo DisplayCollectionName
         {
             get { return new LabelInfo(emd.DisplayCollectionName); }
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo DisplayName
         {
             get { return new LabelInfo(emd.DisplayName); }

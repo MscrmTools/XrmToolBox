@@ -4,14 +4,18 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using System;
+using System.ComponentModel.Composition;
 using System.Windows.Forms;
 using Microsoft.Crm.Sdk.Messages;
-using XrmToolBox;
+using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SampleTool
 {
-    public partial class SampleTool : PluginBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin
+   public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin
     {
+        #region Base tool implementation
+
         public SampleTool()
         {
             InitializeComponent();
@@ -37,7 +41,8 @@ namespace MsCrmTools.SampleTool
                 },
                 e =>
                 {
-
+                    // If progress has to be notified to user, use the following method:
+                    //SetWorkingMessage("Message to display");
                 },
                 "Retrieving your user id...",
                 340,
@@ -49,6 +54,10 @@ namespace MsCrmTools.SampleTool
             CloseTool();
         }
 
+        #endregion Base tool implementation
+
+        #region Github implementation
+
         public string UserName
         {
             get { return "GithubUserName"; }
@@ -59,11 +68,19 @@ namespace MsCrmTools.SampleTool
             get { return "GithubRepositoryName"; }
         }
 
+        #endregion Github implementation
+
+        #region CodePlex implementation
+
         public string CodePlexUrlName
         {
             get { return "CodePlex"; }
         }
 
+        #endregion CodePlex implementation
+
+        #region PayPal implementation
+        
         public string EmailAccount
         {
             get { return "paypal@paypal.com"; }
@@ -73,5 +90,16 @@ namespace MsCrmTools.SampleTool
         {
             get { return "paypal description"; }
         }
+
+        #endregion PayPal implementation
+
+        #region Help implementation
+
+        public string HelpUrl
+        {
+            get { return "http://www.google.com"; }
+        }
+
+        #endregion
     }
 }

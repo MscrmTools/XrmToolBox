@@ -6,7 +6,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace MsCrmTools.RolePrivilegeAnalyzer.AppCode
+namespace MsCrmTools.PrivDiscover.AppCode
 {
     public class ListViewDelegates
     {

@@ -14,6 +14,9 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
+using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Interfaces;
+using XrmToolBox.Extensibility.UserControls;
 using XrmToolBox.Forms;
 
 namespace XrmToolBox
@@ -32,7 +35,7 @@ namespace XrmToolBox
 
         private ConnectionDetail currentConnectionDetail;
 
-        private PluginManager pManager;
+        private PluginManagerExtended pManager;
 
         private Options currentOptions;
 
@@ -58,10 +61,12 @@ namespace XrmToolBox
 
             InitializeComponent();
 
+            pluginsModels = new List<PluginModel>();
             ProcessMenuItemsForPlugin();
             MouseWheel += (sender, e) => HomePageTab.Focus();
 
             currentOptions = Options.Load();
+
             Text = string.Format("{0} (v{1})", Text, Assembly.GetExecutingAssembly().GetName().Version);
 
             ManageConnectionControl();
@@ -227,8 +232,11 @@ namespace XrmToolBox
 
             tstxtFilterPlugin.Focus();
 
-            pManager = new PluginManager();
-            pManager.LoadPlugins();
+            pManager = new PluginManagerExtended(this);
+            pManager.Initialize();
+            pManager.PluginsListUpdated += pManager_PluginsListUpdated;
+
+            tstxtFilterPlugin.AutoCompleteCustomSource.AddRange(pManager.Plugins.Select(p => p.Metadata.Name).ToArray());
 
             this.DisplayPlugins();
 
@@ -283,6 +291,12 @@ namespace XrmToolBox
             WebProxyHelper.ApplyProxy();
 
             this.Opacity = 100;
+
+            if (!currentOptions.AllowLogUsage.HasValue)
+            {
+                currentOptions.AllowLogUsage = LogUsage.PromptToLog();
+                currentOptions.Save();
+            }
         }
 
         private void MainForm_OnCloseTool(object sender, EventArgs e)
@@ -346,7 +360,7 @@ namespace XrmToolBox
 
         private bool IsMessageValid(object sender, MessageBusEventArgs message)
         {
-            if (message == null || sender == null || !(sender is UserControl) || !(sender is IMsCrmToolsPluginUserControl))
+            if (message == null || sender == null || !(sender is UserControl) || !(sender is IXrmToolBoxPluginControl))
             {
                 // Error. Possible reasons are:
                 // * empty sender 
@@ -393,7 +407,7 @@ namespace XrmToolBox
 
         private void TsbOptionsClick(object sender, EventArgs e)
         {
-            var oDialog = new OptionsDialog(currentOptions);
+            var oDialog = new OptionsDialog(currentOptions, pManager);
             if (oDialog.ShowDialog(this) == DialogResult.OK)
             {
                 bool reinitDisplay = currentOptions.DisplayMostUsedFirst != oDialog.Option.DisplayMostUsedFirst
@@ -405,7 +419,8 @@ namespace XrmToolBox
 
                 if (reinitDisplay)
                 {
-                    pManager.PluginsControls.Clear();
+                    //pManager.PluginsControls.Clear();
+                    pluginsModels.Clear();
                     tabControl1.SelectedIndex = 0;
                     DisplayPlugins(tstxtFilterPlugin.Text);
                     AdaptPluginControlSize();
@@ -443,6 +458,20 @@ namespace XrmToolBox
 
             searchThread = new Thread(DisplayPlugins);
             searchThread.Start(tstxtFilterPlugin.Text);
+        }
+
+        private void tstxtFilterPlugin_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                var name = ((ToolStripTextBox)(sender)).Text.ToLower();
+                var plugin = pManager.Plugins.Where(p => p.Metadata.Name.ToLower().Contains(name)).FirstOrDefault();
+
+                if (plugin != null)
+                {
+                    this.PluginClicked(new UserControl { Tag = plugin }, new EventArgs());
+                }
+            }
         }
 
         #endregion Form events
@@ -658,52 +687,6 @@ namespace XrmToolBox
         }
 
         #endregion Other methods
-    }
-
-    public static class Extensions
-    {
-        public static IMsCrmToolsPluginUserControl GetPlugin(this TabPage page)
-        {
-            return (IMsCrmToolsPluginUserControl)page.Controls[0];
-        }
-
-        public static ICodePlexPlugin GetCodePlexPlugin(this TabPage page)
-        {
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            return page.Controls[0] as ICodePlexPlugin;
-        }
-
-        public static IGitHubPlugin GetGithubPlugin(this TabPage page)
-        {
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            return page.Controls[0] as IGitHubPlugin;
-        }
-
-        public static IPayPalPlugin GetPaypalPlugin(this TabPage page)
-        {
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            return page.Controls[0] as IPayPalPlugin;
-        }
-
-        public static string GetTitle(this Type pluginType)
-        {
-            return ((AssemblyTitleAttribute) GetAssemblyAttribute(pluginType.Assembly, typeof (AssemblyTitleAttribute))).Title;
-        }
-
-        public static string GetDescription(this Type pluginType)
-        {
-            return ((AssemblyDescriptionAttribute)GetAssemblyAttribute(pluginType.Assembly, typeof(AssemblyDescriptionAttribute))).Description;
-        }
-
-        public static string GetCompany(this Type pluginType)
-        {
-            return ((AssemblyCompanyAttribute)GetAssemblyAttribute(pluginType.Assembly, typeof(AssemblyCompanyAttribute))).Company;
-        }
-
-        private static object GetAssemblyAttribute(Assembly assembly, Type attributeType)
-        {
-            return assembly.GetCustomAttributes(attributeType, true)[0];
-        }
     }
 }
 
