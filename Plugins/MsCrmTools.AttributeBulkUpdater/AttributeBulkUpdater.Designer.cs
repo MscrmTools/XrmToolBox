@@ -79,9 +79,11 @@ namespace MsCrmTools.AttributeBulkUpdater
             this.gbPropertySelection.Controls.Add(this.chkValidForAudit);
             this.gbPropertySelection.Controls.Add(this.chkValidForAdvancedFind);
             this.gbPropertySelection.Enabled = false;
-            this.gbPropertySelection.Location = new System.Drawing.Point(332, 28);
+            this.gbPropertySelection.Location = new System.Drawing.Point(498, 43);
+            this.gbPropertySelection.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.gbPropertySelection.Name = "gbPropertySelection";
-            this.gbPropertySelection.Size = new System.Drawing.Size(579, 70);
+            this.gbPropertySelection.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbPropertySelection.Size = new System.Drawing.Size(868, 108);
             this.gbPropertySelection.TabIndex = 90;
             this.gbPropertySelection.TabStop = false;
             this.gbPropertySelection.Text = "Attribute Property Selection";
@@ -94,18 +96,19 @@ namespace MsCrmTools.AttributeBulkUpdater
             "Business Required",
             "Business Recommended",
             "No Constraint"});
-            this.cboRequirementLevel.Location = new System.Drawing.Point(373, 45);
+            this.cboRequirementLevel.Location = new System.Drawing.Point(560, 69);
+            this.cboRequirementLevel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cboRequirementLevel.Name = "cboRequirementLevel";
-            this.cboRequirementLevel.Size = new System.Drawing.Size(121, 21);
+            this.cboRequirementLevel.Size = new System.Drawing.Size(180, 28);
             this.cboRequirementLevel.TabIndex = 10;
-            this.cboRequirementLevel.SelectedIndex = 2;
             // 
             // chkRequirementLevel
             // 
             this.chkRequirementLevel.AutoSize = true;
-            this.chkRequirementLevel.Location = new System.Drawing.Point(252, 47);
+            this.chkRequirementLevel.Location = new System.Drawing.Point(378, 72);
+            this.chkRequirementLevel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkRequirementLevel.Name = "chkRequirementLevel";
-            this.chkRequirementLevel.Size = new System.Drawing.Size(115, 17);
+            this.chkRequirementLevel.Size = new System.Drawing.Size(168, 24);
             this.chkRequirementLevel.TabIndex = 9;
             this.chkRequirementLevel.Text = "Requirement Level";
             this.chkRequirementLevel.UseVisualStyleBackColor = true;
@@ -119,35 +122,39 @@ namespace MsCrmTools.AttributeBulkUpdater
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.label1);
             this.panel2.Controls.Add(this.pictureBox2);
-            this.panel2.Location = new System.Drawing.Point(6, 19);
+            this.panel2.Location = new System.Drawing.Point(9, 29);
+            this.panel2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(565, 22);
+            this.panel2.Size = new System.Drawing.Size(846, 33);
             this.panel2.TabIndex = 8;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(25, 3);
+            this.label1.Location = new System.Drawing.Point(38, 5);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(249, 13);
+            this.label1.Size = new System.Drawing.Size(372, 20);
             this.label1.TabIndex = 1;
             this.label1.Text = "Select which attribute properties should be updated";
             // 
             // pictureBox2
             // 
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(3, 2);
+            this.pictureBox2.Location = new System.Drawing.Point(4, 3);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(16, 16);
+            this.pictureBox2.Size = new System.Drawing.Size(24, 25);
             this.pictureBox2.TabIndex = 0;
             this.pictureBox2.TabStop = false;
             // 
             // chkValidForAudit
             // 
             this.chkValidForAudit.AutoSize = true;
-            this.chkValidForAudit.Location = new System.Drawing.Point(155, 47);
+            this.chkValidForAudit.Location = new System.Drawing.Point(232, 72);
+            this.chkValidForAudit.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkValidForAudit.Name = "chkValidForAudit";
-            this.chkValidForAudit.Size = new System.Drawing.Size(91, 17);
+            this.chkValidForAudit.Size = new System.Drawing.Size(134, 24);
             this.chkValidForAudit.TabIndex = 1;
             this.chkValidForAudit.Text = "Valid for Audit";
             this.chkValidForAudit.UseVisualStyleBackColor = true;
@@ -156,9 +163,10 @@ namespace MsCrmTools.AttributeBulkUpdater
             // chkValidForAdvancedFind
             // 
             this.chkValidForAdvancedFind.AutoSize = true;
-            this.chkValidForAdvancedFind.Location = new System.Drawing.Point(10, 47);
+            this.chkValidForAdvancedFind.Location = new System.Drawing.Point(15, 72);
+            this.chkValidForAdvancedFind.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkValidForAdvancedFind.Name = "chkValidForAdvancedFind";
-            this.chkValidForAdvancedFind.Size = new System.Drawing.Size(139, 17);
+            this.chkValidForAdvancedFind.Size = new System.Drawing.Size(203, 24);
             this.chkValidForAdvancedFind.TabIndex = 0;
             this.chkValidForAdvancedFind.Text = "Valid for Advanced Find";
             this.chkValidForAdvancedFind.UseVisualStyleBackColor = true;
@@ -176,7 +184,8 @@ namespace MsCrmTools.AttributeBulkUpdater
             this.tsbPublishEntity});
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
-            this.tsMain.Size = new System.Drawing.Size(911, 25);
+            this.tsMain.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.tsMain.Size = new System.Drawing.Size(1366, 38);
             this.tsMain.TabIndex = 89;
             this.tsMain.Text = "toolStrip1";
             // 
@@ -186,28 +195,28 @@ namespace MsCrmTools.AttributeBulkUpdater
             this.tsbCloseThisTab.Image = ((System.Drawing.Image)(resources.GetObject("tsbCloseThisTab.Image")));
             this.tsbCloseThisTab.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCloseThisTab.Name = "tsbCloseThisTab";
-            this.tsbCloseThisTab.Size = new System.Drawing.Size(23, 22);
+            this.tsbCloseThisTab.Size = new System.Drawing.Size(28, 35);
             this.tsbCloseThisTab.Text = "Close this tab";
             this.tsbCloseThisTab.Click += new System.EventHandler(this.TsbCloseThisTabClick);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 38);
             // 
             // tsbLoadEntities
             // 
             this.tsbLoadEntities.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadEntities.Image")));
             this.tsbLoadEntities.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbLoadEntities.Name = "tsbLoadEntities";
-            this.tsbLoadEntities.Size = new System.Drawing.Size(94, 22);
+            this.tsbLoadEntities.Size = new System.Drawing.Size(140, 35);
             this.tsbLoadEntities.Text = "Load Entities";
             this.tsbLoadEntities.Click += new System.EventHandler(this.tsbLoadEntities_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 38);
             // 
             // tsbSaveAttributes
             // 
@@ -215,7 +224,7 @@ namespace MsCrmTools.AttributeBulkUpdater
             this.tsbSaveAttributes.Image = ((System.Drawing.Image)(resources.GetObject("tsbSaveAttributes.Image")));
             this.tsbSaveAttributes.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbSaveAttributes.Name = "tsbSaveAttributes";
-            this.tsbSaveAttributes.Size = new System.Drawing.Size(106, 22);
+            this.tsbSaveAttributes.Size = new System.Drawing.Size(160, 35);
             this.tsbSaveAttributes.Text = "Save Attributes";
             this.tsbSaveAttributes.Click += new System.EventHandler(this.tsbSaveAttributes_Click);
             // 
@@ -225,7 +234,7 @@ namespace MsCrmTools.AttributeBulkUpdater
             this.tsbPublishEntity.Image = ((System.Drawing.Image)(resources.GetObject("tsbPublishEntity.Image")));
             this.tsbPublishEntity.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbPublishEntity.Name = "tsbPublishEntity";
-            this.tsbPublishEntity.Size = new System.Drawing.Size(99, 22);
+            this.tsbPublishEntity.Size = new System.Drawing.Size(146, 35);
             this.tsbPublishEntity.Text = "Publish entity";
             this.tsbPublishEntity.Click += new System.EventHandler(this.tsbPublishEntity_Click);
             // 
@@ -235,9 +244,11 @@ namespace MsCrmTools.AttributeBulkUpdater
             | System.Windows.Forms.AnchorStyles.Left)));
             this.gbEntities.Controls.Add(this.lvEntities);
             this.gbEntities.Enabled = false;
-            this.gbEntities.Location = new System.Drawing.Point(3, 28);
+            this.gbEntities.Location = new System.Drawing.Point(4, 43);
+            this.gbEntities.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.gbEntities.Name = "gbEntities";
-            this.gbEntities.Size = new System.Drawing.Size(326, 569);
+            this.gbEntities.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbEntities.Size = new System.Drawing.Size(489, 875);
             this.gbEntities.TabIndex = 88;
             this.gbEntities.TabStop = false;
             this.gbEntities.Text = "Entities";
@@ -251,9 +262,10 @@ namespace MsCrmTools.AttributeBulkUpdater
             this.columnHeader7});
             this.lvEntities.FullRowSelect = true;
             this.lvEntities.HideSelection = false;
-            this.lvEntities.Location = new System.Drawing.Point(6, 20);
+            this.lvEntities.Location = new System.Drawing.Point(9, 31);
+            this.lvEntities.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lvEntities.Name = "lvEntities";
-            this.lvEntities.Size = new System.Drawing.Size(314, 543);
+            this.lvEntities.Size = new System.Drawing.Size(469, 833);
             this.lvEntities.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvEntities.TabIndex = 79;
             this.lvEntities.UseCompatibleStateImageBehavior = false;
@@ -281,9 +293,11 @@ namespace MsCrmTools.AttributeBulkUpdater
             this.gbAttributes.Controls.Add(this.btnResetAttributes);
             this.gbAttributes.Controls.Add(this.lvAttributes);
             this.gbAttributes.Enabled = false;
-            this.gbAttributes.Location = new System.Drawing.Point(335, 104);
+            this.gbAttributes.Location = new System.Drawing.Point(502, 160);
+            this.gbAttributes.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.gbAttributes.Name = "gbAttributes";
-            this.gbAttributes.Size = new System.Drawing.Size(573, 493);
+            this.gbAttributes.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbAttributes.Size = new System.Drawing.Size(860, 758);
             this.gbAttributes.TabIndex = 87;
             this.gbAttributes.TabStop = false;
             this.gbAttributes.Text = "Attributes";
@@ -292,9 +306,10 @@ namespace MsCrmTools.AttributeBulkUpdater
             // 
             this.btnCheckAttrOnForms.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCheckAttrOnForms.Enabled = false;
-            this.btnCheckAttrOnForms.Location = new System.Drawing.Point(280, 13);
+            this.btnCheckAttrOnForms.Location = new System.Drawing.Point(420, 20);
+            this.btnCheckAttrOnForms.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCheckAttrOnForms.Name = "btnCheckAttrOnForms";
-            this.btnCheckAttrOnForms.Size = new System.Drawing.Size(125, 23);
+            this.btnCheckAttrOnForms.Size = new System.Drawing.Size(188, 35);
             this.btnCheckAttrOnForms.TabIndex = 7;
             this.btnCheckAttrOnForms.Text = "Check Attr. on Forms";
             this.btnCheckAttrOnForms.UseVisualStyleBackColor = true;
@@ -304,9 +319,10 @@ namespace MsCrmTools.AttributeBulkUpdater
             // 
             this.btnCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCheck.Enabled = false;
-            this.btnCheck.Location = new System.Drawing.Point(409, 13);
+            this.btnCheck.Location = new System.Drawing.Point(614, 20);
+            this.btnCheck.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnCheck.Name = "btnCheck";
-            this.btnCheck.Size = new System.Drawing.Size(75, 23);
+            this.btnCheck.Size = new System.Drawing.Size(112, 35);
             this.btnCheck.TabIndex = 6;
             this.btnCheck.Text = "Check All";
             this.btnCheck.UseVisualStyleBackColor = true;
@@ -316,9 +332,10 @@ namespace MsCrmTools.AttributeBulkUpdater
             // 
             this.btnResetAttributes.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnResetAttributes.Enabled = false;
-            this.btnResetAttributes.Location = new System.Drawing.Point(490, 13);
+            this.btnResetAttributes.Location = new System.Drawing.Point(735, 20);
+            this.btnResetAttributes.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnResetAttributes.Name = "btnResetAttributes";
-            this.btnResetAttributes.Size = new System.Drawing.Size(75, 23);
+            this.btnResetAttributes.Size = new System.Drawing.Size(112, 35);
             this.btnResetAttributes.TabIndex = 5;
             this.btnResetAttributes.Text = "Reset";
             this.btnResetAttributes.UseVisualStyleBackColor = true;
@@ -340,9 +357,10 @@ namespace MsCrmTools.AttributeBulkUpdater
             this.lvAttributes.Enabled = false;
             this.lvAttributes.FullRowSelect = true;
             this.lvAttributes.GridLines = true;
-            this.lvAttributes.Location = new System.Drawing.Point(6, 42);
+            this.lvAttributes.Location = new System.Drawing.Point(9, 65);
+            this.lvAttributes.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lvAttributes.Name = "lvAttributes";
-            this.lvAttributes.Size = new System.Drawing.Size(561, 445);
+            this.lvAttributes.Size = new System.Drawing.Size(840, 682);
             this.lvAttributes.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvAttributes.TabIndex = 2;
             this.lvAttributes.UseCompatibleStateImageBehavior = false;
@@ -385,14 +403,15 @@ namespace MsCrmTools.AttributeBulkUpdater
             // 
             // AttributeBulkUpdater
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.gbPropertySelection);
             this.Controls.Add(this.tsMain);
             this.Controls.Add(this.gbEntities);
             this.Controls.Add(this.gbAttributes);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "AttributeBulkUpdater";
-            this.Size = new System.Drawing.Size(911, 600);
+            this.Size = new System.Drawing.Size(1366, 923);
             this.gbPropertySelection.ResumeLayout(false);
             this.gbPropertySelection.PerformLayout();
             this.panel2.ResumeLayout(false);

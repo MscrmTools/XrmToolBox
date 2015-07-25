@@ -82,12 +82,21 @@ namespace MsCrmTools.AttributeBulkUpdater.Helpers
         /// <returns>Document containing all forms definition</returns>
         public static XmlDocument RetrieveEntityForms(string logicalName, IOrganizationService oService)
         {
-            QueryByAttribute qba = new QueryByAttribute("systemform");
-            qba.Attributes.AddRange("objecttypecode", "type");
-            qba.Values.AddRange(logicalName, 2);
-            qba.ColumnSet = new ColumnSet(true);
+            var qe = new QueryExpression("systemform")
+            {
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("objecttypecode", ConditionOperator.Equal, logicalName),
+                        new ConditionExpression("type", ConditionOperator.In, new[] {2, 7}),
+                        new ConditionExpression("formactivationstate", ConditionOperator.Equal, 1),
+                    }
+                },
+                ColumnSet = new ColumnSet(true)
+            };
 
-            EntityCollection ec = oService.RetrieveMultiple(qba);
+            EntityCollection ec = oService.RetrieveMultiple(qe);
 
             StringBuilder allFormsXml = new StringBuilder();
             allFormsXml.Append("<root>");
