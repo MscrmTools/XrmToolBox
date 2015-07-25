@@ -18,12 +18,20 @@ namespace MsCrmTools.FormAttributeManager.AppCode
 
         public List<Entity> GetAllFormsByTypeCode(int objectTypeCode)
         {
-            var qe = new QueryByAttribute("systemform");
-            qe.ColumnSet = new ColumnSet(new[] { "name", "formxml" });
-            qe.AddAttributeValue("objecttypecode", objectTypeCode);
-            qe.AddAttributeValue("type", 2);
-            qe.AddAttributeValue("iscustomizable", true);
-            qe.AddAttributeValue("formactivationstate", 1);
+            var qe = new QueryExpression("systemform")
+            {
+                ColumnSet = new ColumnSet(new[] { "name", "formxml" }),
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("objecttypecode", ConditionOperator.Equal, objectTypeCode),
+                        new ConditionExpression("type", ConditionOperator.In, new[] {2,7}),
+                        new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
+                        new ConditionExpression("formactivationstate", ConditionOperator.Equal, 1),
+                    }
+                }
+            };
 
             try
             {
@@ -31,8 +39,7 @@ namespace MsCrmTools.FormAttributeManager.AppCode
             }
             catch
             {
-                qe.Attributes.RemoveAt(qe.Attributes.Count - 1);
-                qe.Values.RemoveAt(qe.Values.Count - 1);
+                qe.Criteria.Conditions.RemoveAt(qe.Criteria.Conditions.Count - 1);
                 return Service.RetrieveMultiple(qe).Entities.ToList();
             }
         }
