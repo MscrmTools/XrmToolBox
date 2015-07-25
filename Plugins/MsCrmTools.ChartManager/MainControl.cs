@@ -1,0 +1,293 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.Linq;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
+using MsCrmTools.ChartManager.Forms;
+using MsCrmTools.ChartManager.Helpers;
+using XrmToolBox;
+using XrmToolBox.Extensibility;
+
+namespace MsCrmTools.ChartManager
+{
+    public partial class MainControl : PluginControlBase
+	{
+		private List<EntityMetadata> entitiesCache;
+		private ListViewItem[] listViewItemsCache;
+        private string currentFolder;
+
+        #region Constructor
+
+        public MainControl()
+        {
+            InitializeComponent();
+        }
+
+        #endregion Constructor
+
+        #region Main ToolStrip Handlers
+
+        #region Fill Entities
+
+        private void TsbLoadEntitiesClick(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadEntities);
+        }
+
+        public void LoadEntities()
+        {
+			txtSearchEntity.Text = string.Empty;
+            lvEntities.Items.Clear();
+            gbEntities.Enabled = false;
+          
+            WorkAsync("Loading entities...",
+                e =>
+                {
+                    e.Result = MetadataHelper.RetrieveEntities(Service);
+                },
+                e =>
+                {
+                    if (e.Error != null)
+                    {
+                        MessageBox.Show(ParentForm, e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        entitiesCache = (List<EntityMetadata>) e.Result;
+                        lvEntities.Items.Clear();
+                        var list = new List<ListViewItem>();
+                        foreach (EntityMetadata emd in (List<EntityMetadata>)e.Result)
+                        {
+                            var item = new ListViewItem { Text = emd.DisplayName.UserLocalizedLabel.Label, Tag = emd.LogicalName };
+                            item.SubItems.Add(emd.LogicalName);
+                            list.Add(item);
+                        }
+
+	                    this.listViewItemsCache = list.ToArray();
+	                    lvEntities.Items.AddRange(listViewItemsCache);
+
+	                    gbEntities.Enabled = true;
+                    }
+                });
+        }
+
+        #endregion
+
+        #endregion
+
+        #region ListViews Handlers
+
+        #region Fill Views
+
+        private void lvEntities_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lvEntities.SelectedItems.Count > 0)
+            {
+                string entityLogicalName = lvEntities.SelectedItems[0].Tag.ToString();
+
+                Cursor = Cursors.WaitCursor;
+                lvCharts.Items.Clear();
+
+                WorkAsync("Loading charts...",
+                    evt =>
+                    {
+                        evt.Result = ChartHelper.GetChartsByEntity(evt.Argument.ToString(), Service);
+                    },
+                    evt =>
+                    {
+                        if (evt.Error != null)
+                        {
+                            MessageBox.Show(this, "An error occured: " + evt.Error.Message, "Error",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                        }
+                        else
+                        {
+                            Cursor = Cursors.Default;
+                            var charts = (EntityCollection) evt.Result;
+                            lvCharts.Items.AddRange(charts.Entities.Select(
+                                    c => new ListViewItem(c.GetAttributeValue<string>("name")) {Tag = c}).ToArray());
+                        }
+                    },
+                    entityLogicalName);
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        private void TsbCloseThisTabClick(object sender, EventArgs e)
+        {
+            CloseTool();
+        }
+
+        private void ListViewColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            ((ListView)sender).Sorting = ((ListView)sender).Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            ((ListView)sender).ListViewItemSorter = new ListViewItemComparer(e.Column, ((ListView)sender).Sorting);
+        }
+
+		private void OnSearchKeyUp(object sender, KeyEventArgs e)
+		{
+			var entityName = txtSearchEntity.Text;
+			if (string.IsNullOrWhiteSpace(entityName))
+			{
+				lvEntities.BeginUpdate();
+				lvEntities.Items.Clear();
+				lvEntities.Items.AddRange(listViewItemsCache);
+				lvEntities.EndUpdate();
+			}
+			else
+			{
+				lvEntities.BeginUpdate();
+				lvEntities.Items.Clear();
+				var filteredItems = listViewItemsCache
+					.Where(item => item.Text.StartsWith(entityName, StringComparison.OrdinalIgnoreCase))
+				    .ToArray();
+				lvEntities.Items.AddRange(filteredItems);
+				lvEntities.EndUpdate();
+			}
+		}
+
+        private void tsbExportCharts_Click(object sender, EventArgs e)
+        {
+            var chartsToExport = lvCharts.CheckedItems.Cast<ListViewItem>().Select(c => (Entity)c.Tag).ToList();
+
+            if (chartsToExport.Count > 0)
+            {
+                try
+                {
+                    var cfbDialog = new CustomFolderBrowserDialog { FolderPath = currentFolder };
+                    if (cfbDialog.ShowDialog(ParentForm) == DialogResult.OK)
+                    {
+                        currentFolder = cfbDialog.FolderPath;
+
+                        foreach (var chart in chartsToExport)
+                        {
+                            var doc = new XDocument(
+                                new XElement("visualization",
+                                    new XElement("visualizationid", chart.Id.ToString("B")),
+                                    new XElement("name", chart.GetAttributeValue<string>("name")),
+                                    new XElement("description", chart.GetAttributeValue<string>("description")),
+                                    new XElement("primaryentitytypecode", chart.GetAttributeValue<string>("primaryentitytypecode")),
+                                    new XElement("datadescription", XElement.Parse(chart.GetAttributeValue<string>("datadescription"))),
+                                    new XElement("presentationdescription", XElement.Parse(chart.GetAttributeValue<string>("presentationdescription"))),
+                                    new XElement("isdefault", chart.GetAttributeValue<bool>("isdefault"))
+                                    ));
+
+                            doc.Save(Path.Combine(cfbDialog.FolderPath, chart.GetAttributeValue<string>("name") + ".xml"));
+                        }
+                    }
+                }
+                catch (Exception error)
+                {
+                    MessageBox.Show(ParentForm, error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void importChartsFromFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ofd = new OpenFileDialog {Filter = "XML file|*.xml", InitialDirectory = currentFolder})
+            {
+                if (ofd.ShowDialog(ParentForm) == DialogResult.OK)
+                {
+                    ProcessFiles(new List<string> {ofd.FileName});
+                }
+            }
+        }
+
+        private void ProcessFiles(List<string> files)
+        {
+            WorkAsync("Analyzing file(s)...",
+                evt =>
+                {
+                    evt.Result = ChartHelper.AnalyzeFiles((List<string>)evt.Argument, Service);
+                },
+                evt =>
+                {
+                    var results = (List<ChartDefinition>) evt.Result;
+                    if (results.Any(r => r.Errors.Count > 0))
+                    {
+                        // Display errors
+                        var elForm = new ErrorsListForm(results);
+                        elForm.ShowDialog(ParentForm);
+                    }
+                    else
+                    {
+                        if (results.Any(r => r.Exists))
+                        {
+                            // Display overwrite confirmation
+                            var ocDialog = new OverwriteConfirmationDialog(results);
+                            var result = ocDialog.ShowDialog(ParentForm);
+                            if (result == DialogResult.Cancel)
+                                return;
+
+                            if (result == DialogResult.OK)
+                            {
+                                WorkAsync("Importing file(s)...",
+                                    evt2 =>
+                                    {
+                                        ChartHelper.ImportFiles((List<ChartDefinition>) evt2.Argument, Service);
+                                    },
+                                    evt2 =>
+                                    {
+                                        if (evt2.Error != null)
+                                        {
+                                            MessageBox.Show(ParentForm, evt2.Error.Message, "Error",
+                                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        }
+                                        else
+                                        {
+                                            MessageBox.Show(ParentForm, "Chart(s) imported!", "Information",
+                                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                        }
+                                    },
+                                    results);
+                            }
+                        }
+                        else
+                        {
+                            WorkAsync("Importing file(s)...",
+                                evt2 =>
+                                {
+                                    ChartHelper.ImportFiles((List<ChartDefinition>) evt2.Argument, Service);
+                                },
+                                evt2 =>
+                                {
+                                    if (evt2.Error != null)
+                                    {
+                                        MessageBox.Show(ParentForm, evt2.Error.Message, "Error",
+                                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show(ParentForm, "Chart(s) imported!", "Information",
+                                            MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    }
+                                },
+                                results);
+                        }
+                    }
+                },
+                files);
+        }
+
+        private void importChartsFromFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var cfbDialog = new CustomFolderBrowserDialog {FolderPath = currentFolder};
+            if (cfbDialog.ShowDialog(ParentForm) == DialogResult.OK)
+            {
+                currentFolder = cfbDialog.FolderPath;
+
+                ProcessFiles(new DirectoryInfo(currentFolder).GetFiles("*.xml").Select(f=>f.FullName).ToList());
+            }
+        }
+	}
+}
