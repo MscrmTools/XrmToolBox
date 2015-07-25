@@ -91,7 +91,7 @@ namespace DamSim.SolutionTransferTool
 
             tsbLoadSolutions.Enabled = true;
             tsbTransfertSolution.Enabled = true;
-            btnDownloadLog.Enabled = true;
+            tsbDownloadLogFile.Enabled = true;
             btnSelectTarget.Enabled = true;
             Cursor = Cursors.Default;
 
@@ -149,7 +149,7 @@ namespace DamSim.SolutionTransferTool
                 btnSelectTarget.Enabled = false;
                 tsbTransfertSolution.Enabled = false;
                 tsbLoadSolutions.Enabled = false;
-                btnDownloadLog.Enabled = false;
+                tsbDownloadLogFile.Enabled = false;
 
                 var worker = new BackgroundWorker();
                 worker.DoWork += (o, args) => DownloadLogFile(dialog.SelectedPath);
@@ -163,7 +163,7 @@ namespace DamSim.SolutionTransferTool
                     btnSelectTarget.Enabled = true;
                     tsbTransfertSolution.Enabled = true;
                     tsbLoadSolutions.Enabled = true;
-                    btnDownloadLog.Enabled = true;
+                    tsbDownloadLogFile.Enabled = true;
                     Cursor = Cursors.Default;
                 };
                 worker.RunWorkerAsync();
@@ -345,7 +345,7 @@ namespace DamSim.SolutionTransferTool
                     requests.Add(new PublishAllXmlRequest());
                 }
 
-                btnDownloadLog.Enabled = false;
+                tsbDownloadLogFile.Enabled = false;
                 tsbLoadSolutions.Enabled = false;
                 tsbTransfertSolution.Enabled = false;
                 btnSelectTarget.Enabled = false;
