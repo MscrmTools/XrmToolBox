@@ -109,14 +109,28 @@ namespace MsCrmTools.MetadataDocumentGenerator.Helper
         /// <returns>Document containing all forms definition</returns>
         public static IEnumerable<Entity> RetrieveEntityFormList(string logicalName, IOrganizationService oService)
         {
-            var qba = new QueryByAttribute("systemform");
-            qba.Attributes.AddRange("objecttypecode", "type");
-            qba.Values.AddRange(logicalName, 2);
-            qba.ColumnSet = new ColumnSet(true);
+            var qe = new QueryExpression("systemform")
+            {
+                ColumnSet = new ColumnSet(true),
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("objecttypecode", ConditionOperator.Equal, logicalName),
+                        new ConditionExpression("type", ConditionOperator.In, new[] {2,7}),
+                    }
+                }
+            };
 
-            var ec = oService.RetrieveMultiple(qba);
-
-            return ec.Entities;
+            try
+            {
+                return oService.RetrieveMultiple(qe).Entities;
+            }
+            catch
+            {
+                qe.Criteria.Conditions.RemoveAt(qe.Criteria.Conditions.Count - 1);
+                return oService.RetrieveMultiple(qe).Entities;
+            }
         }
     }
 }
