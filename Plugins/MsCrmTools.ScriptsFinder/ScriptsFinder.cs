@@ -31,7 +31,7 @@ namespace MsCrmTools.ScriptsFinder
             ExecuteMethod(FindScripts);
         }
 
-        private void FindScripts()
+        public void FindScripts()
         {
             lvScripts.Items.Clear();
             tsbMainFindScripts.Enabled = false;
