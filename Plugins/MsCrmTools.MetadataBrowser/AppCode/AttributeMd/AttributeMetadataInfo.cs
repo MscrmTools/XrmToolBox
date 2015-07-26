@@ -186,7 +186,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
 
         public override string ToString()
         {
-            return amd.SchemaName;
+            return amd.AttributeType.Value.ToString();
         }
     }
 }
