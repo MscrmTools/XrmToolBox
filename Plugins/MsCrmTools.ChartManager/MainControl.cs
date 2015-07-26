@@ -13,14 +13,17 @@ using MsCrmTools.ChartManager.Forms;
 using MsCrmTools.ChartManager.Helpers;
 using XrmToolBox;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.ChartManager
 {
-    public partial class MainControl : PluginControlBase
+    public partial class MainControl : PluginControlBase, IHelpPlugin
 	{
 		private List<EntityMetadata> entitiesCache;
 		private ListViewItem[] listViewItemsCache;
         private string currentFolder;
+
+        public string HelpUrl => "https://github.com/MscrmTools/XrmToolBox/wiki/Chart-Manager";
 
         #region Constructor
 
