@@ -42,6 +42,8 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbLoadEntities = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbEditChart = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbExportCharts = new System.Windows.Forms.ToolStripButton();
             this.tsbImportCharts = new System.Windows.Forms.ToolStripDropDownButton();
             this.importChartsFromFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,7 +53,6 @@
             this.gbCharts = new System.Windows.Forms.GroupBox();
             this.lvCharts = new System.Windows.Forms.ListView();
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.gbEntities.SuspendLayout();
             this.tsMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -149,8 +150,9 @@
             this.toolStripSeparator2,
             this.tsbLoadEntities,
             this.toolStripSeparator1,
-            this.tsbExportCharts,
+            this.tsbEditChart,
             this.toolStripSeparator3,
+            this.tsbExportCharts,
             this.tsbImportCharts});
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
@@ -188,8 +190,25 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 38);
             // 
+            // tsbEditChart
+            // 
+            this.tsbEditChart.Enabled = false;
+            this.tsbEditChart.Image = ((System.Drawing.Image)(resources.GetObject("tsbEditChart.Image")));
+            this.tsbEditChart.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbEditChart.Name = "tsbEditChart";
+            this.tsbEditChart.Size = new System.Drawing.Size(117, 35);
+            this.tsbEditChart.Text = "Edit Chart";
+            this.tsbEditChart.ToolTipText = "Edit selected chart";
+            this.tsbEditChart.Click += new System.EventHandler(this.tsbEditChart_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 38);
+            // 
             // tsbExportCharts
             // 
+            this.tsbExportCharts.Enabled = false;
             this.tsbExportCharts.Image = ((System.Drawing.Image)(resources.GetObject("tsbExportCharts.Image")));
             this.tsbExportCharts.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbExportCharts.Name = "tsbExportCharts";
@@ -203,6 +222,7 @@
             this.tsbImportCharts.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.importChartsFromFileToolStripMenuItem,
             this.importChartsFromFolderToolStripMenuItem});
+            this.tsbImportCharts.Enabled = false;
             this.tsbImportCharts.Image = ((System.Drawing.Image)(resources.GetObject("tsbImportCharts.Image")));
             this.tsbImportCharts.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbImportCharts.Name = "tsbImportCharts";
@@ -213,7 +233,7 @@
             // 
             this.importChartsFromFileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("importChartsFromFileToolStripMenuItem.Image")));
             this.importChartsFromFileToolStripMenuItem.Name = "importChartsFromFileToolStripMenuItem";
-            this.importChartsFromFileToolStripMenuItem.Size = new System.Drawing.Size(211, 30);
+            this.importChartsFromFileToolStripMenuItem.Size = new System.Drawing.Size(191, 30);
             this.importChartsFromFileToolStripMenuItem.Text = "From file";
             this.importChartsFromFileToolStripMenuItem.ToolTipText = "Import one chart from one chart file definition file";
             this.importChartsFromFileToolStripMenuItem.Click += new System.EventHandler(this.importChartsFromFileToolStripMenuItem_Click);
@@ -222,7 +242,7 @@
             // 
             this.importChartsFromFolderToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("importChartsFromFolderToolStripMenuItem.Image")));
             this.importChartsFromFolderToolStripMenuItem.Name = "importChartsFromFolderToolStripMenuItem";
-            this.importChartsFromFolderToolStripMenuItem.Size = new System.Drawing.Size(211, 30);
+            this.importChartsFromFolderToolStripMenuItem.Size = new System.Drawing.Size(191, 30);
             this.importChartsFromFolderToolStripMenuItem.Text = "From folder";
             this.importChartsFromFolderToolStripMenuItem.ToolTipText = "Import one or multiple charts from chart definition files contained in a folder";
             this.importChartsFromFolderToolStripMenuItem.Click += new System.EventHandler(this.importChartsFromFolderToolStripMenuItem_Click);
@@ -282,11 +302,6 @@
             this.columnHeader3.Text = "Name";
             this.columnHeader3.Width = 600;
             // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 38);
-            // 
             // MainControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -333,5 +348,6 @@
         private System.Windows.Forms.ToolStripMenuItem importChartsFromFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem importChartsFromFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripButton tsbEditChart;
     }
 }
