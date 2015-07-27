@@ -1371,6 +1371,10 @@ namespace MsCrmTools.WebResourcesManager
                                 updateFromDiskToolStripMenuItem.Enabled = true;
                                 copyWebResourceNameToClipboardToolStripMenuItem.Enabled = false;
                                 getLatestVersionToolStripMenuItem.Enabled = false;
+
+                                expandincludingChildrensToolStripMenuItem.Visible = !tvWebResources.SelectedNode.IsExpanded;
+                                collapseIncludingChildrensToolStripMenuItem.Visible = tvWebResources.SelectedNode.IsExpanded;
+                                toolStripSeparatorExpandCollapse.Visible = true;
                             }
                             break;
                         case 1:
@@ -1386,6 +1390,10 @@ namespace MsCrmTools.WebResourcesManager
                                 updateFromDiskToolStripMenuItem.Enabled = true;
                                 copyWebResourceNameToClipboardToolStripMenuItem.Enabled = false;
                                 getLatestVersionToolStripMenuItem.Enabled = false;
+
+                                expandincludingChildrensToolStripMenuItem.Visible = !tvWebResources.SelectedNode.IsExpanded;
+                                collapseIncludingChildrensToolStripMenuItem.Visible = tvWebResources.SelectedNode.IsExpanded;
+                                toolStripSeparatorExpandCollapse.Visible = true;
                             }
                             break;
                         default:
@@ -1401,6 +1409,10 @@ namespace MsCrmTools.WebResourcesManager
                                 updateFromDiskToolStripMenuItem.Enabled = false;
                                 copyWebResourceNameToClipboardToolStripMenuItem.Enabled = true;
                                 getLatestVersionToolStripMenuItem.Enabled = true;
+
+                                expandincludingChildrensToolStripMenuItem.Visible = false;
+                                collapseIncludingChildrensToolStripMenuItem.Visible = false;
+                                toolStripSeparatorExpandCollapse.Visible = false;
                             }
                             break;
                     }
@@ -1606,6 +1618,26 @@ namespace MsCrmTools.WebResourcesManager
             }
             else
                 e.Effect = DragDropEffects.None;
+        }
+
+        private void expandToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tvWebResources.SelectedNode.Expand();
+        }
+
+        private void expandincludingChildrensToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tvWebResources.SelectedNode.ExpandAll();
+        }
+
+        private void collapseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tvWebResources.SelectedNode.Collapse(true);
+        }
+
+        private void collapseIncludingChildrensToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            tvWebResources.SelectedNode.Collapse(false);
         }
     }
 }
