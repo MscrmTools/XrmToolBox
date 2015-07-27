@@ -87,7 +87,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                 // javascript file, a new TreeNode has to be created
                 if (diChild.GetDirectories().Length > 0 || diChild.GetFiles("*.*").Length > 0)
                 {
-                    var folderNode = new TreeNode(diChild.Name) {ImageIndex = 1, SelectedImageIndex = 1};
+                    var folderNode = new TreeNode(diChild.Name) { ImageIndex = 1, SelectedImageIndex = 1, Tag = diChild.FullName, Name = diChild.Name };
 
                     parentFolderNode.Nodes.Add(folderNode);
 
@@ -103,13 +103,57 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                     continue;
                 }
 
-                if (extensionsToLoad.Contains(fiChild.Extension))
+                if (extensionsToLoad == null || extensionsToLoad.Contains(fiChild.Extension))
                 {
                     // Create a TreeNode for each javascript file
                     CreateWebResourceNode(fiChild, parentFolderNode);
                 }
             }
         }
+
+        public static void UpdateFolderStructure(TreeNode parentFolderNode, DirectoryInfo di, List<string> invalidFilenames, List<string> extensionsToLoad)
+        {
+            var subNodes = parentFolderNode.Nodes;
+            var subFolders = di.GetDirectories();
+
+            foreach (var subFolder in subFolders)
+            {
+                if (!subNodes.ContainsKey(subFolder.Name) || subNodes[subFolder.Name].ImageIndex != 1)
+                {
+                    var folderNode = new TreeNode(subFolder.Name) { ImageIndex = 1, SelectedImageIndex = 1, Tag = subFolder.FullName, Name = subFolder.Name };
+                    parentFolderNode.Nodes.Add(folderNode);
+
+                    UpdateFolderStructure(folderNode, subFolder, invalidFilenames, extensionsToLoad);
+                }
+                else
+                {
+                    UpdateFolderStructure(subNodes[subFolder.Name], subFolder, invalidFilenames, extensionsToLoad);
+                }
+            }
+
+            foreach (FileInfo fiChild in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
+            {
+                if (WebResource.IsInvalidName(fiChild.Name) || !WebResource.ValidExtensions.Contains(fiChild.Extension.Remove(0, 1).ToLower()))
+                {
+                    invalidFilenames.Add(fiChild.FullName);
+                    continue;
+                }
+
+                if (extensionsToLoad == null || extensionsToLoad.Contains(fiChild.Extension))
+                {
+                    if (!subNodes.ContainsKey(fiChild.Name) || subNodes[fiChild.Name].ImageIndex <= 1)
+                    {
+                        CreateWebResourceNode(fiChild, parentFolderNode);
+                    }
+                    else
+                    {
+                        var wr = (WebResource)subNodes[fiChild.Name].Tag;
+                        wr.WebResourceEntity["content"] = Convert.ToBase64String(File.ReadAllBytes(wr.FilePath));
+                    }
+                }
+            }
+        }
+
 
         /// <summary>
         /// Create a TreeNode for the javascript file passed in parameter
@@ -193,6 +237,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             var node = new TreeNode
             {
                 Text = scriptName,
+                Name = scriptName,
                 Tag = scriptObject,
                 ImageIndex = imageIndex,
                 SelectedImageIndex = imageIndex
@@ -502,12 +547,12 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
         internal static string UpdateNodesContentWithLocalFiles(TreeNodeCollection nodes)
         {
-            var fbDialog = new FolderBrowserDialog();
+            var fbDialog = new CustomFolderBrowserDialog(true, false);
             if (fbDialog.ShowDialog() == DialogResult.OK)
             {
                 var sBuilder = new StringBuilder();
 
-                UpdateNodesContentWithLocalFiles(nodes, fbDialog.SelectedPath, new DirectoryInfo(fbDialog.SelectedPath).Name, sBuilder);
+                UpdateNodesContentWithLocalFiles(nodes, fbDialog.FolderPath, new DirectoryInfo(fbDialog.FolderPath).Name, sBuilder);
 
                 if (sBuilder.Length == 0)
                 {

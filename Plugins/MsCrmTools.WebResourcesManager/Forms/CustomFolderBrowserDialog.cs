@@ -8,10 +8,12 @@ namespace MsCrmTools.WebResourcesManager.Forms
 {
     public partial class CustomFolderBrowserDialog : Form
     {
-        public CustomFolderBrowserDialog(bool isLoadFromDisk)
+        private bool showExtensionOptions;
+
+        public CustomFolderBrowserDialog(bool isLoadFromDisk, bool showExtensionOptions = true)
         {
             InitializeComponent();
-
+            
             if (!isLoadFromDisk)
             {
                 webResourceTypePicker1.Visible = false;
@@ -19,6 +21,13 @@ namespace MsCrmTools.WebResourcesManager.Forms
                 lblTitle.Text = "Save folder";
                 Text = "Save web resources";
                 
+                Invalidate();
+            }
+            else if (!showExtensionOptions)
+            {
+                webResourceTypePicker1.Visible = false;
+                lblTitle.Text = "Folder";
+
                 Invalidate();
             }
         }

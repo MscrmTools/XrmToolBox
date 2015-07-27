@@ -125,7 +125,7 @@ namespace MsCrmTools.WebResourcesManager
             ExecuteMethod(LoadWebResourceFromASpecificSolution);
         }
 
-        private void LoadWebResourceFromASpecificSolution()
+        public void LoadWebResourceFromASpecificSolution()
         {
             wrManager = new WebResourceManager(Service);
             var sPicker = new SolutionPicker(Service) { StartPosition = FormStartPosition.CenterParent };
@@ -135,7 +135,7 @@ namespace MsCrmTools.WebResourcesManager
             }
         }
 
-        private void LoadWebResourcesGeneral(Entity specificSolution)
+        public void LoadWebResourcesGeneral(Entity specificSolution)
         {
             wrManager = new WebResourceManager(Service);
             tvWebResources.Nodes.Clear();
@@ -476,11 +476,6 @@ namespace MsCrmTools.WebResourcesManager
                     fbd.FolderPath = currentFolderForFiles;
                 }
                 
-                if (!string.IsNullOrEmpty(currentFolderForFiles))
-                {
-                    fbd.FolderPath = currentFolderForFiles;
-                }
-
                 if (fbd.ShowDialog() == DialogResult.OK)
                 {
                     var extensionsToLoad = fbd.ExtensionsToLoad;
@@ -498,7 +493,7 @@ namespace MsCrmTools.WebResourcesManager
                             continue;
                         }
 
-                        var rootFolderNode = new TreeNode(diChild.Name) { ImageIndex = 0 };
+                        var rootFolderNode = new TreeNode(diChild.Name) { ImageIndex = 0, Tag = diChild.FullName };
 
                         tvWebResources.Nodes.Add(rootFolderNode);
 
@@ -550,6 +545,42 @@ namespace MsCrmTools.WebResourcesManager
            
         }
 
+        private void refreshFromDiskToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var selectedItem = tvWebResources.SelectedNode;
+            
+            if (selectedItem != null)
+            {
+                var tag = selectedItem.Tag;
+                if (tag is string)
+                {
+                    invalidFilenames = new List<string>();
+
+                    TreeViewHelper.UpdateFolderStructure(selectedItem, new DirectoryInfo(tag.ToString()),invalidFilenames, null);
+
+                    if (invalidFilenames.Count > 0)
+                    {
+                        var errorDialog = new InvalidFileListDialog(invalidFilenames)
+                        {
+                            StartPosition =
+                                FormStartPosition.CenterParent
+                        };
+                        errorDialog.ShowDialog(this);
+                    }
+                }
+                else
+                {
+                    var resource = tag as WebResource;
+                    if (resource != null)
+                    {
+                        var wr = resource;
+                        wr.WebResourceEntity["content"] = Convert.ToBase64String(File.ReadAllBytes(wr.FilePath));
+                        TvWebResourcesAfterSelect(tvWebResources, new TreeViewEventArgs(selectedItem));
+                    }
+                }
+            }
+        }
+
         #endregion DISK - Load web resources
 
         #region DISK - Save web resources
@@ -588,13 +619,16 @@ namespace MsCrmTools.WebResourcesManager
 
         private void SaveWebResourcesToDisk(IEnumerable<TreeNode> nodes, bool withRoot = false)
         {
-            var fbd = new FolderBrowserDialog();
-            if (!string.IsNullOrWhiteSpace(Properties.Settings.Default.LastFolderUsed))
-                fbd.SelectedPath = Properties.Settings.Default.LastFolderUsed;
+            var fbd = new CustomFolderBrowserDialog(true, false);
+
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.LastFolderUsed))
+            {
+                fbd.FolderPath = Properties.Settings.Default.LastFolderUsed;
+            }
 
             if (fbd.ShowDialog() == DialogResult.OK)
             {
-                Properties.Settings.Default.LastFolderUsed = fbd.SelectedPath;
+                Properties.Settings.Default.LastFolderUsed = fbd.FolderPath;
                 Properties.Settings.Default.Save();
                 foreach (var node in nodes)
                 {
@@ -605,7 +639,7 @@ namespace MsCrmTools.WebResourcesManager
                         if (webResource.Contains("content") && webResource["content"].ToString().Length > 0)
                         {
                             string[] partPath = webResource["name"].ToString().Split('/');
-                            string path = fbd.SelectedPath;
+                            string path = fbd.FolderPath;
 
                             if (withRoot) {
                                 for (int i = 0; i < partPath.Length - 1; i++) {
@@ -627,8 +661,6 @@ namespace MsCrmTools.WebResourcesManager
                 }
             }
         }
-
-
 
         #endregion DISK - Save web resources
 
@@ -1147,7 +1179,9 @@ namespace MsCrmTools.WebResourcesManager
         private void TvWebResourcesAfterSelect(object sender, TreeViewEventArgs e)
         {
             panelControl.Controls.Clear();
-            if (tvWebResources.SelectedNode != null && tvWebResources.SelectedNode.Tag != null)
+            if (tvWebResources.SelectedNode != null 
+                && tvWebResources.SelectedNode.Tag != null
+                && tvWebResources.SelectedNode.Tag is WebResource)
             {
                 toolStripScriptContent.Visible = true;
                 tslResourceName.Visible = true;
@@ -1573,6 +1607,5 @@ namespace MsCrmTools.WebResourcesManager
             else
                 e.Effect = DragDropEffects.None;
         }
-
     }
 }
