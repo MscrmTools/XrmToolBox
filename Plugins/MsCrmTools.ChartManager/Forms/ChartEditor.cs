@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -39,6 +40,10 @@ namespace MsCrmTools.ChartManager.Forms
 
             tecDataDescription.SetHighlighting("XML");
             tecVisualizationDescription.SetHighlighting("XML");
+
+            // Fix to make Visualization Description text editor content using
+            // all width
+            Size = new Size(Size.Width + 1, Size.Height);
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
@@ -107,9 +112,9 @@ namespace MsCrmTools.ChartManager.Forms
                 StreamReader sr = new StreamReader(ms);
                 return sr.ReadToEnd();
             }
-            catch (Exception ex)
+            catch (Exception error)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(string.Format("An error occured while identing XML: {0}", error));
                 return null;
             }
         }
