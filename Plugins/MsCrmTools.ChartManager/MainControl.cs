@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.ChartManager.Forms;
 using MsCrmTools.ChartManager.Helpers;
-using XrmToolBox;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
@@ -19,7 +17,6 @@ namespace MsCrmTools.ChartManager
 {
     public partial class MainControl : PluginControlBase, IHelpPlugin
 	{
-		private List<EntityMetadata> entitiesCache;
 		private ListViewItem[] listViewItemsCache;
         private string currentFolder;
 
@@ -62,7 +59,6 @@ namespace MsCrmTools.ChartManager
                     }
                     else
                     {
-                        entitiesCache = (List<EntityMetadata>) e.Result;
                         lvEntities.Items.Clear();
                         var list = new List<ListViewItem>();
                         foreach (EntityMetadata emd in (List<EntityMetadata>)e.Result)
@@ -72,13 +68,14 @@ namespace MsCrmTools.ChartManager
                             list.Add(item);
                         }
 
-	                    this.listViewItemsCache = list.ToArray();
+	                    listViewItemsCache = list.ToArray();
 	                    lvEntities.Items.AddRange(listViewItemsCache);
 
 	                    gbEntities.Enabled = true;
                         tsbImportCharts.Enabled = true;
                         tsbExportCharts.Enabled = true;
                         tsbEditChart.Enabled = true;
+                        txtSearchEntity.Focus();
                     }
                 });
         }
@@ -172,7 +169,7 @@ namespace MsCrmTools.ChartManager
             {
                 try
                 {
-                    var cfbDialog = new CustomFolderBrowserDialog { FolderPath = currentFolder };
+                    var cfbDialog = new CustomFolderBrowserDialog(false) { FolderPath = currentFolder };
                     if (cfbDialog.ShowDialog(ParentForm) == DialogResult.OK)
                     {
                         currentFolder = cfbDialog.FolderPath;
@@ -192,6 +189,12 @@ namespace MsCrmTools.ChartManager
 
                             doc.Save(Path.Combine(cfbDialog.FolderPath, chart.GetAttributeValue<string>("name") + ".xml"));
                         }
+
+                        if (MessageBox.Show(ParentForm, "Would you like to open destination folder?", "Question",
+                            MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        {
+                            Process.Start(cfbDialog.FolderPath);
+                        }
                     }
                 }
                 catch (Exception error)
@@ -207,12 +210,12 @@ namespace MsCrmTools.ChartManager
             {
                 if (ofd.ShowDialog(ParentForm) == DialogResult.OK)
                 {
-                    ProcessFiles(new List<string> {ofd.FileName});
+                    ExecuteMethod(ProcessFiles, new List<string> {ofd.FileName});
                 }
             }
         }
 
-        private void ProcessFiles(List<string> files)
+        public void ProcessFiles(List<string> files)
         {
             WorkAsync("Analyzing file(s)...",
                 evt =>
@@ -278,12 +281,11 @@ namespace MsCrmTools.ChartManager
 
         private void importChartsFromFolderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var cfbDialog = new CustomFolderBrowserDialog {FolderPath = currentFolder};
+            var cfbDialog = new CustomFolderBrowserDialog(true) {FolderPath = currentFolder};
             if (cfbDialog.ShowDialog(ParentForm) == DialogResult.OK)
             {
                 currentFolder = cfbDialog.FolderPath;
-
-                ProcessFiles(new DirectoryInfo(currentFolder).GetFiles("*.xml").Select(f=>f.FullName).ToList());
+                ExecuteMethod(ProcessFiles, new DirectoryInfo(currentFolder).GetFiles("*.xml").Select(f => f.FullName).ToList());
             }
         }
 

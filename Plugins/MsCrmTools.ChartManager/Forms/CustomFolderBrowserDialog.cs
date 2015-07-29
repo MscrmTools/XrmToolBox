@@ -1,14 +1,19 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.Serialization.Formatters;
 using System.Windows.Forms;
 
 namespace MsCrmTools.ChartManager.Forms
 {
     public partial class CustomFolderBrowserDialog : Form
     {
-        public CustomFolderBrowserDialog()
+        private readonly bool isForLoad;
+
+        public CustomFolderBrowserDialog(bool isForLoad)
         {
             InitializeComponent();
+
+            this.isForLoad = isForLoad;
         }
 
         public string FolderPath { get; set; }
@@ -22,8 +27,25 @@ namespace MsCrmTools.ChartManager.Forms
         {
             if (!Directory.Exists(txtFolderPath.Text))
             {
-                MessageBox.Show(this, "Invalid folder specified!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                if (!isForLoad && MessageBox.Show(this, "This folder does not exist. Would you like to create it?", "Warning",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+                    == DialogResult.Yes)
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(txtFolderPath.Text);
+                    }
+                    catch (Exception error)
+                    {
+                        MessageBox.Show(this, error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(this, "Folder does not exist!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    return;
+                }
             }
 
             FolderPath = txtFolderPath.Text;

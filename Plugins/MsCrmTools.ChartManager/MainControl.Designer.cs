@@ -222,7 +222,6 @@
             this.tsbImportCharts.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.importChartsFromFileToolStripMenuItem,
             this.importChartsFromFolderToolStripMenuItem});
-            this.tsbImportCharts.Enabled = false;
             this.tsbImportCharts.Image = ((System.Drawing.Image)(resources.GetObject("tsbImportCharts.Image")));
             this.tsbImportCharts.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbImportCharts.Name = "tsbImportCharts";
@@ -233,7 +232,7 @@
             // 
             this.importChartsFromFileToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("importChartsFromFileToolStripMenuItem.Image")));
             this.importChartsFromFileToolStripMenuItem.Name = "importChartsFromFileToolStripMenuItem";
-            this.importChartsFromFileToolStripMenuItem.Size = new System.Drawing.Size(191, 30);
+            this.importChartsFromFileToolStripMenuItem.Size = new System.Drawing.Size(211, 30);
             this.importChartsFromFileToolStripMenuItem.Text = "From file";
             this.importChartsFromFileToolStripMenuItem.ToolTipText = "Import one chart from one chart file definition file";
             this.importChartsFromFileToolStripMenuItem.Click += new System.EventHandler(this.importChartsFromFileToolStripMenuItem_Click);
@@ -242,7 +241,7 @@
             // 
             this.importChartsFromFolderToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("importChartsFromFolderToolStripMenuItem.Image")));
             this.importChartsFromFolderToolStripMenuItem.Name = "importChartsFromFolderToolStripMenuItem";
-            this.importChartsFromFolderToolStripMenuItem.Size = new System.Drawing.Size(191, 30);
+            this.importChartsFromFolderToolStripMenuItem.Size = new System.Drawing.Size(211, 30);
             this.importChartsFromFolderToolStripMenuItem.Text = "From folder";
             this.importChartsFromFolderToolStripMenuItem.ToolTipText = "Import one or multiple charts from chart definition files contained in a folder";
             this.importChartsFromFolderToolStripMenuItem.Click += new System.EventHandler(this.importChartsFromFolderToolStripMenuItem_Click);
