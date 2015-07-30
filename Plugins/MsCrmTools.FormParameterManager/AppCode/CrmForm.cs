@@ -27,7 +27,7 @@ namespace MsCrmTools.FormParameterManager.AppCode
 
         public CrmForm(Entity form)
         {
-            var emd = entitiesMetadatas.ToList().First(e => e.LogicalName == form.LogicalName);
+            var emd = entitiesMetadatas.ToList().First(e => e.LogicalName == form.GetAttributeValue<string>("objecttypecode"));
 
             this.form = form;
 
