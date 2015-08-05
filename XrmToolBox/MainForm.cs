@@ -3,16 +3,16 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System.Threading;
-using McTools.Xrm.Connection;
-using McTools.Xrm.Connection.WinForms;
-using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using McTools.Xrm.Connection;
+using McTools.Xrm.Connection.WinForms;
+using Microsoft.Xrm.Sdk;
 using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
@@ -96,8 +96,7 @@ namespace XrmToolBox
                     var control = e.Parameter as UserControl;
                     if (control != null)
                     {
-                        var realUserControl = control;
-                        DisplayPluginControl(realUserControl);
+                        this.DisplayPluginControl((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)control.Tag);
                     }
                     else if (e.Parameter.ToString() == "ApplyConnectionToTabs" && tabControl1.TabPages.Count > 1)
                     {
@@ -161,14 +160,14 @@ namespace XrmToolBox
 
         private void StartPluginWithoutConnection()
         {
-            if (!string.IsNullOrEmpty(this.initialPluginName) && this.pManager != null && this.pManager.PluginsControls != null)
+            if (!string.IsNullOrEmpty(this.initialPluginName) && this.pManager != null && this.pManager.Plugins != null)
             {
-                var pluginControl = this.pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == this.initialPluginName);
-                if (pluginControl != null)
+                var plugin = this.pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == this.initialPluginName);
+                if (plugin != null)
                 {
                     this.Invoke(new Action(() =>
                     {
-                        this.DisplayPluginControl(pluginControl);
+                        this.DisplayPluginControl(plugin);
                     }));
                 }
 
@@ -337,13 +336,13 @@ namespace XrmToolBox
             else
             {
                 // Searching for suitable plugin
-                var targetModel = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == message.TargetPlugin);
-                if (targetModel == null)
+                var target = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == message.TargetPlugin);
+                if (target == null)
                 {
                     throw new PluginNotFoundException("Plugin {0} was not found", message.TargetPlugin);
                 }
                 // Displaying plugin and keeping number of the tab where it was opened
-                var tabIndex = DisplayPluginControl((UserControl)targetModel);
+                var tabIndex = this.DisplayPluginControl(target);
                 // Getting the tab where plugin was opened
                 tab = tabControl1.TabPages[tabIndex];
                 // New intance of the plugin was created, even if user did not explicitly asked about this.
@@ -434,11 +433,18 @@ namespace XrmToolBox
             if (service == null && MessageBox.Show(this, "Do you want to connect to an organization first?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 if (fHelper.AskForConnection(sender))
+                {
                     infoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120);
+                }
             }
             else
             {
-                DisplayPluginControl((UserControl)sender);
+                var plugin = ((UserControl)sender).Tag as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
+
+                if (plugin != null)
+                {
+                    DisplayPluginControl(plugin);
+                }
             }
         }
 

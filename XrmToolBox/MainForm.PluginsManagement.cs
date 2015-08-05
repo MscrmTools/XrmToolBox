@@ -173,22 +173,20 @@ namespace XrmToolBox
             top += pm.Height + 4;
         }
 
-        private int DisplayPluginControl(UserControl plugin)
+        private int DisplayPluginControl(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin)
         {
             var tabIndex = 0;
 
             try
             {
-                var control = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)plugin.Tag;
-                var pluginControl = (UserControl)control.Value.GetControl();
+                var pluginControl = (UserControl)plugin.Value.GetControl();
              
                 if (service != null)
                 {
                     var clonedService = (OrganizationService)currentConnectionDetail.GetOrganizationService();
                     ((OrganizationServiceProxy)clonedService.InnerService).SdkClientVersion = currentConnectionDetail.OrganizationVersion;
 
-                    ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService,
-                        currentConnectionDetail);
+                    ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
                 }
 
                 // ReSharper disable once SuspiciousTypeConversion.Global
@@ -201,7 +199,7 @@ namespace XrmToolBox
                 ((IXrmToolBoxPluginControl)pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
                 ((IXrmToolBoxPluginControl)pluginControl).OnCloseTool += MainForm_OnCloseTool;
 
-                string name = string.Format("{0} ({1})", control.Metadata.Name,
+                string name = string.Format("{0} ({1})", plugin.Metadata.Name,
                     currentConnectionDetail != null
                         ? currentConnectionDetail.ConnectionName
                         : "Not connected");
@@ -219,27 +217,26 @@ namespace XrmToolBox
 
                 tabControl1.SelectTab(tabIndex);
 
-                var pluginInOption =
-                    currentOptions.MostUsedList.FirstOrDefault(i => i.Name == control.Value.GetType().FullName);
+                var pluginInOption = currentOptions.MostUsedList.FirstOrDefault(i => i.Name == plugin.Value.GetType().FullName);
                 if (pluginInOption == null)
                 {
-                    pluginInOption = new PluginUseCount { Name = control.Value.GetType().FullName, Count = 0 };
+                    pluginInOption = new PluginUseCount { Name = plugin.Value.GetType().FullName, Count = 0 };
                     currentOptions.MostUsedList.Add(pluginInOption);
                 }
 
                 pluginInOption.Count++;
 
-                var p1 = plugin as SmallPluginModel;
-                if (p1 != null)
-                    p1.UpdateCount(pluginInOption.Count);
-                else
-                {
-                    var p2 = plugin as LargePluginModel;
-                    if (p2 != null)
-                    {
-                        p2.UpdateCount(pluginInOption.Count);
-                    }
-                }
+                //var p1 = plugin as SmallPluginModel;
+                //if (p1 != null)
+                //    p1.UpdateCount(pluginInOption.Count);
+                //else
+                //{
+                //    var p2 = plugin as LargePluginModel;
+                //    if (p2 != null)
+                //    {
+                //        p2.UpdateCount(pluginInOption.Count);
+                //    }
+                //}
 
                 if (currentOptions.LastAdvertisementDisplay == new DateTime() ||
                     currentOptions.LastAdvertisementDisplay > DateTime.Now ||
@@ -248,8 +245,7 @@ namespace XrmToolBox
                     bool displayAdvertisement = true;
                     try
                     {
-                        var assembly =
-                            Assembly.LoadFile(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory +
+                        var assembly = Assembly.LoadFile(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory +
                                               "\\McTools.StopAdvertisement.dll");
                         if (assembly != null)
                         {
@@ -283,7 +279,7 @@ namespace XrmToolBox
 
                 if (currentOptions.AllowLogUsage.HasValue && currentOptions.AllowLogUsage.Value)
                 {
-                    LogUsage.DoLog(control);
+                    LogUsage.DoLog(plugin);
                 }
 
                 currentOptions.Save();
