@@ -344,7 +344,7 @@ namespace Javista.XrmToolBox.ImportNN
                 {
                     var innerSettings = (ImportFileSettings)((object[])evt.Argument)[0];
                     var filePath = ((object[])evt.Argument)[1].ToString();
-                    var ie = new ImportEngine(filePath, service, innerSettings);
+                    var ie = new ImportEngine(filePath, this.Service, innerSettings);
                     ie.RaiseError += ie_RaiseError;
                     ie.RaiseSuccess += ie_RaiseSuccess;
                     ie.Import();
@@ -389,7 +389,7 @@ namespace Javista.XrmToolBox.ImportNN
                 {
                     var innerSettings = (ImportFileSettings)((object[])evt.Argument)[0];
                     var filePath = ((object[])evt.Argument)[1].ToString();
-                    var ee = new ExportEngine(filePath, service, innerSettings);
+                    var ee = new ExportEngine(filePath, this.Service, innerSettings);
                     ee.RaiseError += ee_RaiseError;
                     ee.Export();
                 },
