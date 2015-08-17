@@ -30,10 +30,10 @@
         {
             this.picture = new System.Windows.Forms.PictureBox();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.lblDescription = new System.Windows.Forms.Label();
             this.lblVersion = new System.Windows.Forms.Label();
             this.lblAuthor = new System.Windows.Forms.Label();
             this.lblCount = new System.Windows.Forms.Label();
+            this.lblDescription = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.picture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,27 +52,14 @@
             this.lblTitle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblTitle.AutoEllipsis = true;
+            this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.Location = new System.Drawing.Point(111, 2);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(378, 22);
+            this.lblTitle.Size = new System.Drawing.Size(69, 25);
             this.lblTitle.TabIndex = 1;
             this.lblTitle.Text = "[Label]";
             this.lblTitle.Click += new System.EventHandler(this.MouseClick);
-            // 
-            // lblDescription
-            // 
-            this.lblDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblDescription.AutoEllipsis = true;
-            this.lblDescription.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDescription.Location = new System.Drawing.Point(113, 62);
-            this.lblDescription.Name = "lblDescription";
-            this.lblDescription.Size = new System.Drawing.Size(417, 29);
-            this.lblDescription.TabIndex = 2;
-            this.lblDescription.Text = "[Description]";
-            this.lblDescription.Click += new System.EventHandler(this.MouseClick);
             // 
             // lblVersion
             // 
@@ -82,7 +69,7 @@
             this.lblVersion.AutoEllipsis = true;
             this.lblVersion.AutoSize = true;
             this.lblVersion.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVersion.Location = new System.Drawing.Point(113, 24);
+            this.lblVersion.Location = new System.Drawing.Point(113, 33);
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(63, 19);
             this.lblVersion.TabIndex = 3;
@@ -97,7 +84,7 @@
             this.lblAuthor.AutoEllipsis = true;
             this.lblAuthor.AutoSize = true;
             this.lblAuthor.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblAuthor.Location = new System.Drawing.Point(113, 43);
+            this.lblAuthor.Location = new System.Drawing.Point(113, 52);
             this.lblAuthor.Name = "lblAuthor";
             this.lblAuthor.Size = new System.Drawing.Size(60, 19);
             this.lblAuthor.TabIndex = 4;
@@ -116,6 +103,21 @@
             this.lblCount.Text = "[NB]";
             this.lblCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.lblCount.Click += new System.EventHandler(this.MouseClick);
+            // 
+            // lblDescription
+            // 
+            this.lblDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblDescription.AutoEllipsis = true;
+            this.lblDescription.AutoSize = true;
+            this.lblDescription.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDescription.Location = new System.Drawing.Point(113, 71);
+            this.lblDescription.Name = "lblDescription";
+            this.lblDescription.Size = new System.Drawing.Size(86, 19);
+            this.lblDescription.TabIndex = 2;
+            this.lblDescription.Text = "[Description]";
+            this.lblDescription.Click += new System.EventHandler(this.MouseClick);
             // 
             // LargePluginModel
             // 
@@ -143,9 +145,9 @@
 
         private System.Windows.Forms.PictureBox picture;
         private System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.Label lblDescription;
         private System.Windows.Forms.Label lblVersion;
         private System.Windows.Forms.Label lblAuthor;
         private System.Windows.Forms.Label lblCount;
+        private System.Windows.Forms.Label lblDescription;
     }
 }
