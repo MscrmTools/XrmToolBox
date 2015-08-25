@@ -72,45 +72,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppCode\AttributeClass.cs" />
-    <Compile Include="AppCode\AttributeInfo.cs" />
-    <Compile Include="AppCode\CellInfo.cs" />
-    <Compile Include="AppCode\EntityInfo.cs" />
-    <Compile Include="AppCode\AttributeSelectedEventArgs.cs" />
-    <Compile Include="AppCode\EntitySelectedEventArgs.cs" />
-    <Compile Include="AppCode\FormInfo.cs" />
-    <Compile Include="AppCode\FormManager.cs" />
-    <Compile Include="AppCode\ListViewItemComparer.cs" />
-    <Compile Include="Forms\UpdateLabelDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\UpdateLabelDialog.Designer.cs">
-      <DependentUpon>UpdateLabelDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\ReferenceAttributeSelector.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ReferenceAttributeSelector.Designer.cs">
-      <DependentUpon>ReferenceAttributeSelector.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MainControl.Designer.cs">
-      <DependentUpon>MainControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\AttributeSelector.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\AttributeSelector.Designer.cs">
-      <DependentUpon>AttributeSelector.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -132,27 +98,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\UpdateLabelDialog.resx">
-      <DependentUpon>UpdateLabelDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\ReferenceAttributeSelector.resx">
-      <DependentUpon>ReferenceAttributeSelector.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainControl.resx">
-      <DependentUpon>MainControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\AttributeSelector.resx">
-      <DependentUpon>AttributeSelector.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

@@ -53,6 +53,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormAttributeManager\AppCode\AttributeClass.cs" />
+    <Compile Include="FormAttributeManager\AppCode\AttributeInfo.cs" />
+    <Compile Include="FormAttributeManager\AppCode\AttributeSelectedEventArgs.cs" />
+    <Compile Include="FormAttributeManager\AppCode\CellInfo.cs" />
+    <Compile Include="FormAttributeManager\AppCode\EntityInfo.cs" />
+    <Compile Include="FormAttributeManager\AppCode\EntitySelectedEventArgs.cs" />
+    <Compile Include="FormAttributeManager\AppCode\FormInfo.cs" />
+    <Compile Include="FormAttributeManager\AppCode\FormManager.cs" />
+    <Compile Include="FormAttributeManager\AppCode\ListViewItemComparer.cs" />
+    <Compile Include="FormAttributeManager\Forms\ReferenceAttributeSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAttributeManager\Forms\ReferenceAttributeSelector.Designer.cs">
+      <DependentUpon>ReferenceAttributeSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAttributeManager\Forms\UpdateLabelDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAttributeManager\Forms\UpdateLabelDialog.Designer.cs">
+      <DependentUpon>UpdateLabelDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAttributeManager\MainControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormAttributeManager\MainControl.Designer.cs">
+      <DependentUpon>MainControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAttributeManager\Plugin.cs" />
+    <Compile Include="FormAttributeManager\UserControls\AttributeSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormAttributeManager\UserControls\AttributeSelector.Designer.cs">
+      <DependentUpon>AttributeSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormLibrariesManager\AppCode\FormManager.cs" />
     <Compile Include="FormLibrariesManager\AppCode\ListViewDelegates.cs" />
     <Compile Include="FormLibrariesManager\AppCode\ListViewItemComparer.cs" />
@@ -103,10 +137,20 @@
     <Compile Include="FormParameterManager\Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="FormAttributeManager\" />
-  </ItemGroup>
-  <ItemGroup>
+    <EmbeddedResource Include="FormAttributeManager\Forms\ReferenceAttributeSelector.resx">
+      <DependentUpon>ReferenceAttributeSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAttributeManager\Forms\UpdateLabelDialog.resx">
+      <DependentUpon>UpdateLabelDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAttributeManager\MainControl.resx">
+      <DependentUpon>MainControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAttributeManager\UserControls\AttributeSelector.resx">
+      <DependentUpon>AttributeSelector.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormLibrariesManager\Forms\ScriptsOrderDialog.resx">
       <DependentUpon>ScriptsOrderDialog.cs</DependentUpon>
     </EmbeddedResource>
