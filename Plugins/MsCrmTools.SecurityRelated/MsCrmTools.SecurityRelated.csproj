@@ -69,6 +69,34 @@
       <DependentUpon>PrivDiscover.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoleUpdater\Controls\PrivilegeLevelSelectionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RoleUpdater\Controls\PrivilegeLevelSelectionControl.Designer.cs">
+      <DependentUpon>PrivilegeLevelSelectionControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RoleUpdater\Controls\RoleSelectionControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RoleUpdater\Controls\RoleSelectionControl.Designer.cs">
+      <DependentUpon>RoleSelectionControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RoleUpdater\DelegatesHelpers\CommonDelegates.cs" />
+    <Compile Include="RoleUpdater\DelegatesHelpers\ListViewDelegates.cs" />
+    <Compile Include="RoleUpdater\ListViewGroupHeaderSorter.cs" />
+    <Compile Include="RoleUpdater\ListViewGroupSorter.cs" />
+    <Compile Include="RoleUpdater\ListViewItemComparer.cs" />
+    <Compile Include="RoleUpdater\MetadataHelper.cs" />
+    <Compile Include="RoleUpdater\Plugin.cs" />
+    <Compile Include="RoleUpdater\PrivilegeAction.cs" />
+    <Compile Include="RoleUpdater\RoleManager.cs" />
+    <Compile Include="RoleUpdater\RoleUpdater.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RoleUpdater\RoleUpdater.Designer.cs">
+      <DependentUpon>RoleUpdater.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RoleUpdater\UpdateSettings.cs" />
     <Compile Include="UserRolesManager\AppCode\ListViewItemComparer.cs" />
     <Compile Include="UserRolesManager\AppCode\QueryHelper.cs" />
     <Compile Include="UserRolesManager\AppCode\RoleAction.cs" />
@@ -96,12 +124,19 @@
       <DependentUpon>RoleSelector.cs</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RoleUpdater\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="PrivDiscover\PrivDiscover.resx">
       <DependentUpon>PrivDiscover.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RoleUpdater\Controls\PrivilegeLevelSelectionControl.resx">
+      <DependentUpon>PrivilegeLevelSelectionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RoleUpdater\Controls\RoleSelectionControl.resx">
+      <DependentUpon>RoleSelectionControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RoleUpdater\RoleUpdater.resx">
+      <DependentUpon>RoleUpdater.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserRolesManager\MainControl.resx">
       <DependentUpon>MainControl.cs</DependentUpon>
