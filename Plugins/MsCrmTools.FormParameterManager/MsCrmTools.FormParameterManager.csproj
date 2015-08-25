@@ -76,40 +76,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppCode\CrmForm.cs" />
-    <Compile Include="AppCode\CrmSolution.cs" />
-    <Compile Include="AppCode\FormParameter.cs" />
-    <Compile Include="AppCode\ListViewItemComparer.cs" />
-    <Compile Include="Forms\ParameterForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\ParameterForm.Designer.cs">
-      <DependentUpon>ParameterForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="MainControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MainControl.Designer.cs">
-      <DependentUpon>MainControl.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\ParameterForm.resx">
-      <DependentUpon>ParameterForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainControl.resx">
-      <DependentUpon>MainControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -136,7 +113,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

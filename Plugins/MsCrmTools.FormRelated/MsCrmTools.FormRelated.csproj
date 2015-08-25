@@ -40,12 +40,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormParameterManager\AppCode\CrmForm.cs" />
+    <Compile Include="FormParameterManager\AppCode\CrmSolution.cs" />
+    <Compile Include="FormParameterManager\AppCode\FormParameter.cs" />
+    <Compile Include="FormParameterManager\AppCode\ListViewItemComparer.cs" />
+    <Compile Include="FormParameterManager\Forms\ParameterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormParameterManager\Forms\ParameterForm.Designer.cs">
+      <DependentUpon>ParameterForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormParameterManager\MainControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormParameterManager\MainControl.Designer.cs">
+      <DependentUpon>MainControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormParameterManager\Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="FormAttributeManager\" />
     <Folder Include="FormLibrariesManager\" />
-    <Folder Include="FormParameterManager\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FormParameterManager\Forms\ParameterForm.resx">
+      <DependentUpon>ParameterForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormParameterManager\MainControl.resx">
+      <DependentUpon>MainControl.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
