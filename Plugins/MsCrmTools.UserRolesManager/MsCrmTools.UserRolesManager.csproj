@@ -72,37 +72,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppCode\ListViewItemComparer.cs" />
-    <Compile Include="AppCode\QueryHelper.cs" />
-    <Compile Include="AppCode\RoleAction.cs" />
-    <Compile Include="AppCode\RoleManager.cs" />
-    <Compile Include="AppCode\SystemUserManager.cs" />
-    <Compile Include="AppCode\ViewItem.cs" />
-    <Compile Include="AppCode\ViewManager.cs" />
-    <Compile Include="MainControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MainControl.Designer.cs">
-      <DependentUpon>MainControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\RoleSelector.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\RoleSelector.Designer.cs">
-      <DependentUpon>RoleSelector.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\PrincipalSelector.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\PrincipalSelector.Designer.cs">
-      <DependentUpon>PrincipalSelector.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -124,24 +98,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MainControl.resx">
-      <DependentUpon>MainControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\RoleSelector.resx">
-      <DependentUpon>RoleSelector.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\PrincipalSelector.resx">
-      <DependentUpon>PrincipalSelector.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
