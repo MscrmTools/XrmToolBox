@@ -34,6 +34,9 @@
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
       <HintPath>..\..\Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Xrm.Client">
+      <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Client.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
       <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
@@ -42,16 +45,47 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PrivDiscover\AppCode\CommonDelegates.cs" />
+    <Compile Include="PrivDiscover\AppCode\ListViewDelegates.cs" />
+    <Compile Include="PrivDiscover\AppCode\ListViewGroupHeaderSorter.cs" />
+    <Compile Include="PrivDiscover\AppCode\ListViewGroupSorter.cs" />
+    <Compile Include="PrivDiscover\AppCode\ListViewItemComparer.cs" />
+    <Compile Include="PrivDiscover\AppCode\MetadataManager.cs" />
+    <Compile Include="PrivDiscover\AppCode\Privilege.cs" />
+    <Compile Include="PrivDiscover\AppCode\RolesManager.cs" />
+    <Compile Include="PrivDiscover\AppCode\SecurityRole.cs" />
+    <Compile Include="PrivDiscover\Plugin.cs" />
+    <Compile Include="PrivDiscover\PrivDiscover.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PrivDiscover\PrivDiscover.Designer.cs">
+      <DependentUpon>PrivDiscover.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="PrivDiscover\" />
     <Folder Include="RoleUpdater\" />
     <Folder Include="UserRolesManager\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="PrivDiscover\PrivDiscover.resx">
+      <DependentUpon>PrivDiscover.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\XrmToolBox.Extensibility\XrmToolBox.Extensibility.csproj">
+      <Project>{df77aea3-43f7-403c-91af-3023a3bb06ec}</Project>
+      <Name>XrmToolBox.Extensibility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\XrmToolBox\XrmToolBox.csproj">
+      <Project>{328d55be-8b9a-4087-a5c2-9fbaf623f54b}</Project>
+      <Name>XrmToolBox</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
