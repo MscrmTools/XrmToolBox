@@ -53,6 +53,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FormLibrariesManager\AppCode\FormManager.cs" />
+    <Compile Include="FormLibrariesManager\AppCode\ListViewDelegates.cs" />
+    <Compile Include="FormLibrariesManager\AppCode\ListViewItemComparer.cs" />
+    <Compile Include="FormLibrariesManager\AppCode\ScriptManager.cs" />
+    <Compile Include="FormLibrariesManager\AppCode\TreeNodeSorter.cs" />
+    <Compile Include="FormLibrariesManager\AppCode\TreeViewDelegates.cs" />
+    <Compile Include="FormLibrariesManager\Forms\ScriptsOrderDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormLibrariesManager\Forms\ScriptsOrderDialog.Designer.cs">
+      <DependentUpon>ScriptsOrderDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormLibrariesManager\MainControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormLibrariesManager\MainControl.Designer.cs">
+      <DependentUpon>MainControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormLibrariesManager\Plugin.cs" />
+    <Compile Include="FormLibrariesManager\UserControls\CrmForms.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormLibrariesManager\UserControls\CrmForms.Designer.cs">
+      <DependentUpon>CrmForms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormLibrariesManager\UserControls\CrmScriptsTreeView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormLibrariesManager\UserControls\CrmScriptsTreeView.Designer.cs">
+      <DependentUpon>CrmScriptsTreeView.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormParameterManager\AppCode\CrmForm.cs" />
     <Compile Include="FormParameterManager\AppCode\CrmSolution.cs" />
     <Compile Include="FormParameterManager\AppCode\FormParameter.cs" />
@@ -74,9 +105,20 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="FormAttributeManager\" />
-    <Folder Include="FormLibrariesManager\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormLibrariesManager\Forms\ScriptsOrderDialog.resx">
+      <DependentUpon>ScriptsOrderDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLibrariesManager\MainControl.resx">
+      <DependentUpon>MainControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLibrariesManager\UserControls\CrmForms.resx">
+      <DependentUpon>CrmForms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLibrariesManager\UserControls\CrmScriptsTreeView.resx">
+      <DependentUpon>CrmScriptsTreeView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormParameterManager\Forms\ParameterForm.resx">
       <DependentUpon>ParameterForm.cs</DependentUpon>
     </EmbeddedResource>
