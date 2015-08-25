@@ -288,6 +288,55 @@ namespace McTools.Xrm.Connection.WinForms
             //}
         }
 
+        private void TbServerUrlLeave(object sender, EventArgs e)
+        {
+            var urlIsEmpty = String.IsNullOrWhiteSpace(tbServerUrl.Text);
+            ToggleShowUrlDetails(urlIsEmpty);
+            if (urlIsEmpty)
+            {
+                return;
+            }
+
+            Uri uri;
+            try
+            {
+                uri = new Uri(tbServerUrl.Text.Trim());
+            }
+            catch (UriFormatException ufe)
+            {
+                var message = String.Format("{0} Please correct the URL or clear it and complete details manually.", ufe.Message);
+                MessageBox.Show(this, message, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (uri.Host.ToLower().EndsWith(".dynamics.com"))
+            {
+                cbUseOnline.Checked = true;
+                return;
+            }
+            else
+            {
+                cbUseOnline.Checked = false;
+            }
+
+            cbUseSsl.Checked = uri.Scheme == "https";
+            tbServerName.Text = uri.Host;
+            tbServerPort.Text = uri.Port.ToString();
+            ToggleShowUrlDetails(false);   // Reset this as cbUseOnline.Checked can change visibility
+        }
+
+        private void ToggleShowUrlDetails(bool showDetails)
+        {
+            cbUseSsl.Enabled =
+            cbUseIfd.Enabled =
+            cbUseOnline.Enabled =
+            cbUseOSDP.Enabled =
+            cbbOnlineEnv.Enabled =
+            tbServerName.Enabled =
+            tbServerPort.Enabled =
+            showDetails;
+        }
+
         private void CbUseIfdCheckedChanged(object sender, EventArgs e)
         {
             if (cbUseIfd.Checked)
