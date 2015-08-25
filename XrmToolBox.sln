@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox", "XrmToolBox\XrmToolBox.csproj", "{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console.Test", "Console.Test\Console.Test.csproj", "{7D7B8DFB-A4FC-4249-BE09-666039D53375}"
@@ -86,6 +84,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.FlsBulkUpdater", "Plugins\MsCrmTools.FlsBulkUpdater\MsCrmTools.FlsBulkUpdater.csproj", "{5244E9BE-820A-4613-8ACC-ADC858B83C26}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox.Extensibility", "XrmToolBox.Extensibility\XrmToolBox.Extensibility.csproj", "{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.FormRelated", "Plugins\MsCrmTools.FormRelated\MsCrmTools.FormRelated.csproj", "{28F6D950-BC28-4067-98AF-5D6AE70E90A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -630,6 +630,21 @@ Global
 		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Release|x86.ActiveCfg = Release|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug Without GemBox|Any CPU.ActiveCfg = Debug|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug Without GemBox|Any CPU.Build.0 = Debug|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug Without GemBox|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug Without GemBox|Mixed Platforms.Build.0 = Debug|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug Without GemBox|x86.ActiveCfg = Debug|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -668,6 +683,7 @@ Global
 		{A217441C-677F-43C3-8BD8-FD27586E82AC} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{236F1329-C748-4C01-948B-98AE9EA89086} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{5244E9BE-820A-4613-8ACC-ADC858B83C26} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		BuildVersion_ConfigurationName = Release
