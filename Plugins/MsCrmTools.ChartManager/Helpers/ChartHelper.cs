@@ -147,7 +147,7 @@ namespace MsCrmTools.ChartManager.Helpers
                 {
                     if (!chart.Overwrite)
                     {
-                        chart.Entity["name"] = $"{chart.Entity.GetAttributeValue<string>("name")}_{DateTime.Now.ToShortTimeString()}";
+                        chart.Entity["name"] = string.Format("{0}_{1}", chart.Entity.GetAttributeValue<string>("name"), DateTime.Now.ToShortTimeString());
                         chart.Entity.Attributes.Remove("savedqueryvisualizationid");
                         chart.Entity.Id = Guid.Empty;
                         

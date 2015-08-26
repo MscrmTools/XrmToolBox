@@ -20,7 +20,10 @@ namespace MsCrmTools.ChartManager
 		private ListViewItem[] listViewItemsCache;
         private string currentFolder;
 
-        public string HelpUrl => "https://github.com/MscrmTools/XrmToolBox/wiki/Chart-Manager";
+        public string HelpUrl
+        {
+            get { return "https://github.com/MscrmTools/XrmToolBox/wiki/Chart-Manager"; }
+        }
 
         #region Constructor
 
@@ -251,8 +254,7 @@ namespace MsCrmTools.ChartManager
 
                                 Service.Execute(new PublishXmlRequest
                                 {
-                                    ParameterXml = $@"<importexportxml><entities>{ String.Join("",results.Select(r => $@"<entity>{r.Entity.GetAttributeValue<string>("primaryentitytypecode")}</entity>"))
-                            }</entities><nodes/><securityroles/><settings/><workflows/></importexportxml>"
+                                    ParameterXml = string.Format("<importexportxml><entities>{0}</entities><nodes/><securityroles/><settings/><workflows/></importexportxml>", String.Join(")",results.Select(r => string.Format("<entity>{0}</entity>",r.Entity.GetAttributeValue<string>("primaryentitytypecode")))))
                                 });
                             },
                             evt2 =>

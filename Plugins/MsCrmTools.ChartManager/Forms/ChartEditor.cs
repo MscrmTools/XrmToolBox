@@ -65,8 +65,7 @@ namespace MsCrmTools.ChartManager.Forms
 
                 service.Execute(new PublishXmlRequest
                 {
-                    ParameterXml = $@"<importexportxml><entities><entity>{chart.GetAttributeValue<string>("primaryentitytypecode")
-                            }</entity></entities><nodes/><securityroles/><settings/><workflows/></importexportxml>"
+                    ParameterXml = string.Format("<importexportxml><entities><entity>{0}</entity></entities><nodes/><securityroles/><settings/><workflows/></importexportxml>", chart.GetAttributeValue<string>("primaryentitytypecode"))
                 });
             };
             worker.ProgressChanged += (w, evt) =>
