@@ -106,6 +106,11 @@ namespace XrmToolBox.Extensibility
 
         private readonly Worker _worker = new Worker();
 
+        public void WorkAsync(string message, Action<DoWorkEventArgs> work, object argument = null, int messageWidth = 340, int messageHeight = 150)
+        {
+            _worker.WorkAsync(this, message, work, (x) => { }, argument, messageWidth, messageHeight);
+        }
+
         public void WorkAsync(string message, Action<DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, object argument = null, int messageWidth = 340, int messageHeight = 150)
         {
             _worker.WorkAsync(this, message, work, callback, argument, messageWidth, messageHeight);
