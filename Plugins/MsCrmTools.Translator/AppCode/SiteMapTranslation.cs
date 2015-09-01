@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Security.Policy;
 using System.Xml;
-using Microsoft.Crm.Sdk;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
-
 #if NO_GEMBOX
 using OfficeOpenXml;
 #else
@@ -462,12 +457,14 @@ namespace MsCrmTools.Translator.AppCode
                 }
 
                 var columnIndex = 3;
+        
                 while (row.Cells[columnIndex].Value != null)
                 {
-                    if (row.Cells[1].Value.ToString() == "Title")
+                    if (row.Cells[2].Value.ToString() == "Title")
                     {
                         UpdateXmlNode(groupNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             row.Cells[columnIndex].Value.ToString());
+
                     }
                     else
                     {
@@ -478,7 +475,6 @@ namespace MsCrmTools.Translator.AppCode
                 }
 
             }
-
             siteMap["sitemapxml"] = siteMapDoc.OuterXml;
         }
 
@@ -509,7 +505,7 @@ namespace MsCrmTools.Translator.AppCode
                 var columnIndex = 4;
                 while (row.Cells[columnIndex].Value != null)
                 {
-                    if (row.Cells[1].Value.ToString() == "Title")
+                    if (row.Cells[3].Value.ToString() == "Title")
                     {
                         UpdateXmlNode(subAreaNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             row.Cells[columnIndex].Value.ToString());
@@ -522,7 +518,6 @@ namespace MsCrmTools.Translator.AppCode
                     columnIndex++;
                 }
             }
-
             siteMap["sitemapxml"] = siteMapDoc.OuterXml;
         }
 #endif
@@ -576,20 +571,29 @@ namespace MsCrmTools.Translator.AppCode
         private void UpdateXmlNode(XmlNode node,string collectionName, string itemName, string lcid, string description)
         {
             XmlNode refNode;
-            switch (node.Name)
+            if (collectionName == "Titles" && node.FirstChild != null)
             {
-                case "Area":
-                    refNode = node.SelectSingleNode("Group");
-                    break;
-                case "Group":
-                    refNode = node.SelectSingleNode("SubArea");
-                    break;
-                case "SubArea":
-                    refNode = node.SelectSingleNode("Privilege");
-                    break;
-                default:
-                    throw new Exception("Unexpected node name");
+                //Title should allways be first elemnt
+                refNode = node.FirstChild;
             }
+            else
+            {
+                switch (node.Name)
+                {
+                    case "Area":
+                        refNode = node.SelectSingleNode("Group");
+                        break;
+                    case "Group":
+                        refNode = node.SelectSingleNode("SubArea");
+                        break;
+                    case "SubArea":
+                        refNode = node.SelectSingleNode("Privilege");
+                        break;
+                    default:
+                        throw new Exception("Unexpected node name");
+                }
+            }
+           
 
             var labelsNode = node.SelectSingleNode(collectionName);
             if (labelsNode == null)
