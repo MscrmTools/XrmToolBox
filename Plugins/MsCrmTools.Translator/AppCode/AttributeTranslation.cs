@@ -226,7 +226,11 @@ namespace MsCrmTools.Translator.AppCode
 
                     while (row.Cells[columnIndex].Value != null)
                     {
-                        amd.Amd.DisplayName.LocalizedLabels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+                        int languageCode = int.Parse(sheet.Cells[0, columnIndex].Value.ToString());
+                        string label = row.Cells[columnIndex].Value.ToString();
+
+                        amd.Amd.DisplayName.LocalizedLabels.ToList().RemoveAll(item => item.LanguageCode == languageCode);
+                        amd.Amd.DisplayName.LocalizedLabels.Add(new LocalizedLabel(label, languageCode));
 
                         columnIndex++;
                     }
@@ -237,7 +241,11 @@ namespace MsCrmTools.Translator.AppCode
 
                     while (row.Cells[columnIndex].Value != null)
                     {
-                        amd.Amd.Description.LocalizedLabels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+                        int languageCode = int.Parse(sheet.Cells[0, columnIndex].Value.ToString());
+                        string label = row.Cells[columnIndex].Value.ToString();
+
+                        amd.Amd.DisplayName.LocalizedLabels.ToList().RemoveAll(item => item.LanguageCode == languageCode);
+                        amd.Amd.Description.LocalizedLabels.Add(new LocalizedLabel(label, languageCode));
 
                         columnIndex++;
                     }
