@@ -1,17 +1,10 @@
-﻿using System.Text;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Security.Policy;
 using System.Xml;
-using Microsoft.Crm.Sdk;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
-
 #if NO_GEMBOX
 using OfficeOpenXml;
 #else
@@ -471,6 +464,7 @@ namespace MsCrmTools.Translator.AppCode
                     {
                         UpdateXmlNode(groupNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             row.Cells[columnIndex].Value.ToString());
+
                     }
                     else
                     {
@@ -481,6 +475,7 @@ namespace MsCrmTools.Translator.AppCode
                 }
 
             }
+            siteMap["sitemapxml"] = siteMapDoc.OuterXml;
         }
 
         public void PrepareSubAreas(ExcelWorksheet sheet, IOrganizationService service)
@@ -523,7 +518,6 @@ namespace MsCrmTools.Translator.AppCode
                     columnIndex++;
                 }
             }
-
             siteMap["sitemapxml"] = siteMapDoc.OuterXml;
         }
 #endif
