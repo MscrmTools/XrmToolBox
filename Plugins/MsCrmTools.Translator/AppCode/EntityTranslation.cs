@@ -226,7 +226,11 @@ namespace MsCrmTools.Translator.AppCode
 
                     while (row.Cells[columnIndex].Value != null)
                     {
-                        emd.DisplayName.LocalizedLabels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+                        int languageCode = int.Parse(sheet.Cells[0, columnIndex].Value.ToString());
+                        string label = row.Cells[columnIndex].Value.ToString();
+
+                        emd.DisplayName.LocalizedLabels.ToList().RemoveAll(item => item.LanguageCode == languageCode);
+                        emd.DisplayName.LocalizedLabels.Add(new LocalizedLabel(label, languageCode));
 
                         columnIndex++;
                     }
@@ -238,7 +242,11 @@ namespace MsCrmTools.Translator.AppCode
 
                     while (row.Cells[columnIndex].Value != null)
                     {
-                        emd.DisplayCollectionName.LocalizedLabels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+                        int languageCode = int.Parse(sheet.Cells[0, columnIndex].Value.ToString());
+                        string label = row.Cells[columnIndex].Value.ToString();
+
+                        emd.DisplayCollectionName.LocalizedLabels.ToList().RemoveAll(item => item.LanguageCode == languageCode);
+                        emd.DisplayCollectionName.LocalizedLabels.Add(new LocalizedLabel(label, languageCode));
 
                         columnIndex++;
                     }
@@ -250,16 +258,26 @@ namespace MsCrmTools.Translator.AppCode
 
                     while (row.Cells[columnIndex].Value != null)
                     {
-                        emd.Description.LocalizedLabels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+                        int languageCode = int.Parse(sheet.Cells[0, columnIndex].Value.ToString());
+                        string label = row.Cells[columnIndex].Value.ToString();
+
+                        emd.Description.LocalizedLabels.ToList().RemoveAll(item => item.LanguageCode == languageCode);
+                        emd.Description.LocalizedLabels.Add(new LocalizedLabel(label, languageCode));
 
                         columnIndex++;
                     }
                 }
             }
 
-            foreach (var emd in emds.Where(e=>e.IsRenameable.Value))
+            foreach (var emd in emds.Where(e => e.IsRenameable.Value))
             {
-                var request = new UpdateEntityRequest {Entity = emd};
+                var entityUpdate = new EntityMetadata();
+                entityUpdate.LogicalName = emd.LogicalName;
+                entityUpdate.DisplayName = emd.DisplayName;
+                entityUpdate.Description = emd.Description;
+                entityUpdate.DisplayCollectionName = emd.DisplayCollectionName;
+
+                var request = new UpdateEntityRequest {Entity = entityUpdate};
                 service.Execute(request);
             }
         }
