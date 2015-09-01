@@ -622,7 +622,6 @@ namespace MsCrmTools.Translator.AppCode
                 labelsNode = node.OwnerDocument.CreateElement(collectionName);
                 if (refNode != null)
                 {
-                    
                     node.InsertBefore(labelsNode, refNode);
                 }
                 else
