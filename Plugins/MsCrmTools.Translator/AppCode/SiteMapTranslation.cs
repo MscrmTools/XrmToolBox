@@ -22,7 +22,7 @@ namespace MsCrmTools.Translator.AppCode
 {
     public class SiteMapTranslation
     {
-        public Entity siteMap;
+        private Entity siteMap;
 
         /// <summary>
         /// 
@@ -442,7 +442,6 @@ namespace MsCrmTools.Translator.AppCode
 
         public void PrepareGroups(ExcelWorksheet sheet, IOrganizationService service)
         {
-            StringBuilder log = new StringBuilder();
             if (siteMap == null)
             {
                 siteMap = GetSiteMap(service);
@@ -468,15 +467,10 @@ namespace MsCrmTools.Translator.AppCode
         
                 while (row.Cells[columnIndex].Value != null)
                 {
-                    log.Append("row.Cells[columnIndex].Value :   " + row.Cells[columnIndex].Value);
-                    log.Append("row.Cells[1].Value.ToString() :   " + row.Cells[1].Value.ToString());
-                    log.Append("row.Cells[2].Value.ToString() :   " + row.Cells[2].Value.ToString());
-
                     if (row.Cells[2].Value.ToString() == "Title")
                     {
                         UpdateXmlNode(groupNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             row.Cells[columnIndex].Value.ToString());
-
                     }
                     else
                     {
@@ -487,15 +481,6 @@ namespace MsCrmTools.Translator.AppCode
                 }
 
             }
-
-            log.AppendLine();
-            log.AppendLine();
-            log.Append(siteMapDoc.OuterXml);
-            siteMap["sitemapxml"] = siteMapDoc.OuterXml;
-
-            var logFile = new StreamWriter("c:\\group_log.txt");
-            logFile.WriteLine(log.ToString());
-            logFile.Close();
         }
 
         public void PrepareSubAreas(ExcelWorksheet sheet, IOrganizationService service)
