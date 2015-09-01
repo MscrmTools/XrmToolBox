@@ -1,7 +1,9 @@
-﻿using System;
+﻿using System.Text;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Policy;
 using System.Xml;
@@ -20,7 +22,7 @@ namespace MsCrmTools.Translator.AppCode
 {
     public class SiteMapTranslation
     {
-        private Entity siteMap;
+        public Entity siteMap;
 
         /// <summary>
         /// 
@@ -440,6 +442,7 @@ namespace MsCrmTools.Translator.AppCode
 
         public void PrepareGroups(ExcelWorksheet sheet, IOrganizationService service)
         {
+            StringBuilder log = new StringBuilder();
             if (siteMap == null)
             {
                 siteMap = GetSiteMap(service);
@@ -462,12 +465,18 @@ namespace MsCrmTools.Translator.AppCode
                 }
 
                 var columnIndex = 3;
+        
                 while (row.Cells[columnIndex].Value != null)
                 {
-                    if (row.Cells[1].Value.ToString() == "Title")
+                    log.Append("row.Cells[columnIndex].Value :   " + row.Cells[columnIndex].Value);
+                    log.Append("row.Cells[1].Value.ToString() :   " + row.Cells[1].Value.ToString());
+                    log.Append("row.Cells[2].Value.ToString() :   " + row.Cells[2].Value.ToString());
+
+                    if (row.Cells[2].Value.ToString() == "Title")
                     {
                         UpdateXmlNode(groupNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             row.Cells[columnIndex].Value.ToString());
+
                     }
                     else
                     {
@@ -479,7 +488,14 @@ namespace MsCrmTools.Translator.AppCode
 
             }
 
+            log.AppendLine();
+            log.AppendLine();
+            log.Append(siteMapDoc.OuterXml);
             siteMap["sitemapxml"] = siteMapDoc.OuterXml;
+
+            var logFile = new StreamWriter("c:\\group_log.txt");
+            logFile.WriteLine(log.ToString());
+            logFile.Close();
         }
 
         public void PrepareSubAreas(ExcelWorksheet sheet, IOrganizationService service)
@@ -509,7 +525,7 @@ namespace MsCrmTools.Translator.AppCode
                 var columnIndex = 4;
                 while (row.Cells[columnIndex].Value != null)
                 {
-                    if (row.Cells[1].Value.ToString() == "Title")
+                    if (row.Cells[3].Value.ToString() == "Title")
                     {
                         UpdateXmlNode(subAreaNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             row.Cells[columnIndex].Value.ToString());
@@ -576,20 +592,29 @@ namespace MsCrmTools.Translator.AppCode
         private void UpdateXmlNode(XmlNode node,string collectionName, string itemName, string lcid, string description)
         {
             XmlNode refNode;
-            switch (node.Name)
+            if (collectionName == "Titles" && node.FirstChild != null)
             {
-                case "Area":
-                    refNode = node.SelectSingleNode("Group");
-                    break;
-                case "Group":
-                    refNode = node.SelectSingleNode("SubArea");
-                    break;
-                case "SubArea":
-                    refNode = node.SelectSingleNode("Privilege");
-                    break;
-                default:
-                    throw new Exception("Unexpected node name");
+                //Title should allways be first elemnt
+                refNode = node.FirstChild;
             }
+            else
+            {
+                switch (node.Name)
+                {
+                    case "Area":
+                        refNode = node.SelectSingleNode("Group");
+                        break;
+                    case "Group":
+                        refNode = node.SelectSingleNode("SubArea");
+                        break;
+                    case "SubArea":
+                        refNode = node.SelectSingleNode("Privilege");
+                        break;
+                    default:
+                        throw new Exception("Unexpected node name");
+                }
+            }
+           
 
             var labelsNode = node.SelectSingleNode(collectionName);
             if (labelsNode == null)
@@ -597,6 +622,7 @@ namespace MsCrmTools.Translator.AppCode
                 labelsNode = node.OwnerDocument.CreateElement(collectionName);
                 if (refNode != null)
                 {
+                    
                     node.InsertBefore(labelsNode, refNode);
                 }
                 else
