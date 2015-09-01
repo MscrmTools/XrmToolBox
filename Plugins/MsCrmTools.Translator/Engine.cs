@@ -24,9 +24,9 @@ namespace MsCrmTools.Translator
         {
             // The license key to use Gembox.Spreadsheet is not included in 
             // this source code. To obtain a license key, visit Gembox website
-            //var key = new GemBox.LicenseKey.Key();
-           // string excelKey = key.ExcelKey37;
-            SpreadsheetInfo.SetLicense(); //Insert Key as String
+            var key = new GemBox.LicenseKey.Key();
+            string excelKey = key.ExcelKey37;
+            SpreadsheetInfo.SetLicense(excelKey);
         }
 #endif
 
