@@ -394,7 +394,6 @@ namespace MsCrmTools.Translator
                         st.PrepareSubAreas(sheet, service);
                         hasSiteMapContent = true;
                         break;
-
                 }
 
                 if (hasFormContent)
