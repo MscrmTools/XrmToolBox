@@ -1,20 +1,81 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
+using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
-#if NO_GEMBOX
-using OfficeOpenXml;
-#else
-using GemBox.Spreadsheet;
-#endif
-using Microsoft.Xrm.Sdk.Metadata;
 
 namespace MsCrmTools.Translator.AppCode
 {
-    class RelationshipNnTranslation
+    internal class RelationshipNnTranslation
     {
+        public void Import(ExcelWorksheet sheet, List<EntityMetadata> emds, IOrganizationService service)
+        {
+            var rmds = new List<ManyToManyRelationshipMetadata>();
+
+            var rowsCount = sheet.Dimension.Rows;
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                var rmd = rmds.FirstOrDefault(r => r.MetadataId == new Guid(ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString()));
+                if (rmd == null)
+                {
+                    var currentEntity = emds.FirstOrDefault(e => e.LogicalName == ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString());
+                    if (currentEntity == null)
+                    {
+                        var request = new RetrieveEntityRequest
+                        {
+                            LogicalName = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString(),
+                            EntityFilters = EntityFilters.Relationships
+                        };
+
+                        var response = ((RetrieveEntityResponse)service.Execute(request));
+                        currentEntity = response.EntityMetadata;
+
+                        emds.Add(currentEntity);
+                    }
+
+                    rmd = currentEntity.ManyToManyRelationships.FirstOrDefault(r => r.IntersectEntityName == ZeroBasedSheet.Cell(sheet, rowI, 2).Value.ToString());
+                    rmds.Add(rmd);
+                }
+
+                int columnIndex = 5;
+
+                if (ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString() == "Entity1")
+                {
+                    rmd.Entity1AssociatedMenuConfiguration.Label = new Label();
+
+                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    {
+                        rmd.Entity1AssociatedMenuConfiguration.Label.LocalizedLabels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+
+                        columnIndex++;
+                    }
+                }
+                else if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).ToString() == "Entity2")
+                {
+                    rmd.Entity2AssociatedMenuConfiguration.Label = new Label();
+
+                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    {
+                        rmd.Entity2AssociatedMenuConfiguration.Label.LocalizedLabels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+
+                        columnIndex++;
+                    }
+                }
+            }
+
+            foreach (var rmd in rmds)
+            {
+                var request = new UpdateRelationshipRequest
+                {
+                    Relationship = rmd,
+                };
+                service.Execute(request);
+            }
+        }
+
         internal void Export(List<EntityMetadata> entities, List<int> languages, ExcelWorksheet sheet)
         {
             var line = 1;
@@ -37,7 +98,6 @@ namespace MsCrmTools.Translator.AppCode
                     if ((!rel.Entity1AssociatedMenuConfiguration.Behavior.HasValue || rel.Entity1AssociatedMenuConfiguration.Behavior.Value != AssociatedMenuBehavior.UseLabel)
                         && (!rel.Entity2AssociatedMenuConfiguration.Behavior.HasValue || rel.Entity2AssociatedMenuConfiguration.Behavior.Value != AssociatedMenuBehavior.UseLabel))
                         continue;
-
 
                     // entity1Label
                     ZeroBasedSheet.Cell(sheet, line, cell++).Value = rel.Entity2LogicalName;
@@ -106,70 +166,6 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(sheet, i, j).Style);
                 }
-            }
-        }
-
-        public void Import(ExcelWorksheet sheet, List<EntityMetadata> emds, IOrganizationService service)
-        {
-            var rmds = new List<ManyToManyRelationshipMetadata>();
-
-            foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
-            {
-                var rmd = rmds.FirstOrDefault(r => r.MetadataId == new Guid(row.Cells[1].Value.ToString()));
-                if (rmd == null)
-                {
-                    var currentEntity = emds.FirstOrDefault(e => e.LogicalName == row.Cells[1].Value.ToString());
-                    if (currentEntity == null)
-                    {
-                        var request = new RetrieveEntityRequest
-                        {
-                            LogicalName = row.Cells[0].Value.ToString(),
-                            EntityFilters = EntityFilters.Relationships
-                        };
-
-                        var response = ((RetrieveEntityResponse)service.Execute(request));
-                        currentEntity = response.EntityMetadata;
-
-                        emds.Add(currentEntity);
-                    }
-
-                    rmd = currentEntity.ManyToManyRelationships.FirstOrDefault(r => r.IntersectEntityName == row.Cells[2].Value.ToString());
-                    rmds.Add(rmd);
-                }
-
-                int columnIndex = 5;
-
-                if (row.Cells[4].Value.ToString() == "Entity1")
-                {
-                    rmd.Entity1AssociatedMenuConfiguration.Label = new Label();
-
-                    while (row.Cells[columnIndex].Value != null)
-                    {
-                        rmd.Entity1AssociatedMenuConfiguration.Label.LocalizedLabels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
-
-                        columnIndex++;
-                    }
-                }
-                else if (row.Cells[4].Value.ToString() == "Entity2")
-                {
-                    rmd.Entity2AssociatedMenuConfiguration.Label = new Label();
-
-                    while (row.Cells[columnIndex].Value != null)
-                    {
-                        rmd.Entity2AssociatedMenuConfiguration.Label.LocalizedLabels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
-
-                        columnIndex++;
-                    }
-                }
-            }
-
-            foreach (var rmd in rmds)
-            {
-                var request = new UpdateRelationshipRequest
-                {
-                    Relationship = rmd,
-                };
-                service.Execute(request);
             }
         }
 

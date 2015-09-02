@@ -1,18 +1,11 @@
-﻿using System.Linq;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Text;
 using System.Xml;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
-
-#if NO_GEMBOX
-using OfficeOpenXml;
-#else
-using GemBox.Spreadsheet;
-#endif
 
 namespace MsCrmTools.Translator.AppCode
 {
@@ -20,7 +13,7 @@ namespace MsCrmTools.Translator.AppCode
     {
         public void Export(List<int> languages, ExcelWorksheet sheet, bool onlyUnmanaged, IOrganizationService service)
         {
-            var qe = new QueryByAttribute("ribbondiff") {ColumnSet = new ColumnSet(true)};
+            var qe = new QueryByAttribute("ribbondiff") { ColumnSet = new ColumnSet(true) };
 
             if (onlyUnmanaged)
             {
@@ -39,7 +32,7 @@ namespace MsCrmTools.Translator.AppCode
             var line = 1;
 
             AddHeader(sheet, languages);
-            
+
             foreach (var record in records.Entities)
             {
                 var cell = 0;
@@ -75,7 +68,6 @@ namespace MsCrmTools.Translator.AppCode
             }
         }
 
-#if NO_GEMBOX
         public void Import(ExcelWorksheet sheet, IOrganizationService service)
         {
             var rowsCount = sheet.Dimension.Rows;
@@ -103,33 +95,7 @@ namespace MsCrmTools.Translator.AppCode
                 service.Update(ribbonDiff);
             }
         }
-#else
-        public void Import(ExcelWorksheet sheet, IOrganizationService service)
-        {
-            foreach (ExcelRow row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
-            {
-                var xml = new StringBuilder(string.Format("<LocLabel Id=\"{0}\"><Titles>", row.Cells[2].Value));
 
-                var columnIndex = 3;
-
-                while (row.Cells[columnIndex].Value != null)
-                {
-                    xml.Append(string.Format("<Title description=\"{0}\" languagecode=\"{1}\"/>",
-                                             row.Cells[columnIndex].Value,
-                                             int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString())));
-
-                    columnIndex++;
-                }
-
-                xml.Append("</Titles></LocLabel>");
-
-                var ribbonDiff = new Entity("ribbondiff") {Id = new Guid(row.Cells[0].Value.ToString())};
-                ribbonDiff["rdx"] = xml.ToString();
-
-                service.Update(ribbonDiff);
-            }
-        }
-#endif
         private void AddHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
         {
             var cell = 0;
@@ -143,6 +109,5 @@ namespace MsCrmTools.Translator.AppCode
                 ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
             }
         }
-
     }
 }
