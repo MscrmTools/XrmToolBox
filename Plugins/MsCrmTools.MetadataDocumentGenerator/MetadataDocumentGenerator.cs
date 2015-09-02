@@ -3,14 +3,6 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Composition;
-using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Windows.Forms;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
@@ -19,8 +11,13 @@ using Microsoft.Xrm.Sdk.Query;
 using MsCrmTools.MetadataDocumentGenerator.Forms;
 using MsCrmTools.MetadataDocumentGenerator.Generation;
 using MsCrmTools.MetadataDocumentGenerator.Helper;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.MetadataDocumentGenerator
 {
@@ -30,9 +27,8 @@ namespace MsCrmTools.MetadataDocumentGenerator
 
         private List<EntityMetadata> emdCache;
 
-        private GenerationSettings settings;
-
         private bool loadSettingsFlag = false;
+        private GenerationSettings settings;
 
         #endregion Variables
 
@@ -55,13 +51,6 @@ namespace MsCrmTools.MetadataDocumentGenerator
         #endregion Constructor
 
         #region Methods
-
-        private void TsbConnectClick(object sender, EventArgs e)
-        {
-            SetWorkingState(true);
-
-            ExecuteMethod(LoadEntitiesAndLanguages);
-        }
 
         private void LoadEntitiesAndLanguages()
         {
@@ -98,7 +87,6 @@ namespace MsCrmTools.MetadataDocumentGenerator
                                               : "N/A";
                         var name = emd.LogicalName;
 
-
                         lvEntities.Items.Add(new ListViewItem
                         {
                             Text = displayName,
@@ -122,12 +110,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
 
                     SetWorkingState(false);
                 },
-                e=>SetWorkingMessage(e.UserState.ToString()));
-        }
-
-        private void TsbCloseClick(object sender, EventArgs e)
-        {
-            CloseTool();
+                e => SetWorkingMessage(e.UserState.ToString()));
         }
 
         private void SetWorkingState(bool isWorking)
@@ -142,71 +125,19 @@ namespace MsCrmTools.MetadataDocumentGenerator
             settingsToolStripDropDownButton.Enabled = !isWorking;
         }
 
+        private void TsbCloseClick(object sender, EventArgs e)
+        {
+            CloseTool();
+        }
+
+        private void TsbConnectClick(object sender, EventArgs e)
+        {
+            SetWorkingState(true);
+
+            ExecuteMethod(LoadEntitiesAndLanguages);
+        }
+
         #endregion Methods
-
-        private void CbbSelectionTypeSelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (settings == null || cbbSelectionType.SelectedIndex == (int)settings.AttributesSelection)
-                return;
-
-            if (settings.EntitiesToProceed.Count != 0)
-            {
-                if (MessageBox.Show(this,
-                                    "If you change selection type, all previous selected attributes or forms will be cleared from current selection. \r\n\r\nDo you want to continue?",
-                                    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
-                {
-                    cbbSelectionType.SelectedIndex = (int) settings.AttributesSelection;
-                    return;
-                }
-            }
-
-            foreach (var item in settings.EntitiesToProceed)
-            {
-                item.Attributes.Clear();
-                item.Forms.Clear();
-            }
-
-            DisplaySubSelectionComponents();
-        }
-
-        private void DisplaySubSelectionComponents()
-        {
-           
-            lvAttributes.Items.Clear();
-            lvForms.Items.Clear();
-
-            settings.AttributesSelection = (AttributeSelectionOption) cbbSelectionType.SelectedIndex;
-
-            switch (cbbSelectionType.SelectedIndex)
-            {
-                case (int) AttributeSelectionOption.AllAttributes:
-                case (int) AttributeSelectionOption.AttributesOptionSet:
-                    {
-                        lvAttributes.Visible = false;
-                        lvForms.Visible = false;
-                        lblSubSelect.Visible = false;
-                    }
-                    break;
-                case (int)AttributeSelectionOption.AttributesOnForm:
-                case (int)AttributeSelectionOption.AttributesNotOnForm:
-                    {
-                        lvAttributes.Visible = false;
-                        lvForms.Visible = true;
-                        lblSubSelect.Visible = true;
-                        lblSubSelect.Text = "Forms";
-                    }
-                    break;
-                case (int) AttributeSelectionOption.AttributeManualySelected:
-                    {
-                        lvAttributes.Visible = true;
-                        lvForms.Visible = false;
-                        lblSubSelect.Visible = true;
-                        lblSubSelect.Text = "Attributes";
-                        LvEntitiesSelectedIndexChanged(null, null);
-                    }
-                    break;
-            }
-        }
 
         private void BtnBrowseFilePathClick(object sender, EventArgs e)
         {
@@ -225,6 +156,145 @@ namespace MsCrmTools.MetadataDocumentGenerator
             }
         }
 
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            var pSelector = new PublisherSelector(Service, txtPrefixes.Text);
+            if (pSelector.ShowDialog(this) == DialogResult.OK)
+            {
+                txtPrefixes.Text = string.Join(";", pSelector.SelectedPrefixes);
+            }
+        }
+
+        private void CbbOutputTypeSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbbOutputType.SelectedIndex == 1)
+            {
+                MessageBox.Show(this,
+                    "Word document generation is no more available because we removed usage of commercial document generation product. As a workaround, please generate an Excel file and copy/paste result in your Word Document\r\n\r\nIf you are a developer and have skills on Word document generation, please contact us through XrmToolBox Github repository",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cbbOutputType.SelectedIndex = 0;
+                return;
+            }
+
+            txtOutputFilePath.Text = string.Empty;
+        }
+
+        private void CbbSelectionTypeSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (settings == null || cbbSelectionType.SelectedIndex == (int)settings.AttributesSelection)
+                return;
+
+            if (settings.EntitiesToProceed.Count != 0)
+            {
+                if (MessageBox.Show(this,
+                                    "If you change selection type, all previous selected attributes or forms will be cleared from current selection. \r\n\r\nDo you want to continue?",
+                                    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                {
+                    cbbSelectionType.SelectedIndex = (int)settings.AttributesSelection;
+                    return;
+                }
+            }
+
+            foreach (var item in settings.EntitiesToProceed)
+            {
+                item.Attributes.Clear();
+                item.Forms.Clear();
+            }
+
+            DisplaySubSelectionComponents();
+        }
+
+        private void chkFilterByPrefix_CheckedChanged(object sender, EventArgs e)
+        {
+            btnEdit.Enabled = chkFilterByPrefix.Checked;
+            txtPrefixes.Enabled = chkFilterByPrefix.Checked;
+        }
+
+        private void chkSelectAll_CheckedChanged(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in lvEntities.Items)
+            {
+                item.Checked = chkSelectAll.Checked;
+            }
+        }
+
+        private void DisplaySubSelectionComponents()
+        {
+            lvAttributes.Items.Clear();
+            lvForms.Items.Clear();
+
+            settings.AttributesSelection = (AttributeSelectionOption)cbbSelectionType.SelectedIndex;
+
+            switch (cbbSelectionType.SelectedIndex)
+            {
+                case (int)AttributeSelectionOption.AllAttributes:
+                case (int)AttributeSelectionOption.AttributesOptionSet:
+                    {
+                        lvAttributes.Visible = false;
+                        lvForms.Visible = false;
+                        lblSubSelect.Visible = false;
+                    }
+                    break;
+
+                case (int)AttributeSelectionOption.AttributesOnForm:
+                case (int)AttributeSelectionOption.AttributesNotOnForm:
+                    {
+                        lvAttributes.Visible = false;
+                        lvForms.Visible = true;
+                        lblSubSelect.Visible = true;
+                        lblSubSelect.Text = "Forms";
+                    }
+                    break;
+
+                case (int)AttributeSelectionOption.AttributeManualySelected:
+                    {
+                        lvAttributes.Visible = true;
+                        lvForms.Visible = false;
+                        lblSubSelect.Visible = true;
+                        lblSubSelect.Text = "Attributes";
+                        LvEntitiesSelectedIndexChanged(null, null);
+                    }
+                    break;
+            }
+        }
+
+        private void ListViewsColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            var lv = (ListView)sender;
+
+            lv.Sorting = lv.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            lv.ListViewItemSorter = new ListViewItemComparer(e.Column, lv.Sorting);
+            lv.Sort();
+        }
+
+        private void LvAttributesItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            if (lvEntities.SelectedItems.Count == 0)
+                return;
+
+            var currentEntityName = lvEntities.SelectedItems[0].Tag.ToString();
+
+            var currentEntity = settings.EntitiesToProceed.FirstOrDefault(x => x.Name == currentEntityName);
+            if (currentEntity == null)
+            {
+                lvEntities.SelectedItems[0].Checked = true;
+                currentEntity = settings.EntitiesToProceed.FirstOrDefault(x => x.Name == currentEntityName);
+            }
+
+            if (e.Item.Checked)
+            {
+                currentEntity.Attributes.Add(lvAttributes.CheckedItems[0].Tag.ToString());
+            }
+            else
+            {
+                var item = currentEntity.Attributes.FirstOrDefault(x => x == e.Item.Tag.ToString());
+                if (item != null)
+                {
+                    currentEntity.Attributes.Remove(item);
+                }
+            }
+        }
+
         private void LvEntitiesItemChecked(object sender, ItemCheckedEventArgs e)
         {
             if (e.Item.Checked)
@@ -234,7 +304,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
 
                 settings.EntitiesToProceed.Add(new EntityItem
                                                    {
-                                                       Attributes = new List<string>(), 
+                                                       Attributes = new List<string>(),
                                                        Name = e.Item.Tag.ToString(),
                                                        Forms = new List<Guid>()
                                                    });
@@ -305,11 +375,11 @@ namespace MsCrmTools.MetadataDocumentGenerator
                     },
                     entityName);
             }
-            else if (cbbSelectionType.SelectedIndex == (int) AttributeSelectionOption.AttributesOnForm
+            else if (cbbSelectionType.SelectedIndex == (int)AttributeSelectionOption.AttributesOnForm
                 || cbbSelectionType.SelectedIndex == (int)AttributeSelectionOption.AttributesNotOnForm)
             {
                 lvForms.Items.Clear();
-                
+
                 var entityName = lvEntities.SelectedItems[0].Tag.ToString();
                 SetWorkingState(true);
 
@@ -347,7 +417,6 @@ namespace MsCrmTools.MetadataDocumentGenerator
                         SetWorkingState(false);
                     },
                     entityName);
-
             }
         }
 
@@ -365,7 +434,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
                 currentEntity = settings.EntitiesToProceed.FirstOrDefault(x => x.Name == currentEntityName);
             }
 
-            var form = (Entity) lvForms.CheckedItems[0].Tag;
+            var form = (Entity)lvForms.CheckedItems[0].Tag;
 
             if (e.Item.Checked)
             {
@@ -377,34 +446,6 @@ namespace MsCrmTools.MetadataDocumentGenerator
                 if (currentEntity.Forms.Contains(form.Id) && loadSettingsFlag == false)
                 {
                     currentEntity.Forms.Remove(form.Id);
-                }
-            }
-        }
-
-        private void LvAttributesItemChecked(object sender, ItemCheckedEventArgs e)
-        {
-            if (lvEntities.SelectedItems.Count == 0)
-                return;
-
-            var currentEntityName = lvEntities.SelectedItems[0].Tag.ToString();
-
-            var currentEntity = settings.EntitiesToProceed.FirstOrDefault(x => x.Name == currentEntityName);
-            if (currentEntity == null)
-            {
-                lvEntities.SelectedItems[0].Checked = true;
-                currentEntity = settings.EntitiesToProceed.FirstOrDefault(x => x.Name == currentEntityName);
-            }
-
-            if (e.Item.Checked)
-            {
-                currentEntity.Attributes.Add(lvAttributes.CheckedItems[0].Tag.ToString());
-            }
-            else
-            {
-                var item = currentEntity.Attributes.FirstOrDefault(x => x == e.Item.Tag.ToString());
-                if (item != null)
-                {
-                    currentEntity.Attributes.Remove(item);
                 }
             }
         }
@@ -430,7 +471,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
             settings.AddValidForAdvancedFind = chkAddValidForAf.Checked;
             settings.AddFormLocation = chkAddFormLocation.Checked;
 
-            settings.DisplayNamesLangugageCode = ((LanguageCode) cbbLcid.SelectedItem).Lcid;
+            settings.DisplayNamesLangugageCode = ((LanguageCode)cbbLcid.SelectedItem).Lcid;
             settings.FilePath = txtOutputFilePath.Text;
             settings.OutputDocumentType = cbbOutputType.SelectedIndex == 0 ? Output.Excel : Output.Word;
             settings.AttributesSelection = (AttributeSelectionOption)cbbSelectionType.SelectedIndex;
@@ -450,7 +491,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
                     }
                     else
                     {
-                        docGenerator = new WordDocument();
+                        docGenerator = new WordDocumentDocX();
                     }
 
                     docGenerator.Worker = bw;
@@ -478,36 +519,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
                 messageHeight: 180);
         }
 
-        private void CbbOutputTypeSelectedIndexChanged(object sender, EventArgs e)
-        {
-            txtOutputFilePath.Text = string.Empty;
-        }
-
-        private void ListViewsColumnClick(object sender, ColumnClickEventArgs e)
-        {
-            var lv = (ListView) sender;
-
-            lv.Sorting = lv.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
-            lv.ListViewItemSorter = new ListViewItemComparer(e.Column, lv.Sorting);
-            lv.Sort();
-        }
-
         #region Settings
-
-        private void SaveCurrentSettingsToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            settings.OutputDocumentType = (Output) cbbOutputType.SelectedIndex;
-            settings.AttributesSelection = (AttributeSelectionOption) cbbSelectionType.SelectedIndex;
-            settings.FilePath = txtOutputFilePath.Text;
-            settings.AddAuditInformation = chkAddAudit.Checked;
-            settings.AddFieldSecureInformation = chkAddFls.Checked;
-            settings.AddFormLocation = chkAddFormLocation.Checked;
-            settings.AddRequiredLevelInformation = chkAddRequiredLevel.Checked;
-            settings.AddValidForAdvancedFind = chkAddValidForAf.Checked;
-            settings.AddEntitiesSummary = chkDisplayEntityList.Checked;
-
-            settings.SaveToFile();
-        }
 
         private void LoadSettingsToolStripMenuItemClick(object sender, EventArgs e)
         {
@@ -536,29 +548,21 @@ namespace MsCrmTools.MetadataDocumentGenerator
             loadSettingsFlag = false;
         }
 
+        private void SaveCurrentSettingsToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            settings.OutputDocumentType = (Output)cbbOutputType.SelectedIndex;
+            settings.AttributesSelection = (AttributeSelectionOption)cbbSelectionType.SelectedIndex;
+            settings.FilePath = txtOutputFilePath.Text;
+            settings.AddAuditInformation = chkAddAudit.Checked;
+            settings.AddFieldSecureInformation = chkAddFls.Checked;
+            settings.AddFormLocation = chkAddFormLocation.Checked;
+            settings.AddRequiredLevelInformation = chkAddRequiredLevel.Checked;
+            settings.AddValidForAdvancedFind = chkAddValidForAf.Checked;
+            settings.AddEntitiesSummary = chkDisplayEntityList.Checked;
+
+            settings.SaveToFile();
+        }
+
         #endregion Settings
-
-        private void chkSelectAll_CheckedChanged(object sender, EventArgs e)
-        {
-            foreach (ListViewItem item in lvEntities.Items)
-            {
-                item.Checked = chkSelectAll.Checked;
-            }
-        }
-
-        private void chkFilterByPrefix_CheckedChanged(object sender, EventArgs e)
-        {
-            btnEdit.Enabled = chkFilterByPrefix.Checked;
-            txtPrefixes.Enabled = chkFilterByPrefix.Checked;
-        }
-
-        private void btnEdit_Click(object sender, EventArgs e)
-        {
-            var pSelector = new PublisherSelector(Service, txtPrefixes.Text);
-            if (pSelector.ShowDialog(this) == DialogResult.OK)
-            {
-                txtPrefixes.Text = string.Join(";", pSelector.SelectedPrefixes);
-            }
-        }
     }
 }
