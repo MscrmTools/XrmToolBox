@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox", "XrmToolBox\XrmToolBox.csproj", "{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console.Test", "Console.Test\Console.Test.csproj", "{7D7B8DFB-A4FC-4249-BE09-666039D53375}"
@@ -19,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{1A78
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Referenced Assemblies", "Referenced Assemblies", "{000015F3-36AB-4D7F-A281-DB88FBCE71EA}"
 	ProjectSection(SolutionItems) = preProject
+		Referenced Assemblies\ILMerge.exe = Referenced Assemblies\ILMerge.exe
 		Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll = Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll
 		Referenced Assemblies\Microsoft.Xrm.Client.dll = Referenced Assemblies\Microsoft.Xrm.Client.dll
 		Referenced Assemblies\Microsoft.Xrm.Sdk.Deployment.dll = Referenced Assemblies\Microsoft.Xrm.Sdk.Deployment.dll
