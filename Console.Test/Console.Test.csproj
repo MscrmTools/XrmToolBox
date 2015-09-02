@@ -87,6 +87,10 @@
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Plugins\MsCrmTools.MetadataDocumentGenerator\MsCrmTools.MetadataDocumentGenerator.csproj">
+      <Project>{aeb54313-c622-49f4-8d9a-2d75bfa54901}</Project>
+      <Name>MsCrmTools.MetadataDocumentGenerator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Plugins\MsCrmTools.Translator\MsCrmTools.Translator.csproj">
       <Project>{e8a13109-b078-407a-9f6c-3711672770e2}</Project>
       <Name>MsCrmTools.Translator</Name>
