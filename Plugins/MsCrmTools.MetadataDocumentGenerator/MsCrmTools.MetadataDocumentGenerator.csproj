@@ -142,7 +142,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"$(SolutionDir)Referenced Assemblies\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(SolutionDir)XrmToolBox\$(OutDir)Plugins\$(TargetFileName)" MsCrmTools.MetadataDocumentGenerator.dll DocX.dll EPPlus.dll</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)Referenced Assemblies\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(SolutionDir)XrmToolBox\$(OutDir)Plugins\$(TargetFileName)" MsCrmTools.MetadataDocumentGenerator.dll EPPlus.dll</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
