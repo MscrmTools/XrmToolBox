@@ -488,15 +488,14 @@ namespace MsCrmTools.MetadataDocumentGenerator
                     if (cbbOutputType.SelectedItem.ToString() == "Excel Workbook")
                     {
                         docGenerator = new ExcelDocument();
+                        docGenerator.Worker = bw;
+                        docGenerator.Settings = settings;
+                        docGenerator.Generate(Service);
                     }
                     else
                     {
-                        docGenerator = new WordDocumentDocX();
+                        //docGenerator = new WordDocumentDocX();
                     }
-
-                    docGenerator.Worker = bw;
-                    docGenerator.Settings = settings;
-                    docGenerator.Generate(Service);
                 },
                 evt =>
                 {
