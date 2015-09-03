@@ -1,8 +1,5 @@
 ﻿using Microsoft.Xrm.Client;
 using Microsoft.Xrm.Client.Services;
-using MsCrmTools.MetadataDocumentGenerator;
-using MsCrmTools.MetadataDocumentGenerator.Generation;
-using System.Collections.Generic;
 
 namespace Console.Test
 {
@@ -12,26 +9,26 @@ namespace Console.Test
         {
             var service = new OrganizationService(CrmConnection.Parse("Url=http://dev-crm/SCAMPROD;"));
 
-            var doc = new WordDocumentDocX();
-            doc.Settings = new GenerationSettings
-            {
-                FilePath = @"c:\temp\doc.docx",
-                AddAuditInformation = true,
-                AddEntitiesSummary = true,
-                AddFieldSecureInformation = true,
-                AddFormLocation = true,
-                AddRequiredLevelInformation = true,
-                AddValidForAdvancedFind = true,
-                AttributesSelection = AttributeSelectionOption.AllAttributes,
-                DisplayNamesLangugageCode = 1033,
-                EntitiesToProceed = new List<EntityItem>{new EntityItem
-                {
-                    Name = "scam_repartition"
-                }},
-                IncludeOnlyAttributesOnForms = false,
-                OutputDocumentType = Output.Word,
-            };
-            doc.Generate(service);
+            //var doc = new WordDocumentDocX();
+            //doc.Settings = new GenerationSettings
+            //{
+            //    FilePath = @"c:\temp\doc.docx",
+            //    AddAuditInformation = true,
+            //    AddEntitiesSummary = true,
+            //    AddFieldSecureInformation = true,
+            //    AddFormLocation = true,
+            //    AddRequiredLevelInformation = true,
+            //    AddValidForAdvancedFind = true,
+            //    AttributesSelection = AttributeSelectionOption.AllAttributes,
+            //    DisplayNamesLangugageCode = 1033,
+            //    EntitiesToProceed = new List<EntityItem>{new EntityItem
+            //    {
+            //        Name = "scam_repartition"
+            //    }},
+            //    IncludeOnlyAttributesOnForms = false,
+            //    OutputDocumentType = Output.Word,
+            //};
+            //doc.Generate(service);
         }
 
         private static void Import()
