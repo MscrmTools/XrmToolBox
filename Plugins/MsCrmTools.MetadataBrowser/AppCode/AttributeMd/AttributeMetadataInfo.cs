@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.MetadataBrowser.AppCode.LabelMd;
+using System.ComponentModel;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
 {
@@ -60,13 +60,13 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
             get { return amd.DeprecatedVersion; }
         }
 
-        [TypeConverter(typeof (ExpandableObjectConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo Description
         {
             get { return new LabelInfo(amd.Description); }
         }
 
-        [TypeConverter(typeof (ExpandableObjectConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo DisplayName
         {
             get { return new LabelInfo(amd.DisplayName); }
@@ -88,7 +88,6 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
         }
 
         public string IntroducedVersion
-
         {
             get { return amd.IntroducedVersion; }
         }
@@ -136,6 +135,12 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
             get { return amd.IsSecured.HasValue && amd.IsSecured.Value; }
         }
 
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public BooleanManagedPropertyInfo IsValidForAdvancedFind
+        {
+            get { return new BooleanManagedPropertyInfo(amd.IsValidForAdvancedFind); }
+        }
+
         public bool IsValidForCreate
         {
             get { return amd.IsValidForCreate.HasValue && amd.IsValidForCreate.Value; }
@@ -149,12 +154,6 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
         public bool IsValidForUpdate
         {
             get { return amd.IsValidForUpdate.HasValue && amd.IsValidForUpdate.Value; }
-        }
-
-        [TypeConverter(typeof(ExpandableObjectConverter))]
-        public BooleanManagedPropertyInfo IsValidForAdvancedFind
-        {
-            get { return new BooleanManagedPropertyInfo(amd.IsValidForAdvancedFind); }
         }
 
         public string LinkedAttributeId
@@ -172,16 +171,15 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
             get { return amd.MetadataId.HasValue ? amd.MetadataId.Value.ToString("B") : ""; }
         }
 
-        public string SchemaName
-        {
-            get { return amd.SchemaName; }
-        }
-
-
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public AttributeRequiredLevelManagedPropertyInfo RequiredLevel
         {
             get { return new AttributeRequiredLevelManagedPropertyInfo(amd.RequiredLevel); }
+        }
+
+        public string SchemaName
+        {
+            get { return amd.SchemaName; }
         }
 
         public override string ToString()

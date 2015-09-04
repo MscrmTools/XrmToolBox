@@ -3,21 +3,19 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using System.Windows.Forms;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.PrivDiscover.AppCode;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.PrivDiscover
 {
@@ -25,19 +23,19 @@ namespace MsCrmTools.PrivDiscover
     {
         #region Variables
 
-        /// <summary>
-        /// List of security roles for the current organization
-        /// </summary>
-        private List<SecurityRole> roles;
+        private List<EntityMetadata> entities;
+
+        private Thread fillPrivThread;
 
         /// <summary>
         /// List of privileges for the current organization
         /// </summary>
         private DataCollection<Entity> privileges;
 
-        private List<EntityMetadata> entities;
-
-        private Thread fillPrivThread;
+        /// <summary>
+        /// List of security roles for the current organization
+        /// </summary>
+        private List<SecurityRole> roles;
 
         #endregion Variables
 
@@ -55,11 +53,6 @@ namespace MsCrmTools.PrivDiscover
 
         #region Methods
 
-        private void TsbCloseClick(object sender, EventArgs e)
-        {
-            CloseTool();
-        }
-
         private void BtnAddClick(object sender, EventArgs e)
         {
             if (lvPrivileges.SelectedItems.Count == 0)
@@ -67,14 +60,14 @@ namespace MsCrmTools.PrivDiscover
 
             foreach (ListViewItem item in lvPrivileges.SelectedItems)
             {
-                if (lvSelectedPrivileges.Items.Cast<ListViewItem>().Any(selectedItem => ((Privilege) selectedItem.Tag).Id == ((Entity) item.Tag).Id))
+                if (lvSelectedPrivileges.Items.Cast<ListViewItem>().Any(selectedItem => ((Privilege)selectedItem.Tag).Id == ((Entity)item.Tag).Id))
                 {
                     MessageBox.Show(this, "You can't add the same privilege twice!", "Warning", MessageBoxButtons.OK,
                                     MessageBoxIcon.Warning);
                     return;
                 }
 
-                var privilege = (Entity) item.Tag;
+                var privilege = (Entity)item.Tag;
                 string groupName;
                 var group = (from entity in entities
                              where entity.Privileges.Any(p => p.PrivilegeId == privilege.Id)
@@ -98,14 +91,12 @@ namespace MsCrmTools.PrivDiscover
                     if (group.LogicalName == "customeraddress")
                         groupName =
                             entities.First(x => x.LogicalName == "account").DisplayName.UserLocalizedLabel.Label;
-
                     else if (group.LogicalName == "email" || group.LogicalName == "task"
                         || group.LogicalName == "letter" || group.LogicalName == "phonecall"
                         || group.LogicalName == "appointment" || group.LogicalName == "serviceappointment"
                         || group.LogicalName == "campaignresponse" || group.LogicalName == "fax")
                         groupName =
                             entities.First(x => x.LogicalName == "activitypointer").DisplayName.UserLocalizedLabel.Label;
-
                     else
                         groupName = group.Label;
                 }
@@ -117,7 +108,7 @@ namespace MsCrmTools.PrivDiscover
                     lvSelectedPrivileges.Groups.Add(groupName, groupName);
                 }
 
-                var priv = new Privilege {Id = privilege.Id, Name = privilege.GetAttributeValue<string>("name"), IsAnyDepth = true};
+                var priv = new Privilege { Id = privilege.Id, Name = privilege.GetAttributeValue<string>("name"), IsAnyDepth = true };
 
                 if (rdbLevelNone.Checked)
                 {
@@ -150,8 +141,8 @@ namespace MsCrmTools.PrivDiscover
                 clonedItem.Tag = priv;
                 clonedItem.Group =
                     groupName != null
-                        //? ListViewDelegates.GetGroup(lvSelectedPrivileges, groupName)
-                        //: ListViewDelegates.GetGroup(lvSelectedPrivileges, "_Common");
+                    //? ListViewDelegates.GetGroup(lvSelectedPrivileges, groupName)
+                    //: ListViewDelegates.GetGroup(lvSelectedPrivileges, "_Common");
                         ? lvSelectedPrivileges.Groups[groupName]
                         : lvSelectedPrivileges.Groups["_Common"];
 
@@ -162,23 +153,6 @@ namespace MsCrmTools.PrivDiscover
             //ListViewDelegates.Sort(lvSelectedPrivileges, true);
             ((ListViewGroupSorter)lvSelectedPrivileges).SortGroups(true);
             lvSelectedPrivileges.Sort();
-        }
-
-        private string GetPrivilegeDepthLabel(PrivilegeDepth privilegeDepth)
-        {
-            switch (privilegeDepth)
-            {
-                case PrivilegeDepth.Basic:
-                    return "User";
-                case PrivilegeDepth.Local:
-                    return "Division";
-                case PrivilegeDepth.Deep:
-                    return "Division and sub-Divisions";
-                case PrivilegeDepth.Global:
-                    return "Organization";
-                default:
-                    throw new Exception("Not supported!");
-            }
         }
 
         private void BtnRemoveClick(object sender, EventArgs e)
@@ -192,9 +166,25 @@ namespace MsCrmTools.PrivDiscover
             }
         }
 
-        private void TsbLoadRolesAndPrivsClick(object sender, EventArgs e)
+        private string GetPrivilegeDepthLabel(PrivilegeDepth privilegeDepth)
         {
-            ExecuteMethod(LoadRolesAndPrivs);
+            switch (privilegeDepth)
+            {
+                case PrivilegeDepth.Basic:
+                    return "User";
+
+                case PrivilegeDepth.Local:
+                    return "Division";
+
+                case PrivilegeDepth.Deep:
+                    return "Division and sub-Divisions";
+
+                case PrivilegeDepth.Global:
+                    return "Organization";
+
+                default:
+                    throw new Exception("Not supported!");
+            }
         }
 
         private void LoadRolesAndPrivs()
@@ -232,7 +222,17 @@ namespace MsCrmTools.PrivDiscover
 
                     txtSearch.Enabled = true;
                 },
-                e=>SetWorkingMessage(e.UserState.ToString()));
+                e => SetWorkingMessage(e.UserState.ToString()));
+        }
+
+        private void TsbCloseClick(object sender, EventArgs e)
+        {
+            CloseTool();
+        }
+
+        private void TsbLoadRolesAndPrivsClick(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadRolesAndPrivs);
         }
 
         #endregion Methods
@@ -246,13 +246,13 @@ namespace MsCrmTools.PrivDiscover
 
             var lviList = new List<ListViewItem>();
 
-            foreach (SecurityRole role in roles.OrderBy(r=>r.Name))
+            foreach (SecurityRole role in roles.OrderBy(r => r.Name))
             {
                 bool matchPrivileges = false;
 
                 foreach (ListViewItem item in lvSelectedPrivileges.Items)
                 {
-                    var currentPrivilege = (Privilege) item.Tag;
+                    var currentPrivilege = (Privilege)item.Tag;
 
                     if (currentPrivilege.IsNoDepth)
                     {
@@ -275,7 +275,7 @@ namespace MsCrmTools.PrivDiscover
 
                 if (matchPrivileges)
                 {
-                    var item = new ListViewItem(role.Name) {Tag = role.Id, ImageIndex = 0};
+                    var item = new ListViewItem(role.Name) { Tag = role.Id, ImageIndex = 0 };
                     lviList.Add(item);
                 }
             }
@@ -283,24 +283,21 @@ namespace MsCrmTools.PrivDiscover
             lvRoles.Items.AddRange(lviList.ToArray());
         }
 
-        private void TxtSearchTextChanged(object sender, EventArgs e)
+        private void BtnOpenSecurityRoleClick(object sender, EventArgs e)
         {
-            if (fillPrivThread != null)
-                fillPrivThread.Abort();
+            if (lvRoles.SelectedItems.Count == 0)
+                return;
 
-            //ListViewDelegates.ClearItems(lvPrivileges);
-            //ListViewDelegates.ClearGroups(lvPrivileges);
-            lvPrivileges.Items.Clear();
-            lvPrivileges.Groups.Clear();
+            Uri currentServiceUri = ((OrganizationServiceProxy)((OrganizationService)Service).InnerService).ServiceConfiguration.CurrentServiceEndpoint.Address.Uri;
 
-            btnAdd.Enabled = false;
-            btnRemove.Enabled = false;
+            string originalUrl = currentServiceUri.OriginalString;
 
-            fillPrivThread = new Thread(DoWork);
-            fillPrivThread.Start();
+            string baseUrl = originalUrl.Substring(0, originalUrl.IndexOf("XRMServices"));
+
+            Process.Start(string.Format("{0}biz/roles/edit.aspx?id={1}", baseUrl, (Guid)lvRoles.SelectedItems[0].Tag));
         }
 
-        void DoWork()
+        private void DoWork()
         {
             var filterTerm = txtSearch.Text;
             IEnumerable<Entity> matchingPrivileges = null;
@@ -347,14 +344,12 @@ namespace MsCrmTools.PrivDiscover
                     if (group.LogicalName == "customeraddress")
                         groupName =
                             entities.First(x => x.LogicalName == "account").DisplayName.UserLocalizedLabel.Label;
-
                     else if (group.LogicalName == "email" || group.LogicalName == "task"
                         || group.LogicalName == "letter" || group.LogicalName == "phonecall"
                         || group.LogicalName == "appointment" || group.LogicalName == "serviceappointment"
                         || group.LogicalName == "campaignresponse" || group.LogicalName == "fax")
                         groupName =
                             entities.First(x => x.LogicalName == "activitypointer").DisplayName.UserLocalizedLabel.Label;
-
                     else
                         groupName = group.Label;
                 }
@@ -388,7 +383,7 @@ namespace MsCrmTools.PrivDiscover
 
             ListViewDelegates.SortGroup(lvPrivileges, true);
             ListViewDelegates.Sort(lvPrivileges, true);
-           
+
             CommonDelegates.SetEnableState(btnAdd, true);
             CommonDelegates.SetEnableState(btnRemove, true);
         }
@@ -396,25 +391,6 @@ namespace MsCrmTools.PrivDiscover
         private void LvPrivilegesMouseDoubleClick(object sender, MouseEventArgs e)
         {
             BtnAddClick(null, null);
-        }
-
-        private void LvSelectedPrivilegesMouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            BtnRemoveClick(null, null);
-        }
-
-        private void BtnOpenSecurityRoleClick(object sender, EventArgs e)
-        {
-            if (lvRoles.SelectedItems.Count == 0)
-                return;
-
-            Uri currentServiceUri = ((OrganizationServiceProxy) ((OrganizationService)Service).InnerService).ServiceConfiguration.CurrentServiceEndpoint.Address.Uri;
-
-            string originalUrl = currentServiceUri.OriginalString;
-
-            string baseUrl = originalUrl.Substring(0, originalUrl.IndexOf("XRMServices"));
-
-            Process.Start(string.Format("{0}biz/roles/edit.aspx?id={1}", baseUrl, (Guid)lvRoles.SelectedItems[0].Tag));
         }
 
         private void LvPrivilegesSelectedIndexChanged(object sender, EventArgs e)
@@ -451,11 +427,33 @@ namespace MsCrmTools.PrivDiscover
             rdbLevelOrg.Enabled = canBeGlobal;
             pbLevelOrg.Enabled = canBeGlobal;
 
-            if (!canBeBasic&& rdbLevelUser.Checked
+            if (!canBeBasic && rdbLevelUser.Checked
                 || !canBeLocal && rdbLevelDiv.Checked
                 || !canBeDeep && rdbLevelSubDiv.Checked
                 || !canBeGlobal && rdbLevelOrg.Checked)
                 rdbLevelAny.Checked = true;
+        }
+
+        private void LvSelectedPrivilegesMouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            BtnRemoveClick(null, null);
+        }
+
+        private void TxtSearchTextChanged(object sender, EventArgs e)
+        {
+            if (fillPrivThread != null)
+                fillPrivThread.Abort();
+
+            //ListViewDelegates.ClearItems(lvPrivileges);
+            //ListViewDelegates.ClearGroups(lvPrivileges);
+            lvPrivileges.Items.Clear();
+            lvPrivileges.Groups.Clear();
+
+            btnAdd.Enabled = false;
+            btnRemove.Enabled = false;
+
+            fillPrivThread = new Thread(DoWork);
+            fillPrivThread.Start();
         }
     }
 }

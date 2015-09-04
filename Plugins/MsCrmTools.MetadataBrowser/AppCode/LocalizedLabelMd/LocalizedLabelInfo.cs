@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
+using System.ComponentModel;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd
 {
@@ -40,7 +40,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd
 
         public override string ToString()
         {
-            return amd != null ? amd.Label : "N/A"; 
+            return amd != null ? amd.Label : "N/A";
         }
     }
 }

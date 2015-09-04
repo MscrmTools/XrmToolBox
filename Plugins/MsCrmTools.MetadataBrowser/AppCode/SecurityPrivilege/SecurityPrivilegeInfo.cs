@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using System;
 using System.ComponentModel;
-using Microsoft.Xrm.Sdk.Metadata;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.SecurityPrivilege
 {
-    [TypeConverter(typeof (ExpandableObjectConverter))] //SecurityPrivilegeInfoConverter
+    [TypeConverter(typeof(ExpandableObjectConverter))] //SecurityPrivilegeInfoConverter
     public class SecurityPrivilegeInfo
     {
         private readonly SecurityPrivilegeMetadata p;
@@ -34,6 +34,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.SecurityPrivilege
             get { return p.CanBeLocal; }
         }
 
+        public string ExtensionData
+        {
+            get { return p.ExtensionData != null ? p.ExtensionData.ToString() : ""; }
+        }
+
         public string Name
         {
             get { return p.Name; }
@@ -47,11 +52,6 @@ namespace MsCrmTools.MetadataBrowser.AppCode.SecurityPrivilege
         public PrivilegeType PrivilegeType
         {
             get { return p.PrivilegeType; }
-        }
-
-        public string ExtensionData
-        {
-            get { return p.ExtensionData != null ? p.ExtensionData.ToString() : ""; }
         }
 
         public override string ToString()

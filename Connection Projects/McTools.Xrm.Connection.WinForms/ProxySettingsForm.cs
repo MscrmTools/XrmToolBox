@@ -5,16 +5,16 @@ namespace McTools.Xrm.Connection.WinForms
 {
     public partial class ProxySettingsForm : Form
     {
-        public string proxyAddress { get; set; }
-        public string proxyPort { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public bool UseCustomProxy { get; set; }
-
         public ProxySettingsForm()
         {
             InitializeComponent();
         }
+
+        public string Password { get; set; }
+        public string proxyAddress { get; set; }
+        public string proxyPort { get; set; }
+        public bool UseCustomProxy { get; set; }
+        public string UserName { get; set; }
 
         protected override void OnLoad(EventArgs e)
         {
@@ -23,6 +23,14 @@ namespace McTools.Xrm.Connection.WinForms
             this.txtProxyPort.Text = this.proxyPort ?? string.Empty;
             this.txtUserLogin.Text = this.UserName ?? string.Empty;
             this.txtUserPassword.Text = this.Password ?? string.Empty;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.UseCustomProxy = this.chkCustomProxy.Checked;
+
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -34,14 +42,6 @@ namespace McTools.Xrm.Connection.WinForms
             this.UseCustomProxy = this.chkCustomProxy.Checked;
 
             this.DialogResult = DialogResult.OK;
-            this.Close();
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            this.UseCustomProxy = this.chkCustomProxy.Checked;
-
-            this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
 

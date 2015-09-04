@@ -5,13 +5,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.ScriptsFinder
 {
@@ -25,11 +23,6 @@ namespace MsCrmTools.ScriptsFinder
         }
 
         #endregion Constructor
-
-        private void TsbMainFindScriptsClick(object sender, EventArgs e)
-        {
-            ExecuteMethod(FindScripts);
-        }
 
         public void FindScripts()
         {
@@ -56,7 +49,7 @@ namespace MsCrmTools.ScriptsFinder
                         item.SubItems.Add(script.AttributeLogicalName);
                         item.SubItems.Add(script.ScriptLocation);
                         item.SubItems.Add(script.MethodCalled);
-                        item.SubItems.Add(script.IsActive.HasValue ?script.IsActive.Value.ToString() : "");
+                        item.SubItems.Add(script.IsActive.HasValue ? script.IsActive.Value.ToString() : "");
 
                         if (script.HasProblem)
                         {
@@ -96,16 +89,16 @@ namespace MsCrmTools.ScriptsFinder
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                using (var fs = new FileStream(sfd.FileName, FileMode.OpenOrCreate,FileAccess.ReadWrite))
+                using (var fs = new FileStream(sfd.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
                     var preamble = new UTF8Encoding(true).GetPreamble();
-                    fs.Write(preamble,0,preamble.Length);
-                    
+                    fs.Write(preamble, 0, preamble.Length);
+
                     var header = System.Text.Encoding.UTF8.GetBytes(
                         "Type,Entity Display Name,Entity Logical Name,Form name,Event,Attribute Display Name,Attribute Logical Name,Script Location,Method Called,Enabled" +
                         Environment.NewLine);
                     fs.Write(header, 0, header.Length);
-                    
+
                     foreach (ListViewItem item in lvScripts.Items)
                     {
                         var line = System.Text.Encoding.UTF8.GetBytes(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}{10}",
@@ -122,13 +115,17 @@ namespace MsCrmTools.ScriptsFinder
                             Environment.NewLine));
 
                         fs.Write(line, 0, line.Length);
-                  
                     }
 
                     MessageBox.Show(this, string.Format("File saved to '{0}'!", sfd.FileName), "Information",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
+        }
+
+        private void TsbMainFindScriptsClick(object sender, EventArgs e)
+        {
+            ExecuteMethod(FindScripts);
         }
     }
 }

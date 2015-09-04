@@ -3,20 +3,19 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using MsCrmTools.WebResourcesManager.DelegatesHelpers;
 using System;
 using System.ComponentModel;
 using System.ServiceModel;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
-using MsCrmTools.WebResourcesManager.DelegatesHelpers;
 
 namespace MsCrmTools.WebResourcesManager.Forms.Solutions
 {
     public partial class SolutionPicker : Form
     {
-        readonly IOrganizationService innerService;
-        public Entity SelectedSolution { get; set; }
+        private readonly IOrganizationService innerService;
 
         public SolutionPicker(IOrganizationService service)
         {
@@ -25,34 +24,26 @@ namespace MsCrmTools.WebResourcesManager.Forms.Solutions
             innerService = service;
         }
 
-        private void SolutionPicker_Load(object sender, EventArgs e)
+        public Entity SelectedSolution { get; set; }
+
+        private void btnSolutionPickerCancel_Click(object sender, EventArgs e)
         {
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.DoWork += worker_DoWork;
-            worker.RunWorkerCompleted += worker_RunWorkerCompleted;
-            worker.RunWorkerAsync();
+            SelectedSolution = null;
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
-        void worker_DoWork(object sender, DoWorkEventArgs e)
+        private void btnSolutionPickerValidate_Click(object sender, EventArgs e)
         {
-            FillList();
-        }
-
-        void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            MethodInvoker mi = delegate
+            if (lstSolutions.SelectedItems.Count > 0)
             {
-                lstSolutions.Enabled = true;
-                btnSolutionPickerValidate.Enabled = true;
-            };
-
-            if (InvokeRequired)
-            {
-                Invoke(mi);
+                SelectedSolution = (Entity)lstSolutions.SelectedItems[0].Tag;
+                DialogResult = DialogResult.OK;
+                Close();
             }
             else
             {
-                mi();
+                MessageBox.Show(this, "Please select a solution!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -76,8 +67,20 @@ namespace MsCrmTools.WebResourcesManager.Forms.Solutions
             }
             catch (Exception error)
             {
-                CommonDelegates.DisplayMessageBox(this, error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);            
+                CommonDelegates.DisplayMessageBox(this, error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void lstSolutions_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            var list = (ListView)sender;
+            list.Sorting = list.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            list.ListViewItemSorter = new ListViewItemComparer(e.Column, list.Sorting);
+        }
+
+        private void lstSolutions_DoubleClick(object sender, EventArgs e)
+        {
+            btnSolutionPickerValidate_Click(null, null);
         }
 
         private EntityCollection RetrieveSolutions()
@@ -91,7 +94,7 @@ namespace MsCrmTools.WebResourcesManager.Forms.Solutions
                 qe.Criteria.AddCondition(new ConditionExpression("ismanaged", ConditionOperator.Equal, false));
                 qe.Criteria.AddCondition(new ConditionExpression("isvisible", ConditionOperator.Equal, true));
                 qe.Criteria.AddCondition(new ConditionExpression("uniquename", ConditionOperator.NotEqual, "Default"));
-                
+
                 return innerService.RetrieveMultiple(qe);
             }
             catch (Exception error)
@@ -107,37 +110,35 @@ namespace MsCrmTools.WebResourcesManager.Forms.Solutions
             }
         }
 
-        private void lstSolutions_DoubleClick(object sender, EventArgs e)
+        private void SolutionPicker_Load(object sender, EventArgs e)
         {
-            btnSolutionPickerValidate_Click(null, null);
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.DoWork += worker_DoWork;
+            worker.RunWorkerCompleted += worker_RunWorkerCompleted;
+            worker.RunWorkerAsync();
         }
 
-        private void btnSolutionPickerValidate_Click(object sender, EventArgs e)
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            if (lstSolutions.SelectedItems.Count > 0)
+            FillList();
+        }
+
+        private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            MethodInvoker mi = delegate
             {
-                SelectedSolution = (Entity)lstSolutions.SelectedItems[0].Tag;
-                DialogResult = DialogResult.OK;
-                Close();
+                lstSolutions.Enabled = true;
+                btnSolutionPickerValidate.Enabled = true;
+            };
+
+            if (InvokeRequired)
+            {
+                Invoke(mi);
             }
             else
             {
-                MessageBox.Show(this, "Please select a solution!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                mi();
             }
-        }
-
-        private void btnSolutionPickerCancel_Click(object sender, EventArgs e)
-        {
-            SelectedSolution = null;
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
-
-        private void lstSolutions_ColumnClick(object sender, ColumnClickEventArgs e)
-        {
-            var list = (ListView)sender;
-            list.Sorting = list.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
-            list.ListViewItemSorter = new ListViewItemComparer(e.Column, list.Sorting);
         }
     }
 }

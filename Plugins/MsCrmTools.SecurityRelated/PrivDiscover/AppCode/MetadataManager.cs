@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MsCrmTools.PrivDiscover.AppCode
 {
@@ -22,7 +22,7 @@ namespace MsCrmTools.PrivDiscover.AppCode
                                   EntityFilters =
                                       EntityFilters.Entity | EntityFilters.Privileges
                               };
-            var response = (RetrieveAllEntitiesResponse) service.Execute(request);
+            var response = (RetrieveAllEntitiesResponse)service.Execute(request);
 
             return response.EntityMetadata.ToList();
         }

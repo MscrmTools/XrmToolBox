@@ -10,6 +10,23 @@ namespace MsCrmTools.WebResourcesManager.DelegatesHelpers
 {
     public class ProgressBarDelegates
     {
+        public static void PerformStep(ProgressBar progressBar)
+        {
+            MethodInvoker miPerformStep = delegate
+            {
+                progressBar.PerformStep();
+            };
+
+            if (progressBar.InvokeRequired)
+            {
+                progressBar.Invoke(miPerformStep);
+            }
+            else
+            {
+                miPerformStep();
+            }
+        }
+
         public static void SetForeColor(ProgressBar progressBar, Color color)
         {
             MethodInvoker miSetForeColor = delegate
@@ -34,7 +51,7 @@ namespace MsCrmTools.WebResourcesManager.DelegatesHelpers
                 progressBar.Maximum = maximum;
             };
 
-            if(progressBar.InvokeRequired)
+            if (progressBar.InvokeRequired)
             {
                 progressBar.Invoke(miSetMaximum);
             }
@@ -92,23 +109,6 @@ namespace MsCrmTools.WebResourcesManager.DelegatesHelpers
             else
             {
                 miSetValue();
-            }
-        }
-
-        public static void PerformStep(ProgressBar progressBar)
-        {
-            MethodInvoker miPerformStep = delegate
-            {
-                progressBar.PerformStep();
-            };
-
-            if (progressBar.InvokeRequired)
-            {
-                progressBar.Invoke(miPerformStep);
-            }
-            else
-            {
-                miPerformStep();
             }
         }
     }

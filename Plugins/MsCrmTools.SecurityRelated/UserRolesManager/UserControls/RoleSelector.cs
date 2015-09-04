@@ -1,40 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using MsCrmTools.UserRolesManager.AppCode;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace MsCrmTools.UserRolesManager.UserControls
 {
     public partial class RoleSelector : UserControl
     {
-        private IOrganizationService service;
-
         private int currentColumnOrder;
+        private IOrganizationService service;
 
         public RoleSelector()
         {
             InitializeComponent();
         }
 
-        public IOrganizationService Service
-        {
-            set { service = value; }
-        }
+        public List<Entity> AllRoles { get; set; }
 
         public List<Entity> SelectedRoles
         {
             get
             {
-                return listView1.SelectedItems.Cast<ListViewItem>().Select(r => (Entity) r.Tag).ToList();
-                
+                return listView1.SelectedItems.Cast<ListViewItem>().Select(r => (Entity)r.Tag).ToList();
             }
-        } 
+        }
+
+        public IOrganizationService Service
+        {
+            set { service = value; }
+        }
 
         public void LoadRoles(Guid? specificBusinessUnitId = null)
         {
@@ -59,8 +55,6 @@ namespace MsCrmTools.UserRolesManager.UserControls
                 Tag = role
             }).ToArray());
         }
-
-        public List<Entity> AllRoles { get; set; }
 
         private void listView1_ColumnClick(object sender, ColumnClickEventArgs e)
         {

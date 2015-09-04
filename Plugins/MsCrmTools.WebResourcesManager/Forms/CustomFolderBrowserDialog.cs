@@ -13,14 +13,14 @@ namespace MsCrmTools.WebResourcesManager.Forms
         public CustomFolderBrowserDialog(bool isLoadFromDisk, bool showExtensionOptions = true)
         {
             InitializeComponent();
-            
+
             if (!isLoadFromDisk)
             {
                 webResourceTypePicker1.Visible = false;
                 Size = new Size(500, 200);
                 lblTitle.Text = "Save folder";
                 Text = "Save web resources";
-                
+
                 Invalidate();
             }
             else if (!showExtensionOptions)
@@ -32,13 +32,27 @@ namespace MsCrmTools.WebResourcesManager.Forms
             }
         }
 
+        public List<string> ExtensionsToLoad { get; private set; }
         public string FolderPath { get; set; }
 
-        public List<string> ExtensionsToLoad { get; private set; }
-
-        private void CustomFolderBrowserDialog_Load(object sender, EventArgs e)
+        private void btnBrowse_Click(object sender, EventArgs e)
         {
-            txtFolderPath.Text = FolderPath;
+            var fbd = new FolderBrowserDialog
+            {
+                Description = "Select the folder where the files are located",
+                ShowNewFolderButton = true
+            };
+
+            if (fbd.ShowDialog(this) == DialogResult.OK)
+            {
+                txtFolderPath.Text = fbd.SelectedPath;
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -57,24 +71,9 @@ namespace MsCrmTools.WebResourcesManager.Forms
             Close();
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void CustomFolderBrowserDialog_Load(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
-
-        private void btnBrowse_Click(object sender, EventArgs e)
-        {
-            var fbd = new FolderBrowserDialog
-            {
-                Description = "Select the folder where the files are located",
-                ShowNewFolderButton = true
-            };
-
-            if (fbd.ShowDialog(this) == DialogResult.OK)
-            {
-                txtFolderPath.Text = fbd.SelectedPath;
-            }
+            txtFolderPath.Text = FolderPath;
         }
     }
 }

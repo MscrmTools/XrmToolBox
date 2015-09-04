@@ -27,6 +27,185 @@ namespace Tanguy.WinForm.Utilities.DelegatesHelpers
             }
         }
 
+        public static void ClearItems(ListView listview)
+        {
+            MethodInvoker miClearItems = delegate
+            {
+                listview.Items.Clear();
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miClearItems);
+            }
+            else
+            {
+                miClearItems();
+            }
+        }
+
+        public static List<ListViewItem> GetCheckedIndexes(ListView listview)
+        {
+            List<ListViewItem> items = new List<ListViewItem>();
+
+            MethodInvoker miClearItems = delegate
+            {
+                foreach (ListViewItem item in listview.CheckedIndices)
+                {
+                    items.Add((ListViewItem)item.Clone());
+                }
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miClearItems);
+            }
+            else
+            {
+                miClearItems();
+            }
+
+            return items;
+        }
+
+        public static List<ListViewItem> GetCheckedItems(ListView listview)
+        {
+            List<ListViewItem> items = new List<ListViewItem>();
+
+            MethodInvoker miClearItems = delegate
+            {
+                foreach (ListViewItem item in listview.CheckedItems)
+                {
+                    items.Add((ListViewItem)item.Clone());
+                }
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miClearItems);
+            }
+            else
+            {
+                miClearItems();
+            }
+
+            return items;
+        }
+
+        public static ListViewItem GetItem(ListView listview, int index)
+        {
+            ListViewItem item = null;
+
+            MethodInvoker miRemoveItem = delegate
+            {
+                item = listview.Items[index];
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miRemoveItem);
+            }
+            else
+            {
+                miRemoveItem();
+            }
+
+            return item;
+        }
+
+        public static ListViewItem GetItem(ListView listview, string key)
+        {
+            ListViewItem item = null;
+
+            MethodInvoker miRemoveItem = delegate
+            {
+                item = listview.Items[key];
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miRemoveItem);
+            }
+            else
+            {
+                miRemoveItem();
+            }
+
+            return item;
+        }
+
+        public static List<ListViewItem> GetItems(ListView listview)
+        {
+            List<ListViewItem> items = new List<ListViewItem>();
+
+            MethodInvoker miClearItems = delegate
+            {
+                foreach (ListViewItem item in listview.Items)
+                {
+                    items.Add((ListViewItem)item.Clone());
+                }
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miClearItems);
+            }
+            else
+            {
+                miClearItems();
+            }
+
+            return items;
+        }
+
+        public static List<ListViewItem> GetSelectedIndexes(ListView listview)
+        {
+            List<ListViewItem> items = new List<ListViewItem>();
+
+            MethodInvoker miClearItems = delegate
+            {
+                foreach (ListViewItem item in listview.SelectedIndices)
+                {
+                    items.Add((ListViewItem)item.Clone());
+                }
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miClearItems);
+            }
+            else
+            {
+                miClearItems();
+            }
+
+            return items;
+        }
+
+        public static List<ListViewItem> GetSelectedItems(ListView listview)
+        {
+            List<ListViewItem> items = new List<ListViewItem>();
+
+            MethodInvoker miClearItems = delegate
+            {
+                foreach (ListViewItem item in listview.SelectedItems)
+                {
+                    items.Add((ListViewItem)item.Clone());
+                }
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miClearItems);
+            }
+            else
+            {
+                miClearItems();
+            }
+
+            return items;
+        }
+
         public static void InsertItem(ListView listview, int index, ListViewItem item)
         {
             MethodInvoker miInsertItem = delegate
@@ -76,185 +255,6 @@ namespace Tanguy.WinForm.Utilities.DelegatesHelpers
             {
                 miRemoveItem();
             }
-        }
-
-        public static ListViewItem GetItem(ListView listview, int index)
-        {
-            ListViewItem item = null;
-
-            MethodInvoker miRemoveItem = delegate
-            {
-                item = listview.Items[index];
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miRemoveItem);
-            }
-            else
-            {
-                miRemoveItem();
-            }
-
-            return item;
-        }
-
-        public static ListViewItem GetItem(ListView listview, string key)
-        {
-            ListViewItem item = null;
-
-            MethodInvoker miRemoveItem = delegate
-            {
-                item = listview.Items[key];
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miRemoveItem);
-            }
-            else
-            {
-                miRemoveItem();
-            }
-
-            return item;
-        }
-
-        public static void ClearItems(ListView listview)
-        {
-            MethodInvoker miClearItems = delegate
-            {
-                listview.Items.Clear();
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miClearItems);
-            }
-            else
-            {
-                miClearItems();
-            }
-        }
-
-        public static List<ListViewItem> GetItems(ListView listview)
-        {
-            List<ListViewItem> items = new List<ListViewItem>();
-
-            MethodInvoker miClearItems = delegate
-            {
-                foreach (ListViewItem item in listview.Items)
-                {
-                    items.Add((ListViewItem)item.Clone());
-                }
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miClearItems);
-            }
-            else
-            {
-                miClearItems();
-            }
-
-            return items;
-        }
-
-        public static List<ListViewItem> GetSelectedItems(ListView listview)
-        {
-            List<ListViewItem> items = new List<ListViewItem>();
-
-            MethodInvoker miClearItems = delegate
-            {
-                foreach (ListViewItem item in listview.SelectedItems)
-                {
-                    items.Add((ListViewItem)item.Clone());
-                }
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miClearItems);
-            }
-            else
-            {
-                miClearItems();
-            }
-
-            return items;
-        }
-
-        public static List<ListViewItem> GetSelectedIndexes(ListView listview)
-        {
-            List<ListViewItem> items = new List<ListViewItem>();
-
-            MethodInvoker miClearItems = delegate
-            {
-                foreach (ListViewItem item in listview.SelectedIndices)
-                {
-                    items.Add((ListViewItem)item.Clone());
-                }
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miClearItems);
-            }
-            else
-            {
-                miClearItems();
-            }
-
-            return items;
-        }
-
-        public static List<ListViewItem> GetCheckedItems(ListView listview)
-        {
-            List<ListViewItem> items = new List<ListViewItem>();
-
-            MethodInvoker miClearItems = delegate
-            {
-                foreach (ListViewItem item in listview.CheckedItems)
-                {
-                    items.Add((ListViewItem)item.Clone());
-                }
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miClearItems);
-            }
-            else
-            {
-                miClearItems();
-            }
-
-            return items;
-        }
-
-        public static List<ListViewItem> GetCheckedIndexes(ListView listview)
-        {
-            List<ListViewItem> items = new List<ListViewItem>();
-
-            MethodInvoker miClearItems = delegate
-            {
-                foreach (ListViewItem item in listview.CheckedIndices)
-                {
-                    items.Add((ListViewItem)item.Clone());
-                }
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miClearItems);
-            }
-            else
-            {
-                miClearItems();
-            }
-
-            return items;
         }
 
         public static void SetEnableState(ListView listview, bool enabled)

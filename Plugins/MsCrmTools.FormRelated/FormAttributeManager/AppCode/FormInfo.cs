@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using System;
 using System.Globalization;
 using System.Xml;
-using Microsoft.Xrm.Sdk;
 
 namespace MsCrmTools.FormAttributeManager.AppCode
 {
@@ -33,114 +33,48 @@ namespace MsCrmTools.FormAttributeManager.AppCode
             }
         }
 
-        public override string ToString()
-        {
-            return form.GetAttributeValue<string>("name");
-        }
-
         public bool HasChanged { get; private set; }
 
-        public void Update(IOrganizationService service)
+        public void AddAttribute(string attributeLogicalName, string classId, Label displayNames, string sourceAttributeLogicalName)
         {
-            form["formxml"] = formXml.OuterXml;
+            var referenceCellNode = GetCellNodeByAttributeLogicalName(sourceAttributeLogicalName);
 
-            service.Update(form);
-        }
-
-        private XmlNode GetCellNode(Guid cellId)
-        {
-            var node = formXml.SelectSingleNode(string.Format("//cell[@id='{0}']", cellId.ToString("B").ToLower()));
-            if (node == null)
+            // Check if there is an empty cell after the reference cell
+            if (referenceCellNode.NextSibling != null
+                && referenceCellNode.NextSibling.SelectSingleNode("control") == null)
             {
-                throw new Exception(string.Format("Cannot find cell node with id '{0}' in form '{1}",
-                    cellId,
-                    form.GetAttributeValue<string>("name")));
+                AddAttributeNode(referenceCellNode.NextSibling, attributeLogicalName, classId, displayNames);
             }
-
-            return node;
-        }
-
-        private XmlNode GetCellNodeByAttributeLogicalName(string attributeLogicalName)
-        {
-            var node = formXml.SelectSingleNode(string.Format("//cell[control/@datafieldname='{0}']", attributeLogicalName));
-            if (node == null)
+            else
             {
-                throw new Exception(string.Format("Cannot find cell node for attribute '{0}' in form '{1}",
-                    attributeLogicalName,
-                    form.GetAttributeValue<string>("name")));
+                // If not, we add a new row to store the new cell
+                int cellCount = referenceCellNode.ParentNode.ChildNodes.Count;
+                var currentRowNode = referenceCellNode.ParentNode;
+                var rowsNode = currentRowNode.ParentNode;
+
+                var newRowNode = rowsNode.OwnerDocument.CreateElement("row");
+
+                for (int i = 0; i < cellCount; i++)
+                {
+                    var newCellNode = rowsNode.OwnerDocument.CreateElement("cell");
+
+                    var idAttr = rowsNode.OwnerDocument.CreateAttribute("id");
+                    idAttr.Value = Guid.NewGuid().ToString("B");
+                    newCellNode.Attributes.Append(idAttr);
+
+                    var labelsNode = rowsNode.OwnerDocument.CreateElement("labels");
+                    newCellNode.AppendChild(labelsNode);
+
+                    newRowNode.AppendChild(newCellNode);
+
+                    if (i == 0)
+                    {
+                        AddAttributeNode(newCellNode, attributeLogicalName, classId, displayNames);
+                    }
+                }
+
+                rowsNode.InsertAfter(newRowNode, currentRowNode);
             }
-
-            return node;
-        }
-
-        private XmlNode GetCellControlNode(XmlNode cellNode)
-        {
-            return cellNode.SelectSingleNode("control");
-        }
-
-        private XmlAttribute GetAttribute(XmlNode node, string xmlAttributeName)
-        {
-            if (node.Attributes == null)
-            {
-                throw new Exception("Attribute collection expected for the current node!");
-            }
-
-            var attribute = node.Attributes[xmlAttributeName];
-            if (attribute == null)
-            {
-                attribute = formXml.CreateAttribute(xmlAttributeName);
-                node.Attributes.Append(attribute);
-            }
-
-            return attribute;
-        }
-
-        public void SetAttributeReadOnlyMode(Guid cellId, bool isReadOnly)
-        {
-            var attribute = GetAttribute(GetCellControlNode(GetCellNode(cellId)), "disabled");
-            attribute.Value = isReadOnly ? "true" : "false";
-
-            HasChanged = true;
-        }
-
-        public void SetAttributeReadOnlyMode(string attributeLogicalName, bool isReadOnly)
-        {
-            var attribute = GetAttribute(GetCellControlNode(GetCellNodeByAttributeLogicalName(attributeLogicalName)), "disabled");
-            attribute.Value = isReadOnly ? "true" : "false";
-
-            HasChanged = true;
-        }
-
-        public void SetAttributeVisibilityMode(Guid cellId, bool isVisible)
-        {
-            var attribute = GetAttribute(GetCellNode(cellId), "visible");
-            attribute.Value = isVisible ? "true" : "false";
-
-            HasChanged = true;
-        }
-
-        public void SetAttributeVisibilityMode(string attributeLogicalName, bool isVisible)
-        {
-            var attribute = GetAttribute(GetCellNodeByAttributeLogicalName(attributeLogicalName), "visible");
-            attribute.Value = isVisible ? "true" : "false";
-
-            HasChanged = true;
-        }
-
-        public void SetAttributeLabelDisplayMode(Guid cellId, bool isLabelDisplayed)
-        {
-            var attribute = GetAttribute(GetCellNode(cellId), "showlabel");
-            attribute.Value = isLabelDisplayed ? "true" : "false";
-
-            HasChanged = true;
-        }
-
-        public void SetAttributeLabelDisplayMode(string attributeLogicalName, bool isLabelDisplayed)
-        {
-            var attribute = GetAttribute(GetCellNodeByAttributeLogicalName(attributeLogicalName), "showlabel");
-            attribute.Value = isLabelDisplayed ? "true" : "false";
-
-            HasChanged = true;
         }
 
         public void ChangeLabel(Guid cellId, int lcid, string text)
@@ -177,20 +111,17 @@ namespace MsCrmTools.FormAttributeManager.AppCode
             labelNode.Attributes["description"].Value = text;
         }
 
-        public void SetAttributeLockMode(Guid cellId, bool isLocked)
+        public bool HasAttribute(string attributeLogicalName)
         {
-            var attribute = GetAttribute(GetCellNode(cellId), "locklevel");
-            attribute.Value = isLocked ? "1" : "0";
-
-            HasChanged = true;
-        }
-
-        public void SetAttributeLockMode(string attributeLogicalName, bool isLocked)
-        {
-            var attribute = GetAttribute(GetCellNodeByAttributeLogicalName(attributeLogicalName), "locklevel");
-            attribute.Value = isLocked ? "1" : "0";
-
-            HasChanged = true;
+            try
+            {
+                GetCellNodeByAttributeLogicalName(attributeLogicalName);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public void RemoveAttribute(string attributeLogicalName)
@@ -236,6 +167,82 @@ namespace MsCrmTools.FormAttributeManager.AppCode
             }
         }
 
+        public void SetAttributeLabelDisplayMode(Guid cellId, bool isLabelDisplayed)
+        {
+            var attribute = GetAttribute(GetCellNode(cellId), "showlabel");
+            attribute.Value = isLabelDisplayed ? "true" : "false";
+
+            HasChanged = true;
+        }
+
+        public void SetAttributeLabelDisplayMode(string attributeLogicalName, bool isLabelDisplayed)
+        {
+            var attribute = GetAttribute(GetCellNodeByAttributeLogicalName(attributeLogicalName), "showlabel");
+            attribute.Value = isLabelDisplayed ? "true" : "false";
+
+            HasChanged = true;
+        }
+
+        public void SetAttributeLockMode(Guid cellId, bool isLocked)
+        {
+            var attribute = GetAttribute(GetCellNode(cellId), "locklevel");
+            attribute.Value = isLocked ? "1" : "0";
+
+            HasChanged = true;
+        }
+
+        public void SetAttributeLockMode(string attributeLogicalName, bool isLocked)
+        {
+            var attribute = GetAttribute(GetCellNodeByAttributeLogicalName(attributeLogicalName), "locklevel");
+            attribute.Value = isLocked ? "1" : "0";
+
+            HasChanged = true;
+        }
+
+        public void SetAttributeReadOnlyMode(Guid cellId, bool isReadOnly)
+        {
+            var attribute = GetAttribute(GetCellControlNode(GetCellNode(cellId)), "disabled");
+            attribute.Value = isReadOnly ? "true" : "false";
+
+            HasChanged = true;
+        }
+
+        public void SetAttributeReadOnlyMode(string attributeLogicalName, bool isReadOnly)
+        {
+            var attribute = GetAttribute(GetCellControlNode(GetCellNodeByAttributeLogicalName(attributeLogicalName)), "disabled");
+            attribute.Value = isReadOnly ? "true" : "false";
+
+            HasChanged = true;
+        }
+
+        public void SetAttributeVisibilityMode(Guid cellId, bool isVisible)
+        {
+            var attribute = GetAttribute(GetCellNode(cellId), "visible");
+            attribute.Value = isVisible ? "true" : "false";
+
+            HasChanged = true;
+        }
+
+        public void SetAttributeVisibilityMode(string attributeLogicalName, bool isVisible)
+        {
+            var attribute = GetAttribute(GetCellNodeByAttributeLogicalName(attributeLogicalName), "visible");
+            attribute.Value = isVisible ? "true" : "false";
+
+            HasChanged = true;
+        }
+
+        public override string ToString()
+        {
+            return form.GetAttributeValue<string>("name");
+        }
+
+        public void Update(IOrganizationService service)
+        {
+            form["formxml"] = formXml.OuterXml;
+
+            service.Update(form);
+        }
+
         private void AddAttributeNode(XmlNode referenceNode, string attributeLogicalName, string classId, Label displayNames)
         {
             // Add labels information
@@ -269,60 +276,52 @@ namespace MsCrmTools.FormAttributeManager.AppCode
             referenceNode.AppendChild(newControlNode);
         }
 
-        public void AddAttribute(string attributeLogicalName, string classId, Label displayNames, string sourceAttributeLogicalName)
+        private XmlAttribute GetAttribute(XmlNode node, string xmlAttributeName)
         {
-            var referenceCellNode = GetCellNodeByAttributeLogicalName(sourceAttributeLogicalName);
-
-            // Check if there is an empty cell after the reference cell
-            if (referenceCellNode.NextSibling != null
-                && referenceCellNode.NextSibling.SelectSingleNode("control") == null)
+            if (node.Attributes == null)
             {
-                AddAttributeNode(referenceCellNode.NextSibling, attributeLogicalName, classId, displayNames);
+                throw new Exception("Attribute collection expected for the current node!");
             }
 
-            else
+            var attribute = node.Attributes[xmlAttributeName];
+            if (attribute == null)
             {
-                // If not, we add a new row to store the new cell
-                int cellCount = referenceCellNode.ParentNode.ChildNodes.Count;
-                var currentRowNode = referenceCellNode.ParentNode;
-                var rowsNode = currentRowNode.ParentNode;
-
-                var newRowNode = rowsNode.OwnerDocument.CreateElement("row");
-
-                for (int i = 0; i < cellCount; i++)
-                {
-                    var newCellNode = rowsNode.OwnerDocument.CreateElement("cell");
-
-                    var idAttr = rowsNode.OwnerDocument.CreateAttribute("id");
-                    idAttr.Value = Guid.NewGuid().ToString("B");
-                    newCellNode.Attributes.Append(idAttr);
-
-                    var labelsNode = rowsNode.OwnerDocument.CreateElement("labels");
-                    newCellNode.AppendChild(labelsNode);
-
-                    newRowNode.AppendChild(newCellNode);
-
-                    if (i == 0)
-                    {
-                        AddAttributeNode(newCellNode, attributeLogicalName, classId, displayNames);
-                    }
-                }
-
-                rowsNode.InsertAfter(newRowNode, currentRowNode);
+                attribute = formXml.CreateAttribute(xmlAttributeName);
+                node.Attributes.Append(attribute);
             }
+
+            return attribute;
         }
 
-        public bool HasAttribute(string attributeLogicalName)
+        private XmlNode GetCellControlNode(XmlNode cellNode)
         {
-            try
+            return cellNode.SelectSingleNode("control");
+        }
+
+        private XmlNode GetCellNode(Guid cellId)
+        {
+            var node = formXml.SelectSingleNode(string.Format("//cell[@id='{0}']", cellId.ToString("B").ToLower()));
+            if (node == null)
             {
-                GetCellNodeByAttributeLogicalName(attributeLogicalName);
-                return true;
+                throw new Exception(string.Format("Cannot find cell node with id '{0}' in form '{1}",
+                    cellId,
+                    form.GetAttributeValue<string>("name")));
             }
-            catch
+
+            return node;
+        }
+
+        private XmlNode GetCellNodeByAttributeLogicalName(string attributeLogicalName)
+        {
+            var node = formXml.SelectSingleNode(string.Format("//cell[control/@datafieldname='{0}']", attributeLogicalName));
+            if (node == null)
             {
-                return false;
+                throw new Exception(string.Format("Cannot find cell node for attribute '{0}' in form '{1}",
+                    attributeLogicalName,
+                    form.GetAttributeValue<string>("name")));
             }
+
+            return node;
         }
     }
 }

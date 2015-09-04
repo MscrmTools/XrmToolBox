@@ -7,7 +7,7 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
     /// <summary>
     /// Compares two listview items for sorting
     /// </summary>
-    class ListViewItemComparer : IComparer
+    internal class ListViewItemComparer : IComparer
     {
         #region Variables
 
@@ -21,7 +21,7 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
         /// </summary>
         private readonly SortOrder innerOrder;
 
-        #endregion
+        #endregion Variables
 
         #region Constructors
 
@@ -39,13 +39,13 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
         /// </summary>
         /// <param name="column">Index of sorting column</param>
         /// <param name="order">Sort order</param>
-        public ListViewItemComparer(int column,SortOrder order)
+        public ListViewItemComparer(int column, SortOrder order)
         {
             col = column;
             innerOrder = order;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -76,6 +76,6 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
             return String.CompareOrdinal(y.SubItems[col].Text, x.SubItems[col].Text);
         }
 
-        #endregion
+        #endregion Methods
     }
 }

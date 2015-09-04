@@ -3,20 +3,66 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Xrm.Sdk;
+using MsCrmTools.WebResourcesManager.Forms;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
-using MsCrmTools.WebResourcesManager.Forms;
 
 namespace MsCrmTools.WebResourcesManager.AppCode
 {
-    class TreeViewHelper
+    internal class TreeViewHelper
     {
         #region Folders and TreeNodes methods
+
+        /// <summary>
+        /// Create a TreeView folder structure depending on the DirectoryInfo
+        /// element in parameters
+        /// </summary>
+        /// <param name="parentFolderNode">Current TreeNode</param>
+        /// <param name="di">Current physical directory info</param>
+        /// <param name="invalidFilenames"></param>
+        /// <param name="inValidWrNameRegex"></param>
+        public static void CreateFolderStructure(TreeNode parentFolderNode, DirectoryInfo di, List<string> invalidFilenames, List<string> extensionsToLoad)
+        {
+            foreach (DirectoryInfo diChild in di.GetDirectories())
+            {
+                if (WebResource.IsInvalidName(diChild.Name))
+                {
+                    invalidFilenames.Add(diChild.FullName);
+                    continue;
+                }
+
+                // If the current physical directory has sub directories or
+                // javascript file, a new TreeNode has to be created
+                if (diChild.GetDirectories().Length > 0 || diChild.GetFiles("*.*").Length > 0)
+                {
+                    var folderNode = new TreeNode(diChild.Name) { ImageIndex = 1, SelectedImageIndex = 1, Tag = diChild.FullName, Name = diChild.Name };
+
+                    parentFolderNode.Nodes.Add(folderNode);
+
+                    CreateFolderStructure(folderNode, diChild, invalidFilenames, extensionsToLoad);
+                }
+            }
+
+            foreach (FileInfo fiChild in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
+            {
+                if (WebResource.IsInvalidName(fiChild.Name) || !WebResource.ValidExtensions.Contains(fiChild.Extension.Remove(0, 1).ToLower()))
+                {
+                    invalidFilenames.Add(fiChild.FullName);
+                    continue;
+                }
+
+                if (extensionsToLoad == null || extensionsToLoad.Contains(fiChild.Extension))
+                {
+                    // Create a TreeNode for each javascript file
+                    CreateWebResourceNode(fiChild, parentFolderNode);
+                }
+            }
+        }
 
         /// <summary>
         /// Create an item (script file or folder) on disk depending on specifed
@@ -36,7 +82,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
                 if (doContinue)
                 {
-                    Directory.CreateDirectory(Path.Combine(folderPath,node.Text));
+                    Directory.CreateDirectory(Path.Combine(folderPath, node.Text));
 
                     foreach (TreeNode childNode in node.Nodes)
                     {
@@ -66,48 +112,108 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         }
 
         /// <summary>
-        /// Create a TreeView folder structure depending on the DirectoryInfo
-        /// element in parameters
+        /// Create a TreeNode for the javascript file passed in parameter
         /// </summary>
-        /// <param name="parentFolderNode">Current TreeNode</param>
-        /// <param name="di">Current physical directory info</param>
-        /// <param name="invalidFilenames"></param>
-        /// <param name="inValidWrNameRegex"></param>
-        public static void CreateFolderStructure(TreeNode parentFolderNode, DirectoryInfo di, List<string> invalidFilenames, List<string> extensionsToLoad)
+        /// <param name="fiChild">Javascript FileInfo</param>
+        /// <param name="parent">Parent element (TreeView or TreeNode)</param>
+        public static void CreateWebResourceNode(FileInfo fiChild, object parent)
         {
-            foreach (DirectoryInfo diChild in di.GetDirectories())
+            string scriptName = fiChild.Name;
+            string fileName = scriptName;
+
+            // Creating the script "name" attribute which depends on the current
+            // TreeView structure
+            var treeNode = parent as TreeNode;
+            if (treeNode != null)
             {
-                if (WebResource.IsInvalidName(diChild.Name))
-                {
-                    invalidFilenames.Add(diChild.FullName);
-                    continue;
-                }
-                
-                // If the current physical directory has sub directories or 
-                // javascript file, a new TreeNode has to be created
-                if (diChild.GetDirectories().Length > 0 || diChild.GetFiles("*.*").Length > 0)
-                {
-                    var folderNode = new TreeNode(diChild.Name) { ImageIndex = 1, SelectedImageIndex = 1, Tag = diChild.FullName, Name = diChild.Name };
+                var parentNode = treeNode;
 
-                    parentFolderNode.Nodes.Add(folderNode);
-
-                    CreateFolderStructure(folderNode, diChild, invalidFilenames, extensionsToLoad);
+                while (parentNode != null && !parentNode.Text.EndsWith("_"))
+                {
+                    fileName = string.Format("{0}/{1}", parentNode.Text, fileName);
+                    parentNode = parentNode.Parent;
                 }
+
+                if (parentNode != null)
+                    fileName = string.Format("{0}/{1}", parentNode.Text, fileName);
             }
 
-            foreach (FileInfo fiChild in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
-            {
-                if (WebResource.IsInvalidName(fiChild.Name) || !WebResource.ValidExtensions.Contains(fiChild.Extension.Remove(0, 1).ToLower()))
-                {
-                    invalidFilenames.Add(fiChild.FullName);
-                    continue;
-                }
+            int imageIndex = 0;
 
-                if (extensionsToLoad == null || extensionsToLoad.Contains(fiChild.Extension))
-                {
-                    // Create a TreeNode for each javascript file
-                    CreateWebResourceNode(fiChild, parentFolderNode);
-                }
+            switch (fiChild.Extension.ToLower().Remove(0, 1))
+            {
+                case "html":
+                case "htm":
+                    imageIndex = 2;
+                    break;
+
+                case "css":
+                    imageIndex = 3;
+                    break;
+
+                case "js":
+                    imageIndex = 4;
+                    break;
+
+                case "png":
+                    imageIndex = 6;
+                    break;
+
+                case "jpg":
+                    imageIndex = 7;
+                    break;
+
+                case "gif":
+                    imageIndex = 8;
+                    break;
+
+                case "xap":
+                    imageIndex = 9;
+                    break;
+
+                case "xsl":
+                    imageIndex = 10;
+                    break;
+
+                case "ico":
+                    imageIndex = 11;
+                    break;
+            }
+
+            // Create new virtual web resource
+            var script = new Entity("webresource");
+            script["name"] = fileName;
+            script["webresourcetype"] = new OptionSetValue(imageIndex - 1);
+
+            // Add content
+            script["content"] = Convert.ToBase64String(File.ReadAllBytes(fiChild.FullName));
+
+            // Generate display name (Credit to badhabits)
+            var lastSlash = fileName.LastIndexOf("/", StringComparison.Ordinal);
+            var displayName = lastSlash > -1
+                ? fileName.Substring(lastSlash + 1)
+                : fileName;
+            script["displayname"] = displayName;
+
+            var scriptObject = new WebResource(script, fiChild.FullName);
+
+            var node = new TreeNode
+            {
+                Text = scriptName,
+                Name = scriptName,
+                Tag = scriptObject,
+                ImageIndex = imageIndex,
+                SelectedImageIndex = imageIndex
+            };
+
+            var node1 = parent as TreeNode;
+            if (node1 != null)
+            {
+                node1.Nodes.Add(node);
+            }
+            else
+            {
+                ((TreeView)parent).Nodes.Add(node);
             }
         }
 
@@ -151,106 +257,6 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                         wr.WebResourceEntity["content"] = Convert.ToBase64String(File.ReadAllBytes(wr.FilePath));
                     }
                 }
-            }
-        }
-
-
-        /// <summary>
-        /// Create a TreeNode for the javascript file passed in parameter
-        /// </summary>
-        /// <param name="fiChild">Javascript FileInfo</param>
-        /// <param name="parent">Parent element (TreeView or TreeNode)</param>
-        public static void CreateWebResourceNode(FileInfo fiChild, object parent)
-        {
-            string scriptName = fiChild.Name;
-            string fileName = scriptName;
-
-            // Creating the script "name" attribute which depends on the current
-            // TreeView structure
-            var treeNode = parent as TreeNode;
-            if (treeNode != null)
-            {
-                var parentNode = treeNode;
-
-                while (parentNode != null && !parentNode.Text.EndsWith("_"))
-                {
-                    fileName = string.Format("{0}/{1}", parentNode.Text, fileName);
-                    parentNode = parentNode.Parent;
-                }
-
-                if (parentNode != null)
-                    fileName = string.Format("{0}/{1}", parentNode.Text, fileName);
-            }
-
-            int imageIndex = 0;
-
-            switch (fiChild.Extension.ToLower().Remove(0, 1))
-            {
-                case "html":
-                case "htm":
-                    imageIndex = 2;
-                    break;
-                case "css":
-                    imageIndex = 3;
-                    break;
-                case "js":
-                    imageIndex = 4;
-                    break;
-                case "png":
-                    imageIndex = 6;
-                    break;
-                case "jpg":
-                    imageIndex = 7;
-                    break;
-                case "gif":
-                    imageIndex = 8;
-                    break;
-                case "xap":
-                    imageIndex = 9;
-                    break;
-                case "xsl":
-                    imageIndex = 10;
-                    break;
-                case "ico":
-                    imageIndex = 11;
-                    break;
-            }
-
-
-            // Create new virtual web resource
-            var script = new Entity("webresource");
-            script["name"] = fileName;
-            script["webresourcetype"] = new OptionSetValue(imageIndex - 1);
-
-            // Add content
-            script["content"] = Convert.ToBase64String(File.ReadAllBytes(fiChild.FullName));
-
-            // Generate display name (Credit to badhabits)
-            var lastSlash = fileName.LastIndexOf("/", StringComparison.Ordinal);
-            var displayName = lastSlash > -1
-                ? fileName.Substring(lastSlash + 1)
-                : fileName;
-            script["displayname"] = displayName;
-
-            var scriptObject = new WebResource(script, fiChild.FullName);
-
-            var node = new TreeNode
-            {
-                Text = scriptName,
-                Name = scriptName,
-                Tag = scriptObject,
-                ImageIndex = imageIndex,
-                SelectedImageIndex = imageIndex
-            };
-
-            var node1 = parent as TreeNode;
-            if (node1 != null)
-            {
-                node1.Nodes.Add(node);
-            }
-            else
-            {
-                ((TreeView) parent).Nodes.Add(node);
             }
         }
 
@@ -318,69 +324,67 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             return count;
         }
 
-        internal static void GetNodes(List<TreeNode> nodes, object o, bool onlyCheckedNodes)
+        internal static void AddExistingWebResource(TreeView tv, Control mainControl)
         {
-            var tView = o as TreeView;
-            if (tView != null)
+            TreeNode selectedNode = tv.SelectedNode;
+            TreeNode tempNode = selectedNode;
+
+            string name = tempNode.Text;
+            while (tempNode.Parent != null)
             {
-                foreach (TreeNode node in tView.Nodes)
+                name = string.Format("{0}/{1}", tempNode.Parent.Text, name);
+                tempNode = tempNode.Parent;
+            }
+
+            var ofd = new OpenFileDialog { Multiselect = true, Title = "Select file(s) for web resource(s)" };
+
+            if (ofd.ShowDialog(mainControl) == DialogResult.OK)
+            {
+                var errorList = new List<string>();
+
+                foreach (string fileName in ofd.FileNames)
                 {
-                    if (onlyCheckedNodes && node.Checked || !onlyCheckedNodes)
-                        if (node.Tag != null)
+                    var fi = new FileInfo(fileName);
+
+                    //Test valid characters
+                    if (WebResource.IsInvalidName(fi.Name))
+                    {
+                        errorList.Add(fileName);
+                    }
+                    else
+                    {
+                        var webResource = new Entity("webresource");
+                        webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(fileName));
+                        webResource["webresourcetype"] =
+                            new OptionSetValue(WebResource.GetTypeFromExtension(fi.Extension.Remove(0, 1)));
+                        webResource["name"] = string.Format("{0}/{1}", name, fi.Name);
+                        webResource["displayname"] = string.Format("{0}/{1}", name, fi.Name);
+                        var wr = new WebResource(webResource, fileName);
+
+                        var node = new TreeNode(fi.Name)
                         {
-                            string name = GetName(node);
-                            ((WebResource)node.Tag).WebResourceEntity["name"] = name;
+                            ImageIndex =
+                                WebResource.GetImageIndexFromExtension(fi.Extension.Remove(0,
+                                                                               1))
+                        };
+                        node.SelectedImageIndex = node.ImageIndex;
+                        node.Tag = wr;
 
-                            nodes.Add(node);
-                        }
+                        selectedNode.Nodes.Add(node);
 
-                    GetNodes(nodes, node, onlyCheckedNodes);
+                        selectedNode.Expand();
+                    }
+
+                    if (errorList.Count > 0)
+                    {
+                        MessageBox.Show("Some file have not been added since their name does not match naming policy\r\n"
+                                        + string.Join("\r\n", errorList));
+                    }
                 }
             }
-            else
-            {
-                foreach (TreeNode node in ((TreeNode)o).Nodes)
-                {
-                    if (onlyCheckedNodes && node.Checked || !onlyCheckedNodes)
-                        if (node.Tag != null)
-                        {
-                            string name = GetName(node);
-                            ((WebResource)node.Tag).WebResourceEntity["name"] = name;
 
-                            nodes.Add(node);
-                        }
-
-                    GetNodes(nodes, node, onlyCheckedNodes);
-                }
-            }
-        }
-
-        private static string GetName(TreeNode node)
-        {
-            string name = node.Text;
-
-            while (node.Parent != null)
-            {
-                node = node.Parent;
-                name = string.Format("{0}/{1}", node.Text, name);
-            }
-
-            return name;
-        }
-
-        internal static void AddRoot(TreeView tv, Control mainControl)
-        {
-            var nrd = new NewRootDialog { StartPosition = FormStartPosition.CenterParent };
-
-            if (nrd.ShowDialog(mainControl) == DialogResult.OK)
-            {
-                var rootNode = new TreeNode(nrd.RootName) { ImageIndex = 0, SelectedImageIndex = 0 };
-
-                tv.Nodes.Add(rootNode);
-
-                tv.TreeViewNodeSorter = new NodeSorter();
-                tv.Sort();
-            }
+            tv.TreeViewNodeSorter = new NodeSorter();
+            tv.Sort();
         }
 
         internal static void AddFolder(TreeView tvWebResources, Control mainControl)
@@ -405,6 +409,44 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
             tvWebResources.TreeViewNodeSorter = new NodeSorter();
             tvWebResources.Sort();
+        }
+
+        internal static void AddRoot(TreeView tv, Control mainControl)
+        {
+            var nrd = new NewRootDialog { StartPosition = FormStartPosition.CenterParent };
+
+            if (nrd.ShowDialog(mainControl) == DialogResult.OK)
+            {
+                var rootNode = new TreeNode(nrd.RootName) { ImageIndex = 0, SelectedImageIndex = 0 };
+
+                tv.Nodes.Add(rootNode);
+
+                tv.TreeViewNodeSorter = new NodeSorter();
+                tv.Sort();
+            }
+        }
+
+        internal static bool CheckOnlyThisNode(TreeView tv)
+        {
+            TreeNode node = tv.SelectedNode;
+
+            // If no item is selected, return
+            if (node == null)
+                return true;
+
+            // Retrieve checked web resources
+            var nodesList = new List<TreeNode>();
+            TreeViewHelper.GetNodes(nodesList, tv, true);
+
+            // Uncheck all items
+            foreach (var childNode in nodesList)
+            {
+                childNode.Checked = false;
+            }
+
+            // Check the selected item
+            node.Checked = true;
+            return false;
         }
 
         internal static void CreateEmptyWebResource(string extension, TreeView tv, Control mainControl)
@@ -459,90 +501,41 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             }
         }
 
-        internal static void AddExistingWebResource(TreeView tv, Control mainControl)
-       {
-           TreeNode selectedNode = tv.SelectedNode;
-           TreeNode tempNode = selectedNode;
-
-           string name = tempNode.Text;
-           while (tempNode.Parent != null)
-           {
-               name = string.Format("{0}/{1}", tempNode.Parent.Text, name);
-               tempNode = tempNode.Parent;
-           }
-
-           var ofd = new OpenFileDialog { Multiselect = true, Title = "Select file(s) for web resource(s)" };
-
-           if (ofd.ShowDialog(mainControl) == DialogResult.OK)
-           {
-               var errorList = new List<string>();
-
-               foreach (string fileName in ofd.FileNames)
-               {
-                   var fi = new FileInfo(fileName);
-
-                   //Test valid characters
-                   if (WebResource.IsInvalidName(fi.Name))
-                   {
-                       errorList.Add(fileName);
-                   }
-                   else
-                   {
-                       var webResource = new Entity("webresource");
-                       webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(fileName));
-                       webResource["webresourcetype"] =
-                           new OptionSetValue(WebResource.GetTypeFromExtension(fi.Extension.Remove(0, 1)));
-                       webResource["name"] = string.Format("{0}/{1}", name, fi.Name);
-                       webResource["displayname"] = string.Format("{0}/{1}", name, fi.Name);
-                       var wr = new WebResource(webResource, fileName);
-
-                       var node = new TreeNode(fi.Name)
-                       {
-                           ImageIndex =
-                               WebResource.GetImageIndexFromExtension(fi.Extension.Remove(0,
-                                                                              1))
-                       };
-                       node.SelectedImageIndex = node.ImageIndex;
-                       node.Tag = wr;
-
-                       selectedNode.Nodes.Add(node);
-
-                       selectedNode.Expand();
-                   }
-
-                   if (errorList.Count > 0)
-                   {
-                       MessageBox.Show("Some file have not been added since their name does not match naming policy\r\n"
-                                       + string.Join("\r\n", errorList));
-                   }
-               }
-           }
-
-           tv.TreeViewNodeSorter = new NodeSorter();
-           tv.Sort();
-       }
-
-        internal static bool CheckOnlyThisNode(TreeView tv)
+        internal static void GetNodes(List<TreeNode> nodes, object o, bool onlyCheckedNodes)
         {
-            TreeNode node = tv.SelectedNode;
-
-            // If no item is selected, return
-            if (node == null)
-                return true;
-
-            // Retrieve checked web resources
-            var nodesList = new List<TreeNode>();
-            TreeViewHelper.GetNodes(nodesList, tv, true);
-
-            // Uncheck all items
-            foreach (var childNode in nodesList)
+            var tView = o as TreeView;
+            if (tView != null)
             {
-                childNode.Checked = false;
-            }
+                foreach (TreeNode node in tView.Nodes)
+                {
+                    if (onlyCheckedNodes && node.Checked || !onlyCheckedNodes)
+                        if (node.Tag != null)
+                        {
+                            string name = GetName(node);
+                            ((WebResource)node.Tag).WebResourceEntity["name"] = name;
 
-            // Check the selected item
-            node.Checked = true;
-            return false;
+                            nodes.Add(node);
+                        }
+
+                    GetNodes(nodes, node, onlyCheckedNodes);
+                }
+            }
+            else
+            {
+                foreach (TreeNode node in ((TreeNode)o).Nodes)
+                {
+                    if (onlyCheckedNodes && node.Checked || !onlyCheckedNodes)
+                        if (node.Tag != null)
+                        {
+                            string name = GetName(node);
+                            ((WebResource)node.Tag).WebResourceEntity["name"] = name;
+
+                            nodes.Add(node);
+                        }
+
+                    GetNodes(nodes, node, onlyCheckedNodes);
+                }
+            }
         }
 
         internal static string UpdateNodesContentWithLocalFiles(TreeNodeCollection nodes)
@@ -564,7 +557,20 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
             return string.Empty;
         }
-        
+
+        private static string GetName(TreeNode node)
+        {
+            string name = node.Text;
+
+            while (node.Parent != null)
+            {
+                node = node.Parent;
+                name = string.Format("{0}/{1}", node.Text, name);
+            }
+
+            return name;
+        }
+
         private static void UpdateNodesContentWithLocalFiles(TreeNodeCollection nodes, string folderPath, string initialFolderName, StringBuilder sBuilder)
         {
             var folder = new DirectoryInfo(folderPath);

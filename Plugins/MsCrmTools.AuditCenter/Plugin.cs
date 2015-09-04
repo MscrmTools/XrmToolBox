@@ -16,7 +16,7 @@ namespace MsCrmTools.AuditCenter
     {
         public override IXrmToolBoxPluginControl GetControl()
         {
-           return new MainControl();
+            return new MainControl();
         }
     }
 }

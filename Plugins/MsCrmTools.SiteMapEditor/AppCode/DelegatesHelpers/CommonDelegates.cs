@@ -9,20 +9,24 @@ namespace Tanguy.WinForm.Utilities.DelegatesHelpers
 {
     public class CommonDelegates
     {
-        internal static void SetEnableState(Control control, bool enabled)
+        public static DialogResult DisplayMessageBox(Form form, string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
         {
-            MethodInvoker miSetEnableState = delegate
+            DialogResult result = DialogResult.Ignore;
+
+            MethodInvoker DisplayMessage = delegate
             {
-                control.Enabled = enabled;
+                result = MessageBox.Show(form, message, caption, buttons, icon);
             };
 
-            if (control.InvokeRequired)
+            if (form.InvokeRequired)
             {
-                control.Invoke(miSetEnableState);
+                form.Invoke(DisplayMessage);
+                return result;
             }
             else
             {
-                miSetEnableState();
+                DisplayMessage();
+                return result;
             }
         }
 
@@ -43,24 +47,20 @@ namespace Tanguy.WinForm.Utilities.DelegatesHelpers
             }
         }
 
-        public static DialogResult DisplayMessageBox(Form form, string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
+        internal static void SetEnableState(Control control, bool enabled)
         {
-            DialogResult result = DialogResult.Ignore;
-
-            MethodInvoker DisplayMessage = delegate
+            MethodInvoker miSetEnableState = delegate
             {
-                result = MessageBox.Show(form, message, caption, buttons, icon);
+                control.Enabled = enabled;
             };
 
-            if (form.InvokeRequired)
+            if (control.InvokeRequired)
             {
-                form.Invoke(DisplayMessage);
-                return result;
+                control.Invoke(miSetEnableState);
             }
             else
             {
-                DisplayMessage();
-                return result;
+                miSetEnableState();
             }
         }
 

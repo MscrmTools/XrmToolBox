@@ -2,9 +2,10 @@
 
 namespace MsCrmTools.AccessChecker.Forms
 {
-    class ViewInfo
+    internal class ViewInfo
     {
         public Entity Entity { get; set; }
+
         public override string ToString()
         {
             return Entity["name"].ToString();

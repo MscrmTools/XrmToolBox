@@ -3,14 +3,14 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using CSRichTextBoxSyntaxHighlighting;
+using Microsoft.Crm.Sdk.Messages;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
-using CSRichTextBoxSyntaxHighlighting;
-using Microsoft.Crm.Sdk.Messages;
 using XrmToolBox.Extensibility;
 
 namespace MsCrmTools.FetchXmlTester
@@ -42,16 +42,28 @@ namespace MsCrmTools.FetchXmlTester
 
         #region Methods
 
-        private void TsbExecuteClick(object sender, EventArgs e)
+        private string IndentXMLString(string xml)
         {
-            if (txtRequest.Text.Length == 0)
-            {
-                MessageBox.Show(this, "Please provide a fetchXml query before trying to execute it!", "Warning",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+            var ms = new MemoryStream();
+            var xtw = new XmlTextWriter(ms, Encoding.Unicode);
+            var doc = new XmlDocument();
 
-            ExecuteMethod(ProcessFetchXml);
+            try
+            {
+                doc.LoadXml(xml);
+
+                xtw.Formatting = Formatting.Indented;
+                doc.WriteContentTo(xtw);
+                xtw.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+                var sr = new StreamReader(ms);
+                return sr.ReadToEnd();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+                return null;
+            }
         }
 
         private void ProcessFetchXml()
@@ -79,34 +91,22 @@ namespace MsCrmTools.FetchXmlTester
                 },
                 txtRequest.Text);
         }
-    
+
         private void TsbCloseClick(object sender, EventArgs e)
         {
-           CloseTool();
+            CloseTool();
         }
 
-        private string IndentXMLString(string xml)
+        private void TsbExecuteClick(object sender, EventArgs e)
         {
-            var ms = new MemoryStream();
-            var xtw = new XmlTextWriter(ms, Encoding.Unicode);
-            var doc = new XmlDocument();
-
-            try
+            if (txtRequest.Text.Length == 0)
             {
-                doc.LoadXml(xml);
+                MessageBox.Show(this, "Please provide a fetchXml query before trying to execute it!", "Warning",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-                xtw.Formatting = Formatting.Indented;
-                doc.WriteContentTo(xtw);
-                xtw.Flush();
-                ms.Seek(0, SeekOrigin.Begin);
-                var sr = new StreamReader(ms);
-                return sr.ReadToEnd();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-                return null;
-            }
+            ExecuteMethod(ProcessFetchXml);
         }
 
         #endregion Methods
@@ -121,7 +121,7 @@ namespace MsCrmTools.FetchXmlTester
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-           
+
                 ((XMLViewer)tabControl1.SelectedTab.Controls[0]).Process(true);
             }
             catch (Exception error)

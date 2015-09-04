@@ -5,42 +5,14 @@
 
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Microsoft.Win32;
 
 namespace XrmToolBox
 {
-    static class Program
+    internal static class Program
     {
-        /// <summary>
-        /// Point d'entrée principal de l'application.
-        /// </summary>
-        [STAThread]
-        static void Main(string[] args)
-        {
-            try
-            {
-                if (!CheckRequiredAssemblies())
-                {
-                    return;
-                }
-
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new MainForm(args));
-            }
-            catch (Exception error)
-            {
-                const string lockedMessage = "One reason can be that at least one file is locked by Windows. Please unlock each locked files or unlock XrmToolBox.zip before extracting its content";
-                MessageBox.Show("An unexpected error occured: " + error + "\r\n\r\n" + lockedMessage, "Error", MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-            }
-        }
-
-        static bool CheckRequiredAssemblies()
+        private static bool CheckRequiredAssemblies()
         {
             try
             {
@@ -67,6 +39,31 @@ namespace XrmToolBox
                 }
 
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Point d'entrée principal de l'application.
+        /// </summary>
+        [STAThread]
+        private static void Main(string[] args)
+        {
+            try
+            {
+                if (!CheckRequiredAssemblies())
+                {
+                    return;
+                }
+
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainForm(args));
+            }
+            catch (Exception error)
+            {
+                const string lockedMessage = "One reason can be that at least one file is locked by Windows. Please unlock each locked files or unlock XrmToolBox.zip before extracting its content";
+                MessageBox.Show("An unexpected error occured: " + error + "\r\n\r\n" + lockedMessage, "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
             }
         }
     }

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Xml;
-using Microsoft.Crm.Sdk.Messages;
+﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Xml;
 
 namespace MsCrmTools.FormParameterManager.AppCode
 {
@@ -15,10 +15,8 @@ namespace MsCrmTools.FormParameterManager.AppCode
     {
         #region Variables
 
-        private static EntityMetadata[] entitiesMetadatas;
-
         private const string ParametersListXPath = "form/formparameters";
-
+        private static EntityMetadata[] entitiesMetadatas;
         private readonly Entity form;
 
         #endregion Variables
@@ -43,15 +41,11 @@ namespace MsCrmTools.FormParameterManager.AppCode
 
         #region Properties
 
-        public List<FormParameter> Parameters { get; private set; }
-
-        public string Name { get; private set; }
-
-        public string EntityLogicalName { get; private set; }
-
         public string EntityDisplayName { get; private set; }
-
+        public string EntityLogicalName { get; private set; }
         public Guid Id { get; private set; }
+        public string Name { get; private set; }
+        public List<FormParameter> Parameters { get; private set; }
 
         #endregion Properties
 
@@ -67,11 +61,11 @@ namespace MsCrmTools.FormParameterManager.AppCode
         {
             if (worker != null && worker.WorkerReportsProgress)
             {
-                worker.ReportProgress(0,"Retrieving entities metadata...");
+                worker.ReportProgress(0, "Retrieving entities metadata...");
             }
 
-            var request = new RetrieveAllEntitiesRequest {EntityFilters = EntityFilters.Entity};
-            var response = (RetrieveAllEntitiesResponse) service.Execute(request);
+            var request = new RetrieveAllEntitiesRequest { EntityFilters = EntityFilters.Entity };
+            var response = (RetrieveAllEntitiesResponse)service.Execute(request);
             entitiesMetadatas = response.EntityMetadata;
 
             if (worker != null && worker.WorkerReportsProgress)
@@ -109,35 +103,19 @@ namespace MsCrmTools.FormParameterManager.AppCode
             return service.RetrieveMultiple(qe).Entities.Select(e => new CrmForm(e));
         }
 
-        private void ListParameters()
+        public static void PublishForms(IOrganizationService service, IEnumerable<string> entities)
         {
-            Parameters = new List<FormParameter>();
-            
-            var formXml = form.GetAttributeValue<string>("formxml");
-            var doc = new XmlDocument();
-            doc.LoadXml(formXml);
-
-            var parametersListNode = doc.SelectSingleNode(ParametersListXPath);
-            if (parametersListNode == null)
+            var entitiesToPublish = "";
+            entitiesToPublish = entities.Aggregate(entitiesToPublish,
+                (current, e) => current + ("<entity>" + e + "</entity>"));
+            var request = new PublishXmlRequest
             {
-                return;
-            }
+                ParameterXml =
+                    string.Format("<importexportxml><entities>{0}</entities></importexportxml>",
+                        entitiesToPublish)
+            };
 
-            
-            foreach (XmlNode parameterNode in parametersListNode.ChildNodes)
-            {
-                if (parameterNode.NodeType == XmlNodeType.Comment)
-                {
-                    continue;
-                }
-
-                Parameters.Add(new FormParameter
-                {
-                    Name = parameterNode.Attributes["name"].Value,
-                    Type = (FormParameterType)Enum.Parse(typeof(FormParameterType), parameterNode.Attributes["type"].Value),
-                    ParentForm = this
-                });
-            }
+            service.Execute(request);
         }
 
         public void AddParameter(FormParameter parameter)
@@ -178,6 +156,18 @@ namespace MsCrmTools.FormParameterManager.AppCode
             Parameters.Add(parameterToAdd);
         }
 
+        public void PublishForm(IOrganizationService service)
+        {
+            var request = new PublishXmlRequest
+            {
+                ParameterXml =
+                    string.Format("<importexportxml><entities><entity>{0}</entity></entities></importexportxml>",
+                        EntityLogicalName)
+            };
+
+            service.Execute(request);
+        }
+
         public void RemoveParameter(FormParameter parameter)
         {
             var formXml = form.GetAttributeValue<string>("formxml");
@@ -198,7 +188,7 @@ namespace MsCrmTools.FormParameterManager.AppCode
             }
 
             parametersListNode.RemoveChild(parameterNode);
-        
+
             form["formxml"] = doc.OuterXml;
 
             Parameters.Remove(parameter);
@@ -209,31 +199,34 @@ namespace MsCrmTools.FormParameterManager.AppCode
             service.Update(form);
         }
 
-        public void PublishForm(IOrganizationService service)
+        private void ListParameters()
         {
-            var request = new PublishXmlRequest
+            Parameters = new List<FormParameter>();
+
+            var formXml = form.GetAttributeValue<string>("formxml");
+            var doc = new XmlDocument();
+            doc.LoadXml(formXml);
+
+            var parametersListNode = doc.SelectSingleNode(ParametersListXPath);
+            if (parametersListNode == null)
             {
-                ParameterXml =
-                    string.Format("<importexportxml><entities><entity>{0}</entity></entities></importexportxml>",
-                        EntityLogicalName)
-            };
+                return;
+            }
 
-            service.Execute(request);
-        }
-
-        public static void PublishForms(IOrganizationService service, IEnumerable<string> entities)
-        {
-            var entitiesToPublish = "";
-            entitiesToPublish = entities.Aggregate(entitiesToPublish,
-                (current, e) => current + ("<entity>" + e + "</entity>"));
-            var request = new PublishXmlRequest
+            foreach (XmlNode parameterNode in parametersListNode.ChildNodes)
             {
-                ParameterXml =
-                    string.Format("<importexportxml><entities>{0}</entities></importexportxml>",
-                        entitiesToPublish)
-            };
+                if (parameterNode.NodeType == XmlNodeType.Comment)
+                {
+                    continue;
+                }
 
-            service.Execute(request);
+                Parameters.Add(new FormParameter
+                {
+                    Name = parameterNode.Attributes["name"].Value,
+                    Type = (FormParameterType)Enum.Parse(typeof(FormParameterType), parameterNode.Attributes["type"].Value),
+                    ParentForm = this
+                });
+            }
         }
 
         #endregion Methods

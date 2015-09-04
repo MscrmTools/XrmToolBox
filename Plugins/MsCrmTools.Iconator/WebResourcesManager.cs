@@ -3,30 +3,15 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.Drawing;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.Drawing;
 
 namespace MsCrmTools.Iconator
 {
     public static class WebResourcesManager
     {
-        /// <summary>
-        /// Class representant l'objet web ressource
-        /// </summary>
-        public class WebResource
-        {
-            public string DisplayName { get; set; }
-            public Guid WebResourceId { get; set; }
-        }
-
-        public class WebResourceAndImage
-        {
-            public Entity Webresource { get; set; }
-            public Image Image { get; set; }
-        };
-
         /// <summary>
         /// Recupere la liste des web resources d'un solution ciblee
         /// </summary>
@@ -34,7 +19,6 @@ namespace MsCrmTools.Iconator
         /// <returns>Liste des web resources retrouvees</returns>
         public static EntityCollection GetWebResourcesOnSolution(IOrganizationService service)
         {
-
             var queryWr = new QueryExpression
                               {
                                   EntityName = "webresource",
@@ -52,5 +36,19 @@ namespace MsCrmTools.Iconator
             return service.RetrieveMultiple(queryWr);
         }
 
+        /// <summary>
+        /// Class representant l'objet web ressource
+        /// </summary>
+        public class WebResource
+        {
+            public string DisplayName { get; set; }
+            public Guid WebResourceId { get; set; }
+        }
+
+        public class WebResourceAndImage
+        {
+            public Image Image { get; set; }
+            public Entity Webresource { get; set; }
+        };
     }
 }

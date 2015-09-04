@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Crm.Sdk.Messages;
+﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
-using XrmToolBox;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
 {
@@ -40,14 +38,13 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
             }
             else
             {
-               // throw new Exception("Unexpected stage data");
+                // throw new Exception("Unexpected stage data");
             }
         }
 
-        public int Rank
+        public string Description
         {
-            get { return workflow.GetAttributeValue<int>("rank"); }
-            set { workflow["rank"] = value; }
+            get { return workflow.GetAttributeValue<string>("description"); }
         }
 
         public string EntityLogicalName
@@ -55,7 +52,10 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
             get { return workflow.GetAttributeValue<string>("primaryentity"); }
         }
 
-        public int Stage { get; private set; }
+        public bool HasChanged
+        {
+            get { return initialRank != Rank; }
+        }
 
         public string Message { get; private set; }
 
@@ -64,9 +64,27 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
             get { return workflow.GetAttributeValue<string>("name"); }
         }
 
-        public string Description
+        public int Rank
         {
-            get { return workflow.GetAttributeValue<string>("description"); }
+            get { return workflow.GetAttributeValue<int>("rank"); }
+            set { workflow["rank"] = value; }
+        }
+
+        public int Stage { get; private set; }
+        public string Type { get { return "Workflow"; } }
+
+        public static IEnumerable<SynchronousWorkflow> RetrievePluginSteps(IOrganizationService service)
+        {
+            var qba = new QueryByAttribute("workflow")
+            {
+                Attributes = { "mode", "type", "category" },
+                Values = { 1, 1, 0 },
+                ColumnSet = new ColumnSet(true)
+            };
+
+            var steps = service.RetrieveMultiple(qba);
+
+            return steps.Entities.Select(e => new SynchronousWorkflow(e));
         }
 
         public void UpdateRank(IOrganizationService service)
@@ -100,26 +118,5 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
                 initialRank = workflow.GetAttributeValue<int>("rank");
             }
         }
-
-         public static IEnumerable<SynchronousWorkflow> RetrievePluginSteps(IOrganizationService service)
-        {
-            var qba = new QueryByAttribute("workflow")
-            {
-                Attributes = {"mode", "type", "category"},
-                Values = {1, 1, 0},
-                ColumnSet = new ColumnSet(true)
-            };
-
-            var steps = service.RetrieveMultiple(qba);
-
-            return steps.Entities.Select(e => new SynchronousWorkflow(e));
-        }
-
-         public bool HasChanged
-         {
-             get { return initialRank != Rank; }
-         }
-
-         public string Type { get { return "Workflow"; } }
     }
 }

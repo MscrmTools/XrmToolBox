@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using MsCrmTools.FormLibrariesManager.AppCode;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace MsCrmTools.FormLibrariesManager.UserControls
 {
@@ -13,6 +13,15 @@ namespace MsCrmTools.FormLibrariesManager.UserControls
         }
 
         public IOrganizationService Service { get; set; }
+
+        public List<Entity> GetSelectedScripts()
+        {
+            var scripts = new List<Entity>();
+
+            GetNodes(scripts, ScriptsTreeView, true);
+
+            return scripts;
+        }
 
         public void LoadScripts(List<Entity> scripts)
         {
@@ -29,46 +38,6 @@ namespace MsCrmTools.FormLibrariesManager.UserControls
             ScriptsTreeView.Sort();
             ScriptsTreeView.ExpandAll();
             ScriptsTreeView.Invalidate();
-        }
-
-        public List<Entity> GetSelectedScripts()
-        {
-            var scripts = new List<Entity>();
-
-            GetNodes(scripts, ScriptsTreeView, true);
-
-            return scripts;
-        }
-
-        private void GetNodes(List<Entity> scripts, object o, bool onlyCheckedNodes)
-        {
-            var tView = o as TreeView;
-            if (tView != null)
-            {
-                foreach (TreeNode node in tView.Nodes)
-                {
-                    if (onlyCheckedNodes && node.Checked || !onlyCheckedNodes)
-                        if (node.Tag != null)
-                        {
-                            scripts.Add((Entity)node.Tag);
-                        }
-
-                    GetNodes(scripts, node, onlyCheckedNodes);
-                }
-            }
-            else
-            {
-                foreach (TreeNode node in ((TreeNode)o).Nodes)
-                {
-                    if (onlyCheckedNodes && node.Checked || !onlyCheckedNodes)
-                        if (node.Tag != null)
-                        {
-                            scripts.Add((Entity)node.Tag);
-                        }
-
-                    GetNodes(scripts, node, onlyCheckedNodes);
-                }
-            }
         }
 
         private void AddNode(string[] nameParts, int index, object parent, Entity script)
@@ -141,17 +110,48 @@ namespace MsCrmTools.FormLibrariesManager.UserControls
             }
         }
 
-        private void ScriptsTreeView_AfterCheck(object sender, TreeViewEventArgs e)
-        {
-            CheckTreeNode(e.Node);
-        }
-
         private void CheckTreeNode(TreeNode node)
         {
             foreach (TreeNode childNode in node.Nodes)
             {
                 childNode.Checked = node.Checked;
             }
+        }
+
+        private void GetNodes(List<Entity> scripts, object o, bool onlyCheckedNodes)
+        {
+            var tView = o as TreeView;
+            if (tView != null)
+            {
+                foreach (TreeNode node in tView.Nodes)
+                {
+                    if (onlyCheckedNodes && node.Checked || !onlyCheckedNodes)
+                        if (node.Tag != null)
+                        {
+                            scripts.Add((Entity)node.Tag);
+                        }
+
+                    GetNodes(scripts, node, onlyCheckedNodes);
+                }
+            }
+            else
+            {
+                foreach (TreeNode node in ((TreeNode)o).Nodes)
+                {
+                    if (onlyCheckedNodes && node.Checked || !onlyCheckedNodes)
+                        if (node.Tag != null)
+                        {
+                            scripts.Add((Entity)node.Tag);
+                        }
+
+                    GetNodes(scripts, node, onlyCheckedNodes);
+                }
+            }
+        }
+
+        private void ScriptsTreeView_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            CheckTreeNode(e.Node);
         }
     }
 }

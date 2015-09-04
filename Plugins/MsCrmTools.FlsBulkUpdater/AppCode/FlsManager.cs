@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MsCrmTools.FlsBulkUpdater.AppCode
 {
-    class FlsManager
+    internal class FlsManager
     {
         private readonly IOrganizationService service;
-        
+
         public FlsManager(IOrganizationService service)
         {
             this.service = service;
@@ -68,7 +68,6 @@ namespace MsCrmTools.FlsBulkUpdater.AppCode
 
         public void Update(List<Entity> profiles, List<SecureFieldInfo> fields)
         {
-            
         }
     }
 }

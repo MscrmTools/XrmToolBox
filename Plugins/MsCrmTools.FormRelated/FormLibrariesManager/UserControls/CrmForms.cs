@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Xrm.Sdk;
+using MsCrmTools.FormLibrariesManager.AppCode;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
-using MsCrmTools.FormLibrariesManager.AppCode;
 
 namespace MsCrmTools.FormLibrariesManager.UserControls
 {
@@ -14,6 +14,11 @@ namespace MsCrmTools.FormLibrariesManager.UserControls
         }
 
         public IOrganizationService Service { get; set; }
+
+        public List<Entity> GetSelectedForms()
+        {
+            return lvForms.CheckedItems.Cast<ListViewItem>().Select(i => (Entity)i.Tag).ToList();
+        }
 
         public void LoadForms(List<Entity> forms)
         {
@@ -27,11 +32,6 @@ namespace MsCrmTools.FormLibrariesManager.UserControls
 
                 lvForms.Items.Add(item);
             }
-        }
-
-        public List<Entity> GetSelectedForms()
-        {
-            return lvForms.CheckedItems.Cast<ListViewItem>().Select(i => (Entity)i.Tag).ToList();
         }
 
         private void lvForms_ColumnClick(object sender, ColumnClickEventArgs e)

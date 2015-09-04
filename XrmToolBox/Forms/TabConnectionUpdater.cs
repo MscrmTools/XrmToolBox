@@ -22,20 +22,6 @@ namespace XrmToolBox.Forms
 
         public List<TabPage> SelectedTabs { get; private set; }
 
-        private void TabConnectionUpdaterLoad(object sender, EventArgs e)
-        {
-            foreach(var tab in tabs)
-            {
-                string[] nameParts = tab.Text.Split('(');
-
-                var item = new ListViewItem(nameParts[0]);
-                item.SubItems.Add(nameParts[1].Replace(")", ""));
-                item.Tag = tab;
-
-                lvTabs.Items.Add(item);
-            }
-        }
-
         private void BtnOkClick(object sender, EventArgs e)
         {
             SelectedTabs = new List<TabPage>();
@@ -47,6 +33,20 @@ namespace XrmToolBox.Forms
 
             DialogResult = DialogResult.OK;
             Close();
+        }
+
+        private void TabConnectionUpdaterLoad(object sender, EventArgs e)
+        {
+            foreach (var tab in tabs)
+            {
+                string[] nameParts = tab.Text.Split('(');
+
+                var item = new ListViewItem(nameParts[0]);
+                item.SubItems.Add(nameParts[1].Replace(")", ""));
+                item.Tag = tab;
+
+                lvTabs.Items.Add(item);
+            }
         }
     }
 }

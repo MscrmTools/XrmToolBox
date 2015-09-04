@@ -18,6 +18,22 @@ namespace XrmToolBox.Extensibility
     public class InformationPanel
     {
         /// <summary>
+        /// Updates the message of an existing panel
+        /// </summary>
+        /// <param name="informationPanel">Panel to update</param>
+        /// <param name="message">Message to display</param>
+        public static void ChangeInformationPanelMessage(Panel informationPanel, string message)
+        {
+            foreach (var label in informationPanel.Controls.OfType<Label>())
+            {
+                if (label.Name == "InfoLabel")
+                {
+                    label.Text = message;
+                }
+            }
+        }
+
+        /// <summary>
         /// Creates an information panel with a waiting animated gif and a message
         /// </summary>
         /// <param name="parentControl">Control where the panel will be added</param>
@@ -33,10 +49,10 @@ namespace XrmToolBox.Extensibility
                                 Width = width,
                                 Height = height,
                                 Location = new Point(
-                                    (parentControl.Width - width)/2,
-                                    (parentControl.Height - height)/2),
-                                    BackColor = Color.FromArgb(255,255,224),
-                                    BorderStyle = BorderStyle.FixedSingle
+                                    (parentControl.Width - width) / 2,
+                                    (parentControl.Height - height) / 2),
+                                BackColor = Color.FromArgb(255, 255, 224),
+                                BorderStyle = BorderStyle.FixedSingle
                             };
 
             var label = new Label
@@ -45,7 +61,7 @@ namespace XrmToolBox.Extensibility
                                 AutoSize = false,
                                 TextAlign = ContentAlignment.MiddleCenter,
                                 Width = panel.Width,
-                                Height = panel.Height/2,
+                                Height = panel.Height / 2,
                                 Text = message,
                                 Location = new Point(0, 10),
                                 Font = new Font("Segoe UI", 10F),
@@ -76,8 +92,8 @@ namespace XrmToolBox.Extensibility
                                    Height = 36,
                                    Width = 36,
                                    Location = new Point(
-                                       (panel.Width - 36)/2,
-                                       (panel.Height - 36)/4*3),
+                                       (panel.Width - 36) / 2,
+                                       (panel.Height - 36) / 4 * 3),
                                    Image = Image.FromStream(file)
                                };
 
@@ -93,27 +109,11 @@ namespace XrmToolBox.Extensibility
             return panel;
         }
 
-        static void hyperlink_Click(object sender, EventArgs e)
+        private static void hyperlink_Click(object sender, EventArgs e)
         {
             Process.Start("http://mscrmtools.blogspot.fr/p/xrmtoolbox-sponsoring.html");
         }
 
-        /// <summary>
-        /// Updates the message of an existing panel
-        /// </summary>
-        /// <param name="informationPanel">Panel to update</param>
-        /// <param name="message">Message to display</param>
-        public static void ChangeInformationPanelMessage(Panel informationPanel, string message)
-        {
-            foreach (var label in informationPanel.Controls.OfType<Label>())
-            {
-                if (label.Name == "InfoLabel")
-                {
-                    label.Text = message;
-                }
-            }
-        }
-        
         /// <summary>
         /// Adjusts location of the panel when the parent container is resized
         /// </summary>
@@ -121,11 +121,11 @@ namespace XrmToolBox.Extensibility
         /// <param name="e">Event arguments</param>
         private static void ParentControlResize(object sender, EventArgs e)
         {
-            foreach (var ctrl in ((Control) sender).Controls.Cast<object>().OfType<Panel>().Where(ctrl => ctrl.Name == "informationPanel"))
+            foreach (var ctrl in ((Control)sender).Controls.Cast<object>().OfType<Panel>().Where(ctrl => ctrl.Name == "informationPanel"))
             {
                 ctrl.Location = new Point(
-                    (((Control) sender).Width - ctrl.Width)/2,
-                    (((Control) sender).Height - ctrl.Height)/2);
+                    (((Control)sender).Width - ctrl.Width) / 2,
+                    (((Control)sender).Height - ctrl.Height) / 2);
             }
         }
     }

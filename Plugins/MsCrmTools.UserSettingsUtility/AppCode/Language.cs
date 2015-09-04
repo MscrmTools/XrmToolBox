@@ -2,7 +2,7 @@
 
 namespace MsCrmTools.UserSettingsUtility.AppCode
 {
-    class Language
+    internal class Language
     {
         public Language(int lcid)
         {

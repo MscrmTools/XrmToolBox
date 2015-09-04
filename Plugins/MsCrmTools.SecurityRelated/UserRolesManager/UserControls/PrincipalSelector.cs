@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using MsCrmTools.UserRolesManager.AppCode;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace MsCrmTools.UserRolesManager.UserControls
 {
     public partial class PrincipalSelector : UserControl
     {
+        private int currentColumnOrder;
         private IOrganizationService service;
 
-        private int currentColumnOrder;
         public PrincipalSelector()
         {
             InitializeComponent();
@@ -25,6 +21,11 @@ namespace MsCrmTools.UserRolesManager.UserControls
             cbbType.SelectedIndexChanged += cbbType_SelectedIndexChanged;
         }
 
+        public List<Entity> SelectedItems
+        {
+            get { return lvUsersAndTeams.SelectedItems.Cast<ListViewItem>().Select(e => (Entity)e.Tag).ToList(); }
+        }
+
         public IOrganizationService Service
         {
             set
@@ -32,11 +33,6 @@ namespace MsCrmTools.UserRolesManager.UserControls
                 service = value;
                 cbbType_SelectedIndexChanged(null, null);
             }
-        }
-
-        public List<Entity> SelectedItems
-        {
-            get { return lvUsersAndTeams.SelectedItems.Cast<ListViewItem>().Select(e => (Entity) e.Tag).ToList(); }
         }
 
         public void LoadViews()
@@ -58,27 +54,28 @@ namespace MsCrmTools.UserRolesManager.UserControls
             switch (cbbType.SelectedIndex)
             {
                 case 0:
-                {
-                    items = vManager.RetrieveViews("systemuser");
-
-                    lvUsersAndTeams.Columns.AddRange(new []
                     {
-                        new ColumnHeader{Text = "Last name", Width = 150}, 
-                        new ColumnHeader{Text = "First name", Width = 150}, 
+                        items = vManager.RetrieveViews("systemuser");
+
+                        lvUsersAndTeams.Columns.AddRange(new[]
+                    {
+                        new ColumnHeader{Text = "Last name", Width = 150},
+                        new ColumnHeader{Text = "First name", Width = 150},
                         new ColumnHeader{Text = "Business unit", Width = 150}
                     });
-                }
+                    }
                     break;
-                case 1:
-                {
-                    items = vManager.RetrieveViews("team");
 
-                    lvUsersAndTeams.Columns.AddRange(new[]
+                case 1:
                     {
-                        new ColumnHeader{Text = "Name", Width = 150}, 
+                        items = vManager.RetrieveViews("team");
+
+                        lvUsersAndTeams.Columns.AddRange(new[]
+                    {
+                        new ColumnHeader{Text = "Name", Width = 150},
                         new ColumnHeader{Text = "Business unit", Width = 150}
                     });
-                }
+                    }
                     break;
             }
 
@@ -95,7 +92,7 @@ namespace MsCrmTools.UserRolesManager.UserControls
         private void cbbViews_SelectedIndexChanged(object sender, EventArgs e)
         {
             lvUsersAndTeams.Items.Clear();
-            var viewItem = (ViewItem) cbbViews.SelectedItem;
+            var viewItem = (ViewItem)cbbViews.SelectedItem;
 
             var entity = QueryHelper.GetItems(viewItem.FetchXml, service);
 

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Crm.Sdk.Messages;
+﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.Collections.Generic;
 
 namespace MsCrmTools.AccessChecker
 {
@@ -18,9 +18,9 @@ namespace MsCrmTools.AccessChecker
         /// <summary>
         /// CRM proxy data service
         /// </summary>
-        readonly IOrganizationService service;
+        private readonly IOrganizationService service;
 
-        #endregion
+        #endregion Variables
 
         #region Constructor
 
@@ -33,19 +33,9 @@ namespace MsCrmTools.AccessChecker
             this.service = service;
         }
 
-        #endregion
+        #endregion Constructor
 
         #region Methods
-
-        /// <summary>
-        /// Retrieve the list of all CRM entities
-        /// </summary>
-        /// <returns>List of all CRM entities</returns>
-        public RetrieveAllEntitiesResponse RetrieveEntitiesList()
-        {
-            var request = new RetrieveAllEntitiesRequest { EntityFilters = EntityFilters.Entity };
-            return (RetrieveAllEntitiesResponse)service.Execute(request);
-        }
 
         /// <summary>
         /// Obtains all users corresponding to the search filter
@@ -82,7 +72,7 @@ namespace MsCrmTools.AccessChecker
                 }
                 catch
                 { }
-                
+
                 if (isGuid)
                 {
                     var ce = new ConditionExpression("systemuserid", ConditionOperator.Equal, value);
@@ -109,6 +99,48 @@ namespace MsCrmTools.AccessChecker
         }
 
         /// <summary>
+        /// Retrieve the primary attribute value of the specified object
+        /// </summary>
+        /// <param name="recordId">Unique identifier of the object</param>
+        /// <param name="entityName">Object entity logical name</param>
+        /// <param name="primaryAttribute">Entity primary attribute logical name</param>
+        /// <returns>Dynamic Entity containing the primary attribute value</returns>
+        public Entity RetrieveDynamicWithPrimaryAttr(Guid recordId, string entityName, string primaryAttribute)
+        {
+            return service.Retrieve(entityName, recordId, new ColumnSet(primaryAttribute));
+        }
+
+        /// <summary>
+        /// Retrieve the list of all CRM entities
+        /// </summary>
+        /// <returns>List of all CRM entities</returns>
+        public RetrieveAllEntitiesResponse RetrieveEntitiesList()
+        {
+            var request = new RetrieveAllEntitiesRequest { EntityFilters = EntityFilters.Entity };
+            return (RetrieveAllEntitiesResponse)service.Execute(request);
+        }
+
+        /// <summary>
+        /// Retrieve all privileges definition for the specified entity
+        /// </summary>
+        /// <param name="entityName">Entity logical name</param>
+        /// <returns>List of privileges</returns>
+        public Dictionary<string, Guid> RetrievePrivileges(string entityName)
+        {
+            var request = new RetrieveEntityRequest { LogicalName = entityName, EntityFilters = EntityFilters.Privileges };
+            var response = (RetrieveEntityResponse)service.Execute(request);
+
+            var privileges = new Dictionary<string, Guid>();
+
+            foreach (SecurityPrivilegeMetadata spmd in response.EntityMetadata.Privileges)
+            {
+                privileges.Add(spmd.Name.ToLower(), spmd.PrivilegeId);
+            }
+
+            return privileges;
+        }
+
+        /// <summary>
         /// Retrieve the access rights for the specified user against the specified object
         /// </summary>
         /// <param name="userId">Unique identifier of the user</param>
@@ -132,38 +164,6 @@ namespace MsCrmTools.AccessChecker
             }
         }
 
-        /// <summary>
-        /// Retrieve all privileges definition for the specified entity
-        /// </summary>
-        /// <param name="entityName">Entity logical name</param>
-        /// <returns>List of privileges</returns>
-        public Dictionary<string, Guid> RetrievePrivileges(string entityName)
-        {
-            var request = new RetrieveEntityRequest {LogicalName = entityName, EntityFilters = EntityFilters.Privileges};
-            var response = (RetrieveEntityResponse)service.Execute(request);
-
-            var privileges = new Dictionary<string, Guid>();
-
-            foreach (SecurityPrivilegeMetadata spmd in response.EntityMetadata.Privileges)
-            {
-                privileges.Add(spmd.Name.ToLower(), spmd.PrivilegeId);
-            }
-
-            return privileges;
-        }
-    
-        /// <summary>
-        /// Retrieve the primary attribute value of the specified object
-        /// </summary>
-        /// <param name="recordId">Unique identifier of the object</param>
-        /// <param name="entityName">Object entity logical name</param>
-        /// <param name="primaryAttribute">Entity primary attribute logical name</param>
-        /// <returns>Dynamic Entity containing the primary attribute value</returns>
-        public Entity RetrieveDynamicWithPrimaryAttr(Guid recordId, string entityName, string primaryAttribute)
-        {
-            return service.Retrieve(entityName, recordId, new ColumnSet(primaryAttribute));
-        }
-
-        #endregion
+        #endregion Methods
     }
 }

@@ -14,16 +14,13 @@ namespace MsCrmTools.FormAttributeManager.AppCode
             SectionName = sectionName;
         }
 
-        public Guid CellId { get; private set; }
-
         public String AttributeLogicalName { get; private set; }
-
+        public Guid CellId { get; private set; }
         public Guid FormId { get; private set; }
- 
+
         public string FormName { get; private set; }
 
-        public string TabName { get; private set; }
-
         public string SectionName { get; private set; }
+        public string TabName { get; private set; }
     }
 }

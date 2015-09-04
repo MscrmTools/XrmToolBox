@@ -11,7 +11,7 @@ namespace MsCrmTools.PrivDiscover.AppCode
     public class ListViewGroupHeaderSorter : IComparer<ListViewGroup>
     {
         private readonly bool _ascending = true;
-        
+
         public ListViewGroupHeaderSorter(bool ascending)
         {
             _ascending = ascending;
@@ -27,6 +27,6 @@ namespace MsCrmTools.PrivDiscover.AppCode
                 return string.Compare((y).Header, (x).Header);
         }
 
-        #endregion
+        #endregion IComparer<ListViewGroup> Members
     }
 }

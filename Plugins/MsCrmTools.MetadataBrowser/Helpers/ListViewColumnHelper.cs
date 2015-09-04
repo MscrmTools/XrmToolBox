@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using MsCrmTools.MetadataBrowser.AppCode;
 
 namespace MsCrmTools.MetadataBrowser.Helpers
 {
-    class ListViewColumnHelper
+    internal class ListViewColumnHelper
     {
+        public static void AddColumnHeaderByProperty(ListView listView, Type type, string propertyName)
+        {
+            listView.Columns.Add(new ColumnHeader
+            {
+                Text = type.GetProperties().First(p => p.Name == propertyName).Name,
+                Width = 7 * type.GetProperties().First(p => p.Name == propertyName).Name.Length
+            });
+        }
+
         public static void AddColumnsHeader(ListView listView, Type type, string[] firstColumns, string[] selectedColumns,
             string[] columnsToIgnore)
         {
@@ -38,15 +46,6 @@ namespace MsCrmTools.MetadataBrowser.Helpers
                     AddColumnHeaderByProperty(listView, type, prop.Name);
                 }
             }
-        }
-
-        public static void AddColumnHeaderByProperty(ListView listView, Type type, string propertyName)
-        {
-            listView.Columns.Add(new ColumnHeader
-            {
-                Text = type.GetProperties().First(p => p.Name == propertyName).Name,
-                Width = 7 * type.GetProperties().First(p => p.Name == propertyName).Name.Length
-            });
         }
     }
 }

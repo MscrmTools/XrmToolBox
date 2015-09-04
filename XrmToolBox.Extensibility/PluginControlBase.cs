@@ -3,13 +3,13 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://www.dotnetdust.blogspot.com/
 
+using McTools.Xrm.Connection;
+using Microsoft.Xrm.Sdk;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Reflection;
 using System.Windows.Forms;
-using McTools.Xrm.Connection;
-using Microsoft.Xrm.Sdk;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace XrmToolBox.Extensibility
@@ -25,15 +25,15 @@ namespace XrmToolBox.Extensibility
     {
         public ConnectionDetail ConnectionDetail { get; set; }
 
+        public void CloseTool()
+        {
+            OnCloseTool(this, null);
+        }
+
         [Obsolete("This has been renamed to CloseTool.  Call that method instead, and if there is any required logic for Closing override the ClosingPlugin Method", true)]
         public virtual void CloseToolPrompt()
         {
             CloseTool();
-        }
-
-        public void CloseTool()
-        {
-                OnCloseTool(this, null);
         }
 
         #region IMsCrmToolsPluginUserControl Members
@@ -46,7 +46,7 @@ namespace XrmToolBox.Extensibility
 
         /// <summary>
         /// Allows for the plugin to prevent the form from closing, or preform some action before closing
-        /// By default, if the Form is being closed, or a close all or all except active is being called, it won't prompt the user to ensure they wanted to close 
+        /// By default, if the Form is being closed, or a close all or all except active is being called, it won't prompt the user to ensure they wanted to close
         /// </summary>
         /// <param name="info"></param>
         public virtual void ClosingPlugin(PluginCloseInfo info)
@@ -100,11 +100,24 @@ namespace XrmToolBox.Extensibility
             }
         }
 
-        #endregion
+        #endregion IMsCrmToolsPluginUserControl Members
 
         #region IWorkerHost
 
         private readonly Worker _worker = new Worker();
+
+        public void RaiseRequestConnectionEvent(RequestConnectionEventArgs args)
+        {
+            if (OnRequestConnection != null)
+            {
+                OnRequestConnection(this, args);
+            }
+        }
+
+        public void SetWorkingMessage(string message, int width = 340, int height = 150)
+        {
+            _worker.SetWorkingMessage(this, message);
+        }
 
         public void WorkAsync(string message, Action<DoWorkEventArgs> work, object argument = null, int messageWidth = 340, int messageHeight = 150)
         {
@@ -122,20 +135,7 @@ namespace XrmToolBox.Extensibility
             _worker.WorkAsync(this, message, work, callback, progressChanged, argument, messageWidth, messageHeight);
         }
 
-        public void SetWorkingMessage(string message, int width = 340, int height = 150)
-        {
-            _worker.SetWorkingMessage(this, message);
-        }
-
-        public void RaiseRequestConnectionEvent(RequestConnectionEventArgs args)
-        {
-            if (OnRequestConnection != null)
-            {
-                OnRequestConnection(this, args);
-            }
-        }
-
-        #endregion // IWorkerHost
+        #endregion IWorkerHost
 
         #region ExecuteMethod
 
@@ -211,9 +211,11 @@ namespace XrmToolBox.Extensibility
             info.ExternalAction.Invoke();
         }
 
-        #endregion // ExecuteMethod
+        #endregion ExecuteMethod
 
         #region Connection Updated
+
+        public delegate void ConnectionUpdatedHandler(object sender, ConnectionUpdatedEventArgs e);
 
         public event ConnectionUpdatedHandler ConnectionUpdated;
 
@@ -223,22 +225,18 @@ namespace XrmToolBox.Extensibility
             if (handler != null) { handler(this, e); }
         }
 
-        public delegate void ConnectionUpdatedHandler(object sender, ConnectionUpdatedEventArgs e);
-
         public class ConnectionUpdatedEventArgs : EventArgs
         {
-            public IOrganizationService Service { get; set; }
-            public ConnectionDetail ConnectionDetail { get; set; }
-
             public ConnectionUpdatedEventArgs(IOrganizationService service, ConnectionDetail connectionDetail)
             {
                 Service = service;
                 ConnectionDetail = connectionDetail;
             }
+
+            public ConnectionDetail ConnectionDetail { get; set; }
+            public IOrganizationService Service { get; set; }
         }
 
-        #endregion // Connection Updated
-
-     
+        #endregion Connection Updated
     }
 }

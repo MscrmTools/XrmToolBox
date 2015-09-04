@@ -10,7 +10,7 @@ namespace MsCrmTools.Iconator.AppCode
     public class EntityImageMap
     {
         public EntityMetadata Entity { get; set; }
-        public string WebResourceName { get; set; }
         public int ImageSize { get; set; }
+        public string WebResourceName { get; set; }
     }
 }

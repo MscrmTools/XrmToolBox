@@ -24,6 +24,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.ManyToManyRelationship
             get { return list[index]; }
         }
 
+        public void Add(ManyToManyRelationshipMetadataInfo info)
+        {
+            list.Add(info);
+        }
+
         public AttributeCollection GetAttributes()
         {
             return TypeDescriptor.GetAttributes(this, true);
@@ -88,11 +93,6 @@ namespace MsCrmTools.MetadataBrowser.AppCode.ManyToManyRelationship
         public object GetPropertyOwner(PropertyDescriptor pd)
         {
             return this;
-        }
-
-        public void Add(ManyToManyRelationshipMetadataInfo info)
-        {
-            list.Add(info);
         }
 
         public void Remove(ManyToManyRelationshipMetadataInfo info)

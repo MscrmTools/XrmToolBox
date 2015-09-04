@@ -33,15 +33,19 @@ namespace MsCrmTools.RoleUpdater
                     case PrivilegeLevel.None:
                         LevelName = "None";
                         break;
+
                     case PrivilegeLevel.User:
                         LevelName = "User";
                         break;
+
                     case PrivilegeLevel.BusinessUnit:
                         LevelName = "Business Unit";
                         break;
+
                     case PrivilegeLevel.ParentChildBusinessUnit:
                         LevelName = "Parent : Child Business Unit";
                         break;
+
                     case PrivilegeLevel.Organization:
                         LevelName = "Organization";
                         break;
@@ -49,8 +53,8 @@ namespace MsCrmTools.RoleUpdater
             }
         }
 
+        public string LevelName { get; set; }
         public Guid PrivilegeId { get; set; }
         public string PrivilegeName { get; set; }
-        public string LevelName { get; set; }
     }
 }

@@ -2,9 +2,10 @@
 
 namespace MsCrmTools.UserSettingsUtility.AppCode
 {
-    class Currency
+    internal class Currency
     {
         private readonly Entity currency;
+
         public Currency(Entity currency)
         {
             this.currency = currency;

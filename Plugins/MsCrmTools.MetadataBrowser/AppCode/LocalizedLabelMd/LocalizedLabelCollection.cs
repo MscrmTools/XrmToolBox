@@ -2,11 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.Remoting.Messaging;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd
 {
-   // [TypeConverter(typeof(LocalizedLabelCollectionConverter))]
+    // [TypeConverter(typeof(LocalizedLabelCollectionConverter))]
     public class LocalizedLabelCollection : CollectionBase, ICustomTypeDescriptor
     {
         private readonly List<LocalizedLabelInfo> list;
@@ -24,6 +23,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd
         public LocalizedLabelInfo this[int index]
         {
             get { return list[index]; }
+        }
+
+        public void Add(LocalizedLabelInfo info)
+        {
+            list.Add(info);
         }
 
         public AttributeCollection GetAttributes()
@@ -90,11 +94,6 @@ namespace MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd
         public object GetPropertyOwner(PropertyDescriptor pd)
         {
             return this;
-        }
-
-        public void Add(LocalizedLabelInfo info)
-        {
-            list.Add(info);
         }
 
         public void Remove(LocalizedLabelInfo info)

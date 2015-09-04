@@ -11,7 +11,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
 {
     public partial class NewFolderDialog : Form
     {
-        readonly Regex inValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant));
+        private readonly Regex inValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant));
 
         private string folderName;
 
@@ -21,6 +21,12 @@ namespace MsCrmTools.WebResourcesManager.Forms
         }
 
         public string FolderName { get { return folderName; } }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
 
         private void btnValidate_Click(object sender, EventArgs e)
         {
@@ -35,12 +41,6 @@ namespace MsCrmTools.WebResourcesManager.Forms
             {
                 MessageBox.Show(this, "Please provide a valid folder name!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
         }
 
         private void txtFolderName_KeyUp(object sender, KeyEventArgs e)

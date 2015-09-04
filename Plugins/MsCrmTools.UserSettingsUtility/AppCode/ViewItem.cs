@@ -2,7 +2,7 @@
 
 namespace MsCrmTools.UserSettingsUtility.AppCode
 {
-    class ViewItem
+    internal class ViewItem
     {
         private readonly Entity view;
 

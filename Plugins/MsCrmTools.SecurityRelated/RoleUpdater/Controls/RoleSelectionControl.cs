@@ -3,12 +3,12 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Xrm.Sdk;
+using MsCrmTools.RoleUpdater.DelegatesHelpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
-using MsCrmTools.RoleUpdater.DelegatesHelpers;
 
 namespace MsCrmTools.RoleUpdater.Controls
 {
@@ -51,7 +51,7 @@ namespace MsCrmTools.RoleUpdater.Controls
         {
             get
             {
-                var selectedRoles = (from ListViewItem item in lvRoles.SelectedItems select (Entity) item.Tag).ToList();
+                var selectedRoles = (from ListViewItem item in lvRoles.SelectedItems select (Entity)item.Tag).ToList();
 
                 if (selectedRoles.Count == 0)
                 {
@@ -83,7 +83,7 @@ namespace MsCrmTools.RoleUpdater.Controls
 
                 ListViewDelegates.AddItem(lvRoles, item);
 
-                if(settings != null && settings.SelectedRoles.Count > 0)
+                if (settings != null && settings.SelectedRoles.Count > 0)
                 {
                     if (settings.SelectedRoles.Any(x => x["name"] == role["name"]))
                         item.Selected = true;

@@ -3,18 +3,16 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Drawing;
-using System.Windows.Forms;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.AccessChecker.Forms;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.AccessChecker
 {
@@ -34,9 +32,23 @@ namespace MsCrmTools.AccessChecker
 
         #region Methods
 
-        private void TsbCloseClick(object sender, System.EventArgs e)
+        private void BrowseUser()
         {
-            CloseTool();
+            var form = new CrmUserPickerForm(new CrmAccess(Service));
+
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                foreach (Guid userId in form.SelectedUsers.Keys)
+                {
+                    textBox_UserID.Text = form.SelectedUsers[userId];
+                    textBox_UserID.Tag = userId;
+                }
+            }
+        }
+
+        private void BtnBrowseClick(object sender, EventArgs e)
+        {
+            ExecuteMethod(BrowseUser);
         }
 
         private void BtnRetrieveEntitiesClick(object sender, EventArgs e)
@@ -44,39 +56,26 @@ namespace MsCrmTools.AccessChecker
             ExecuteMethod(ProcessRetrieveEntities);
         }
 
-        private void ProcessRetrieveEntities()
+        private void BtnRetrieveRightsClick(object sender, EventArgs e)
         {
-            cBoxEntities.Items.Clear();
+            ExecuteMethod(RetrieveAccessRights);
+        }
 
-            WorkAsync("Retrieving Entities...",
-              e =>
-              {
-                  var request = new RetrieveAllEntitiesRequest { EntityFilters = EntityFilters.Entity };
-                  var response = (RetrieveAllEntitiesResponse)Service.Execute(request);
+        private void BtnSearchRecordIdClick(object sender, EventArgs e)
+        {
+            if (cBoxEntities.SelectedIndex < 0)
+            {
+                MessageBox.Show(ParentForm, "Please select an entity in the list before using the search action",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-                  e.Result = response.EntityMetadata;
-              },
-              e =>
-              {
-                  if (e.Error != null)
-                  {
-                      MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                  }
-                  else
-                  {
-                      var emds = (EntityMetadata[])e.Result;
-
-                      foreach (var emd in emds)
-                      {
-                          cBoxEntities.Items.Add(new EntityInfo(emd.LogicalName, emd.DisplayName != null && emd.DisplayName.UserLocalizedLabel != null ? emd.DisplayName.UserLocalizedLabel.Label : "N/A", emd.PrimaryNameAttribute));
-                      }
-
-                      cBoxEntities.DrawMode = DrawMode.OwnerDrawFixed;
-                      cBoxEntities.DrawItem += cbbEntity_DrawItem; 
-
-                      cBoxEntities.SelectedIndex = 0;
-                  }
-              });
+            var lp = new LookupSingle(((EntityInfo)cBoxEntities.SelectedItem).LogicalName, Service);
+            lp.StartPosition = FormStartPosition.CenterParent;
+            if (lp.ShowDialog() == DialogResult.OK)
+            {
+                txtObjectId.Text = lp.SelectedRecordId.ToString("B");
+            }
         }
 
         private void cbbEntity_DrawItem(object sender, DrawItemEventArgs e)
@@ -117,28 +116,44 @@ namespace MsCrmTools.AccessChecker
             }
         }
 
-        private void BtnBrowseClick(object sender, EventArgs e)
+        private void CBoxEntitiesSelectedIndexChanged(object sender, EventArgs e)
         {
-            ExecuteMethod(BrowseUser);
+            btnSearchRecordId.Enabled = cBoxEntities.SelectedItem != null;
         }
 
-        private void BrowseUser()
+        private void ProcessRetrieveEntities()
         {
-            var form = new CrmUserPickerForm(new CrmAccess(Service));
+            cBoxEntities.Items.Clear();
 
-            if (form.ShowDialog() == DialogResult.OK)
-            {
-                foreach (Guid userId in form.SelectedUsers.Keys)
-                {
-                    textBox_UserID.Text = form.SelectedUsers[userId];
-                    textBox_UserID.Tag = userId;
-                }
-            }
-        }
+            WorkAsync("Retrieving Entities...",
+              e =>
+              {
+                  var request = new RetrieveAllEntitiesRequest { EntityFilters = EntityFilters.Entity };
+                  var response = (RetrieveAllEntitiesResponse)Service.Execute(request);
 
-        private void BtnRetrieveRightsClick(object sender, EventArgs e)
-        {
-            ExecuteMethod(RetrieveAccessRights);
+                  e.Result = response.EntityMetadata;
+              },
+              e =>
+              {
+                  if (e.Error != null)
+                  {
+                      MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                  }
+                  else
+                  {
+                      var emds = (EntityMetadata[])e.Result;
+
+                      foreach (var emd in emds)
+                      {
+                          cBoxEntities.Items.Add(new EntityInfo(emd.LogicalName, emd.DisplayName != null && emd.DisplayName.UserLocalizedLabel != null ? emd.DisplayName.UserLocalizedLabel.Label : "N/A", emd.PrimaryNameAttribute));
+                      }
+
+                      cBoxEntities.DrawMode = DrawMode.OwnerDrawFixed;
+                      cBoxEntities.DrawItem += cbbEntity_DrawItem;
+
+                      cBoxEntities.SelectedIndex = 0;
+                  }
+              });
         }
 
         private void RetrieveAccessRights()
@@ -165,13 +180,13 @@ namespace MsCrmTools.AccessChecker
             {
                 var g = new Guid(txtObjectId.Text);
             }
-            catch 
+            catch
             {
                 MessageBox.Show(this, "The object ID is invalid", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            var parameters = new List<string> {txtObjectId.Text, textBox_UserID.Tag.ToString(), 
+            var parameters = new List<string> {txtObjectId.Text, textBox_UserID.Tag.ToString(),
                 ((EntityInfo)cBoxEntities.SelectedItem).LogicalName,
             ((EntityInfo)cBoxEntities.SelectedItem).PrimaryAttribute};
 
@@ -325,26 +340,9 @@ namespace MsCrmTools.AccessChecker
            parameters);
         }
 
-        private void BtnSearchRecordIdClick(object sender, EventArgs e)
+        private void TsbCloseClick(object sender, System.EventArgs e)
         {
-            if (cBoxEntities.SelectedIndex < 0)
-            {
-                MessageBox.Show(ParentForm, "Please select an entity in the list before using the search action",
-                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            var lp = new LookupSingle(((EntityInfo)cBoxEntities.SelectedItem).LogicalName, Service);
-            lp.StartPosition = FormStartPosition.CenterParent;
-            if (lp.ShowDialog() == DialogResult.OK)
-            {
-                txtObjectId.Text = lp.SelectedRecordId.ToString("B");
-            }
-        }
-
-        private void CBoxEntitiesSelectedIndexChanged(object sender, EventArgs e)
-        {
-            btnSearchRecordId.Enabled = cBoxEntities.SelectedItem != null;
+            CloseTool();
         }
 
         #endregion Methods

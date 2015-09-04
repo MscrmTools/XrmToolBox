@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using Microsoft.Crm.Sdk.Messages;
+﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using System.Collections.Generic;
 
 namespace MsCrmTools.PrivDiscover.AppCode
 {
-    class RolesManager
+    internal class RolesManager
     {
         private readonly IOrganizationService service;
 
@@ -29,7 +29,7 @@ namespace MsCrmTools.PrivDiscover.AppCode
         {
             var list = new List<SecurityRole>();
 
-            var qe = new QueryExpression("role") {Criteria = new FilterExpression(), ColumnSet = new ColumnSet(true)};
+            var qe = new QueryExpression("role") { Criteria = new FilterExpression(), ColumnSet = new ColumnSet(true) };
             qe.Criteria.AddCondition("parentroleid", ConditionOperator.Null);
 
             var roles = service.RetrieveMultiple(qe).Entities;
@@ -48,7 +48,7 @@ namespace MsCrmTools.PrivDiscover.AppCode
                                       RoleId = role.Id
                                   };
 
-                var response = (RetrieveRolePrivilegesRoleResponse) service.Execute(request);
+                var response = (RetrieveRolePrivilegesRoleResponse)service.Execute(request);
 
                 foreach (var roleprivilege in response.RolePrivileges)
                 {

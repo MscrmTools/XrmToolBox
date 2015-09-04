@@ -3,19 +3,17 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Windows.Forms;
 using MsCrmTools.FormParameterManager.AppCode;
 using MsCrmTools.FormParameterManager.Forms;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.FormParameterManager
 {
-     public partial class MainControl : PluginControlBase
+    public partial class MainControl : PluginControlBase
     {
         #region Constructor
 
@@ -31,11 +29,6 @@ namespace MsCrmTools.FormParameterManager
 
         #region Methods
 
-        private void TsbCloseClick(object sender, EventArgs e)
-        {
-            CloseTool();
-        }
-     
         private void SetState(bool isRunning)
         {
             lvForms.Enabled = !isRunning;
@@ -43,16 +36,16 @@ namespace MsCrmTools.FormParameterManager
             toolStripMenu.Enabled = !isRunning;
         }
 
-        #endregion Methods
-      
-        #region Load Forms
-
-        private void tsbLoadForms_Click(object sender, EventArgs e)
+        private void TsbCloseClick(object sender, EventArgs e)
         {
-            ExecuteMethod(LoadForms);
+            CloseTool();
         }
 
-        void LoadForms()
+        #endregion Methods
+
+        #region Load Forms
+
+        private void LoadForms()
         {
             // Clear listviews
             lvForms.Items.Clear();
@@ -94,7 +87,12 @@ namespace MsCrmTools.FormParameterManager
                 e => SetWorkingMessage(e.UserState.ToString()));
         }
 
-        #endregion LoadForms
+        private void tsbLoadForms_Click(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadForms);
+        }
+
+        #endregion Load Forms
 
         #region Create Parameters
 
@@ -135,7 +133,7 @@ namespace MsCrmTools.FormParameterManager
                         }
 
                         // Publishing form
-                        bw.ReportProgress(0,"Publishing form(s) ...");
+                        bw.ReportProgress(0, "Publishing form(s) ...");
                         CrmForm.PublishForms(Service, formsUpdated.Select(f => f.EntityLogicalName));
 
                         evt.Result = lvItems;
@@ -159,7 +157,7 @@ namespace MsCrmTools.FormParameterManager
 
                         SetState(false);
                     },
-                    evt=>SetWorkingMessage(evt.UserState.ToString()),
+                    evt => SetWorkingMessage(evt.UserState.ToString()),
                     new object[] { pForm.Parameter, lvForms.CheckedItems });
             }
         }
@@ -182,13 +180,12 @@ namespace MsCrmTools.FormParameterManager
             WorkAsync("Deleting attribute(s)...",
                 (bw, evt) =>
                 {
-                    var lvItems = (ListView.SelectedListViewItemCollection) ((object[]) evt.Argument)[0];
+                    var lvItems = (ListView.SelectedListViewItemCollection)((object[])evt.Argument)[0];
                     var formsUpdated = new List<CrmForm>();
-
 
                     foreach (ListViewItem item in lvItems)
                     {
-                        var parameter = (FormParameter) item.Tag;
+                        var parameter = (FormParameter)item.Tag;
 
                         // Deleting attribute on form
                         parameter.ParentForm.RemoveParameter(parameter);
@@ -220,11 +217,11 @@ namespace MsCrmTools.FormParameterManager
                     }
                     else
                     {
-                        foreach (var form in (List<CrmForm>) evt.Result)
+                        foreach (var form in (List<CrmForm>)evt.Result)
                         {
                             foreach (ListViewItem item in lvForms.Items)
                             {
-                                if (((CrmForm) item.Tag).Id == form.Id)
+                                if (((CrmForm)item.Tag).Id == form.Id)
                                 {
                                     item.SubItems[2].Text = (form.Parameters.Count > 0).ToString();
                                 }
@@ -237,20 +234,12 @@ namespace MsCrmTools.FormParameterManager
                     SetState(false);
                 },
                 evt => SetWorkingMessage(evt.UserState.ToString()),
-                new object[] {lvParameters.SelectedItems});
+                new object[] { lvParameters.SelectedItems });
         }
 
         #endregion Delete Parameters
-      
-        #region ListViews events
 
-        private void lvForms_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            foreach (ListViewItem item in lvForms.Items)
-            {
-                item.Checked = item.Selected;
-            }
-        }
+        #region ListViews events
 
         private void lvForms_ColumnClick(object sender, ColumnClickEventArgs e)
         {
@@ -267,13 +256,13 @@ namespace MsCrmTools.FormParameterManager
                     lvParameters.Columns[0].Width = 100;
                     lvParameters.Columns[1].Width = 100;
 
-                    var ch1 = new ColumnHeader {Text = "Entity", Width = 100};
-                    var ch2 = new ColumnHeader {Text = "Form", Width = 100};
+                    var ch1 = new ColumnHeader { Text = "Entity", Width = 100 };
+                    var ch2 = new ColumnHeader { Text = "Form", Width = 100 };
 
-                    lvParameters.Columns.AddRange(new[] {ch1, ch2});
+                    lvParameters.Columns.AddRange(new[] { ch1, ch2 });
                 }
             }
-            else 
+            else
             {
                 if (lvParameters.Columns.Count > 2)
                 {
@@ -286,7 +275,7 @@ namespace MsCrmTools.FormParameterManager
 
             foreach (ListViewItem lvItem in lvForms.CheckedItems)
             {
-                var form = (CrmForm) lvItem.Tag;
+                var form = (CrmForm)lvItem.Tag;
 
                 foreach (var parameter in form.Parameters)
                 {
@@ -303,6 +292,14 @@ namespace MsCrmTools.FormParameterManager
 
                     lvParameters.Items.Add(item);
                 }
+            }
+        }
+
+        private void lvForms_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in lvForms.Items)
+            {
+                item.Checked = item.Selected;
             }
         }
 

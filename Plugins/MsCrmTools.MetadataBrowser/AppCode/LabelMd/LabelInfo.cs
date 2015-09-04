@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.Xrm.Sdk;
+using MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd;
+using System.ComponentModel;
 using System.Drawing.Design;
 using System.Linq;
-using Microsoft.Xrm.Sdk;
-using MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd;
 using LocalizedLabelCollection = MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd.LocalizedLabelCollection;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.LabelMd
@@ -22,8 +22,8 @@ namespace MsCrmTools.MetadataBrowser.AppCode.LabelMd
             get { return amd.ExtensionData != null ? amd.ExtensionData.ToString() : ""; }
         }
 
-        [Editor(typeof (CustomCollectionEditor), typeof (UITypeEditor))]
-        [TypeConverter(typeof (LocalizedLabelCollectionConverter))]
+        [Editor(typeof(CustomCollectionEditor), typeof(UITypeEditor))]
+        [TypeConverter(typeof(LocalizedLabelCollectionConverter))]
         public LocalizedLabelCollection LocalizedLabels
         {
             get

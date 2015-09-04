@@ -12,9 +12,9 @@ namespace MsCrmTools.AttributeBulkUpdater
     public class UpdateSettings
     {
         internal List<ListViewItem> Items { get; set; }
-        internal bool UpdateValidForAdvancedFind { get; set; }
+        internal AttributeRequiredLevel? RequirementLevelValue { get; set; }
         internal bool UpdateAuditIsEnabled { get; set; }
         internal bool UpdateRequirementLevel { get; set; }
-        internal AttributeRequiredLevel? RequirementLevelValue { get; set; }
+        internal bool UpdateValidForAdvancedFind { get; set; }
     }
 }

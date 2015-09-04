@@ -3,18 +3,18 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MsCrmTools.RoleUpdater
 {
     /// <summary>
     /// This class helps to retrieve metadata
     /// </summary>
-    class MetadataHelper
+    internal class MetadataHelper
     {
         /// <summary>
         /// Gets all entities metadata with specified informations
@@ -24,9 +24,9 @@ namespace MsCrmTools.RoleUpdater
         /// <returns>List of entities metadata</returns>
         public static List<EntityMetadata> GetEntitiesMetadata(IOrganizationService service, EntityFilters filters)
         {
-            var request = new RetrieveAllEntitiesRequest 
+            var request = new RetrieveAllEntitiesRequest
             {
-                EntityFilters = filters            
+                EntityFilters = filters
             };
 
             var response = (RetrieveAllEntitiesResponse)service.Execute(request);

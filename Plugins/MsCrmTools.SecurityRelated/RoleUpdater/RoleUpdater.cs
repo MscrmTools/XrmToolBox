@@ -3,14 +3,12 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Windows.Forms;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.RoleUpdater.Controls;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 using CrmExceptionHelper = XrmToolBox.CrmExceptionHelper;
 
 namespace MsCrmTools.RoleUpdater
@@ -20,11 +18,6 @@ namespace MsCrmTools.RoleUpdater
         #region Variables
 
         /// <summary>
-        /// Manager to process actions on roles
-        /// </summary>
-        RoleManager rManager;
-
-        /// <summary>
         /// Wizard current step
         /// </summary>
         private int currentStep = 1;
@@ -32,7 +25,12 @@ namespace MsCrmTools.RoleUpdater
         /// <summary>
         /// List of all entities metadata
         /// </summary>
-        List<EntityMetadata> entities;
+        private List<EntityMetadata> entities;
+
+        /// <summary>
+        /// Manager to process actions on roles
+        /// </summary>
+        private RoleManager rManager;
 
         /// <summary>
         /// Wizard settings
@@ -60,42 +58,6 @@ namespace MsCrmTools.RoleUpdater
             ExecuteMethod(LoadRolesAndPrivileges);
         }
 
-        private void LoadRolesAndPrivileges()
-        {
-            rManager = new RoleManager(Service);
-           
-            WorkAsync("Loading roles...",
-                (bw, e) =>
-                {
-                    rManager.LoadRootRoles();
-
-                    bw.ReportProgress(1, "Loading privileges...");
-                    rManager.LoadPrivileges();
-
-                    bw.ReportProgress(2, "Loading Entities privileges...");
-                    entities = MetadataHelper.GetEntitiesMetadata(Service, EntityFilters.Privileges);
-                },
-                e =>
-                {
-                    if (e.Error != null)
-                    {
-                        var errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
-                        MessageBox.Show(this, "An error occured: " + errorMessage, "Error", MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-                    }
-                    else
-                    {
-                        pnlSteps.Visible = true;
-                        btnPrevious.Visible = false;
-                        btnReset.Visible = false;
-                        btnNext.Visible = true;
-                        BtnResetClick(null, null);
-                    }
-                },
-                e => SetWorkingMessage(e.UserState.ToString()));
-        }
-
-
         private void BtnNextClick(object sender, EventArgs e)
         {
             switch (currentStep)
@@ -122,6 +84,7 @@ namespace MsCrmTools.RoleUpdater
                         currentStep = 2;
                     }
                     break;
+
                 case 2:
                     {
                         settings.SelectedRoles = ((RoleSelectionControl)pnlSteps.Controls[0]).SelectedRoles;
@@ -151,6 +114,7 @@ namespace MsCrmTools.RoleUpdater
                         currentStep = 3;
                     }
                     break;
+
                 case 3:
                     {
                         pnlSteps.Visible = true;
@@ -158,15 +122,10 @@ namespace MsCrmTools.RoleUpdater
                         btnPrevious.Visible = true;
                         btnReset.Visible = true;
 
-                        ((PrivilegeLevelSelectionControl) pnlSteps.Controls[0]).ApplyChanges();
+                        ((PrivilegeLevelSelectionControl)pnlSteps.Controls[0]).ApplyChanges();
                     }
                     break;
             }
-        }
-
-        void CtrlSettingsApplied(object sender, EventArgs e)
-        {
-            btnNext.Enabled = true;
         }
 
         private void BtnPreviousClick(object sender, EventArgs e)
@@ -184,6 +143,7 @@ namespace MsCrmTools.RoleUpdater
                         btnReset.Visible = false;
                     }
                     break;
+
                 case 3:
                     {
                         pnlSteps.Visible = true;
@@ -209,6 +169,7 @@ namespace MsCrmTools.RoleUpdater
                         currentStep = 2;
                     }
                     break;
+
                 case 4:
                     {
                         pnlSteps.Visible = true;
@@ -261,11 +222,51 @@ namespace MsCrmTools.RoleUpdater
             currentStep = 2;
         }
 
+        private void CtrlSettingsApplied(object sender, EventArgs e)
+        {
+            btnNext.Enabled = true;
+        }
+
+        private void LoadRolesAndPrivileges()
+        {
+            rManager = new RoleManager(Service);
+
+            WorkAsync("Loading roles...",
+                (bw, e) =>
+                {
+                    rManager.LoadRootRoles();
+
+                    bw.ReportProgress(1, "Loading privileges...");
+                    rManager.LoadPrivileges();
+
+                    bw.ReportProgress(2, "Loading Entities privileges...");
+                    entities = MetadataHelper.GetEntitiesMetadata(Service, EntityFilters.Privileges);
+                },
+                e =>
+                {
+                    if (e.Error != null)
+                    {
+                        var errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
+                        MessageBox.Show(this, "An error occured: " + errorMessage, "Error", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        pnlSteps.Visible = true;
+                        btnPrevious.Visible = false;
+                        btnReset.Visible = false;
+                        btnNext.Visible = true;
+                        BtnResetClick(null, null);
+                    }
+                },
+                e => SetWorkingMessage(e.UserState.ToString()));
+        }
+
         private void TsbCloseThisTabClick(object sender, EventArgs e)
         {
             CloseTool();
         }
 
-        #endregion
+        #endregion Methods
     }
 }

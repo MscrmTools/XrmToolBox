@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Crm.Sdk.Messages;
+﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MsCrmTools.FormAttributeManager.AppCode
 {
@@ -44,15 +44,15 @@ namespace MsCrmTools.FormAttributeManager.AppCode
             }
         }
 
-        public void UpdateForm(Entity form)
-        {
-            Service.Update(form);
-        }
-
         public void PublishForm(string entityName)
         {
             var request = new PublishXmlRequest { ParameterXml = String.Format("<importexportxml><entities><entity>{0}</entity></entities></importexportxml>", entityName) };
             Service.Execute(request);
+        }
+
+        public void UpdateForm(Entity form)
+        {
+            Service.Update(form);
         }
     }
 }

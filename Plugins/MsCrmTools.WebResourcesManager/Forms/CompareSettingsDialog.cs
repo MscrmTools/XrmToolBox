@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
 
 namespace MsCrmTools.WebResourcesManager.Forms
 {
-    
     public partial class CompareSettingsDialog : Form
     {
         private readonly bool _isConfiured;
@@ -18,11 +14,26 @@ namespace MsCrmTools.WebResourcesManager.Forms
             InitializeComponent();
         }
 
-        private void CompareSettingsDialog_Load(object sender, EventArgs e)
+        private void btnBrowse_Click(object sender, EventArgs e)
         {
-            OpenInstructions.Enabled = true;
-            txtCommandPath.Text = Properties.Settings.Default.CompareToolPath;
-            txtCommandArgs.Text = Properties.Settings.Default.CompareToolArgs;
+            using (var dialog = new OpenFileDialog())
+            {
+                dialog.Filter = "exe files (*.exe)|*.exe|All files (*.*)|*.*";
+                dialog.FilterIndex = 2;
+                dialog.RestoreDirectory = true;
+                dialog.Multiselect = false;
+
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    txtCommandPath.Text = dialog.FileName;
+                }
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void btnOk_Click(object sender, EventArgs e)
@@ -38,25 +49,11 @@ namespace MsCrmTools.WebResourcesManager.Forms
             Close();
         }
 
-        private void btnCancel_Click(object sender, EventArgs e)
+        private void CompareSettingsDialog_Load(object sender, EventArgs e)
         {
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
-
-        private void btnBrowse_Click(object sender, EventArgs e)
-        {
-            using (var dialog = new OpenFileDialog()) {
-                dialog.Filter = "exe files (*.exe)|*.exe|All files (*.*)|*.*";
-                dialog.FilterIndex = 2;
-                dialog.RestoreDirectory = true;
-                dialog.Multiselect = false;
-
-                if (dialog.ShowDialog() == DialogResult.OK)
-                {
-                    txtCommandPath.Text = dialog.FileName;
-                }
-            }
+            OpenInstructions.Enabled = true;
+            txtCommandPath.Text = Properties.Settings.Default.CompareToolPath;
+            txtCommandArgs.Text = Properties.Settings.Default.CompareToolArgs;
         }
 
         private void OpenInstructions_Tick(object sender, EventArgs e)

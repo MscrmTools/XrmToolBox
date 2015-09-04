@@ -1,14 +1,13 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using MsCrmTools.FormAttributeManager.AppCode;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk.Metadata;
-using MsCrmTools.FormAttributeManager.AppCode;
 
 namespace MsCrmTools.FormAttributeManager.Forms
 {
     public partial class ReferenceAttributeSelector : Form
     {
-        
         public ReferenceAttributeSelector(IEnumerable<AttributeMetadata> amds)
         {
             InitializeComponent();
@@ -23,7 +22,7 @@ namespace MsCrmTools.FormAttributeManager.Forms
 
         public AttributeMetadata SelectedAttribute
         {
-            get { return ((AttributeMetadataInfo) cbbAttributes.SelectedItem).Amd; }
+            get { return ((AttributeMetadataInfo)cbbAttributes.SelectedItem).Amd; }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

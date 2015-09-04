@@ -10,26 +10,86 @@ namespace MsCrmTools.PrivDiscover.AppCode
 {
     public class ListViewDelegates
     {
-        public static void SetItemCheckStatus(ListView listview, ListViewItem item, bool isChecked)
+        public static void AddColumn(ListView listview, ColumnHeader column)
         {
-            MethodInvoker miSetItemCheckStatus = delegate
+            MethodInvoker miAddColumn = delegate
             {
-                item.Checked = isChecked;
+                listview.Columns.Add(column);
             };
 
             if (listview.InvokeRequired)
             {
-                listview.Invoke(miSetItemCheckStatus);
+                listview.Invoke(miAddColumn);
             }
             else
             {
-                miSetItemCheckStatus();
+                miAddColumn();
+            }
+        }
+
+        public static void AddGroup(ListView listview, string groupName)
+        {
+            MethodInvoker miAddGroups = delegate
+            {
+                ListViewGroup g = new ListViewGroup();
+                g.Header = groupName;
+                g.Name = groupName;
+
+                listview.Groups.Add(g);
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miAddGroups);
+            }
+            else
+            {
+                miAddGroups();
             }
         }
 
         public static void AddGroupsRange(ListView listview, ListViewGroup[] groups)
         {
             MethodInvoker miAddItem = () => listview.Groups.AddRange(groups);
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miAddItem);
+            }
+            else
+            {
+                miAddItem();
+            }
+        }
+
+        public static void AddImageToImageList(ListView listview, Bitmap image)
+        {
+            MethodInvoker miAddImageToImageList = delegate
+            {
+                if (listview.SmallImageList == null)
+                {
+                    listview.SmallImageList = new ImageList();
+                }
+
+                listview.SmallImageList.Images.Add(image);
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miAddImageToImageList);
+            }
+            else
+            {
+                miAddImageToImageList();
+            }
+        }
+
+        public static void AddItem(ListView listview, ListViewItem item)
+        {
+            MethodInvoker miAddItem = delegate
+            {
+                listview.Items.Add(item);
+            };
 
             if (listview.InvokeRequired)
             {
@@ -55,38 +115,201 @@ namespace MsCrmTools.PrivDiscover.AppCode
             }
         }
 
-        public static void AddItem(ListView listview, ListViewItem item)
+        public static void ClearColumns(ListView listview)
         {
-            MethodInvoker miAddItem = delegate
-            {
-                listview.Items.Add(item);
-            };
+            MethodInvoker miClearItems = () => listview.Columns.Clear();
 
             if (listview.InvokeRequired)
             {
-                listview.Invoke(miAddItem);
+                listview.Invoke(miClearItems);
             }
             else
             {
-                miAddItem();
+                miClearItems();
             }
         }
 
-        public static void AddColumn(ListView listview, ColumnHeader column)
+        public static void ClearGroups(ListView listview)
         {
-            MethodInvoker miAddColumn = delegate
+            MethodInvoker miClearGroups = () => listview.Groups.Clear();
+
+            if (listview.InvokeRequired)
             {
-                listview.Columns.Add(column);
+                listview.Invoke(miClearGroups);
+            }
+            else
+            {
+                miClearGroups();
+            }
+        }
+
+        public static void ClearItems(ListView listview)
+        {
+            MethodInvoker miClearItems = () => listview.Items.Clear();
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miClearItems);
+            }
+            else
+            {
+                miClearItems();
+            }
+        }
+
+        public static int[] GetCheckedIndexes(ListView listview)
+        {
+            int[] checkedIndexes = new int[0];
+
+            MethodInvoker miClearItems = delegate
+            {
+                checkedIndexes = new int[listview.CheckedIndices.Count];
+
+                for (int i = 0; i < checkedIndexes.Length; i++)
+                {
+                    checkedIndexes[i] = listview.CheckedIndices[i];
+                }
             };
 
             if (listview.InvokeRequired)
             {
-                listview.Invoke(miAddColumn);
+                listview.Invoke(miClearItems);
             }
             else
             {
-                miAddColumn();
+                miClearItems();
             }
+
+            return checkedIndexes;
+        }
+
+        public static ListViewItem[] GetCheckedItems(ListView listview)
+        {
+            ListViewItem[] checkedItems = new ListViewItem[0];
+
+            MethodInvoker miClearItems = delegate
+            {
+                checkedItems = new ListViewItem[listview.CheckedItems.Count];
+                listview.CheckedItems.CopyTo(checkedItems, 0);
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miClearItems);
+            }
+            else
+            {
+                miClearItems();
+            }
+
+            return checkedItems;
+        }
+
+        public static ListViewGroup GetGroup(ListView listview, string groupName)
+        {
+            ListViewGroup group = null;
+
+            MethodInvoker miGetGroups = delegate
+            {
+                group = listview.Groups[groupName];
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miGetGroups);
+            }
+            else
+            {
+                miGetGroups();
+            }
+
+            return group;
+        }
+
+        public static ListViewItem GetItem(ListView listview, int index)
+        {
+            ListViewItem item = null;
+
+            MethodInvoker miRemoveItem = delegate
+            {
+                item = listview.Items[index];
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miRemoveItem);
+            }
+            else
+            {
+                miRemoveItem();
+            }
+
+            return item;
+        }
+
+        public static ListViewItem GetItem(ListView listview, string key)
+        {
+            ListViewItem item = null;
+
+            MethodInvoker miRemoveItem = delegate
+            {
+                item = listview.Items[key];
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miRemoveItem);
+            }
+            else
+            {
+                miRemoveItem();
+            }
+
+            return item;
+        }
+
+        public static int[] GetSelectedIndexes(ListView listview)
+        {
+            int[] selectedIndexes = new int[0];
+
+            MethodInvoker miClearItems = delegate
+            {
+                selectedIndexes = new int[listview.SelectedIndices.Count];
+                listview.SelectedIndices.CopyTo(selectedIndexes, 0);
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miClearItems);
+            }
+            else
+            {
+                miClearItems();
+            }
+
+            return selectedIndexes;
+        }
+
+        public static ListViewItem[] GetSelectedItems(ListView listview)
+        {
+            ListViewItem[] selectedItems = new ListViewItem[0];
+
+            MethodInvoker miGetSelectedItems = delegate
+            {
+                selectedItems = new ListViewItem[listview.SelectedItems.Count];
+                listview.SelectedItems.CopyTo(selectedItems, 0);
+            };
+
+            if (listview.InvokeRequired)
+            {
+                listview.Invoke(miGetSelectedItems);
+            }
+            else
+            {
+                miGetSelectedItems();
+            }
+
+            return selectedItems;
         }
 
         public static void InsertItem(ListView listview, int index, ListViewItem item)
@@ -140,244 +363,20 @@ namespace MsCrmTools.PrivDiscover.AppCode
             }
         }
 
-        public static ListViewItem GetItem(ListView listview, int index)
+        public static void SetItemCheckStatus(ListView listview, ListViewItem item, bool isChecked)
         {
-            ListViewItem item = null;
-
-            MethodInvoker miRemoveItem = delegate
+            MethodInvoker miSetItemCheckStatus = delegate
             {
-                item = listview.Items[index];
+                item.Checked = isChecked;
             };
 
             if (listview.InvokeRequired)
             {
-                listview.Invoke(miRemoveItem);
+                listview.Invoke(miSetItemCheckStatus);
             }
             else
             {
-                miRemoveItem();
-            }
-
-            return item;
-        }
-
-        public static ListViewItem GetItem(ListView listview, string key)
-        {
-            ListViewItem item = null;
-
-            MethodInvoker miRemoveItem = delegate
-            {
-                item = listview.Items[key];
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miRemoveItem);
-            }
-            else
-            {
-                miRemoveItem();
-            }
-
-            return item;
-        }
-
-        public static void ClearColumns(ListView listview)
-        {
-            MethodInvoker miClearItems = () => listview.Columns.Clear();
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miClearItems);
-            }
-            else
-            {
-                miClearItems();
-            }
-        }
-
-        public static void ClearItems(ListView listview)
-        {
-            MethodInvoker miClearItems = () => listview.Items.Clear();
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miClearItems);
-            }
-            else
-            {
-                miClearItems();
-            }
-        }
-
-        public static void ClearGroups(ListView listview)
-        {
-            MethodInvoker miClearGroups = () => listview.Groups.Clear();
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miClearGroups);
-            }
-            else
-            {
-                miClearGroups();
-            }
-        }
-
-        public static ListViewItem[] GetSelectedItems(ListView listview)
-        {
-            ListViewItem[] selectedItems = new ListViewItem[0];
-
-            MethodInvoker miGetSelectedItems = delegate
-            {
-                selectedItems = new ListViewItem[listview.SelectedItems.Count];
-                listview.SelectedItems.CopyTo(selectedItems, 0);
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miGetSelectedItems);
-            }
-            else
-            {
-                miGetSelectedItems();
-            }
-
-            return selectedItems;
-        }
-
-        public static int[] GetSelectedIndexes(ListView listview)
-        {
-            int[] selectedIndexes = new int[0];
-
-            MethodInvoker miClearItems = delegate
-            {
-                selectedIndexes = new int[listview.SelectedIndices.Count];
-                listview.SelectedIndices.CopyTo(selectedIndexes, 0);
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miClearItems);
-            }
-            else
-            {
-                miClearItems();
-            }
-
-            return selectedIndexes;
-        }
-
-        public static ListViewItem[] GetCheckedItems(ListView listview)
-        {
-            ListViewItem[] checkedItems = new ListViewItem[0];
-
-            MethodInvoker miClearItems = delegate
-            {
-                checkedItems = new ListViewItem[listview.CheckedItems.Count];
-                listview.CheckedItems.CopyTo(checkedItems, 0);
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miClearItems);
-            }
-            else
-            {
-                miClearItems();
-            }
-
-            return checkedItems;
-        }
-
-        public static int[] GetCheckedIndexes(ListView listview)
-        {
-            int[] checkedIndexes = new int[0];
-
-            MethodInvoker miClearItems = delegate
-            {
-                checkedIndexes = new int[listview.CheckedIndices.Count];
-
-                for (int i = 0; i < checkedIndexes.Length; i++)
-                {
-                    checkedIndexes[i] = listview.CheckedIndices[i];
-                }
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miClearItems);
-            }
-            else
-            {
-                miClearItems();
-            }
-
-            return checkedIndexes;
-        }
-
-
-        public static void AddImageToImageList(ListView listview, Bitmap image)
-        {
-            MethodInvoker miAddImageToImageList = delegate
-            {
-                if (listview.SmallImageList == null)
-                {
-                    listview.SmallImageList = new ImageList();
-                }
-
-                listview.SmallImageList.Images.Add(image);
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miAddImageToImageList);
-            }
-            else
-            {
-                miAddImageToImageList();
-            }
-        }
-
-        public static ListViewGroup GetGroup(ListView listview, string groupName)
-        {
-            ListViewGroup group = null;
-
-            MethodInvoker miGetGroups = delegate
-            {
-                group = listview.Groups[groupName];
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miGetGroups);
-            }
-            else
-            {
-                miGetGroups();
-            }
-
-            return group;
-        }
-
-        public static void AddGroup(ListView listview, string groupName)
-        {
-            MethodInvoker miAddGroups = delegate
-            {
-                ListViewGroup g = new ListViewGroup();
-                g.Header = groupName;
-                g.Name = groupName;
-
-                listview.Groups.Add(g);
-            };
-
-            if (listview.InvokeRequired)
-            {
-                listview.Invoke(miAddGroups);
-            }
-            else
-            {
-                miAddGroups();
+                miSetItemCheckStatus();
             }
         }
 

@@ -3,21 +3,19 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 using Microsoft.Xrm.Sdk;
 using MsCrmTools.FormLibrariesManager.AppCode;
 using MsCrmTools.FormLibrariesManager.Forms;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.FormLibrariesManager
 {
-   public partial class MainControl : PluginControlBase
+    public partial class MainControl : PluginControlBase
     {
         #region Constructor
 
@@ -39,11 +37,6 @@ namespace MsCrmTools.FormLibrariesManager
         }
 
         #endregion Methods
-
-        private void tsbLoadLibrariesAndScripts_Click(object sender, EventArgs e)
-        {
-            ExecuteMethod(LoadLibrariesAndForms);
-        }
 
         private void LoadLibrariesAndForms()
         {
@@ -101,7 +94,7 @@ namespace MsCrmTools.FormLibrariesManager
                 return;
             }
 
-            var sod = new ScriptsOrderDialog(scripts){StartPosition = FormStartPosition.CenterParent};
+            var sod = new ScriptsOrderDialog(scripts) { StartPosition = FormStartPosition.CenterParent };
             if (sod.ShowDialog(ParentForm) == DialogResult.Cancel)
             {
                 return;
@@ -191,6 +184,11 @@ namespace MsCrmTools.FormLibrariesManager
               new object[] { sod.Scripts, sod.AddFirst, forms });
         }
 
+        private void tsbLoadLibrariesAndScripts_Click(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadLibrariesAndForms);
+        }
+
         private void tsbRemoveCheckedScripts_Click(object sender, EventArgs e)
         {
             lvLogs.Items.Clear();
@@ -264,7 +262,6 @@ namespace MsCrmTools.FormLibrariesManager
                                        ForeColor = Color.DarkOrange
                                    });
                                 }
-
                             }
                             catch (Exception error)
                             {

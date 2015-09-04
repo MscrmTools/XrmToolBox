@@ -8,12 +8,16 @@ namespace MscrmTools.SyncFilterManager.Forms
         public ViewPropertiesDialog()
         {
             InitializeComponent();
-
-           
         }
 
-        public string ViewName { get;  set; }
         public string ViewDescription { get; set; }
+        public string ViewName { get; set; }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
 
         private void btnValidate_Click(object sender, EventArgs e)
         {
@@ -29,12 +33,6 @@ namespace MscrmTools.SyncFilterManager.Forms
             {
                 MessageBox.Show(this, "Please provide a valid name!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
         }
 
         private void txtFolderName_KeyUp(object sender, KeyEventArgs e)

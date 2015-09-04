@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using McTools.Xrm.Connection;
+using System;
 using System.Net;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
-using McTools.Xrm.Connection;
 
 namespace XrmToolBox.AppCode
 {

@@ -7,9 +7,9 @@ namespace DamSim.SolutionTransferTool
     /// <summary>
     /// Compares two listview items for sorting
     /// </summary>
-    class ListViewItemComparer : IComparer
+    internal class ListViewItemComparer : IComparer
     {
-        #region Variables 
+        #region Variables
 
         /// <summary>
         /// Index of sorting column
@@ -21,7 +21,7 @@ namespace DamSim.SolutionTransferTool
         /// </summary>
         private readonly SortOrder innerOrder;
 
-        #endregion
+        #endregion Variables
 
         #region Constructors
 
@@ -39,13 +39,13 @@ namespace DamSim.SolutionTransferTool
         /// </summary>
         /// <param name="column">Index of sorting column</param>
         /// <param name="order">Sort order</param>
-        public ListViewItemComparer(int column,SortOrder order)
+        public ListViewItemComparer(int column, SortOrder order)
         {
             col = column;
             innerOrder = order;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -77,7 +77,7 @@ namespace DamSim.SolutionTransferTool
                 return String.Compare(y.SubItems[col].Text, x.SubItems[col].Text);
             }
         }
-       
-        #endregion
+
+        #endregion Methods
     }
 }

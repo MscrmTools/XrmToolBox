@@ -1,14 +1,15 @@
-﻿using System;
+﻿using MsCrmTools.MetadataBrowser.AppCode.AttributeMd;
+using System;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing.Design;
-using MsCrmTools.MetadataBrowser.AppCode.AttributeMd;
 
 namespace MsCrmTools.MetadataBrowser.AppCode
 {
     public class CustomCollectionEditor : CollectionEditor
     {
-        public CustomCollectionEditor(Type type) : base(type)
+        public CustomCollectionEditor(Type type)
+            : base(type)
         {
         }
 
@@ -27,6 +28,5 @@ namespace MsCrmTools.MetadataBrowser.AppCode
 
             return base.GetDisplayText(value);
         }
-
     }
 }

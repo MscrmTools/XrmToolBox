@@ -3,9 +3,9 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System.Collections.Generic;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
+using System.Collections.Generic;
 
 namespace MsCrmTools.RoleUpdater
 {
@@ -17,34 +17,37 @@ namespace MsCrmTools.RoleUpdater
             Actions = new List<PrivilegeAction>();
         }
 
+        public List<PrivilegeAction> Actions { get; set; }
         public List<Entity> SelectedRoles { get; set; }
-        public List<PrivilegeAction> Actions { get; set; } 
 
         public List<RolePrivilege> ActionsToRolePrivilegeList()
         {
             var list = new List<RolePrivilege>();
 
-            foreach(PrivilegeAction pAction in Actions)
+            foreach (PrivilegeAction pAction in Actions)
             {
-                var rp = new RolePrivilege {PrivilegeId = pAction.PrivilegeId};
+                var rp = new RolePrivilege { PrivilegeId = pAction.PrivilegeId };
 
-                switch(pAction.Level)
+                switch (pAction.Level)
                 {
                     case PrivilegeLevel.User:
                         {
-                            rp.Depth = PrivilegeDepth.Local; 
+                            rp.Depth = PrivilegeDepth.Local;
                         }
                         break;
+
                     case PrivilegeLevel.BusinessUnit:
                         {
                             rp.Depth = PrivilegeDepth.Basic;
                         }
                         break;
+
                     case PrivilegeLevel.ParentChildBusinessUnit:
                         {
                             rp.Depth = PrivilegeDepth.Deep;
                         }
                         break;
+
                     case PrivilegeLevel.Organization:
                         {
                             rp.Depth = PrivilegeDepth.Global;

@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 
 namespace MsCrmTools.FormLibrariesManager.AppCode
 {
@@ -17,33 +17,6 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
         }
 
         public IOrganizationService Service { get; set; }
-
-        public List<Entity> GetAllForms()
-        {
-            var qe = new QueryExpression("systemform")
-            {
-                ColumnSet = new ColumnSet(new[] { "name", "formxml", "objecttypecode" }),
-                Criteria = new FilterExpression
-                {
-                    Conditions =
-                    {
-                        new ConditionExpression("type", ConditionOperator.In, new[] {2,7}),
-                        new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
-                        new ConditionExpression("formactivationstate", ConditionOperator.Equal, 1),
-                    }
-                }
-            };
-
-            try
-            {
-                return Service.RetrieveMultiple(qe).Entities.ToList();
-            }
-            catch
-            {
-                qe.Criteria.Conditions.RemoveAt(qe.Criteria.Conditions.Count - 1);
-                return Service.RetrieveMultiple(qe).Entities.ToList();
-            }
-        }
 
         public void AddLibrary(Entity form, string libraryName, bool addFirst)
         {
@@ -97,6 +70,39 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
             form["formxml"] = formDoc.OuterXml;
         }
 
+        public List<Entity> GetAllForms()
+        {
+            var qe = new QueryExpression("systemform")
+            {
+                ColumnSet = new ColumnSet(new[] { "name", "formxml", "objecttypecode" }),
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("type", ConditionOperator.In, new[] {2,7}),
+                        new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
+                        new ConditionExpression("formactivationstate", ConditionOperator.Equal, 1),
+                    }
+                }
+            };
+
+            try
+            {
+                return Service.RetrieveMultiple(qe).Entities.ToList();
+            }
+            catch
+            {
+                qe.Criteria.Conditions.RemoveAt(qe.Criteria.Conditions.Count - 1);
+                return Service.RetrieveMultiple(qe).Entities.ToList();
+            }
+        }
+
+        public void PublishForm(string entityName)
+        {
+            var request = new PublishXmlRequest { ParameterXml = String.Format("<importexportxml><entities><entity>{0}</entity></entities></importexportxml>", entityName) };
+            Service.Execute(request);
+        }
+
         public bool RemoveLibrary(Entity form, string libraryName, Form parentForm)
         {
             // Read the form xml content
@@ -104,7 +110,6 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
             var formDoc = new XmlDocument();
             formDoc.LoadXml(formXml);
 
-           
             var formNode = formDoc.SelectSingleNode("form");
             if (formNode == null)
             {
@@ -171,12 +176,6 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
         public void UpdateForm(Entity form)
         {
             Service.Update(form);
-        }
-
-        public void PublishForm(string entityName)
-        {
-            var request = new PublishXmlRequest { ParameterXml = String.Format("<importexportxml><entities><entity>{0}</entity></entities></importexportxml>", entityName) };
-            Service.Execute(request);
         }
     }
 }

@@ -12,27 +12,29 @@ namespace MsCrmTools.PrivDiscover.AppCode
     {
         internal ListView _listview;
 
-        public static bool operator ==(ListView listview, ListViewGroupSorter sorter)
+        internal ListViewGroupSorter(ListView listview)
         {
-            return listview == sorter._listview;
-        }
-        public static bool operator !=(ListView listview, ListViewGroupSorter sorter)
-        {
-            return listview != sorter._listview;
+            _listview = listview;
         }
 
         public static implicit operator ListView(ListViewGroupSorter sorter)
         {
             return sorter._listview;
         }
+
         public static implicit operator ListViewGroupSorter(ListView listview)
         {
             return new ListViewGroupSorter(listview);
         }
 
-        internal ListViewGroupSorter(ListView listview)
+        public static bool operator !=(ListView listview, ListViewGroupSorter sorter)
         {
-            _listview = listview;
+            return listview != sorter._listview;
+        }
+
+        public static bool operator ==(ListView listview, ListViewGroupSorter sorter)
+        {
+            return listview == sorter._listview;
         }
 
         public void SortGroups(bool ascending)
@@ -64,6 +66,6 @@ namespace MsCrmTools.PrivDiscover.AppCode
             return _listview.ToString();
         }
 
-        #endregion
+        #endregion overridden methods
     }
 }

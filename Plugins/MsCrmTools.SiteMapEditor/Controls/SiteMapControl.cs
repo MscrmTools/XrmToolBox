@@ -3,10 +3,10 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using MsCrmTools.SiteMapEditor.AppCode;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using MsCrmTools.SiteMapEditor.AppCode;
 
 namespace MsCrmTools.SiteMapEditor.Controls
 {
@@ -20,13 +20,13 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
         public delegate void SaveEventHandler(object sender, SaveEventArgs e);
 
-        #endregion
+        #endregion Delegates
 
         #region Event Handlers
 
         public event SaveEventHandler Saved;
 
-        #endregion
+        #endregion Event Handlers
 
         public SiteMapControl()
         {
@@ -39,12 +39,24 @@ namespace MsCrmTools.SiteMapEditor.Controls
             tip.SetToolTip(txtSiteMapUrl, "Specifies the URL for Microsoft Dynamics CRM for Outlook to render.");
         }
 
-        public SiteMapControl(Dictionary<string, string> collection):this()
+        public SiteMapControl(Dictionary<string, string> collection)
+            : this()
         {
-
             collec = collection;
 
             FillControls();
+        }
+
+        public void Save()
+        {
+            Dictionary<string, string> collection = new Dictionary<string, string>();
+
+            if (txtSiteMapUrl.Text.Length > 0)
+                collection.Add("Url", txtSiteMapUrl.Text);
+
+            initialUrl = txtSiteMapUrl.Text;
+
+            SendSaveMessage(collection);
         }
 
         private void FillControls()
@@ -64,22 +76,10 @@ namespace MsCrmTools.SiteMapEditor.Controls
             }
         }
 
-        public void Save()
-        {
-            Dictionary<string, string> collection = new Dictionary<string, string>();
-
-            if (txtSiteMapUrl.Text.Length > 0)
-                collection.Add("Url", txtSiteMapUrl.Text);
-
-            initialUrl = txtSiteMapUrl.Text;
-
-            SendSaveMessage(collection);
-        }
-
         #region Send Events
 
         /// <summary>
-        /// Sends a connection success message 
+        /// Sends a connection success message
         /// </summary>
         /// <param name="service">IOrganizationService generated</param>
         /// <param name="parameters">Lsit of parameter</param>
@@ -93,7 +93,6 @@ namespace MsCrmTools.SiteMapEditor.Controls
             }
         }
 
-        #endregion
-
+        #endregion Send Events
     }
 }

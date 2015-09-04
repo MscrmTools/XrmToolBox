@@ -5,7 +5,6 @@ namespace MsCrmTools.FormAttributeManager.Forms
 {
     public partial class UpdateLabelDialog : Form
     {
-
         public UpdateLabelDialog(int localeId)
         {
             InitializeComponent();

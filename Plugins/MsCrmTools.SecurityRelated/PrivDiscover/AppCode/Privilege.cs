@@ -1,14 +1,14 @@
-﻿using System;
-using Microsoft.Crm.Sdk.Messages;
+﻿using Microsoft.Crm.Sdk.Messages;
+using System;
 
 namespace MsCrmTools.PrivDiscover.AppCode
 {
-    class Privilege
+    internal class Privilege
     {
-        public string Name { get; set; }
-        public Guid Id { get; set; }
         public PrivilegeDepth Depth { get; set; }
+        public Guid Id { get; set; }
         public bool IsAnyDepth { get; set; }
         public bool IsNoDepth { get; set; }
+        public string Name { get; set; }
     }
 }

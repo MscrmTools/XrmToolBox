@@ -3,12 +3,12 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.IO;
-using System.Windows.Forms;
 using Jsbeautifier;
 using MsCrmTools.WebResourcesManager.AppCode;
 using MsCrmTools.WebResourcesManager.Forms;
+using System;
+using System.IO;
+using System.Windows.Forms;
 
 namespace MsCrmTools.WebResourcesManager.UserControls
 {
@@ -19,36 +19,36 @@ namespace MsCrmTools.WebResourcesManager.UserControls
     {
         #region Variables
 
+        private readonly FindAndReplaceForm findForm = new FindAndReplaceForm();
+
         /// <summary>
         /// Type of web resource
         /// </summary>
-        readonly Enumerations.WebResourceType innerType;
+        private readonly Enumerations.WebResourceType innerType;
 
         /// <summary>
         /// Base64 content of the web resource when loading this control
         /// </summary>
-        readonly string originalContent;
+        private readonly string originalContent;
 
         /// <summary>
         /// Base64 content of the web resource
         /// </summary>
-        string innerContent;
+        private string innerContent;
 
-        readonly FindAndReplaceForm findForm = new FindAndReplaceForm();
-               
         #endregion Variables
 
         #region Delegates
 
         public delegate void WebResourceUpdatedEventHandler(object sender, WebResourceUpdatedEventArgs e);
 
-        #endregion
+        #endregion Delegates
 
         #region Event Handlers
 
         public event WebResourceUpdatedEventHandler WebResourceUpdated;
 
-        #endregion
+        #endregion Event Handlers
 
         #region Constructor
 
@@ -63,7 +63,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
             if (!string.IsNullOrEmpty(content))
             {
-                // Converts base64 content to string 
+                // Converts base64 content to string
                 byte[] b = Convert.FromBase64String(content);
                 innerContent = System.Text.Encoding.UTF8.GetString(b);
                 originalContent = innerContent;
@@ -87,7 +87,6 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             {
                 tecCode.Text = innerContent;
 
-
                 switch (innerType)
                 {
                     case Enumerations.WebResourceType.Script:
@@ -95,21 +94,25 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                             tecCode.SetHighlighting("JavaScript");
                         }
                         break;
+
                     case Enumerations.WebResourceType.Data:
                         {
                             tecCode.SetHighlighting("XML");
                         }
                         break;
+
                     case Enumerations.WebResourceType.WebPage:
                         {
                             tecCode.SetHighlighting("HTML");
                         }
                         break;
+
                     case Enumerations.WebResourceType.Css:
                         {
                             tecCode.SetHighlighting("CSS");
                         }
                         break;
+
                     case Enumerations.WebResourceType.Xsl:
                         {
                             tecCode.SetHighlighting("HTML");
@@ -137,8 +140,13 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         public string GetBase64WebResourceContent()
         {
             byte[] bytes = System.Text.Encoding.UTF8.GetBytes(tecCode.Text);
-         
+
             return Convert.ToBase64String(bytes);
+        }
+
+        public Enumerations.WebResourceType GetWebResourceType()
+        {
+            return innerType;
         }
 
         public void MinifyJs()
@@ -178,19 +186,14 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             }
         }
 
-        public Enumerations.WebResourceType GetWebResourceType()
-        {
-            return innerType;
-        }
-
         private void SendSavedMessage()
         {
             var wrueArgs = new WebResourceUpdatedEventArgs
                                                        {
-                Base64Content = innerContent,
-                IsDirty = (innerContent != originalContent),
-                Type = innerType
-            };
+                                                           Base64Content = innerContent,
+                                                           IsDirty = (innerContent != originalContent),
+                                                           Type = innerType
+                                                       };
 
             if (WebResourceUpdated != null)
             {
@@ -204,7 +207,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         {
             Beautifier b = new Beautifier(new BeautifierOptions
             {
-                BraceStyle =BraceStyle.Expand,
+                BraceStyle = BraceStyle.Expand,
                 BreakChainedMethods = false,
                 EvalCode = true,
                 IndentChar = '\t',

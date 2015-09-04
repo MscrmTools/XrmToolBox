@@ -1,9 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.MetadataBrowser.AppCode.LabelMd;
 using MsCrmTools.MetadataBrowser.AppCode.OptionMd;
+using System;
+using System.ComponentModel;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.BooleanOptionSetMd
 {
@@ -34,9 +33,10 @@ namespace MsCrmTools.MetadataBrowser.AppCode.BooleanOptionSetMd
             get { return amd.ExtensionData != null ? amd.ExtensionData.ToString() : ""; }
         }
 
-        public string Name
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public OptionMetadataInfo FalseOption
         {
-            get { return amd.Name; }
+            get { return new OptionMetadataInfo(amd.FalseOption); }
         }
 
         public string IntroducedVersion
@@ -44,15 +44,15 @@ namespace MsCrmTools.MetadataBrowser.AppCode.BooleanOptionSetMd
             get { return amd.IntroducedVersion; }
         }
 
-        public bool IsCustomOptionSet
-        {
-            get { return amd.IsCustomOptionSet.HasValue && amd.IsCustomOptionSet.Value; }
-        }
-
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public BooleanManagedPropertyInfo IsCustomizable
         {
             get { return new BooleanManagedPropertyInfo(amd.IsCustomizable); }
+        }
+
+        public bool IsCustomOptionSet
+        {
+            get { return amd.IsCustomOptionSet.HasValue && amd.IsCustomOptionSet.Value; }
         }
 
         public bool IsGlobal
@@ -70,15 +70,14 @@ namespace MsCrmTools.MetadataBrowser.AppCode.BooleanOptionSetMd
             get { return amd.MetadataId.Value; }
         }
 
+        public string Name
+        {
+            get { return amd.Name; }
+        }
+
         public OptionSetType OptionSetType
         {
             get { return amd.OptionSetType.Value; }
-        }
-
-        [TypeConverter(typeof(ExpandableObjectConverter))]
-        public OptionMetadataInfo FalseOption
-        {
-            get { return new OptionMetadataInfo(amd.FalseOption); }
         }
 
         [TypeConverter(typeof(ExpandableObjectConverter))]

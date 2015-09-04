@@ -3,12 +3,12 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
 
 namespace MsCrmTools.WebResourcesManager.Forms
 {
@@ -24,7 +24,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
 
             foreach (var wr in unusedWebResources)
             {
-                var item = new ListViewItem(wr["name"].ToString()) {Tag = wr};
+                var item = new ListViewItem(wr["name"].ToString()) { Tag = wr };
                 lvWebResources.Items.Add(item);
             }
         }
@@ -45,7 +45,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
                                 "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
                 return;
 
-            var list = (from ListViewItem item in lvWebResources.SelectedItems select (Entity) item.Tag).ToList();
+            var list = (from ListViewItem item in lvWebResources.SelectedItems select (Entity)item.Tag).ToList();
             pbDelete.Visible = true;
 
             var bwDelete = new BackgroundWorker();
@@ -56,7 +56,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
             bwDelete.RunWorkerAsync(list);
         }
 
-        void BwDeleteDoWork(object sender, DoWorkEventArgs e)
+        private void BwDeleteDoWork(object sender, DoWorkEventArgs e)
         {
             var bw = (BackgroundWorker)sender;
             var wrs = (List<Entity>)e.Argument;
@@ -71,18 +71,18 @@ namespace MsCrmTools.WebResourcesManager.Forms
                     service.Delete(wr.LogicalName, wr.Id);
                 }
                 catch
-                {}
-                
+                { }
+
                 i++;
             }
         }
 
-        void BwDeleteProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void BwDeleteProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             pbDelete.Value = e.ProgressPercentage;
         }
 
-        void BwDeleteRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void BwDeleteRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             pbDelete.Value = 0;
             pbDelete.Visible = false;

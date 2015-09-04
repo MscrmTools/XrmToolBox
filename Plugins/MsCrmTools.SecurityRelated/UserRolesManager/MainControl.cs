@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using MsCrmTools.UserRolesManager.AppCode;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
-using MsCrmTools.UserRolesManager.AppCode;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
@@ -20,30 +20,19 @@ namespace MsCrmTools.UserRolesManager
        ExportMetadata("SecondaryFontColor", "Gray")]
     public partial class MainControl : PluginControlBase
     {
+        private List<Entity> allRoles;
         private Guid currentUserId;
-
-        private List<Entity> allRoles; 
 
         public MainControl()
         {
             InitializeComponent();
         }
 
-        private void TsbCloseClick(object sender, EventArgs e)
-        {
-           CloseTool();
-        }
-
-        private void tsbLoadCrmItems_Click(object sender, EventArgs e)
-        {
-            ExecuteMethod(LoadCrmItems);
-        }
-
         private void LoadCrmItems()
         {
             principalSelector1.Service = Service;
             roleSelector1.Service = Service;
-            
+
             principalSelector1.LoadViews();
             roleSelector1.LoadRoles();
 
@@ -52,7 +41,18 @@ namespace MsCrmTools.UserRolesManager
             currentUserId = (new SystemUserManager(Service)).GetCurrentUserId();
         }
 
+        private void TsbCloseClick(object sender, EventArgs e)
+        {
+            CloseTool();
+        }
+
+        private void tsbLoadCrmItems_Click(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadCrmItems);
+        }
+
         #region Action 1 : Add roles to principals
+
         private void action1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var ra = new RoleAction
@@ -82,7 +82,7 @@ namespace MsCrmTools.UserRolesManager
                 ra);
         }
 
-        #endregion
+        #endregion Action 1 : Add roles to principals
 
         #region Action 2 : Remove roles from principals
 
@@ -109,7 +109,7 @@ namespace MsCrmTools.UserRolesManager
             WorkAsync("Removing roles to principal(s)...",
                 (bw, evt) =>
                 {
-                    var action = (RoleAction) evt.Argument;
+                    var action = (RoleAction)evt.Argument;
 
                     var rManager = new RoleManager(Service);
                     rManager.RemoveRolesFromPrincipals(action.Roles, action.Principals, allRoles, bw);
@@ -126,9 +126,10 @@ namespace MsCrmTools.UserRolesManager
                 ra);
         }
 
-        #endregion
+        #endregion Action 2 : Remove roles from principals
 
         #region Action 3 : Remove then Add roles to principals
+
         private void action3ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var ra = new RoleAction
@@ -173,6 +174,6 @@ namespace MsCrmTools.UserRolesManager
               ra);
         }
 
-        #endregion
+        #endregion Action 3 : Remove then Add roles to principals
     }
 }

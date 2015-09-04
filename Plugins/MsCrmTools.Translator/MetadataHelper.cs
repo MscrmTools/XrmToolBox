@@ -3,22 +3,22 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Xml;
 using XrmToolBox;
 
 namespace MsCrmTools.Translator
 {
     /// <summary>
-    /// Class for querying Crm Metadata 
+    /// Class for querying Crm Metadata
     /// </summary>
-    class MetadataHelper
+    internal class MetadataHelper
     {
         /// <summary>
         /// Gets the list of entities metadata (only Entity Items)
@@ -30,8 +30,8 @@ namespace MsCrmTools.Translator
 
             RetrieveAllEntitiesRequest request = new RetrieveAllEntitiesRequest
                                                      {
-                EntityFilters = EntityFilters.Entity
-            };
+                                                         EntityFilters = EntityFilters.Entity
+                                                     };
 
             RetrieveAllEntitiesResponse response = (RetrieveAllEntitiesResponse)oService.Execute(request);
 
@@ -58,10 +58,10 @@ namespace MsCrmTools.Translator
             {
                 RetrieveEntityRequest request = new RetrieveEntityRequest
                                                     {
-                    LogicalName = logicalName,
-                    EntityFilters = EntityFilters.Attributes,
-                    RetrieveAsIfPublished = true
-                };
+                                                        LogicalName = logicalName,
+                                                        EntityFilters = EntityFilters.Attributes,
+                                                        RetrieveAsIfPublished = true
+                                                    };
 
                 RetrieveEntityResponse response = (RetrieveEntityResponse)oService.Execute(request);
 

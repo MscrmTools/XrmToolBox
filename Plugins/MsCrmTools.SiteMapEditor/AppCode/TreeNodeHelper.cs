@@ -19,6 +19,185 @@ namespace MsCrmTools.SiteMapEditor.AppCode
         #region Methods
 
         /// <summary>
+        /// Adds a context menu to a TreeNode control
+        /// </summary>
+        /// <param name="node">TreeNode where to add the context menu</param>
+        /// <param name="form">Current application form</param>
+        public static void AddContextMenu(TreeNode node, SiteMapEditor form)
+        {
+            var collec = (Dictionary<string, string>)node.Tag;
+
+            HideAllContextMenuItems(form.nodeMenu);
+
+            switch (node.Text.Split(' ')[0])
+            {
+                case "SiteMap":
+                    {
+                        form.addSystemAreaToolStripMenuItem.Visible = true;
+                        form.toolStripSeparatorSystem.Visible = true;
+                        form.addAreaToolStripMenuItem.Visible = true;
+
+                        form.toolStripSeparatorAction.Visible = true;
+                        form.deleteToolStripMenuItem.Visible = true;
+                        form.deleteToolStripMenuItem.Enabled = true;
+
+                        form.pasteToolStripMenuItem.Enabled = form.clipboard.IsValidForPaste("SiteMap");
+                    }
+                    break;
+
+                case "Area":
+                    {
+                        form.addGroupToolStripMenuItem.Visible = true;
+                        form.toolStripSeparatorSystem.Visible = true;
+                        form.addSystemGroupToolStripMenuItem.Visible = true;
+                        form.toolStripSeparatorAction.Visible = true;
+                        form.deleteToolStripMenuItem.Visible = true;
+                        form.deleteToolStripMenuItem.Enabled = true;
+                        form.addDescriptionsToolStripMenuItem.Visible = true;
+                        form.addDescriptionsToolStripMenuItem.Enabled = node.Nodes.Find("Descriptions", false).Length == 0;
+                        form.addTitlesToolStripMenuItem.Visible = true;
+                        form.addTitlesToolStripMenuItem.Enabled = node.Nodes.Find("Titles", false).Length == 0;
+
+                        form.disableToolStripMenuItem.Visible = true;
+                        form.disableToolStripMenuItem.Enabled = true;
+                        form.disableToolStripMenuItem.Text = collec.ContainsKey("_disabled") ? "Enable" : "Disable";
+
+                        form.cutToolStripMenuItem.Enabled = true;
+                        form.copyToolStripMenuItem.Enabled = true;
+                        form.pasteToolStripMenuItem.Enabled = form.clipboard.IsValidForPaste("Area");
+                    }
+                    break;
+
+                case "Group":
+                    {
+                        form.addSystemSubAreaToolStripMenuItem.Visible = true;
+                        form.toolStripSeparatorSystem.Visible = true;
+                        form.addSubAreaToolStripMenuItem.Visible = true;
+                        form.addDescriptionsToolStripMenuItem.Visible = true;
+                        form.addDescriptionsToolStripMenuItem.Enabled = node.Nodes.Find("Descriptions", false).Length == 0;
+                        form.addTitlesToolStripMenuItem.Visible = true;
+                        form.addTitlesToolStripMenuItem.Enabled = node.Nodes.Find("Titles", false).Length == 0;
+                        form.toolStripSeparatorAction.Visible = true;
+                        form.deleteToolStripMenuItem.Visible = true;
+                        form.deleteToolStripMenuItem.Enabled = true;
+
+                        form.disableToolStripMenuItem.Visible = true;
+                        form.disableToolStripMenuItem.Enabled = true;
+                        form.disableToolStripMenuItem.Text = collec.ContainsKey("_disabled") ? "Enable" : "Disable";
+
+                        form.cutToolStripMenuItem.Enabled = true;
+                        form.copyToolStripMenuItem.Enabled = true;
+                        form.pasteToolStripMenuItem.Enabled = form.clipboard.IsValidForPaste("Group");
+
+                        foreach (TreeNode childNode in node.Nodes)
+                        {
+                            if (childNode.Text == "Descriptions")
+                            {
+                                form.addDescriptionsToolStripMenuItem.Enabled = false;
+                                break;
+                            }
+
+                            if (childNode.Text == "Titles")
+                            {
+                                form.addTitlesToolStripMenuItem.Enabled = false;
+                                break;
+                            }
+                        }
+                    }
+                    break;
+
+                case "SubArea":
+                    {
+                        form.addPrivilegeToolStripMenuItem.Visible = true;
+                        form.addDescriptionsToolStripMenuItem.Visible = true;
+                        form.addDescriptionsToolStripMenuItem.Enabled = node.Nodes.Find("Descriptions", false).Length == 0;
+                        form.addTitlesToolStripMenuItem.Visible = true;
+                        form.addTitlesToolStripMenuItem.Enabled = node.Nodes.Find("Titles", false).Length == 0;
+                        form.toolStripSeparatorAction.Visible = true;
+                        form.deleteToolStripMenuItem.Visible = true;
+                        form.deleteToolStripMenuItem.Enabled = true;
+
+                        form.disableToolStripMenuItem.Visible = true;
+                        form.disableToolStripMenuItem.Enabled = true;
+                        form.disableToolStripMenuItem.Text = collec.ContainsKey("_disabled") ? "Enable" : "Disable";
+
+                        form.cutToolStripMenuItem.Enabled = true;
+                        form.copyToolStripMenuItem.Enabled = true;
+                        form.pasteToolStripMenuItem.Enabled = form.clipboard.IsValidForPaste("SubArea");
+
+                        foreach (TreeNode childNode in node.Nodes)
+                        {
+                            if (childNode.Text == "Titles")
+                            {
+                                form.addTitlesToolStripMenuItem.Enabled = false;
+                                break;
+                            }
+                        }
+                    }
+                    break;
+
+                case "Privilege":
+                    {
+                        form.deleteToolStripMenuItem.Visible = true;
+                        form.deleteToolStripMenuItem.Enabled = true;
+                        form.toolStripSeparatorBeginOfEdition.Visible = false;
+
+                        form.disableToolStripMenuItem.Visible = true;
+                        form.disableToolStripMenuItem.Enabled = true;
+                        form.disableToolStripMenuItem.Text = collec.ContainsKey("_disabled") ? "Enable" : "Disable";
+
+                        form.toolStripSeparatorAction.Visible = true;
+                        form.cutToolStripMenuItem.Enabled = true;
+                        form.copyToolStripMenuItem.Enabled = true;
+                    }
+                    break;
+
+                case "Titles":
+                    {
+                        form.addTitleToolStripMenuItem.Visible = true;
+                        form.toolStripSeparatorAction.Visible = true;
+                        form.deleteToolStripMenuItem.Visible = true;
+                        form.deleteToolStripMenuItem.Enabled = true;
+
+                        form.cutToolStripMenuItem.Enabled = true;
+                        form.copyToolStripMenuItem.Enabled = true;
+                        form.pasteToolStripMenuItem.Enabled = form.clipboard.IsValidForPaste("Titles");
+                    }
+                    break;
+
+                case "Descriptions":
+                    {
+                        form.addDescriptionToolStripMenuItem.Visible = true;
+                        form.toolStripSeparatorAction.Visible = true;
+                        form.deleteToolStripMenuItem.Visible = true;
+                        form.deleteToolStripMenuItem.Enabled = true;
+
+                        form.cutToolStripMenuItem.Enabled = true;
+                        form.copyToolStripMenuItem.Enabled = true;
+                        form.pasteToolStripMenuItem.Enabled = form.clipboard.IsValidForPaste("Descriptions");
+                    }
+                    break;
+
+                case "Title":
+                case "Description":
+                    {
+                        form.deleteToolStripMenuItem.Visible = true;
+                        form.toolStripSeparatorAction.Visible = true;
+
+                        form.toolStripSeparatorBeginOfEdition.Visible = false;
+                        form.cutToolStripMenuItem.Enabled = true;
+                        form.copyToolStripMenuItem.Enabled = true;
+
+                        if (node.Parent != null && node.Parent.Nodes.Count == 1)
+                            form.deleteToolStripMenuItem.Enabled = false;
+                    }
+                    break;
+            }
+
+            node.ContextMenuStrip = form.nodeMenu;
+        }
+
+        /// <summary>
         /// Adds a new TreeNode to the parent object from the XmlNode information
         /// </summary>
         /// <param name="parentObject">Object (TreeNode or TreeView) where to add a new TreeNode</param>
@@ -46,7 +225,7 @@ namespace MsCrmTools.SiteMapEditor.AppCode
             }
 
             node.Name = node.Text.Replace(" ", "");
-            
+
             if (isDisabled)
             {
                 node.ToolTipText =
@@ -59,8 +238,6 @@ namespace MsCrmTools.SiteMapEditor.AppCode
             node.Tag = attributes;
 
             AddContextMenu(node, form);
-
-          
 
             if (parentObject is TreeView)
             {
@@ -89,178 +266,6 @@ namespace MsCrmTools.SiteMapEditor.AppCode
                     AddTreeViewNode(node, commentDoc.DocumentElement, form, true);
                 }
             }
-        }
-
-        /// <summary>
-        /// Adds a context menu to a TreeNode control
-        /// </summary>
-        /// <param name="node">TreeNode where to add the context menu</param>
-        /// <param name="form">Current application form</param>
-        public static void AddContextMenu(TreeNode node, SiteMapEditor form)
-        {
-            var collec = (Dictionary<string, string>)node.Tag;
-
-            HideAllContextMenuItems(form.nodeMenu);
-
-            switch (node.Text.Split(' ')[0])
-            {
-                case "SiteMap":
-                    {
-                        form.addSystemAreaToolStripMenuItem.Visible = true;
-                        form.toolStripSeparatorSystem.Visible = true;
-                        form.addAreaToolStripMenuItem.Visible = true;
-
-                        form.toolStripSeparatorAction.Visible = true;
-                        form.deleteToolStripMenuItem.Visible = true;
-                        form.deleteToolStripMenuItem.Enabled= true;
-
-                        form.pasteToolStripMenuItem.Enabled = form.clipboard.IsValidForPaste("SiteMap");
-                    }
-                    break;
-                case "Area":
-                    {
-                        form.addGroupToolStripMenuItem.Visible = true;
-                        form.toolStripSeparatorSystem.Visible = true;
-                        form.addSystemGroupToolStripMenuItem.Visible = true;
-                        form.toolStripSeparatorAction.Visible = true;
-                        form.deleteToolStripMenuItem.Visible = true;
-                        form.deleteToolStripMenuItem.Enabled = true;
-                        form.addDescriptionsToolStripMenuItem.Visible = true;
-                        form.addDescriptionsToolStripMenuItem.Enabled = node.Nodes.Find("Descriptions", false).Length == 0;
-                        form.addTitlesToolStripMenuItem.Visible = true;
-                        form.addTitlesToolStripMenuItem.Enabled = node.Nodes.Find("Titles",false).Length == 0;
-
-                        form.disableToolStripMenuItem.Visible = true;
-                        form.disableToolStripMenuItem.Enabled = true;
-                        form.disableToolStripMenuItem.Text = collec.ContainsKey("_disabled") ? "Enable" : "Disable";
-
-                        form.cutToolStripMenuItem.Enabled = true;
-                        form.copyToolStripMenuItem.Enabled = true;
-                        form.pasteToolStripMenuItem.Enabled = form.clipboard.IsValidForPaste("Area");
-                    }
-                    break;
-                case "Group":
-                    {
-                        form.addSystemSubAreaToolStripMenuItem.Visible = true;
-                        form.toolStripSeparatorSystem.Visible = true;
-                        form.addSubAreaToolStripMenuItem.Visible = true;
-                        form.addDescriptionsToolStripMenuItem.Visible = true;
-                        form.addDescriptionsToolStripMenuItem.Enabled = node.Nodes.Find("Descriptions", false).Length == 0;
-                        form.addTitlesToolStripMenuItem.Visible = true;
-                        form.addTitlesToolStripMenuItem.Enabled = node.Nodes.Find("Titles", false).Length == 0;
-                        form.toolStripSeparatorAction.Visible = true;
-                        form.deleteToolStripMenuItem.Visible = true;
-                        form.deleteToolStripMenuItem.Enabled = true;
-
-                        form.disableToolStripMenuItem.Visible = true;
-                        form.disableToolStripMenuItem.Enabled = true;
-                        form.disableToolStripMenuItem.Text = collec.ContainsKey("_disabled") ? "Enable" : "Disable";
-
-                        form.cutToolStripMenuItem.Enabled = true;
-                        form.copyToolStripMenuItem.Enabled = true;
-                        form.pasteToolStripMenuItem.Enabled = form.clipboard.IsValidForPaste("Group");
-                        
-                        foreach (TreeNode childNode in node.Nodes)
-                        {
-                            if (childNode.Text == "Descriptions")
-                            {
-                                form.addDescriptionsToolStripMenuItem.Enabled = false;
-                                break;
-                            }
-
-                            if (childNode.Text == "Titles")
-                            {
-                                form.addTitlesToolStripMenuItem.Enabled = false;
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                case "SubArea":
-                    {
-                        form.addPrivilegeToolStripMenuItem.Visible = true;
-                        form.addDescriptionsToolStripMenuItem.Visible = true;
-                        form.addDescriptionsToolStripMenuItem.Enabled = node.Nodes.Find("Descriptions", false).Length == 0;
-                        form.addTitlesToolStripMenuItem.Visible = true;
-                        form.addTitlesToolStripMenuItem.Enabled = node.Nodes.Find("Titles",false).Length == 0;
-                        form.toolStripSeparatorAction.Visible = true;
-                        form.deleteToolStripMenuItem.Visible = true;
-                        form.deleteToolStripMenuItem.Enabled = true;
-
-                        form.disableToolStripMenuItem.Visible = true;
-                        form.disableToolStripMenuItem.Enabled = true;
-                        form.disableToolStripMenuItem.Text = collec.ContainsKey("_disabled") ? "Enable" : "Disable";
-                        
-                        form.cutToolStripMenuItem.Enabled = true;
-                        form.copyToolStripMenuItem.Enabled = true;
-                        form.pasteToolStripMenuItem.Enabled = form.clipboard.IsValidForPaste("SubArea");
-
-                        foreach (TreeNode childNode in node.Nodes)
-                        {
-                            if (childNode.Text == "Titles")
-                            {
-                                form.addTitlesToolStripMenuItem.Enabled = false;
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                case "Privilege":
-                    {
-                        form.deleteToolStripMenuItem.Visible = true;
-                        form.deleteToolStripMenuItem.Enabled = true;
-                        form.toolStripSeparatorBeginOfEdition.Visible = false;
-
-                        form.disableToolStripMenuItem.Visible = true;
-                        form.disableToolStripMenuItem.Enabled = true;
-                        form.disableToolStripMenuItem.Text = collec.ContainsKey("_disabled") ? "Enable" : "Disable";
-                        
-                        form.toolStripSeparatorAction.Visible = true;
-                        form.cutToolStripMenuItem.Enabled = true;
-                        form.copyToolStripMenuItem.Enabled = true;
-                    }
-                    break;
-                case "Titles":
-                    {
-                        form.addTitleToolStripMenuItem.Visible = true;
-                        form.toolStripSeparatorAction.Visible = true;
-                        form.deleteToolStripMenuItem.Visible = true;
-                        form.deleteToolStripMenuItem.Enabled = true;
-
-                        form.cutToolStripMenuItem.Enabled = true;
-                        form.copyToolStripMenuItem.Enabled = true;
-                        form.pasteToolStripMenuItem.Enabled = form.clipboard.IsValidForPaste("Titles");
-                    }
-                    break;
-                case "Descriptions":
-                    {
-                        form.addDescriptionToolStripMenuItem.Visible = true;
-                        form.toolStripSeparatorAction.Visible = true;
-                        form.deleteToolStripMenuItem.Visible = true;
-                        form.deleteToolStripMenuItem.Enabled = true;
-
-                        form.cutToolStripMenuItem.Enabled = true;
-                        form.copyToolStripMenuItem.Enabled = true;
-                        form.pasteToolStripMenuItem.Enabled = form.clipboard.IsValidForPaste("Descriptions");
-                    }
-                    break;
-                case "Title":
-                case "Description":
-                    {
-                        form.deleteToolStripMenuItem.Visible = true;
-                        form.toolStripSeparatorAction.Visible = true;
-
-                        form.toolStripSeparatorBeginOfEdition.Visible = false;
-                        form.cutToolStripMenuItem.Enabled = true;
-                        form.copyToolStripMenuItem.Enabled = true;
-                        
-                        if (node.Parent != null && node.Parent.Nodes.Count == 1)
-                            form.deleteToolStripMenuItem.Enabled = false;
-                    }
-                    break;
-            }
-
-            node.ContextMenuStrip = form.nodeMenu;
         }
 
         /// <summary>

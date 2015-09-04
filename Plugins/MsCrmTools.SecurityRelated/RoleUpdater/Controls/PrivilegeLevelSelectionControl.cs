@@ -3,16 +3,15 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
+using MsCrmTools.RoleUpdater.DelegatesHelpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Metadata;
-using MsCrmTools.RoleUpdater.DelegatesHelpers;
-using XrmToolBox;
 using XrmToolBox.Extensibility;
 
 namespace MsCrmTools.RoleUpdater.Controls
@@ -27,14 +26,14 @@ namespace MsCrmTools.RoleUpdater.Controls
         private readonly List<PrivilegeAction> actions;
 
         /// <summary>
-        /// Role manager
-        /// </summary>
-        private readonly RoleManager rManager;
-
-        /// <summary>
         /// List of entities
         /// </summary>
         private readonly List<EntityMetadata> entities;
+
+        /// <summary>
+        /// Role manager
+        /// </summary>
+        private readonly RoleManager rManager;
 
         private readonly UpdateSettings settings;
 
@@ -43,6 +42,7 @@ namespace MsCrmTools.RoleUpdater.Controls
         private Panel infoPanel;
 
         public delegate void SettingsAppliedHandler(object sender, EventArgs e);
+
         public event SettingsAppliedHandler SettingsApplied;
 
         #endregion Variables
@@ -72,31 +72,17 @@ namespace MsCrmTools.RoleUpdater.Controls
         public List<PrivilegeAction> Actions
         {
             get { return actions; }
-        } 
+        }
 
         #endregion Properties
 
         #region Methods
 
-        private void BtnRemoveClick(object sender, EventArgs e)
+        private void AddNoneLevelClick(object sender, EventArgs e)
         {
-            var itemsToRemove = listView1.SelectedItems.Cast<ListViewItem>().ToList();
-            var actionsToRemove = new List<PrivilegeAction>();
-
-            foreach(ListViewItem item in itemsToRemove)
+            foreach (var prv in from ListViewItem item in lvPrivileges.SelectedItems select (Entity)item.Tag)
             {
-                var prv = (Entity)item.Tag;
-
-                foreach (var action in actions.Where(action => action.PrivilegeId == prv.Id))
-                {
-                    actionsToRemove.Add(action);
-                    listView1.Items.Remove(item);
-                }
-
-                foreach(var pAction in actionsToRemove)
-                {
-                    actions.Remove(pAction);
-                }
+                AddPrivilegeLevel(PrivilegeLevel.None, "None", prv);
             }
         }
 
@@ -124,27 +110,19 @@ namespace MsCrmTools.RoleUpdater.Controls
             }
         }
 
-        private void BtnAddOrganizationLevelClick(object sender, EventArgs e)
-        {
-            foreach (var prv in from ListViewItem item in lvPrivileges.SelectedItems select (Entity)item.Tag)
-            {
-                AddPrivilegeLevel(PrivilegeLevel.Organization, "Organization", prv);
-            }
-        }
-
-        private void BtnAddUserLevelClick(object sender, EventArgs e)
-        {
-            foreach (var prv in from ListViewItem item in lvPrivileges.SelectedItems select (Entity)item.Tag)
-            {
-                AddPrivilegeLevel(PrivilegeLevel.User, "User", prv);
-            }
-        }
-
         private void BtnAddBusinessUnitLevelClick(object sender, EventArgs e)
         {
             foreach (var prv in from ListViewItem item in lvPrivileges.SelectedItems select (Entity)item.Tag)
             {
                 AddPrivilegeLevel(PrivilegeLevel.BusinessUnit, "Business Unit", prv);
+            }
+        }
+
+        private void BtnAddOrganizationLevelClick(object sender, EventArgs e)
+        {
+            foreach (var prv in from ListViewItem item in lvPrivileges.SelectedItems select (Entity)item.Tag)
+            {
+                AddPrivilegeLevel(PrivilegeLevel.Organization, "Organization", prv);
             }
         }
 
@@ -156,37 +134,61 @@ namespace MsCrmTools.RoleUpdater.Controls
             }
         }
 
-        private void AddNoneLevelClick(object sender, EventArgs e)
+        private void BtnAddUserLevelClick(object sender, EventArgs e)
         {
             foreach (var prv in from ListViewItem item in lvPrivileges.SelectedItems select (Entity)item.Tag)
             {
-                AddPrivilegeLevel(PrivilegeLevel.None, "None", prv);
+                AddPrivilegeLevel(PrivilegeLevel.User, "User", prv);
+            }
+        }
+
+        private void BtnRemoveClick(object sender, EventArgs e)
+        {
+            var itemsToRemove = listView1.SelectedItems.Cast<ListViewItem>().ToList();
+            var actionsToRemove = new List<PrivilegeAction>();
+
+            foreach (ListViewItem item in itemsToRemove)
+            {
+                var prv = (Entity)item.Tag;
+
+                foreach (var action in actions.Where(action => action.PrivilegeId == prv.Id))
+                {
+                    actionsToRemove.Add(action);
+                    listView1.Items.Remove(item);
+                }
+
+                foreach (var pAction in actionsToRemove)
+                {
+                    actions.Remove(pAction);
+                }
             }
         }
 
         #endregion Methods
 
-        private void PrivilegeLevelSelectionControlLoad(object sender, EventArgs e)
+        public void ApplyChanges()
         {
-            lvPrivileges.Columns[lvPrivileges.Columns.Count - 1].Width = lvPrivileges.Width - 24;
-            listView1.Columns[listView1.Columns.Count - 1].Width = -2;
+            settings.Actions = actions;
 
-            fillPrivThread = new Thread(DoWork);
-            fillPrivThread.Start();
-
-            if(settings != null && settings.Actions.Count > 0)
+            if (settings.Actions.Count == 0)
             {
-                foreach(PrivilegeAction pAction in settings.Actions)
-                {
-                    var prv = new Entity("privilege") {Id = pAction.PrivilegeId};
-                    prv["name"] = pAction.PrivilegeName;
+                MessageBox.Show(this, "Please select at least one privilege", "Warning", MessageBoxButtons.OK,
+                                   MessageBoxIcon.Warning);
 
-                    AddPrivilegeLevel(pAction.Level, pAction.LevelName, prv);
-                }
+                return;
             }
+
+            infoPanel = InformationPanel.GetInformationPanel(this, "Updating roles...", 500, 120);
+
+            var worker = new BackgroundWorker();
+            worker.DoWork += WorkerDoWork;
+            worker.ProgressChanged += WorkerProgressChanged;
+            worker.RunWorkerCompleted += WorkerRunWorkerCompleted;
+            worker.WorkerReportsProgress = true;
+            worker.RunWorkerAsync();
         }
 
-        void DoWork()
+        private void DoWork()
         {
             var filterTerm = textBox1.Text;
             IEnumerable<Entity> privileges = rManager.Privileges;
@@ -204,14 +206,14 @@ namespace MsCrmTools.RoleUpdater.Controls
             {
                 var groupName = string.Empty;
                 var group = (from entity in entities
-                                 where entity.Privileges.Any(p => p.PrivilegeId == privilege.Id)
-                                 select new{entity.LogicalName, entity.DisplayName.UserLocalizedLabel.Label}).FirstOrDefault();
+                             where entity.Privileges.Any(p => p.PrivilegeId == privilege.Id)
+                             select new { entity.LogicalName, entity.DisplayName.UserLocalizedLabel.Label }).FirstOrDefault();
                 var entitySchemaName = (from entity in entities
                                         where entity.Privileges.Any(p => p.Name == privilege["name"].ToString())
                                         select entity.SchemaName).FirstOrDefault();
 
                 if (group == null)
-                { 
+                {
                     if (privilege["name"].ToString().EndsWith("Entity"))
                         groupName = "Entity";
                     else if (privilege["name"].ToString().EndsWith("Attribute"))
@@ -228,14 +230,12 @@ namespace MsCrmTools.RoleUpdater.Controls
                     if (group.LogicalName == "customeraddress")
                         groupName =
                             entities.First(x => x.LogicalName == "account").DisplayName.UserLocalizedLabel.Label;
-
                     else if (group.LogicalName == "email" || group.LogicalName == "task"
                         || group.LogicalName == "letter" || group.LogicalName == "phonecall"
                         || group.LogicalName == "appointment" || group.LogicalName == "serviceappointment"
                         || group.LogicalName == "campaignresponse" || group.LogicalName == "fax")
                         groupName =
                             entities.First(x => x.LogicalName == "activitypointer").DisplayName.UserLocalizedLabel.Label;
-
                     else
                         groupName = group.Label;
                 }
@@ -264,16 +264,10 @@ namespace MsCrmTools.RoleUpdater.Controls
             ListViewDelegates.Sort(lvPrivileges, true);
         }
 
-        private void TextBox1TextChanged(object sender, EventArgs e)
+        private void ListView1MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if(fillPrivThread != null)
-                fillPrivThread.Abort();
-
-            ListViewDelegates.ClearItems(lvPrivileges);
-            ListViewDelegates.ClearGroups(lvPrivileges);
-
-            fillPrivThread = new Thread(DoWork);
-            fillPrivThread.Start();
+            if (listView1.SelectedItems.Count > 0)
+                listView1.Items.Remove(listView1.SelectedItems[0]);
         }
 
         private void LvPrivilegesSelectedIndexChanged(object sender, EventArgs e)
@@ -285,19 +279,19 @@ namespace MsCrmTools.RoleUpdater.Controls
             bool canBeDeep = true;
             bool canBeGlobal = true;
 
-            foreach(ListViewItem item in lvPrivileges.SelectedItems)
+            foreach (ListViewItem item in lvPrivileges.SelectedItems)
             {
                 var privilege = item.Tag as Entity;
 
                 if (privilege == null) continue;
 
-                if((bool) privilege["canbelocal"] == false)
+                if ((bool)privilege["canbelocal"] == false)
                     canBeLocal = false;
-                 if((bool) privilege["canbebasic"] == false)
+                if ((bool)privilege["canbebasic"] == false)
                     canBeBasic = false;
-                 if((bool) privilege["canbedeep"] == false)
+                if ((bool)privilege["canbedeep"] == false)
                     canBeDeep = false;
-                 if((bool) privilege["canbeglobal"] == false)
+                if ((bool)privilege["canbeglobal"] == false)
                     canBeGlobal = false;
             }
 
@@ -307,50 +301,54 @@ namespace MsCrmTools.RoleUpdater.Controls
             btnAddOrganizationLevel.Enabled = canBeGlobal;
         }
 
-        private void ListView1MouseDoubleClick(object sender, MouseEventArgs e)
+        private void PrivilegeLevelSelectionControlLoad(object sender, EventArgs e)
         {
-            if(listView1.SelectedItems.Count > 0)
-                listView1.Items.Remove(listView1.SelectedItems[0]);
-        }
-    
-        public void ApplyChanges()
-        {
-            settings.Actions = actions;
+            lvPrivileges.Columns[lvPrivileges.Columns.Count - 1].Width = lvPrivileges.Width - 24;
+            listView1.Columns[listView1.Columns.Count - 1].Width = -2;
 
-            if (settings.Actions.Count == 0)
+            fillPrivThread = new Thread(DoWork);
+            fillPrivThread.Start();
+
+            if (settings != null && settings.Actions.Count > 0)
             {
-                MessageBox.Show(this, "Please select at least one privilege", "Warning", MessageBoxButtons.OK,
-                                   MessageBoxIcon.Warning);
-                    
-                return;
+                foreach (PrivilegeAction pAction in settings.Actions)
+                {
+                    var prv = new Entity("privilege") { Id = pAction.PrivilegeId };
+                    prv["name"] = pAction.PrivilegeName;
+
+                    AddPrivilegeLevel(pAction.Level, pAction.LevelName, prv);
+                }
             }
-
-            infoPanel = InformationPanel.GetInformationPanel(this, "Updating roles...", 500, 120);
-
-            var worker = new BackgroundWorker();
-            worker.DoWork += WorkerDoWork;
-            worker.ProgressChanged += WorkerProgressChanged;
-            worker.RunWorkerCompleted += WorkerRunWorkerCompleted;
-            worker.WorkerReportsProgress = true;
-            worker.RunWorkerAsync();
         }
 
-        void WorkerDoWork(object sender, DoWorkEventArgs e)
+        private void TextBox1TextChanged(object sender, EventArgs e)
         {
-            var worker = (BackgroundWorker) sender;
+            if (fillPrivThread != null)
+                fillPrivThread.Abort();
+
+            ListViewDelegates.ClearItems(lvPrivileges);
+            ListViewDelegates.ClearGroups(lvPrivileges);
+
+            fillPrivThread = new Thread(DoWork);
+            fillPrivThread.Start();
+        }
+
+        private void WorkerDoWork(object sender, DoWorkEventArgs e)
+        {
+            var worker = (BackgroundWorker)sender;
 
             foreach (var role in settings.SelectedRoles)
             {
                 try
                 {
-                    worker.ReportProgress(1,string.Format("Retrieving privileges set for role \"{0}\"...", role["name"]));
+                    worker.ReportProgress(1, string.Format("Retrieving privileges set for role \"{0}\"...", role["name"]));
                     var rolePrivileges = rManager.GetPrivilegesForRole(role.Id);
 
                     foreach (var pAction in settings.Actions)
                     {
                         if (pAction.Level == PrivilegeLevel.None)
                         {
-                            worker.ReportProgress(1, string.Format("Removing privilege \"{0}\" from role \"{1}\"...",pAction.PrivilegeName, role["name"]));
+                            worker.ReportProgress(1, string.Format("Removing privilege \"{0}\" from role \"{1}\"...", pAction.PrivilegeName, role["name"]));
                             rManager.RemovePrivilegeFromRole(rolePrivileges, pAction.PrivilegeId);
                         }
                         else
@@ -372,12 +370,12 @@ namespace MsCrmTools.RoleUpdater.Controls
             }
         }
 
-        void WorkerProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void WorkerProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-           InformationPanel.ChangeInformationPanelMessage(infoPanel, e.UserState.ToString());
+            InformationPanel.ChangeInformationPanelMessage(infoPanel, e.UserState.ToString());
         }
 
-        void WorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void WorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             infoPanel.Dispose();
             Controls.Remove(infoPanel);

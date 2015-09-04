@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
+using System.ComponentModel;
 
 namespace MsCrmTools.MetadataBrowser.AppCode
 {
@@ -18,14 +18,14 @@ namespace MsCrmTools.MetadataBrowser.AppCode
             get { return property.CanBeChanged; }
         }
 
-        public bool Value
-        {
-            get { return property.Value; }
-        }
-
         public string ManagedPropertyLogicalName
         {
             get { return property.ManagedPropertyLogicalName; }
+        }
+
+        public bool Value
+        {
+            get { return property.Value; }
         }
 
         public override string ToString()

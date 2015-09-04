@@ -10,6 +10,9 @@ namespace XrmToolBox
 {
     public class PluginManagerExtended : MarshalByRefObject
     {
+        private static readonly string PluginPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "Plugins");
+        private CompositionContainer container;
+        private DirectoryCatalog directoryCatalog;
         private DateTime lastPluginsUpdate;
 
         public PluginManagerExtended(Form parentForm)
@@ -26,14 +29,10 @@ namespace XrmToolBox
             watcher.Created += watcher_EventRaised;
         }
 
+        public event EventHandler PluginsListUpdated;
+
         [ImportMany(AllowRecomposition = true)]
         public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> Plugins { get; set; }
-
-        private CompositionContainer container;
-        private DirectoryCatalog directoryCatalog;
-        private static readonly string PluginPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "Plugins");
-
-        public event EventHandler PluginsListUpdated;
 
         public void Initialize()
         {
@@ -45,7 +44,13 @@ namespace XrmToolBox
             container.ComposeParts(this);
         }
 
-        void watcher_EventRaised(object sender, FileSystemEventArgs e)
+        public void Recompose()
+        {
+            directoryCatalog.Refresh();
+            container.ComposeParts(directoryCatalog.Parts);
+        }
+
+        private void watcher_EventRaised(object sender, FileSystemEventArgs e)
         {
             try
             {
@@ -57,12 +62,6 @@ namespace XrmToolBox
             {
                 ((FileSystemWatcher)sender).EnableRaisingEvents = true;
             }
-        }
-
-        public void Recompose()
-        {
-            directoryCatalog.Refresh();
-            container.ComposeParts(directoryCatalog.Parts);
         }
     }
 }

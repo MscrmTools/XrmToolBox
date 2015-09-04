@@ -36,14 +36,13 @@ namespace MsCrmTools.FormParameterManager.AppCode
                 {
                     throw new NotSupportedException("The name cannot start with underscore (_) or crm_. It must start with alphanumeric characters followed by underscore (_). For example, parameter_1 or 1_parameter. Name cannot contains hyphen (-), colon (:), semicolon (;), comma (,) or point(.).");
                 }
-                
+
                 name = value;
             }
         }
 
-        public FormParameterType Type { get; set; }
-
         public CrmForm ParentForm { get; set; }
+        public FormParameterType Type { get; set; }
 
         public object Clone()
         {

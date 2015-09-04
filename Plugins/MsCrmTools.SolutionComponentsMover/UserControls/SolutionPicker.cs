@@ -1,14 +1,7 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 
 namespace MsCrmTools.SolutionComponentsMover.UserControls
 {
@@ -21,16 +14,16 @@ namespace MsCrmTools.SolutionComponentsMover.UserControls
             InitializeComponent();
         }
 
-        public IOrganizationService Service { set { service = value; } }
+        public bool CanDisplayManagedSolutions { get; set; }
 
         public List<Entity> SelectedSolutions
         {
-            get { return lvSolutions.SelectedItems.Cast<ListViewItem>().Select(i => (Entity) i.Tag).ToList(); }
+            get { return lvSolutions.SelectedItems.Cast<ListViewItem>().Select(i => (Entity)i.Tag).ToList(); }
         }
 
-        public bool CanDisplayManagedSolutions { get; set; }
+        public IOrganizationService Service { set { service = value; } }
 
-       public void LoadSolutions(IEnumerable<Entity> solutions)
+        public void LoadSolutions(IEnumerable<Entity> solutions)
         {
             lvSolutions.Items.Clear();
 
@@ -38,12 +31,12 @@ namespace MsCrmTools.SolutionComponentsMover.UserControls
 
             IEnumerable<Entity> solutionsToDisplay = solutions;
 
-           if (!CanDisplayManagedSolutions)
-           {
-               solutionsToDisplay = solutions.Where(s => s.GetAttributeValue<bool>("ismanaged") == false);
-           }
+            if (!CanDisplayManagedSolutions)
+            {
+                solutionsToDisplay = solutions.Where(s => s.GetAttributeValue<bool>("ismanaged") == false);
+            }
 
-           foreach (var solution in solutionsToDisplay)
+            foreach (var solution in solutionsToDisplay)
             {
                 var item = new ListViewItem(solution.GetAttributeValue<string>("friendlyname"));
                 item.SubItems.Add(solution.GetAttributeValue<string>("uniquename"));
@@ -51,11 +44,9 @@ namespace MsCrmTools.SolutionComponentsMover.UserControls
                 item.Tag = solution;
 
                 list.Add(item);
-            } 
+            }
 
             lvSolutions.Items.AddRange(list.ToArray());
         }
-
-       
     }
 }

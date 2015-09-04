@@ -1,16 +1,15 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 
 namespace MsCrmTools.UserRolesManager.AppCode
 {
     internal class ViewManager
     {
         private readonly IOrganizationService service;
+
         public ViewManager(IOrganizationService service)
         {
             this.service = service;
@@ -40,7 +39,7 @@ namespace MsCrmTools.UserRolesManager.AppCode
                 }
             });
 
-            items.AddRange(savedQueries.Entities.Select(e=> new ViewItem(e)));
+            items.AddRange(savedQueries.Entities.Select(e => new ViewItem(e)));
 
             if (worker != null && worker.WorkerReportsProgress)
             {

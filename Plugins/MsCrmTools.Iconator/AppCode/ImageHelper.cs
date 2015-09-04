@@ -24,17 +24,15 @@ namespace MsCrmTools.Iconator.AppCode
                 var imageBytes = Convert.FromBase64String(contentImageList);
                 var ms = new MemoryStream(imageBytes);
 
-                var im = Image.FromStream(ms,true, true);
-                
+                var im = Image.FromStream(ms, true, true);
+
                 return im;
             }
             catch (Exception ex)
             {
-                throw new Exception(String.Format("Error on ConvertWebResContent method : {0}",ex.InnerException.Message));
+                throw new Exception(String.Format("Error on ConvertWebResContent method : {0}", ex.InnerException.Message));
             }
-           
         }
-
 
         /// <summary>
         /// method for resizing an image
@@ -58,7 +56,6 @@ namespace MsCrmTools.Iconator.AppCode
             {
                 throw new Exception(String.Format("Error on Resize method : {0}", ex.InnerException.Message));
             }
-            
-        } 
+        }
     }
 }

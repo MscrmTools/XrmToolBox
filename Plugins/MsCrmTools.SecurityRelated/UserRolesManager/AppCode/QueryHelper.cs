@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using System;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 
 namespace MsCrmTools.UserRolesManager.AppCode
 {
@@ -27,16 +24,17 @@ namespace MsCrmTools.UserRolesManager.AppCode
             switch (entityElement.Attribute("name").Value)
             {
                 case "systemuser":
-                {
-                    AddMissingCrmAttribute(xDoc, "firstname");
-                    AddMissingCrmAttribute(xDoc, "lastname");
-                }
-                break;
+                    {
+                        AddMissingCrmAttribute(xDoc, "firstname");
+                        AddMissingCrmAttribute(xDoc, "lastname");
+                    }
+                    break;
+
                 case "team":
-                {
-                    AddMissingCrmAttribute(xDoc, "name");
-                }
-                break;
+                    {
+                        AddMissingCrmAttribute(xDoc, "name");
+                    }
+                    break;
             }
 
             return service.RetrieveMultiple(new FetchExpression(xDoc.ToString()));
