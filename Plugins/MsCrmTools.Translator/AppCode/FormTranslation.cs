@@ -33,6 +33,7 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     setting["localeid"] = lcid;
                     setting["uilanguageid"] = lcid;
+                    setting["helplanguageid"] = lcid;
                     service.Update(setting);
                     currentSetting = lcid;
                 }
@@ -97,6 +98,7 @@ namespace MsCrmTools.Translator.AppCode
             {
                 setting["localeid"] = userSettingLcid;
                 setting["uilanguageid"] = userSettingLcid;
+                setting["helplanguageid"] = userSettingLcid;
                 service.Update(setting);
             }
 
