@@ -317,12 +317,12 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"$(SolutionDir)Referenced Assemblies\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(SolutionDir)XrmToolBox\$(OutDir)Plugins\$(TargetFileName)" MsCrmTools.WebResourcesManager.dll ICSharpCode.TextEditor.dll Yahoo.Yui.Compressor.dll EcmaScript.NET.modified.dll
+    <PostBuildEvent>"$(SolutionDir)packages\ilmerge.2.14.1208\tools\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(SolutionDir)XrmToolBox\$(OutDir)Plugins\$(TargetFileName)" MsCrmTools.WebResourcesManager.dll ICSharpCode.TextEditor.dll Yahoo.Yui.Compressor.dll EcmaScript.NET.modified.dll
 </PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
