@@ -15,15 +15,25 @@
                 url: 'https://api.github.com/repos/MscrmTools/XrmToolBox/releases',
                 success: function (data) {
                     if (data.length > 0) {
+					
 						var allCount = 0;
+						var latestPublicRelease = null;
 						
 						$(data).each(function(index){
-							allCount += this.assets[0].download_count;
+							if(this.prerelease == false)
+							{
+								allCount += this.assets[0].download_count;
+								
+								if(latestPublicRelease == null){
+									latestPublicRelease = this;
+								}
+							}
+							
 						});
 											
-                        $("#latestVersionDownloadCount").text(data[0].assets[0].download_count);
+                        $("#latestVersionDownloadCount").text(latestPublicRelease.assets[0].download_count);
                         $("#allDownloadCount").text(allCount);
-						$("#downloadLink").attr("href", data[0].assets[0].browser_download_url);
+						$("#downloadLink").attr("href", latestPublicRelease.assets[0].browser_download_url);
                        
                     } else {
                          $("#latestVersionDownloadCount").text("0");
