@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 
 namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
 {
@@ -49,17 +48,16 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
             }
         }
 
-        public int Rank
+        public string Description
         {
-            get { return pluginStep.GetAttributeValue<int>("rank"); }
-            set { pluginStep["rank"] = value; }
+            get { return pluginStep.GetAttributeValue<string>("description"); }
         }
 
         public string EntityLogicalName { get; private set; }
 
-        public int Stage
+        public bool HasChanged
         {
-            get { return pluginStep.GetAttributeValue<OptionSetValue>("stage").Value; }
+            get { return initialRank != Rank; }
         }
 
         public string Message { get; private set; }
@@ -69,19 +67,18 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
             get { return pluginStep.GetAttributeValue<string>("name"); }
         }
 
-        public string Description
+        public int Rank
         {
-            get { return pluginStep.GetAttributeValue<string>("description"); }
+            get { return pluginStep.GetAttributeValue<int>("rank"); }
+            set { pluginStep["rank"] = value; }
         }
 
-        public void UpdateRank(IOrganizationService service)
+        public int Stage
         {
-            if (HasChanged)
-            {
-                service.Update(pluginStep);
-                initialRank = pluginStep.GetAttributeValue<int>("rank");
-            }
+            get { return pluginStep.GetAttributeValue<OptionSetValue>("stage").Value; }
         }
+
+        public string Type { get { return "Plugin step"; } }
 
         public static IEnumerable<PluginStep> RetrievePluginSteps(IOrganizationService service, IEnumerable<Entity> sdkMessageFilers, IEnumerable<Entity> sdkMessages)
         {
@@ -120,13 +117,13 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
             return steps.Entities.Select(e => new PluginStep(e, sdkMessageFilers, sdkMessages));
         }
 
-
-        public bool HasChanged
+        public void UpdateRank(IOrganizationService service)
         {
-            get { return initialRank != Rank; }
+            if (HasChanged)
+            {
+                service.Update(pluginStep);
+                initialRank = pluginStep.GetAttributeValue<int>("rank");
+            }
         }
-
-        public string Type { get { return "Plugin step"; } }
-
     }
 }

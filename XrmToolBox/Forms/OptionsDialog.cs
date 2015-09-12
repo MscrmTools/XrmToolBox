@@ -1,10 +1,9 @@
-﻿using System;
+﻿using McTools.Xrm.Connection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Windows.Forms;
-using McTools.Xrm.Connection;
 using XrmToolBox.AppCode;
 
 namespace XrmToolBox.Forms
@@ -30,30 +29,10 @@ namespace XrmToolBox.Forms
 
         public Options Option { get { return option; } }
 
-        private void OptionsDialog_Load(object sender, EventArgs e)
+        private void BtnCancelClick(object sender, EventArgs e)
         {
-            foreach (var plugin in pManager.Plugins)
-            {
-                var title = plugin.Metadata.Name;
-                var author = plugin.Value.GetCompany();
-                var version = plugin.Value.GetVersion();
-
-                var item = new ListViewItem(title);
-                item.SubItems.Add(author);
-                item.SubItems.Add(version);
-                item.Checked = option.HiddenPlugins == null || !option.HiddenPlugins.Contains(title);
-
-                lvPlugins.Items.Add(item);
-            }
-
-            // Load proxy options
-            cbbProxyUsage.SelectedIndex = ConnectionManager.Instance.ConnectionsList.UseCustomProxy ? 2 : ConnectionManager.Instance.ConnectionsList.UseInternetExplorerProxy ? 1 : 0;
-            rbCustomAuthYes.Checked = !ConnectionManager.Instance.ConnectionsList.UseDefaultCredentials;
-            chkByPassProxyOnLocal.Checked = ConnectionManager.Instance.ConnectionsList.ByPassProxyOnLocal;
-            txtProxyAddress.Text = ConnectionManager.Instance.ConnectionsList.ProxyAddress;
-            txtProxyUser.Text = ConnectionManager.Instance.ConnectionsList.UserName;
-            txtProxyPassword.Text = ConnectionManager.Instance.ConnectionsList.Password;
-            cbbProxyUsage_SelectedIndexChanged(null, null);
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void BtnOkClick(object sender, EventArgs e)
@@ -104,26 +83,9 @@ namespace XrmToolBox.Forms
             }
         }
 
-        private void BtnCancelClick(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
-
         private void BtnResetMuListClick(object sender, EventArgs e)
         {
             option.MostUsedList = new List<PluginUseCount>();
-        }
-
-       private object GetAssemblyAttribute(Assembly assembly, Type attributeType)
-        {
-            return assembly.GetCustomAttributes(attributeType, true)[0];
-        }
-
-        private void rbCustomAuthYes_CheckedChanged(object sender, EventArgs e)
-        {
-            txtProxyPassword.Enabled = rbCustomAuthYes.Checked;
-            txtProxyUser.Enabled = rbCustomAuthYes.Checked;
         }
 
         private void cbbProxyUsage_SelectedIndexChanged(object sender, EventArgs e)
@@ -136,6 +98,43 @@ namespace XrmToolBox.Forms
             chkByPassProxyOnLocal.Enabled = useCustomProxy;
             rbCustomAuthYes.Enabled = useCustomProxy;
             rbCustomAuthNo.Enabled = useCustomProxy;
+        }
+
+        private object GetAssemblyAttribute(Assembly assembly, Type attributeType)
+        {
+            return assembly.GetCustomAttributes(attributeType, true)[0];
+        }
+
+        private void OptionsDialog_Load(object sender, EventArgs e)
+        {
+            foreach (var plugin in pManager.Plugins)
+            {
+                var title = plugin.Metadata.Name;
+                var author = plugin.Value.GetCompany();
+                var version = plugin.Value.GetVersion();
+
+                var item = new ListViewItem(title);
+                item.SubItems.Add(author);
+                item.SubItems.Add(version);
+                item.Checked = option.HiddenPlugins == null || !option.HiddenPlugins.Contains(title);
+
+                lvPlugins.Items.Add(item);
+            }
+
+            // Load proxy options
+            cbbProxyUsage.SelectedIndex = ConnectionManager.Instance.ConnectionsList.UseCustomProxy ? 2 : ConnectionManager.Instance.ConnectionsList.UseInternetExplorerProxy ? 1 : 0;
+            rbCustomAuthYes.Checked = !ConnectionManager.Instance.ConnectionsList.UseDefaultCredentials;
+            chkByPassProxyOnLocal.Checked = ConnectionManager.Instance.ConnectionsList.ByPassProxyOnLocal;
+            txtProxyAddress.Text = ConnectionManager.Instance.ConnectionsList.ProxyAddress;
+            txtProxyUser.Text = ConnectionManager.Instance.ConnectionsList.UserName;
+            txtProxyPassword.Text = ConnectionManager.Instance.ConnectionsList.Password;
+            cbbProxyUsage_SelectedIndexChanged(null, null);
+        }
+
+        private void rbCustomAuthYes_CheckedChanged(object sender, EventArgs e)
+        {
+            txtProxyPassword.Enabled = rbCustomAuthYes.Checked;
+            txtProxyUser.Enabled = rbCustomAuthYes.Checked;
         }
     }
 }

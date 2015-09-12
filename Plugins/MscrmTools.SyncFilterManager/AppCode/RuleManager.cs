@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Windows.Forms;
-using System.Xml;
-using Microsoft.Crm.Sdk.Messages;
+﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
-using MscrmTools.SyncFilterManager.Forms;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Xml;
 
 namespace MscrmTools.SyncFilterManager.AppCode
 {
-    class RuleManager
+    internal class RuleManager
     {
         private readonly string entityName;
 
@@ -28,12 +25,160 @@ namespace MscrmTools.SyncFilterManager.AppCode
             this.service = service;
         }
 
-        public EntityCollection GetRules(int[] ruleTypes, List<Entity> usersToReturn = null, string expectedReturnedType= null, BackgroundWorker worker = null)
+        public void AddRulesFromUser(Entity sourceUser, List<Entity> users, BackgroundWorker worker = null)
+        {
+            // Retrieving user filter metadata
+            var emd = (RetrieveEntityResponse)
+                service.Execute(new RetrieveEntityRequest
+                {
+                    EntityFilters = EntityFilters.Attributes,
+                    LogicalName = "userquery"
+                });
+
+            if (worker != null && worker.WorkerReportsProgress)
+            {
+                worker.ReportProgress(0, "Loading source user synchronization filters...");
+            }
+
+            // Retrieve filters for source user
+            var rules = GetRules(new[] { 16, 256 }, new List<Entity> { new Entity("systemuser") { Id = sourceUser.Id } });
+
+            foreach (var targetUser in users)
+            {
+                if (worker != null && worker.WorkerReportsProgress)
+                {
+                    worker.ReportProgress(0, "Removing filters from user " + targetUser.GetAttributeValue<string>("fullname") + "...");
+                }
+
+                // Remove existing rules
+                RemoveAllRulesForUser(targetUser.Id);
+
+                //ApplyRulesToUser(new EntityReferenceCollection(rules.Entities.Where(e=>e.GetAttributeValue<EntityReference>("parentqueryid") != null).Select(e=>e.GetAttributeValue<EntityReference>("parentqueryid")).ToList()), targetUserId);
+
+                if (worker != null && worker.WorkerReportsProgress)
+                {
+                    worker.ReportProgress(0, "Adding filters to user " + targetUser.GetAttributeValue<string>("fullname") + "...");
+                }
+
+                // Add source rules to target user
+                foreach (var rule in rules.Entities)
+                {
+                    rule.Id = Guid.Empty;
+                    rule.Attributes.Remove("userqueryid");
+                    rule["ownerid"] = new EntityReference("systemuser", targetUser.Id);
+                    foreach (var amd in emd.EntityMetadata.Attributes.Where(a => a.IsValidForCreate.Value == false))
+                    {
+                        rule.Attributes.Remove(amd.LogicalName);
+                    }
+
+                    service.Create(rule);
+                }
+            }
+        }
+
+        public void ApplyRulesToUser(EntityReferenceCollection ec, Guid userId)
+        {
+            var request = new InstantiateFiltersRequest
+            {
+                UserId = userId,
+                TemplateCollection = ec
+            };
+
+            service.Execute(request);
+        }
+
+        public void ApplyRuleToActiveUsers(EntityReferenceCollection ec)
+        {
+            var qba = new QueryByAttribute("systemuser");
+            qba.AddAttributeValue("isdisabled", false);
+            foreach (var user in service.RetrieveMultiple(qba).Entities)
+            {
+                var request = new InstantiateFiltersRequest
+                {
+                    UserId = user.Id,
+                    TemplateCollection = ec
+                };
+
+                service.Execute(request);
+            }
+        }
+
+        public List<Guid> CreateRuleFromSystemView(List<Entity> systemViews, int templateType, BackgroundWorker worker = null)
+        {
+            if (systemViews.Count == 0)
+                return new List<Guid>();
+
+            var rulesIds = new List<Guid>();
+
+            foreach (var systemView in systemViews)
+            {
+                var rule = new Entity(entityName);
+                rule["returnedtypecode"] = systemView.GetAttributeValue<string>("returnedtypecode");
+                rule["name"] = systemView.GetAttributeValue<string>("name");
+                rule["description"] = systemView.GetAttributeValue<string>("description");
+                rule["querytype"] = templateType;
+                rule["isdefault"] = false;
+                rule["layoutxml"] = systemView.GetAttributeValue<string>("layoutxml");
+
+                if (templateType == 256 || templateType == 131072)
+                {
+                    // Remove Order nodes if Outlook template
+                    var fetchDoc = new XmlDocument();
+                    fetchDoc.LoadXml(systemView.GetAttributeValue<string>("fetchxml"));
+                    var orderNodes = fetchDoc.SelectNodes("//order");
+                    foreach (XmlNode orderNode in orderNodes)
+                    {
+                        orderNode.ParentNode.RemoveChild(orderNode);
+                    }
+
+                    rule["fetchxml"] = fetchDoc.OuterXml;
+                }
+                else
+                {
+                    rule["fetchxml"] = systemView.GetAttributeValue<string>("fetchxml");
+                }
+
+                rulesIds.Add(service.Create(rule));
+            }
+
+            return rulesIds;
+        }
+
+        public void DeleteRule(Guid ruleId)
+        {
+            service.Delete(entityName, ruleId);
+        }
+
+        public void DisableRule(Guid ruleId)
+        {
+            var setStateRequest = new SetStateRequest
+            {
+                EntityMoniker = new EntityReference(entityName, ruleId),
+                State = new OptionSetValue(1),
+                Status = new OptionSetValue(-1)
+            };
+
+            service.Execute(setStateRequest);
+        }
+
+        public void EnableRule(Guid ruleId)
+        {
+            var setStateRequest = new SetStateRequest
+            {
+                EntityMoniker = new EntityReference(entityName, ruleId),
+                State = new OptionSetValue(0),
+                Status = new OptionSetValue(-1)
+            };
+
+            service.Execute(setStateRequest);
+        }
+
+        public EntityCollection GetRules(int[] ruleTypes, List<Entity> usersToReturn = null, string expectedReturnedType = null, BackgroundWorker worker = null)
         {
             if (entityName == "userquery")
             {
                 var rules = new EntityCollection();
-                
+
                 if (usersToReturn == null)
                 {
                     if (worker != null && worker.WorkerReportsProgress)
@@ -44,7 +189,7 @@ namespace MscrmTools.SyncFilterManager.AppCode
                     var userQuery = new QueryExpression("systemuser")
                     {
                         Distinct = true,
-                        ColumnSet = new ColumnSet(new []{"fullname","systemuserid"}),
+                        ColumnSet = new ColumnSet(new[] { "fullname", "systemuserid" }),
                         Orders =
                         {
                             new OrderExpression("fullname", OrderType.Ascending)
@@ -123,115 +268,39 @@ namespace MscrmTools.SyncFilterManager.AppCode
                     }
                 };
 
-                if(!string.IsNullOrEmpty(expectedReturnedType))
+                if (!string.IsNullOrEmpty(expectedReturnedType))
                     qe.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, expectedReturnedType);
 
                 return service.RetrieveMultiple(qe);
             }
         }
 
-        public void EnableRule(Guid ruleId)
+        public void ResetUsersRulesFromDefault(List<Entity> users, BackgroundWorker worker = null)
         {
-            var setStateRequest = new SetStateRequest
+            var currentId = ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId;
+
+            foreach (var user in users)
             {
-                EntityMoniker = new EntityReference(entityName, ruleId),
-                State = new OptionSetValue(0),
-                Status = new OptionSetValue(-1)
-            };
-
-            service.Execute(setStateRequest);
-        }
-
-        public void DisableRule(Guid ruleId)
-        {
-            var setStateRequest = new SetStateRequest
-            {
-                EntityMoniker = new EntityReference(entityName, ruleId),
-                State = new OptionSetValue(1),
-                Status = new OptionSetValue(-1)
-            };
-
-            service.Execute(setStateRequest);
-        }
-
-        public void DeleteRule(Guid ruleId)
-        {
-            service.Delete(entityName, ruleId);
-        }
-
-        public List<Guid> CreateRuleFromSystemView(List<Entity> systemViews, int templateType, BackgroundWorker worker = null)
-        {
-            if (systemViews.Count == 0)
-                return new List<Guid>();
-
-            var rulesIds = new List<Guid>();
-
-            foreach (var systemView in systemViews)
-            {
-                var rule = new Entity(entityName);
-                rule["returnedtypecode"] = systemView.GetAttributeValue<string>("returnedtypecode");
-                rule["name"] = systemView.GetAttributeValue<string>("name");
-                rule["description"] = systemView.GetAttributeValue<string>("description");
-                rule["querytype"] = templateType;
-                rule["isdefault"] = false;
-                rule["layoutxml"] = systemView.GetAttributeValue<string>("layoutxml");
-
-                if (templateType == 256 || templateType == 131072)
+                if (worker != null)
                 {
-                    // Remove Order nodes if Outlook template
-                    var fetchDoc = new XmlDocument();
-                    fetchDoc.LoadXml(systemView.GetAttributeValue<string>("fetchxml"));
-                    var orderNodes = fetchDoc.SelectNodes("//order");
-                    foreach (XmlNode orderNode in orderNodes)
-                    {
-                        orderNode.ParentNode.RemoveChild(orderNode);
-                    }
-
-                    rule["fetchxml"] = fetchDoc.OuterXml;
-                }
-                else
-                {
-                    rule["fetchxml"] = systemView.GetAttributeValue<string>("fetchxml");
+                    worker.ReportProgress(0, "Reseting filters for user \"" + user.GetAttributeValue<string>("fullname") + "\"");
                 }
 
-                rulesIds.Add(service.Create(rule));
-            }
+                ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId = user.Id;
 
-            return rulesIds;
+                var request = new ResetUserFiltersRequest { QueryType = 16 };
+                service.Execute(request);
 
-           
-        }
-
-        public void ApplyRulesToUser(EntityReferenceCollection ec, Guid userId)
-        {
-            var request = new InstantiateFiltersRequest
-            {
-                UserId = userId,
-                TemplateCollection = ec
-            };
-
-            service.Execute(request);
-        }
-
-        public void ApplyRuleToActiveUsers(EntityReferenceCollection ec)
-        {
-            var qba = new QueryByAttribute("systemuser");
-            qba.AddAttributeValue("isdisabled", false);
-            foreach (var user in service.RetrieveMultiple(qba).Entities)
-            {
-                var request = new InstantiateFiltersRequest
-                {
-                    UserId = user.Id,
-                    TemplateCollection = ec
-                };
-
+                request = new ResetUserFiltersRequest { QueryType = 256 };
                 service.Execute(request);
             }
+
+            ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId = currentId;
         }
 
         public void UpdateRuleFromSystemView(Entity systemView, Entity rule, BackgroundWorker worker = null)
         {
-            var ruleToUpdate = new Entity("savedquery") {Id = rule.Id};
+            var ruleToUpdate = new Entity("savedquery") { Id = rule.Id };
 
             if (rule.GetAttributeValue<int>("querytype") == 256 || rule.GetAttributeValue<int>("querytype") == 131072)
             {
@@ -262,29 +331,6 @@ namespace MscrmTools.SyncFilterManager.AppCode
             service.Execute(request);
         }
 
-        public void ResetUsersRulesFromDefault(List<Entity> users, BackgroundWorker worker = null)
-        {
-            var currentId = ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId;
-
-            foreach (var user in users)
-            {
-                if (worker != null)
-                {
-                    worker.ReportProgress(0, "Reseting filters for user \"" + user.GetAttributeValue<string>("fullname") + "\"");
-                }
-
-                ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId = user.Id;
-
-                var request = new ResetUserFiltersRequest {QueryType = 16};
-                service.Execute(request);
-
-                request = new ResetUserFiltersRequest { QueryType = 256 };
-                service.Execute(request);
-            }
-
-            ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId = currentId;
-        }
-
         private void RemoveAllRulesForUser(Guid userId)
         {
             var currentId = ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId;
@@ -298,58 +344,6 @@ namespace MscrmTools.SyncFilterManager.AppCode
             }
 
             ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId = currentId;
-        }
-
-        public void AddRulesFromUser(Entity sourceUser, List<Entity> users, BackgroundWorker worker = null)
-        {
-            // Retrieving user filter metadata
-            var emd = (RetrieveEntityResponse)
-                service.Execute(new RetrieveEntityRequest
-                {
-                    EntityFilters = EntityFilters.Attributes,
-                    LogicalName = "userquery"
-                });
-
-            if (worker != null && worker.WorkerReportsProgress)
-            {
-                worker.ReportProgress(0, "Loading source user synchronization filters...");
-            }
-
-            // Retrieve filters for source user
-            var rules = GetRules(new[] { 16, 256 }, new List<Entity> { new Entity("systemuser") { Id = sourceUser.Id } });
-
-            foreach (var targetUser in users)
-            {
-                if (worker != null && worker.WorkerReportsProgress)
-                {
-                    worker.ReportProgress(0, "Removing filters from user " + targetUser.GetAttributeValue<string>("fullname") + "...");
-                }
-
-                // Remove existing rules
-                RemoveAllRulesForUser(targetUser.Id);
-
-                //ApplyRulesToUser(new EntityReferenceCollection(rules.Entities.Where(e=>e.GetAttributeValue<EntityReference>("parentqueryid") != null).Select(e=>e.GetAttributeValue<EntityReference>("parentqueryid")).ToList()), targetUserId);
-
-
-                if (worker != null && worker.WorkerReportsProgress)
-                {
-                    worker.ReportProgress(0, "Adding filters to user " + targetUser.GetAttributeValue<string>("fullname") + "...");
-                }
-
-                // Add source rules to target user
-                foreach (var rule in rules.Entities)
-                {
-                    rule.Id = Guid.Empty;
-                    rule.Attributes.Remove("userqueryid");
-                    rule["ownerid"] = new EntityReference("systemuser", targetUser.Id);
-                    foreach (var amd in emd.EntityMetadata.Attributes.Where(a => a.IsValidForCreate.Value == false))
-                    {
-                        rule.Attributes.Remove(amd.LogicalName);
-                    }
-
-                    service.Create(rule);
-                }
-            }
         }
     }
 }

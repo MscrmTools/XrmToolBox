@@ -3,34 +3,32 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Xml;
-using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
-using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Sdk.Query;
-using McTools.Xrm.Connection;
 
 namespace MsCrmTools.ViewLayoutReplicator.Helpers
 {
     /// <summary>
     /// Helps to interact with Crm views
     /// </summary>
-    class ViewHelper
+    internal class ViewHelper
     {
         #region Constants
 
-        public const int VIEW_BASIC = 0;
         public const int VIEW_ADVANCEDFIND = 1;
         public const int VIEW_ASSOCIATED = 2;
+        public const int VIEW_BASIC = 0;
         public const int VIEW_QUICKFIND = 4;
         public const int VIEW_SEARCH = 64;
 
-        #endregion
+        #endregion Constants
 
         /// <summary>
         /// Retrieve the list of views for a specific entity
@@ -69,39 +67,6 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
             {
                 string errorMessage = CrmExceptionHelper.GetErrorMessage(error, false);
                 throw new Exception("Error while retrieving views: " + errorMessage);
-            }
-        }
-
-        internal static IEnumerable<Entity> RetrieveUserViews(string entityLogicalName, List<EntityMetadata> entitiesCache, IOrganizationService service)
-        {
-            try
-            {
-                EntityMetadata currentEmd = entitiesCache.Find(e => e.LogicalName == entityLogicalName);
-
-                QueryByAttribute qba = new QueryByAttribute
-                {
-                    EntityName = "userquery",
-                    ColumnSet = new ColumnSet(true)
-                };
-
-                qba.Attributes.AddRange("returnedtypecode", "querytype");
-                qba.Values.AddRange(currentEmd.ObjectTypeCode.Value, 0);
-
-                EntityCollection views = service.RetrieveMultiple(qba);
-
-                List<Entity> viewsList = new List<Entity>();
-
-                foreach (Entity entity in views.Entities)
-                {
-                    viewsList.Add(entity);
-                }
-
-                return viewsList;
-            }
-            catch (Exception error)
-            {
-                string errorMessage = CrmExceptionHelper.GetErrorMessage(error, false);
-                throw new Exception("Error while retrieving user views: " + errorMessage);
             }
         }
 
@@ -178,7 +143,7 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
                         }
 
                         // Replace ObjectTypeCode in layoutXml
-                        ReplaceLayoutXmlObjectTypeCode(targetView, targetService); 
+                        ReplaceLayoutXmlObjectTypeCode(targetView, targetService);
 
                         try
                         {
@@ -197,6 +162,39 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
                 string errorMessage = CrmExceptionHelper.GetErrorMessage(error, false);
 
                 throw new Exception("Error while transfering views: " + errorMessage);
+            }
+        }
+
+        internal static IEnumerable<Entity> RetrieveUserViews(string entityLogicalName, List<EntityMetadata> entitiesCache, IOrganizationService service)
+        {
+            try
+            {
+                EntityMetadata currentEmd = entitiesCache.Find(e => e.LogicalName == entityLogicalName);
+
+                QueryByAttribute qba = new QueryByAttribute
+                {
+                    EntityName = "userquery",
+                    ColumnSet = new ColumnSet(true)
+                };
+
+                qba.Attributes.AddRange("returnedtypecode", "querytype");
+                qba.Values.AddRange(currentEmd.ObjectTypeCode.Value, 0);
+
+                EntityCollection views = service.RetrieveMultiple(qba);
+
+                List<Entity> viewsList = new List<Entity>();
+
+                foreach (Entity entity in views.Entities)
+                {
+                    viewsList.Add(entity);
+                }
+
+                return viewsList;
+            }
+            catch (Exception error)
+            {
+                string errorMessage = CrmExceptionHelper.GetErrorMessage(error, false);
+                throw new Exception("Error while retrieving user views: " + errorMessage);
             }
         }
 
@@ -229,7 +227,7 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
         private static void ReplaceLayoutXmlObjectTypeCode(Entity view, IOrganizationService targetService)
         {
             // Retrieve Metadata for target entity
-            var response = (RetrieveEntityResponse) targetService.Execute(new RetrieveEntityRequest {LogicalName = view.GetAttributeValue<string>("returnedtypecode"),EntityFilters = EntityFilters.Entity});
+            var response = (RetrieveEntityResponse)targetService.Execute(new RetrieveEntityRequest { LogicalName = view.GetAttributeValue<string>("returnedtypecode"), EntityFilters = EntityFilters.Entity });
             var code = response.EntityMetadata.ObjectTypeCode.Value;
 
             var sXml = view.GetAttributeValue<string>("layoutxml");
@@ -242,6 +240,6 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
             view["layoutxml"] = xml.OuterXml;
         }
 
-        #endregion
+        #endregion Private methods
     }
 }

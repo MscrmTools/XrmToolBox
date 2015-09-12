@@ -3,10 +3,10 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using MsCrmTools.SiteMapEditor.AppCode;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using MsCrmTools.SiteMapEditor.AppCode;
 
 namespace MsCrmTools.SiteMapEditor.Controls
 {
@@ -15,29 +15,29 @@ namespace MsCrmTools.SiteMapEditor.Controls
         private readonly Dictionary<string, string> collec;
 
         private string initialEntity = "";
-        private bool initialPrivCreate;
-        private bool initialPrivRead;
-        private bool initialPrivWrite;
-        private bool initialPrivDelete;
-        private bool initialPrivAppend;
-        private bool initialPrivAppendTo;
-        private bool initialPrivShare;
-        private bool initialPrivAssign;
         private bool initialPrivAll;
         private bool initialPrivAllowQuickCampaign;
+        private bool initialPrivAppend;
+        private bool initialPrivAppendTo;
+        private bool initialPrivAssign;
+        private bool initialPrivCreate;
+        private bool initialPrivDelete;
+        private bool initialPrivRead;
+        private bool initialPrivShare;
         private bool initialPrivUseInternetMarketing;
+        private bool initialPrivWrite;
 
         #region Delegates
 
         public delegate void SaveEventHandler(object sender, SaveEventArgs e);
 
-        #endregion
+        #endregion Delegates
 
         #region Event Handlers
 
         public event SaveEventHandler Saved;
 
-        #endregion
+        #endregion Event Handlers
 
         public PrivilegeControl()
         {
@@ -50,11 +50,70 @@ namespace MsCrmTools.SiteMapEditor.Controls
             tip.SetToolTip(txtPrivilegeEntity, "Specifies the name of the entity to check privileges for.");
         }
 
-        public PrivilegeControl(Dictionary<string, string> collection):this()
+        public PrivilegeControl(Dictionary<string, string> collection)
+            : this()
         {
             collec = collection;
 
             FillControls();
+        }
+
+        public void Save()
+        {
+            Dictionary<string, string> collection = new Dictionary<string, string>();
+
+            string privilege = "";
+
+            if (chkPrivilegeAll.Checked)
+                privilege += "All";
+            if (chkPrivilegeAllowQuickCampaign.Checked)
+                privilege += ",AllowQuickCampaign";
+            if (chkPrivilegeAppend.Checked)
+                privilege += ",Append";
+            if (chkPrivilegeAppendTo.Checked)
+                privilege += ",AppendTo";
+            if (chkPrivilegeAssign.Checked)
+                privilege += ",Assign";
+            if (chkPrivilegeCreate.Checked)
+                privilege += ",Create";
+            if (chkPrivilegeDelete.Checked)
+                privilege += ",Delete";
+            if (chkPrivilegeRead.Checked)
+                privilege += ",Read";
+            if (chkPrivilegeShare.Checked)
+                privilege += ",Share";
+            if (chkPrivilegeUseInternetMarketing.Checked)
+                privilege += ",UseInternetMarketing";
+            if (chkPrivilegeWrite.Checked)
+                privilege += ",Write";
+
+            if (privilege.StartsWith(","))
+                privilege = privilege.Remove(0, 1);
+
+            if (txtPrivilegeEntity.Text.Length > 0)
+                collection.Add("Entity", txtPrivilegeEntity.Text);
+            if (privilege.Length > 0)
+                collection.Add("Privilege", privilege);
+
+            if (collec.ContainsKey("_disabled"))
+            {
+                collection.Add("_disabled", collec["_disabled"]);
+            }
+
+            initialEntity = txtPrivilegeEntity.Text;
+            initialPrivCreate = chkPrivilegeCreate.Checked;
+            initialPrivRead = chkPrivilegeRead.Checked;
+            initialPrivWrite = chkPrivilegeWrite.Checked;
+            initialPrivDelete = chkPrivilegeDelete.Checked;
+            initialPrivAppend = chkPrivilegeAppend.Checked;
+            initialPrivAppendTo = chkPrivilegeAppendTo.Checked;
+            initialPrivShare = chkPrivilegeShare.Checked;
+            initialPrivAssign = chkPrivilegeAssign.Checked;
+            initialPrivAll = chkPrivilegeAll.Checked;
+            initialPrivAllowQuickCampaign = chkPrivilegeAllowQuickCampaign.Checked;
+            initialPrivUseInternetMarketing = chkPrivilegeUseInternetMarketing.Checked;
+
+            SendSaveMessage(collection);
         }
 
         private void FillControls()
@@ -108,69 +167,10 @@ namespace MsCrmTools.SiteMapEditor.Controls
             }
         }
 
-        public void Save()
-        {
-            Dictionary<string, string> collection = new Dictionary<string, string>();
-
-            string privilege = "";
-
-            if (chkPrivilegeAll.Checked)
-                privilege += "All";
-            if (chkPrivilegeAllowQuickCampaign.Checked)
-                privilege += ",AllowQuickCampaign";
-            if (chkPrivilegeAppend.Checked)
-                privilege += ",Append";
-            if (chkPrivilegeAppendTo.Checked)
-                privilege += ",AppendTo";
-            if (chkPrivilegeAssign.Checked)
-                privilege += ",Assign";
-            if (chkPrivilegeCreate.Checked)
-                privilege += ",Create";
-            if (chkPrivilegeDelete.Checked)
-                privilege += ",Delete";
-            if (chkPrivilegeRead.Checked)
-                privilege += ",Read";
-            if (chkPrivilegeShare.Checked)
-                privilege += ",Share";
-            if (chkPrivilegeUseInternetMarketing.Checked)
-                privilege += ",UseInternetMarketing";
-            if (chkPrivilegeWrite.Checked)
-                privilege += ",Write";
-
-            if (privilege.StartsWith(","))
-                privilege = privilege.Remove(0, 1);
-
-            if(txtPrivilegeEntity.Text.Length > 0)
-                collection.Add("Entity", txtPrivilegeEntity.Text);
-            if (privilege.Length > 0)
-                collection.Add("Privilege", privilege);
-
-            if (collec.ContainsKey("_disabled"))
-            {
-                collection.Add("_disabled", collec["_disabled"]);
-            }
-
-            initialEntity = txtPrivilegeEntity.Text;
-            initialPrivCreate = chkPrivilegeCreate.Checked;
-            initialPrivRead = chkPrivilegeRead.Checked;
-            initialPrivWrite = chkPrivilegeWrite.Checked;
-            initialPrivDelete = chkPrivilegeDelete.Checked;
-            initialPrivAppend = chkPrivilegeAppend.Checked;
-            initialPrivAppendTo = chkPrivilegeAppendTo.Checked;
-            initialPrivShare = chkPrivilegeShare.Checked;
-            initialPrivAssign = chkPrivilegeAssign.Checked;
-            initialPrivAll = chkPrivilegeAll.Checked;
-            initialPrivAllowQuickCampaign = chkPrivilegeAllowQuickCampaign.Checked;
-            initialPrivUseInternetMarketing = chkPrivilegeUseInternetMarketing.Checked;
-
-
-            SendSaveMessage(collection);
-        }
-
         #region Send Events
 
         /// <summary>
-        /// Sends a connection success message 
+        /// Sends a connection success message
         /// </summary>
         /// <param name="service">IOrganizationService generated</param>
         /// <param name="parameters">Lsit of parameter</param>
@@ -184,6 +184,6 @@ namespace MsCrmTools.SiteMapEditor.Controls
             }
         }
 
-        #endregion
+        #endregion Send Events
     }
 }

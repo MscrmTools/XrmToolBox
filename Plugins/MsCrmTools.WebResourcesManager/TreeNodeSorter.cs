@@ -25,28 +25,26 @@ namespace MsCrmTools.WebResourcesManager
                 {
                     return String.CompareOrdinal(tx.Text, ty.Text);
                 }
-                
+
                 if (tx.ImageIndex == 0)
                 {
                     return -1;
                 }
-                
+
                 if (tx.ImageIndex == 1 && tx.ImageIndex < ty.ImageIndex)
                 {
                     return -1;
                 }
-                
+
                 if (ty.ImageIndex == 1 && ty.ImageIndex < tx.ImageIndex)
                 {
                     return 1;
                 }
-                
+
                 return String.CompareOrdinal(tx.Text, ty.Text);
             }
 
             return 0;
         }
     }
-
-
 }

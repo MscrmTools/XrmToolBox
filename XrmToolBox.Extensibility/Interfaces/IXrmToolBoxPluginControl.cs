@@ -3,28 +3,28 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
+using System;
 
 namespace XrmToolBox.Extensibility.Interfaces
 {
     public interface IXrmToolBoxPluginControl
     {
         /// <summary>
-        /// Gets the organization service used by the tool
+        /// EventHandler to close the current tool
         /// </summary>
-        IOrganizationService Service { get; }
+        event EventHandler OnCloseTool;
 
-     /// <summary>
+        /// <summary>
         /// EventHandler to request a connection to an organization
         /// </summary>
         event EventHandler OnRequestConnection;
 
         /// <summary>
-        /// EventHandler to close the current tool
+        /// Gets the organization service used by the tool
         /// </summary>
-        event EventHandler OnCloseTool;
+        IOrganizationService Service { get; }
 
         /// <summary>
         /// Method to allow plugin to Cancel a closing event, or perform any save events required before closing.

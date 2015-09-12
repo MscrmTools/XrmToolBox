@@ -24,10 +24,10 @@ namespace MsCrmTools.AttributeBulkUpdater
             InitializeComponent();
 
             // Display version number
-            lblVersion.Text = "Version: " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version; 
+            lblVersion.Text = "Version: " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
         }
 
-        #endregion
+        #endregion Constructor
 
         #region Handlers
 
@@ -60,6 +60,6 @@ namespace MsCrmTools.AttributeBulkUpdater
             }
         }
 
-        #endregion
+        #endregion Handlers
     }
 }

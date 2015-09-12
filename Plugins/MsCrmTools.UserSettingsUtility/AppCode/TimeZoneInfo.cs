@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace MsCrmTools.UserSettingsUtility.AppCode
+﻿namespace MsCrmTools.UserSettingsUtility.AppCode
 {
     internal class TimeZone
     {

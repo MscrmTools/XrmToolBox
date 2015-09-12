@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Microsoft.Crm.Sdk.Messages;
 
 namespace MsCrmTools.MetadataBrowser.Forms
 {
     public partial class ColumnSelector : Form
     {
-        private readonly Type type;
-        private readonly string[] firstColumns;
         private readonly string[] attributeToIgnore;
+        private readonly string[] firstColumns;
+        private readonly Type type;
         private string[] currentAttributes;
 
         public ColumnSelector(Type type, string[] firstColumns, string[] attributeToIgnore, string[] currentAttributes)
@@ -29,6 +25,28 @@ namespace MsCrmTools.MetadataBrowser.Forms
 
         public string[] UpdatedCurrentAttributes { get { return currentAttributes; } }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            currentAttributes = attributeListView.CheckedItems.Cast<ListViewItem>().Select(i => i.Text).ToArray();
+
+            DialogResult = DialogResult.OK;
+            Close();
+        }
+
+        private void btnResetToDefault_Click(object sender, EventArgs e)
+        {
+            currentAttributes = null;
+
+            DialogResult = DialogResult.OK;
+            Close();
+        }
+
         private void ColumnSelector_Load(object sender, EventArgs e)
         {
             List<ListViewItem> list;
@@ -39,7 +57,7 @@ namespace MsCrmTools.MetadataBrowser.Forms
 
                 foreach (var attrName in firstColumns)
                 {
-                    var item = new ListViewItem(attrName) {ForeColor = Color.Gray, Checked = true};
+                    var item = new ListViewItem(attrName) { ForeColor = Color.Gray, Checked = true };
                     var index = Array.IndexOf(firstColumns, attrName);
                     dico.Add(index, item);
                 }
@@ -51,7 +69,7 @@ namespace MsCrmTools.MetadataBrowser.Forms
                         continue;
                     }
 
-                    var item = new ListViewItem(prop.Name){Checked = currentAttributes.Contains(prop.Name)};
+                    var item = new ListViewItem(prop.Name) { Checked = currentAttributes.Contains(prop.Name) };
                     dico.Add(dico.Count + (currentAttributes.Contains(prop.Name) ? 1000 : 2000), item);
                 }
 
@@ -59,7 +77,7 @@ namespace MsCrmTools.MetadataBrowser.Forms
             }
             else
             {
-                list = firstColumns.Select(fc => new ListViewItem(fc) {Checked = true, ForeColor = Color.Gray}).ToList();
+                list = firstColumns.Select(fc => new ListViewItem(fc) { Checked = true, ForeColor = Color.Gray }).ToList();
 
                 foreach (var prop in type.GetProperties())
                 {
@@ -68,30 +86,12 @@ namespace MsCrmTools.MetadataBrowser.Forms
                         continue;
                     }
 
-                    var item = new ListViewItem(prop.Name){Checked = true};
+                    var item = new ListViewItem(prop.Name) { Checked = true };
                     list.Add(item);
                 }
             }
 
             attributeListView.Items.AddRange(list.ToArray());
-        }
-
-        private void tsbUp_Click(object sender, EventArgs e)
-        {
-            var currentItem = attributeListView.SelectedItems[0];
-            var currentIndex = currentItem.Index;
-            if (currentIndex == 0)
-                return;
-            if (firstColumns.Contains(attributeListView.Items[currentItem.Index - 1].Text))
-                return;
-
-            var previousItem = attributeListView.Items[currentItem.Index - 1];
-            var previousIndex = previousItem.Index;
-            attributeListView.Items.Remove(previousItem);
-            attributeListView.Items.Remove(currentItem);
-
-            attributeListView.Items.Insert(previousIndex, currentItem);
-            attributeListView.Items.Insert(currentIndex, previousItem);
         }
 
         private void tsbDown_Click(object sender, EventArgs e)
@@ -112,26 +112,22 @@ namespace MsCrmTools.MetadataBrowser.Forms
             attributeListView.Items.Insert(nextIndex, currentItem);
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        private void tsbUp_Click(object sender, EventArgs e)
         {
-            currentAttributes = attributeListView.CheckedItems.Cast<ListViewItem>().Select(i => i.Text).ToArray();
+            var currentItem = attributeListView.SelectedItems[0];
+            var currentIndex = currentItem.Index;
+            if (currentIndex == 0)
+                return;
+            if (firstColumns.Contains(attributeListView.Items[currentItem.Index - 1].Text))
+                return;
 
-            DialogResult = DialogResult.OK;
-            Close();
-        }
+            var previousItem = attributeListView.Items[currentItem.Index - 1];
+            var previousIndex = previousItem.Index;
+            attributeListView.Items.Remove(previousItem);
+            attributeListView.Items.Remove(currentItem);
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
-
-        private void btnResetToDefault_Click(object sender, EventArgs e)
-        {
-            currentAttributes = null;
-
-            DialogResult = DialogResult.OK;
-            Close();
+            attributeListView.Items.Insert(previousIndex, currentItem);
+            attributeListView.Items.Insert(currentIndex, previousItem);
         }
     }
 }

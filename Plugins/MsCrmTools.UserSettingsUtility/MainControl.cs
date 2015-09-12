@@ -1,32 +1,29 @@
-﻿using System;
+﻿using MsCrmTools.UserSettingsUtility.AppCode;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Forms;
-using MsCrmTools.UserSettingsUtility.AppCode;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.UserSettingsUtility
 {
     public partial class MainControl : PluginControlBase
     {
         private List<string> areas;
-        private List<Tuple<string,string>> subAreas; 
+        private List<Tuple<string, string>> subAreas;
 
         public MainControl()
         {
             InitializeComponent();
         }
 
-        private void TsbCloseClick(object sender, EventArgs e)
+        private void cbbSiteMapArea_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CloseTool();
-        }
-
-        private void tsbLoadCrmItems_Click(object sender, EventArgs e)
-        {
-           ExecuteMethod(LoadCrmItems);
+            cbbSiteMapSubArea.Enabled = cbbSiteMapArea.SelectedIndex != 0;
+            cbbSiteMapSubArea.Items.Clear();
+            cbbSiteMapSubArea.Items.Add("No change");
+            cbbSiteMapSubArea.Items.AddRange(subAreas.Where(t => t.Item2 == cbbSiteMapArea.SelectedItem.ToString()).Select(t => t.Item1).ToArray());
+            cbbSiteMapSubArea.SelectedIndex = 0;
         }
 
         private void LoadCrmItems()
@@ -128,7 +125,6 @@ namespace MsCrmTools.UserSettingsUtility
                                     }
                                 }
                             }
-                            
                         }
 
                         panel1.Enabled = true;
@@ -139,14 +135,15 @@ namespace MsCrmTools.UserSettingsUtility
                     SetWorkingMessage(e.UserState.ToString());
                 });
         }
-  
-        private void cbbSiteMapArea_SelectedIndexChanged(object sender, EventArgs e)
+
+        private void TsbCloseClick(object sender, EventArgs e)
         {
-            cbbSiteMapSubArea.Enabled = cbbSiteMapArea.SelectedIndex != 0;
-            cbbSiteMapSubArea.Items.Clear();
-            cbbSiteMapSubArea.Items.Add("No change");
-            cbbSiteMapSubArea.Items.AddRange(subAreas.Where(t => t.Item2 == cbbSiteMapArea.SelectedItem.ToString()).Select(t => t.Item1).ToArray());
-            cbbSiteMapSubArea.SelectedIndex = 0;
+            CloseTool();
+        }
+
+        private void tsbLoadCrmItems_Click(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadCrmItems);
         }
 
         private void tsbUpdateUserSettings_Click(object sender, EventArgs e)
@@ -184,7 +181,7 @@ namespace MsCrmTools.UserSettingsUtility
 
             if (cbbTimeZones.SelectedIndex != 0)
             {
-                setting.TimeZoneCode = ((AppCode.TimeZone) cbbTimeZones.SelectedItem).Code;
+                setting.TimeZoneCode = ((AppCode.TimeZone)cbbTimeZones.SelectedItem).Code;
             }
 
             if (cbbWorkStartTime.SelectedIndex != 0 || cbbWorkStartTime.SelectedText != null)
@@ -245,7 +242,7 @@ namespace MsCrmTools.UserSettingsUtility
                 setting.UseCrmFormForTask = cbbUseCrmFormTask.SelectedIndex == 2;
             }
 
-            #endregion
+            #endregion Initialisation des données à mettre à jour
 
             WorkAsync("Initializing update...",
                 (w, a) =>

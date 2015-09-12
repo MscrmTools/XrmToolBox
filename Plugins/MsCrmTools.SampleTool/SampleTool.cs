@@ -3,16 +3,15 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.ComponentModel.Composition;
-using System.Windows.Forms;
 using Microsoft.Crm.Sdk.Messages;
+using System;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SampleTool
 {
-   public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin
+    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin
     {
         #region Base tool implementation
 
@@ -21,23 +20,18 @@ namespace MsCrmTools.SampleTool
             InitializeComponent();
         }
 
-        private void BtnWhoAmIClick(object sender, EventArgs e)
-        {
-            ExecuteMethod(ProcessWhoAmI);
-        }
-
         public void ProcessWhoAmI()
         {
             WorkAsync(null, (w, e) =>
             {
                 var request = new WhoAmIRequest();
-                var response = (WhoAmIResponse) Service.Execute(request);
+                var response = (WhoAmIResponse)Service.Execute(request);
 
                 e.Result = response.UserId;
             },
                 e =>
                 {
-                    MessageBox.Show(string.Format("You are {0}", (Guid) e.Result));
+                    MessageBox.Show(string.Format("You are {0}", (Guid)e.Result));
                 },
                 e =>
                 {
@@ -54,18 +48,23 @@ namespace MsCrmTools.SampleTool
             CloseTool();
         }
 
+        private void BtnWhoAmIClick(object sender, EventArgs e)
+        {
+            ExecuteMethod(ProcessWhoAmI);
+        }
+
         #endregion Base tool implementation
 
         #region Github implementation
 
-        public string UserName
-        {
-            get { return "GithubUserName"; }
-        }
-
         public string RepositoryName
         {
             get { return "GithubRepositoryName"; }
+        }
+
+        public string UserName
+        {
+            get { return "GithubUserName"; }
         }
 
         #endregion Github implementation
@@ -80,15 +79,15 @@ namespace MsCrmTools.SampleTool
         #endregion CodePlex implementation
 
         #region PayPal implementation
-        
-        public string EmailAccount
-        {
-            get { return "paypal@paypal.com"; }
-        }
 
         public string DonationDescription
         {
             get { return "paypal description"; }
+        }
+
+        public string EmailAccount
+        {
+            get { return "paypal@paypal.com"; }
         }
 
         #endregion PayPal implementation
@@ -100,6 +99,6 @@ namespace MsCrmTools.SampleTool
             get { return "http://www.google.com"; }
         }
 
-        #endregion
+        #endregion Help implementation
     }
 }

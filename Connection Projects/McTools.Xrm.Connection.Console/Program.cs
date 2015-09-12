@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace McTools.Xrm.Connection.Console
+﻿namespace McTools.Xrm.Connection.Console
 {
-    class Program
+    internal class Program
     {
         private ConnectionManager connectionManager;
-
-        static void Main(string[] args)
-        {
-            new Program().Run();
-        }
 
         public void Run()
         {
@@ -37,37 +27,42 @@ namespace McTools.Xrm.Connection.Console
             System.Console.ReadLine();
         }
 
-        private string RequestInformation(string name)
+        private static void Main(string[] args)
         {
-            System.Console.WriteLine("Please provide your "+name+"?:");
-            return System.Console.ReadLine();
+            new Program().Run();
         }
 
-        void connectionManager_StepChanged(object sender, StepChangedEventArgs e)
+        private void connectionManager_ConnectionFailed(object sender, ConnectionFailedEventArgs e)
         {
-            System.Console.WriteLine(e.CurrentStep);
+            System.Console.WriteLine("Failed to connect: " + e.FailureReason);
         }
 
-        void connectionManager_UseProxy(object sender, UseProxyEventArgs e)
+        private void connectionManager_ConnectionSucceed(object sender, ConnectionSucceedEventArgs e)
         {
-            //throw new NotImplementedException();
+            System.Console.WriteLine("Successfully connected");
         }
 
-        bool connectionManager_RequestPassword(object sender, RequestPasswordEventArgs e)
+        private bool connectionManager_RequestPassword(object sender, RequestPasswordEventArgs e)
         {
             System.Console.WriteLine("Please enter your password: ");
             e.ConnectionDetail.SetPassword(System.Console.ReadLine());
             return false;
         }
 
-        void connectionManager_ConnectionFailed(object sender, ConnectionFailedEventArgs e)
+        private void connectionManager_StepChanged(object sender, StepChangedEventArgs e)
         {
-            System.Console.WriteLine("Failed to connect: "+e.FailureReason);
+            System.Console.WriteLine(e.CurrentStep);
         }
 
-        void connectionManager_ConnectionSucceed(object sender, ConnectionSucceedEventArgs e)
+        private void connectionManager_UseProxy(object sender, UseProxyEventArgs e)
         {
-            System.Console.WriteLine("Successfully connected");
+            //throw new NotImplementedException();
+        }
+
+        private string RequestInformation(string name)
+        {
+            System.Console.WriteLine("Please provide your " + name + "?:");
+            return System.Console.ReadLine();
         }
     }
 }

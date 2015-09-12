@@ -3,29 +3,19 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Xrm.Sdk;
+using MsCrmTools.WebResourcesManager.Forms;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
-using MsCrmTools.WebResourcesManager.Forms;
 
 namespace MsCrmTools.WebResourcesManager
 {
-    class WebResource
+    internal class WebResource
     {
         private static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
 
-        private static readonly List<string> validExtensions = new List<string>{"htm","html","css","js","xml","jpg","jpeg","png","gif","ico","xap","xslt"};
-
-        public static List<string> ValidExtensions
-        {
-            get { return validExtensions; }
-        }
-
-        public string FilePath { get; set; }
-        public Entity WebResourceEntity { get; set; }
-
-        public string InitialBase64 { get; set; }
+        private static readonly List<string> validExtensions = new List<string> { "htm", "html", "css", "js", "xml", "jpg", "jpeg", "png", "gif", "ico", "xap", "xslt" };
 
         public WebResource(Entity webResource, string filePath)
         {
@@ -36,37 +26,16 @@ namespace MsCrmTools.WebResourcesManager
 
         public WebResource(Entity webresource)
             : this(webresource, string.Empty)
-        {}
+        { }
 
-        public static int GetTypeFromExtension(string ext)
+        public static List<string> ValidExtensions
         {
-            switch (ext.ToLower())
-            {
-                case "htm":
-                case "html":
-                    return 1;
-                case "css":
-                    return 2;
-                case "js":
-                    return 3;
-                case "xml":
-                    return 4;
-                case "png":
-                    return 5;
-                case "jpg":
-                case "jpeg":
-                    return 6;
-                case "gif":
-                    return 7;
-                case "xap":
-                    return 8;
-                case "xsl":
-                case "xslt":
-                    return 9;
-                default:
-                    return 10;
-            }
+            get { return validExtensions; }
         }
+
+        public string FilePath { get; set; }
+        public string InitialBase64 { get; set; }
+        public Entity WebResourceEntity { get; set; }
 
         public static int GetImageIndexFromExtension(string ext)
         {
@@ -75,26 +44,74 @@ namespace MsCrmTools.WebResourcesManager
                 case "htm":
                 case "html":
                     return 2;
+
                 case "css":
                     return 3;
+
                 case "js":
                     return 4;
+
                 case "xml":
                     return 5;
+
                 case "png":
                     return 6;
+
                 case "jpg":
                 case "jpeg":
                     return 7;
+
                 case "gif":
                     return 8;
+
                 case "xap":
                     return 9;
+
                 case "xsl":
                 case "xslt":
                     return 10;
+
                 default:
                     return 11;
+            }
+        }
+
+        public static int GetTypeFromExtension(string ext)
+        {
+            switch (ext.ToLower())
+            {
+                case "htm":
+                case "html":
+                    return 1;
+
+                case "css":
+                    return 2;
+
+                case "js":
+                    return 3;
+
+                case "xml":
+                    return 4;
+
+                case "png":
+                    return 5;
+
+                case "jpg":
+                case "jpeg":
+                    return 6;
+
+                case "gif":
+                    return 7;
+
+                case "xap":
+                    return 8;
+
+                case "xsl":
+                case "xslt":
+                    return 9;
+
+                default:
+                    return 10;
             }
         }
 
@@ -102,11 +119,11 @@ namespace MsCrmTools.WebResourcesManager
         {
             var isInvalidName = InValidWrNameRegex.IsMatch(name);
 
-             const string pattern = "*.config .* _* *.bin";
-            
+            const string pattern = "*.config .* _* *.bin";
+
             // insert backslash before regex special characters that may appear in filenames
             var regexPattern = Regex.Replace(pattern, @"([\+\(\)\[\]\{\$\^\.])", @"\$1");
-            
+
             // apply regex syntax
             regexPattern = string.Format("^{0}$", regexPattern.Replace(" ", "$|^").Replace("*", ".*"));
 

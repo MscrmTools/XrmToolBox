@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using System;
 using System.ComponentModel;
-using Microsoft.Xrm.Sdk.Metadata;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.OneToManyRelationship
 {
@@ -33,6 +33,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OneToManyRelationship
         {
             get { return otmmd.ExtensionData != null ? otmmd.ExtensionData.ToString() : ""; }
         }
+
         public bool HasChanged
         {
             get { return otmmd.HasChanged.HasValue && otmmd.HasChanged.Value; }

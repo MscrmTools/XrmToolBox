@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk.Client;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk.Client;
 
 namespace McTools.Xrm.Connection.WinForms
 {
@@ -15,12 +14,15 @@ namespace McTools.Xrm.Connection.WinForms
     {
         #region Variables
 
+        private readonly bool allowMultipleSelection;
+        private readonly bool isConnectionSelection;
+        private bool hadCreatedNewConnection;
         private bool requiresSavingConnectionsFile;
 
         /// <summary>
         /// Connexion sélectionnée
         /// </summary>
-        List<ConnectionDetail> selectedConnections;
+        private List<ConnectionDetail> selectedConnections;
 
         /// <summary>
         /// Obtient la connexion sélectionnée
@@ -30,12 +32,7 @@ namespace McTools.Xrm.Connection.WinForms
             get { return selectedConnections; }
         }
 
-        private bool hadCreatedNewConnection;
-
-        private readonly bool isConnectionSelection;
-        private readonly bool allowMultipleSelection;
-
-        #endregion
+        #endregion Variables
 
         #region Constructeur
 
@@ -85,7 +82,7 @@ namespace McTools.Xrm.Connection.WinForms
             var details = ConnectionManager.Instance.ConnectionsList.Connections;
             if (ConnectionManager.Instance.ConnectionsList.UseMruDisplay)
             {
-                details = ConnectionManager.Instance.ConnectionsList.Connections.OrderByDescending(c => c.LastUsedOn).ThenBy(c=>c.ConnectionName).ToList();
+                details = ConnectionManager.Instance.ConnectionsList.Connections.OrderByDescending(c => c.LastUsedOn).ThenBy(c => c.ConnectionName).ToList();
             }
 
             foreach (ConnectionDetail detail in details)
@@ -120,16 +117,15 @@ namespace McTools.Xrm.Connection.WinForms
             }
         }
 
-
         private void LoadImages()
         {
             lvConnections.SmallImageList = new ImageList();
             lvConnections.SmallImageList.Images.Add(RessourceManager.GetImage("McTools.Xrm.Connection.WinForms.Resources.server.png"));
             lvConnections.SmallImageList.Images.Add(RessourceManager.GetImage("McTools.Xrm.Connection.WinForms.Resources.server_key.png"));
             lvConnections.SmallImageList.Images.Add(RessourceManager.GetImage("McTools.Xrm.Connection.WinForms.Resources.CRMOnlineLive_16.png"));
-          }
+        }
 
-        #endregion
+        #endregion Constructeur
 
         #region Properties
 
@@ -138,22 +134,16 @@ namespace McTools.Xrm.Connection.WinForms
             get { return hadCreatedNewConnection; }
         }
 
-        #endregion
+        #endregion Properties
 
         #region Méthodes
 
-        private void LvConnectionsMouseDoubleClick(object sender, MouseEventArgs e)
+        private void BCancelClick(object sender, EventArgs e)
         {
-            if (isConnectionSelection)
-            {
-                BValidateClick(sender, e);
-            }
-            else
-            {
-                tsbUpdateConnection_Click(sender, null);
-            }
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
-        
+
         private void BValidateClick(object sender, EventArgs e)
         {
             if (lvConnections.SelectedItems.Count > 0)
@@ -170,108 +160,25 @@ namespace McTools.Xrm.Connection.WinForms
             }
         }
 
-        private void BCancelClick(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
-
         private void LvConnectionsColumnClick(object sender, ColumnClickEventArgs e)
         {
             lvConnections.Sorting = lvConnections.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
             lvConnections.ListViewItemSorter = new ListViewItemComparer(e.Column, lvConnections.Sorting);
         }
 
-        #endregion
-
-        private void tsbNewConnection_Click(object sender, EventArgs e)
+        private void LvConnectionsMouseDoubleClick(object sender, MouseEventArgs e)
         {
-            var cForm = new ConnectionForm(true, false)
+            if (isConnectionSelection)
             {
-               StartPosition = FormStartPosition.CenterParent
-            };
-
-            if (cForm.ShowDialog(this) == DialogResult.OK)
+                BValidateClick(sender, e);
+            }
+            else
             {
-                var newConnection = cForm.CrmConnectionDetail;
-                hadCreatedNewConnection = true;
-
-                var item = new ListViewItem(newConnection.ConnectionName);
-                item.SubItems.Add(newConnection.ServerName);
-                item.SubItems.Add(newConnection.Organization);
-                item.SubItems.Add(newConnection.OrganizationVersion);
-                item.Tag = newConnection;
-                item.Group = GetGroup(newConnection.AuthType);
-                item.ImageIndex = GetImageIndex(newConnection);
-
-                lvConnections.Items.Add(item);
-                lvConnections.SelectedItems.Clear();
-                item.Selected = true;
-
-                lvConnections.Sort();
-
-                if (isConnectionSelection)
-                {
-                    BValidateClick(sender, e);
-                }
-
-                if (ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(
-                             d => d.ConnectionId == newConnection.ConnectionId) == null)
-                {
-                    ConnectionManager.Instance.ConnectionsList.Connections.Add(newConnection);
-                }
-
-                ConnectionManager.Instance.SaveConnectionsFile();
+                tsbUpdateConnection_Click(sender, null);
             }
         }
 
-       private void tsbUpdateConnection_Click(object sender, EventArgs e)
-        {
-            if (lvConnections.SelectedItems.Count == 1)
-            {
-                ListViewItem item = lvConnections.SelectedItems[0];
-
-                var cForm = new ConnectionForm(false, false)
-                {
-                    CrmConnectionDetail = (ConnectionDetail)item.Tag,
-                    StartPosition = FormStartPosition.CenterParent
-                };
-
-                if (cForm.ShowDialog(this) == DialogResult.OK)
-                {
-                    item.SubItems[0].Text = cForm.CrmConnectionDetail.ConnectionName;
-                    item.SubItems[1].Text = cForm.CrmConnectionDetail.ServerName;
-                    item.SubItems[2].Text = cForm.CrmConnectionDetail.Organization;
-                    if (item.SubItems.Count == 4)
-                    {
-                        item.SubItems[3].Text = cForm.CrmConnectionDetail.OrganizationVersion;
-                    }
-                    else
-                    {
-                        item.SubItems.Add(cForm.CrmConnectionDetail.OrganizationVersion);
-                    }
-                    item.Group = GetGroup(cForm.CrmConnectionDetail.AuthType);
-
-                    lvConnections.Refresh();
-
-                    ConnectionManager.Instance.SaveConnectionsFile();
-                }
-            }
-        }
-
-        private void tsbDeleteConnection_Click(object sender, EventArgs e)
-        {
-            foreach(ListViewItem connectionItem in lvConnections.SelectedItems)
-            {
-                var detailToRemove = (ConnectionDetail)connectionItem.Tag;
-
-                lvConnections.Items.Remove(lvConnections.SelectedItems[0]);
-
-                ConnectionManager.Instance.ConnectionsList.Connections.RemoveAll(d => d.ConnectionId == detailToRemove.ConnectionId);
-            }
-
-            ConnectionManager.Instance.SaveConnectionsFile();
-        }
+        #endregion Méthodes
 
         private ListViewGroup GetGroup(AuthenticationProviderType type)
         {
@@ -282,12 +189,15 @@ namespace McTools.Xrm.Connection.WinForms
                 case AuthenticationProviderType.ActiveDirectory:
                     groupName = "OnPremise";
                     break;
+
                 case AuthenticationProviderType.OnlineFederation:
                     groupName = "CRM Online - Office 365";
                     break;
+
                 case AuthenticationProviderType.LiveId:
                     groupName = "CRM Online - CTP";
                     break;
+
                 case AuthenticationProviderType.Federation:
                     groupName = "Claims authentication - Internet Facing Deployment";
                     break;
@@ -325,10 +235,99 @@ namespace McTools.Xrm.Connection.WinForms
 
         private void tsb_UseMru_CheckedChanged(object sender, EventArgs e)
         {
-            var tsb = (ToolStripButton) sender;
+            var tsb = (ToolStripButton)sender;
             ConnectionManager.Instance.ConnectionsList.UseMruDisplay = tsb_UseMru.Checked;
 
             DisplayConnections(allowMultipleSelection);
+        }
+
+        private void tsbDeleteConnection_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem connectionItem in lvConnections.SelectedItems)
+            {
+                var detailToRemove = (ConnectionDetail)connectionItem.Tag;
+
+                lvConnections.Items.Remove(lvConnections.SelectedItems[0]);
+
+                ConnectionManager.Instance.ConnectionsList.Connections.RemoveAll(d => d.ConnectionId == detailToRemove.ConnectionId);
+            }
+
+            ConnectionManager.Instance.SaveConnectionsFile();
+        }
+
+        private void tsbNewConnection_Click(object sender, EventArgs e)
+        {
+            var cForm = new ConnectionForm(true, false)
+            {
+                StartPosition = FormStartPosition.CenterParent
+            };
+
+            if (cForm.ShowDialog(this) == DialogResult.OK)
+            {
+                var newConnection = cForm.CrmConnectionDetail;
+                hadCreatedNewConnection = true;
+
+                var item = new ListViewItem(newConnection.ConnectionName);
+                item.SubItems.Add(newConnection.ServerName);
+                item.SubItems.Add(newConnection.Organization);
+                item.SubItems.Add(newConnection.OrganizationVersion);
+                item.Tag = newConnection;
+                item.Group = GetGroup(newConnection.AuthType);
+                item.ImageIndex = GetImageIndex(newConnection);
+
+                lvConnections.Items.Add(item);
+                lvConnections.SelectedItems.Clear();
+                item.Selected = true;
+
+                lvConnections.Sort();
+
+                if (isConnectionSelection)
+                {
+                    BValidateClick(sender, e);
+                }
+
+                if (ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(
+                             d => d.ConnectionId == newConnection.ConnectionId) == null)
+                {
+                    ConnectionManager.Instance.ConnectionsList.Connections.Add(newConnection);
+                }
+
+                ConnectionManager.Instance.SaveConnectionsFile();
+            }
+        }
+
+        private void tsbUpdateConnection_Click(object sender, EventArgs e)
+        {
+            if (lvConnections.SelectedItems.Count == 1)
+            {
+                ListViewItem item = lvConnections.SelectedItems[0];
+
+                var cForm = new ConnectionForm(false, false)
+                {
+                    CrmConnectionDetail = (ConnectionDetail)item.Tag,
+                    StartPosition = FormStartPosition.CenterParent
+                };
+
+                if (cForm.ShowDialog(this) == DialogResult.OK)
+                {
+                    item.SubItems[0].Text = cForm.CrmConnectionDetail.ConnectionName;
+                    item.SubItems[1].Text = cForm.CrmConnectionDetail.ServerName;
+                    item.SubItems[2].Text = cForm.CrmConnectionDetail.Organization;
+                    if (item.SubItems.Count == 4)
+                    {
+                        item.SubItems[3].Text = cForm.CrmConnectionDetail.OrganizationVersion;
+                    }
+                    else
+                    {
+                        item.SubItems.Add(cForm.CrmConnectionDetail.OrganizationVersion);
+                    }
+                    item.Group = GetGroup(cForm.CrmConnectionDetail.AuthType);
+
+                    lvConnections.Refresh();
+
+                    ConnectionManager.Instance.SaveConnectionsFile();
+                }
+            }
         }
     }
 }

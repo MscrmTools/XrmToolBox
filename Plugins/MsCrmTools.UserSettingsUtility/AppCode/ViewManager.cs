@@ -1,14 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 
 namespace MsCrmTools.UserSettingsUtility.AppCode
 {
     internal class ViewManager
     {
         private readonly IOrganizationService service;
+
         public ViewManager(IOrganizationService service)
         {
             this.service = service;

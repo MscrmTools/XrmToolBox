@@ -1,7 +1,6 @@
-﻿using System.ComponentModel;
-
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.MetadataBrowser.AppCode.LabelMd;
+using System.ComponentModel;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.OptionMd
 {

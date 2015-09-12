@@ -359,6 +359,13 @@
             <Assembly AssemblyName="System.ServiceModel.Channels, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
                 <Merging />
             </Assembly>
+            <Assembly AssemblyName="XrmToolBox.Extensibility, Culture=neutral, PublicKeyToken=null">
+                <Merging />
+                <Embedding />
+            </Assembly>
+            <Assembly AssemblyName="System.ComponentModel.Composition, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+                <Merging />
+            </Assembly>
         </Assemblies>
     </Configuration>
 </SmartAssemblyProject>

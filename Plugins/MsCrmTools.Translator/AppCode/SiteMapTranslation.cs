@@ -1,20 +1,11 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Security.Policy;
 using System.Xml;
-using Microsoft.Crm.Sdk;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Sdk.Query;
-
-#if NO_GEMBOX
-using OfficeOpenXml;
-#else
-using GemBox.Spreadsheet;
-#endif
 
 namespace MsCrmTools.Translator.AppCode
 {
@@ -23,7 +14,7 @@ namespace MsCrmTools.Translator.AppCode
         private Entity siteMap;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <example>
         /// viewId;entityLogicalName;viewName;ViewType;Type;LCID1;LCID2;...;LCODX
@@ -31,11 +22,7 @@ namespace MsCrmTools.Translator.AppCode
         /// <param name="languages"></param>
         /// <param name="file"></param>
         /// <param name="service"></param>
-#if NO_GEMBOX
         public void Export(List<int> languages, ExcelWorkbook file, IOrganizationService service)
-#else
-        public void Export(List<int> languages, ExcelFile file, IOrganizationService service)
-#endif
         {
             var line = 1;
 
@@ -52,7 +39,7 @@ namespace MsCrmTools.Translator.AppCode
             var areaNodes = siteMapDoc.SelectNodes("SiteMap/Area");
             foreach (XmlNode areaNode in areaNodes)
             {
-                var area = new CrmSiteMapArea {Id = areaNode.Attributes["Id"].Value};
+                var area = new CrmSiteMapArea { Id = areaNode.Attributes["Id"].Value };
                 foreach (XmlNode titleNode in areaNode.SelectNodes("Titles/Title"))
                 {
                     area.Titles.Add(int.Parse(titleNode.Attributes["LCID"].Value), titleNode.Attributes["Title"].Value);
@@ -108,13 +95,13 @@ namespace MsCrmTools.Translator.AppCode
                         crmSiteMapSubAreas.Add(subArea);
                     }
 
-                    #endregion
+                    #endregion Export SubArea
                 }
 
-                #endregion
+                #endregion Export Groups
             }
 
-            #endregion
+            #endregion Export Area
 
             #region Area sheet
 
@@ -143,7 +130,7 @@ namespace MsCrmTools.Translator.AppCode
                 line++;
             }
 
-            #endregion
+            #endregion Area sheet
 
             #region Group sheet
 
@@ -175,7 +162,7 @@ namespace MsCrmTools.Translator.AppCode
                 line++;
             }
 
-            #endregion
+            #endregion Group sheet
 
             #region SubArea sheet
 
@@ -209,8 +196,8 @@ namespace MsCrmTools.Translator.AppCode
                 line++;
             }
 
-            #endregion
-            
+            #endregion SubArea sheet
+
             // Applying style to cells
             for (int i = 0; i < (2 + languages.Count); i++)
             {
@@ -234,7 +221,6 @@ namespace MsCrmTools.Translator.AppCode
                 for (int j = 0; j < 3; j++)
                 {
                     StyleMutator.HighlightedCell(ZeroBasedSheet.Cell(groupSheet, i, j).Style);
-
                 }
             }
 
@@ -254,13 +240,17 @@ namespace MsCrmTools.Translator.AppCode
 
         public Entity GetSiteMap(IOrganizationService service)
         {
-            EntityCollection ec = service.RetrieveMultiple(new QueryExpression("sitemap") {ColumnSet = new ColumnSet(true)});
+            EntityCollection ec = service.RetrieveMultiple(new QueryExpression("sitemap") { ColumnSet = new ColumnSet(true) });
 
             var siteMap = ec[0];
             return siteMap;
         }
 
-#if NO_GEMBOX
+        public void Import(IOrganizationService service)
+        {
+            service.Update(siteMap);
+        }
+
         public void PrepareAreas(ExcelWorksheet sheet, IOrganizationService service)
         {
             if (siteMap == null)
@@ -299,7 +289,6 @@ namespace MsCrmTools.Translator.AppCode
                     }
                     columnIndex++;
                 }
-
             }
 
             siteMap["sitemapxml"] = siteMapDoc.OuterXml;
@@ -332,7 +321,7 @@ namespace MsCrmTools.Translator.AppCode
                 var columnIndex = 3;
                 while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                 {
-                    if (ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString() == "Title")
+                    if (ZeroBasedSheet.Cell(sheet, rowI, 2).Value.ToString() == "Title")
                     {
                         UpdateXmlNode(groupNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
@@ -344,7 +333,6 @@ namespace MsCrmTools.Translator.AppCode
                     }
                     columnIndex++;
                 }
-
             }
 
             siteMap["sitemapxml"] = siteMapDoc.OuterXml;
@@ -378,7 +366,7 @@ namespace MsCrmTools.Translator.AppCode
                 var columnIndex = 4;
                 while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                 {
-                    if (ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString() == "Title")
+                    if (ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Title")
                     {
                         UpdateXmlNode(subAreaNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
                             ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
@@ -393,142 +381,6 @@ namespace MsCrmTools.Translator.AppCode
             }
 
             siteMap["sitemapxml"] = siteMapDoc.OuterXml;
-        }
-#else
-        public void PrepareAreas(ExcelWorksheet sheet, IOrganizationService service)
-        {
-            if (siteMap == null)
-            {
-                siteMap = GetSiteMap(service);
-            }
-
-            var siteMapDoc = new XmlDocument();
-            siteMapDoc.LoadXml(siteMap["sitemapxml"].ToString());
-
-            foreach (var row in sheet.Rows.OrderBy(r=>r.Index))
-            {
-                if (row.Index == 0) continue;
-                if (row.Cells[0].Value == null) break;
-
-                var areaId = row.Cells[0].Value.ToString();
-                var areaNode = siteMapDoc.SelectSingleNode("SiteMap/Area[@Id='" + areaId + "']");
-                if (areaNode == null)
-                {
-                    throw new Exception("Unable to find area with id " + areaId);
-                }
-
-                var columnIndex = 2;
-                while (row.Cells[columnIndex].Value != null)
-                {
-                    if (row.Cells[1].Value.ToString() == "Title")
-                    {
-                        UpdateXmlNode(areaNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                            row.Cells[columnIndex].Value.ToString());
-                    }
-                    else
-                    {
-                        UpdateXmlNode(areaNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                         row.Cells[columnIndex].Value.ToString());
-                    }
-                    columnIndex++;
-                }
-
-            }
-
-            siteMap["sitemapxml"] = siteMapDoc.OuterXml;
-        }
-
-        public void PrepareGroups(ExcelWorksheet sheet, IOrganizationService service)
-        {
-            if (siteMap == null)
-            {
-                siteMap = GetSiteMap(service);
-            } 
-            
-            var siteMapDoc = new XmlDocument();
-            siteMapDoc.LoadXml(siteMap["sitemapxml"].ToString());
-
-            foreach (var row in sheet.Rows)
-            {
-                if (row.Index == 0) continue;
-                if (row.Cells[0].Value == null) break;
-
-                var areaId = row.Cells[0].Value.ToString();
-                var groupId = row.Cells[1].Value.ToString();
-                var groupNode = siteMapDoc.SelectSingleNode("SiteMap/Area[@Id='" + areaId + "']/Group[@Id='"+groupId+"']");
-                if (groupNode == null)
-                {
-                    throw new Exception("Unable to find group with id " + groupId + " in area " + areaId);
-                }
-
-                var columnIndex = 3;
-                while (row.Cells[columnIndex].Value != null)
-                {
-                    if (row.Cells[1].Value.ToString() == "Title")
-                    {
-                        UpdateXmlNode(groupNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                            row.Cells[columnIndex].Value.ToString());
-                    }
-                    else
-                    {
-                        UpdateXmlNode(groupNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                         row.Cells[columnIndex].Value.ToString());
-                    }
-                    columnIndex++;
-                }
-
-            }
-
-            siteMap["sitemapxml"] = siteMapDoc.OuterXml;
-        }
-
-        public void PrepareSubAreas(ExcelWorksheet sheet, IOrganizationService service)
-        {
-            if (siteMap == null)
-            {
-                siteMap = GetSiteMap(service);
-            }
-
-            var siteMapDoc = new XmlDocument();
-            siteMapDoc.LoadXml(siteMap["sitemapxml"].ToString());
-
-            foreach (var row in sheet.Rows)
-            {
-                if (row.Index == 0) continue;
-                if (row.Cells[0].Value == null) break;
-
-                var areaId = row.Cells[0].Value.ToString();
-                var groupId = row.Cells[1].Value.ToString();
-                var subAreaId = row.Cells[2].Value.ToString();
-                var subAreaNode = siteMapDoc.SelectSingleNode("SiteMap/Area[@Id='" + areaId + "']/Group[@Id='" + groupId + "']/SubArea[@Id='" + subAreaId + "']");
-                if (subAreaNode == null)
-                {
-                    throw new Exception("Unable to find group with id " + groupId + " in area " + areaId);
-                }
-
-                var columnIndex = 4;
-                while (row.Cells[columnIndex].Value != null)
-                {
-                    if (row.Cells[1].Value.ToString() == "Title")
-                    {
-                        UpdateXmlNode(subAreaNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                            row.Cells[columnIndex].Value.ToString());
-                    }
-                    else
-                    {
-                        UpdateXmlNode(subAreaNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                         row.Cells[columnIndex].Value.ToString());
-                    }
-                    columnIndex++;
-                }
-            }
-
-            siteMap["sitemapxml"] = siteMapDoc.OuterXml;
-        }
-#endif
-        public void Import(IOrganizationService service)
-        {
-           service.Update(siteMap);
         }
 
         private void AddAreaHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
@@ -573,22 +425,33 @@ namespace MsCrmTools.Translator.AppCode
             }
         }
 
-        private void UpdateXmlNode(XmlNode node,string collectionName, string itemName, string lcid, string description)
+        private void UpdateXmlNode(XmlNode node, string collectionName, string itemName, string lcid, string description)
         {
             XmlNode refNode;
-            switch (node.Name)
+            if (collectionName == "Titles" && node.FirstChild != null)
             {
-                case "Area":
-                    refNode = node.SelectSingleNode("Group");
-                    break;
-                case "Group":
-                    refNode = node.SelectSingleNode("SubArea");
-                    break;
-                case "SubArea":
-                    refNode = node.SelectSingleNode("Privilege");
-                    break;
-                default:
-                    throw new Exception("Unexpected node name");
+                //Title should allways be first elemnt
+                refNode = node.FirstChild;
+            }
+            else
+            {
+                switch (node.Name)
+                {
+                    case "Area":
+                        refNode = node.SelectSingleNode("Group");
+                        break;
+
+                    case "Group":
+                        refNode = node.SelectSingleNode("SubArea");
+                        break;
+
+                    case "SubArea":
+                        refNode = node.SelectSingleNode("Privilege");
+                        break;
+
+                    default:
+                        throw new Exception("Unexpected node name");
+                }
             }
 
             var labelsNode = node.SelectSingleNode(collectionName);

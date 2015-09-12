@@ -12,11 +12,10 @@ namespace MsCrmTools.WebResourcesManager.Forms
 {
     public partial class NewWebResourceDialog : Form
     {
-        readonly Regex inValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant));
-        
-        private string _webResourceName;
-
         private readonly string _extension;
+        private readonly Regex inValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant));
+
+        private string _webResourceName;
 
         public NewWebResourceDialog(string extension)
         {
@@ -25,18 +24,19 @@ namespace MsCrmTools.WebResourcesManager.Forms
             _extension = extension;
         }
 
-        private void TxtWebResourceNameTextChanged(object sender, EventArgs e)
-        {
-            label2.Text = string.Format("Final file name: {0}.{1}", txtWebResourceName.Text, _extension);
-        }
-
         public string WebResourceName { get { return _webResourceName; } }
+
+        private void BtnCancelClick(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
 
         private void BtnValidateClick(object sender, EventArgs e)
         {
-            if (txtWebResourceName.Text.Length > 0 
+            if (txtWebResourceName.Text.Length > 0
                 && !inValidWrNameRegex.IsMatch(txtWebResourceName.Text)
-                && txtWebResourceName.Text.Split('/').All(x=>x.Length != 0))
+                && txtWebResourceName.Text.Split('/').All(x => x.Length != 0))
             {
                 _webResourceName = txtWebResourceName.Text;
 
@@ -49,18 +49,17 @@ namespace MsCrmTools.WebResourcesManager.Forms
             }
         }
 
-        private void BtnCancelClick(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
-
         private void TxtWebResourceNameKeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 BtnValidateClick(null, null);
             }
+        }
+
+        private void TxtWebResourceNameTextChanged(object sender, EventArgs e)
+        {
+            label2.Text = string.Format("Final file name: {0}.{1}", txtWebResourceName.Text, _extension);
         }
     }
 }

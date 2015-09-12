@@ -13,6 +13,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.BooleanOptionSetMd
         {
             list = new List<BooleanOptionSetMetadataInfo>();
         }
+
         public new int Count
         {
             get { return list.Count; }
@@ -21,6 +22,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.BooleanOptionSetMd
         public BooleanOptionSetMetadataInfo this[int index]
         {
             get { return list[index]; }
+        }
+
+        public void Add(BooleanOptionSetMetadataInfo info)
+        {
+            list.Add(info);
         }
 
         public AttributeCollection GetAttributes()
@@ -87,11 +93,6 @@ namespace MsCrmTools.MetadataBrowser.AppCode.BooleanOptionSetMd
         public object GetPropertyOwner(PropertyDescriptor pd)
         {
             return this;
-        }
-
-        public void Add(BooleanOptionSetMetadataInfo info)
-        {
-            list.Add(info);
         }
 
         public void Remove(BooleanOptionSetMetadataInfo info)

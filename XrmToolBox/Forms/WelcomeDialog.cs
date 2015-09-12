@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 
 namespace XrmToolBox.Forms
@@ -17,7 +11,7 @@ namespace XrmToolBox.Forms
         {
             InitializeComponent();
 
-            lblVersion.Text = string.Format("version: {0}",version);
+            lblVersion.Text = string.Format("version: {0}", version);
 
             ManageLicense();
 
@@ -25,12 +19,6 @@ namespace XrmToolBox.Forms
             timer.Tick += TimerTick;
             timer.Interval = 3000;
             timer.Start();
-        }
-
-        void TimerTick(object sender, EventArgs e)
-        {
-            ((Timer)sender).Stop();
-            Close();
         }
 
         private void ManageLicense()
@@ -45,10 +33,10 @@ namespace XrmToolBox.Forms
                 {
                     Type type = assembly.GetType("McTools.StopAdvertisement.LicenseManager");
                     if (type == null) { return; }
-                   
+
                     MethodInfo methodInfo = type.GetMethod("IsValid");
                     if (methodInfo == null) { return; }
-                        
+
                     object classInstance = Activator.CreateInstance(type, null);
 
                     if ((bool)methodInfo.Invoke(classInstance, null))
@@ -83,5 +71,10 @@ namespace XrmToolBox.Forms
             }
         }
 
+        private void TimerTick(object sender, EventArgs e)
+        {
+            ((Timer)sender).Stop();
+            Close();
+        }
     }
 }

@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 
 namespace MsCrmTools.SolutionComponentsMover.AppCode
 {
@@ -41,7 +41,32 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
             return service.RetrieveMultiple(qe).Entities;
         }
 
-        internal List<Entity> RetrieveComponentsFromSolutions(List<Guid> solutionsIds, List<int> componentsTypes )
+        internal void CopyComponents(CopySettings settings, BackgroundWorker backgroundWorker)
+        {
+            backgroundWorker.ReportProgress(0, "Retrieving source solution(s) components...");
+
+            var components = RetrieveComponentsFromSolutions(settings.SourceSolutions.Select(s => s.Id).ToList(), settings.ComponentsTypes);
+
+            foreach (var target in settings.TargetSolutions)
+            {
+                backgroundWorker.ReportProgress(0, string.Format("Adding {0} components to solution '{1}'", components.Count, target.GetAttributeValue<string>("friendlyname")));
+
+                foreach (var component in components)
+                {
+                    var request = new AddSolutionComponentRequest
+                    {
+                        AddRequiredComponents = false,
+                        ComponentId = component.GetAttributeValue<Guid>("objectid"),
+                        ComponentType = component.GetAttributeValue<OptionSetValue>("componenttype").Value,
+                        SolutionUniqueName = target.GetAttributeValue<string>("uniquename")
+                    };
+
+                    service.Execute(request);
+                }
+            }
+        }
+
+        internal List<Entity> RetrieveComponentsFromSolutions(List<Guid> solutionsIds, List<int> componentsTypes)
         {
             var qe = new QueryExpression("solutioncomponent")
             {
@@ -57,31 +82,6 @@ namespace MsCrmTools.SolutionComponentsMover.AppCode
             };
 
             return service.RetrieveMultiple(qe).Entities.ToList();
-        } 
-
-        internal void CopyComponents(CopySettings settings, BackgroundWorker backgroundWorker)
-        {
-            backgroundWorker.ReportProgress(0,"Retrieving source solution(s) components...");
-
-            var components = RetrieveComponentsFromSolutions(settings.SourceSolutions.Select(s => s.Id).ToList(), settings.ComponentsTypes);
-            
-            foreach (var target in settings.TargetSolutions)
-            {
-                backgroundWorker.ReportProgress(0, string.Format("Adding {0} components to solution '{1}'", components.Count, target.GetAttributeValue<string>("friendlyname")));
-
-                foreach (var component in components)
-                {
-                    var request = new AddSolutionComponentRequest
-                    {
-                        AddRequiredComponents = false,
-                        ComponentId =component.GetAttributeValue<Guid>("objectid"),
-                        ComponentType = component.GetAttributeValue<OptionSetValue>("componenttype").Value,
-                        SolutionUniqueName = target.GetAttributeValue<string>("uniquename")
-                    };
-
-                    service.Execute(request);
-                }
-            }
         }
     }
 }

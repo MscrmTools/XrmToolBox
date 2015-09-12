@@ -1,30 +1,20 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk.Metadata;
 
 namespace MsCrmTools.AuditCenter.Forms
 {
     public partial class EntityPicker : Form
     {
-        private readonly List<EntityMetadata> emds;
         public List<EntityMetadata> EntitiesToAdd;
+        private readonly List<EntityMetadata> emds;
 
         public EntityPicker(List<EntityMetadata> emds)
         {
             this.emds = emds;
             InitializeComponent();
-        }
-
-        private void EntityPickerLoad(object sender, EventArgs e)
-        {
-            foreach (EntityMetadata emd in emds.Where(emd => !emd.IsAuditEnabled.Value))
-            {
-                var item = new ListViewItem { Text = emd.DisplayName.UserLocalizedLabel.Label, Tag = emd };
-                item.SubItems.Add(emd.LogicalName);
-                lvEntities.Items.Add(item);
-            }
         }
 
         private void BtnCancelClick(object sender, EventArgs e)
@@ -44,6 +34,16 @@ namespace MsCrmTools.AuditCenter.Forms
 
             DialogResult = DialogResult.OK;
             Close();
+        }
+
+        private void EntityPickerLoad(object sender, EventArgs e)
+        {
+            foreach (EntityMetadata emd in emds.Where(emd => !emd.IsAuditEnabled.Value))
+            {
+                var item = new ListViewItem { Text = emd.DisplayName.UserLocalizedLabel.Label, Tag = emd };
+                item.SubItems.Add(emd.LogicalName);
+                lvEntities.Items.Add(item);
+            }
         }
 
         private void ListViewColumnClick(object sender, ColumnClickEventArgs e)

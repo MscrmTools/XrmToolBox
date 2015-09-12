@@ -14,10 +14,10 @@ namespace MsCrmTools.SampleTool
     /// Name and Description are not more used from Assembly information
     /// For image Metadata, paste your base64 encoded image or null to use "No logo" logo
     /// For color Metadata, you can use color name or hexadecimal code
-    /// 
+    ///
     /// If this is not obvious, it is possible to include multiple plugins in one assembly
     /// as plugins are retrieved by class and not by assembly anymore
-    /// 
+    ///
     /// Required references:
     /// - XrmToolBox.Extensions
     /// - System.ComponentModel.Composition

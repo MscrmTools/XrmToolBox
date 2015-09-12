@@ -3,7 +3,7 @@
     public class GithubInformation
     {
         public GithubInformation()
-        {}
+        { }
 
         public GithubInformation(string version, string description)
         {
@@ -11,8 +11,7 @@
             Description = description;
         }
 
-        public string Version { get; set; }
-        
         public string Description { get; set; }
+        public string Version { get; set; }
     }
 }

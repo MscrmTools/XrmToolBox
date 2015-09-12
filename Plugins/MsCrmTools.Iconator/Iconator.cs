@@ -3,18 +3,16 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.Iconator.AppCode;
 using MsCrmTools.Iconator.Properties;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.Iconator
 {
@@ -42,13 +40,13 @@ namespace MsCrmTools.Iconator
         {
             if (listViewEntities.SelectedItems.Count > 0)
             {
-                var entity = (EntityMetadata) listViewEntities.SelectedItems[0].Tag;
+                var entity = (EntityMetadata)listViewEntities.SelectedItems[0].Tag;
 
                 if (!string.IsNullOrEmpty(entity.IconSmallName))
                 {
                     var queryWrSmall = from wrList in webResourceRetrivedList
-                        where (string) wrList["name"] == entity.IconSmallName
-                        select wrList;
+                                       where (string)wrList["name"] == entity.IconSmallName
+                                       select wrList;
 
                     foreach (var entityWrS in queryWrSmall)
                     {
@@ -66,8 +64,8 @@ namespace MsCrmTools.Iconator
                 if (!string.IsNullOrEmpty(entity.IconMediumName))
                 {
                     var queryMedium = from wrList in webResourceRetrivedList
-                        where (string) wrList["name"] == entity.IconMediumName
-                        select wrList;
+                                      where (string)wrList["name"] == entity.IconMediumName
+                                      select wrList;
 
                     foreach (var entityM in queryMedium)
                     {
@@ -85,32 +83,27 @@ namespace MsCrmTools.Iconator
             }
         }
 
-        private void LvWebRessourcesSelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (listViewWebRessources32.SelectedItems.Count > 0)
-            {
-                var webRessource = (Entity) listViewWebRessources32.SelectedItems[0].Tag;
-            }
-        }
-
         private void LvWebRessourcesOtherSelectedIndexChanged(object sender, EventArgs e)
         {
             if (listViewWebRessourcesOther.SelectedItems.Count > 0)
             {
                 labelSizeWr.Text = "Image size: " +
-                                   ((WebResourcesManager.WebResourceAndImage) listViewWebRessourcesOther.FocusedItem.Tag)
+                                   ((WebResourcesManager.WebResourceAndImage)listViewWebRessourcesOther.FocusedItem.Tag)
                                        .Image.Size.ToString();
+            }
+        }
+
+        private void LvWebRessourcesSelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listViewWebRessources32.SelectedItems.Count > 0)
+            {
+                var webRessource = (Entity)listViewWebRessources32.SelectedItems[0].Tag;
             }
         }
 
         #endregion ListViewItems selection
 
         #region Main menu actions
-
-        private void TsbConnectClick(object sender, EventArgs e)
-        {
-            ExecuteMethod(DoAction);
-        }
 
         private void DoAction()
         {
@@ -126,12 +119,12 @@ namespace MsCrmTools.Iconator
 
                     // Display retrieved entities
                     var queryEntities = from entityList in MetadataManager.GetEntitiesList(Service)
-                        orderby entityList.DisplayName.UserLocalizedLabel.Label
-                        select entityList;
+                                        orderby entityList.DisplayName.UserLocalizedLabel.Label
+                                        select entityList;
 
                     foreach (var entity in queryEntities)
                     {
-                        var lvi = new ListViewItem(entity.DisplayName.UserLocalizedLabel.Label) {Tag = entity};
+                        var lvi = new ListViewItem(entity.DisplayName.UserLocalizedLabel.Label) { Tag = entity };
                         lvi.SubItems.Add(entity.LogicalName);
                         cc.Entities.Add(lvi);
                     }
@@ -205,7 +198,7 @@ namespace MsCrmTools.Iconator
                     }
                     else
                     {
-                        var cc = (CrmComponents) e.Result;
+                        var cc = (CrmComponents)e.Result;
 
                         var imageList16 = new ImageList
                         {
@@ -217,7 +210,7 @@ namespace MsCrmTools.Iconator
                             ImageSize = new Size(32, 32),
                             ColorDepth = ColorDepth.Depth32Bit
                         };
-                        var imageListOther = new ImageList {ColorDepth = ColorDepth.Depth32Bit};
+                        var imageListOther = new ImageList { ColorDepth = ColorDepth.Depth32Bit };
 
                         imageList16.Images.AddRange(cc.Images16.ToArray());
                         imageList32.Images.AddRange(cc.Images32.ToArray());
@@ -299,17 +292,22 @@ namespace MsCrmTools.Iconator
             }
         }
 
+        private void TsbConnectClick(object sender, EventArgs e)
+        {
+            ExecuteMethod(DoAction);
+        }
+
         #region Apply Images to entities
 
         private void TsbApplyClick(object sender, EventArgs e)
         {
             if (lvMappings.Items.Count <= 0) return;
 
-            var mappingList = (from ListViewItem item in lvMappings.Items select (EntityImageMap) item.Tag).ToList();
+            var mappingList = (from ListViewItem item in lvMappings.Items select (EntityImageMap)item.Tag).ToList();
             SetEnableState(false);
 
             WorkAsync("Applying images to entities. Please wait...",
-                evt => MetadataManager.ApplyImagesToEntities((List<EntityImageMap>) evt.Argument, Service),
+                evt => MetadataManager.ApplyImagesToEntities((List<EntityImageMap>)evt.Argument, Service),
                 evt =>
                 {
                     SetEnableState(true);
@@ -330,7 +328,7 @@ namespace MsCrmTools.Iconator
 
         #endregion Apply Images to entities
 
-        #endregion
+        #endregion Main menu actions
 
         #region Map/UnMap
 
@@ -340,27 +338,27 @@ namespace MsCrmTools.Iconator
                 (listViewWebRessources16.SelectedItems.Count > 0 || listViewWebRessources32.SelectedItems.Count > 0 ||
                  listViewWebRessourcesOther.SelectedItems.Count > 0))
             {
-                var selectedEntity = (EntityMetadata) listViewEntities.SelectedItems[0].Tag;
+                var selectedEntity = (EntityMetadata)listViewEntities.SelectedItems[0].Tag;
 
-                var mapping = new EntityImageMap {Entity = selectedEntity};
+                var mapping = new EntityImageMap { Entity = selectedEntity };
 
                 if (listViewWebRessources16.SelectedItems.Count > 0)
                 {
-                    mapping.WebResourceName = ((Entity) listViewWebRessources16.SelectedItems[0].Tag)["name"].ToString();
+                    mapping.WebResourceName = ((Entity)listViewWebRessources16.SelectedItems[0].Tag)["name"].ToString();
                     mapping.ImageSize = 16;
                 }
                 else if (listViewWebRessources32.SelectedItems.Count > 0)
                 {
-                    mapping.WebResourceName = ((Entity) listViewWebRessources32.SelectedItems[0].Tag)["name"].ToString();
+                    mapping.WebResourceName = ((Entity)listViewWebRessources32.SelectedItems[0].Tag)["name"].ToString();
                     mapping.ImageSize = 32;
                 }
                 else
                 {
                     mapping.WebResourceName =
-                        ((WebResourcesManager.WebResourceAndImage) listViewWebRessourcesOther.SelectedItems[0].Tag)
+                        ((WebResourcesManager.WebResourceAndImage)listViewWebRessourcesOther.SelectedItems[0].Tag)
                             .Webresource["name"].ToString();
 
-                    var issDialog = new ImageSizeSelectionDialog {StartPosition = FormStartPosition.CenterParent};
+                    var issDialog = new ImageSizeSelectionDialog { StartPosition = FormStartPosition.CenterParent };
                     if (issDialog.ShowDialog(this) == DialogResult.OK)
                     {
                         mapping.ImageSize = issDialog.ImageSizeSelected;
@@ -372,7 +370,7 @@ namespace MsCrmTools.Iconator
                 }
 
                 var item = new ListViewItem(
-                    ((EntityMetadata) listViewEntities.SelectedItems[0].Tag).DisplayName.UserLocalizedLabel.Label)
+                    ((EntityMetadata)listViewEntities.SelectedItems[0].Tag).DisplayName.UserLocalizedLabel.Label)
                 {
                     Tag = mapping
                 };
@@ -388,9 +386,7 @@ namespace MsCrmTools.Iconator
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
-
                 }
-
 
                 lvMappings.Items.Add(item);
             }
@@ -419,7 +415,7 @@ namespace MsCrmTools.Iconator
             }
         }
 
-        #endregion
+        #endregion Map/UnMap
 
         #region Reset Icons
 
@@ -434,7 +430,7 @@ namespace MsCrmTools.Iconator
                     SetEnableState(false);
 
                     WorkAsync("Reseting icons for entity. Please wait...",
-                        evt => MetadataManager.ResetIcons((EntityMetadata) evt.Argument, Service),
+                        evt => MetadataManager.ResetIcons((EntityMetadata)evt.Argument, Service),
                         evt =>
                         {
                             SetEnableState(true);
@@ -469,9 +465,9 @@ namespace MsCrmTools.Iconator
             if (listViewWebRessourcesOther.FocusedItem != null)
             {
                 var img =
-                    ((WebResourcesManager.WebResourceAndImage) listViewWebRessourcesOther.FocusedItem.Tag).Image;
+                    ((WebResourcesManager.WebResourceAndImage)listViewWebRessourcesOther.FocusedItem.Tag).Image;
 
-                var preview = new ImagePreview(img) {StartPosition = FormStartPosition.CenterParent};
+                var preview = new ImagePreview(img) { StartPosition = FormStartPosition.CenterParent };
                 preview.ShowDialog();
             }
         }
@@ -490,7 +486,6 @@ namespace MsCrmTools.Iconator
             listViewWebRessources32.SelectedItems.Clear();
             listViewWebRessourcesOther.SelectedItems.Clear();
         }
-
 
         #endregion Others
 

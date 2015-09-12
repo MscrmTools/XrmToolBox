@@ -5,18 +5,19 @@ using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility.Interfaces;
-using XrmToolBox.Extensibility.UserControls;
 
 namespace XrmToolBox
 {
     public class PluginManagerExtended : MarshalByRefObject
     {
+        private static readonly string PluginPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "Plugins");
+        private CompositionContainer container;
+        private DirectoryCatalog directoryCatalog;
         private DateTime lastPluginsUpdate;
 
         public PluginManagerExtended(Form parentForm)
         {
             lastPluginsUpdate = DateTime.Now;
-            PluginsControls = new List<PluginModel>();
 
             var watcher = new FileSystemWatcher(PluginPath)
             {
@@ -28,20 +29,10 @@ namespace XrmToolBox
             watcher.Created += watcher_EventRaised;
         }
 
+        public event EventHandler PluginsListUpdated;
+
         [ImportMany(AllowRecomposition = true)]
         public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> Plugins { get; set; }
-
-        /// <summary>
-        /// List of plugins user controls
-        /// </summary>
-        public List<PluginModel> PluginsControls { get; private set; }
-
-
-        private CompositionContainer container;
-        private DirectoryCatalog directoryCatalog;
-        private static readonly string PluginPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,"Plugins");
-
-        public event EventHandler PluginsListUpdated;
 
         public void Initialize()
         {
@@ -53,24 +44,24 @@ namespace XrmToolBox
             container.ComposeParts(this);
         }
 
-        void watcher_EventRaised(object sender, FileSystemEventArgs e)
+        public void Recompose()
+        {
+            directoryCatalog.Refresh();
+            container.ComposeParts(directoryCatalog.Parts);
+        }
+
+        private void watcher_EventRaised(object sender, FileSystemEventArgs e)
         {
             try
             {
-                ((FileSystemWatcher) sender).EnableRaisingEvents = false;
+                ((FileSystemWatcher)sender).EnableRaisingEvents = false;
 
                 PluginsListUpdated(this, new EventArgs());
             }
             finally
             {
-                ((FileSystemWatcher) sender).EnableRaisingEvents = true;
+                ((FileSystemWatcher)sender).EnableRaisingEvents = true;
             }
-        }
-        
-        public void Recompose()
-        {
-            directoryCatalog.Refresh();
-            container.ComposeParts(directoryCatalog.Parts);
         }
     }
 }

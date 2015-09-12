@@ -4,10 +4,18 @@ using System.Windows.Forms;
 
 namespace McTools.Xrm.Connection.WinForms
 {
+    internal class GroupComparer : IComparer
+    {
+        public int Compare(object objA, object objB)
+        {
+            return String.Compare(((ListViewGroup)objA).Header, ((ListViewGroup)objB).Header, StringComparison.Ordinal);
+        }
+    }
+
     /// <summary>
     /// Compares two listview items for sorting
     /// </summary>
-    class ListViewItemComparer : IComparer
+    internal class ListViewItemComparer : IComparer
     {
         #region Variables
 
@@ -21,7 +29,7 @@ namespace McTools.Xrm.Connection.WinForms
         /// </summary>
         private SortOrder innerOrder;
 
-        #endregion
+        #endregion Variables
 
         #region Constructors
 
@@ -39,13 +47,13 @@ namespace McTools.Xrm.Connection.WinForms
         /// </summary>
         /// <param name="column">Index of sorting column</param>
         /// <param name="order">Sort order</param>
-        public ListViewItemComparer(int column,SortOrder order)
+        public ListViewItemComparer(int column, SortOrder order)
         {
             this.col = column;
             this.innerOrder = order;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -77,15 +85,7 @@ namespace McTools.Xrm.Connection.WinForms
                 return String.Compare(y.SubItems[this.col].Text, x.SubItems[this.col].Text);
             }
         }
-       
-        #endregion
-    }
 
-    class GroupComparer : IComparer
-    {
-        public int Compare(object objA, object objB)
-        {
-            return String.Compare(((ListViewGroup)objA).Header, ((ListViewGroup)objB).Header, StringComparison.Ordinal);
-        }
+        #endregion Methods
     }
 }

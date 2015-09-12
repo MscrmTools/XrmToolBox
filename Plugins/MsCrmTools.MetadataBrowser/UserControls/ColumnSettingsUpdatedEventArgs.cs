@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MsCrmTools.MetadataBrowser.AppCode;
+﻿using MsCrmTools.MetadataBrowser.AppCode;
+using System;
 
 namespace MsCrmTools.MetadataBrowser.UserControls
 {
     public class ColumnSettingsUpdatedEventArgs : EventArgs
     {
-        public ListViewColumnsSettings Settings { get; set; }
-
         public EntityPropertiesControl Control { get; set; }
+        public ListViewColumnsSettings Settings { get; set; }
     }
 }

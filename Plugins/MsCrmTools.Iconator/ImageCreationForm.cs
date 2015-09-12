@@ -3,28 +3,26 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using MsCrmTools.Iconator.AppCode;
+using MsCrmTools.Iconator.Delegates;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
-using MsCrmTools.Iconator.AppCode;
-using MsCrmTools.Iconator.Delegates;
-using XrmToolBox;
 using XrmToolBox.Extensibility;
 
 namespace MsCrmTools.Iconator
 {
     public partial class ImageCreationForm : Form
     {
-        private readonly IOrganizationService _service;
-
+        public List<Entity> WebResourcesCreated;
         private readonly List<FileInfo> _selectedFiles;
-
+        private readonly IOrganizationService _service;
         private Panel infoPanel;
 
         public ImageCreationForm(IOrganizationService service, string path = null)
@@ -35,7 +33,7 @@ namespace MsCrmTools.Iconator
             _selectedFiles = new List<FileInfo>();
             WebResourcesCreated = new List<Entity>();
 
-            if(!string.IsNullOrEmpty(path))
+            if (!string.IsNullOrEmpty(path))
             {
                 var fi = new FileInfo(path);
                 _selectedFiles.Add(fi);
@@ -48,33 +46,6 @@ namespace MsCrmTools.Iconator
             }
         }
 
-        public List<Entity> WebResourcesCreated; 
-
-        private void ChkAddToDefaultSolutionCheckedChanged(object sender, EventArgs e)
-        {
-            cbbSolutions.Enabled = !chkAddToDefaultSolution.Checked;
-
-            if(!chkAddToDefaultSolution.Checked)
-            {
-                cbbSolutions.Items.Clear();
-
-                // Traitement pour récupérer les solutions qui nous intéresse
-                var qe = new QueryExpression("solution");
-                qe.Distinct = true;
-                qe.ColumnSet = new ColumnSet(true);
-                qe.Criteria = new FilterExpression();
-                qe.Criteria.AddCondition(new ConditionExpression("ismanaged", ConditionOperator.Equal, false));
-                qe.Criteria.AddCondition(new ConditionExpression("isvisible", ConditionOperator.Equal, true));
-
-                var solutions = _service.RetrieveMultiple(qe);
-
-                foreach (var solution in solutions.Entities)
-                {
-                    cbbSolutions.Items.Add(new SolutionObject{Solution = solution});
-                }
-            }
-        }
-
         private void BtnAddFilesClick(object sender, EventArgs e)
         {
             var dialog = new OpenFileDialog
@@ -84,47 +55,20 @@ namespace MsCrmTools.Iconator
                     Title = "Select image files to add as web resource"
                 };
 
-            if(dialog.ShowDialog() == DialogResult.OK)
+            if (dialog.ShowDialog() == DialogResult.OK)
             {
-               foreach(string filePath in dialog.FileNames)
-               {
-                   var fi = new FileInfo(filePath);
-                   _selectedFiles.Add(fi);
+                foreach (string filePath in dialog.FileNames)
+                {
+                    var fi = new FileInfo(filePath);
+                    _selectedFiles.Add(fi);
 
-                   var item = new ListViewItem(fi.Name);
-                   item.SubItems.Add(fi.FullName);
-                   item.Tag = fi;
+                    var item = new ListViewItem(fi.Name);
+                    item.SubItems.Add(fi.FullName);
+                    item.Tag = fi;
 
-                   lvFiles.Items.Add(item);
-               }
+                    lvFiles.Items.Add(item);
+                }
             }
-        }
-
-        private void ChkUseSolutionPrefixCheckedChanged(object sender, EventArgs e)
-        {
-            txtPrefixToUse.Enabled = !chkUseSolutionPrefix.Checked;
-
-            if (chkUseSolutionPrefix.Checked && cbbSolutions.SelectedItem != null)
-            {
-                // Retrieve publisher prefix
-                var publisher = _service.Retrieve("publisher",
-                                                  ((EntityReference)
-                                                   ((SolutionObject)cbbSolutions.SelectedItem).Solution["publisherid"]).Id,
-                                                  new ColumnSet("customizationprefix"));
-
-                txtPrefixToUse.Text = publisher["customizationprefix"] + "_";
-            }
-        }
-
-        private void CbbFilesSelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Retrieve publisher prefix
-            var publisher = _service.Retrieve("publisher",
-                                              ((EntityReference)
-                                               ((SolutionObject)cbbSolutions.SelectedItem).Solution["publisherid"]).Id,
-                                              new ColumnSet("customizationprefix"));
-
-            txtPrefixToUse.Text = publisher["customizationprefix"] + "_";
         }
 
         private void BtnCreateWebResourcesClick(object sender, EventArgs e)
@@ -140,7 +84,7 @@ namespace MsCrmTools.Iconator
             }
         }
 
-        void BWorkerDoWork(object sender, DoWorkEventArgs e)
+        private void BWorkerDoWork(object sender, DoWorkEventArgs e)
         {
             foreach (ListViewItem item in ListViewDelegates.GetItems(lvFiles))
             {
@@ -169,8 +113,8 @@ namespace MsCrmTools.Iconator
                     var existingWr = _service.RetrieveMultiple(new QueryByAttribute
                     {
                         EntityName = "webresource",
-                        Attributes = {"name"},
-                        Values = {webR["name"]}
+                        Attributes = { "name" },
+                        Values = { webR["name"] }
                     }).Entities.ToList().FirstOrDefault();
 
                     if (existingWr != null)
@@ -191,10 +135,10 @@ namespace MsCrmTools.Iconator
                 {
                     var request = new AddSolutionComponentRequest
                                       {
-                        ComponentType = 61,
-                        SolutionUniqueName = cbbSolutions.SelectedItem.ToString(),
-                        ComponentId = webR.Id
-                    };
+                                          ComponentType = 61,
+                                          SolutionUniqueName = cbbSolutions.SelectedItem.ToString(),
+                                          ComponentId = webR.Id
+                                      };
 
                     _service.Execute(request);
                 }
@@ -203,19 +147,71 @@ namespace MsCrmTools.Iconator
             }
         }
 
-        void BWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void BWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if(e.Error != null)
+            if (e.Error != null)
             {
                 Controls.Remove(infoPanel);
                 infoPanel.Dispose();
-                
+
                 MessageBox.Show(this, "Error while creating or updating web resources: " + e.Error.Message, "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
                 Close();
+            }
+        }
+
+        private void CbbFilesSelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Retrieve publisher prefix
+            var publisher = _service.Retrieve("publisher",
+                                              ((EntityReference)
+                                               ((SolutionObject)cbbSolutions.SelectedItem).Solution["publisherid"]).Id,
+                                              new ColumnSet("customizationprefix"));
+
+            txtPrefixToUse.Text = publisher["customizationprefix"] + "_";
+        }
+
+        private void ChkAddToDefaultSolutionCheckedChanged(object sender, EventArgs e)
+        {
+            cbbSolutions.Enabled = !chkAddToDefaultSolution.Checked;
+
+            if (!chkAddToDefaultSolution.Checked)
+            {
+                cbbSolutions.Items.Clear();
+
+                // Traitement pour récupérer les solutions qui nous intéresse
+                var qe = new QueryExpression("solution");
+                qe.Distinct = true;
+                qe.ColumnSet = new ColumnSet(true);
+                qe.Criteria = new FilterExpression();
+                qe.Criteria.AddCondition(new ConditionExpression("ismanaged", ConditionOperator.Equal, false));
+                qe.Criteria.AddCondition(new ConditionExpression("isvisible", ConditionOperator.Equal, true));
+
+                var solutions = _service.RetrieveMultiple(qe);
+
+                foreach (var solution in solutions.Entities)
+                {
+                    cbbSolutions.Items.Add(new SolutionObject { Solution = solution });
+                }
+            }
+        }
+
+        private void ChkUseSolutionPrefixCheckedChanged(object sender, EventArgs e)
+        {
+            txtPrefixToUse.Enabled = !chkUseSolutionPrefix.Checked;
+
+            if (chkUseSolutionPrefix.Checked && cbbSolutions.SelectedItem != null)
+            {
+                // Retrieve publisher prefix
+                var publisher = _service.Retrieve("publisher",
+                                                  ((EntityReference)
+                                                   ((SolutionObject)cbbSolutions.SelectedItem).Solution["publisherid"]).Id,
+                                                  new ColumnSet("customizationprefix"));
+
+                txtPrefixToUse.Text = publisher["customizationprefix"] + "_";
             }
         }
     }

@@ -10,12 +10,62 @@ namespace MsCrmTools.WebResourcesManager.DelegatesHelpers
 {
     public class TreeViewDelegates
     {
-        public static void Sort(TreeView treeview, IComparer nodeSorter)
+        public static void AddNode(TreeView treeview, TreeNode node)
         {
             MethodInvoker mi = delegate
             {
-                treeview.TreeViewNodeSorter = nodeSorter;
-                treeview.Sort();
+                treeview.Nodes.Add(node);
+            };
+
+            if (treeview.InvokeRequired)
+            {
+                treeview.Invoke(mi);
+            }
+            else
+            {
+                mi();
+            }
+        }
+
+        public static void AddNode(TreeNode parentNode, TreeNode node)
+        {
+            MethodInvoker mi = delegate
+            {
+                parentNode.Nodes.Add(node);
+            };
+
+            if (parentNode.TreeView.InvokeRequired)
+            {
+                parentNode.TreeView.Invoke(mi);
+            }
+            else
+            {
+                mi();
+            }
+        }
+
+        public static void ClearNodes(TreeView treeview)
+        {
+            MethodInvoker mi = delegate
+            {
+                treeview.Nodes.Clear();
+            };
+
+            if (treeview.InvokeRequired)
+            {
+                treeview.Invoke(mi);
+            }
+            else
+            {
+                mi();
+            }
+        }
+
+        public static void ExpandAll(TreeView treeview)
+        {
+            MethodInvoker mi = delegate
+            {
+                treeview.ExpandAll();
             };
 
             if (treeview.InvokeRequired)
@@ -66,67 +116,17 @@ namespace MsCrmTools.WebResourcesManager.DelegatesHelpers
             return node;
         }
 
-        public static void ClearNodes(TreeView treeview)
+        public static void Sort(TreeView treeview, IComparer nodeSorter)
         {
             MethodInvoker mi = delegate
             {
-                treeview.Nodes.Clear();
+                treeview.TreeViewNodeSorter = nodeSorter;
+                treeview.Sort();
             };
 
             if (treeview.InvokeRequired)
             {
                 treeview.Invoke(mi);
-            }
-            else
-            {
-                mi();
-            }
-        }
-
-        public static void ExpandAll(TreeView treeview)
-        {
-            MethodInvoker mi = delegate
-            {
-                treeview.ExpandAll();
-            };
-
-            if (treeview.InvokeRequired)
-            {
-                treeview.Invoke(mi);
-            }
-            else
-            {
-                mi();
-            }
-        }
-
-        public static void AddNode(TreeView treeview, TreeNode node)
-        {
-            MethodInvoker mi = delegate
-            {
-                treeview.Nodes.Add(node);
-            };
-
-            if (treeview.InvokeRequired)
-            {
-                treeview.Invoke(mi);
-            }
-            else
-            {
-                mi();
-            }
-        }
-
-        public static void AddNode(TreeNode parentNode, TreeNode node)
-        {
-            MethodInvoker mi = delegate
-            {
-                parentNode.Nodes.Add(node);
-            };
-
-            if (parentNode.TreeView.InvokeRequired)
-            {
-                parentNode.TreeView.Invoke(mi);
             }
             else
             {

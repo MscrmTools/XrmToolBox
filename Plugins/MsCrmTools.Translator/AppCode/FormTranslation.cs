@@ -1,46 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Xml;
-using Microsoft.Crm.Sdk.Messages;
+﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
-using Color = System.Drawing.Color;
-
-#if NO_GEMBOX
 using OfficeOpenXml;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Xml;
 using ExcelWorksheet = OfficeOpenXml.ExcelWorksheet;
-#else
-using GemBox.Spreadsheet;
-using ExcelWorksheet = GemBox.Spreadsheet.ExcelWorksheet;
-#endif
 
 namespace MsCrmTools.Translator.AppCode
 {
     public class FormTranslation
     {
-        private Entity GetCurrentUserSettings(IOrganizationService service)
-        {
-            var qe = new QueryExpression("usersettings");
-            qe.ColumnSet = new ColumnSet(new[] {"uilanguageid", "localeid"});
-            qe.Criteria = new FilterExpression();
-            qe.Criteria.AddCondition("systemuserid", ConditionOperator.EqualUserId);
-            var settings = service.RetrieveMultiple(qe);
-
-            return settings[0];
-        }
-
-#if NO_GEMBOX
         public void Export(List<EntityMetadata> entities, List<int> languages, ExcelWorkbook file, IOrganizationService service, FormExportOption options)
-#else
-        public void Export(List<EntityMetadata> entities, List<int> languages, ExcelFile file,
-            IOrganizationService service, FormExportOption options)
-#endif
-
         {
             // Retrieve current user language information
             var setting = GetCurrentUserSettings(service);
@@ -59,6 +33,7 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     setting["localeid"] = lcid;
                     setting["uilanguageid"] = lcid;
+                    setting["helplanguageid"] = lcid;
                     service.Update(setting);
                     currentSetting = lcid;
                 }
@@ -106,7 +81,7 @@ namespace MsCrmTools.Translator.AppCode
                                             }
                                         }
 
-                                        #endregion
+                                        #endregion Labels
                                     }
                                 }
 
@@ -123,9 +98,9 @@ namespace MsCrmTools.Translator.AppCode
             {
                 setting["localeid"] = userSettingLcid;
                 setting["uilanguageid"] = userSettingLcid;
+                setting["helplanguageid"] = userSettingLcid;
                 service.Update(setting);
             }
-
 
             foreach (var entity in entities.OrderBy(e => e.LogicalName))
             {
@@ -158,7 +133,7 @@ namespace MsCrmTools.Translator.AppCode
                         EntityMoniker = new EntityReference("systemform", form.Id)
                     };
 
-                    var response = (RetrieveLocLabelsResponse) service.Execute(request);
+                    var response = (RetrieveLocLabelsResponse)service.Execute(request);
                     foreach (var locLabel in response.Label.LocalizedLabels)
                     {
                         crmForm.Names.Add(locLabel.LanguageCode, locLabel.Label);
@@ -171,14 +146,13 @@ namespace MsCrmTools.Translator.AppCode
                         EntityMoniker = new EntityReference("systemform", form.Id)
                     };
 
-                    response = (RetrieveLocLabelsResponse) service.Execute(request);
+                    response = (RetrieveLocLabelsResponse)service.Execute(request);
                     foreach (var locLabel in response.Label.LocalizedLabels)
                     {
                         crmForm.Descriptions.Add(locLabel.LanguageCode, locLabel.Label);
                     }
                 }
             }
-
 
             var line = 1;
             if (options.ExportForms)
@@ -282,6 +256,158 @@ namespace MsCrmTools.Translator.AppCode
             }
         }
 
+        public void ImportFormName(ExcelWorksheet sheet, IOrganizationService service)
+        {
+            var rowsCount = sheet.Dimension.Rows;
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                var currentFormId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString());
+
+                var request = new SetLocLabelsRequest
+                {
+                    EntityMoniker = new EntityReference("systemform", currentFormId),
+                    AttributeName = ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Name" ? "name" : "description"
+                };
+
+                var labels = new List<LocalizedLabel>();
+
+                var columnIndex = 4;
+                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                {
+                    var currentLcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
+                    labels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), currentLcid));
+                    columnIndex++;
+                }
+
+                request.Labels = labels.ToArray();
+
+                service.Execute(request);
+            }
+        }
+
+        public void ImportFormsContent(IOrganizationService service, List<Entity> forms)
+        {
+            foreach (var form in forms)
+            {
+                service.Update(form);
+            }
+        }
+
+        public void PrepareFormLabels(ExcelWorksheet sheet, IOrganizationService service, List<Entity> forms)
+        {
+            var rowsCount = sheet.Dimension.Rows;
+
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                var labelId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
+                var formId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString());
+
+                var form = forms.FirstOrDefault(f => f.Id == formId);
+                if (form == null)
+                {
+                    form = service.Retrieve("systemform", formId, new ColumnSet(new[] { "formxml" }));
+                    forms.Add(form);
+                }
+
+                // Load formxml
+                var formXml = form.GetAttributeValue<string>("formxml");
+                var docXml = new XmlDocument();
+                docXml.LoadXml(formXml);
+
+                var cellNode =
+                    docXml.DocumentElement.SelectSingleNode(
+                        string.Format("tabs/tab/columns/column/sections/section/rows/row/cell[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{0}']", labelId.ToLower()));
+                if (cellNode != null)
+                {
+                    var columnIndex = 8;
+                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    {
+                        UpdateXmlNode(cellNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
+                        columnIndex++;
+                    }
+                }
+
+                form["formxml"] = docXml.OuterXml;
+            }
+        }
+
+        public void PrepareFormSections(ExcelWorksheet sheet, IOrganizationService service, List<Entity> forms)
+        {
+            var rowsCount = sheet.Dimension.Rows;
+
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                var sectionId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
+                var formId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString());
+
+                var form = forms.FirstOrDefault(f => f.Id == formId);
+                if (form == null)
+                {
+                    form = service.Retrieve("systemform", formId, new ColumnSet(new[] { "formxml" }));
+                    forms.Add(form);
+                }
+
+                // Load formxml
+                var formXml = form.GetAttributeValue<string>("formxml");
+                var docXml = new XmlDocument();
+                docXml.LoadXml(formXml);
+
+                var sectionNode =
+                    docXml.DocumentElement.SelectSingleNode(
+                        string.Format("tabs/tab/columns/column/sections/section[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{0}']", sectionId.ToLower()));
+                if (sectionNode != null)
+                {
+                    var columnIndex = 6;
+                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    {
+                        UpdateXmlNode(sectionNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
+                        columnIndex++;
+                    }
+                }
+
+                form["formxml"] = docXml.OuterXml;
+            }
+        }
+
+        public void PrepareFormTabs(ExcelWorksheet sheet, IOrganizationService service, List<Entity> forms)
+        {
+            var rowsCount = sheet.Dimension.Rows;
+
+            for (var rowI = 1; rowI < rowsCount; rowI++)
+            {
+                var tabId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
+                var formId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString());
+
+                var form = forms.FirstOrDefault(f => f.Id == formId);
+                if (form == null)
+                {
+                    form = service.Retrieve("systemform", formId, new ColumnSet(new[] { "formxml" }));
+                    forms.Add(form);
+                }
+
+                // Load formxml
+                var formXml = form.GetAttributeValue<string>("formxml");
+                var docXml = new XmlDocument();
+                docXml.LoadXml(formXml);
+
+                var tabNode = docXml.DocumentElement.SelectSingleNode(string.Format("tabs/tab[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{0}']", tabId.ToLower()));
+                if (tabNode != null)
+                {
+                    var columnIndex = 5;
+                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    {
+                        UpdateXmlNode(tabNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
+                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
+                        columnIndex++;
+                    }
+                }
+
+                form["formxml"] = docXml.OuterXml;
+            }
+        }
+
         private static int ExportField(List<int> languages, ExcelWorksheet labelSheet, int line,
             CrmFormLabel crmFormLabel)
         {
@@ -301,52 +427,6 @@ namespace MsCrmTools.Translator.AppCode
                 bool exists = crmFormLabel.Names.ContainsKey(lcid);
                 ZeroBasedSheet.Cell(labelSheet, line, cell++).Value = exists
                     ? crmFormLabel.Names.First(n => n.Key == lcid).Value
-                    : string.Empty;
-            }
-
-            line++;
-            return line;
-        }
-
-        private static int ExportSection(List<int> languages, ExcelWorksheet sectionSheet, int line,
-            CrmFormSection crmFormSection)
-        {
-            var cell = 0;
-
-            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.Id.ToString("B");
-            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.Entity;
-            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.Form;
-            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.FormUniqueId.ToString("B");
-            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.FormId.ToString("B");
-            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.Tab;
-
-            foreach (var lcid in languages)
-            {
-                bool exists = crmFormSection.Names.ContainsKey(lcid);
-                ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = exists
-                    ? crmFormSection.Names.First(n => n.Key == lcid).Value
-                    : string.Empty;
-            }
-
-            line++;
-            return line;
-        }
-
-        private int ExportTab(List<int> languages, ExcelWorksheet tabSheet, int line, CrmFormTab crmFormTab)
-        {
-            var cell = 0;
-
-            ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = crmFormTab.Id.ToString("B");
-            ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = crmFormTab.Entity;
-            ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = crmFormTab.Form;
-            ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = crmFormTab.FormUniqueId.ToString("B");
-            ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = crmFormTab.FormId.ToString("B");
-
-            foreach (var lcid in languages)
-            {
-                bool exists = crmFormTab.Names.ContainsKey(lcid);
-                ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = exists
-                    ? crmFormTab.Names.First(n => n.Key == lcid).Value
                     : string.Empty;
             }
 
@@ -388,6 +468,119 @@ namespace MsCrmTools.Translator.AppCode
                 else
                     cell++;
             }
+            line++;
+            return line;
+        }
+
+        private static int ExportSection(List<int> languages, ExcelWorksheet sectionSheet, int line,
+            CrmFormSection crmFormSection)
+        {
+            var cell = 0;
+
+            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.Id.ToString("B");
+            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.Entity;
+            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.Form;
+            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.FormUniqueId.ToString("B");
+            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.FormId.ToString("B");
+            ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = crmFormSection.Tab;
+
+            foreach (var lcid in languages)
+            {
+                bool exists = crmFormSection.Names.ContainsKey(lcid);
+                ZeroBasedSheet.Cell(sectionSheet, line, cell++).Value = exists
+                    ? crmFormSection.Names.First(n => n.Key == lcid).Value
+                    : string.Empty;
+            }
+
+            line++;
+            return line;
+        }
+
+        private void AddFormHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
+        {
+            var cell = 0;
+
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Unique Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Type";
+
+            foreach (var lcid in languages)
+            {
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
+            }
+        }
+
+        private void AddFormLabelsHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
+        {
+            var cell = 0;
+
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Label Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Unique Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Tab Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Section Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Attribute";
+
+            foreach (var lcid in languages)
+            {
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
+            }
+        }
+
+        private void AddFormSectionHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
+        {
+            var cell = 0;
+
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Section Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Unique Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Tab Name";
+
+            foreach (var lcid in languages)
+            {
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
+            }
+        }
+
+        private void AddFormTabHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
+        {
+            var cell = 0;
+
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Tab Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Name";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Unique Id";
+            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Id";
+
+            foreach (var lcid in languages)
+            {
+                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
+            }
+        }
+
+        private int ExportTab(List<int> languages, ExcelWorksheet tabSheet, int line, CrmFormTab crmFormTab)
+        {
+            var cell = 0;
+
+            ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = crmFormTab.Id.ToString("B");
+            ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = crmFormTab.Entity;
+            ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = crmFormTab.Form;
+            ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = crmFormTab.FormUniqueId.ToString("B");
+            ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = crmFormTab.FormId.ToString("B");
+
+            foreach (var lcid in languages)
+            {
+                bool exists = crmFormTab.Names.ContainsKey(lcid);
+                ZeroBasedSheet.Cell(tabSheet, line, cell++).Value = exists
+                    ? crmFormTab.Names.First(n => n.Key == lcid).Value
+                    : string.Empty;
+            }
+
             line++;
             return line;
         }
@@ -529,297 +722,35 @@ namespace MsCrmTools.Translator.AppCode
             return tabName;
         }
 
-        public void ImportFormName(ExcelWorksheet sheet, IOrganizationService service)
+        private Entity GetCurrentUserSettings(IOrganizationService service)
         {
-#if NO_GEMBOX
-            var rowsCount = sheet.Dimension.Rows;
-            for (var rowI = 1; rowI < rowsCount; rowI++)
-            {
-                var currentFormId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString());
+            var qe = new QueryExpression("usersettings");
+            qe.ColumnSet = new ColumnSet(new[] { "uilanguageid", "localeid" });
+            qe.Criteria = new FilterExpression();
+            qe.Criteria.AddCondition("systemuserid", ConditionOperator.EqualUserId);
+            var settings = service.RetrieveMultiple(qe);
 
-                var request = new SetLocLabelsRequest
-                {
-                    EntityMoniker = new EntityReference("systemform", currentFormId),
-                    AttributeName = ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Name" ? "name" : "description"
-                };
-
-                var labels = new List<LocalizedLabel>();
-
-                var columnIndex = 4;
-                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
-                {
-                    var currentLcid = int.Parse(ZeroBasedSheet.Cell(sheet, 1, columnIndex).Value.ToString());
-                    labels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), currentLcid));
-                    columnIndex++;
-                }
-
-                request.Labels = labels.ToArray();
-
-                service.Execute(request);
-            }
-#else
-            foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
-            {
-                var currentFormId = new Guid(row.Cells[1].Value.ToString());
-
-                var request = new SetLocLabelsRequest
-                {
-                    EntityMoniker = new EntityReference("systemform", currentFormId),
-                    AttributeName = row.Cells[3].Value.ToString() == "Name" ? "name" : "description"
-                };
-
-                var labels = new List<LocalizedLabel>();
-
-                var columnIndex = 4;
-                while (row.Cells[columnIndex].Value != null)
-                {
-                    var currentLcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
-                    labels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(), currentLcid));
-                    columnIndex++;
-                }
-
-                request.Labels = labels.ToArray();
-
-                service.Execute(request);
-            }
-#endif
+            return settings[0];
         }
 
-#if NO_GEMBOX
-        public void PrepareFormTabs(ExcelWorksheet sheet, IOrganizationService service, List<Entity> forms)
+        private IEnumerable<Entity> RetrieveEntityFormList(string logicalName, IOrganizationService oService)
         {
-            var rowsCount = sheet.Dimension.Rows;
-
-            for (var rowI = 1; rowI < rowsCount; rowI++)
+            var qe = new QueryExpression("systemform")
             {
-                var tabId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
-                var formId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString());
-
-                var form = forms.FirstOrDefault(f => f.Id == formId);
-                if (form == null)
+                ColumnSet = new ColumnSet(true),
+                Criteria = new FilterExpression
                 {
-                    form = service.Retrieve("systemform", formId, new ColumnSet(new[] { "formxml" }));
-                    forms.Add(form);
-                }
-
-                // Load formxml
-                var formXml = form.GetAttributeValue<string>("formxml");
-                var docXml = new XmlDocument();
-                docXml.LoadXml(formXml);
-
-                var tabNode = docXml.DocumentElement.SelectSingleNode(string.Format("tabs/tab[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{0}']", tabId.ToLower()));
-                if (tabNode != null)
-                {
-                    var columnIndex = 5;
-                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    Conditions =
                     {
-                        UpdateXmlNode(tabNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
-                        columnIndex++;
+                        new ConditionExpression("objecttypecode", ConditionOperator.Equal, logicalName),
+                        new ConditionExpression("type", ConditionOperator.In, new[] {2, 7})
                     }
                 }
+            };
 
-                form["formxml"] = docXml.OuterXml;
-            }
-        }
-#else
-        public void PrepareFormTabs(ExcelWorksheet sheet, IOrganizationService service, List<Entity> forms)
-        {
-            foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
-            {
-                var tabId = row.Cells[0].Value.ToString();
-                var formId = new Guid(row.Cells[4].Value.ToString());
+            var ec = oService.RetrieveMultiple(qe);
 
-                var form = forms.FirstOrDefault(f => f.Id == formId);
-                if (form == null)
-                {
-                    form = service.Retrieve("systemform", formId, new ColumnSet(new[] {"formxml"}));
-                    forms.Add(form);
-                }
-
-                // Load formxml
-                var formXml = form.GetAttributeValue<string>("formxml");
-                var docXml = new XmlDocument();
-                docXml.LoadXml(formXml);
-
-                var tabNode = docXml.DocumentElement.SelectSingleNode(string.Format("tabs/tab[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{0}']", tabId.ToLower()));
-                if (tabNode != null)
-                {
-                    var columnIndex = 5;
-                    while (row.Cells[columnIndex].Value != null)
-                    {
-                        UpdateXmlNode(tabNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                            row.Cells[columnIndex].Value.ToString());
-                        columnIndex++;
-                    }
-                }
-
-                form["formxml"] = docXml.OuterXml;
-            }
-        }
-#endif
-
-#if NO_GEMBOX
-        public void PrepareFormSections(ExcelWorksheet sheet, IOrganizationService service, List<Entity> forms)
-        {
-            var rowsCount = sheet.Dimension.Rows;
-
-            for (var rowI = 1; rowI < rowsCount; rowI++)
-            {
-                var sectionId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
-                var formId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString());
-
-                var form = forms.FirstOrDefault(f => f.Id == formId);
-                if (form == null)
-                {
-                    form = service.Retrieve("systemform", formId, new ColumnSet(new[] { "formxml" }));
-                    forms.Add(form);
-                }
-
-                // Load formxml
-                var formXml = form.GetAttributeValue<string>("formxml");
-                var docXml = new XmlDocument();
-                docXml.LoadXml(formXml);
-
-                var sectionNode =
-                    docXml.DocumentElement.SelectSingleNode(
-                        string.Format("tabs/tab/columns/column/sections/section[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{0}']", sectionId.ToLower()));
-                if (sectionNode != null)
-                {
-                    var columnIndex = 6;
-                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
-                    {
-                        UpdateXmlNode(sectionNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
-                        columnIndex++;
-                    }
-                }
-
-                form["formxml"] = docXml.OuterXml;
-            }
-        }
-#else
-        public void PrepareFormSections(ExcelWorksheet sheet, IOrganizationService service, List<Entity> forms)
-        {
-            foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
-            {
-                var sectionId = row.Cells[0].Value.ToString();
-                var formId = new Guid(row.Cells[4].Value.ToString());
-
-                var form = forms.FirstOrDefault(f => f.Id == formId);
-                if (form == null)
-                {
-                    form = service.Retrieve("systemform", formId, new ColumnSet(new[] {"formxml"}));
-                    forms.Add(form);
-                }
-
-                // Load formxml
-                var formXml = form.GetAttributeValue<string>("formxml");
-                var docXml = new XmlDocument();
-                docXml.LoadXml(formXml);
-
-                var sectionNode =
-                    docXml.DocumentElement.SelectSingleNode(
-                        string.Format("tabs/tab/columns/column/sections/section[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{0}']", sectionId.ToLower()));
-                if (sectionNode != null)
-                {
-                    var columnIndex = 6;
-                    while (row.Cells[columnIndex].Value != null)
-                    {
-                        UpdateXmlNode(sectionNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                            row.Cells[columnIndex].Value.ToString());
-                        columnIndex++;
-                    }
-                }
-
-                form["formxml"] = docXml.OuterXml;
-            }
-        }
-#endif
-
-#if NO_GEMBOX
-        public void PrepareFormLabels(ExcelWorksheet sheet, IOrganizationService service, List<Entity> forms)
-        {
-            var rowsCount = sheet.Dimension.Rows;
-
-            for (var rowI = 1; rowI < rowsCount; rowI++)
-            {
-                var labelId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
-                var formId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString());
-
-                var form = forms.FirstOrDefault(f => f.Id == formId);
-                if (form == null)
-                {
-                    form = service.Retrieve("systemform", formId, new ColumnSet(new[] { "formxml" }));
-                    forms.Add(form);
-                }
-
-                // Load formxml
-                var formXml = form.GetAttributeValue<string>("formxml");
-                var docXml = new XmlDocument();
-                docXml.LoadXml(formXml);
-
-                var cellNode =
-                    docXml.DocumentElement.SelectSingleNode(
-                        string.Format("tabs/tab/columns/column/sections/section/rows/row/cell[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{0}']", labelId.ToLower()));
-                if (cellNode != null)
-                {
-                    var columnIndex = 8;
-                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
-                    {
-                        UpdateXmlNode(cellNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
-                        columnIndex++;
-                    }
-                }
-
-                form["formxml"] = docXml.OuterXml;
-            }
-        }
-#else
-        public void PrepareFormLabels(ExcelWorksheet sheet, IOrganizationService service, List<Entity> forms)
-        {
-            foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
-            {
-                var labelId = row.Cells[0].Value.ToString();
-                var formId = new Guid(row.Cells[4].Value.ToString());
-
-                var form = forms.FirstOrDefault(f => f.Id == formId);
-                if (form == null)
-                {
-                    form = service.Retrieve("systemform", formId, new ColumnSet(new[] {"formxml"}));
-                    forms.Add(form);
-                }
-
-                // Load formxml
-                var formXml = form.GetAttributeValue<string>("formxml");
-                var docXml = new XmlDocument();
-                docXml.LoadXml(formXml);
-
-                var cellNode =
-                    docXml.DocumentElement.SelectSingleNode(
-                        string.Format("tabs/tab/columns/column/sections/section/rows/row/cell[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='{0}']", labelId.ToLower()));
-                if (cellNode != null)
-                {
-                    var columnIndex = 8;
-                    while (row.Cells[columnIndex].Value != null)
-                    {
-                        UpdateXmlNode(cellNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                            row.Cells[columnIndex].Value.ToString());
-                        columnIndex++;
-                    }
-                }
-
-                form["formxml"] = docXml.OuterXml;
-            }
-        }
-#endif
-        public void ImportFormsContent(IOrganizationService service, List<Entity> forms)
-        {
-            foreach (var form in forms)
-            {
-                service.Update(form);
-            }
+            return ec.Entities;
         }
 
         private void UpdateXmlNode(XmlNode node, string lcid, string description)
@@ -845,93 +776,6 @@ namespace MsCrmTools.Translator.AppCode
             }
 
             labelNode.Attributes["description"].Value = description;
-        }
-
-        private IEnumerable<Entity> RetrieveEntityFormList(string logicalName, IOrganizationService oService)
-        {
-            var qe = new QueryExpression("systemform")
-            {
-                ColumnSet = new ColumnSet(true),
-                Criteria = new FilterExpression
-                {
-                    Conditions =
-                    {
-                        new ConditionExpression("objecttypecode", ConditionOperator.Equal, logicalName),
-                        new ConditionExpression("type", ConditionOperator.In, new[] {2, 7})
-                    }
-                }
-            };
-
-            var ec = oService.RetrieveMultiple(qe);
-
-            return ec.Entities;
-        }
-
-        private void AddFormHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
-        {
-            var cell = 0;
-
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Unique Id";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Id";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Type";
-
-            foreach (var lcid in languages)
-            {
-                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
-            }
-        }
-
-        private void AddFormTabHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
-        {
-            var cell = 0;
-
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Tab Id";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Name";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Unique Id";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Id";
-
-            foreach (var lcid in languages)
-            {
-                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
-            }
-        }
-
-        private void AddFormSectionHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
-        {
-            var cell = 0;
-
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Section Id";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Name";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Unique Id";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Id";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Tab Name";
-
-            foreach (var lcid in languages)
-            {
-                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
-            }
-        }
-
-        private void AddFormLabelsHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
-        {
-            var cell = 0;
-
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Label Id";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Entity Logical Name";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Name";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Unique Id";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Form Id";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Tab Name";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Section Name";
-            ZeroBasedSheet.Cell(sheet, 0, cell++).Value = "Attribute";
-
-            foreach (var lcid in languages)
-            {
-                ZeroBasedSheet.Cell(sheet, 0, cell++).Value = lcid.ToString(CultureInfo.InvariantCulture);
-            }
         }
     }
 }

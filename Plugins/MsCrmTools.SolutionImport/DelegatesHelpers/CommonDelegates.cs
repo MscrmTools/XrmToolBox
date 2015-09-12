@@ -9,40 +9,6 @@ namespace Tanguy.WinForm.Utilities.DelegatesHelpers
 {
     public class CommonDelegates
     {
-        internal static void SetEnableState(Control control, bool enabled)
-        {
-            MethodInvoker miSetEnableState = delegate
-            {
-                control.Enabled = enabled;
-            };
-
-            if (control.InvokeRequired)
-            {
-                control.Invoke(miSetEnableState);
-            }
-            else
-            {
-                miSetEnableState();
-            }
-        }
-
-        public static void SetCursor(Control control, Cursor cursor)
-        {
-            MethodInvoker miSetCursor = delegate
-            {
-                control.Cursor = cursor;
-            };
-
-            if (control.InvokeRequired)
-            {
-                control.Invoke(miSetCursor);
-            }
-            else
-            {
-                miSetCursor();
-            }
-        }
-
         public static DialogResult DisplayMessageBox(Form form, string message, string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
         {
             DialogResult result = DialogResult.Ignore;
@@ -64,6 +30,23 @@ namespace Tanguy.WinForm.Utilities.DelegatesHelpers
             }
         }
 
+        public static void SetCursor(Control control, Cursor cursor)
+        {
+            MethodInvoker miSetCursor = delegate
+            {
+                control.Cursor = cursor;
+            };
+
+            if (control.InvokeRequired)
+            {
+                control.Invoke(miSetCursor);
+            }
+            else
+            {
+                miSetCursor();
+            }
+        }
+
         public static void SetFocus(Control control)
         {
             MethodInvoker miSetFocus = delegate
@@ -78,6 +61,23 @@ namespace Tanguy.WinForm.Utilities.DelegatesHelpers
             else
             {
                 miSetFocus();
+            }
+        }
+
+        internal static void SetEnableState(Control control, bool enabled)
+        {
+            MethodInvoker miSetEnableState = delegate
+            {
+                control.Enabled = enabled;
+            };
+
+            if (control.InvokeRequired)
+            {
+                control.Invoke(miSetEnableState);
+            }
+            else
+            {
+                miSetEnableState();
             }
         }
     }

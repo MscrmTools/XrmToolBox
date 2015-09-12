@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{28F6D950-BC28-4067-98AF-5D6AE70E90A7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MsCrmTools.FormRelated</RootNamespace>
+    <AssemblyName>MsCrmTools.FormRelated</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Crm.Sdk.Proxy">
+      <HintPath>..\..\Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Sdk">
+      <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Sdk.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FormAttributeManager\AppCode\AttributeClass.cs" />
+    <Compile Include="FormAttributeManager\AppCode\AttributeInfo.cs" />
+    <Compile Include="FormAttributeManager\AppCode\AttributeSelectedEventArgs.cs" />
+    <Compile Include="FormAttributeManager\AppCode\CellInfo.cs" />
+    <Compile Include="FormAttributeManager\AppCode\EntityInfo.cs" />
+    <Compile Include="FormAttributeManager\AppCode\EntitySelectedEventArgs.cs" />
+    <Compile Include="FormAttributeManager\AppCode\FormInfo.cs" />
+    <Compile Include="FormAttributeManager\AppCode\FormManager.cs" />
+    <Compile Include="FormAttributeManager\AppCode\ListViewItemComparer.cs" />
+    <Compile Include="FormAttributeManager\Forms\ReferenceAttributeSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAttributeManager\Forms\ReferenceAttributeSelector.Designer.cs">
+      <DependentUpon>ReferenceAttributeSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAttributeManager\Forms\UpdateLabelDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAttributeManager\Forms\UpdateLabelDialog.Designer.cs">
+      <DependentUpon>UpdateLabelDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAttributeManager\MainControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormAttributeManager\MainControl.Designer.cs">
+      <DependentUpon>MainControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAttributeManager\Plugin.cs" />
+    <Compile Include="FormAttributeManager\UserControls\AttributeSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormAttributeManager\UserControls\AttributeSelector.Designer.cs">
+      <DependentUpon>AttributeSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormLibrariesManager\AppCode\FormManager.cs" />
+    <Compile Include="FormLibrariesManager\AppCode\ListViewDelegates.cs" />
+    <Compile Include="FormLibrariesManager\AppCode\ListViewItemComparer.cs" />
+    <Compile Include="FormLibrariesManager\AppCode\ScriptManager.cs" />
+    <Compile Include="FormLibrariesManager\AppCode\TreeNodeSorter.cs" />
+    <Compile Include="FormLibrariesManager\AppCode\TreeViewDelegates.cs" />
+    <Compile Include="FormLibrariesManager\Forms\ScriptsOrderDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormLibrariesManager\Forms\ScriptsOrderDialog.Designer.cs">
+      <DependentUpon>ScriptsOrderDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormLibrariesManager\MainControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormLibrariesManager\MainControl.Designer.cs">
+      <DependentUpon>MainControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormLibrariesManager\Plugin.cs" />
+    <Compile Include="FormLibrariesManager\UserControls\CrmForms.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormLibrariesManager\UserControls\CrmForms.Designer.cs">
+      <DependentUpon>CrmForms.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormLibrariesManager\UserControls\CrmScriptsTreeView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormLibrariesManager\UserControls\CrmScriptsTreeView.Designer.cs">
+      <DependentUpon>CrmScriptsTreeView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormParameterManager\AppCode\CrmForm.cs" />
+    <Compile Include="FormParameterManager\AppCode\CrmSolution.cs" />
+    <Compile Include="FormParameterManager\AppCode\FormParameter.cs" />
+    <Compile Include="FormParameterManager\AppCode\ListViewItemComparer.cs" />
+    <Compile Include="FormParameterManager\Forms\ParameterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormParameterManager\Forms\ParameterForm.Designer.cs">
+      <DependentUpon>ParameterForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormParameterManager\MainControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FormParameterManager\MainControl.Designer.cs">
+      <DependentUpon>MainControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormParameterManager\Plugin.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="FormAttributeManager\Forms\ReferenceAttributeSelector.resx">
+      <DependentUpon>ReferenceAttributeSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAttributeManager\Forms\UpdateLabelDialog.resx">
+      <DependentUpon>UpdateLabelDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAttributeManager\MainControl.resx">
+      <DependentUpon>MainControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAttributeManager\UserControls\AttributeSelector.resx">
+      <DependentUpon>AttributeSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLibrariesManager\Forms\ScriptsOrderDialog.resx">
+      <DependentUpon>ScriptsOrderDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLibrariesManager\MainControl.resx">
+      <DependentUpon>MainControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLibrariesManager\UserControls\CrmForms.resx">
+      <DependentUpon>CrmForms.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLibrariesManager\UserControls\CrmScriptsTreeView.resx">
+      <DependentUpon>CrmScriptsTreeView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormParameterManager\Forms\ParameterForm.resx">
+      <DependentUpon>ParameterForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormParameterManager\MainControl.resx">
+      <DependentUpon>MainControl.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\XrmToolBox.Extensibility\XrmToolBox.Extensibility.csproj">
+      <Project>{df77aea3-43f7-403c-91af-3023a3bb06ec}</Project>
+      <Name>XrmToolBox.Extensibility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y "$(TargetPath)" "$(SolutionDir)XrmToolBox\$(OutDir)Plugins\"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

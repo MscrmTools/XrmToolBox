@@ -28,57 +28,6 @@ namespace Tanguy.WinForm.Utilities.DelegatesHelpers
                 }
             }
 
-            public static void InsertItem(ListBox listbox, int index, object item)
-            {
-                MethodInvoker miInsertItem = delegate
-                {
-                    listbox.Items.Insert(index, item);
-                };
-
-                if (listbox.InvokeRequired)
-                {
-                    listbox.Invoke(miInsertItem);
-                }
-                else
-                {
-                    miInsertItem();
-                }
-            }
-
-            public static void RemoveItem(ListBox listbox, object item)
-            {
-                MethodInvoker miRemoveItem = delegate
-                {
-                    listbox.Items.Remove(item);
-                };
-
-                if (listbox.InvokeRequired)
-                {
-                    listbox.Invoke(miRemoveItem);
-                }
-                else
-                {
-                    miRemoveItem();
-                }
-            }
-
-            public static void RemoveItemAt(ListBox listbox, int index)
-            {
-                MethodInvoker miRemoveItem = delegate
-                {
-                    listbox.Items.RemoveAt(index);
-                };
-
-                if (listbox.InvokeRequired)
-                {
-                    listbox.Invoke(miRemoveItem);
-                }
-                else
-                {
-                    miRemoveItem();
-                }
-            }
-
             public static void ClearItems(ListBox listbox)
             {
                 MethodInvoker miClearItems = delegate
@@ -157,6 +106,57 @@ namespace Tanguy.WinForm.Utilities.DelegatesHelpers
                 }
 
                 return text;
+            }
+
+            public static void InsertItem(ListBox listbox, int index, object item)
+            {
+                MethodInvoker miInsertItem = delegate
+                {
+                    listbox.Items.Insert(index, item);
+                };
+
+                if (listbox.InvokeRequired)
+                {
+                    listbox.Invoke(miInsertItem);
+                }
+                else
+                {
+                    miInsertItem();
+                }
+            }
+
+            public static void RemoveItem(ListBox listbox, object item)
+            {
+                MethodInvoker miRemoveItem = delegate
+                {
+                    listbox.Items.Remove(item);
+                };
+
+                if (listbox.InvokeRequired)
+                {
+                    listbox.Invoke(miRemoveItem);
+                }
+                else
+                {
+                    miRemoveItem();
+                }
+            }
+
+            public static void RemoveItemAt(ListBox listbox, int index)
+            {
+                MethodInvoker miRemoveItem = delegate
+                {
+                    listbox.Items.RemoveAt(index);
+                };
+
+                if (listbox.InvokeRequired)
+                {
+                    listbox.Invoke(miRemoveItem);
+                }
+                else
+                {
+                    miRemoveItem();
+                }
             }
 
             public static void SetEnableState(ListBox listbox, bool enabled)

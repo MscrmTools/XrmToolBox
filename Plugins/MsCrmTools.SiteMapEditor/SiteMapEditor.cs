@@ -3,14 +3,6 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Drawing;
-using System.IO;
-using System.Reflection;
-using System.Windows.Forms;
-using System.Xml;
 using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
@@ -21,19 +13,24 @@ using MsCrmTools.SiteMapEditor.AppCode;
 using MsCrmTools.SiteMapEditor.Controls;
 using MsCrmTools.SiteMapEditor.Forms;
 using SiteMapEditor.Controls;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Reflection;
+using System.Windows.Forms;
+using System.Xml;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 using Clipboard = MsCrmTools.SiteMapEditor.AppCode.Clipboard;
 
 namespace MsCrmTools.SiteMapEditor
 {
     public partial class SiteMapEditor : PluginControlBase
     {
+        internal Clipboard clipboard = new Clipboard();
         internal List<EntityMetadata> entityCache;
         internal List<Entity> webResourcesHtmlCache;
         internal List<Entity> webResourcesImageCache;
-        internal Clipboard clipboard = new Clipboard();
-
         private Entity siteMap;
         private XmlDocument siteMapDoc;
 
@@ -43,153 +40,6 @@ namespace MsCrmTools.SiteMapEditor
         }
 
         #region Main ToolStrip Menu
-
-        private void TsbMainOpenSiteMapClick(object sender, EventArgs e)
-        {
-            ExecuteMethod(LoadSiteMap);
-        }
-
-        private void TsbMainImportClick(object sender, EventArgs e)
-        {
-            ExecuteMethod(UpdateSiteMap);
-        }
-
-        private void ToolStripButtonLoadSiteMapFromDiskClick(object sender, EventArgs e)
-        {
-            var ofd = new OpenFileDialog
-            {
-                Title = "Select a Xml file representing a SiteMap",
-                Filter = "Xml file (*.xml)|*.xml"
-            };
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                EnableControls(false);
-
-                siteMapDoc = new XmlDocument();
-                siteMapDoc.Load(ofd.FileName);
-
-                if (siteMapDoc.DocumentElement.Name != "SiteMap" ||
-                    siteMapDoc.DocumentElement.ChildNodes.Count > 0 &&
-                    siteMapDoc.DocumentElement.ChildNodes[0].Name == "SiteMap")
-                {
-                    MessageBox.Show(this, "Invalid Xml: SiteMap Xml root must be SiteMap!", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                    tsbMainOpenSiteMap.Enabled = true;
-                    toolStripButtonLoadSiteMapFromDisk.Enabled = true;
-                }
-                else
-                {
-                    if (Service != null && entityCache == null)
-                    {
-                        WorkAsync("Loading Entities...",
-                            (bw, evt) =>
-                            {
-                                // Recherche des métadonnées
-                                entityCache = new List<EntityMetadata>();
-                                webResourcesHtmlCache = new List<Entity>();
-
-                                var request = new RetrieveAllEntitiesRequest
-                                {
-                                    EntityFilters = EntityFilters.Entity
-                                };
-
-                                var response = (RetrieveAllEntitiesResponse) Service.Execute(request);
-
-                                foreach (var emd in response.EntityMetadata)
-                                {
-                                    entityCache.Add(emd);
-                                }
-                                // Fin Recherche des métadonnées
-
-                                bw.ReportProgress(0, "Loading web resources...");
-                                // Rercherche des images
-
-                                webResourcesImageCache = new List<Entity>();
-
-                                var wrQuery = new QueryExpression("webresource");
-                                wrQuery.Criteria.AddCondition("webresourcetype", ConditionOperator.In,
-                                    new object[] {2, 5, 6, 7});
-                                wrQuery.ColumnSet.AllColumns = true;
-
-                                EntityCollection results = Service.RetrieveMultiple(wrQuery);
-
-                                foreach (Entity webresource in results.Entities)
-                                {
-                                    if (webresource.GetAttributeValue<OptionSetValue>("webresourcetype").Value == 2)
-                                    {
-                                        webResourcesHtmlCache.Add(webresource);
-                                    }
-                                    else
-                                    {
-                                        webResourcesImageCache.Add(webresource);
-                                    }
-                                }
-                            },
-                            evt =>
-                            {
-                                DisplaySiteMap();
-                                EnableControls(true);
-                            },
-                            evt => SetWorkingMessage(evt.UserState.ToString()));
-                    }
-                    else
-                    {
-                        DisplaySiteMap();
-                        EnableControls(true);
-                    }
-                }
-            }
-        }
-
-        private void ToolStripButtonSaveSiteMapToDiskClick(object sender, EventArgs e)
-        {
-            var sfd = new SaveFileDialog
-            {
-                Title = "Select a location to save the SiteMap as a Xml file",
-                Filter = "Xml file (*.xml)|*.xml",
-                FileName = "SiteMap.xml"
-            };
-
-            if (sfd.ShowDialog() == DialogResult.OK)
-            {
-                EnableControls(false);
-
-                // Build the Xml SiteMap from SiteMap TreeView
-                var doc = new XmlDocument();
-                XmlNode rootNode = doc.CreateElement("SiteMap");
-                doc.AppendChild(rootNode);
-
-                AddXmlNode(tvSiteMap.Nodes[0], rootNode);
-
-                if (siteMap != null)
-                {
-                    siteMap["sitemapxml"] = doc.SelectSingleNode("SiteMap/SiteMap").OuterXml;
-                }
-
-                siteMapDoc.LoadXml(doc.SelectSingleNode("SiteMap/SiteMap").OuterXml);
-
-                siteMapDoc.Save(sfd.FileName);
-
-                EnableControls(true);
-
-                MessageBox.Show(this, "SiteMap saved!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-        private void ResetSiteMapToDefaultToolStripMenuItemClick(object sender, EventArgs e)
-        {
-            if (ConnectionDetail.OrganizationMajorVersion != 5)
-            {
-                if (DialogResult.No == MessageBox.Show(this,
-                    "Your current organization is not a CRM 2011 organization! Are you sure you want to continue?",
-                    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
-                    return;
-            }
-
-            ResetSiteMap(2011);
-        }
 
         private void resetCRM2013SiteMapToDefaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -257,9 +107,297 @@ namespace MsCrmTools.SiteMapEditor
             }
         }
 
+        private void ResetSiteMapToDefaultToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            if (ConnectionDetail.OrganizationMajorVersion != 5)
+            {
+                if (DialogResult.No == MessageBox.Show(this,
+                    "Your current organization is not a CRM 2011 organization! Are you sure you want to continue?",
+                    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                    return;
+            }
+
+            ResetSiteMap(2011);
+        }
+
+        private void ToolStripButtonLoadSiteMapFromDiskClick(object sender, EventArgs e)
+        {
+            var ofd = new OpenFileDialog
+            {
+                Title = "Select a Xml file representing a SiteMap",
+                Filter = "Xml file (*.xml)|*.xml"
+            };
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                EnableControls(false);
+
+                siteMapDoc = new XmlDocument();
+                siteMapDoc.Load(ofd.FileName);
+
+                if (siteMapDoc.DocumentElement.Name != "SiteMap" ||
+                    siteMapDoc.DocumentElement.ChildNodes.Count > 0 &&
+                    siteMapDoc.DocumentElement.ChildNodes[0].Name == "SiteMap")
+                {
+                    MessageBox.Show(this, "Invalid Xml: SiteMap Xml root must be SiteMap!", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    tsbMainOpenSiteMap.Enabled = true;
+                    toolStripButtonLoadSiteMapFromDisk.Enabled = true;
+                }
+                else
+                {
+                    if (Service != null && entityCache == null)
+                    {
+                        WorkAsync("Loading Entities...",
+                            (bw, evt) =>
+                            {
+                                // Recherche des métadonnées
+                                entityCache = new List<EntityMetadata>();
+                                webResourcesHtmlCache = new List<Entity>();
+
+                                var request = new RetrieveAllEntitiesRequest
+                                {
+                                    EntityFilters = EntityFilters.Entity
+                                };
+
+                                var response = (RetrieveAllEntitiesResponse)Service.Execute(request);
+
+                                foreach (var emd in response.EntityMetadata)
+                                {
+                                    entityCache.Add(emd);
+                                }
+                                // Fin Recherche des métadonnées
+
+                                bw.ReportProgress(0, "Loading web resources...");
+                                // Rercherche des images
+
+                                webResourcesImageCache = new List<Entity>();
+
+                                var wrQuery = new QueryExpression("webresource");
+                                wrQuery.Criteria.AddCondition("webresourcetype", ConditionOperator.In,
+                                    new object[] { 2, 5, 6, 7 });
+                                wrQuery.ColumnSet.AllColumns = true;
+
+                                EntityCollection results = Service.RetrieveMultiple(wrQuery);
+
+                                foreach (Entity webresource in results.Entities)
+                                {
+                                    if (webresource.GetAttributeValue<OptionSetValue>("webresourcetype").Value == 2)
+                                    {
+                                        webResourcesHtmlCache.Add(webresource);
+                                    }
+                                    else
+                                    {
+                                        webResourcesImageCache.Add(webresource);
+                                    }
+                                }
+                            },
+                            evt =>
+                            {
+                                DisplaySiteMap();
+                                EnableControls(true);
+                            },
+                            evt => SetWorkingMessage(evt.UserState.ToString()));
+                    }
+                    else
+                    {
+                        DisplaySiteMap();
+                        EnableControls(true);
+                    }
+                }
+            }
+        }
+
+        private void ToolStripButtonSaveSiteMapToDiskClick(object sender, EventArgs e)
+        {
+            var sfd = new SaveFileDialog
+            {
+                Title = "Select a location to save the SiteMap as a Xml file",
+                Filter = "Xml file (*.xml)|*.xml",
+                FileName = "SiteMap.xml"
+            };
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                EnableControls(false);
+
+                // Build the Xml SiteMap from SiteMap TreeView
+                var doc = new XmlDocument();
+                XmlNode rootNode = doc.CreateElement("SiteMap");
+                doc.AppendChild(rootNode);
+
+                AddXmlNode(tvSiteMap.Nodes[0], rootNode);
+
+                if (siteMap != null)
+                {
+                    siteMap["sitemapxml"] = doc.SelectSingleNode("SiteMap/SiteMap").OuterXml;
+                }
+
+                siteMapDoc.LoadXml(doc.SelectSingleNode("SiteMap/SiteMap").OuterXml);
+
+                siteMapDoc.Save(sfd.FileName);
+
+                EnableControls(true);
+
+                MessageBox.Show(this, "SiteMap saved!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void TsbMainImportClick(object sender, EventArgs e)
+        {
+            ExecuteMethod(UpdateSiteMap);
+        }
+
+        private void TsbMainOpenSiteMapClick(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadSiteMap);
+        }
+
         #endregion Main ToolStrip Menu
 
         #region TreeView ToolStrip Menu
+
+        private void ToolStripButtonAddXmlClick(object sender, EventArgs e)
+        {
+            try
+            {
+                TreeNode selectedNode = tvSiteMap.SelectedNode;
+
+                var axForm = new AddXmlForm();
+                axForm.StartPosition = FormStartPosition.CenterParent;
+
+                if (axForm.ShowDialog() == DialogResult.OK)
+                {
+                    XmlNode resultNode = axForm.AddedXmlNode;
+
+                    switch (resultNode.Name)
+                    {
+                        case "Area":
+                            {
+                                if (!selectedNode.Text.StartsWith("SiteMap"))
+                                {
+                                    throw new Exception(
+                                        "Invalid Xml content for SiteMap node!\r\n\r\n'Area' Xml content is allowed only for 'SiteMap'.");
+                                }
+                            }
+                            break;
+
+                        case "Group":
+                            {
+                                if (!selectedNode.Text.StartsWith("Area"))
+                                {
+                                    throw new Exception(
+                                        "Invalid Xml content for Area node!\r\n\r\n'Group' Xml content is allowed only for 'Area'.");
+                                }
+                            }
+                            break;
+
+                        case "SubArea":
+                            {
+                                if (!selectedNode.Text.StartsWith("Group"))
+                                {
+                                    throw new Exception(
+                                        "Invalid Xml content for Group node!\r\n\r\n'SubArea' Xml content is allowed only for 'Group'.");
+                                }
+                            }
+                            break;
+
+                        case "Titles":
+                            {
+                                if (!selectedNode.Text.StartsWith("Group") && !selectedNode.Text.StartsWith("SubArea") &&
+                                    !selectedNode.Text.StartsWith("Area"))
+                                {
+                                    throw new Exception("Invalid Xml content for " + selectedNode.Text.Split(' ')[0] +
+                                                        " node!\r\n\r\n'Titles' Xml content is allowed only for 'Area', 'Group' and 'SubArea'.");
+                                }
+                            }
+                            break;
+
+                        case "Descriptions":
+                            {
+                                if (!selectedNode.Text.StartsWith("Group") && !selectedNode.Text.StartsWith("SubArea") &&
+                                    !selectedNode.Text.StartsWith("Area"))
+                                {
+                                    throw new Exception("Invalid Xml content for " + selectedNode.Text.Split(' ')[0] +
+                                                        " node!\r\n\r\n'Descriptions' Xml content is allowed only for 'Area', 'Group' and 'SubArea'.");
+                                }
+                            }
+                            break;
+
+                        case "Title":
+                            {
+                                if (!selectedNode.Text.StartsWith("Titles"))
+                                {
+                                    throw new Exception(
+                                        "Invalid Xml content for Titles node!\r\n\r\n'Title' Xml content is allowed only for 'Titles'.");
+                                }
+                            }
+                            break;
+
+                        case "Description":
+                            {
+                                if (!selectedNode.Text.StartsWith("Descriptions"))
+                                {
+                                    throw new Exception(
+                                        "Invalid Xml content for Descriptions node!\r\n\r\n'Description' Xml content is allowed only for 'Descriptions'.");
+                                }
+                            }
+                            break;
+
+                        case "Privilege":
+                            {
+                                if (!selectedNode.Text.StartsWith("SubArea"))
+                                {
+                                    throw new Exception(
+                                        "Invalid Xml content for SubArea node!\r\n\r\n'Privilege' Xml content is allowed only for 'SubArea'.");
+                                }
+                            }
+                            break;
+
+                        default:
+                            throw new Exception("Unsupported Xml content!");
+                    }
+
+                    TreeNodeHelper.AddTreeViewNode(selectedNode, resultNode, this);
+                }
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(this, error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ToolStripButtonDeleteClick(object sender, EventArgs e)
+        {
+            tvSiteMap.SelectedNode.Remove();
+        }
+
+        private void ToolStripButtonDisplayXmlClick(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = tvSiteMap.SelectedNode;
+            var collec = (Dictionary<string, string>)selectedNode.Tag;
+
+            var doc = new XmlDocument();
+            doc.AppendChild(doc.CreateElement(selectedNode.Text.Split(' ')[0]));
+
+            foreach (string key in collec.Keys)
+            {
+                XmlAttribute attr = doc.CreateAttribute(key);
+                attr.Value = collec[key];
+
+                doc.DocumentElement.Attributes.Append(attr);
+            }
+
+            foreach (TreeNode node in selectedNode.Nodes)
+            {
+                AddXmlNode(node, doc.DocumentElement);
+            }
+
+            var xcdDialog = new XmlContentDisplayDialog(doc.OuterXml);
+            xcdDialog.StartPosition = FormStartPosition.CenterParent;
+            xcdDialog.ShowDialog();
+        }
 
         private void ToolStripButtonMoveDownClick(object sender, EventArgs e)
         {
@@ -315,245 +453,9 @@ namespace MsCrmTools.SiteMapEditor
             toolStripButtonMoveUp.Enabled = true;
         }
 
-        private void ToolStripButtonDeleteClick(object sender, EventArgs e)
-        {
-            tvSiteMap.SelectedNode.Remove();
-        }
-
-        private void ToolStripButtonDisplayXmlClick(object sender, EventArgs e)
-        {
-            TreeNode selectedNode = tvSiteMap.SelectedNode;
-            var collec = (Dictionary<string, string>) selectedNode.Tag;
-
-            var doc = new XmlDocument();
-            doc.AppendChild(doc.CreateElement(selectedNode.Text.Split(' ')[0]));
-
-            foreach (string key in collec.Keys)
-            {
-                XmlAttribute attr = doc.CreateAttribute(key);
-                attr.Value = collec[key];
-
-                doc.DocumentElement.Attributes.Append(attr);
-            }
-
-            foreach (TreeNode node in selectedNode.Nodes)
-            {
-                AddXmlNode(node, doc.DocumentElement);
-            }
-
-            var xcdDialog = new XmlContentDisplayDialog(doc.OuterXml);
-            xcdDialog.StartPosition = FormStartPosition.CenterParent;
-            xcdDialog.ShowDialog();
-        }
-
-        private void ToolStripButtonAddXmlClick(object sender, EventArgs e)
-        {
-            try
-            {
-                TreeNode selectedNode = tvSiteMap.SelectedNode;
-
-                var axForm = new AddXmlForm();
-                axForm.StartPosition = FormStartPosition.CenterParent;
-
-                if (axForm.ShowDialog() == DialogResult.OK)
-                {
-                    XmlNode resultNode = axForm.AddedXmlNode;
-
-                    switch (resultNode.Name)
-                    {
-                        case "Area":
-                        {
-                            if (!selectedNode.Text.StartsWith("SiteMap"))
-                            {
-                                throw new Exception(
-                                    "Invalid Xml content for SiteMap node!\r\n\r\n'Area' Xml content is allowed only for 'SiteMap'.");
-                            }
-                        }
-                            break;
-                        case "Group":
-                        {
-                            if (!selectedNode.Text.StartsWith("Area"))
-                            {
-                                throw new Exception(
-                                    "Invalid Xml content for Area node!\r\n\r\n'Group' Xml content is allowed only for 'Area'.");
-                            }
-                        }
-                            break;
-                        case "SubArea":
-                        {
-                            if (!selectedNode.Text.StartsWith("Group"))
-                            {
-                                throw new Exception(
-                                    "Invalid Xml content for Group node!\r\n\r\n'SubArea' Xml content is allowed only for 'Group'.");
-                            }
-                        }
-                            break;
-                        case "Titles":
-                        {
-                            if (!selectedNode.Text.StartsWith("Group") && !selectedNode.Text.StartsWith("SubArea") &&
-                                !selectedNode.Text.StartsWith("Area"))
-                            {
-                                throw new Exception("Invalid Xml content for " + selectedNode.Text.Split(' ')[0] +
-                                                    " node!\r\n\r\n'Titles' Xml content is allowed only for 'Area', 'Group' and 'SubArea'.");
-                            }
-                        }
-                            break;
-                        case "Descriptions":
-                        {
-                            if (!selectedNode.Text.StartsWith("Group") && !selectedNode.Text.StartsWith("SubArea") &&
-                                !selectedNode.Text.StartsWith("Area"))
-                            {
-                                throw new Exception("Invalid Xml content for " + selectedNode.Text.Split(' ')[0] +
-                                                    " node!\r\n\r\n'Descriptions' Xml content is allowed only for 'Area', 'Group' and 'SubArea'.");
-                            }
-                        }
-                            break;
-                        case "Title":
-                        {
-                            if (!selectedNode.Text.StartsWith("Titles"))
-                            {
-                                throw new Exception(
-                                    "Invalid Xml content for Titles node!\r\n\r\n'Title' Xml content is allowed only for 'Titles'.");
-                            }
-                        }
-                            break;
-                        case "Description":
-                        {
-                            if (!selectedNode.Text.StartsWith("Descriptions"))
-                            {
-                                throw new Exception(
-                                    "Invalid Xml content for Descriptions node!\r\n\r\n'Description' Xml content is allowed only for 'Descriptions'.");
-                            }
-                        }
-                            break;
-                        case "Privilege":
-                        {
-                            if (!selectedNode.Text.StartsWith("SubArea"))
-                            {
-                                throw new Exception(
-                                    "Invalid Xml content for SubArea node!\r\n\r\n'Privilege' Xml content is allowed only for 'SubArea'.");
-                            }
-                        }
-                            break;
-                        default:
-                            throw new Exception("Unsupported Xml content!");
-                    }
-
-                    TreeNodeHelper.AddTreeViewNode(selectedNode, resultNode, this);
-                }
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show(this, error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
         #endregion TreeView ToolStrip Menu
 
         #region TreeView Handlers
-
-        private void TvSiteMapNodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-            TreeNode selectedNode = e.Node;
-            selectedNode.TreeView.SelectedNode = selectedNode;
-            var collec = (Dictionary<string, string>) selectedNode.Tag;
-
-            TreeNodeHelper.AddContextMenu(e.Node, this);
-            Control existingControl = panelContainer.Controls.Count > 0 ? panelContainer.Controls[0] : null;
-
-            switch (selectedNode.Text.Split(' ')[0])
-            {
-                case "SiteMap":
-                {
-                    var ctrl = new SiteMapControl(collec);
-                    ctrl.Saved += CtrlSaved;
-
-                    panelContainer.Controls.Add(ctrl);
-                    ctrl.BringToFront();
-                    if (existingControl != null) panelContainer.Controls.Remove(existingControl);
-                    tsbItemSave.Visible = true;
-                }
-                    break;
-                case "Area":
-                {
-                    if (collec.Count == 0) collec.Add("Id", string.Format("tempId_{0}", DateTime.Now.Ticks));
-                    var ctrl = new AreaControl(collec, webResourcesImageCache, webResourcesHtmlCache, Service);
-                    ctrl.Saved += CtrlSaved;
-
-                    panelContainer.Controls.Add(ctrl);
-                    ctrl.BringToFront();
-                    if (existingControl != null) panelContainer.Controls.Remove(existingControl);
-                    tsbItemSave.Visible = true;
-                }
-                    break;
-                case "SubArea":
-                {
-                    if (collec.Count == 0) collec.Add("Id", string.Format("tempId_{0}", DateTime.Now.Ticks));
-                    var ctrl = new SubAreaControl(collec, entityCache, webResourcesImageCache, webResourcesHtmlCache,
-                        Service);
-                    ctrl.Saved += CtrlSaved;
-
-                    panelContainer.Controls.Add(ctrl);
-                    ctrl.BringToFront();
-                    if (existingControl != null) panelContainer.Controls.Remove(existingControl);
-                    tsbItemSave.Visible = true;
-                }
-                    break;
-                case "Group":
-                {
-                    if (collec.Count == 0) collec.Add("Id", string.Format("tempId_{0}", DateTime.Now.Ticks));
-                    var ctrl = new GroupControl(collec);
-                    ctrl.Saved += CtrlSaved;
-
-                    panelContainer.Controls.Add(ctrl);
-                    ctrl.BringToFront();
-                    if (existingControl != null) panelContainer.Controls.Remove(existingControl);
-                    tsbItemSave.Visible = true;
-                }
-                    break;
-                case "Privilege":
-                {
-                    var ctrl = new PrivilegeControl(collec);
-                    ctrl.Saved += CtrlSaved;
-
-                    panelContainer.Controls.Add(ctrl);
-                    ctrl.BringToFront();
-                    if (existingControl != null) panelContainer.Controls.Remove(existingControl);
-                    tsbItemSave.Visible = true;
-                }
-                    break;
-                case "Description":
-                {
-                    var ctrl = new DescriptionControl(collec);
-                    ctrl.Saved += CtrlSaved;
-
-                    panelContainer.Controls.Add(ctrl);
-                    ctrl.BringToFront();
-                    if (existingControl != null) panelContainer.Controls.Remove(existingControl);
-                    tsbItemSave.Visible = true;
-                }
-                    break;
-                case "Title":
-                {
-                    var ctrl = new TitleControl(collec);
-                    ctrl.Saved += CtrlSaved;
-
-                    panelContainer.Controls.Add(ctrl);
-                    ctrl.BringToFront();
-                    if (existingControl != null) panelContainer.Controls.Remove(existingControl);
-                    tsbItemSave.Visible = true;
-                }
-                    break;
-                default:
-                {
-                    panelContainer.Controls.Clear();
-                    tsbItemSave.Visible = false;
-                }
-                    break;
-            }
-
-            ManageMenuDisplay();
-        }
 
         private void TvSiteMapAfterSelect(object sender, TreeViewEventArgs e)
         {
@@ -600,24 +502,134 @@ namespace MsCrmTools.SiteMapEditor
                 clipboard.Paste(tvSiteMap.SelectedNode);
         }
 
+        private void TvSiteMapNodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            TreeNode selectedNode = e.Node;
+            selectedNode.TreeView.SelectedNode = selectedNode;
+            var collec = (Dictionary<string, string>)selectedNode.Tag;
+
+            TreeNodeHelper.AddContextMenu(e.Node, this);
+            Control existingControl = panelContainer.Controls.Count > 0 ? panelContainer.Controls[0] : null;
+
+            switch (selectedNode.Text.Split(' ')[0])
+            {
+                case "SiteMap":
+                    {
+                        var ctrl = new SiteMapControl(collec);
+                        ctrl.Saved += CtrlSaved;
+
+                        panelContainer.Controls.Add(ctrl);
+                        ctrl.BringToFront();
+                        if (existingControl != null) panelContainer.Controls.Remove(existingControl);
+                        tsbItemSave.Visible = true;
+                    }
+                    break;
+
+                case "Area":
+                    {
+                        if (collec.Count == 0) collec.Add("Id", string.Format("tempId_{0}", DateTime.Now.Ticks));
+                        var ctrl = new AreaControl(collec, webResourcesImageCache, webResourcesHtmlCache, Service);
+                        ctrl.Saved += CtrlSaved;
+
+                        panelContainer.Controls.Add(ctrl);
+                        ctrl.BringToFront();
+                        if (existingControl != null) panelContainer.Controls.Remove(existingControl);
+                        tsbItemSave.Visible = true;
+                    }
+                    break;
+
+                case "SubArea":
+                    {
+                        if (collec.Count == 0) collec.Add("Id", string.Format("tempId_{0}", DateTime.Now.Ticks));
+                        var ctrl = new SubAreaControl(collec, entityCache, webResourcesImageCache, webResourcesHtmlCache,
+                            Service);
+                        ctrl.Saved += CtrlSaved;
+
+                        panelContainer.Controls.Add(ctrl);
+                        ctrl.BringToFront();
+                        if (existingControl != null) panelContainer.Controls.Remove(existingControl);
+                        tsbItemSave.Visible = true;
+                    }
+                    break;
+
+                case "Group":
+                    {
+                        if (collec.Count == 0) collec.Add("Id", string.Format("tempId_{0}", DateTime.Now.Ticks));
+                        var ctrl = new GroupControl(collec);
+                        ctrl.Saved += CtrlSaved;
+
+                        panelContainer.Controls.Add(ctrl);
+                        ctrl.BringToFront();
+                        if (existingControl != null) panelContainer.Controls.Remove(existingControl);
+                        tsbItemSave.Visible = true;
+                    }
+                    break;
+
+                case "Privilege":
+                    {
+                        var ctrl = new PrivilegeControl(collec);
+                        ctrl.Saved += CtrlSaved;
+
+                        panelContainer.Controls.Add(ctrl);
+                        ctrl.BringToFront();
+                        if (existingControl != null) panelContainer.Controls.Remove(existingControl);
+                        tsbItemSave.Visible = true;
+                    }
+                    break;
+
+                case "Description":
+                    {
+                        var ctrl = new DescriptionControl(collec);
+                        ctrl.Saved += CtrlSaved;
+
+                        panelContainer.Controls.Add(ctrl);
+                        ctrl.BringToFront();
+                        if (existingControl != null) panelContainer.Controls.Remove(existingControl);
+                        tsbItemSave.Visible = true;
+                    }
+                    break;
+
+                case "Title":
+                    {
+                        var ctrl = new TitleControl(collec);
+                        ctrl.Saved += CtrlSaved;
+
+                        panelContainer.Controls.Add(ctrl);
+                        ctrl.BringToFront();
+                        if (existingControl != null) panelContainer.Controls.Remove(existingControl);
+                        tsbItemSave.Visible = true;
+                    }
+                    break;
+
+                default:
+                    {
+                        panelContainer.Controls.Clear();
+                        tsbItemSave.Visible = false;
+                    }
+                    break;
+            }
+
+            ManageMenuDisplay();
+        }
+
         #endregion TreeView Handlers
 
         #region SiteMap Component Handlers
 
         private void TsbItemSaveClick(object sender, EventArgs e)
         {
-            ((ISiteMapSavable) panelContainer.Controls[0]).Save();
+            ((ISiteMapSavable)panelContainer.Controls[0]).Save();
 
-            var nodeAttributesCollection = (Dictionary<string, string>) tvSiteMap.SelectedNode.Tag;
+            var nodeAttributesCollection = (Dictionary<string, string>)tvSiteMap.SelectedNode.Tag;
 
             if (nodeAttributesCollection.ContainsKey("Id"))
             {
                 if (tvSiteMap.SelectedNode.Text.Split(' ').Length == 1)
                     tvSiteMap.SelectedNode.Text += " (" +
-                                                   ((Dictionary<string, string>) tvSiteMap.SelectedNode.Tag)["Id"] + ")";
+                                                   ((Dictionary<string, string>)tvSiteMap.SelectedNode.Tag)["Id"] + ")";
                 else
                     tvSiteMap.SelectedNode.Text = tvSiteMap.SelectedNode.Text.Split(' ')[0] + " (" +
-                                                  ((Dictionary<string, string>) tvSiteMap.SelectedNode.Tag)["Id"] + ")";
+                                                  ((Dictionary<string, string>)tvSiteMap.SelectedNode.Tag)["Id"] + ")";
 
                 tvSiteMap.SelectedNode.Name = tvSiteMap.SelectedNode.Text.Replace(" ", "");
             }
@@ -625,7 +637,7 @@ namespace MsCrmTools.SiteMapEditor
             if (nodeAttributesCollection.ContainsKey("LCID"))
             {
                 tvSiteMap.SelectedNode.Text = tvSiteMap.SelectedNode.Text.Split(' ')[0] + " (" +
-                                              ((Dictionary<string, string>) tvSiteMap.SelectedNode.Tag)["LCID"] + ")";
+                                              ((Dictionary<string, string>)tvSiteMap.SelectedNode.Tag)["LCID"] + ")";
 
                 tvSiteMap.SelectedNode.Name = tvSiteMap.SelectedNode.Text.Replace(" ", "");
             }
@@ -653,9 +665,11 @@ namespace MsCrmTools.SiteMapEditor
                     case 5:
                         version = "2011";
                         break;
+
                     case 6:
                         version = "2013";
                         break;
+
                     case 7:
                         if (ConnectionDetail.OrganizationMinorVersion == 0)
                             version = "2015";
@@ -707,7 +721,7 @@ namespace MsCrmTools.SiteMapEditor
             }
             else if (e.ClickedItem.Text == "Disable")
             {
-                ((Dictionary<string, string>) tvSiteMap.SelectedNode.Tag).Add("_disabled", "true");
+                ((Dictionary<string, string>)tvSiteMap.SelectedNode.Tag).Add("_disabled", "true");
                 tvSiteMap.SelectedNode.ForeColor = Color.Gray;
                 tvSiteMap.SelectedNode.Text += " - disabled";
                 tvSiteMap.SelectedNode.ToolTipText =
@@ -715,7 +729,7 @@ namespace MsCrmTools.SiteMapEditor
             }
             else if (e.ClickedItem.Text == "Enable")
             {
-                ((Dictionary<string, string>) tvSiteMap.SelectedNode.Tag).Remove("_disabled");
+                ((Dictionary<string, string>)tvSiteMap.SelectedNode.Tag).Remove("_disabled");
                 tvSiteMap.SelectedNode.ForeColor = Color.Black;
                 tvSiteMap.SelectedNode.Text = tvSiteMap.SelectedNode.Text.Replace(" - disabled", "");
                 tvSiteMap.SelectedNode.ToolTipText = null;
@@ -777,7 +791,7 @@ namespace MsCrmTools.SiteMapEditor
                         EntityFilters = EntityFilters.Entity
                     };
 
-                    var response = (RetrieveAllEntitiesResponse) Service.Execute(request);
+                    var response = (RetrieveAllEntitiesResponse)Service.Execute(request);
 
                     foreach (var emd in response.EntityMetadata)
                     {
@@ -791,7 +805,7 @@ namespace MsCrmTools.SiteMapEditor
                     webResourcesImageCache = new List<Entity>();
 
                     var wrQuery = new QueryExpression("webresource");
-                    wrQuery.Criteria.AddCondition("webresourcetype", ConditionOperator.In, new object[] {2, 5, 6, 7});
+                    wrQuery.Criteria.AddCondition("webresourcetype", ConditionOperator.In, new object[] { 2, 5, 6, 7 });
                     wrQuery.ColumnSet.AllColumns = true;
 
                     EntityCollection results = Service.RetrieveMultiple(wrQuery);
@@ -905,50 +919,30 @@ namespace MsCrmTools.SiteMapEditor
         #region Others
 
         /// <summary>
-        ///     Loads the SiteMap from the extracted Xml solution files
+        ///     Enables or disables specific controls
         /// </summary>
-        private void DisplaySiteMap()
+        /// <param name="enabled">Flag that indicates if controls must be enabled</param>
+        internal void EnableControls(bool enabled)
         {
-            XmlNode siteMapXmlNode = siteMapDoc.DocumentElement;
-            tvSiteMap.Nodes.Clear();
+            MethodInvoker mi = delegate
+            {
+                tsbMainOpenSiteMap.Enabled = enabled;
+                tsbUpdateSiteMap.Enabled = enabled;
+                toolStripButtonSaveSiteMapToDisk.Enabled = enabled;
+                toolStripButtonLoadSiteMapFromDisk.Enabled = enabled;
+                toolStripDropDownButtonMoreActions.Enabled = enabled;
+                gbSiteMap.Enabled = enabled;
+                gbProperties.Enabled = enabled;
+            };
 
-            TreeNodeHelper.AddTreeViewNode(tvSiteMap, siteMapXmlNode, this);
-
-            ManageMenuDisplay();
-            tvSiteMap.Nodes[0].Expand();
-        }
-
-        /// <summary>
-        ///     When SiteMap component properties are saved, they are
-        ///     copied in the current selected TreeNode
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CtrlSaved(object sender, SaveEventArgs e)
-        {
-            tvSiteMap.SelectedNode.Tag = e.AttributeCollection;
-        }
-
-        /// <summary>
-        ///     Manages which controls should be visible/enabled
-        /// </summary>
-        private void ManageMenuDisplay()
-        {
-            TreeNode selectedNode = tvSiteMap.SelectedNode;
-
-            tsbItemSave.Enabled = selectedNode != null;
-            toolStripButtonDelete.Enabled = selectedNode != null && selectedNode.Text != "SiteMap";
-            toolStripButtonMoveUp.Enabled = selectedNode != null && selectedNode.Parent != null &&
-                                            selectedNode.Index != 0;
-            toolStripButtonMoveDown.Enabled = selectedNode != null && selectedNode.Parent != null &&
-                                              selectedNode.Index != selectedNode.Parent.Nodes.Count - 1;
-            toolStripButtonAddXml.Enabled = selectedNode != null && selectedNode.Text != "Title" &&
-                                            selectedNode.Text != "Description" && selectedNode.Text != "Privilege";
-            toolStripButtonDisplayXml.Enabled = selectedNode != null;
-
-            toolStripDropDownButtonMoreActions.Enabled = tvSiteMap.Nodes.Count > 0;
-            tsbUpdateSiteMap.Enabled = tvSiteMap.Nodes.Count > 0;
-            toolStripButtonSaveSiteMapToDisk.Enabled = tvSiteMap.Nodes.Count > 0;
+            if (InvokeRequired)
+            {
+                Invoke(mi);
+            }
+            else
+            {
+                mi();
+            }
         }
 
         /// <summary>
@@ -961,7 +955,7 @@ namespace MsCrmTools.SiteMapEditor
         {
             XmlNode newNode = parentXmlNode.OwnerDocument.CreateElement(currentNode.Text.Split(' ')[0]);
 
-            var collec = (Dictionary<string, string>) currentNode.Tag;
+            var collec = (Dictionary<string, string>)currentNode.Tag;
 
             foreach (string key in collec.Keys)
             {
@@ -1007,42 +1001,62 @@ namespace MsCrmTools.SiteMapEditor
         }
 
         /// <summary>
-        ///     Enables or disables specific controls
+        ///     When SiteMap component properties are saved, they are
+        ///     copied in the current selected TreeNode
         /// </summary>
-        /// <param name="enabled">Flag that indicates if controls must be enabled</param>
-        internal void EnableControls(bool enabled)
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CtrlSaved(object sender, SaveEventArgs e)
         {
-            MethodInvoker mi = delegate
-            {
-                tsbMainOpenSiteMap.Enabled = enabled;
-                tsbUpdateSiteMap.Enabled = enabled;
-                toolStripButtonSaveSiteMapToDisk.Enabled = enabled;
-                toolStripButtonLoadSiteMapFromDisk.Enabled = enabled;
-                toolStripDropDownButtonMoreActions.Enabled = enabled;
-                gbSiteMap.Enabled = enabled;
-                gbProperties.Enabled = enabled;
-            };
+            tvSiteMap.SelectedNode.Tag = e.AttributeCollection;
+        }
 
-            if (InvokeRequired)
-            {
-                Invoke(mi);
-            }
-            else
-            {
-                mi();
-            }
+        /// <summary>
+        ///     Loads the SiteMap from the extracted Xml solution files
+        /// </summary>
+        private void DisplaySiteMap()
+        {
+            XmlNode siteMapXmlNode = siteMapDoc.DocumentElement;
+            tvSiteMap.Nodes.Clear();
+
+            TreeNodeHelper.AddTreeViewNode(tvSiteMap, siteMapXmlNode, this);
+
+            ManageMenuDisplay();
+            tvSiteMap.Nodes[0].Expand();
+        }
+
+        /// <summary>
+        ///     Manages which controls should be visible/enabled
+        /// </summary>
+        private void ManageMenuDisplay()
+        {
+            TreeNode selectedNode = tvSiteMap.SelectedNode;
+
+            tsbItemSave.Enabled = selectedNode != null;
+            toolStripButtonDelete.Enabled = selectedNode != null && selectedNode.Text != "SiteMap";
+            toolStripButtonMoveUp.Enabled = selectedNode != null && selectedNode.Parent != null &&
+                                            selectedNode.Index != 0;
+            toolStripButtonMoveDown.Enabled = selectedNode != null && selectedNode.Parent != null &&
+                                              selectedNode.Index != selectedNode.Parent.Nodes.Count - 1;
+            toolStripButtonAddXml.Enabled = selectedNode != null && selectedNode.Text != "Title" &&
+                                            selectedNode.Text != "Description" && selectedNode.Text != "Privilege";
+            toolStripButtonDisplayXml.Enabled = selectedNode != null;
+
+            toolStripDropDownButtonMoreActions.Enabled = tvSiteMap.Nodes.Count > 0;
+            tsbUpdateSiteMap.Enabled = tvSiteMap.Nodes.Count > 0;
+            toolStripButtonSaveSiteMapToDisk.Enabled = tvSiteMap.Nodes.Count > 0;
         }
 
         #endregion Others
 
-        private void TsbCloseThisTabClick(object sender, EventArgs e)
-        {
-            CloseTool();
-        }
-
         private void loadEntitiesAndWebResourcesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ExecuteMethod(LoadCrmItems);
+        }
+
+        private void TsbCloseThisTabClick(object sender, EventArgs e)
+        {
+            CloseTool();
         }
     }
 }

@@ -24,6 +24,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.SecurityPrivilege
             get { return list[index]; }
         }
 
+        public void Add(SecurityPrivilegeInfo info)
+        {
+            list.Add(info);
+        }
+
         public AttributeCollection GetAttributes()
         {
             return TypeDescriptor.GetAttributes(this, true);
@@ -88,11 +93,6 @@ namespace MsCrmTools.MetadataBrowser.AppCode.SecurityPrivilege
         public object GetPropertyOwner(PropertyDescriptor pd)
         {
             return this;
-        }
-
-        public void Add(SecurityPrivilegeInfo info)
-        {
-            list.Add(info);
         }
 
         public void Remove(SecurityPrivilegeInfo info)

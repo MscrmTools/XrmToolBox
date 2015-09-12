@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using System.Collections.Generic;
 
 namespace MsCrmTools.MetadataDocumentGenerator.Helper
 {
