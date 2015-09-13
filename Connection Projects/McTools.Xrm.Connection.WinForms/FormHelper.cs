@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -16,7 +17,10 @@ namespace McTools.Xrm.Connection.WinForms
         /// <summary>
         /// Asks this manager to select a Crm connection to use
         /// </summary>
-        public bool AskForConnection(object connectionParameter)
+        /// <param name="connectionParameter">The connection parameter.</param>
+        /// <param name="preConnectionRequest">The action to be performed before the async call to create the connection.  Userful to display a please wait message</param>
+        /// <returns></returns>
+        public bool AskForConnection(object connectionParameter, Action preConnectionRequest)
         {
             var cs = new ConnectionSelector
             {
@@ -47,12 +51,25 @@ namespace McTools.Xrm.Connection.WinForms
                     }
                 }
 
+                if (preConnectionRequest != null)
+                {
+                    preConnectionRequest();
+                }
+
                 ConnectionManager.Instance.ConnectToServer(connectionDetail, connectionParameter);
 
                 return true;
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Asks this manager to select a Crm connection to use
+        /// </summary>
+        public bool AskForConnection(object connectionParameter)
+        {
+            return AskForConnection(connectionParameter, null);
         }
 
         /// <summary>

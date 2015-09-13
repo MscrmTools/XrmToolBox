@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
+using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility.Interfaces;
 
@@ -36,12 +38,34 @@ namespace XrmToolBox
 
         public void Initialize()
         {
-            directoryCatalog = new DirectoryCatalog(PluginPath);
+            try
+            {
+                directoryCatalog = new DirectoryCatalog(PluginPath);
 
-            var catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(directoryCatalog);
-            container = new CompositionContainer(catalog);
-            container.ComposeParts(this);
+                var catalog = new AggregateCatalog();
+                catalog.Catalogs.Add(directoryCatalog);
+                container = new CompositionContainer(catalog);
+                container.ComposeParts(this);
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                if (ex.LoaderExceptions.Length == 1)
+                {
+                    throw ex.LoaderExceptions[0];
+                }
+                var sb = new StringBuilder();
+                var i = 1;
+                sb.AppendLine("Multiple Exception Occured Attempting to Intialize the Plugin Manager");
+                foreach (var exception in ex.LoaderExceptions)
+                {
+                    sb.AppendLine("Exception " + i++);
+                    sb.AppendLine(exception.ToString());
+                    sb.AppendLine();
+                    sb.AppendLine();
+                }
+
+                throw new ReflectionTypeLoadException(ex.Types, ex.LoaderExceptions, sb.ToString());
+            }
         }
 
         public void Recompose()
