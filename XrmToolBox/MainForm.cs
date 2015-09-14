@@ -31,7 +31,6 @@ namespace XrmToolBox
         private Options currentOptions;
         private string currentReleaseNote;
         private FormHelper fHelper;
-        private Panel infoPanel;
         private string initialConnectionName;
         private string initialPluginName;
         private PluginManagerExtended pManager;
@@ -73,28 +72,32 @@ namespace XrmToolBox
             cManager.StepChanged += (sender, e) => ccsb.SetMessage(e.CurrentStep);
             cManager.ConnectionSucceed += (sender, e) =>
             {
-                Controls.Remove(infoPanel);
-                if (infoPanel != null) infoPanel.Dispose();
+                var parameter = e.Parameter as ConnectionParameterInfo;
+                if (parameter != null)
+                {
+                    Controls.Remove(parameter.InfoPanel);
+                    parameter.InfoPanel.Dispose();
+                }
 
                 currentConnectionDetail = e.ConnectionDetail;
                 service = e.OrganizationService;
                 ccsb.SetConnectionStatus(true, e.ConnectionDetail);
                 ccsb.SetMessage(string.Empty);
 
-                if (e.Parameter != null)
+                if (parameter != null)
                 {
-                    var control = e.Parameter as UserControl;
+                    var control = parameter.ConnectionParmater as UserControl;
                     if (control != null)
                     {
                         this.DisplayPluginControl((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)control.Tag);
                     }
-                    else if (e.Parameter.ToString() == "ApplyConnectionToTabs" && tabControl1.TabPages.Count > 1)
+                    else if (parameter.ConnectionParmater.ToString() == "ApplyConnectionToTabs" && tabControl1.TabPages.Count > 1)
                     {
                         ApplyConnectionToTabs();
                     }
                     else
                     {
-                        var args = e.Parameter as RequestConnectionEventArgs;
+                        var args = parameter.ConnectionParmater as RequestConnectionEventArgs;
                         if (args != null)
                         {
                             var userControl = (UserControl)args.Control;
@@ -118,6 +121,7 @@ namespace XrmToolBox
             {
                 this.Invoke(new Action(() =>
                 {
+                    var infoPanel = ((ConnectionParameterInfo)e.Parameter).InfoPanel;
                     Controls.Remove(infoPanel);
                     if (infoPanel != null) infoPanel.Dispose();
 
@@ -371,20 +375,14 @@ namespace XrmToolBox
 
         private void MainForm_OnRequestConnection(object sender, EventArgs e)
         {
-            if (fHelper.AskForConnection(e))
-            {
-                infoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120);
-            }
+            ConnectUponApproval(sender);
         }
 
         private void PluginClicked(object sender, EventArgs e)
         {
             if (service == null && MessageBox.Show(this, "Do you want to connect to an organization first?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                if (fHelper.AskForConnection(sender))
-                {
-                    infoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120);
-                }
+                ConnectUponApproval(sender);
             }
             else
             {
@@ -395,6 +393,15 @@ namespace XrmToolBox
                     DisplayPluginControl(plugin);
                 }
             }
+        }
+
+        private void ConnectUponApproval(object connectionParameter)
+        {
+            var info = new ConnectionParameterInfo
+            {
+                ConnectionParmater = connectionParameter
+            };
+            fHelper.AskForConnection(info, () => info.InfoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120));
         }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
@@ -410,10 +417,7 @@ namespace XrmToolBox
 
         private void TsbConnectClick(object sender, EventArgs e)
         {
-            if (fHelper.AskForConnection("ApplyConnectionToTabs"))
-            {
-                infoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120);
-            }
+            ConnectUponApproval("ApplyConnectionToTabs");
         }
 
         private void tsbManageConnections_Click(object sender, EventArgs e)
