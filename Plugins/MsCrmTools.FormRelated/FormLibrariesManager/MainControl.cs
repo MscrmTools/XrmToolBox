@@ -49,7 +49,7 @@ namespace MsCrmTools.FormLibrariesManager
                     bw.ReportProgress(0, "Loading forms...");
 
                     var fManager = new FormManager(Service);
-                    var forms = fManager.GetAllForms();
+                    var forms = fManager.GetAllForms(ConnectionDetail);
 
                     e.Result = new[] { scripts, forms };
 

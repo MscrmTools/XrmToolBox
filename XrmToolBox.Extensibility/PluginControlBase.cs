@@ -74,7 +74,7 @@ namespace XrmToolBox.Extensibility
             MethodInfo method;
             if (parameter == null)
             {
-                method = GetType().GetMethod(actionName);
+                method = GetType().GetMethod(actionName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 if (method == null)
                 {
                     throw new Exception("Unable to find method " + GetType().Name + "." + actionName);
@@ -86,7 +86,7 @@ namespace XrmToolBox.Extensibility
                 var externalCaller = parameter as ExternalMethodCallerInfo;
                 if (externalCaller == null)
                 {
-                    method = GetType().GetMethod(actionName, new[] { parameter.GetType() });
+                    method = GetType().GetMethod(actionName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { parameter.GetType() }, null);
                     if (method == null)
                     {
                         throw new Exception("Unable to find method " + GetType().Name + "." + actionName);

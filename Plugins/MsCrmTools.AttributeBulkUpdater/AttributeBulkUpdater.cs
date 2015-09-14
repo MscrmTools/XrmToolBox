@@ -154,7 +154,7 @@ namespace MsCrmTools.AttributeBulkUpdater
                     {
                         attributesOriginalState = new Dictionary<string, AttributeMetadata>();
                         EntityMetadata metadata = MetadataHelper.RetrieveEntity(evt.Argument.ToString(), Service);
-                        XmlDocument allFormsDoc = MetadataHelper.RetrieveEntityForms(metadata.LogicalName, Service);
+                        XmlDocument allFormsDoc = MetadataHelper.RetrieveEntityForms(metadata.LogicalName, Service, ConnectionDetail);
                         var items = new List<ListViewItem>();
 
                         foreach (AttributeMetadata amd in metadata.Attributes)

@@ -176,14 +176,14 @@ namespace MsCrmTools.SiteMapEditor
 
                                 var wrQuery = new QueryExpression("webresource");
                                 wrQuery.Criteria.AddCondition("webresourcetype", ConditionOperator.In,
-                                    new object[] { 2, 5, 6, 7 });
+                                    new object[] { 1, 5, 6, 7 });
                                 wrQuery.ColumnSet.AllColumns = true;
 
                                 EntityCollection results = Service.RetrieveMultiple(wrQuery);
 
                                 foreach (Entity webresource in results.Entities)
                                 {
-                                    if (webresource.GetAttributeValue<OptionSetValue>("webresourcetype").Value == 2)
+                                    if (webresource.GetAttributeValue<OptionSetValue>("webresourcetype").Value == 1)
                                     {
                                         webResourcesHtmlCache.Add(webresource);
                                     }
@@ -805,14 +805,14 @@ namespace MsCrmTools.SiteMapEditor
                     webResourcesImageCache = new List<Entity>();
 
                     var wrQuery = new QueryExpression("webresource");
-                    wrQuery.Criteria.AddCondition("webresourcetype", ConditionOperator.In, new object[] { 2, 5, 6, 7 });
+                    wrQuery.Criteria.AddCondition("webresourcetype", ConditionOperator.In, new object[] { 1, 5, 6, 7 });
                     wrQuery.ColumnSet.AllColumns = true;
 
                     EntityCollection results = Service.RetrieveMultiple(wrQuery);
 
                     foreach (Entity webresource in results.Entities)
                     {
-                        if (webresource.GetAttributeValue<OptionSetValue>("webresourcetype").Value == 2)
+                        if (webresource.GetAttributeValue<OptionSetValue>("webresourcetype").Value == 1)
                         {
                             webResourcesHtmlCache.Add(webresource);
                         }

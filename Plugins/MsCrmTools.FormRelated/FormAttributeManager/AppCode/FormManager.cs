@@ -1,4 +1,5 @@
-﻿using Microsoft.Crm.Sdk.Messages;
+﻿using McTools.Xrm.Connection;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
@@ -16,7 +17,7 @@ namespace MsCrmTools.FormAttributeManager.AppCode
 
         public IOrganizationService Service { get; set; }
 
-        public List<Entity> GetAllFormsByTypeCode(int objectTypeCode)
+        public List<Entity> GetAllFormsByTypeCode(int objectTypeCode, ConnectionDetail detail)
         {
             var qe = new QueryExpression("systemform")
             {
@@ -27,11 +28,15 @@ namespace MsCrmTools.FormAttributeManager.AppCode
                     {
                         new ConditionExpression("objecttypecode", ConditionOperator.Equal, objectTypeCode),
                         new ConditionExpression("type", ConditionOperator.In, new[] {2,7}),
-                        new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
-                        new ConditionExpression("formactivationstate", ConditionOperator.Equal, 1),
+                        new ConditionExpression("iscustomizable", ConditionOperator.Equal, true)
                     }
                 }
             };
+
+            if (detail.OrganizationMajorVersion > 5)
+            {
+                qe.Criteria.Conditions.Add(new ConditionExpression("formactivationstate", ConditionOperator.Equal, 1));
+            }
 
             try
             {

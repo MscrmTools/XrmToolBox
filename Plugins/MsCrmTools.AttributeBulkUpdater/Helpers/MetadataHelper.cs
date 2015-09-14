@@ -3,6 +3,7 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
@@ -11,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
-using XrmToolBox;
+using CrmExceptionHelper = XrmToolBox.CrmExceptionHelper;
 
 namespace MsCrmTools.AttributeBulkUpdater.Helpers
 {
@@ -80,7 +81,7 @@ namespace MsCrmTools.AttributeBulkUpdater.Helpers
         /// <param name="logicalName">Entity logical name</param>
         /// <param name="oService">Crm organization service</param>
         /// <returns>Document containing all forms definition</returns>
-        public static XmlDocument RetrieveEntityForms(string logicalName, IOrganizationService oService)
+        public static XmlDocument RetrieveEntityForms(string logicalName, IOrganizationService oService, ConnectionDetail detail)
         {
             var qe = new QueryExpression("systemform")
             {
@@ -90,11 +91,15 @@ namespace MsCrmTools.AttributeBulkUpdater.Helpers
                     {
                         new ConditionExpression("objecttypecode", ConditionOperator.Equal, logicalName),
                         new ConditionExpression("type", ConditionOperator.In, new[] {2, 7}),
-                        new ConditionExpression("formactivationstate", ConditionOperator.Equal, 1),
                     }
                 },
                 ColumnSet = new ColumnSet(true)
             };
+
+            if (detail.OrganizationMajorVersion > 5)
+            {
+                qe.Criteria.Conditions.Add(new ConditionExpression("formactivationstate", ConditionOperator.Equal, 1));
+            }
 
             EntityCollection ec = oService.RetrieveMultiple(qe);
 
