@@ -89,7 +89,16 @@ namespace XrmToolBox
                     var control = parameter.ConnectionParmater as UserControl;
                     if (control != null)
                     {
-                        this.DisplayPluginControl((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)control.Tag);
+                        var pluginModel = control.Tag as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
+                        if (pluginModel == null)
+                        {
+                            // Actual Plugin was passed, Just update the plugin's Tab.
+                            UpdateTabConnection((TabPage) control.Parent);
+                        }
+                        else
+                        {
+                            this.DisplayPluginControl(pluginModel);
+                        }
                     }
                     else if (parameter.ConnectionParmater.ToString() == "ApplyConnectionToTabs" && tabControl1.TabPages.Count > 1)
                     {
@@ -659,15 +668,20 @@ namespace XrmToolBox
             {
                 foreach (TabPage tab in tcu.SelectedTabs)
                 {
-                    tab.GetPlugin().UpdateConnection(service, currentConnectionDetail);
-
-                    tab.Text = string.Format("{0} ({1})",
-                                        ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)tab.Tag).Metadata.Name,
-                                        currentConnectionDetail != null
-                                            ? currentConnectionDetail.ConnectionName
-                                            : "Not connected");
+                    UpdateTabConnection(tab);
                 }
             }
+        }
+
+        private void UpdateTabConnection(TabPage tab)
+        {
+            tab.GetPlugin().UpdateConnection(service, currentConnectionDetail);
+
+            tab.Text = string.Format("{0} ({1})",
+                ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>) tab.Tag).Metadata.Name,
+                currentConnectionDetail != null
+                    ? currentConnectionDetail.ConnectionName
+                    : "Not connected");
         }
 
         private string ExtractSwitchValue(string key, ref string[] args)
