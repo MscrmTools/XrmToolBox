@@ -1,4 +1,5 @@
-﻿using Microsoft.Crm.Sdk.Messages;
+﻿using McTools.Xrm.Connection;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using System;
@@ -70,7 +71,7 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
             form["formxml"] = formDoc.OuterXml;
         }
 
-        public List<Entity> GetAllForms()
+        public List<Entity> GetAllForms(ConnectionDetail detail)
         {
             var qe = new QueryExpression("systemform")
             {
@@ -81,10 +82,14 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
                     {
                         new ConditionExpression("type", ConditionOperator.In, new[] {2,7}),
                         new ConditionExpression("iscustomizable", ConditionOperator.Equal, true),
-                        new ConditionExpression("formactivationstate", ConditionOperator.Equal, 1),
                     }
                 }
             };
+
+            if (detail.OrganizationMajorVersion > 5)
+            {
+                qe.Criteria.Conditions.Add(new ConditionExpression("formactivationstate", ConditionOperator.Equal, 1));
+            }
 
             try
             {

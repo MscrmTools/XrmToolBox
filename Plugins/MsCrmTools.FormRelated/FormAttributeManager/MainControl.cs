@@ -371,7 +371,7 @@ namespace MsCrmTools.FormAttributeManager
                 evt =>
                 {
                     var formManager = new FormManager(Service);
-                    var forms = formManager.GetAllFormsByTypeCode(((EntityMetadata)evt.Argument).ObjectTypeCode.Value);
+                    var forms = formManager.GetAllFormsByTypeCode(((EntityMetadata)evt.Argument).ObjectTypeCode.Value, ConnectionDetail);
                     var items = forms.Select(form => new FormInfo(form)).Select(fi => new ListViewItem(fi.ToString()) { Tag = fi }).ToList();
                     evt.Result = items;
                 },
