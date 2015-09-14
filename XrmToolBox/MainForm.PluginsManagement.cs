@@ -44,7 +44,7 @@ namespace XrmToolBox
                 var secondaryColor = ColorTranslator.FromHtml(plugin.Metadata.SecondaryFontColor);
 
                 var args = new[]
-            {
+                {
                     typeof(Image),
                     typeof(string),
                     typeof(string),
@@ -69,16 +69,19 @@ namespace XrmToolBox
                     count
                 };
 
-                var ctor = typeof(T).GetConstructor(args);
-                if (ctor != null)
+                var ctor = typeof (T).GetConstructor(args);
+                if (ctor == null)
                 {
-                    pm = (T)ctor.Invoke(vals);
-
-                    pm.Tag = plugin;
-                    pm.Clicked += PluginClicked;
-
-                    pluginsModels.Add(pm);
+                    throw new Exception("Unable to find a constructor of type " + typeof (T).FullName + "(" + String.Join(Environment.NewLine, args.Select(c => c.FullName))+ ")");
                 }
+
+                pm = (T) ctor.Invoke(vals);
+
+                pm.Tag = plugin;
+                pm.Clicked += PluginClicked;
+
+                pluginsModels.Add(pm);
+
             }
 
             if (pm == null) { return; }

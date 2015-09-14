@@ -19,6 +19,7 @@ namespace McTools.Xrm.Connection
     public class ConnectionFailedEventArgs : EventArgs
     {
         public string FailureReason { get; set; }
+        public object Parameter { get; set; }
     }
 
     public class ConnectionSucceedEventArgs : EventArgs
@@ -377,7 +378,7 @@ namespace McTools.Xrm.Connection
                 var error = parameters[2] as Exception;
                 if (error != null)
                 {
-                    SendFailureMessage(CrmExceptionHelper.GetErrorMessage(error, false));
+                    SendFailureMessage(CrmExceptionHelper.GetErrorMessage(error, false), parameters[1]);
                 }
                 else
                 {
@@ -398,13 +399,14 @@ namespace McTools.Xrm.Connection
         /// Sends a connection failure message
         /// </summary>
         /// <param name="failureReason">Reason of the failure</param>
-        private void SendFailureMessage(string failureReason)
+        private void SendFailureMessage(string failureReason, object parameter)
         {
             if (ConnectionFailed != null)
             {
                 var args = new ConnectionFailedEventArgs
                 {
-                    FailureReason = failureReason
+                    FailureReason = failureReason,
+                    Parameter = parameter
                 };
 
                 ConnectionFailed(this, args);
@@ -432,7 +434,7 @@ namespace McTools.Xrm.Connection
         /// Sends a connection success message
         /// </summary>
         /// <param name="service">IOrganizationService generated</param>
-        /// <param name="parameters">Lsit of parameter</param>
+        /// <param name="parameters">List of parameters</param>
         private void SendSuccessMessage(IOrganizationService service, List<object> parameters)
         {
             if (ConnectionSucceed != null)
