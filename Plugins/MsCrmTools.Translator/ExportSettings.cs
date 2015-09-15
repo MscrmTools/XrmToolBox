@@ -9,6 +9,7 @@ namespace MsCrmTools.Translator
         public bool ExportAttributes { get; set; }
         public bool ExportBooleans { get; set; }
         public bool ExportCustomizedRelationships { get; set; }
+        public bool ExportDashboards { get; set; }
         public bool ExportEntities { get; set; }
         public bool ExportFormFields { get; set; }
         public bool ExportForms { get; set; }
