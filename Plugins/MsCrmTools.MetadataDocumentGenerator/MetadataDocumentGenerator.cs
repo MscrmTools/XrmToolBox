@@ -389,12 +389,21 @@ namespace MsCrmTools.MetadataDocumentGenerator
                 WorkAsync("Retrieving forms...",
                     evt =>
                     {
-                        var qba = new QueryByAttribute("systemform");
-                        qba.Attributes.AddRange("objecttypecode", "type");
-                        qba.Values.AddRange(evt.Argument.ToString(), 2);
-                        qba.ColumnSet = new ColumnSet(true);
+                        var qe = new QueryExpression("systemform")
+                        {
+                            ColumnSet = new ColumnSet(true),
+                            Criteria = new FilterExpression
+                            {
+                                Conditions =
+                                {
+                                    new ConditionExpression("objecttypecode", ConditionOperator.Equal,
+                                        evt.Argument.ToString()),
+                                    new ConditionExpression("type", ConditionOperator.In, new[] {2, 7})
+                                }
+                            }
+                        };
 
-                        evt.Result = Service.RetrieveMultiple(qba).Entities;
+                        evt.Result = Service.RetrieveMultiple(qe).Entities;
                     },
                     evt =>
                     {
@@ -483,9 +492,40 @@ namespace MsCrmTools.MetadataDocumentGenerator
             WorkAsync("",
                 (bw, evt) =>
                 {
+                    // If we need attribute location but miss at least one
+                    // form definition for entity, then we retrieve forms
+                    // again
+                    if ((settings.AttributesSelection == AttributeSelectionOption.AllAttributes
+                        || settings.AttributesSelection == AttributeSelectionOption.AttributeManualySelected
+                        || settings.AttributesSelection == AttributeSelectionOption.AttributesOptionSet)
+                        && settings.AddFormLocation
+                        && settings.EntitiesToProceed.Any(entity => entity.FormsDefinitions.Count == 0))
+                    {
+                        bw.ReportProgress(0, "Loading forms definitions...");
+
+                        var qba = new QueryExpression("systemform")
+                        {
+                            ColumnSet = new ColumnSet(true),
+                            Criteria = new FilterExpression
+                            {
+                                Conditions =
+                                {
+                                    new ConditionExpression("objecttypecode", ConditionOperator.In,
+                                        settings.EntitiesToProceed.Select(entity => entity.Name).ToArray()),
+                                    new ConditionExpression("type", ConditionOperator.In, new[] {2, 7})
+                                }
+                            }
+                        };
+
+                        foreach (var form in Service.RetrieveMultiple(qba).Entities)
+                        {
+                            settings.EntitiesToProceed.First(entity => entity.Name == form.GetAttributeValue<string>("objecttypecode")).FormsDefinitions.Add(form);
+                        }
+                    }
+
                     IDocument docGenerator;
 
-                    if (cbbOutputType.SelectedItem.ToString() == "Excel Workbook")
+                    if (settings.OutputDocumentType == Output.Excel)
                     {
                         docGenerator = new ExcelDocument();
                         docGenerator.Worker = bw;
