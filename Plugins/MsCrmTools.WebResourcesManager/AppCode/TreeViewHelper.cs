@@ -155,6 +155,10 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                     imageIndex = 4;
                     break;
 
+                case "xml":
+                    imageIndex = 5;
+                    break;
+
                 case "png":
                     imageIndex = 6;
                     break;
