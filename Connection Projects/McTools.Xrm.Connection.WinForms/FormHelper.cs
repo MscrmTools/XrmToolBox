@@ -18,9 +18,9 @@ namespace McTools.Xrm.Connection.WinForms
         /// Asks this manager to select a Crm connection to use
         /// </summary>
         /// <param name="connectionParameter">The connection parameter.</param>
-        /// <param name="preConnectionRequest">The action to be performed before the async call to create the connection.  Userful to display a please wait message</param>
+        /// <param name="preConnectionRequestAction">The action to be performed before the async call to create the connection.  Useful to display a please wait message</param>
         /// <returns></returns>
-        public bool AskForConnection(object connectionParameter, Action preConnectionRequest)
+        public bool AskForConnection(object connectionParameter, Action preConnectionRequestAction)
         {
             var cs = new ConnectionSelector
             {
@@ -51,11 +51,10 @@ namespace McTools.Xrm.Connection.WinForms
                     }
                 }
 
-                if (preConnectionRequest != null)
+                if (preConnectionRequestAction != null)
                 {
-                    preConnectionRequest();
+                    preConnectionRequestAction();
                 }
-
                 ConnectionManager.Instance.ConnectToServer(connectionDetail, connectionParameter);
 
                 return true;
