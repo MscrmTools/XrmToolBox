@@ -8,6 +8,7 @@ using McTools.Xrm.Connection.WinForms;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -281,9 +282,13 @@ namespace XrmToolBox
 
             var tasks = new List<Task>
             {
-                this.LaunchWelcomeDialog(),
-                this.LaunchVersionCheck()
+                this.LaunchWelcomeDialog()
             };
+
+            if (!Debugger.IsAttached)
+            {
+                tasks.Add(this.LaunchVersionCheck());
+            }
 
             if (!string.IsNullOrEmpty(this.initialConnectionName))
             {
