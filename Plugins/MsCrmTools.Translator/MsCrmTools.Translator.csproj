@@ -83,6 +83,7 @@
     <Compile Include="AppCode\CrmSiteMapArea.cs" />
     <Compile Include="AppCode\CrmSiteMapGroup.cs" />
     <Compile Include="AppCode\CrmSiteMapSubArea.cs" />
+    <Compile Include="AppCode\DashboardTranslation.cs" />
     <Compile Include="AppCode\GlobalOptionSetTranslation.cs" />
     <Compile Include="AppCode\CrmFormLabel.cs" />
     <Compile Include="AppCode\CrmFormSection.cs" />

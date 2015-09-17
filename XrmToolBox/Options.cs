@@ -70,6 +70,7 @@ namespace XrmToolBox
 
         public bool? AllowLogUsage { get; set; }
         public bool CheckUpdateOnStartup { get; set; }
+        public bool CloseOpenedPluginsSilently { get; set; }
         public bool DisplayLargeIcons { get; set; }
         public bool DisplayMostUsedFirst { get; set; }
         public List<string> HiddenPlugins { get; set; }
@@ -104,7 +105,8 @@ namespace XrmToolBox
                 LastAdvertisementDisplay = LastAdvertisementDisplay,
                 HiddenPlugins = HiddenPlugins,
                 LastUpdateCheck = LastUpdateCheck,
-                AllowLogUsage = AllowLogUsage
+                AllowLogUsage = AllowLogUsage,
+                CloseOpenedPluginsSilently = CloseOpenedPluginsSilently
             };
         }
 

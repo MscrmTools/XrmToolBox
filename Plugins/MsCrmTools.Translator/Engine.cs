@@ -6,8 +6,10 @@ using MsCrmTools.Translator.AppCode;
 using OfficeOpenXml;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace MsCrmTools.Translator
 {
@@ -183,7 +185,24 @@ namespace MsCrmTools.Translator
                 st.Export(lcids, file.Workbook, service);
             }
 
+            if (settings.ExportDashboards)
+            {
+                if (worker != null && worker.WorkerReportsProgress)
+                {
+                    worker.ReportProgress(0, "Exporting Dashboards custom labels translations...");
+                }
+
+                var st = new DashboardTranslation();
+
+                st.Export(lcids, file.Workbook, service);
+            }
+
             file.Save();
+
+            if (DialogResult.Yes == MessageBox.Show("Do you want to open generated document?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            {
+                Process.Start(settings.FilePath);
+            }
         }
 
         public void Import(string filePath, IOrganizationService service, BackgroundWorker worker = null)
@@ -196,7 +215,9 @@ namespace MsCrmTools.Translator
             var forms = new List<Entity>();
             var ft = new FormTranslation();
             var st = new SiteMapTranslation();
+            var db = new DashboardTranslation();
             bool hasFormContent = false;
+            bool hasDashboardContent = false;
             bool hasSiteMapContent = false;
 
             foreach (var sheet in file.Workbook.Worksheets)
@@ -309,6 +330,30 @@ namespace MsCrmTools.Translator
                         hasFormContent = true;
                         break;
 
+                    case "Dashboards":
+                        if (worker != null && worker.WorkerReportsProgress)
+                        {
+                            worker.ReportProgress(0, "Importing dashboard translations...");
+                        }
+
+                        db.ImportFormName(sheet, service);
+                        break;
+
+                    case "Dashboards Tabs":
+                        db.PrepareFormTabs(sheet, service, forms);
+                        hasDashboardContent = true;
+                        break;
+
+                    case "Dashboards Sections":
+                        db.PrepareFormSections(sheet, service, forms);
+                        hasDashboardContent = true;
+                        break;
+
+                    case "Dashboards Fields":
+                        db.PrepareFormLabels(sheet, service, forms);
+                        hasDashboardContent = true;
+                        break;
+
                     case "SiteMap Areas":
                         st.PrepareAreas(sheet, service);
                         hasSiteMapContent = true;
@@ -333,6 +378,16 @@ namespace MsCrmTools.Translator
                     }
 
                     ft.ImportFormsContent(service, forms);
+                }
+
+                if (hasDashboardContent)
+                {
+                    if (worker != null && worker.WorkerReportsProgress)
+                    {
+                        worker.ReportProgress(0, "Importing dashboard content translations...");
+                    }
+
+                    db.ImportFormsContent(service, forms);
                 }
 
                 if (hasSiteMapContent)
