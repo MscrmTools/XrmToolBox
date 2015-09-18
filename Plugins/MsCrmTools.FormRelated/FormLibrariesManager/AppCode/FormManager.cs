@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
+using MsCrmTools.FormRelated.FormLibrariesManager.POCO;
 
 namespace MsCrmTools.FormLibrariesManager.AppCode
 {
@@ -22,6 +23,35 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
         public void AddLibrary(Entity form, string libraryName, bool addFirst)
         {
             // Read the form xml content
+            var formLibrariesNode = GetFormLibraries(form);
+
+            // Search for existing library
+            var libraryNode = formLibrariesNode.SelectSingleNode(string.Format("Library[@name='{0}']", libraryName));
+            if (libraryNode != null)
+            {
+                throw new Exception("This library is already included in this form");
+            }
+
+            // Create the new library node
+            libraryNode = formLibrariesNode.OwnerDocument.CreateElement("Library");
+            AddAttribute(libraryNode, "name", libraryName);
+            AddAttribute(libraryNode, "libraryUniqueId", Guid.NewGuid().ToString("B"));
+
+            if (formLibrariesNode.ChildNodes.Count > 0 && addFirst)
+            {
+                formLibrariesNode.InsertBefore(libraryNode, formLibrariesNode.FirstChild);
+            }
+            else
+            {
+                formLibrariesNode.AppendChild(libraryNode);
+            }
+
+            // Update the form xml content
+            form["formxml"] = formLibrariesNode.OwnerDocument.OuterXml;
+        }
+
+        public static XmlNode GetFormLibraries(Entity form)
+        {
             var formXml = form.GetAttributeValue<string>("formxml");
             var formDoc = new XmlDocument();
             formDoc.LoadXml(formXml);
@@ -38,37 +68,7 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
                 formLibrariesNode = formDoc.CreateElement("formLibraries");
                 formNode.AppendChild(formLibrariesNode);
             }
-
-            // Search for existing library
-            var libraryNode = formLibrariesNode.SelectSingleNode(string.Format("Library[@name='{0}']", libraryName));
-            if (libraryNode != null)
-            {
-                throw new Exception("This library is already included in this form");
-            }
-
-            // Create the new library node
-            var nameAttribute = formDoc.CreateAttribute("name");
-            var libraryUniqueIdAttribute = formDoc.CreateAttribute("libraryUniqueId");
-            nameAttribute.Value = libraryName;
-            libraryUniqueIdAttribute.Value = Guid.NewGuid().ToString("B");
-            libraryNode = formDoc.CreateElement("Library");
-            if (libraryNode.Attributes != null)
-            {
-                libraryNode.Attributes.Append(nameAttribute);
-                libraryNode.Attributes.Append(libraryUniqueIdAttribute);
-            }
-
-            if (formLibrariesNode.ChildNodes.Count > 0 && addFirst)
-            {
-                formLibrariesNode.InsertBefore(libraryNode, formLibrariesNode.FirstChild);
-            }
-            else
-            {
-                formLibrariesNode.AppendChild(libraryNode);
-            }
-
-            // Update the form xml content
-            form["formxml"] = formDoc.OuterXml;
+            return formLibrariesNode;
         }
 
         public List<Entity> GetAllForms(ConnectionDetail detail)
@@ -102,7 +102,7 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
             }
         }
 
-        public void PublishForm(string entityName)
+        public void PublishEntity(string entityName)
         {
             var request = new PublishXmlRequest { ParameterXml = String.Format("<importexportxml><entities><entity>{0}</entity></entities></importexportxml>", entityName) };
             Service.Execute(request);
@@ -196,6 +196,85 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
         public void UpdateForm(Entity form)
         {
             Service.Update(form);
+        }
+
+        public void UpdateFormEventHandlers(Entity form, string eventName, List<FormEvent> formEvents)
+        {
+            var formXml = form.GetAttributeValue<string>("formxml");
+            var formDoc = new XmlDocument();
+            formDoc.LoadXml(formXml);
+
+            var formNode = formDoc.SelectSingleNode("form");
+            if (formNode == null)
+            {
+                throw new Exception("Expected node \"formNode\" was not found");
+            }
+
+            // Remove all Nodes for Event
+            RemoveAllNodesForEvent(formNode, eventName);
+
+            // Add All Nodes
+            AddFormEvents(formNode, eventName, formEvents);
+
+            form["formxml"] = formDoc.OuterXml;
+            UpdateForm(form);
+        }
+
+        private static void AddFormEvents(XmlNode formNode, string eventName, List<FormEvent> formEvents)
+        {
+            if (formEvents.Count == 0)
+            {
+                return;
+            }
+            var eventsNode = formNode.SelectSingleNode("events");
+            if (eventsNode == null)
+            {
+                eventsNode = formNode.OwnerDocument.CreateElement("events");
+                formNode.AppendChild(eventsNode);
+            }
+            var eventNode = eventsNode.OwnerDocument.CreateElement("event");
+            AddAttribute(eventNode, "name", eventName);
+            AddAttribute(eventNode, "application", "false");
+            AddAttribute(eventNode, "active", "false");
+            eventsNode.AppendChild(eventNode);
+            var handlers = eventNode.OwnerDocument.CreateElement("Handlers");
+            eventNode.AppendChild(handlers);
+            foreach (var formEvent in formEvents)
+            {
+                var handler = eventNode.OwnerDocument.CreateElement("Handler");
+                AddAttribute(handler, "functionName", formEvent.Function);
+                AddAttribute(handler, "libraryName", formEvent.Script);
+                AddAttribute(handler, "handlerUniqueId", Guid.NewGuid().ToString("B"));
+                AddAttribute(handler, "enabled", formEvent.Enabled.ToString().ToLower());
+                AddAttribute(handler, "parameters", formEvent.Parameters);
+                AddAttribute(handler, "passExecutionContext", formEvent.PassExecutionContext.ToString().ToLower());
+                handlers.AppendChild(handler);
+            }
+        }
+
+        private static void AddAttribute(XmlNode eventNode, string name, string value)
+        {
+            var attribute = eventNode.OwnerDocument.CreateAttribute(name);
+            attribute.Value = value;
+            eventNode.Attributes.Append(attribute);
+        }
+
+        private static void RemoveAllNodesForEvent(XmlNode formNode, string eventName)
+        {
+            var eventNode = formNode.SelectSingleNode(string.Format("events/event[@name='{0}']", eventName));
+            if (eventNode != null)
+            {
+                var eventsNode = eventNode.ParentNode;
+                if (eventsNode.ChildNodes.Count == 1)
+                {
+                    // Removing event nod, and no more events, remove Events
+                    eventsNode.ParentNode.RemoveChild(eventsNode);
+                }
+                else
+                {
+                    eventsNode.RemoveChild(eventNode);
+                }
+            }
         }
     }
 }

@@ -49,6 +49,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
@@ -95,6 +96,12 @@
     <Compile Include="FormLibrariesManager\AppCode\ScriptManager.cs" />
     <Compile Include="FormLibrariesManager\AppCode\TreeNodeSorter.cs" />
     <Compile Include="FormLibrariesManager\AppCode\TreeViewDelegates.cs" />
+    <Compile Include="FormLibrariesManager\Forms\FormEventsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormLibrariesManager\Forms\FormEventsDialog.Designer.cs">
+      <DependentUpon>FormEventsDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormLibrariesManager\Forms\ScriptsOrderDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -108,6 +115,8 @@
       <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
     <Compile Include="FormLibrariesManager\Plugin.cs" />
+    <Compile Include="FormLibrariesManager\POCO\FormEvent.cs" />
+    <Compile Include="FormLibrariesManager\POCO\Script.cs" />
     <Compile Include="FormLibrariesManager\UserControls\CrmForms.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -119,6 +128,12 @@
     </Compile>
     <Compile Include="FormLibrariesManager\UserControls\CrmScriptsTreeView.Designer.cs">
       <DependentUpon>CrmScriptsTreeView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormLibrariesManager\UserControls\GridLineDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FormLibrariesManager\UserControls\GridLineDataGridView.Designer.cs">
+      <DependentUpon>GridLineDataGridView.cs</DependentUpon>
     </Compile>
     <Compile Include="FormParameterManager\AppCode\CrmForm.cs" />
     <Compile Include="FormParameterManager\AppCode\CrmSolution.cs" />
@@ -138,8 +153,17 @@
     </Compile>
     <Compile Include="FormParameterManager\Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="MsCrmTools.FormRelated.FormLibrariesManager.POCO.FormEvent.datasource" />
+    <None Include="MsCrmTools.FormRelated.FormLibrariesManager.POCO.Script.datasource" />
+    <None Include="Resources\cmd_movedown.png" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormAttributeManager\Forms\ReferenceAttributeSelector.resx">
       <DependentUpon>ReferenceAttributeSelector.cs</DependentUpon>
@@ -152,6 +176,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormAttributeManager\UserControls\AttributeSelector.resx">
       <DependentUpon>AttributeSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormLibrariesManager\Forms\FormEventsDialog.resx">
+      <DependentUpon>FormEventsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormLibrariesManager\Forms\ScriptsOrderDialog.resx">
       <DependentUpon>ScriptsOrderDialog.cs</DependentUpon>
@@ -171,6 +198,10 @@
     <EmbeddedResource Include="FormParameterManager\MainControl.resx">
       <DependentUpon>MainControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Connection Projects\McTools.Xrm.Connection\McTools.Xrm.Connection.csproj">
@@ -181,6 +212,15 @@
       <Project>{df77aea3-43f7-403c-91af-3023a3bb06ec}</Project>
       <Name>XrmToolBox.Extensibility</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cmd_moveup.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_16_remove.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cmd_add.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
