@@ -122,19 +122,47 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
             }
 
             // Retrieve events that use the library
-            var eventNodes = formNode.SelectNodes(string.Format("events/event/Handlers/Handler[@libraryName='{0}']", libraryName));
-            if (eventNodes != null && eventNodes.Count > 0)
+            var handlerEventNodes = formNode.SelectNodes(string.Format("events/event/Handlers/Handler[@libraryName='{0}']", libraryName));
+            if (handlerEventNodes != null && handlerEventNodes.Count > 0)
             {
-                var result =
-                    MessageBox.Show(parentForm,
-                        string.Format(
-                            "The library '{2}' is used by {0} event{1}. If you remove the library, {0} event{1} will be removed too\r\n\r\nDo you want to continue?",
-                            eventNodes.Count, eventNodes.Count > 1 ? "s" : "", libraryName), "Question", MessageBoxButtons.YesNo,
+                var result = DialogResult.None;
+                parentForm.Invoke((MethodInvoker)delegate {
+                    result = MessageBox.Show(parentForm, string.Format(
+                        "The library '{2}' is used by {0} event{1}. If you remove the library, {0} event{1} will be removed too\r\n\r\nDo you want to continue?",
+                        handlerEventNodes.Count, handlerEventNodes.Count > 1 ? "s" : "", libraryName)
+                        , "Question", MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question);
+                });
 
                 if (result == DialogResult.No)
                 {
                     return false;
+                }
+
+                // Remove events that were using the library
+                foreach (XmlNode handlerNode in handlerEventNodes)
+                {
+                    // Events> <Event> <Handlers><Handler>
+                    if (handlerNode.ParentNode.ChildNodes.Count == 1)
+                    {
+                        var events = formNode.SelectSingleNode("events");
+                        if (events.ChildNodes.Count == 1)
+                        {
+                            // Remove Events since it only has one Event and the Event only has on handler, and the Handler is getting removed
+                            events.ParentNode.RemoveChild(events);
+                        }
+                        else
+                        {
+                            // Remove Event since it only has one handler and it is being removed, but there are other events
+                            events.RemoveChild(handlerNode.ParentNode.ParentNode);
+                        }
+
+                    }
+                    else
+                    {
+                        // Remove only handler since there are other handlers 
+                        handlerNode.ParentNode.RemoveChild(handlerNode);
+                    }
                 }
             }
 
@@ -148,7 +176,7 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
             var libraryNode = formLibrariesNode.SelectSingleNode(string.Format("Library[@name='{0}']", libraryName));
             if (libraryNode == null)
             {
-                throw new Exception("This library is noy included in this form");
+                throw new Exception("This library is not included in this form");
             }
 
             // Remove library
@@ -157,19 +185,6 @@ namespace MsCrmTools.FormLibrariesManager.AppCode
             if (formLibrariesNode.ChildNodes.Count == 0)
             {
                 formLibrariesNode.ParentNode.RemoveChild(formLibrariesNode);
-            }
-
-            // Remove events that was using the library
-            foreach (XmlNode eventNode in eventNodes)
-            {
-                if (eventNode.ParentNode.ChildNodes.Count == 1)
-                {
-                    formNode.SelectSingleNode("events").RemoveChild(eventNode.ParentNode.ParentNode);
-                }
-                else
-                {
-                    eventNode.ParentNode.RemoveChild(eventNode);
-                }
             }
 
             // Update the form xml content

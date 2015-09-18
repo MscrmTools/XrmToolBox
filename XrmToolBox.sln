@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox", "XrmToolBox\XrmToolBox.csproj", "{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}"
 EndProject
@@ -504,8 +504,8 @@ Global
 		{236F1329-C748-4C01-948B-98AE9EA89086}.Release|x86.ActiveCfg = Release|Any CPU
 		{5244E9BE-820A-4613-8ACC-ADC858B83C26}.Debug Without GemBox|Any CPU.ActiveCfg = Debug|Any CPU
 		{5244E9BE-820A-4613-8ACC-ADC858B83C26}.Debug Without GemBox|Any CPU.Build.0 = Debug|Any CPU
-		{5244E9BE-820A-4613-8ACC-ADC858B83C26}.Debug Without GemBox|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{5244E9BE-820A-4613-8ACC-ADC858B83C26}.Debug Without GemBox|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5244E9BE-820A-4613-8ACC-ADC858B83C26}.Debug Without GemBox|Mixed Platforms.ActiveCfg = Debug Without GemBox|Any CPU
+		{5244E9BE-820A-4613-8ACC-ADC858B83C26}.Debug Without GemBox|Mixed Platforms.Build.0 = Debug Without GemBox|Any CPU
 		{5244E9BE-820A-4613-8ACC-ADC858B83C26}.Debug Without GemBox|x86.ActiveCfg = Debug|Any CPU
 		{5244E9BE-820A-4613-8ACC-ADC858B83C26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5244E9BE-820A-4613-8ACC-ADC858B83C26}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -519,8 +519,8 @@ Global
 		{5244E9BE-820A-4613-8ACC-ADC858B83C26}.Release|x86.ActiveCfg = Release|Any CPU
 		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Debug Without GemBox|Any CPU.ActiveCfg = Debug|Any CPU
 		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Debug Without GemBox|Any CPU.Build.0 = Debug|Any CPU
-		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Debug Without GemBox|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Debug Without GemBox|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Debug Without GemBox|Mixed Platforms.ActiveCfg = Debug Without GemBox|Any CPU
+		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Debug Without GemBox|Mixed Platforms.Build.0 = Debug Without GemBox|Any CPU
 		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Debug Without GemBox|x86.ActiveCfg = Debug|Any CPU
 		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -534,8 +534,8 @@ Global
 		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Release|x86.ActiveCfg = Release|Any CPU
 		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug Without GemBox|Any CPU.ActiveCfg = Debug|Any CPU
 		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug Without GemBox|Any CPU.Build.0 = Debug|Any CPU
-		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug Without GemBox|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug Without GemBox|Mixed Platforms.Build.0 = Debug|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug Without GemBox|Mixed Platforms.ActiveCfg = Debug Without GemBox|Any CPU
+		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug Without GemBox|Mixed Platforms.Build.0 = Debug Without GemBox|Any CPU
 		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug Without GemBox|x86.ActiveCfg = Debug|Any CPU
 		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -549,8 +549,8 @@ Global
 		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Release|x86.ActiveCfg = Release|Any CPU
 		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug Without GemBox|Any CPU.ActiveCfg = Debug|Any CPU
 		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug Without GemBox|Any CPU.Build.0 = Debug|Any CPU
-		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug Without GemBox|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug Without GemBox|Mixed Platforms.Build.0 = Debug|Any CPU
+		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug Without GemBox|Mixed Platforms.ActiveCfg = Debug Without GemBox|Any CPU
+		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug Without GemBox|Mixed Platforms.Build.0 = Debug Without GemBox|Any CPU
 		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug Without GemBox|x86.ActiveCfg = Debug|Any CPU
 		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug|Any CPU.Build.0 = Debug|Any CPU

@@ -214,8 +214,10 @@ namespace MsCrmTools.FormLibrariesManager
             WorkAsync("Updating forms...",
                 (bw, evt) =>
                 {
-                    var scripts = (List<Entity>)((object[])evt.Argument)[0];
-                    var forms = (List<Entity>)((object[])evt.Argument)[1];
+                    var argArray = (List<Entity>[]) evt.Argument;
+                    var scripts = argArray[0];
+                    var forms = argArray[1];
+
 
                     var fManager = new FormManager(Service);
 
@@ -307,7 +309,7 @@ namespace MsCrmTools.FormLibrariesManager
                     }
                 },
                 evt => SetWorkingMessage(evt.UserState.ToString()),
-                new[] { scriptsParam, formsParam });
+                new [] { scriptsParam, formsParam });
         }
     }
 }
