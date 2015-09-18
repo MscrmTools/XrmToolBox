@@ -95,5 +95,18 @@ namespace MsCrmTools.FormRelated.FormLibrariesManager.Forms
         {
             DialogResult = DialogResult.Cancel;
         }
+
+        private void gridLineDataGridView1_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
+        {
+
+            // Default Enabled and Pass Execution Context to true
+            //e.Row.Cells["Enabled"]
+            //formEvent.Enabled = true;
+            //formEvent.PassExecutionContext = true;
+            e.Row.Cells[scriptDataGridViewTextBoxColumn.Name].Value = Scripts.Last().Name;
+            e.Row.Cells[Enabled.Name].Value = true;
+            e.Row.Cells[PassExecutionContext.Name].Value = true;
+
+        }
     }
 }

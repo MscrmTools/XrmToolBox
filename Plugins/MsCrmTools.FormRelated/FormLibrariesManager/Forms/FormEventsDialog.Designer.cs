@@ -1,5 +1,4 @@
 ﻿using MsCrmTools.FormLibrariesManager.Forms;
-using MsCrmTools.FormRelated.FormLibrariesManager.UserControls;
 
 namespace MsCrmTools.FormRelated.FormLibrariesManager.Forms
 {
@@ -41,13 +40,13 @@ namespace MsCrmTools.FormRelated.FormLibrariesManager.Forms
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
             this.gridLineDataGridView1 = new System.Windows.Forms.DataGridView();
-            this.bsScript = new System.Windows.Forms.BindingSource(this.components);
-            this.bsFormEvent = new System.Windows.Forms.BindingSource(this.components);
             this.scriptDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.bsScript = new System.Windows.Forms.BindingSource(this.components);
             this.functionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Enabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.PassExecutionContext = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Parameters = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.bsFormEvent = new System.Windows.Forms.BindingSource(this.components);
             this.pnlHeader.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridLineDataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsScript)).BeginInit();
@@ -148,14 +147,7 @@ namespace MsCrmTools.FormRelated.FormLibrariesManager.Forms
             this.gridLineDataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.gridLineDataGridView1.Size = new System.Drawing.Size(630, 237);
             this.gridLineDataGridView1.TabIndex = 8;
-            // 
-            // bsScript
-            // 
-            this.bsScript.DataSource = typeof(MsCrmTools.FormRelated.FormLibrariesManager.POCO.Script);
-            // 
-            // bsFormEvent
-            // 
-            this.bsFormEvent.DataSource = typeof(MsCrmTools.FormRelated.FormLibrariesManager.POCO.FormEvent);
+            this.gridLineDataGridView1.DefaultValuesNeeded += new System.Windows.Forms.DataGridViewRowEventHandler(this.gridLineDataGridView1_DefaultValuesNeeded);
             // 
             // scriptDataGridViewTextBoxColumn
             // 
@@ -168,6 +160,10 @@ namespace MsCrmTools.FormRelated.FormLibrariesManager.Forms
             this.scriptDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.scriptDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             this.scriptDataGridViewTextBoxColumn.ValueMember = "Name";
+            // 
+            // bsScript
+            // 
+            this.bsScript.DataSource = typeof(MsCrmTools.FormRelated.FormLibrariesManager.POCO.Script);
             // 
             // functionDataGridViewTextBoxColumn
             // 
@@ -200,6 +196,10 @@ namespace MsCrmTools.FormRelated.FormLibrariesManager.Forms
             this.Parameters.FillWeight = 93.27411F;
             this.Parameters.HeaderText = "Parameters";
             this.Parameters.Name = "Parameters";
+            // 
+            // bsFormEvent
+            // 
+            this.bsFormEvent.DataSource = typeof(MsCrmTools.FormRelated.FormLibrariesManager.POCO.FormEvent);
             // 
             // FormEventsDialog
             // 
