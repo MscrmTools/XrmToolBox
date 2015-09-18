@@ -64,7 +64,7 @@ namespace MsCrmTools.Translator
 
         private void BtnExportTranslationsClick(object sender, EventArgs e)
         {
-            if (lvEntities.CheckedItems.Count > 0 || chkExportGlobalOptSet.Checked || chkExportSiteMap.Checked)
+            if (lvEntities.CheckedItems.Count > 0 || chkExportGlobalOptSet.Checked || chkExportSiteMap.Checked || chkExportDashboards.Checked)
             {
                 var entities = (from ListViewItem item in lvEntities.CheckedItems select ((EntityMetadata)item.Tag).LogicalName).ToList();
 
@@ -85,6 +85,7 @@ namespace MsCrmTools.Translator
                                            ExportViews = chkExportViews.Checked,
                                            ExportCustomizedRelationships = chkExportCustomizedRelationships.Checked,
                                            ExportSiteMap = chkExportSiteMap.Checked,
+                                           ExportDashboards = chkExportDashboards.Checked,
                                            FilePath = sfd.FileName,
                                            Entities = entities
                                        };

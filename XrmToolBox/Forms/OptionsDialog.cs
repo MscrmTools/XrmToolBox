@@ -25,6 +25,7 @@ namespace XrmToolBox.Forms
             rdbToolsListSmall.Checked = !option.DisplayLargeIcons;
             chkDisplayMuFirst.Checked = option.DisplayMostUsedFirst;
             chkAllowUsageStatistics.Checked = option.AllowLogUsage.HasValue && option.AllowLogUsage.Value;
+            chkClosePluginsSilently.Checked = option.CloseOpenedPluginsSilently;
         }
 
         public Options Option { get { return option; } }
@@ -40,6 +41,7 @@ namespace XrmToolBox.Forms
             option.AllowLogUsage = chkAllowUsageStatistics.Checked;
             option.DisplayLargeIcons = rdbToolsListLarge.Checked;
             option.DisplayMostUsedFirst = chkDisplayMuFirst.Checked;
+            option.CloseOpenedPluginsSilently = chkClosePluginsSilently.Checked;
 
             option.HiddenPlugins =
                 lvPlugins.Items.Cast<ListViewItem>().Where(i => i.Checked == false).Select(i => i.Text).ToList();

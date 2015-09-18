@@ -238,6 +238,15 @@ namespace XrmToolBox
             AdaptPluginControlSize();
         }
 
+        private void ConnectUponApproval(object connectionParameter)
+        {
+            var info = new ConnectionParameterInfo
+            {
+                ConnectionParmater = connectionParameter
+            };
+            fHelper.AskForConnection(info, () => info.InfoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120));
+        }
+
         private bool IsMessageValid(object sender, MessageBusEventArgs message)
         {
             if (message == null || sender == null || !(sender is UserControl) || !(sender is IXrmToolBoxPluginControl))
@@ -409,15 +418,6 @@ namespace XrmToolBox
             }
         }
 
-        private void ConnectUponApproval(object connectionParameter)
-        {
-            var info = new ConnectionParameterInfo
-            {
-                ConnectionParmater = connectionParameter
-            };
-            fHelper.AskForConnection(info, () => info.InfoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120));
-        }
-
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             ProcessMenuItemsForPlugin();
@@ -545,6 +545,9 @@ namespace XrmToolBox
             currentOptions.Save();
 
             // Warn to close opened plugins
+            if (currentOptions.CloseOpenedPluginsSilently)
+                return;
+
             var info = new PluginCloseInfo(e.CloseReason);
             RequestCloseTabs(GetPluginPages(), info);
             e.Cancel = info.Cancel;
