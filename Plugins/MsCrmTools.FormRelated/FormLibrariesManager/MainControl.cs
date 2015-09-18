@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml;
+using MsCrmTools.FormRelated.FormLibrariesManager.POCO;
 using XrmToolBox.Extensibility;
 
 namespace MsCrmTools.FormLibrariesManager
@@ -61,8 +63,61 @@ namespace MsCrmTools.FormLibrariesManager
                     var forms = (List<Entity>)((object[])e.Result)[1];
 
                     crmScriptsTreeView1.LoadScripts(scripts);
-                    crmForms1.LoadForms(forms);
+                    crmForms1.LoadForms(forms, scripts, this);
 
+                    if (e.Error != null)
+                    {
+                        MessageBox.Show(ParentForm, "An error occured:" + e.Error.Message, "Error", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
+                },
+                e => SetWorkingMessage(e.UserState.ToString()));
+        }
+
+        public void UpdateFormEventHanders(Entity form, string eventName, List<FormEvent> formEvents)
+        {
+            WorkAsync("Updating Form " + form.GetAttributeValue<string>("name") + "...",
+                (bw, e) =>
+                {
+                    try
+                    {
+                        var manager = new FormManager(Service);
+                        manager.UpdateFormEventHandlers(form, eventName, formEvents);
+
+                        bw.ReportProgress(0, string.Format("Publishing entity '{0}'...", form.GetAttributeValue<string>("objecttypecode")));
+                        new FormManager(Service).PublishEntity(form.GetAttributeValue<string>("objecttypecode"));
+
+                        ListViewDelegates.AddItem(lvLogs,
+                            new ListViewItem
+                            {
+                                Text = form.GetAttributeValue<string>("objecttypecode"),
+                                SubItems =
+                                {
+                                    new ListViewItem.ListViewSubItem {Text = form.GetAttributeValue<string>("name")},
+                                    new ListViewItem.ListViewSubItem {Text = eventName},
+                                    new ListViewItem.ListViewSubItem {Text = "Updated!"}
+                                },
+                                ForeColor = Color.Green
+                            });
+                    }
+                    catch (Exception error)
+                    {
+                        ListViewDelegates.AddItem(lvLogs,
+                            new ListViewItem
+                            {
+                                Text = form.GetAttributeValue<string>("objecttypecode"),
+                                SubItems =
+                                {
+                                    new ListViewItem.ListViewSubItem {Text = form.GetAttributeValue<string>("name")},
+                                    new ListViewItem.ListViewSubItem {Text = eventName},
+                                    new ListViewItem.ListViewSubItem {Text = error.Message}
+                                },
+                                ForeColor = Color.Red
+                            });
+                    }
+                },
+                e =>
+                {
                     if (e.Error != null)
                     {
                         MessageBox.Show(ParentForm, "An error occured:" + e.Error.Message, "Error", MessageBoxButtons.OK,
@@ -94,7 +149,7 @@ namespace MsCrmTools.FormLibrariesManager
                 return;
             }
 
-            var sod = new ScriptsOrderDialog(scripts) { StartPosition = FormStartPosition.CenterParent };
+            var sod = new ScriptsOrderDialog(scripts, false) { StartPosition = FormStartPosition.CenterParent };
             if (sod.ShowDialog(ParentForm) == DialogResult.Cancel)
             {
                 return;
@@ -106,6 +161,7 @@ namespace MsCrmTools.FormLibrariesManager
                   var scriptsArg = (List<Entity>)((object[])evt.Argument)[0];
                   var addFirstArg = (bool)((object[])evt.Argument)[1];
                   var formsArg = (List<Entity>)((object[])evt.Argument)[2];
+                  var formsUpdated = new HashSet<Entity>();
 
                   if (addFirstArg)
                   {
@@ -120,13 +176,20 @@ namespace MsCrmTools.FormLibrariesManager
                   {
                       bw.ReportProgress(0, string.Format("Updating form '{0}' ({1})...", form.GetAttributeValue<string>("name"), form.GetAttributeValue<string>("objecttypecode")));
 
+                      bool atLeastOneScriptSucess = false;
+
                       foreach (var script in scriptsArg)
                       {
                           try
                           {
                               fManager.AddLibrary(form, script.GetAttributeValue<string>("name"), addFirstArg);
 
+                              atLeastOneScriptSucess = true;
                               atLeastOneSuccess = true;
+                              if (!formsUpdated.Contains(form))
+                              {
+                                formsUpdated.Add(form);  
+                              }
 
                               ListViewDelegates.AddItem(lvLogs,
                                  new ListViewItem
@@ -157,8 +220,10 @@ namespace MsCrmTools.FormLibrariesManager
                                   });
                           }
                       }
-
-                      fManager.UpdateForm(form);
+                      if (atLeastOneScriptSucess)
+                      {
+                          fManager.UpdateForm(form);
+                      }
                   }
 
                   if (!atLeastOneSuccess)
@@ -166,10 +231,10 @@ namespace MsCrmTools.FormLibrariesManager
                       return;
                   }
 
-                  foreach (var entitiesToPublish in formsArg.Select(f => f.GetAttributeValue<string>("objecttypecode")).Distinct())
+                  foreach (var entityToPublish in formsUpdated.Select(f => f.GetAttributeValue<string>("objecttypecode")).Distinct())
                   {
-                      bw.ReportProgress(0, string.Format("Publishing entity '{0}'...", entitiesToPublish));
-                      fManager.PublishForm(entitiesToPublish);
+                      bw.ReportProgress(0, string.Format("Publishing entity '{0}'...", entityToPublish));
+                      fManager.PublishEntity(entityToPublish);
                   }
               },
               evt =>
@@ -297,7 +362,7 @@ namespace MsCrmTools.FormLibrariesManager
                     foreach (var entitiesToPublish in forms.Select(f => f.GetAttributeValue<string>("objecttypecode")).Distinct())
                     {
                         bw.ReportProgress(0, string.Format("Publishing entity '{0}'...", entitiesToPublish));
-                        fManager.PublishForm(entitiesToPublish);
+                        fManager.PublishEntity(entitiesToPublish);
                     }
                 },
                 evt =>
@@ -310,6 +375,62 @@ namespace MsCrmTools.FormLibrariesManager
                 },
                 evt => SetWorkingMessage(evt.UserState.ToString()),
                 new [] { scriptsParam, formsParam });
+        }
+
+        public void UpdateFormLibraryOrder(Entity form, XmlNode formLibrariesNode)
+        {
+            WorkAsync("Reordering Libraries For Form " + form.GetAttributeValue<string>("name") + "...",
+                (bw, e) =>
+                {
+                    var selectedForm = (Entity)((object[]) e.Argument)[0];
+                    try
+                    {
+                        var node = (XmlNode)((object[])e.Argument)[1];
+                        selectedForm["formxml"] = node.OwnerDocument.OuterXml;
+                        Service.Update(selectedForm);
+
+                        bw.ReportProgress(0, string.Format("Publishing entity '{0}'...", selectedForm.GetAttributeValue<string>("objecttypecode")));
+                        new FormManager(Service).PublishEntity(selectedForm.GetAttributeValue<string>("objecttypecode"));
+
+                        ListViewDelegates.AddItem(lvLogs,
+                            new ListViewItem
+                            {
+                                Text = selectedForm.GetAttributeValue<string>("objecttypecode"),
+                                SubItems =
+                                {
+                                    new ListViewItem.ListViewSubItem {Text = selectedForm.GetAttributeValue<string>("name")},
+                                    new ListViewItem.ListViewSubItem {Text = "Reordering Form Libraries"},
+                                    new ListViewItem.ListViewSubItem {Text = "Updated!"}
+                                },
+                                ForeColor = Color.Green
+                            });
+                    }
+                    catch (Exception error)
+                    {
+                        ListViewDelegates.AddItem(lvLogs,
+                            new ListViewItem
+                            {
+                                Text = selectedForm.GetAttributeValue<string>("objecttypecode"),
+                                SubItems =
+                                {
+                                    new ListViewItem.ListViewSubItem {Text = selectedForm.GetAttributeValue<string>("name")},
+                                    new ListViewItem.ListViewSubItem {Text = "Reordering Form Libraries"},
+                                    new ListViewItem.ListViewSubItem {Text = error.Message}
+                                },
+                                ForeColor = Color.Red
+                            });
+                    }
+                },
+                e =>
+                {
+                    if (e.Error != null)
+                    {
+                        MessageBox.Show(ParentForm, "An error occured:" + e.Error.Message, "Error", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
+                },
+                e => SetWorkingMessage(e.UserState.ToString()), 
+                new object[] { form, formLibrariesNode });
         }
     }
 }
