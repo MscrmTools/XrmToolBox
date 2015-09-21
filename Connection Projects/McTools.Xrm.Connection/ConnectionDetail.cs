@@ -5,6 +5,7 @@ using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Discovery;
 using System;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Globalization;
 using System.ServiceModel.Description;
 using System.Xml.Linq;
@@ -218,10 +219,11 @@ namespace McTools.Xrm.Connection
 
         private string GetDiscoveryCrmConnectionString()
         {
-            var connectionString = string.Format("Url={0}://{1}:{2};",
+            DbConnectionStringBuilder dbcb = new DbConnectionStringBuilder();
+            dbcb.Add("Url", string.Format("{0}://{1}:{2}",
                 UseSsl ? "https" : "http",
                 UseIfd ? ServerName : UseOsdp ? "disco." + ServerName : UseOnline ? "dev." + ServerName : ServerName,
-                ServerPort == 0 ? (UseSsl ? 443 : 80) : ServerPort);
+                ServerPort == 0 ? (UseSsl ? 443 : 80) : ServerPort));
 
             if (IsCustomAuth)
             {
@@ -229,7 +231,7 @@ namespace McTools.Xrm.Connection
                 {
                     if (!string.IsNullOrEmpty(UserDomain))
                     {
-                        connectionString += string.Format("Domain={0};", UserDomain);
+                        dbcb.Add("Domain", UserDomain);
                     }
                 }
 
@@ -254,7 +256,8 @@ namespace McTools.Xrm.Connection
                     ConnectionManager.CryptoInitVector,
                     ConnectionManager.CryptoKeySize);
 
-                connectionString += string.Format("Username={0};Password={1};", username, decryptedPassword);
+                dbcb.Add("Username", username);
+                dbcb.Add("Password", decryptedPassword);
             }
 
             if (UseOnline && !UseOsdp)
@@ -272,22 +275,22 @@ namespace McTools.Xrm.Connection
                          || deviceCredentials.UserName.UserName.Contains("=")
                          || deviceCredentials.UserName.UserName.Contains(" "));
 
-                connectionString += string.Format("DeviceID={0};DevicePassword={1};",
-                                                  deviceCredentials.UserName.UserName,
-                                                  deviceCredentials.UserName.Password);
+                dbcb.Add("DeviceID", deviceCredentials.UserName.UserName);
+                dbcb.Add("DevicePassword", deviceCredentials.UserName.Password);
             }
 
             if (UseIfd && !string.IsNullOrEmpty(HomeRealmUrl))
             {
-                connectionString += string.Format("HomeRealmUri={0};", HomeRealmUrl);
+                dbcb.Add("HomeRealmUri", HomeRealmUrl);
             }
 
-            return connectionString;
+            return dbcb.ToString();
         }
 
         private string GetOrganizationCrmConnectionString()
         {
-            var connectionString = string.Format("Url={0};", OrganizationServiceUrl.Replace("/XRMServices/2011/Organization.svc", ""));
+            DbConnectionStringBuilder dbcb = new DbConnectionStringBuilder();
+            dbcb.Add("Url", OrganizationServiceUrl.Replace("/XRMServices/2011/Organization.svc", ""));
 
             if (IsCustomAuth)
             {
@@ -295,7 +298,7 @@ namespace McTools.Xrm.Connection
                 {
                     if (!string.IsNullOrEmpty(UserDomain))
                     {
-                        connectionString += string.Format("Domain={0};", UserDomain);
+                        dbcb.Add("Domain", UserDomain);
                     }
                 }
 
@@ -320,7 +323,8 @@ namespace McTools.Xrm.Connection
                    ConnectionManager.CryptoInitVector,
                    ConnectionManager.CryptoKeySize);
 
-                connectionString += string.Format("Username={0};Password={1};", username, decryptedPassword);
+                dbcb.Add("Username", username);
+                dbcb.Add("Password", decryptedPassword);
             }
 
             if (UseOnline)
@@ -338,19 +342,19 @@ namespace McTools.Xrm.Connection
                          || deviceCredentials.UserName.UserName.Contains("=")
                          || deviceCredentials.UserName.UserName.Contains(" "));
 
-                connectionString += string.Format("DeviceID={0};DevicePassword={1};",
-                                                  deviceCredentials.UserName.UserName,
-                                                  deviceCredentials.UserName.Password);
+                dbcb.Add("DeviceID", deviceCredentials.UserName.UserName);
+                dbcb.Add("DevicePassword", deviceCredentials.UserName.Password);
             }
 
             if (UseIfd && !string.IsNullOrEmpty(HomeRealmUrl))
             {
-                connectionString += string.Format("HomeRealmUri={0};", HomeRealmUrl);
+                dbcb.Add("HomeRealmUri", HomeRealmUrl);
             }
 
             //append timeout in seconds to connectionstring
-            connectionString += string.Format("Timeout={0};", Timeout.ToString(@"hh\:mm\:ss"));
-            return connectionString;
+            dbcb.Add("Timeout", Timeout.ToString(@"hh\:mm\:ss"));
+
+            return dbcb.ToString();
         }
 
         #endregion Méthodes
