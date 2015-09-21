@@ -8,14 +8,22 @@ namespace MsCrmTools.FormLibrariesManager.Forms
 {
     public partial class ScriptsOrderDialog : Form
     {
-        public ScriptsOrderDialog(List<Entity> scripts)
+
+        public ScriptsOrderDialog(List<Entity> scripts, bool reorderOnly)
         {
             InitializeComponent();
             Scripts = scripts;
             AddFirst = false;
+            ReorderOnly = reorderOnly;
+            if (reorderOnly)
+            {
+                rdbAddScriptsToBegining.Visible = false;
+                rdbAddScriptsToEnd.Visible = false;
+            }
         }
 
         public bool AddFirst { get; private set; }
+        public bool ReorderOnly { get; private set; }
         public List<Entity> Scripts { get; private set; }
 
         private void btnCancel_Click(object sender, EventArgs e)

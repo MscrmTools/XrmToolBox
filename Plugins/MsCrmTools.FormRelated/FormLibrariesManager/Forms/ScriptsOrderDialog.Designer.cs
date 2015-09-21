@@ -42,7 +42,7 @@
             this.tsbDown = new System.Windows.Forms.ToolStripButton();
             this.btnOK = new System.Windows.Forms.Button();
             this.rdbAddScriptsToBegining = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.rdbAddScriptsToEnd = new System.Windows.Forms.RadioButton();
             this.pnlHeader.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -179,18 +179,18 @@
             this.rdbAddScriptsToBegining.Text = "Add script(s) as first one(s)";
             this.rdbAddScriptsToBegining.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // rdbAddScriptsToEnd
             // 
-            this.radioButton2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Checked = true;
-            this.radioButton2.Location = new System.Drawing.Point(166, 302);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(148, 17);
-            this.radioButton2.TabIndex = 7;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "Add script(s) as last one(s)";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.rdbAddScriptsToEnd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.rdbAddScriptsToEnd.AutoSize = true;
+            this.rdbAddScriptsToEnd.Checked = true;
+            this.rdbAddScriptsToEnd.Location = new System.Drawing.Point(166, 302);
+            this.rdbAddScriptsToEnd.Name = "rdbAddScriptsToEnd";
+            this.rdbAddScriptsToEnd.Size = new System.Drawing.Size(148, 17);
+            this.rdbAddScriptsToEnd.TabIndex = 7;
+            this.rdbAddScriptsToEnd.TabStop = true;
+            this.rdbAddScriptsToEnd.Text = "Add script(s) as last one(s)";
+            this.rdbAddScriptsToEnd.UseVisualStyleBackColor = true;
             // 
             // ScriptsOrderDialog
             // 
@@ -198,7 +198,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(630, 334);
             this.ControlBox = false;
-            this.Controls.Add(this.radioButton2);
+            this.Controls.Add(this.rdbAddScriptsToEnd);
             this.Controls.Add(this.rdbAddScriptsToBegining);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.toolStrip1);
@@ -232,6 +232,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ToolStripButton tsbDown;
         private System.Windows.Forms.RadioButton rdbAddScriptsToBegining;
-        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton rdbAddScriptsToEnd;
     }
 }
