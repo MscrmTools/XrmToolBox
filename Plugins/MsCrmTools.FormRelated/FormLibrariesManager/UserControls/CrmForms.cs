@@ -1,26 +1,25 @@
-﻿using System;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using MsCrmTools.FormLibrariesManager.AppCode;
+using MsCrmTools.FormLibrariesManager.Forms;
+using MsCrmTools.FormRelated.FormLibrariesManager.Forms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using MsCrmTools.FormLibrariesManager.Forms;
-using MsCrmTools.FormRelated.FormLibrariesManager.Forms;
 using System.Xml;
 
 namespace MsCrmTools.FormLibrariesManager.UserControls
 {
     public partial class CrmForms : UserControl
     {
-        public Dictionary<string, Entity> ScriptsByName { get; }
-        public MainControl Plugin { get; set; }
-
         public CrmForms()
         {
             InitializeComponent();
             ScriptsByName = new Dictionary<string, Entity>();
         }
 
+        public MainControl Plugin { get; set; }
+        public Dictionary<string, Entity> ScriptsByName { get; private set; }
         public IOrganizationService Service { get; set; }
 
         public List<Entity> GetSelectedForms()
@@ -75,8 +74,8 @@ namespace MsCrmTools.FormLibrariesManager.UserControls
             FormEventsDialog fod;
             try
             {
-                var form = (Entity) lvForms.FocusedItem.Tag;
-                fod = new FormEventsDialog(form, "onload") {StartPosition = FormStartPosition.CenterParent};
+                var form = (Entity)lvForms.FocusedItem.Tag;
+                fod = new FormEventsDialog(form, "onload") { StartPosition = FormStartPosition.CenterParent };
                 if (fod.ShowDialog(ParentForm) == DialogResult.Cancel)
                 {
                     return;
@@ -95,8 +94,8 @@ namespace MsCrmTools.FormLibrariesManager.UserControls
             FormEventsDialog fod;
             try
             {
-                var form = (Entity) lvForms.FocusedItem.Tag;
-                fod = new FormEventsDialog(form, "onsave") {StartPosition = FormStartPosition.CenterParent};
+                var form = (Entity)lvForms.FocusedItem.Tag;
+                fod = new FormEventsDialog(form, "onsave") { StartPosition = FormStartPosition.CenterParent };
                 if (fod.ShowDialog(ParentForm) == DialogResult.Cancel)
                 {
                     return;
@@ -110,6 +109,7 @@ namespace MsCrmTools.FormLibrariesManager.UserControls
 
             Plugin.UpdateFormEventHanders(fod.Form, fod.EventName, fod.FormEvents.ToList());
         }
+
         private void viewLibrariesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
@@ -135,7 +135,7 @@ namespace MsCrmTools.FormLibrariesManager.UserControls
                 {
                     libraryNodes.Add(node);
                 }
-                
+
                 formLibrariesNode.RemoveAll();
 
                 foreach (var script in sod.Scripts)
@@ -157,8 +157,6 @@ namespace MsCrmTools.FormLibrariesManager.UserControls
                 MessageBox.Show(ex.Message);
                 return;
             }
-
-
         }
 
         #endregion Right Click Context Menu
