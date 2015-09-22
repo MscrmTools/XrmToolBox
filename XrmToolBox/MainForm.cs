@@ -94,7 +94,7 @@ namespace XrmToolBox
                         if (pluginModel == null)
                         {
                             // Actual Plugin was passed, Just update the plugin's Tab.
-                            UpdateTabConnection((TabPage) control.Parent);
+                            UpdateTabConnection((TabPage)control.Parent);
                         }
                         else
                         {
@@ -398,7 +398,14 @@ namespace XrmToolBox
 
         private void MainForm_OnRequestConnection(object sender, EventArgs e)
         {
-            ConnectUponApproval(sender);
+            if (e is RequestConnectionEventArgs)
+            {
+                ConnectUponApproval(e);
+            }
+            else
+            {
+                ConnectUponApproval(sender);
+            }
         }
 
         private void PluginClicked(object sender, EventArgs e)
@@ -681,17 +688,6 @@ namespace XrmToolBox
             }
         }
 
-        private void UpdateTabConnection(TabPage tab)
-        {
-            tab.GetPlugin().UpdateConnection(service, currentConnectionDetail);
-
-            tab.Text = string.Format("{0} ({1})",
-                ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>) tab.Tag).Metadata.Name,
-                currentConnectionDetail != null
-                    ? currentConnectionDetail.ConnectionName
-                    : "Not connected");
-        }
-
         private string ExtractSwitchValue(string key, ref string[] args)
         {
             var name = string.Empty;
@@ -705,6 +701,17 @@ namespace XrmToolBox
             }
 
             return name;
+        }
+
+        private void UpdateTabConnection(TabPage tab)
+        {
+            tab.GetPlugin().UpdateConnection(service, currentConnectionDetail);
+
+            tab.Text = string.Format("{0} ({1})",
+                ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)tab.Tag).Metadata.Name,
+                currentConnectionDetail != null
+                    ? currentConnectionDetail.ConnectionName
+                    : "Not connected");
         }
 
         #endregion Other methods
