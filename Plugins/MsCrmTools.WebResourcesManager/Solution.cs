@@ -7,10 +7,10 @@ using Microsoft.Xrm.Sdk;
 
 namespace MsCrmTools.WebResourcesManager
 {
-    class Solution
+    internal class Solution
     {
-        public Entity InnerSolution { get; set; }
         public string CustomizationPrefix { get; set; }
+        public Entity InnerSolution { get; set; }
 
         public override string ToString()
         {

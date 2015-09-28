@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Windows.Forms;
-using Microsoft.Crm.Sdk;
-using Microsoft.Crm.Sdk.Messages;
+﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
-
-#if NO_GEMBOX
 using OfficeOpenXml;
-#else
-using GemBox.Spreadsheet;
-#endif
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace MsCrmTools.Translator.AppCode
 {
     public class ViewTranslation
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <example>
         /// viewId;entityLogicalName;viewName;ViewType;Type;LCID1;LCID2;...;LCODX
@@ -67,7 +59,7 @@ namespace MsCrmTools.Translator.AppCode
                         EntityMoniker = new EntityReference("savedquery", view.Id)
                     };
 
-                    var response = (RetrieveLocLabelsResponse) service.Execute(request);
+                    var response = (RetrieveLocLabelsResponse)service.Execute(request);
                     foreach (var locLabel in response.Label.LocalizedLabels)
                     {
                         crmView.Names.Add(locLabel.LanguageCode, locLabel.Label);
@@ -87,8 +79,8 @@ namespace MsCrmTools.Translator.AppCode
                     }
                 }
             }
-            
-            foreach (var crmView in crmViews.OrderBy(cv=>cv.Entity).ThenBy(cv=>cv.Type))
+
+            foreach (var crmView in crmViews.OrderBy(cv => cv.Entity).ThenBy(cv => cv.Type))
             {
                 var cell = 0;
                 ZeroBasedSheet.Cell(sheet, line, cell++).Value = crmView.Id.ToString("B");
@@ -99,7 +91,7 @@ namespace MsCrmTools.Translator.AppCode
                 foreach (var lcid in languages)
                 {
                     var name = crmView.Names.FirstOrDefault(n => n.Key == lcid);
-                    if(name.Value != null)
+                    if (name.Value != null)
                         ZeroBasedSheet.Cell(sheet, line, cell++).Value = name.Value;
                     else
                     {
@@ -142,7 +134,6 @@ namespace MsCrmTools.Translator.AppCode
             }
         }
 
-#if NO_GEMBOX
         public void Import(ExcelWorksheet sheet, IOrganizationService service)
         {
             var views = new List<Tuple<int, Entity>>();
@@ -173,36 +164,6 @@ namespace MsCrmTools.Translator.AppCode
                 service.Execute(request);
             }
         }
-#else
-        public void Import(ExcelWorksheet sheet, IOrganizationService service)
-        {
-            var views = new List<Tuple<int, Entity>>();
-
-            foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
-            {
-                var currentViewId = new Guid(row.Cells[0].Value.ToString());
-                var request = new SetLocLabelsRequest
-                {
-                    EntityMoniker = new EntityReference("savedquery", currentViewId),
-                    AttributeName = row.Cells[3].Value.ToString() == "Name" ? "name" : "description"
-                };
-                
-                var labels = new List<LocalizedLabel>();
-
-                var columnIndex = 4;
-                while (row.Cells[columnIndex].Value != null)
-                {
-                    var currentLcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
-                    labels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(),currentLcid));
-                    columnIndex++;
-                }
-
-                request.Labels = labels.ToArray();
-
-                service.Execute(request);
-            }
-        }
-#endif
 
         private void AddHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
         {

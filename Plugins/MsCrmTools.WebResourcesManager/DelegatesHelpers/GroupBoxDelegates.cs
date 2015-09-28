@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace MsCrmTools.WebResourcesManager.DelegatesHelpers
 {
-    class GroupBoxDelegates
+    internal class GroupBoxDelegates
     {
         public static void SetEnableState(GroupBox gb, bool enabled)
         {

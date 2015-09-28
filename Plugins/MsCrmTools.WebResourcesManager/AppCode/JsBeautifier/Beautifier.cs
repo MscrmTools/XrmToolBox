@@ -5,7 +5,7 @@
     using System.Globalization;
     using System.Linq;
     using System.Text.RegularExpressions;
-    
+
     public class Beautifier
     {
         public Beautifier()
@@ -19,101 +19,29 @@
             this.BlankState();
         }
 
-        public BeautifierOptions Opts { get; set; }
-
         public BeautifierFlags Flags { get; set; }
-
+        public BeautifierOptions Opts { get; set; }
+        private string Digits { get; set; }
+        private bool DoBlockJustClosed { get; set; }
         private List<BeautifierFlags> FlagStore { get; set; }
 
-        private bool WantedNewline { get; set; }
-
-        private bool JustAddedNewline { get; set; }
-
-        private bool DoBlockJustClosed { get; set; }
-
         private string IndentString { get; set; }
-
-        private string PreindentString { get; set; }
-
-        private string LastWord { get; set; }
-
-        private string LastType { get; set; }
-
-        private string LastText { get; set; }
-
-        private string LastLastText { get; set; }
-
         private string Input { get; set; }
-
+        private bool JustAddedNewline { get; set; }
+        private string LastLastText { get; set; }
+        private string LastText { get; set; }
+        private string LastType { get; set; }
+        private string LastWord { get; set; }
+        private string[] LineStarters { get; set; }
+        private int NNewlines { get; set; }
         private List<string> Output { get; set; }
-
+        private int ParserPos { get; set; }
+        private string PreindentString { get; set; }
+        private string[] Punct { get; set; }
+        private bool WantedNewline { get; set; }
         private char[] Whitespace { get; set; }
 
         private string Wordchar { get; set; }
-
-        private string Digits { get; set; }
-
-        private string[] Punct { get; set; }
-
-        private string[] LineStarters { get; set; }
-
-        private int ParserPos { get; set; }
-
-        private int NNewlines { get; set; }
-
-        private void BlankState()
-        {
-            // internal flags
-            this.Flags = new BeautifierFlags("BLOCK");
-            this.FlagStore = new List<BeautifierFlags>();
-            this.WantedNewline = false;
-            this.JustAddedNewline = false;
-            this.DoBlockJustClosed = false;
-            
-            if (this.Opts.IndentWithTabs)
-                this.IndentString = "\t";
-            else
-                this.IndentString = new string(this.Opts.IndentChar, (int)this.Opts.IndentSize);
-
-            this.PreindentString = "";
-            this.LastWord = "";               // last TK_WORD seen
-            this.LastType = "TK_START_EXPR";  // last token type
-            this.LastText = "";               // last token text
-            this.LastLastText = "";           // pre-last token text
-            this.Input = null;
-            this.Output = new List<string>(); // formatted javascript gets built here
-            this.Whitespace = new[] { '\n', '\r', '\t', ' ' };
-            this.Wordchar = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$";
-            this.Digits = "0123456789";
-            this.Punct = "+ - * / % & ++ -- = += -= *= /= %= == === != !== > < >= <= >> << >>> >>>= >>= <<= && &= | || ! !! , : ? ^ ^= |= :: <?= <? ?> <%= <% %>".Split(' ');
-            
-            // Words which always should start on a new line
-            this.LineStarters = "continue,try,throw,return,var,if,switch,case,default,for,while,break,function".Split(',');
-            this.SetMode("BLOCK");
-            this.ParserPos = 0;
-        }
-
-        private void SetMode(string mode)
-        {
-            BeautifierFlags prev = new BeautifierFlags("BLOCK");
-            if (this.Flags != null)
-            {
-                this.FlagStore.Add(this.Flags);
-                prev = this.Flags;
-            }
-            this.Flags = new BeautifierFlags(mode);
-
-            if (this.FlagStore.Count == 1)
-                this.Flags.IndentationLevel = 0;
-            else
-            {
-                this.Flags.IndentationLevel = prev.IndentationLevel;
-                if (prev.VarLine && prev.VarLineReindented)
-                    this.Flags.IndentationLevel = this.Flags.IndentationLevel + 1;
-            }
-
-            this.Flags.PreviousMode = prev.Mode;
-        }
 
         public string Beautify(string s, BeautifierOptions opts = null)
         {
@@ -140,7 +68,7 @@
                     break;
 
                 Dictionary<string, Action<string>> handlers = new Dictionary<string, Action<string>> {
-                    { "TK_START_EXPR", HandleStartExpr }, 
+                    { "TK_START_EXPR", HandleStartExpr },
                     { "TK_END_EXPR", HandleEndExpr },
                     { "TK_START_BLOCK", HandleStartBlock },
                     { "TK_END_BLOCK", HandleEndBlock },
@@ -168,44 +96,35 @@
             string sweetCode = this.PreindentString + regex.Replace(string.Concat(this.Output), "", 1);
             return sweetCode;
         }
-        
-        private void TrimOutput(bool eatNewlines = false)
+
+        private void Append(string s)
         {
-            while (this.Output.Count != 0 &&
-                (this.Output[this.Output.Count - 1] == " " ||
-                this.Output[this.Output.Count - 1] == this.IndentString ||
-                this.Output[this.Output.Count - 1] == this.PreindentString ||
-                (eatNewlines && (this.Output[this.Output.Count - 1] == "\n" || this.Output[this.Output.Count - 1] == "\r"))))
+            if (s == " ")
             {
-                this.Output.RemoveAt(this.Output.Count - 1);
+                // do not add just a single space after the // comment, ever
+                if (this.LastType == "TK_COMMENT")
+                {
+                    this.AppendNewline();
+                    return;
+                }
+
+                // make sure only single space gets drawn
+                if (this.Flags.EatNextSpace)
+                    this.Flags.EatNextSpace = false;
+                else if (this.Output.Count != 0 &&
+                    this.Output[this.Output.Count - 1] != " " &&
+                    this.Output[this.Output.Count - 1] != "\n" &&
+                    this.Output[this.Output.Count - 1] != this.IndentString)
+                {
+                    this.Output.Add(" ");
+                }
             }
-        }
-
-        private bool IsSpecialWord(string s)
-        {
-            return s == "case" || s == "return" || s == "do" || s == "if" || s == "throw" || s == "else";
-        }
-
-        private bool IsArray(string mode)
-        {
-            return mode == "[EXPRESSION]" || mode == "[INDENTED-EXPRESSION]";
-        }
-
-        private bool IsExpression(string mode)
-        {
-            return mode == "[EXPRESSION]" ||
-                mode == "[INDENTED-EXPRESSION]" ||
-                mode == "(EXPRESSION)" ||
-                mode == "(FOR-EXPRESSION)" ||
-                mode == "(COND-EXPRESSION)";
-        }
-
-        private void AppendNewlineForced()
-        {
-            bool oldArrayIndentation = this.Opts.KeepArrayIndentation;
-            this.Opts.KeepArrayIndentation = false;
-            this.AppendNewline();
-            this.Opts.KeepArrayIndentation = oldArrayIndentation;
+            else
+            {
+                this.JustAddedNewline = false;
+                this.Flags.EatNextSpace = false;
+                this.Output.Add(s);
+            }
         }
 
         private void AppendNewline(bool ignoreRepeated = true, bool resetStatementFlags = true)
@@ -242,62 +161,44 @@
                 this.Output.Add(this.IndentString);
         }
 
-        private void Append(string s)
+        private void AppendNewlineForced()
         {
-            if (s == " ")
-            {
-                // do not add just a single space after the // comment, ever
-                if (this.LastType == "TK_COMMENT")
-                {
-                    this.AppendNewline();
-                    return;
-                }
+            bool oldArrayIndentation = this.Opts.KeepArrayIndentation;
+            this.Opts.KeepArrayIndentation = false;
+            this.AppendNewline();
+            this.Opts.KeepArrayIndentation = oldArrayIndentation;
+        }
 
-                // make sure only single space gets drawn
-                if (this.Flags.EatNextSpace)
-                    this.Flags.EatNextSpace = false;
+        private void BlankState()
+        {
+            // internal flags
+            this.Flags = new BeautifierFlags("BLOCK");
+            this.FlagStore = new List<BeautifierFlags>();
+            this.WantedNewline = false;
+            this.JustAddedNewline = false;
+            this.DoBlockJustClosed = false;
 
-                else if (this.Output.Count != 0 &&
-                    this.Output[this.Output.Count - 1] != " " &&
-                    this.Output[this.Output.Count - 1] != "\n" &&
-                    this.Output[this.Output.Count - 1] != this.IndentString)
-                {
-                    this.Output.Add(" ");
-                }
-            }
+            if (this.Opts.IndentWithTabs)
+                this.IndentString = "\t";
             else
-            {
-                this.JustAddedNewline = false;
-                this.Flags.EatNextSpace = false;
-                this.Output.Add(s);
-            }
-        }
+                this.IndentString = new string(this.Opts.IndentChar, (int)this.Opts.IndentSize);
 
-        private void Indent()
-        {
-            this.Flags.IndentationLevel = this.Flags.IndentationLevel + 1;
-        }
+            this.PreindentString = "";
+            this.LastWord = "";               // last TK_WORD seen
+            this.LastType = "TK_START_EXPR";  // last token type
+            this.LastText = "";               // last token text
+            this.LastLastText = "";           // pre-last token text
+            this.Input = null;
+            this.Output = new List<string>(); // formatted javascript gets built here
+            this.Whitespace = new[] { '\n', '\r', '\t', ' ' };
+            this.Wordchar = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$";
+            this.Digits = "0123456789";
+            this.Punct = "+ - * / % & ++ -- = += -= *= /= %= == === != !== > < >= <= >> << >>> >>>= >>= <<= && &= | || ! !! , : ? ^ ^= |= :: <?= <? ?> <%= <% %>".Split(' ');
 
-        private void RemoveIndent()
-        {
-            if (this.Output.Count != 0 &&
-                (this.Output[this.Output.Count - 1] == this.IndentString ||
-                 this.Output[this.Output.Count - 1] == this.PreindentString))
-            {
-                this.Output.RemoveAt(this.Output.Count - 1);
-            }
-        }
-
-        private void RestoreMode()
-        {
-            this.DoBlockJustClosed = this.Flags.Mode == "DO_BLOCK";
-            if (this.FlagStore.Count > 0)
-            {
-                string mode = this.Flags.Mode;
-                this.Flags = this.FlagStore[this.FlagStore.Count - 1];
-                this.FlagStore.RemoveAt(this.FlagStore.Count - 1);
-                this.Flags.PreviousMode = mode;
-            }
+            // Words which always should start on a new line
+            this.LineStarters = "continue,try,throw,return,var,if,switch,case,default,for,while,break,function".Split(',');
+            this.SetMode("BLOCK");
+            this.ParserPos = 0;
         }
 
         private Tuple<string, string> GetNextToken()
@@ -383,7 +284,7 @@
                             break;
                     }
                 }
-                
+
                 // small and surprisingly unugly hack for 1E-10 representation
                 if (this.ParserPos != this.Input.Length && "+-".Contains(this.Input[this.ParserPos]) && Regex.IsMatch(cc, "^[0-9]+[Ee]$"))
                 {
@@ -665,7 +566,346 @@
             return new Tuple<string, string>(c.ToString(), "TK_UNKNOWN");
         }
 
-        private void HandleStartExpr(string  tokenText)
+        private void HandleBlockComment(string tokenText)
+        {
+            string[] lines = tokenText.Replace("\r", "").Split('\n');
+            // all lines start with an asterisk? that's a proper box comment
+
+            if (!lines.Skip(1).Where(x => x.Trim() == "" || x.TrimStart()[0] != '*').Any(l => !string.IsNullOrEmpty(l)))
+            {
+                this.AppendNewline();
+                this.Append(lines[0]);
+                foreach (string line in lines.Skip(1))
+                {
+                    this.AppendNewline();
+                    this.Append(" " + line.Trim());
+                }
+            }
+            else
+            {
+                // simple block comment: leave intact
+                if (lines.Length > 1)
+                {
+                    // multiline comment starts on a new line
+                    this.AppendNewline();
+                }
+                else
+                {
+                    // single line /* ... */ comment stays on the same line
+                    this.Append(" ");
+                }
+                foreach (string line in lines)
+                {
+                    this.Append(line);
+                    this.Append("\n");
+                }
+            }
+            this.AppendNewline();
+        }
+
+        private void HandleComma(string tokenText)
+        {
+            if (this.LastType == "TK_COMMENT")
+                this.AppendNewline();
+
+            if (this.Flags.VarLine)
+            {
+                if (this.IsExpression(this.Flags.Mode) || this.LastType == "TK_END_BLOCK")
+                {
+                    // do not break on comma, for ( var a = 1, b = 2
+                    this.Flags.VarLineTainted = false;
+                }
+                if (this.Flags.VarLineTainted)
+                {
+                    this.Append(tokenText);
+                    this.Flags.VarLineReindented = true;
+                    this.Flags.VarLineTainted = false;
+                    this.AppendNewline();
+                    return;
+                }
+                else
+                    this.Flags.VarLineTainted = false;
+                this.Append(tokenText);
+                this.Append(" ");
+                return;
+            }
+
+            if (this.LastType == "TK_END_BLOCK" && this.Flags.Mode != "(EXPRESSION)")
+            {
+                this.Append(tokenText);
+                if (this.Flags.Mode == "OBJECT" && this.LastText == "}")
+                    this.AppendNewline();
+                else
+                    this.Append(" ");
+            }
+            else
+            {
+                if (this.Flags.Mode == "OBJECT")
+                {
+                    this.Append(tokenText);
+                    this.AppendNewline();
+                }
+                else
+                {
+                    // EXPR or DO_BLOCK
+                    this.Append(tokenText);
+                    this.Append(" ");
+                }
+            }
+        }
+
+        private void HandleComment(string tokenText)
+        {
+            if (this.LastText == "," && !this.WantedNewline)
+                this.TrimOutput(true);
+
+            if (this.LastType != "TK_COMMENT")
+            {
+                if (this.WantedNewline)
+                    this.AppendNewline();
+                else
+                    this.Append(" ");
+            }
+
+            this.Append(tokenText);
+            this.AppendNewline();
+        }
+
+        private void HandleDot(string tokenText)
+        {
+            if (this.IsSpecialWord(this.LastText))
+                this.Append(" ");
+            else if (this.LastText == ")")
+            {
+                if (this.Opts.BreakChainedMethods || this.WantedNewline)
+                {
+                    this.Flags.ChainExtraIndentation = 1;
+                    this.AppendNewline(true, false);
+                }
+            }
+            this.Append(tokenText);
+        }
+
+        private void HandleEndBlock(string tokenText)
+        {
+            this.RestoreMode();
+            if (this.Opts.BraceStyle == BraceStyle.Expand)
+            {
+                if (this.LastText != "{")
+                    this.AppendNewline();
+            }
+            else
+            {
+                if (this.LastType == "TK_START_BLOCK")
+                {
+                    if (this.JustAddedNewline)
+                        this.RemoveIndent();
+                    else
+                        this.TrimOutput();
+                }
+                else
+                {
+                    if (this.IsArray(this.Flags.Mode) && this.Opts.KeepArrayIndentation)
+                    {
+                        this.Opts.KeepArrayIndentation = false;
+                        this.AppendNewline();
+                        this.Opts.KeepArrayIndentation = true;
+                    }
+                    else
+                        this.AppendNewline();
+                }
+            }
+            this.Append(tokenText);
+        }
+
+        private void HandleEndExpr(string tokenText)
+        {
+            if (tokenText == "]")
+            {
+                if (this.Opts.KeepArrayIndentation)
+                {
+                    if (this.LastText == "}")
+                    {
+                        this.RemoveIndent();
+                        this.Append(tokenText);
+                        this.RestoreMode();
+                        return;
+                    }
+                }
+                else if (this.Flags.Mode == "[INDENTED-EXPRESSION]")
+                {
+                    if (this.LastText == "]")
+                    {
+                        this.RestoreMode();
+                        this.AppendNewline();
+                        this.Append(tokenText);
+                        return;
+                    }
+                }
+            }
+            this.RestoreMode();
+            this.Append(tokenText);
+        }
+
+        private void HandleEquals(string tokenText)
+        {
+            if (this.Flags.VarLine)
+                // just got an '=' in a var-line, different line breaking rules will apply
+                this.Flags.VarLineTainted = true;
+            this.Append(" ");
+            this.Append(tokenText);
+            this.Append(" ");
+        }
+
+        private void HandleInlineComment(string tokenText)
+        {
+            this.Append(" ");
+            this.Append(tokenText);
+            if (this.IsExpression(this.Flags.Mode))
+                this.Append(" ");
+            else
+                this.AppendNewlineForced();
+        }
+
+        private void HandleOperator(string tokenText)
+        {
+            bool spaceBefore = true;
+            bool spaceAfter = true;
+
+            if (this.IsSpecialWord(this.LastText))
+            {
+                // return had a special handling in TK_WORD
+                this.Append(" ");
+                this.Append(tokenText);
+                return;
+            }
+
+            // hack for actionscript's import .*;
+            if (tokenText == "*" && this.LastType == "TK_DOT" && !this.LastLastText.All(char.IsDigit))
+            {
+                this.Append(tokenText);
+                return;
+            }
+
+            if (tokenText == ":" && this.Flags.InCase)
+            {
+                this.Flags.CaseBody = true;
+                this.Indent();
+                this.Append(tokenText);
+                this.AppendNewline();
+                this.Flags.InCase = true;
+                return;
+            }
+
+            if (tokenText == "::")
+            {
+                // no spaces around the exotic namespacing syntax operator
+                this.Append(tokenText);
+                return;
+            }
+
+            if ((tokenText == "++" || tokenText == "--" || tokenText == "!") || (tokenText == "+" || tokenText == "-") &&
+                ((this.LastType == "TK_START_BLOCK" || this.LastType == "TK_START_EXPR" || this.LastType == "TK_EQUALS" || this.LastType == "TK_OPERATOR") ||
+                (this.LineStarters.Contains(this.LastText) || this.LastText == ",")))
+            {
+                spaceBefore = false;
+                spaceAfter = false;
+
+                if (this.LastText == ";" && this.IsExpression(this.Flags.Mode))
+                {
+                    // for (;; ++i)
+                    // ^^
+                    spaceBefore = true;
+                }
+
+                if (this.LastText == "TK_WORD" && this.LineStarters.Contains(this.LastText))
+                    spaceBefore = true;
+
+                if (this.Flags.Mode == "BLOCK" && (this.LastText == ";" || this.LastText == "{"))
+                {
+                    // { foo: --i }
+                    // foo(): --bar
+                    this.AppendNewline();
+                }
+            }
+            else if (tokenText == ":")
+            {
+                if (this.Flags.TernaryDepth == 0)
+                {
+                    if (this.Flags.Mode == "BLOCK")
+                        this.Flags.Mode = "OBJECT";
+                    spaceBefore = false;
+                }
+                else
+                    this.Flags.TernaryDepth -= 1;
+            }
+            else if (tokenText == "?")
+                this.Flags.TernaryDepth += 1;
+
+            if (spaceBefore)
+                this.Append(" ");
+
+            this.Append(tokenText);
+
+            if (spaceAfter)
+                this.Append(" ");
+        }
+
+        private void HandleSemicolon(string tokenText)
+        {
+            this.Append(tokenText);
+            this.Flags.VarLine = false;
+            this.Flags.VarLineReindented = false;
+            if (this.Flags.Mode == "OBJECT")
+                // OBJECT mode is weird and doesn't get reset too well.
+                this.Flags.Mode = "BLOCK";
+        }
+
+        private void HandleStartBlock(string tokenText)
+        {
+            if (this.LastWord == "do")
+                this.SetMode("DO_BLOCK");
+            else
+                this.SetMode("BLOCK");
+
+            if (this.Opts.BraceStyle == BraceStyle.Expand)
+            {
+                if (this.LastType != "TK_OPERATOR")
+                {
+                    if (this.LastText == "=" || (this.IsSpecialWord(this.LastText) && this.LastText != "else"))
+                        this.Append(" ");
+                    else
+                        this.AppendNewline(true);
+                }
+                this.Append(tokenText);
+                this.Indent();
+            }
+            else
+            {
+                if (this.LastType != "TK_OPERATOR" && this.LastType != "TK_START_EXPR")
+                {
+                    if (this.LastType == "TK_START_BLOCK")
+                        this.AppendNewline();
+                    else
+                        this.Append(" ");
+                }
+                else
+                {
+                    // if TK_OPERATOR or TK_START_EXPR
+                    if (this.IsArray(this.Flags.PreviousMode) && this.LastText == ",")
+                    {
+                        if (this.LastLastText == "}")
+                            this.Append(" ");
+                        else
+                            this.AppendNewline();
+                    }
+                }
+                this.Indent();
+                this.Append(tokenText);
+            }
+        }
+
+        private void HandleStartExpr(string tokenText)
         {
             if (tokenText == "[")
             {
@@ -744,108 +984,25 @@
             this.Append(tokenText);
         }
 
-        private void HandleEndExpr(string tokenText)
+        private void HandleString(string tokenText)
         {
-            if (tokenText == "]")
+            if (this.LastType == "TK_END_EXPR" && (this.Flags.PreviousMode == "(COND-EXPRESSION)" || this.Flags.PreviousMode == "(FOR-EXPRESSION)"))
+                this.Append(" ");
+
+            if (this.LastType == "TK_COMMENT" || this.LastType == "TK_STRING" || this.LastType == "TK_START_BLOCK" || this.LastType == "TK_END_BLOCK" || this.LastType == "TK_SEMICOLON")
+                this.AppendNewline();
+            else if (this.LastType == "TK_WORD")
+                this.Append(" ");
+            else if (this.Opts.PreserveNewlines && this.WantedNewline && this.Flags.Mode != "OBJECT")
             {
-                if (this.Opts.KeepArrayIndentation)
-                {
-                    if (this.LastText == "}")
-                    {
-                        this.RemoveIndent();
-                        this.Append(tokenText);
-                        this.RestoreMode();
-                        return;
-                    }
-                }
-                else if (this.Flags.Mode == "[INDENTED-EXPRESSION]")
-                {
-                    if (this.LastText == "]")
-                    {
-                        this.RestoreMode();
-                        this.AppendNewline();
-                        this.Append(tokenText);
-                        return;
-                    }
-                }
+                this.AppendNewline();
+                this.Append(this.IndentString);
             }
-            this.RestoreMode();
             this.Append(tokenText);
         }
 
-        private void HandleStartBlock(string tokenText)
+        private void HandleUnknown(string tokenText)
         {
-            if (this.LastWord == "do")
-                this.SetMode("DO_BLOCK");
-            else
-                this.SetMode("BLOCK");
-
-            if (this.Opts.BraceStyle == BraceStyle.Expand)
-            {
-                if (this.LastType != "TK_OPERATOR")
-                {
-                    if (this.LastText == "=" || (this.IsSpecialWord(this.LastText) && this.LastText != "else"))
-                        this.Append(" ");
-                    else
-                        this.AppendNewline(true);
-                }
-                this.Append(tokenText);
-                this.Indent();
-            }
-            else
-            {
-                if (this.LastType != "TK_OPERATOR" && this.LastType != "TK_START_EXPR")
-                {
-                    if (this.LastType == "TK_START_BLOCK")
-                        this.AppendNewline();
-                    else
-                        this.Append(" ");
-                }
-                else
-                {
-                    // if TK_OPERATOR or TK_START_EXPR
-                    if (this.IsArray(this.Flags.PreviousMode) && this.LastText == ",")
-                    {
-                        if (this.LastLastText == "}")
-                            this.Append(" ");
-                        else
-                            this.AppendNewline();
-                    }
-                }
-                this.Indent();
-                this.Append(tokenText);
-            }
-        }
-
-        private void HandleEndBlock(string tokenText)
-        {
-            this.RestoreMode();
-            if (this.Opts.BraceStyle == BraceStyle.Expand)
-            {
-                if (this.LastText != "{")
-                    this.AppendNewline();
-            }
-            else
-            {
-                if (this.LastType == "TK_START_BLOCK")
-                {
-                    if (this.JustAddedNewline)
-                        this.RemoveIndent();
-                    else
-                        this.TrimOutput();
-                }
-                else
-                {
-                    if (this.IsArray(this.Flags.Mode) && this.Opts.KeepArrayIndentation)
-                    {
-                        this.Opts.KeepArrayIndentation = false;
-                        this.AppendNewline();
-                        this.Opts.KeepArrayIndentation = true;
-                    }
-                    else
-                        this.AppendNewline();
-                }
-            }
             this.Append(tokenText);
         }
 
@@ -1029,260 +1186,84 @@
                 this.Flags.IfLine = false;
         }
 
-        private void HandleSemicolon(string tokenText)
+        private void Indent()
         {
-            this.Append(tokenText);
-            this.Flags.VarLine = false;
-            this.Flags.VarLineReindented = false;
-            if (this.Flags.Mode == "OBJECT")
-                // OBJECT mode is weird and doesn't get reset too well.
-                this.Flags.Mode = "BLOCK";
+            this.Flags.IndentationLevel = this.Flags.IndentationLevel + 1;
         }
 
-        private void HandleString(string tokenText)
+        private bool IsArray(string mode)
         {
-            if (this.LastType == "TK_END_EXPR" && (this.Flags.PreviousMode == "(COND-EXPRESSION)" || this.Flags.PreviousMode == "(FOR-EXPRESSION)"))
-                this.Append(" ");
-
-            if (this.LastType == "TK_COMMENT" || this.LastType == "TK_STRING" || this.LastType == "TK_START_BLOCK" || this.LastType == "TK_END_BLOCK" || this.LastType == "TK_SEMICOLON")
-                this.AppendNewline();
-            else if (this.LastType == "TK_WORD")
-                this.Append(" ");
-            else if (this.Opts.PreserveNewlines && this.WantedNewline && this.Flags.Mode != "OBJECT")
-            {
-                this.AppendNewline();
-                this.Append(this.IndentString);
-            }
-            this.Append(tokenText);
+            return mode == "[EXPRESSION]" || mode == "[INDENTED-EXPRESSION]";
         }
 
-        private void HandleEquals(string tokenText)
+        private bool IsExpression(string mode)
         {
-            if (this.Flags.VarLine)
-                // just got an '=' in a var-line, different line breaking rules will apply
-                this.Flags.VarLineTainted = true;
-            this.Append(" ");
-            this.Append(tokenText);
-            this.Append(" ");
+            return mode == "[EXPRESSION]" ||
+                mode == "[INDENTED-EXPRESSION]" ||
+                mode == "(EXPRESSION)" ||
+                mode == "(FOR-EXPRESSION)" ||
+                mode == "(COND-EXPRESSION)";
         }
 
-        private void HandleComma(string tokenText)
+        private bool IsSpecialWord(string s)
         {
-            if (this.LastType == "TK_COMMENT")
-                this.AppendNewline();
+            return s == "case" || s == "return" || s == "do" || s == "if" || s == "throw" || s == "else";
+        }
 
-            if (this.Flags.VarLine)
+        private void RemoveIndent()
+        {
+            if (this.Output.Count != 0 &&
+                (this.Output[this.Output.Count - 1] == this.IndentString ||
+                 this.Output[this.Output.Count - 1] == this.PreindentString))
             {
-                if (this.IsExpression(this.Flags.Mode) || this.LastType == "TK_END_BLOCK")
-                {
-                    // do not break on comma, for ( var a = 1, b = 2
-                    this.Flags.VarLineTainted = false;
-                }
-                if (this.Flags.VarLineTainted)
-                {
-                    this.Append(tokenText);
-                    this.Flags.VarLineReindented = true;
-                    this.Flags.VarLineTainted = false;
-                    this.AppendNewline();
-                    return;
-                }
-                else
-                    this.Flags.VarLineTainted = false;
-                this.Append(tokenText);
-                this.Append(" ");
-                return;
+                this.Output.RemoveAt(this.Output.Count - 1);
             }
+        }
 
-            if (this.LastType == "TK_END_BLOCK" && this.Flags.Mode != "(EXPRESSION)")
+        private void RestoreMode()
+        {
+            this.DoBlockJustClosed = this.Flags.Mode == "DO_BLOCK";
+            if (this.FlagStore.Count > 0)
             {
-                this.Append(tokenText);
-                if (this.Flags.Mode == "OBJECT" && this.LastText == "}")
-                    this.AppendNewline();
-                else
-                    this.Append(" ");
+                string mode = this.Flags.Mode;
+                this.Flags = this.FlagStore[this.FlagStore.Count - 1];
+                this.FlagStore.RemoveAt(this.FlagStore.Count - 1);
+                this.Flags.PreviousMode = mode;
             }
+        }
+
+        private void SetMode(string mode)
+        {
+            BeautifierFlags prev = new BeautifierFlags("BLOCK");
+            if (this.Flags != null)
+            {
+                this.FlagStore.Add(this.Flags);
+                prev = this.Flags;
+            }
+            this.Flags = new BeautifierFlags(mode);
+
+            if (this.FlagStore.Count == 1)
+                this.Flags.IndentationLevel = 0;
             else
             {
-                if (this.Flags.Mode == "OBJECT")
-                {
-                    this.Append(tokenText);
-                    this.AppendNewline();
-                }
-                else
-                {
-                    // EXPR or DO_BLOCK
-                    this.Append(tokenText);
-                    this.Append(" ");
-                }
+                this.Flags.IndentationLevel = prev.IndentationLevel;
+                if (prev.VarLine && prev.VarLineReindented)
+                    this.Flags.IndentationLevel = this.Flags.IndentationLevel + 1;
             }
+
+            this.Flags.PreviousMode = prev.Mode;
         }
 
-        private void HandleOperator(string tokenText)
+        private void TrimOutput(bool eatNewlines = false)
         {
-            bool spaceBefore = true;
-            bool spaceAfter = true;
-
-            if (this.IsSpecialWord(this.LastText))
+            while (this.Output.Count != 0 &&
+                (this.Output[this.Output.Count - 1] == " " ||
+                this.Output[this.Output.Count - 1] == this.IndentString ||
+                this.Output[this.Output.Count - 1] == this.PreindentString ||
+                (eatNewlines && (this.Output[this.Output.Count - 1] == "\n" || this.Output[this.Output.Count - 1] == "\r"))))
             {
-                // return had a special handling in TK_WORD
-                this.Append(" ");
-                this.Append(tokenText);
-                return;
+                this.Output.RemoveAt(this.Output.Count - 1);
             }
-
-            // hack for actionscript's import .*;
-            if (tokenText == "*" && this.LastType == "TK_DOT" && !this.LastLastText.All(char.IsDigit))
-            {
-                this.Append(tokenText);
-                return;
-            }
-
-            if (tokenText == ":" && this.Flags.InCase)
-            {
-                this.Flags.CaseBody = true;
-                this.Indent();
-                this.Append(tokenText);
-                this.AppendNewline();
-                this.Flags.InCase = true;
-                return;
-            }
-
-            if (tokenText == "::")
-            {
-                // no spaces around the exotic namespacing syntax operator
-                this.Append(tokenText);
-                return;
-            }
-
-            if ((tokenText == "++" || tokenText == "--" || tokenText == "!") || (tokenText == "+" || tokenText == "-") &&
-                ((this.LastType == "TK_START_BLOCK" || this.LastType == "TK_START_EXPR" || this.LastType == "TK_EQUALS" || this.LastType == "TK_OPERATOR") ||
-                (this.LineStarters.Contains(this.LastText) || this.LastText == ",")))
-            {
-                spaceBefore = false;
-                spaceAfter = false;
-
-                if (this.LastText == ";" && this.IsExpression(this.Flags.Mode))
-                {
-                    // for (;; ++i)
-                    // ^^
-                    spaceBefore = true;
-                }
-
-                if (this.LastText == "TK_WORD" && this.LineStarters.Contains(this.LastText))
-                    spaceBefore = true;
-
-                if (this.Flags.Mode == "BLOCK" && (this.LastText == ";" || this.LastText == "{"))
-                {
-                    // { foo: --i }
-                    // foo(): --bar
-                    this.AppendNewline();
-                }
-            }
-            else if (tokenText == ":")
-            {
-                if (this.Flags.TernaryDepth == 0)
-                {
-                    if (this.Flags.Mode == "BLOCK")
-                        this.Flags.Mode = "OBJECT";
-                    spaceBefore = false;
-                }
-                else
-                    this.Flags.TernaryDepth -= 1;
-            }
-            else if (tokenText == "?")
-                this.Flags.TernaryDepth += 1;
-
-            if (spaceBefore)
-                this.Append(" ");
-
-            this.Append(tokenText);
-
-            if (spaceAfter)
-                this.Append(" ");
-        }
-
-        private void HandleBlockComment(string tokenText)
-        {
-            string[] lines = tokenText.Replace("\r", "").Split('\n');
-            // all lines start with an asterisk? that's a proper box comment
-
-            if (!lines.Skip(1).Where(x => x.Trim() == "" || x.TrimStart()[0] != '*').Any(l => !string.IsNullOrEmpty(l)))
-            {
-                this.AppendNewline();
-                this.Append(lines[0]);
-                foreach (string line in lines.Skip(1))
-                {
-                    this.AppendNewline();
-                    this.Append(" " + line.Trim());
-                }
-            }
-            else
-            {
-                // simple block comment: leave intact
-                if (lines.Length > 1)
-                {
-                    // multiline comment starts on a new line
-                    this.AppendNewline();
-                }
-                else
-                {
-                    // single line /* ... */ comment stays on the same line
-                    this.Append(" ");
-                }
-                foreach (string line in lines)
-                {
-                    this.Append(line);
-                    this.Append("\n");
-                }
-            }
-            this.AppendNewline();
-        }
-
-        private void HandleInlineComment(string tokenText)
-        {
-            this.Append(" ");
-            this.Append(tokenText);
-            if (this.IsExpression(this.Flags.Mode))
-                this.Append(" ");
-            else
-                this.AppendNewlineForced();
-        }
-
-        private void HandleComment(string tokenText)
-        {
-            if (this.LastText == "," && !this.WantedNewline)
-                this.TrimOutput(true);
-
-            if (this.LastType != "TK_COMMENT")
-            {
-                if (this.WantedNewline)
-                    this.AppendNewline();
-                else
-                    this.Append(" ");
-            }
-
-            this.Append(tokenText);
-            this.AppendNewline();
-        }
-
-        private void HandleDot(string tokenText)
-        {
-            if (this.IsSpecialWord(this.LastText))
-                this.Append(" ");
-            else if (this.LastText == ")")
-            {
-                if (this.Opts.BreakChainedMethods || this.WantedNewline)
-                {
-                    this.Flags.ChainExtraIndentation = 1;
-                    this.AppendNewline(true, false);
-                }
-            }
-            this.Append(tokenText);
-        }
-
-        private void HandleUnknown(string tokenText)
-        {
-            this.Append(tokenText);
         }
     }
 }

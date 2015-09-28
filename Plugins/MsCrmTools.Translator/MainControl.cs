@@ -3,14 +3,12 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk.Metadata;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 using CrmExceptionHelper = XrmToolBox.CrmExceptionHelper;
 
 namespace MsCrmTools.Translator
@@ -38,13 +36,39 @@ namespace MsCrmTools.Translator
 
         #endregion Methods
 
+        private void BtnBrowseImportFileClick(object sender, EventArgs e)
+        {
+            var ofd = new OpenFileDialog
+                          {
+                              Title = "Select translation file",
+                              Filter = "Excel Workbook|*.xlsx"
+                          };
+
+            if (ofd.ShowDialog(this) == DialogResult.OK)
+            {
+                txtFilePath.Text = ofd.FileName;
+            }
+        }
+
+        private void BtnCheckAllClick(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in lvEntities.Items)
+                item.Checked = true;
+        }
+
+        private void BtnClearAllClick(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in lvEntities.Items)
+                item.Checked = false;
+        }
+
         private void BtnExportTranslationsClick(object sender, EventArgs e)
         {
-            if (lvEntities.CheckedItems.Count > 0 || chkExportGlobalOptSet.Checked || chkExportSiteMap.Checked)
+            if (lvEntities.CheckedItems.Count > 0 || chkExportGlobalOptSet.Checked || chkExportSiteMap.Checked || chkExportDashboards.Checked)
             {
-                var entities = (from ListViewItem item in lvEntities.CheckedItems select ((EntityMetadata) item.Tag).LogicalName).ToList();
+                var entities = (from ListViewItem item in lvEntities.CheckedItems select ((EntityMetadata)item.Tag).LogicalName).ToList();
 
-                var sfd = new SaveFileDialog {Filter = "Excel workbook|*.xlsx", Title = "Select file destination"};
+                var sfd = new SaveFileDialog { Filter = "Excel workbook|*.xlsx", Title = "Select file destination" };
                 if (sfd.ShowDialog(this) == DialogResult.OK)
                 {
                     var settings = new ExportSettings
@@ -61,6 +85,7 @@ namespace MsCrmTools.Translator
                                            ExportViews = chkExportViews.Checked,
                                            ExportCustomizedRelationships = chkExportCustomizedRelationships.Checked,
                                            ExportSiteMap = chkExportSiteMap.Checked,
+                                           ExportDashboards = chkExportDashboards.Checked,
                                            FilePath = sfd.FileName,
                                            Entities = entities
                                        };
@@ -83,15 +108,49 @@ namespace MsCrmTools.Translator
                                 MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         },
-                        evt=>SetWorkingMessage(evt.UserState.ToString()),
+                        evt => SetWorkingMessage(evt.UserState.ToString()),
                         settings);
                 }
             }
         }
 
-        private void TsbLoadEntitiesClick(object sender, EventArgs e)
+        private void BtnImportTranslationsClick(object sender, EventArgs e)
         {
-            ExecuteMethod(LoadEntities);
+            if (txtFilePath.Text.Length == 0)
+            {
+                MessageBox.Show(this, "Please select a file to import", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                if (tabControl1.SelectedIndex != 1)
+                    tabControl1.SelectedIndex = 1;
+
+                return;
+            }
+
+            ExecuteMethod(ImportTranslations);
+        }
+
+        private void ImportTranslations()
+        {
+            SetState(false);
+
+            WorkAsync("",
+                (bw, e) =>
+                {
+                    var engine = new Engine();
+                    engine.Import(e.Argument.ToString(), Service, bw);
+                },
+                e =>
+                {
+                    if (e.Error != null)
+                    {
+                        string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
+                        MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                    SetState(false);
+                },
+                e => SetWorkingMessage(e.UserState.ToString()),
+                txtFilePath.Text);
         }
 
         private void LoadEntities()
@@ -123,57 +182,10 @@ namespace MsCrmTools.Translator
                 });
         }
 
-        private void BtnBrowseImportFileClick(object sender, EventArgs e)
+        private void LvEntitiesColumnClick(object sender, ColumnClickEventArgs e)
         {
-            var ofd = new OpenFileDialog
-                          {
-                              Title = "Select translation file",
-                              Filter = "Excel Workbook|*.xlsx"
-                          };
-
-            if (ofd.ShowDialog(this) == DialogResult.OK)
-            {
-                txtFilePath.Text = ofd.FileName;
-            }
-        }
-
-        private void BtnImportTranslationsClick(object sender, EventArgs e)
-        {
-            if (txtFilePath.Text.Length == 0)
-            {
-                MessageBox.Show(this,"Please select a file to import","Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                if (tabControl1.SelectedIndex != 1)
-                    tabControl1.SelectedIndex = 1;
-
-                return;
-            }
-
-            ExecuteMethod(ImportTranslations);
-        }
-
-        private void ImportTranslations()
-        {
-            SetState(false);
-
-            WorkAsync("",
-                (bw, e) =>
-                {
-                    var engine = new Engine();
-                    engine.Import(e.Argument.ToString(), Service, bw);
-                },
-                e =>
-                {
-                    if (e.Error != null)
-                    {
-                        string errorMessage = CrmExceptionHelper.GetErrorMessage(e.Error, true);
-                        MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-
-                    SetState(false);
-                },
-                e=>SetWorkingMessage(e.UserState.ToString()),
-                txtFilePath.Text);
+            lvEntities.Sorting = lvEntities.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            lvEntities.ListViewItemSorter = new ListViewItemComparer(e.Column, lvEntities.Sorting);
         }
 
         private void SetState(bool isRunning)
@@ -183,22 +195,9 @@ namespace MsCrmTools.Translator
             tsbLoadEntities.Enabled = !isRunning;
         }
 
-        private void BtnCheckAllClick(object sender, EventArgs e)
+        private void TsbLoadEntitiesClick(object sender, EventArgs e)
         {
-            foreach (ListViewItem item in lvEntities.Items)
-                item.Checked = true;
-        }
-
-        private void BtnClearAllClick(object sender, EventArgs e)
-        {
-            foreach (ListViewItem item in lvEntities.Items)
-                item.Checked = false;
-        }
-
-        private void LvEntitiesColumnClick(object sender, ColumnClickEventArgs e)
-        {
-            lvEntities.Sorting = lvEntities.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
-            lvEntities.ListViewItemSorter = new ListViewItemComparer(e.Column, lvEntities.Sorting);
+            ExecuteMethod(LoadEntities);
         }
     }
 }

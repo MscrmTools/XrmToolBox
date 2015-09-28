@@ -1,14 +1,12 @@
-﻿using Microsoft.Xrm.Sdk;
-
-namespace XrmToolBox.Extensibility.Interfaces
+﻿namespace XrmToolBox.Extensibility.Interfaces
 {
     public interface IXrmToolBoxPlugin
     {
+        string GetCompany();
+
         IXrmToolBoxPluginControl GetControl();
 
         string GetMyType();
-
-        string GetCompany();
 
         string GetVersion();
     }

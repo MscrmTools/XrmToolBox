@@ -31,17 +31,17 @@ namespace MscrmTools.SyncFilterManager.Forms
 
         public int TemplateType { get; private set; }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
         private void btnOK_Click(object sender, EventArgs e)
         {
             TemplateType = isSystem ? (rdbOfflineTemplate.Checked ? 16 : 256) : (rdbOfflineTemplate.Checked ? 8192 : 131072);
 
             DialogResult = DialogResult.OK;
-            Close();
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
             Close();
         }
     }

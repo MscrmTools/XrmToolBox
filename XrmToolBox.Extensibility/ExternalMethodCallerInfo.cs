@@ -15,11 +15,11 @@ namespace XrmToolBox.Extensibility
 
     public class ExternalMethodCallerInfo
     {
-        public Action ExternalAction { get; set; }
-
         public ExternalMethodCallerInfo(Action action)
         {
             ExternalAction = action;
         }
+
+        public Action ExternalAction { get; set; }
     }
 }

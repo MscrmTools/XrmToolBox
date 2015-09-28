@@ -3,7 +3,7 @@
 namespace XrmToolBox.Extensibility.Interfaces
 {
     /// <summary>
-    /// This interface allows a user to specify CodePlex project name to add a 
+    /// This interface allows a user to specify CodePlex project name to add a
     /// menu to redirect end user to CodePlex project pages (issues, discussions)
     /// </summary>
     public interface ICodePlexPlugin

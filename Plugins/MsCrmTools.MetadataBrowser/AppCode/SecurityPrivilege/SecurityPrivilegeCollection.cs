@@ -14,9 +14,19 @@ namespace MsCrmTools.MetadataBrowser.AppCode.SecurityPrivilege
             list = new List<SecurityPrivilegeInfo>();
         }
 
+        public new int Count
+        {
+            get { return list.Count; }
+        }
+
         public SecurityPrivilegeInfo this[int index]
         {
             get { return list[index]; }
+        }
+
+        public void Add(SecurityPrivilegeInfo info)
+        {
+            list.Add(info);
         }
 
         public AttributeCollection GetAttributes()
@@ -83,11 +93,6 @@ namespace MsCrmTools.MetadataBrowser.AppCode.SecurityPrivilege
         public object GetPropertyOwner(PropertyDescriptor pd)
         {
             return this;
-        }
-
-        public void Add(SecurityPrivilegeInfo info)
-        {
-            list.Add(info);
         }
 
         public void Remove(SecurityPrivilegeInfo info)

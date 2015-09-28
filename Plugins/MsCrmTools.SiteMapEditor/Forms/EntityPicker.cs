@@ -3,11 +3,10 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk.Messages;
-using Microsoft.Xrm.Sdk.Metadata;
 using Tanguy.WinForm.Utilities.DelegatesHelpers;
 
 namespace MsCrmTools.SiteMapEditor.Forms
@@ -41,30 +40,41 @@ namespace MsCrmTools.SiteMapEditor.Forms
 
         #region Methods
 
+        private void BtnCancelClick(object sender, EventArgs e)
+        {
+            SelectedEntity = string.Empty;
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void BtnValidateClick(object sender, EventArgs e)
+        {
+            if (lvSelectedEntities.SelectedItems.Count == 0)
+            {
+                MessageBox.Show(this, "Please select at least one entity!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                SelectedEntity = ((EntityMetadata)lvSelectedEntities.SelectedItems[0].Tag).LogicalName;
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+        }
+
         /// <summary>
         /// Fills the list of entities
         /// </summary>
         private void FillEntities()
         {
-            // Checks the application cache and load it if needed
-            //if (entityCache == null || entityCache.Count == 0)
-            //{
-            //    entityCache = new List<EntityMetadata>();
-
-            //    var request = new RetrieveAllEntitiesRequest
-            //    {
-            //        EntityFilters = EntityFilters.Entity
-            //    };
-
-            //    var response = (RetrieveAllEntitiesResponse)SiteMapEditor.service.Execute(request);
-
-            //    foreach (var emd in response.EntityMetadata)
-            //    {
-            //        SiteMapEditor.entityCache.Add(emd);
-            //    }
-            //}
-
             // Displays entities
+            if (entityCache == null)
+            {
+                MessageBox.Show(this,
+                    "You are not connected to an organization, so it is not possible to display a list of entities\n\nPlease use menu \"More actions\" to load entities and web resources",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Close();
+            }
+
             foreach (var emd in entityCache)
             {
                 if ((emd.IsCustomizable.Value || emd.IsManaged.Value == false) && emd.DisplayName.UserLocalizedLabel != null)
@@ -84,27 +94,6 @@ namespace MsCrmTools.SiteMapEditor.Forms
             ListViewDelegates.SetEnableState(lvSelectedEntities, true);
             CommonDelegates.SetEnableState(btnCancel, true);
             CommonDelegates.SetEnableState(btnValidate, true);
-        }
-
-        private void BtnValidateClick(object sender, EventArgs e)
-        {
-            if (lvSelectedEntities.SelectedItems.Count == 0)
-            {
-                MessageBox.Show(this, "Please select at least one entity!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else
-            {
-                SelectedEntity = ((EntityMetadata)lvSelectedEntities.SelectedItems[0].Tag).LogicalName;
-                DialogResult = DialogResult.OK;
-                Close();
-            }
-        }
-
-        private void BtnCancelClick(object sender, EventArgs e)
-        {
-            SelectedEntity = string.Empty;
-            DialogResult = DialogResult.Cancel;
-            Close();
         }
 
         #endregion Methods

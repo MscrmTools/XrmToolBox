@@ -14,9 +14,19 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OneToManyRelationship
             list = new List<OneToManyRelationshipMetadataInfo>();
         }
 
+        public new int Count
+        {
+            get { return list.Count; }
+        }
+
         public OneToManyRelationshipMetadataInfo this[int index]
         {
             get { return list[index]; }
+        }
+
+        public void Add(OneToManyRelationshipMetadataInfo info)
+        {
+            list.Add(info);
         }
 
         public AttributeCollection GetAttributes()
@@ -83,11 +93,6 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OneToManyRelationship
         public object GetPropertyOwner(PropertyDescriptor pd)
         {
             return this;
-        }
-
-        public void Add(OneToManyRelationshipMetadataInfo info)
-        {
-            list.Add(info);
         }
 
         public void Remove(OneToManyRelationshipMetadataInfo info)

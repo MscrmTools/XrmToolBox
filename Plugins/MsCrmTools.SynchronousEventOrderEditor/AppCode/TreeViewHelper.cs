@@ -20,14 +20,14 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
             var entityNode = tv.Nodes.Find(sEvent.EntityLogicalName, false).ToList().SingleOrDefault();
             if (entityNode == null)
             {
-                entityNode = new TreeNode(sEvent.EntityLogicalName) { ImageIndex = 0, SelectedImageIndex = 0, Name = sEvent.EntityLogicalName};
+                entityNode = new TreeNode(sEvent.EntityLogicalName) { ImageIndex = 0, SelectedImageIndex = 0, Name = sEvent.EntityLogicalName };
                 tv.Nodes.Add(entityNode);
             }
 
             var messageNode = entityNode.Nodes.Find(sEvent.Message, false).ToList().SingleOrDefault();
             if (messageNode == null)
             {
-                messageNode = new TreeNode(sEvent.Message){ ImageIndex = 1, SelectedImageIndex = 1, Name = sEvent.Message};
+                messageNode = new TreeNode(sEvent.Message) { ImageIndex = 1, SelectedImageIndex = 1, Name = sEvent.Message };
                 entityNode.Nodes.Add(messageNode);
             }
 
@@ -40,9 +40,11 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
                     case 10:
                         stageName = "PreValidation";
                         break;
+
                     case 20:
                         stageName = "PreOperation";
                         break;
+
                     case 40:
                         stageName = "PostOperation";
                         break;
@@ -50,7 +52,7 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
 
                 stageNode = new TreeNode(stageName)
                 {
-                    ImageIndex = 2, 
+                    ImageIndex = 2,
                     SelectedImageIndex = 2,
                     Name = sEvent.Stage.ToString(CultureInfo.InvariantCulture),
                     Tag = new List<ISynchronousEvent>()

@@ -1,9 +1,9 @@
-﻿using System.ComponentModel;
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using System.ComponentModel;
 
 namespace MsCrmTools.MetadataBrowser.AppCode
 {
-    [TypeConverter(typeof(CascadeConfigurationInfoConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class CascadeConfigurationInfo
     {
         private CascadeConfiguration configuration;
@@ -41,6 +41,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode
         public CascadeType Unshare
         {
             get { return configuration.Unshare.HasValue ? configuration.Unshare.Value : CascadeType.NoCascade; }
+        }
+
+        public override string ToString()
+        {
+            return "Expand to see properties";
         }
     }
 }

@@ -3,28 +3,27 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Composition;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
-using System.Xml;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.ViewLayoutReplicator.Forms;
 using MsCrmTools.ViewLayoutReplicator.Helpers;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+using System.Xml;
 using Tanguy.WinForm.Utilities.DelegatesHelpers;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.ViewLayoutReplicator
 {
     public partial class ViewLayoutReplicator : PluginControlBase
     {
-        private List<EntityMetadata> entitiesCache; 
+        private List<EntityMetadata> entitiesCache;
+        private ListViewItem[] listViewItemsCache;
 
         #region Constructor
 
@@ -33,7 +32,7 @@ namespace MsCrmTools.ViewLayoutReplicator
             InitializeComponent();
 
             var tt = new ToolTip();
-            tt.SetToolTip(lvSourceViews,"Double click on a selected row to display its layout XML");
+            tt.SetToolTip(lvSourceViews, "Double click on a selected row to display its layout XML");
         }
 
         #endregion Constructor
@@ -42,13 +41,9 @@ namespace MsCrmTools.ViewLayoutReplicator
 
         #region Fill Entities
 
-        private void TsbLoadEntitiesClick(object sender, EventArgs e)
-        {
-            ExecuteMethod(LoadEntities);
-        }
-
         private void LoadEntities()
         {
+            txtSearchEntity.Text = string.Empty;
             lvEntities.Items.Clear();
             gbEntities.Enabled = false;
             tsbPublishEntity.Enabled = false;
@@ -74,7 +69,7 @@ namespace MsCrmTools.ViewLayoutReplicator
                     }
                     else
                     {
-                        entitiesCache = (List<EntityMetadata>) e.Result;
+                        entitiesCache = (List<EntityMetadata>)e.Result;
                         lvEntities.Items.Clear();
                         var list = new List<ListViewItem>();
                         foreach (EntityMetadata emd in (List<EntityMetadata>)e.Result)
@@ -84,7 +79,8 @@ namespace MsCrmTools.ViewLayoutReplicator
                             list.Add(item);
                         }
 
-                        lvEntities.Items.AddRange(list.ToArray());
+                        this.listViewItemsCache = list.ToArray();
+                        lvEntities.Items.AddRange(listViewItemsCache);
 
                         gbEntities.Enabled = true;
                         tsbPublishEntity.Enabled = true;
@@ -94,7 +90,12 @@ namespace MsCrmTools.ViewLayoutReplicator
                 });
         }
 
-        #endregion
+        private void TsbLoadEntitiesClick(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadEntities);
+        }
+
+        #endregion Fill Entities
 
         #region Save Views
 
@@ -105,7 +106,7 @@ namespace MsCrmTools.ViewLayoutReplicator
             tsbSaveViews.Enabled = false;
             tsbLoadEntities.Enabled = false;
 
-            var targetViews = lvTargetViews.CheckedItems.Cast<ListViewItem>().Select(i => (Entity) i.Tag).ToList();
+            var targetViews = lvTargetViews.CheckedItems.Cast<ListViewItem>().Select(i => (Entity)i.Tag).ToList();
             var sourceView = (Entity)lvSourceViews.SelectedItems.Cast<ListViewItem>().First().Tag;
 
             WorkAsync("Saving views...",
@@ -127,10 +128,10 @@ namespace MsCrmTools.ViewLayoutReplicator
                     tsbSaveViews.Enabled = true;
                     tsbLoadEntities.Enabled = true;
                 },
-                new object[]{sourceView, targetViews});
+                new object[] { sourceView, targetViews });
         }
 
-        #endregion
+        #endregion Save Views
 
         #region Publish Entity
 
@@ -175,13 +176,129 @@ namespace MsCrmTools.ViewLayoutReplicator
             }
         }
 
-        #endregion
+        #endregion Publish Entity
 
-        #endregion
+        #endregion Main ToolStrip Handlers
 
         #region ListViews Handlers
 
         #region Fill Views
+
+        private void BwFillViewsDoWork(object sender, DoWorkEventArgs e)
+        {
+            string entityLogicalName = e.Argument.ToString();
+
+            List<Entity> viewsList = ViewHelper.RetrieveViews(entityLogicalName, entitiesCache, Service);
+            viewsList.AddRange(ViewHelper.RetrieveUserViews(entityLogicalName, entitiesCache, Service));
+
+            foreach (Entity view in viewsList)
+            {
+                bool display = true;
+
+                var item = new ListViewItem(view["name"].ToString());
+                item.Tag = view;
+
+                #region Gestion de l'image associée à la vue
+
+                switch ((int)view["querytype"])
+                {
+                    case ViewHelper.VIEW_BASIC:
+                        {
+                            if (view.LogicalName == "savedquery")
+                            {
+                                if ((bool)view["isdefault"])
+                                {
+                                    item.SubItems.Add("Default public view");
+                                    item.ImageIndex = 3;
+                                }
+                                else
+                                {
+                                    item.SubItems.Add("Public view");
+                                    item.ImageIndex = 0;
+                                }
+                            }
+                            else
+                            {
+                                item.SubItems.Add("User view");
+                                item.ImageIndex = 6;
+                            }
+                        }
+                        break;
+
+                    case ViewHelper.VIEW_ADVANCEDFIND:
+                        {
+                            item.SubItems.Add("Advanced find view");
+                            item.ImageIndex = 1;
+                        }
+                        break;
+
+                    case ViewHelper.VIEW_ASSOCIATED:
+                        {
+                            item.SubItems.Add("Associated view");
+                            item.ImageIndex = 2;
+                        }
+                        break;
+
+                    case ViewHelper.VIEW_QUICKFIND:
+                        {
+                            item.SubItems.Add("QuickFind view");
+                            item.ImageIndex = 5;
+                        }
+                        break;
+
+                    case ViewHelper.VIEW_SEARCH:
+                        {
+                            item.SubItems.Add("Lookup view");
+                            item.ImageIndex = 4;
+                        }
+                        break;
+
+                    default:
+                        {
+                            //item.SubItems.Add(view["name"].ToString());
+                            display = false;
+                        }
+                        break;
+                }
+
+                #endregion Gestion de l'image associée à la vue
+
+                if (display)
+                {
+                    // Add view to each list of views (source and target)
+                    ListViewItem clonedItem = (ListViewItem)item.Clone();
+                    ListViewDelegates.AddItem(lvSourceViews, item);
+
+                    if (view.Contains("iscustomizable") && ((BooleanManagedProperty)view["iscustomizable"]).Value == false
+                        && view.Contains("ismanaged") && (bool)view["ismanaged"])
+                    {
+                        clonedItem.ForeColor = Color.Gray;
+                        clonedItem.ToolTipText = "This managed view has not been defined as customizable";
+                    }
+
+                    ListViewDelegates.AddItem(lvTargetViews, clonedItem);
+                }
+            }
+        }
+
+        private void BwFillViewsRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Cursor = Cursors.Default;
+            gbSourceViews.Enabled = true;
+            gbTargetViews.Enabled = true;
+
+            if (e.Error != null)
+            {
+                MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+
+            if (lvSourceViews.Items.Count == 0)
+            {
+                MessageBox.Show(this, "This entity does not contain any view", "Warning", MessageBoxButtons.OK,
+                                MessageBoxIcon.Warning);
+            }
+        }
 
         private void lvEntities_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -204,123 +321,11 @@ namespace MsCrmTools.ViewLayoutReplicator
             }
         }
 
-        private void BwFillViewsDoWork(object sender, DoWorkEventArgs e)
-        {
-            string entityLogicalName = e.Argument.ToString();
-
-            List<Entity> viewsList = ViewHelper.RetrieveViews(entityLogicalName, entitiesCache, Service);
-            viewsList.AddRange(ViewHelper.RetrieveUserViews(entityLogicalName, entitiesCache, Service));
-
-            foreach (Entity view in viewsList)
-            {
-                bool display = true;
-
-                var item = new ListViewItem(view["name"].ToString());
-                item.Tag = view;
-
-                #region Gestion de l'image associée à la vue
-
-               switch ((int) view["querytype"])
-                {
-                    case ViewHelper.VIEW_BASIC:
-                        {
-                            if (view.LogicalName == "savedquery")
-                            {
-                                if ((bool) view["isdefault"])
-                                {
-                                    item.SubItems.Add("Default public view");
-                                    item.ImageIndex = 3;
-                                }
-                                else
-
-                                {
-                                    item.SubItems.Add("Public view");
-                                    item.ImageIndex = 0;
-                                }
-                            }
-                            else
-                            {
-                                item.SubItems.Add("User view");
-                                item.ImageIndex = 6;
-                            }
-                        }
-                        break;
-                    case ViewHelper.VIEW_ADVANCEDFIND:
-                        {
-                            item.SubItems.Add("Advanced find view");
-                            item.ImageIndex = 1;
-                        }
-                        break;
-                    case ViewHelper.VIEW_ASSOCIATED:
-                        {
-                            item.SubItems.Add("Associated view");
-                            item.ImageIndex = 2;
-                        }
-                        break;
-                    case ViewHelper.VIEW_QUICKFIND:
-                        {
-                            item.SubItems.Add("QuickFind view");
-                            item.ImageIndex = 5;
-                        }
-                        break;
-                    case ViewHelper.VIEW_SEARCH:
-                        {
-                            item.SubItems.Add("Lookup view");
-                            item.ImageIndex = 4;
-                        }
-                        break;
-                    default:
-                        {
-                            //item.SubItems.Add(view["name"].ToString());
-                            display = false;
-                        }
-                        break;
-                }
-
-                #endregion
-
-                if (display)
-                {
-                    // Add view to each list of views (source and target)
-                    ListViewItem clonedItem = (ListViewItem) item.Clone();
-                    ListViewDelegates.AddItem(lvSourceViews, item);
-
-                    if (view.Contains("iscustomizable") && ((BooleanManagedProperty) view["iscustomizable"]).Value == false 
-                        && view.Contains("ismanaged") && (bool)view["ismanaged"])
-                    {
-                        clonedItem.ForeColor = Color.Gray;
-                        clonedItem.ToolTipText = "This managed view has not been defined as customizable";
-                    }
-
-                    ListViewDelegates.AddItem(lvTargetViews, clonedItem);
-                }
-            }
-        }
-
-        private void BwFillViewsRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            Cursor = Cursors.Default;
-            gbSourceViews.Enabled = true;
-            gbTargetViews.Enabled = true;
-            
-            if (e.Error != null)
-            {
-                MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-            }
-
-            if (lvSourceViews.Items.Count == 0)
-            {
-                MessageBox.Show(this, "This entity does not contain any view", "Warning", MessageBoxButtons.OK,
-                                MessageBoxIcon.Warning);
-            }
-        }
-
-        #endregion
+        #endregion Fill Views
 
         #region Display View
 
-        private void LvSourceViewsSelectedIndexChanged(object sender, System.EventArgs e)
+        private void LvSourceViewsSelectedIndexChanged(object sender, EventArgs e)
         {
             lvSourceViewLayoutPreview.Columns.Clear();
 
@@ -368,7 +373,7 @@ namespace MsCrmTools.ViewLayoutReplicator
                                 item.SubItems.Add(columnNode.Attributes["width"].Value + "px");
                         }
 
-                        evt.Result = new object[] {headers, item};
+                        evt.Result = new object[] { headers, item };
                     },
                     evt =>
                     {
@@ -414,14 +419,9 @@ namespace MsCrmTools.ViewLayoutReplicator
             }
         }
 
-        #endregion
+        #endregion Display View
 
-        #endregion
-
-        private void TsbCloseThisTabClick(object sender, EventArgs e)
-        {
-            CloseTool();
-        }
+        #endregion ListViews Handlers
 
         private void LvEntitiesColumnClick(object sender, ColumnClickEventArgs e)
         {
@@ -435,10 +435,37 @@ namespace MsCrmTools.ViewLayoutReplicator
                 return;
 
             ListViewItem item = lvSourceViews.SelectedItems[0];
-            var view = (Entity) item.Tag;
+            var view = (Entity)item.Tag;
 
             var dialog = new XmlContentDisplayDialog(view["layoutxml"].ToString());
             dialog.ShowDialog(this);
+        }
+
+        private void OnSearchKeyUp(object sender, KeyEventArgs e)
+        {
+            var entityName = txtSearchEntity.Text;
+            if (string.IsNullOrWhiteSpace(entityName))
+            {
+                lvEntities.BeginUpdate();
+                lvEntities.Items.Clear();
+                lvEntities.Items.AddRange(listViewItemsCache);
+                lvEntities.EndUpdate();
+            }
+            else
+            {
+                lvEntities.BeginUpdate();
+                lvEntities.Items.Clear();
+                var filteredItems = listViewItemsCache
+                    .Where(item => item.Text.StartsWith(entityName, StringComparison.OrdinalIgnoreCase))
+                    .ToArray();
+                lvEntities.Items.AddRange(filteredItems);
+                lvEntities.EndUpdate();
+            }
+        }
+
+        private void TsbCloseThisTabClick(object sender, EventArgs e)
+        {
+            CloseTool();
         }
 
         private void TsbPublishAllClick(object sender, EventArgs e)

@@ -14,12 +14,12 @@ namespace XrmToolBox.Extensibility.UserControls
 
         public delegate void ClickedEventHandler(object sender, EventArgs e);
 
-        #endregion
+        #endregion Delegates
 
         #region Event Handlers
 
         public virtual event ClickedEventHandler Clicked;
 
-        #endregion
+        #endregion Event Handlers
     }
 }

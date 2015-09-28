@@ -14,9 +14,19 @@ namespace MsCrmTools.MetadataBrowser.AppCode.LabelMd
             list = new List<LabelInfo>();
         }
 
+        public new int Count
+        {
+            get { return list.Count; }
+        }
+
         public LabelInfo this[int index]
         {
             get { return list[index]; }
+        }
+
+        public void Add(LabelInfo info)
+        {
+            list.Add(info);
         }
 
         public AttributeCollection GetAttributes()
@@ -83,11 +93,6 @@ namespace MsCrmTools.MetadataBrowser.AppCode.LabelMd
         public object GetPropertyOwner(PropertyDescriptor pd)
         {
             return this;
-        }
-
-        public void Add(LabelInfo info)
-        {
-            list.Add(info);
         }
 
         public void Remove(LabelInfo info)

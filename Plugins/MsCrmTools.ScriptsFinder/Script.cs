@@ -9,17 +9,17 @@ namespace MsCrmTools.ScriptsFinder
 {
     public class Script
     {
-        public string ScriptLocation { get; set; }
-        public string MethodCalled { get; set; }
-        public string EntityLogicalName { get; set; }
-        public string EntityName { get; set; }
-        public string Name { get; set; }
-        public string Event { get; set; }
         public string Attribute { get; set; }
         public string AttributeLogicalName { get; set; }
         public List<string> Dependencies { get; set; }
-        public bool? IsActive { get; set; }
-        public string Type { get; set; }
+        public string EntityLogicalName { get; set; }
+        public string EntityName { get; set; }
+        public string Event { get; set; }
         public bool HasProblem { get; set; }
+        public bool? IsActive { get; set; }
+        public string MethodCalled { get; set; }
+        public string Name { get; set; }
+        public string ScriptLocation { get; set; }
+        public string Type { get; set; }
     }
 }

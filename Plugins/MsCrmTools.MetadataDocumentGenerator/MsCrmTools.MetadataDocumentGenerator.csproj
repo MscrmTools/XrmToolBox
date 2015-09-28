@@ -49,16 +49,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GemBox.Document, Version=23.3.30.1104, Culture=neutral, PublicKeyToken=b1b72c69714d4847, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\GemBox.Document.23.3.30.1040\lib\net30\GemBox.Document.dll</HintPath>
-    </Reference>
-    <Reference Include="GemBox.LicenseKey">
-      <HintPath>..\..\..\..\GemBox.LicenseKey\GemBox.LicenseKey\bin\ReleaseObfuscated\GemBox.LicenseKey.dll</HintPath>
-    </Reference>
-    <Reference Include="GemBox.Spreadsheet, Version=37.3.30.1128, Culture=neutral, PublicKeyToken=b1b72c69714d4847, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\GemBox.Spreadsheet.37.3.30.1110\lib\net30\GemBox.Spreadsheet.dll</HintPath>
+    <Reference Include="EPPlus">
+      <HintPath>..\..\packages\EPPlus.4.0.4\lib\net20\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
       <HintPath>..\..\Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
@@ -95,7 +87,8 @@
     <Compile Include="GenerationSettings.cs" />
     <Compile Include="Generation\ExcelDocument.cs" />
     <Compile Include="Generation\IDocument.cs" />
-    <Compile Include="Generation\WordDocument.cs" />
+    <Compile Include="Generation\WordDocumentDocX.cs" />
+    <Compile Include="Helper\AttributeMetadataComparer.cs" />
     <Compile Include="Helper\ListViewItemComparer.cs" />
     <Compile Include="Helper\MetadataHelper.cs" />
     <Compile Include="LanguageCode.cs" />
@@ -149,12 +142,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)packages\ilmerge.2.14.1208\tools\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(SolutionDir)XrmToolBox\$(OutDir)Plugins\$(TargetFileName)" MsCrmTools.MetadataDocumentGenerator.dll EPPlus.dll</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

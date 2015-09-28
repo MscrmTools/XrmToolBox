@@ -3,28 +3,28 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using System;
 
 namespace MsCrmTools.WebResourcesManager
 {
-    class SolutionManager
+    internal class SolutionManager
     {
         #region Variables
 
         /// <summary>
         /// Organization service
         /// </summary>
-        readonly IOrganizationService service;
+        private readonly IOrganizationService service;
 
         /// <summary>
         /// Current retrieved solution
         /// </summary>
-        Entity currentSolution;
+        private Entity currentSolution;
 
-       #endregion
+        #endregion Variables
 
         #region Constructors
 
@@ -37,7 +37,7 @@ namespace MsCrmTools.WebResourcesManager
             service = organizationService;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Properties
 
@@ -47,7 +47,7 @@ namespace MsCrmTools.WebResourcesManager
             set { currentSolution = value; }
         }
 
-        #endregion
+        #endregion Properties
 
         public void AddComponent(int type, Guid id)
         {

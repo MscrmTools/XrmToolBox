@@ -1,9 +1,9 @@
-﻿using System.ComponentModel;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
+using System.ComponentModel;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd
 {
-    [TypeConverter(typeof (LocalizedLabelInfoConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class LocalizedLabelInfo
     {
         private readonly LocalizedLabel amd;
@@ -20,12 +20,12 @@ namespace MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd
 
         public bool HasChanged
         {
-            get { return amd.HasChanged.HasValue && amd.HasChanged.Value; }
+            get { return amd != null && amd.HasChanged.HasValue && amd.HasChanged.Value; }
         }
 
         public bool IsManaged
         {
-            get { return amd.IsManaged.HasValue && amd.IsManaged.Value; }
+            get { return amd != null && amd.IsManaged.HasValue && amd.IsManaged.Value; }
         }
 
         public string Label
@@ -36,6 +36,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd
         public int LanguageCode
         {
             get { return amd != null ? amd.LanguageCode : -1; }
+        }
+
+        public override string ToString()
+        {
+            return amd != null ? amd.Label : "N/A";
         }
     }
 }

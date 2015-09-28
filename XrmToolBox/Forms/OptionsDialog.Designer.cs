@@ -66,6 +66,7 @@
             this.cbbProxyUsage = new System.Windows.Forms.ComboBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.chkAllowUsageStatistics = new System.Windows.Forms.CheckBox();
+            this.chkClosePluginsSilently = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -480,6 +481,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.chkClosePluginsSilently);
             this.tabPage1.Controls.Add(this.chkAllowUsageStatistics);
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
@@ -498,6 +500,16 @@
             this.chkAllowUsageStatistics.TabIndex = 1;
             this.chkAllowUsageStatistics.Text = "Allow to send usage statistics (only anonymous data : plugin usage count)";
             this.chkAllowUsageStatistics.UseVisualStyleBackColor = true;
+            // 
+            // chkClosePluginsSilently
+            // 
+            this.chkClosePluginsSilently.AutoSize = true;
+            this.chkClosePluginsSilently.Location = new System.Drawing.Point(15, 52);
+            this.chkClosePluginsSilently.Name = "chkClosePluginsSilently";
+            this.chkClosePluginsSilently.Size = new System.Drawing.Size(518, 24);
+            this.chkClosePluginsSilently.TabIndex = 2;
+            this.chkClosePluginsSilently.Text = "Do not prompt on exit when plugins are opened, close plugins silently";
+            this.chkClosePluginsSilently.UseVisualStyleBackColor = true;
             // 
             // OptionsDialog
             // 
@@ -577,5 +589,6 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.CheckBox chkAllowUsageStatistics;
+        private System.Windows.Forms.CheckBox chkClosePluginsSilently;
     }
 }

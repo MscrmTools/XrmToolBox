@@ -5,7 +5,6 @@ namespace Javista.XrmToolBox.ImportNN
 {
     public partial class MainControl
     {
-        private IOrganizationService service;
         private ComboBox cbbFirstEntity;
         private ComboBox cbbRelationship;
         private ComboBox cbbSecondEntity;

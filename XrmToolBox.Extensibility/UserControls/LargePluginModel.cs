@@ -14,7 +14,7 @@ namespace XrmToolBox.Extensibility.UserControls
 
         public override event ClickedEventHandler Clicked;
 
-        #endregion
+        #endregion Event Handlers
 
         #region Constructors
 
@@ -37,7 +37,7 @@ namespace XrmToolBox.Extensibility.UserControls
             lblDescription.ForeColor = primaryColor;
             lblAuthor.ForeColor = primaryColor;
             lblVersion.ForeColor = primaryColor;
-                
+
             BackColor = backColor;
 
             if (count > 0)
@@ -52,15 +52,15 @@ namespace XrmToolBox.Extensibility.UserControls
 
         #endregion Constructors
 
-        private new void MouseClick(object sender, EventArgs e)
-        {
-            if(Clicked != null)
-                Clicked(this, new EventArgs());
-        }
-
         public void UpdateCount(int count)
         {
             lblCount.Text = count.ToString();
+        }
+
+        private new void MouseClick(object sender, EventArgs e)
+        {
+            if (Clicked != null)
+                Clicked(this, new EventArgs());
         }
     }
 }

@@ -69,6 +69,7 @@
             this.btnBrowseImportFile = new System.Windows.Forms.Button();
             this.txtFilePath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.chkExportDashboards = new System.Windows.Forms.CheckBox();
             this.toolStripMenu.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -376,6 +377,7 @@
             // 
             this.gbGlobalOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbGlobalOptions.Controls.Add(this.chkExportDashboards);
             this.gbGlobalOptions.Controls.Add(this.chkExportSiteMap);
             this.gbGlobalOptions.Controls.Add(this.chkExportGlobalOptSet);
             this.gbGlobalOptions.Location = new System.Drawing.Point(490, 29);
@@ -569,6 +571,19 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Translation file";
             // 
+            // chkExportDashboards
+            // 
+            this.chkExportDashboards.AutoSize = true;
+            this.chkExportDashboards.Checked = true;
+            this.chkExportDashboards.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkExportDashboards.Location = new System.Drawing.Point(9, 97);
+            this.chkExportDashboards.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkExportDashboards.Name = "chkExportDashboards";
+            this.chkExportDashboards.Size = new System.Drawing.Size(355, 24);
+            this.chkExportDashboards.TabIndex = 93;
+            this.chkExportDashboards.Text = "Export Dashboards custom labels Translation";
+            this.chkExportDashboards.UseVisualStyleBackColor = true;
+            // 
             // MainControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -640,5 +655,6 @@
         private System.Windows.Forms.Button btnClearAll;
         private System.Windows.Forms.CheckBox chkExportSiteMap;
         private System.Windows.Forms.CheckBox chkExportCustomizedRelationships;
+        private System.Windows.Forms.CheckBox chkExportDashboards;
     }
 }

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Tanguy.WinForm.Utilities.DelegatesHelpers
 {
-    class ToolStripStatusDelegates
+    internal class ToolStripStatusDelegates
     {
         public static void SetText(ToolStripStatusLabel statusLabel, string text)
         {

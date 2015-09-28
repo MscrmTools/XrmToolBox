@@ -3,15 +3,15 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.IO;
-using System.ServiceModel;
-using System.Threading;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
+using System;
 using System.Diagnostics;
+using System.IO;
+using System.ServiceModel;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace MsCrmTools.SolutionImport
@@ -27,13 +27,36 @@ namespace MsCrmTools.SolutionImport
             innerService = service;
         }
 
+        //Downloads the import log file
+        public string DownloadLogFile(string path, ImportSettings settings)
+        {
+            try
+            {
+                var importLogRequest = new RetrieveFormattedImportJobResultsRequest
+                                           {
+                                               ImportJobId = settings.ImportId
+                                           };
+                var importLogResponse =
+                    (RetrieveFormattedImportJobResultsResponse)innerService.Execute(importLogRequest);
+                DateTime time = DateTime.Now;
+                string format = "yyyy_MM_dd__HH_mm";
+                string filePath = path.Replace(".zip", "-") + time.ToString(format) + ".xml";
+                File.WriteAllText(filePath, importLogResponse.FormattedResults);
+
+                return filePath;
+            }
+            catch (Exception)
+            {
+                // Do nothing
+                return string.Empty;
+            }
+        }
+
         public void ImportSolutionArchive(string archivePath, ImportSettings settings)
         {
             try
             {
                 importPath = archivePath; //sets the global variable for the import path
-
-               
 
                 var request = new ImportSolutionRequest
                                   {
@@ -91,7 +114,7 @@ namespace MsCrmTools.SolutionImport
                     {
                         Process.Start("Excel.exe", "\"" + filePath + "\"");
                     }
-                } 
+                }
             }
         }
 
@@ -132,44 +155,6 @@ namespace MsCrmTools.SolutionImport
             }
         }
 
-        public void PublishAll()
-        {
-            try
-            {
-                var request = new PublishAllXmlRequest();
-                innerService.Execute(request);
-            }
-            catch (FaultException<OrganizationServiceFault> error)
-            {
-                throw new Exception("An error while publishing archive: " + error.Message);
-            }
-        }
-
-        //Downloads the import log file
-        public string DownloadLogFile(string path, ImportSettings settings)
-        {
-            try
-            {
-                var importLogRequest = new RetrieveFormattedImportJobResultsRequest
-                                           {
-                                               ImportJobId = settings.ImportId
-                                           };
-                var importLogResponse =
-                    (RetrieveFormattedImportJobResultsResponse) innerService.Execute(importLogRequest);
-                DateTime time = DateTime.Now;
-                string format = "yyyy_MM_dd__HH_mm";
-                string filePath = path.Replace(".zip", "-") + time.ToString(format) + ".xml";
-                File.WriteAllText(filePath, importLogResponse.FormattedResults);
-
-                return filePath;
-            }
-            catch (Exception)
-            {
-                // Do nothing
-                return string.Empty;
-            }
-        }
-
         public int IsFinished(Guid importId)
         {
             try
@@ -187,6 +172,19 @@ namespace MsCrmTools.SolutionImport
             {
                 System.Windows.Forms.MessageBox.Show(error.ToString());
                 throw;
+            }
+        }
+
+        public void PublishAll()
+        {
+            try
+            {
+                var request = new PublishAllXmlRequest();
+                innerService.Execute(request);
+            }
+            catch (FaultException<OrganizationServiceFault> error)
+            {
+                throw new Exception("An error while publishing archive: " + error.Message);
             }
         }
     }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Windows.Forms;
 
 public class ListViewGroupHeaderSorter : IComparer<ListViewGroup>
 {
     private readonly bool ascending = true;
+
     public ListViewGroupHeaderSorter(bool ascending)
     {
         this.ascending = ascending;
@@ -21,5 +21,5 @@ public class ListViewGroupHeaderSorter : IComparer<ListViewGroup>
         return String.Compare(y.Header, x.Header, StringComparison.OrdinalIgnoreCase);
     }
 
-    #endregion
+    #endregion IComparer<ListViewGroup> Members
 }

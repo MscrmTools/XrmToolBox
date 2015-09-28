@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Crm.Sdk.Messages;
+﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MsCrmTools.UserSettingsUtility.AppCode
 {
@@ -16,14 +16,6 @@ namespace MsCrmTools.UserSettingsUtility.AppCode
         public UserSettingsHelper(IOrganizationService service)
         {
             this.service = service;
-        }
-        
-        public EntityCollection RetrieveTimeZones()
-        {
-            var request = new GetAllTimeZonesWithDisplayNameRequest {LocaleId = 1033};
-            var response = (GetAllTimeZonesWithDisplayNameResponse) service.Execute(request);
-
-            return response.EntityCollection;
         }
 
         public List<Language> RetrieveAvailableLanguages()
@@ -36,24 +28,32 @@ namespace MsCrmTools.UserSettingsUtility.AppCode
         public List<Currency> RetrieveCurrencies()
         {
             return
-                service.RetrieveMultiple(new QueryExpression("transactioncurrency"){ColumnSet = new ColumnSet("currencyname")})
+                service.RetrieveMultiple(new QueryExpression("transactioncurrency") { ColumnSet = new ColumnSet("currencyname") })
                     .Entities.Select(tc => new Currency(tc))
                     .ToList();
-        } 
+        }
+
+        public EntityCollection RetrieveTimeZones()
+        {
+            var request = new GetAllTimeZonesWithDisplayNameRequest { LocaleId = 1033 };
+            var response = (GetAllTimeZonesWithDisplayNameResponse)service.Execute(request);
+
+            return response.EntityCollection;
+        }
 
         public void UpdateSettings(Guid userId, UserSettings settings)
         {
-            var currentUserId = ((OrganizationServiceProxy) (((OrganizationService) service).InnerService)).CallerId;
+            var currentUserId = ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId;
 
             var records = service.RetrieveMultiple(new QueryByAttribute("usersettings")
             {
-                Attributes = {"systemuserid"},
-                Values = {userId},
+                Attributes = { "systemuserid" },
+                Values = { userId },
             });
 
             var record = records.Entities.First();
 
-            if(settings.AdvancedFindStartupMode >= 1)
+            if (settings.AdvancedFindStartupMode >= 1)
                 record["advancedfindstartupmode"] = settings.AdvancedFindStartupMode;
             if (settings.AutoCreateContactOnPromote >= 0)
                 record["autocreatecontactonpromote"] = settings.AutoCreateContactOnPromote;
@@ -96,7 +96,7 @@ namespace MsCrmTools.UserSettingsUtility.AppCode
 
             service.Update(record);
 
-            ((OrganizationServiceProxy) (((OrganizationService) service).InnerService)).CallerId = currentUserId;
+            ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId = currentUserId;
         }
     }
 }

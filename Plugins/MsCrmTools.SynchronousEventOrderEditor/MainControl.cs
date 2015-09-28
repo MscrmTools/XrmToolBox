@@ -1,28 +1,41 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk.Query;
+using MsCrmTools.SynchronousEventOrderEditor.AppCode;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk.Query;
-using MsCrmTools.SynchronousEventOrderEditor.AppCode;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SynchronousEventOrderEditor
 {
     public partial class MainControl : PluginControlBase
     {
-        private List<ISynchronousEvent> events; 
+        private List<ISynchronousEvent> events;
 
         public MainControl()
         {
             InitializeComponent();
         }
 
-        private void tsbLoadEvents_Click(object sender, EventArgs e)
+        private void dgvSynchronousEvent_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            ExecuteMethod(LoadEvents);
+            if (dgvSynchronousEvent.Rows.Count == 0) return;
+            dgvSynchronousEventRank.ValueType = typeof(Int32);
+            int rank;
+
+            if (int.TryParse(dgvSynchronousEvent.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString(), out rank))
+            {
+                var sEvent = (ISynchronousEvent)dgvSynchronousEvent.Rows[e.RowIndex].Tag;
+                sEvent.Rank = rank;
+
+                dgvSynchronousEvent.Sort(dgvSynchronousEvent.Columns[e.ColumnIndex], ListSortDirection.Ascending);
+            }
+            else
+            {
+                MessageBox.Show(ParentForm, "Only integer value is allowed for rank", "Warning", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
         }
 
         private void LoadEvents()
@@ -72,54 +85,17 @@ namespace MsCrmTools.SynchronousEventOrderEditor
                         }
                     }
                 },
-                e=>SetWorkingMessage(e.UserState.ToString()));
+                e => SetWorkingMessage(e.UserState.ToString()));
         }
 
-        private void tvEvents_AfterSelect(object sender, TreeViewEventArgs e)
+        private void tsbClose_Click(object sender, EventArgs e)
         {
-            dgvSynchronousEvent.Rows.Clear();
-
-            if (e.Node.Nodes.Count > 0)
-            {
-                return;
-            }
-
-            var localEvents = (List<ISynchronousEvent>) e.Node.Tag;
-
-            foreach (var sEvent in localEvents)
-            {
-                dgvSynchronousEvent.Rows.Add(new DataGridViewRow
-                {
-                    Cells =
-                    {
-                        new DataGridViewTextBoxCell{Value = sEvent.Rank},
-                        new DataGridViewTextBoxCell{Value = sEvent.Type},
-                        new DataGridViewTextBoxCell{Value = sEvent.Name},
-                        new DataGridViewTextBoxCell{Value = sEvent.Description}
-                    },
-                    Tag = sEvent
-                });
-            }
+            CloseTool();
         }
 
-        private void dgvSynchronousEvent_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        private void tsbLoadEvents_Click(object sender, EventArgs e)
         {
-            if (dgvSynchronousEvent.Rows.Count == 0) return;
-            dgvSynchronousEventRank.ValueType = typeof (Int32);
-            int rank;
-
-            if (int.TryParse(dgvSynchronousEvent.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString(), out rank))
-            {
-                var sEvent = (ISynchronousEvent) dgvSynchronousEvent.Rows[e.RowIndex].Tag;
-                sEvent.Rank = rank;
-
-                dgvSynchronousEvent.Sort(dgvSynchronousEvent.Columns[e.ColumnIndex], ListSortDirection.Ascending);
-            }
-            else
-            {
-                MessageBox.Show(ParentForm, "Only integer value is allowed for rank", "Warning", MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-            }
+            ExecuteMethod(LoadEvents);
         }
 
         private void tsbUpdate_Click(object sender, EventArgs e)
@@ -149,12 +125,34 @@ namespace MsCrmTools.SynchronousEventOrderEditor
                             MessageBoxIcon.Error);
                     }
                 },
-                evt=>SetWorkingMessage(evt.UserState.ToString()));
+                evt => SetWorkingMessage(evt.UserState.ToString()));
         }
 
-        private void tsbClose_Click(object sender, EventArgs e)
+        private void tvEvents_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            CloseTool();
+            dgvSynchronousEvent.Rows.Clear();
+
+            if (e.Node.Nodes.Count > 0)
+            {
+                return;
+            }
+
+            var localEvents = (List<ISynchronousEvent>)e.Node.Tag;
+
+            foreach (var sEvent in localEvents)
+            {
+                dgvSynchronousEvent.Rows.Add(new DataGridViewRow
+                {
+                    Cells =
+                    {
+                        new DataGridViewTextBoxCell{Value = sEvent.Rank},
+                        new DataGridViewTextBoxCell{Value = sEvent.Type},
+                        new DataGridViewTextBoxCell{Value = sEvent.Name},
+                        new DataGridViewTextBoxCell{Value = sEvent.Description}
+                    },
+                    Tag = sEvent
+                });
+            }
         }
     }
 }

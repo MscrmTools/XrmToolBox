@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Microsoft.Xrm.Client.Services;
+using Microsoft.Xrm.Sdk.Client;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using Microsoft.Xrm.Client.Services;
-using Microsoft.Xrm.Sdk.Client;
 using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
@@ -22,94 +22,15 @@ namespace XrmToolBox
         /// </summary>
         private readonly List<PluginModel> pluginsModels;
 
-        private void DisplayPlugins(object filter = null)
-        {
-            if (!pManager.Plugins.Any())
-            {
-                Invoke(new Action(() =>
-                {
-                    pnlHelp.Visible = true;
-                }));
-
-                return;
-            }
-
-            var top = 4;
-            int lastWidth = HomePageTab.Width - 28;
-
-            // Search with filter defined
-            var filteredPlugins = (filter != null && filter.ToString().Length > 0
-                ? pManager.Plugins.Where(p
-                    => p.Metadata.Name.ToLower().Contains(filter.ToString().ToLower())
-                    || p.Value.GetType().GetCompany().ToLower().Contains(filter.ToString().ToLower()))
-                : pManager.Plugins).OrderBy(p=>p.Metadata.Name).ToList();
-
-            if (currentOptions.DisplayMostUsedFirst)
-            {
-                foreach (var item in currentOptions.MostUsedList.OrderByDescending(i => i.Count).ThenBy(i => i.Name))
-                {
-                    var plugin = filteredPlugins.FirstOrDefault(x => x.GetType().FullName == item.Name);
-                    if (plugin != null && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.GetType().GetTitle())))
-                    {
-                        DisplayOnePlugin(plugin, ref top, lastWidth, item.Count);
-                    }
-                }
-
-                foreach (var plugin in filteredPlugins.OrderBy(p => p.Metadata.Name))
-                {
-                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.GetType().FullName) && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.GetType().GetTitle())))
-                    {
-                        DisplayOnePlugin(plugin, ref top, lastWidth);
-                    }
-                }
-            }
-            else
-            {
-                foreach (var plugin in filteredPlugins.OrderBy(p => p.Metadata.Name))
-                {
-                    if (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.Metadata.Name))
-                    {
-                        DisplayOnePlugin(plugin, ref top, lastWidth);
-                    }
-                }
-            }
-
-            Invoke(new Action(() =>
-            {
-                HomePageTab.Controls.Clear();
-
-                foreach (PluginModel ctrl in pluginsModels.Where(p=> filteredPlugins.Contains((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)p.Tag)))
-                //foreach (PluginModel ctrl in pluginsModels)
-                {
-                    ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-                    HomePageTab.Controls.Add(ctrl);
-                }
-
-                AdaptPluginControlSize();
-            }));
-        }
-
-        private void DisplayOnePlugin(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count = -1)
-        {
-            if (currentOptions.DisplayLargeIcons)
-            {
-                CreateModel<LargePluginModel>(plugin, ref top, width, count);
-            }
-            else
-            {
-                CreateModel<SmallPluginModel>(plugin, ref top, width, count);
-            }
-        }
-
         private void CreateModel<T>(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count)
              where T : PluginModel
         {
             var type = plugin.Value.GetMyType();
             //var pm = (T)pManager.PluginsControls.FirstOrDefault(t => ((Type)t.Tag).FullName == type && t is T);
 
-            var pm = (T) pluginsModels.FirstOrDefault(t => ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>) t.Tag).Value.GetType().FullName == type && t is T);
-            var small = (typeof(T) == typeof (SmallPluginModel));
-            
+            var pm = (T)pluginsModels.FirstOrDefault(t => ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)t.Tag).Value.GetType().FullName == type && t is T);
+            var small = (typeof(T) == typeof(SmallPluginModel));
+
             if (pm == null)
             {
                 var title = plugin.Metadata.Name;
@@ -122,42 +43,45 @@ namespace XrmToolBox
                 var primaryColor = ColorTranslator.FromHtml(plugin.Metadata.PrimaryFontColor);
                 var secondaryColor = ColorTranslator.FromHtml(plugin.Metadata.SecondaryFontColor);
 
-                var args = new[] 
-            {
-                    typeof(Image), 
-                    typeof(string), 
-                    typeof(string), 
-                    typeof(string), 
-                    typeof(string), 
-                    typeof(Color), 
+                var args = new[]
+                {
+                    typeof(Image),
+                    typeof(string),
+                    typeof(string),
+                    typeof(string),
+                    typeof(string),
                     typeof(Color),
-                    typeof(Color), 
+                    typeof(Color),
+                    typeof(Color),
                     typeof(int)
                 };
 
                 var vals = new object[]
                 {
-                    GetImage(small ? plugin.Metadata.SmallImageBase64 : plugin.Metadata.BigImageBase64, small), 
+                    GetImage(small ? plugin.Metadata.SmallImageBase64 : plugin.Metadata.BigImageBase64, small),
                     title,
-                    desc, 
-                    author, 
-                    version, 
-                    backColor, 
+                    desc,
+                    author,
+                    version,
+                    backColor,
                     primaryColor,
                     secondaryColor,
                     count
                 };
 
-                var ctor = typeof(T).GetConstructor(args);
-                if (ctor != null)
+                var ctor = typeof (T).GetConstructor(args);
+                if (ctor == null)
                 {
-                    pm = (T) ctor.Invoke(vals);
-
-                    pm.Tag = plugin;
-                    pm.Clicked += PluginClicked;
-
-                    pluginsModels.Add(pm);
+                    throw new Exception("Unable to find a constructor of type " + typeof (T).FullName + "(" + String.Join(Environment.NewLine, args.Select(c => c.FullName))+ ")");
                 }
+
+                pm = (T) ctor.Invoke(vals);
+
+                pm.Tag = plugin;
+                pm.Clicked += PluginClicked;
+
+                pluginsModels.Add(pm);
+
             }
 
             if (pm == null) { return; }
@@ -173,22 +97,32 @@ namespace XrmToolBox
             top += pm.Height + 4;
         }
 
-        private int DisplayPluginControl(UserControl plugin)
+        private void DisplayOnePlugin(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count = -1)
+        {
+            if (currentOptions.DisplayLargeIcons)
+            {
+                CreateModel<LargePluginModel>(plugin, ref top, width, count);
+            }
+            else
+            {
+                CreateModel<SmallPluginModel>(plugin, ref top, width, count);
+            }
+        }
+
+        private int DisplayPluginControl(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin)
         {
             var tabIndex = 0;
 
             try
             {
-                var control = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)plugin.Tag;
-                var pluginControl = (UserControl)control.Value.GetControl();
-             
+                var pluginControl = (UserControl)plugin.Value.GetControl();
+
                 if (service != null)
                 {
                     var clonedService = (OrganizationService)currentConnectionDetail.GetOrganizationService();
                     ((OrganizationServiceProxy)clonedService.InnerService).SdkClientVersion = currentConnectionDetail.OrganizationVersion;
 
-                    ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService,
-                        currentConnectionDetail);
+                    ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
                 }
 
                 // ReSharper disable once SuspiciousTypeConversion.Global
@@ -201,12 +135,12 @@ namespace XrmToolBox
                 ((IXrmToolBoxPluginControl)pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
                 ((IXrmToolBoxPluginControl)pluginControl).OnCloseTool += MainForm_OnCloseTool;
 
-                string name = string.Format("{0} ({1})", control.Metadata.Name,
+                string name = string.Format("{0} ({1})", plugin.Metadata.Name,
                     currentConnectionDetail != null
                         ? currentConnectionDetail.ConnectionName
                         : "Not connected");
 
-                var newTab = new TabPage(name);
+                var newTab = new TabPage(name) { Tag = plugin };
                 tabControl1.TabPages.Add(newTab);
 
                 pluginControl.Dock = DockStyle.Fill;
@@ -219,27 +153,26 @@ namespace XrmToolBox
 
                 tabControl1.SelectTab(tabIndex);
 
-                var pluginInOption =
-                    currentOptions.MostUsedList.FirstOrDefault(i => i.Name == pluginControl.GetType().FullName);
+                var pluginInOption = currentOptions.MostUsedList.FirstOrDefault(i => i.Name == plugin.Value.GetType().FullName);
                 if (pluginInOption == null)
                 {
-                    pluginInOption = new PluginUseCount { Name = pluginControl.GetType().FullName, Count = 0 };
+                    pluginInOption = new PluginUseCount { Name = plugin.Value.GetType().FullName, Count = 0 };
                     currentOptions.MostUsedList.Add(pluginInOption);
                 }
 
                 pluginInOption.Count++;
 
-                var p1 = plugin as SmallPluginModel;
-                if (p1 != null)
-                    p1.UpdateCount(pluginInOption.Count);
-                else
-                {
-                    var p2 = plugin as LargePluginModel;
-                    if (p2 != null)
-                    {
-                        p2.UpdateCount(pluginInOption.Count);
-                    }
-                }
+                //var p1 = plugin as SmallPluginModel;
+                //if (p1 != null)
+                //    p1.UpdateCount(pluginInOption.Count);
+                //else
+                //{
+                //    var p2 = plugin as LargePluginModel;
+                //    if (p2 != null)
+                //    {
+                //        p2.UpdateCount(pluginInOption.Count);
+                //    }
+                //}
 
                 if (currentOptions.LastAdvertisementDisplay == new DateTime() ||
                     currentOptions.LastAdvertisementDisplay > DateTime.Now ||
@@ -248,8 +181,7 @@ namespace XrmToolBox
                     bool displayAdvertisement = true;
                     try
                     {
-                        var assembly =
-                            Assembly.LoadFile(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory +
+                        var assembly = Assembly.LoadFile(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory +
                                               "\\McTools.StopAdvertisement.dll");
                         if (assembly != null)
                         {
@@ -283,7 +215,7 @@ namespace XrmToolBox
 
                 if (currentOptions.AllowLogUsage.HasValue && currentOptions.AllowLogUsage.Value)
                 {
-                    LogUsage.DoLog(control);
+                    LogUsage.DoLog(plugin);
                 }
 
                 currentOptions.Save();
@@ -295,6 +227,73 @@ namespace XrmToolBox
             }
 
             return tabIndex;
+        }
+
+        private void DisplayPlugins(object filter = null)
+        {
+            if (!pManager.Plugins.Any())
+            {
+                Invoke(new Action(() =>
+                {
+                    pnlHelp.Visible = true;
+                }));
+
+                return;
+            }
+
+            var top = 4;
+            int lastWidth = HomePageTab.Width - 28;
+
+            // Search with filter defined
+            var filteredPlugins = (filter != null && filter.ToString().Length > 0
+                ? pManager.Plugins.Where(p
+                    => p.Metadata.Name.ToLower().Contains(filter.ToString().ToLower())
+                    || p.Value.GetType().GetCompany().ToLower().Contains(filter.ToString().ToLower()))
+                : pManager.Plugins).OrderBy(p => p.Metadata.Name).ToList();
+
+            if (currentOptions.DisplayMostUsedFirst)
+            {
+                foreach (var item in currentOptions.MostUsedList.OrderByDescending(i => i.Count).ThenBy(i => i.Name))
+                {
+                    var plugin = filteredPlugins.FirstOrDefault(x => x.Value.GetType().FullName == item.Name);
+                    if (plugin != null && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.GetType().GetTitle())))
+                    {
+                        DisplayOnePlugin(plugin, ref top, lastWidth, item.Count);
+                    }
+                }
+
+                foreach (var plugin in filteredPlugins.OrderBy(p => p.Metadata.Name))
+                {
+                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.Value.GetType().FullName) && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.Value.GetType().GetTitle())))
+                    {
+                        DisplayOnePlugin(plugin, ref top, lastWidth);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var plugin in filteredPlugins.OrderBy(p => p.Metadata.Name))
+                {
+                    if (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.Metadata.Name))
+                    {
+                        DisplayOnePlugin(plugin, ref top, lastWidth);
+                    }
+                }
+            }
+
+            Invoke(new Action(() =>
+            {
+                HomePageTab.Controls.Clear();
+
+                foreach (PluginModel ctrl in pluginsModels.Where(p => filteredPlugins.Contains((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)p.Tag)))
+                //foreach (PluginModel ctrl in pluginsModels)
+                {
+                    ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+                    HomePageTab.Controls.Add(ctrl);
+                }
+
+                AdaptPluginControlSize();
+            }));
         }
 
         /// <summary>

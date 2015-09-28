@@ -1,26 +1,18 @@
-﻿using System.Drawing;
-
-#if NO_GEMBOX
+﻿using OfficeOpenXml.Style;
+using System.Drawing;
 using ExcelWorksheet = OfficeOpenXml.ExcelWorksheet;
-using OfficeOpenXml.Style;
-#else
-using GemBox.Spreadsheet;
-using ExcelWorksheet = GemBox.Spreadsheet.ExcelWorksheet;
-#endif
 
 namespace MsCrmTools.Translator
 {
     public static class StyleMutator
     {
-        private static readonly Color TitleColor = Color.PowderBlue;
         private static readonly Color RowColor = Color.AliceBlue;
+        private static readonly Color TitleColor = Color.PowderBlue;
 
-#if NO_GEMBOX
-        public static void TitleCell(ExcelStyle style)
+        public static void FontDefaults(ExcelWorksheet sheet)
         {
-            style.Fill.PatternType = ExcelFillStyle.Solid;
-            style.Fill.BackgroundColor.SetColor(TitleColor);
-            style.Font.Bold = true;
+            sheet.Cells.Style.Font.Name = "Arial";
+            sheet.Cells.Style.Font.Size = 10;
         }
 
         public static void HighlightedCell(ExcelStyle style)
@@ -29,27 +21,11 @@ namespace MsCrmTools.Translator
             style.Fill.BackgroundColor.SetColor(RowColor);
         }
 
-        public static void FontDefaults(ExcelWorksheet sheet)
+        public static void TitleCell(ExcelStyle style)
         {
-            sheet.Cells.Style.Font.Name = "Arial";
-            sheet.Cells.Style.Font.Size = 10;
+            style.Fill.PatternType = ExcelFillStyle.Solid;
+            style.Fill.BackgroundColor.SetColor(TitleColor);
+            style.Font.Bold = true;
         }
-#else
-        public static void TitleCell(CellStyle style)
-        {
-            style.FillPattern.SetSolid(TitleColor);
-            style.Font.Weight = ExcelFont.BoldWeight;  
-        }
-
-        public static void HighlightedCell(CellStyle style)
-        {
-            style.FillPattern.SetSolid(RowColor);
-        }
-
-        public static void FontDefaults(ExcelWorksheet sheet)
-        {
-        }
-#endif
     }
 }
-
