@@ -953,7 +953,18 @@ namespace MsCrmTools.SiteMapEditor
         /// <param name="hasDisabledParent">Indicates if a parent node is already disabled</param>
         private void AddXmlNode(TreeNode currentNode, XmlNode parentXmlNode, bool hasDisabledParent = false)
         {
-            XmlNode newNode = parentXmlNode.OwnerDocument.CreateElement(currentNode.Text.Split(' ')[0]);
+            string newNodeName;
+            if (currentNode.Text.StartsWith("#"))
+            {
+                newNodeName = currentNode.Text.Remove(0, 2).Trim();
+                XmlComment comment = parentXmlNode.OwnerDocument.CreateComment(newNodeName);
+                parentXmlNode.AppendChild(comment);
+                return;
+            }
+
+            newNodeName = currentNode.Text.Split(' ')[0];
+
+            XmlNode newNode = parentXmlNode.OwnerDocument.CreateElement(newNodeName);
 
             var collec = (Dictionary<string, string>)currentNode.Tag;
 

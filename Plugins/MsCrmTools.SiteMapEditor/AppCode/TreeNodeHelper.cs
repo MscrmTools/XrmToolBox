@@ -210,29 +210,47 @@ namespace MsCrmTools.SiteMapEditor.AppCode
 
             Dictionary<string, string> attributes = new Dictionary<string, string>();
 
-            foreach (XmlAttribute attr in xmlNode.Attributes)
+            if (xmlNode.NodeType != XmlNodeType.Text)
             {
-                attributes.Add(attr.Name, attr.Value);
-            }
+                foreach (XmlAttribute attr in xmlNode.Attributes)
+                {
+                    attributes.Add(attr.Name, attr.Value);
+                }
 
-            if (xmlNode.Attributes["Id"] != null)
-            {
-                node.Text += " (" + xmlNode.Attributes["Id"].Value + ")";
+                if (xmlNode.Attributes["Id"] != null)
+                {
+                    node.Text += " (" + xmlNode.Attributes["Id"].Value + ")";
+                }
+                if (xmlNode.Attributes["LCID"] != null)
+                {
+                    node.Text += " (" + xmlNode.Attributes["LCID"].Value + ")";
+                }
+                if (node.Text.ToLower() == "comment")
+                {
+                    node.Text = string.Format("# - {0}", xmlNode.InnerText);
+                }
             }
-            if (xmlNode.Attributes["LCID"] != null)
+            else
             {
-                node.Text += " (" + xmlNode.Attributes["LCID"].Value + ")";
+                node.Text = String.Format("# {0}", xmlNode.InnerText);
             }
 
             node.Name = node.Text.Replace(" ", "");
 
             if (isDisabled)
             {
-                node.ToolTipText =
-                    "This node is disabled and won't appear in Microsoft Dynamics CRM 2011. Right click this node and enable it and make it appear on Microsoft Dynamics CRM 2011";
+                if (node.Text.StartsWith("#"))
+                {
+                    node.ToolTipText = "This is a comment in SiteMap";
+                }
+                else
+                {
+                    node.ToolTipText =
+                        "This node is disabled and won't appear in Microsoft Dynamics CRM 2011. Right click this node and enable it and make it appear on Microsoft Dynamics CRM 2011";
+                    node.Text += " - disabled";
+                    attributes.Add("_disabled", "true");
+                }
                 node.ForeColor = Color.Gray;
-                node.Text += " - disabled";
-                attributes.Add("_disabled", "true");
             }
 
             node.Tag = attributes;
@@ -254,16 +272,33 @@ namespace MsCrmTools.SiteMapEditor.AppCode
 
             foreach (XmlNode childNode in xmlNode.ChildNodes)
             {
-                if (childNode.NodeType != XmlNodeType.Comment)
+                if (childNode.NodeType == XmlNodeType.Comment)
+                {
+                    var commentDoc = new XmlDocument();
+
+                    try
+                    {
+                        commentDoc.LoadXml(childNode.InnerText);
+                        AddTreeViewNode(node, commentDoc.DocumentElement, form, true);
+                    }
+                    catch
+                    {
+                        commentDoc.LoadXml("<comment>" + childNode.InnerText + "</comment>");
+
+                        foreach (XmlNode commentChildNode in commentDoc.DocumentElement.ChildNodes)
+                        {
+                            AddTreeViewNode(node, commentChildNode, form, true);
+                        }
+                    }
+                }
+                else if (childNode.NodeType == XmlNodeType.Element)
                 {
                     AddTreeViewNode(node, childNode, form);
                 }
-                else
+                else if (childNode.NodeType == XmlNodeType.Text)
                 {
-                    var commentDoc = new XmlDocument();
-                    commentDoc.LoadXml(childNode.InnerText);
-
-                    AddTreeViewNode(node, commentDoc.DocumentElement, form, true);
+                    var tvChildNode = new TreeNode("#" + childNode.InnerText);
+                    node.Nodes.Add(tvChildNode);
                 }
             }
         }
