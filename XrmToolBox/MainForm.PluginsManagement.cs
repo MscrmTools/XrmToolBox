@@ -69,19 +69,18 @@ namespace XrmToolBox
                     count
                 };
 
-                var ctor = typeof (T).GetConstructor(args);
+                var ctor = typeof(T).GetConstructor(args);
                 if (ctor == null)
                 {
-                    throw new Exception("Unable to find a constructor of type " + typeof (T).FullName + "(" + String.Join(Environment.NewLine, args.Select(c => c.FullName))+ ")");
+                    throw new Exception("Unable to find a constructor of type " + typeof(T).FullName + "(" + String.Join(Environment.NewLine, args.Select(c => c.FullName)) + ")");
                 }
 
-                pm = (T) ctor.Invoke(vals);
+                pm = (T)ctor.Invoke(vals);
 
                 pm.Tag = plugin;
                 pm.Clicked += PluginClicked;
 
                 pluginsModels.Add(pm);
-
             }
 
             if (pm == null) { return; }
@@ -248,6 +247,7 @@ namespace XrmToolBox
             var filteredPlugins = (filter != null && filter.ToString().Length > 0
                 ? pManager.Plugins.Where(p
                     => p.Metadata.Name.ToLower().Contains(filter.ToString().ToLower())
+                    || p.Metadata.Description.ToLower().Contains(filter.ToString().ToLower())
                     || p.Value.GetType().GetCompany().ToLower().Contains(filter.ToString().ToLower()))
                 : pManager.Plugins).OrderBy(p => p.Metadata.Name).ToList();
 

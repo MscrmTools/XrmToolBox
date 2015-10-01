@@ -474,11 +474,15 @@ namespace XrmToolBox
             if (e.KeyData == Keys.Enter)
             {
                 var name = ((ToolStripTextBox)(sender)).Text.ToLower();
-                var plugin = pManager.Plugins.Where(p => p.Metadata.Name.ToLower().Contains(name)).FirstOrDefault();
+                var plugin = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name.ToLower().Contains(name));
 
                 if (plugin != null)
                 {
                     this.PluginClicked(new UserControl { Tag = plugin }, new EventArgs());
+
+                    // Clear the textbox
+                    // ReSharper disable once PossibleNullReferenceException
+                    tstxtFilterPlugin.TextBox.Text = string.Empty;
                 }
             }
         }
