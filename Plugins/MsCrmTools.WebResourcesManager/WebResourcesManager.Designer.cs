@@ -52,6 +52,7 @@
             this.tsbMinifyJS = new System.Windows.Forms.ToolStripButton();
             this.tsbPreviewHtml = new System.Windows.Forms.ToolStripButton();
             this.tsbBeautify = new System.Windows.Forms.ToolStripButton();
+            this.tsbDoFolding = new System.Windows.Forms.ToolStripButton();
             this.tsbGetLatestVersion = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.tslResourceName = new System.Windows.Forms.ToolStripLabel();
@@ -88,6 +89,7 @@
             this.addNewFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.collapseIncludingChildrensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.expandincludingChildrensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparatorExpandCollapse = new System.Windows.Forms.ToolStripSeparator();
             this.updateFromDiskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshFromDiskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -103,7 +105,6 @@
             this.copyWebResourceNameToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.expandincludingChildrensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -214,6 +215,7 @@
             this.tsbMinifyJS,
             this.tsbPreviewHtml,
             this.tsbBeautify,
+            this.tsbDoFolding,
             this.tsbGetLatestVersion,
             this.toolStripSeparator10,
             this.tslResourceName});
@@ -347,7 +349,7 @@
             this.tsbMinifyJS.Image = ((System.Drawing.Image)(resources.GetObject("tsbMinifyJS.Image")));
             this.tsbMinifyJS.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbMinifyJS.Name = "tsbMinifyJS";
-            this.tsbMinifyJS.Size = new System.Drawing.Size(120, 36);
+            this.tsbMinifyJS.Size = new System.Drawing.Size(112, 36);
             this.tsbMinifyJS.Text = "Compress";
             this.tsbMinifyJS.ToolTipText = "This feature compress/minify a script web resource. It does not obfuscate the cod" +
     "e, just remove useless formatting.\r\nBe careful when using this feature! There is" +
@@ -360,7 +362,7 @@
             this.tsbPreviewHtml.Image = ((System.Drawing.Image)(resources.GetObject("tsbPreviewHtml.Image")));
             this.tsbPreviewHtml.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbPreviewHtml.Name = "tsbPreviewHtml";
-            this.tsbPreviewHtml.Size = new System.Drawing.Size(100, 36);
+            this.tsbPreviewHtml.Size = new System.Drawing.Size(92, 36);
             this.tsbPreviewHtml.Text = "Preview";
             this.tsbPreviewHtml.ToolTipText = "This feature allows you to preview HTML pages. It does not warn about script erro" +
     "r, so the HTML page could not render or behave as expected";
@@ -372,19 +374,29 @@
             this.tsbBeautify.Image = ((System.Drawing.Image)(resources.GetObject("tsbBeautify.Image")));
             this.tsbBeautify.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbBeautify.Name = "tsbBeautify";
-            this.tsbBeautify.Size = new System.Drawing.Size(103, 36);
+            this.tsbBeautify.Size = new System.Drawing.Size(95, 36);
             this.tsbBeautify.Text = "Beautify";
             this.tsbBeautify.ToolTipText = "This feature make uglified JavaScript readable \r\n\r\nThanks to ghost6991 for his wo" +
     "rk on the beautifier in C# : https://github.com/ghost6991/Jsbeautifier";
             this.tsbBeautify.Visible = false;
             this.tsbBeautify.Click += new System.EventHandler(this.tsbBeautify_Click);
             // 
+            // tsbDoFolding
+            // 
+            this.tsbDoFolding.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbDoFolding.Image = ((System.Drawing.Image)(resources.GetObject("tsbDoFolding.Image")));
+            this.tsbDoFolding.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbDoFolding.Name = "tsbDoFolding";
+            this.tsbDoFolding.Size = new System.Drawing.Size(133, 36);
+            this.tsbDoFolding.Text = "Enable Folding";
+            this.tsbDoFolding.Click += new System.EventHandler(this.tsbDoFolding_Click);
+            // 
             // tsbGetLatestVersion
             // 
             this.tsbGetLatestVersion.Image = ((System.Drawing.Image)(resources.GetObject("tsbGetLatestVersion.Image")));
             this.tsbGetLatestVersion.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbGetLatestVersion.Name = "tsbGetLatestVersion";
-            this.tsbGetLatestVersion.Size = new System.Drawing.Size(118, 36);
+            this.tsbGetLatestVersion.Size = new System.Drawing.Size(110, 36);
             this.tsbGetLatestVersion.Text = "Get Latest";
             this.tsbGetLatestVersion.Click += new System.EventHandler(this.getLatestVersionToolStripMenuItem_Click);
             // 
@@ -457,7 +469,7 @@
             this.tsddCrmMenu.Image = ((System.Drawing.Image)(resources.GetObject("tsddCrmMenu.Image")));
             this.tsddCrmMenu.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddCrmMenu.Name = "tsddCrmMenu";
-            this.tsddCrmMenu.Size = new System.Drawing.Size(92, 36);
+            this.tsddCrmMenu.Size = new System.Drawing.Size(84, 36);
             this.tsddCrmMenu.Text = "CRM";
             // 
             // loadWebResourcesToolStripMenuItem
@@ -513,7 +525,7 @@
             this.tsddFileMenu.Image = ((System.Drawing.Image)(resources.GetObject("tsddFileMenu.Image")));
             this.tsddFileMenu.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddFileMenu.Name = "tsddFileMenu";
-            this.tsddFileMenu.Size = new System.Drawing.Size(80, 36);
+            this.tsddFileMenu.Size = new System.Drawing.Size(72, 36);
             this.tsddFileMenu.Text = "File";
             // 
             // loadWebResourcesToolStripMenuItem1
@@ -550,7 +562,7 @@
             this.tsbNewRoot.Image = ((System.Drawing.Image)(resources.GetObject("tsbNewRoot.Image")));
             this.tsbNewRoot.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbNewRoot.Name = "tsbNewRoot";
-            this.tsbNewRoot.Size = new System.Drawing.Size(114, 36);
+            this.tsbNewRoot.Size = new System.Drawing.Size(106, 36);
             this.tsbNewRoot.Text = "New root";
             this.tsbNewRoot.Click += new System.EventHandler(this.TsbNewRootClick);
             // 
@@ -693,6 +705,13 @@
             this.collapseIncludingChildrensToolStripMenuItem.Text = "Collapse (including childrens)";
             this.collapseIncludingChildrensToolStripMenuItem.Click += new System.EventHandler(this.collapseIncludingChildrensToolStripMenuItem_Click);
             // 
+            // expandincludingChildrensToolStripMenuItem
+            // 
+            this.expandincludingChildrensToolStripMenuItem.Name = "expandincludingChildrensToolStripMenuItem";
+            this.expandincludingChildrensToolStripMenuItem.Size = new System.Drawing.Size(492, 30);
+            this.expandincludingChildrensToolStripMenuItem.Text = "Expand (including childrens)";
+            this.expandincludingChildrensToolStripMenuItem.Click += new System.EventHandler(this.expandincludingChildrensToolStripMenuItem_Click);
+            // 
             // toolStripSeparatorExpandCollapse
             // 
             this.toolStripSeparatorExpandCollapse.Name = "toolStripSeparatorExpandCollapse";
@@ -797,13 +816,6 @@
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.PropertiesToolStripMenuItemClick);
             // 
-            // expandincludingChildrensToolStripMenuItem
-            // 
-            this.expandincludingChildrensToolStripMenuItem.Name = "expandincludingChildrensToolStripMenuItem";
-            this.expandincludingChildrensToolStripMenuItem.Size = new System.Drawing.Size(492, 30);
-            this.expandincludingChildrensToolStripMenuItem.Text = "Expand (including childrens)";
-            this.expandincludingChildrensToolStripMenuItem.Click += new System.EventHandler(this.expandincludingChildrensToolStripMenuItem_Click);
-            // 
             // WebResourcesManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -903,5 +915,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
         private System.Windows.Forms.ToolStripMenuItem collapseIncludingChildrensToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem expandincludingChildrensToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton tsbDoFolding;
     }
 }

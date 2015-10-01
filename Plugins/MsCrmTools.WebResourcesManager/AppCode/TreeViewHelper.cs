@@ -513,7 +513,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                 foreach (TreeNode node in tView.Nodes)
                 {
                     if (onlyCheckedNodes && node.Checked || !onlyCheckedNodes)
-                        if (node.Tag != null)
+                        if (node.Tag is WebResource)
                         {
                             string name = GetName(node);
                             ((WebResource)node.Tag).WebResourceEntity["name"] = name;
@@ -529,7 +529,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                 foreach (TreeNode node in ((TreeNode)o).Nodes)
                 {
                     if (onlyCheckedNodes && node.Checked || !onlyCheckedNodes)
-                        if (node.Tag != null)
+                        if (node.Tag is WebResource)
                         {
                             string name = GetName(node);
                             ((WebResource)node.Tag).WebResourceEntity["name"] = name;
@@ -601,18 +601,22 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                         var bytes = File.ReadAllBytes(file.FullName);
                         var content = Convert.ToBase64String(bytes);
 
-                        ((WebResource)node.Tag).WebResourceEntity["content"] = content;
-
-                        string nameToDisplay = name;
-                        var currentDirectory = file.Directory;
-
-                        while (initialFolderName != currentDirectory.Name)
+                        var wr = node.Tag as WebResource;
+                        if (wr != null)
                         {
-                            nameToDisplay = currentDirectory.Name + "\\" + nameToDisplay;
-                            currentDirectory = currentDirectory.Parent;
-                        }
+                            wr.WebResourceEntity["content"] = content;
 
-                        sBuilder.AppendLine(" - " + nameToDisplay);
+                            string nameToDisplay = name;
+                            var currentDirectory = file.Directory;
+
+                            while (initialFolderName != currentDirectory.Name)
+                            {
+                                nameToDisplay = currentDirectory.Name + "\\" + nameToDisplay;
+                                currentDirectory = currentDirectory.Parent;
+                            }
+
+                            sBuilder.AppendLine(" - " + nameToDisplay);
+                        }
                     }
                 }
             }

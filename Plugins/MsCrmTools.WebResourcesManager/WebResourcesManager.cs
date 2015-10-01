@@ -1163,6 +1163,12 @@ namespace MsCrmTools.WebResourcesManager
             }
         }
 
+        private void tsbDoFolding_Click(object sender, EventArgs e)
+        {
+            tsbDoFolding.Checked = !tsbDoFolding.Checked;
+            ((CodeControl)panelControl.Controls[0]).EnableFolding(tsbDoFolding.Checked);
+        }
+
         private void TsbMinifyJsClick(object sender, EventArgs e)
         {
             if (DialogResult.Yes ==
@@ -1210,6 +1216,8 @@ namespace MsCrmTools.WebResourcesManager
         private void TvWebResourcesAfterSelect(object sender, TreeViewEventArgs e)
         {
             panelControl.Controls.Clear();
+            tsbDoFolding.Checked = false;
+
             if (tvWebResources.SelectedNode != null
                 && tvWebResources.SelectedNode.Tag != null
                 && tvWebResources.SelectedNode.Tag is WebResource)
@@ -1230,6 +1238,7 @@ namespace MsCrmTools.WebResourcesManager
                             MainFormWebResourceUpdated;
                         toolStripSeparatorMinifyJS.Visible = true;
                         tsbMinifyJS.Visible = false;
+                        tsbDoFolding.Visible = true;
                         tsbBeautify.Visible = false;
                         tsbPreviewHtml.Visible = true;
                         tsSeparatorEdit.Visible = true;
@@ -1242,6 +1251,7 @@ namespace MsCrmTools.WebResourcesManager
                                                 Enumerations.WebResourceType.Css);
                         ((CodeControl)ctrl).WebResourceUpdated += MainFormWebResourceUpdated;
                         tsbMinifyJS.Visible = false;
+                        tsbDoFolding.Visible = true;
                         tsbBeautify.Visible = false;
                         tsbPreviewHtml.Visible = false;
                         tsSeparatorEdit.Visible = true;
@@ -1255,6 +1265,7 @@ namespace MsCrmTools.WebResourcesManager
                         ((CodeControl)ctrl).WebResourceUpdated +=
                             MainFormWebResourceUpdated;
                         toolStripSeparatorMinifyJS.Visible = true;
+                        tsbDoFolding.Visible = true;
                         tsbMinifyJS.Visible = true;
                         tsbBeautify.Visible = true;
                         tsbPreviewHtml.Visible = false;
@@ -1269,6 +1280,7 @@ namespace MsCrmTools.WebResourcesManager
                         ((CodeControl)ctrl).WebResourceUpdated +=
                             MainFormWebResourceUpdated;
                         tsbMinifyJS.Visible = false;
+                        tsbDoFolding.Visible = true;
                         tsbBeautify.Visible = false;
                         tsbPreviewHtml.Visible = false;
                         tsSeparatorEdit.Visible = true;
@@ -1282,6 +1294,7 @@ namespace MsCrmTools.WebResourcesManager
                         ((ImageControl)ctrl).WebResourceUpdated +=
                             MainFormWebResourceUpdated;
                         tsbMinifyJS.Visible = false;
+                        tsbDoFolding.Visible = false;
                         tsbBeautify.Visible = false;
                         tsbPreviewHtml.Visible = false;
                         tsSeparatorEdit.Visible = false;
@@ -1295,6 +1308,7 @@ namespace MsCrmTools.WebResourcesManager
                         ((ImageControl)ctrl).WebResourceUpdated +=
                             MainFormWebResourceUpdated;
                         tsbMinifyJS.Visible = false;
+                        tsbDoFolding.Visible = false;
                         tsbBeautify.Visible = false;
                         tsbPreviewHtml.Visible = false;
                         tsSeparatorEdit.Visible = false;
@@ -1308,6 +1322,7 @@ namespace MsCrmTools.WebResourcesManager
                         ((ImageControl)ctrl).WebResourceUpdated +=
                             MainFormWebResourceUpdated;
                         tsbMinifyJS.Visible = false;
+                        tsbDoFolding.Visible = false;
                         tsbBeautify.Visible = false;
                         tsbPreviewHtml.Visible = false;
                         tsSeparatorEdit.Visible = false;
@@ -1319,6 +1334,7 @@ namespace MsCrmTools.WebResourcesManager
                         ctrl = new UserControl();
                         tsSeparatorEdit.Visible = false;
                         tsddbEdit.Visible = false;
+                        tsbDoFolding.Visible = false;
                         tsbPreviewHtml.Visible = false;
                         tsddbCompare.Visible = false;
                         break;
@@ -1329,7 +1345,8 @@ namespace MsCrmTools.WebResourcesManager
                         ((CodeControl)ctrl).WebResourceUpdated +=
                             MainFormWebResourceUpdated;
                         tsbMinifyJS.Visible = false;
-                        tsbBeautify.Visible = false;
+                        tsbDoFolding.Visible = false;
+                        tsbBeautify.Visible = true;
                         tsbPreviewHtml.Visible = false;
                         tsSeparatorEdit.Visible = true;
                         tsddbEdit.Visible = true;
@@ -1341,6 +1358,7 @@ namespace MsCrmTools.WebResourcesManager
                         ((IconControl)ctrl).WebResourceUpdated +=
                             MainFormWebResourceUpdated;
                         tsbMinifyJS.Visible = false;
+                        tsbDoFolding.Visible = false;
                         tsbBeautify.Visible = false;
                         tsbPreviewHtml.Visible = false;
                         tsSeparatorEdit.Visible = false;

@@ -53,8 +53,8 @@
     <Reference Include="EcmaScript.NET.modified">
       <HintPath>Referenced Assemblies\EcmaScript.NET.modified.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.TextEditor">
-      <HintPath>..\..\packages\ICSharpCode.TextEditor.3.2.1.6466\lib\Net20\ICSharpCode.TextEditor.dll</HintPath>
+    <Reference Include="ICSharpCode.AvalonEdit">
+      <HintPath>..\..\packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
       <HintPath>..\..\Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
@@ -68,6 +68,8 @@
     <Reference Include="Microsoft.Xrm.Sdk.Deployment">
       <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -75,11 +77,15 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
     <Reference Include="Yahoo.Yui.Compressor">
       <HintPath>Referenced Assemblies\Yahoo.Yui.Compressor.dll</HintPath>
     </Reference>
@@ -87,6 +93,36 @@
   <ItemGroup>
     <Compile Include="AppCode\Enumerations.cs" />
     <Compile Include="AppCode\Globals.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\crc32.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\EncodingFoundException.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlAttribute.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlAttributeCollection.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlCmdLine.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlCommentNode.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlConsoleListener.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlDocument.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlElementFlag.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlEntity.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlNameTable.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlNode.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlNodeCollection.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlNodeNavigator.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlNodeType.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlParseError.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlParseErrorCode.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlTextNode.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlWeb.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\HtmlWebException.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\IOLibrary.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\MixedCodeDocument.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\MixedCodeDocumentCodeFragment.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\MixedCodeDocumentFragment.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\MixedCodeDocumentFragmentList.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\MixedCodeDocumentFragmentType.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\MixedCodeDocumentTextFragment.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\NameValuePair.cs" />
+    <Compile Include="AppCode\HtmlAgilityPack\NameValuePairList.cs" />
+    <Compile Include="AppCode\HtmlFoldingStrategy.cs" />
     <Compile Include="AppCode\JsBeautifier\Beautifier.cs" />
     <Compile Include="AppCode\JsBeautifier\BeautifierFlags.cs" />
     <Compile Include="AppCode\JsBeautifier\BeautifierOptions.cs" />
@@ -291,6 +327,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="AppCode\HtmlAgilityPack\HtmlAgilityPack.snk" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -315,9 +352,14 @@
       <Name>XrmToolBox</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="AppCode\HtmlAgilityPack\HtmlAgilityPack VS2008.csproj" />
+    <Content Include="AppCode\HtmlAgilityPack\HtmlAgilityPack.csproj" />
+    <Content Include="AppCode\HtmlAgilityPack\HtmlAgilityPack.csproj.vspscc" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"$(SolutionDir)packages\ilmerge.2.14.1208\tools\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(SolutionDir)XrmToolBox\$(OutDir)Plugins\$(TargetFileName)" MsCrmTools.WebResourcesManager.dll ICSharpCode.TextEditor.dll Yahoo.Yui.Compressor.dll EcmaScript.NET.modified.dll
+    <PostBuildEvent>"$(SolutionDir)packages\ilmerge.2.14.1208\tools\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(SolutionDir)XrmToolBox\$(OutDir)Plugins\$(TargetFileName)" MsCrmTools.WebResourcesManager.dll ICSharpCode.AvalonEdit.dll Yahoo.Yui.Compressor.dll EcmaScript.NET.modified.dll
 </PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>

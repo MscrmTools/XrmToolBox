@@ -25,22 +25,5 @@ namespace MsCrmTools.WebResourcesManager.DelegatesHelpers
                 miSetText();
             }
         }
-
-        internal static void SetText(ICSharpCode.TextEditor.TextEditorControl control, string text)
-        {
-            MethodInvoker miSetText = delegate
-            {
-                control.Text = text;
-            };
-
-            if (control.InvokeRequired)
-            {
-                control.Invoke(miSetText);
-            }
-            else
-            {
-                miSetText();
-            }
-        }
     }
 }
