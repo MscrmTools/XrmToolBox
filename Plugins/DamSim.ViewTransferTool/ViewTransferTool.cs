@@ -349,6 +349,19 @@ namespace DamSim.ViewTransferTool
 
                 if (display)
                 {
+                    if (view.Contains("statecode"))
+                    {
+                        int statecodeValue = ((OptionSetValue)view["statecode"]).Value;
+                        switch (statecodeValue)
+                        {
+                            case ViewHelper.VIEW_STATECODE_ACTIVE:
+                                item.SubItems.Add("Active");
+                                break;
+                            case ViewHelper.VIEW_STATECODE_INACTIVE:
+                                item.SubItems.Add("Inactive");
+                                break;
+                        }
+                    }
                     // Add view to each list of views (source and target)
                     ListViewItem clonedItem = (ListViewItem)item.Clone();
                     ListViewDelegates.AddItem(lvSourceViews, item);

@@ -27,6 +27,8 @@ namespace MsCrmTools.ViewLayoutReplicator.Helpers
         public const int VIEW_BASIC = 0;
         public const int VIEW_QUICKFIND = 4;
         public const int VIEW_SEARCH = 64;
+        public const int VIEW_STATECODE_ACTIVE = 0;
+        public const int VIEW_STATECODE_INACTIVE = 1;
 
         #endregion Constants
 

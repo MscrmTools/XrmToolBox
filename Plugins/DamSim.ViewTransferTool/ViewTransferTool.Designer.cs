@@ -55,6 +55,7 @@
             this.lbTarget = new System.Windows.Forms.Label();
             this.gbSourceViewLayout = new System.Windows.Forms.GroupBox();
             this.lvSourceViewLayoutPreview = new System.Windows.Forms.ListView();
+            this.allViewIsActive = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.gbEntities.SuspendLayout();
             this.gbSourceViews.SuspendLayout();
             this.tsMain.SuspendLayout();
@@ -125,7 +126,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvSourceViews.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.allViewName,
-            this.allViewType});
+            this.allViewType,
+            this.allViewIsActive});
             this.lvSourceViews.FullRowSelect = true;
             this.lvSourceViews.HideSelection = false;
             this.lvSourceViews.Location = new System.Drawing.Point(4, 20);
@@ -320,6 +322,11 @@
             this.lvSourceViewLayoutPreview.UseCompatibleStateImageBehavior = false;
             this.lvSourceViewLayoutPreview.View = System.Windows.Forms.View.Details;
             // 
+            // allViewIsActive
+            // 
+            this.allViewIsActive.Text = "View State";
+            this.allViewIsActive.Width = 130;
+            // 
             // ViewTransferTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -372,6 +379,7 @@
         private System.Windows.Forms.GroupBox gbSourceViewLayout;
         private System.Windows.Forms.ListView lvSourceViewLayoutPreview;
         private System.Windows.Forms.ToolStripButton tsbTransferViews;
+        private System.Windows.Forms.ColumnHeader allViewIsActive;
 
     }
 }
