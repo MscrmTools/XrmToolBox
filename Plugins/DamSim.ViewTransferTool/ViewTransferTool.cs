@@ -282,70 +282,7 @@ namespace DamSim.ViewTransferTool
                 var item = new ListViewItem(view["name"].ToString());
                 item.Tag = view;
 
-                #region Gestion de l'image associée à la vue
-
-                switch ((int)view["querytype"])
-                {
-                    case ViewHelper.VIEW_BASIC:
-                        {
-                            if (view.LogicalName == "savedquery")
-                            {
-                                if ((bool)view["isdefault"])
-                                {
-                                    item.SubItems.Add("Default public view");
-                                    item.ImageIndex = 3;
-                                }
-                                else
-                                {
-                                    item.SubItems.Add("Public view");
-                                    item.ImageIndex = 0;
-                                }
-                            }
-                            else
-                            {
-                                item.SubItems.Add("User view");
-                                item.ImageIndex = 6;
-                            }
-                        }
-                        break;
-
-                    case ViewHelper.VIEW_ADVANCEDFIND:
-                        {
-                            item.SubItems.Add("Advanced find view");
-                            item.ImageIndex = 1;
-                        }
-                        break;
-
-                    case ViewHelper.VIEW_ASSOCIATED:
-                        {
-                            item.SubItems.Add("Associated view");
-                            item.ImageIndex = 2;
-                        }
-                        break;
-
-                    case ViewHelper.VIEW_QUICKFIND:
-                        {
-                            item.SubItems.Add("QuickFind view");
-                            item.ImageIndex = 5;
-                        }
-                        break;
-
-                    case ViewHelper.VIEW_SEARCH:
-                        {
-                            item.SubItems.Add("Lookup view");
-                            item.ImageIndex = 4;
-                        }
-                        break;
-
-                    default:
-                        {
-                            //item.SubItems.Add(view["name"].ToString());
-                            display = false;
-                        }
-                        break;
-                }
-
-                #endregion Gestion de l'image associée à la vue
+                display = ShouldDisplayItem(item);
 
                 if (display)
                 {
@@ -397,6 +334,11 @@ namespace DamSim.ViewTransferTool
         }
 
         private void lvEntities_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopulateSourceViews();
+        }
+
+        private void PopulateSourceViews()
         {
             if (lvEntities.SelectedItems.Count > 0)
             {
@@ -680,26 +622,93 @@ namespace DamSim.ViewTransferTool
 
         #endregion Publish all
 
-        private void CheckItems()
-        {
-            lvSourceViews.Refresh();
-            if (chkShowActiveViews.Checked)
-            {
-                foreach (ListViewItem item in lvSourceViews.Items)
-                {
-                    var viewEntity = (Entity)item.Tag;
-                    var viewStateCode = viewEntity.GetAttributeValue<OptionSetValue>("statecode").Value;
-                    if (viewStateCode == ViewHelper.VIEW_STATECODE_INACTIVE)
-                    {
-                        ListViewDelegates.RemoveItem(lvSourceViews, item);
-                    }
-                }
-            }
-        }
-
         private void chkShowActiveViews_CheckedChanged(object sender, EventArgs e)
         {
-            CheckItems();
+            PopulateSourceViews();
+        }
+
+        private bool ShouldDisplayItem(ListViewItem item)
+        {
+            bool display = true;
+            var view = (Entity)item.Tag;
+
+            #region Gestion de l'image associée à la vue
+
+            switch ((int)view["querytype"])
+            {
+                case ViewHelper.VIEW_BASIC:
+                    {
+                        if (view.LogicalName == "savedquery")
+                        {
+                            if ((bool)view["isdefault"])
+                            {
+                                item.SubItems.Add("Default public view");
+                                item.ImageIndex = 3;
+                            }
+                            else
+                            {
+                                item.SubItems.Add("Public view");
+                                item.ImageIndex = 0;
+                            }
+                        }
+                        else
+                        {
+                            item.SubItems.Add("User view");
+                            item.ImageIndex = 6;
+                        }
+                    }
+                    break;
+
+                case ViewHelper.VIEW_ADVANCEDFIND:
+                    {
+                        item.SubItems.Add("Advanced find view");
+                        item.ImageIndex = 1;
+                    }
+                    break;
+
+                case ViewHelper.VIEW_ASSOCIATED:
+                    {
+                        item.SubItems.Add("Associated view");
+                        item.ImageIndex = 2;
+                    }
+                    break;
+
+                case ViewHelper.VIEW_QUICKFIND:
+                    {
+                        item.SubItems.Add("QuickFind view");
+                        item.ImageIndex = 5;
+                    }
+                    break;
+
+                case ViewHelper.VIEW_SEARCH:
+                    {
+                        item.SubItems.Add("Lookup view");
+                        item.ImageIndex = 4;
+                    }
+                    break;
+
+                default:
+                    {
+                        return false;
+                    }
+            }
+
+            #endregion Gestion de l'image associée à la vue
+
+            #region Filters
+
+            if (chkShowActiveViews.Checked)
+            {
+                var viewStateCode = view.GetAttributeValue<OptionSetValue>("statecode").Value;
+                if (viewStateCode == ViewHelper.VIEW_STATECODE_INACTIVE)
+                {
+                    return false;
+                }
+            }
+
+            #endregion
+
+            return display;
         }
     }
 }
