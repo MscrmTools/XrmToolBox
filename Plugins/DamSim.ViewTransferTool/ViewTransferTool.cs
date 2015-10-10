@@ -679,5 +679,27 @@ namespace DamSim.ViewTransferTool
         }
 
         #endregion Publish all
+
+        private void CheckItems()
+        {
+            lvSourceViews.Refresh();
+            if (chkShowActiveViews.Checked)
+            {
+                foreach (ListViewItem item in lvSourceViews.Items)
+                {
+                    var viewEntity = (Entity)item.Tag;
+                    var viewStateCode = viewEntity.GetAttributeValue<OptionSetValue>("statecode").Value;
+                    if (viewStateCode == ViewHelper.VIEW_STATECODE_INACTIVE)
+                    {
+                        ListViewDelegates.RemoveItem(lvSourceViews, item);
+                    }
+                }
+            }
+        }
+
+        private void chkShowActiveViews_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckItems();
+        }
     }
 }
