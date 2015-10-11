@@ -335,6 +335,7 @@ namespace DamSim.ViewTransferTool
 
         private void lvEntities_SelectedIndexChanged(object sender, EventArgs e)
         {
+            ResetFilterControls();
             PopulateSourceViews();
         }
 
@@ -625,6 +626,13 @@ namespace DamSim.ViewTransferTool
         private void chkShowActiveViews_CheckedChanged(object sender, EventArgs e)
         {
             PopulateSourceViews();
+        }
+
+        private void ResetFilterControls()
+        {
+            chkShowActiveViews.CheckedChanged -= chkShowActiveViews_CheckedChanged;
+            chkShowActiveViews.Checked = false;
+            chkShowActiveViews.CheckedChanged += chkShowActiveViews_CheckedChanged;
         }
 
         private bool ShouldDisplayItem(ListViewItem item)
