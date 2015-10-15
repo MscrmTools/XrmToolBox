@@ -5,6 +5,7 @@
 
 using Microsoft.Crm.Sdk.Messages;
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
@@ -15,6 +16,8 @@ namespace MsCrmTools.SampleTool
     {
         #region Base tool implementation
 
+        private BackgroundWorker bw;
+
         public SampleTool()
         {
             InitializeComponent();
@@ -22,23 +25,34 @@ namespace MsCrmTools.SampleTool
 
         public void ProcessWhoAmI()
         {
-            WorkAsync(null, (w, e) =>
+            WorkAsync("Retrieving your user id...", (w, e) =>
             {
-                var request = new WhoAmIRequest();
-                var response = (WhoAmIResponse)Service.Execute(request);
+                while (e.Cancel == false)
+                {
+                    if (w.CancellationPending)
+                    {
+                        e.Cancel = true;
+                    }
+                    var request = new WhoAmIRequest();
+                    var response = (WhoAmIResponse)Service.Execute(request);
 
-                e.Result = response.UserId;
+                    e.Result = response.UserId;
+                }
             },
                 e =>
                 {
-                    MessageBox.Show(string.Format("You are {0}", (Guid)e.Result));
+                    if (!e.Cancelled)
+                    {
+                        MessageBox.Show(string.Format("You are {0}", (Guid)e.Result));
+                    }
                 },
                 e =>
                 {
                     // If progress has to be notified to user, use the following method:
                     //SetWorkingMessage("Message to display");
                 },
-                "Retrieving your user id...",
+                null,
+                true,
                 340,
                 150);
         }
@@ -100,5 +114,12 @@ namespace MsCrmTools.SampleTool
         }
 
         #endregion Help implementation
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            CancelWorker();
+
+            MessageBox.Show("Cancelled");
+        }
     }
 }

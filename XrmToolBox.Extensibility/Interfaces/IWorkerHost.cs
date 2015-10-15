@@ -22,5 +22,11 @@ namespace XrmToolBox.Extensibility.Interfaces
         void WorkAsync(string message, Action<DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, object argument, int messageWidth, int messageHeight);
 
         void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, Action<ProgressChangedEventArgs> progressChanged, object argument, int messageWidth, int messageHeight);
+
+        void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, object argument, bool enableCancellation, int messageWidth, int messageHeight);
+
+        void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, object argument, bool enableCancellation, int messageWidth, int messageHeight);
+
+        void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, Action<ProgressChangedEventArgs> progressChanged, object argument, bool enableCancellation, int messageWidth, int messageHeight);
     }
 }

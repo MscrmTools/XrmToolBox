@@ -106,6 +106,11 @@ namespace XrmToolBox.Extensibility
 
         private readonly Worker _worker = new Worker();
 
+        public void CancelWorker()
+        {
+            _worker.CancelWorker();
+        }
+
         public void RaiseRequestConnectionEvent(RequestConnectionEventArgs args)
         {
             if (OnRequestConnection != null)
@@ -133,6 +138,21 @@ namespace XrmToolBox.Extensibility
                               Action<ProgressChangedEventArgs> progressChanged, object argument = null, int messageWidth = 340, int messageHeight = 150)
         {
             _worker.WorkAsync(this, message, work, callback, progressChanged, argument, messageWidth, messageHeight);
+        }
+
+        public void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, object argument, bool enableCancellation, int messageWidth, int messageHeight)
+        {
+            _worker.WorkAsync(this, message, work, (x) => { }, argument, enableCancellation, messageWidth, messageHeight);
+        }
+
+        public void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, object argument, bool enableCancellation, int messageWidth, int messageHeight)
+        {
+            _worker.WorkAsync(this, message, work, callback, argument, enableCancellation, messageWidth, messageHeight);
+        }
+
+        public void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, Action<ProgressChangedEventArgs> progressChanged, object argument, bool enableCancellation, int messageWidth, int messageHeight)
+        {
+            _worker.WorkAsync(this, message, work, callback, progressChanged, argument, enableCancellation, messageWidth, messageHeight);
         }
 
         #endregion IWorkerHost
