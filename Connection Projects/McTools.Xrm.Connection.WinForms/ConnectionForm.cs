@@ -668,12 +668,13 @@ namespace McTools.Xrm.Connection.WinForms
                 cbbOnlineEnv.Visible = false;
 
                 tbServerName.Text = detail.ServerName;
+                tbServerPort.Text = detail.ServerPort.ToString();
             }
 
             comboBoxOrganizations.DropDownStyle = ComboBoxStyle.DropDown;
             comboBoxOrganizations.SelectedText = detail.OrganizationFriendlyName;
 
-            cbUseSsl_CheckedChanged(null, null);
+            //cbUseSsl_CheckedChanged(null, null);
         }
 
         private void RbAuthenticationIntegratedCheckedChanged(object sender, EventArgs e)
