@@ -38,6 +38,7 @@
             this.lvSourceViews = new System.Windows.Forms.ListView();
             this.allViewName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.allViewType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.allViewIsActive = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tsMain = new System.Windows.Forms.ToolStrip();
             this.tsbCloseThisTab = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -55,10 +56,13 @@
             this.lbTarget = new System.Windows.Forms.Label();
             this.gbSourceViewLayout = new System.Windows.Forms.GroupBox();
             this.lvSourceViewLayoutPreview = new System.Windows.Forms.ListView();
+            this.gbFilters = new System.Windows.Forms.GroupBox();
+            this.chkShowActiveViews = new System.Windows.Forms.CheckBox();
             this.gbEntities.SuspendLayout();
             this.gbSourceViews.SuspendLayout();
             this.tsMain.SuspendLayout();
             this.gbSourceViewLayout.SuspendLayout();
+            this.gbFilters.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbEntities
@@ -108,6 +112,7 @@
             // 
             this.gbSourceViews.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbSourceViews.Controls.Add(this.gbFilters);
             this.gbSourceViews.Controls.Add(this.lvSourceViews);
             this.gbSourceViews.Enabled = false;
             this.gbSourceViews.Font = new System.Drawing.Font("Segoe UI", 8.25F);
@@ -125,12 +130,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvSourceViews.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.allViewName,
-            this.allViewType});
+            this.allViewType,
+            this.allViewIsActive});
             this.lvSourceViews.FullRowSelect = true;
             this.lvSourceViews.HideSelection = false;
-            this.lvSourceViews.Location = new System.Drawing.Point(4, 20);
+            this.lvSourceViews.Location = new System.Drawing.Point(4, 58);
             this.lvSourceViews.Name = "lvSourceViews";
-            this.lvSourceViews.Size = new System.Drawing.Size(495, 225);
+            this.lvSourceViews.Size = new System.Drawing.Size(495, 187);
             this.lvSourceViews.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvSourceViews.TabIndex = 63;
             this.lvSourceViews.UseCompatibleStateImageBehavior = false;
@@ -146,6 +152,11 @@
             // 
             this.allViewType.Text = "View Type";
             this.allViewType.Width = 130;
+            // 
+            // allViewIsActive
+            // 
+            this.allViewIsActive.Text = "View State";
+            this.allViewIsActive.Width = 130;
             // 
             // tsMain
             // 
@@ -320,6 +331,27 @@
             this.lvSourceViewLayoutPreview.UseCompatibleStateImageBehavior = false;
             this.lvSourceViewLayoutPreview.View = System.Windows.Forms.View.Details;
             // 
+            // gbFilters
+            // 
+            this.gbFilters.Controls.Add(this.chkShowActiveViews);
+            this.gbFilters.Location = new System.Drawing.Point(6, 20);
+            this.gbFilters.Name = "gbFilters";
+            this.gbFilters.Size = new System.Drawing.Size(493, 32);
+            this.gbFilters.TabIndex = 64;
+            this.gbFilters.TabStop = false;
+            this.gbFilters.Text = "View Filters";
+            // 
+            // chkShowActiveViews
+            // 
+            this.chkShowActiveViews.AutoSize = true;
+            this.chkShowActiveViews.Location = new System.Drawing.Point(7, 14);
+            this.chkShowActiveViews.Name = "chkShowActiveViews";
+            this.chkShowActiveViews.Size = new System.Drawing.Size(121, 17);
+            this.chkShowActiveViews.TabIndex = 0;
+            this.chkShowActiveViews.Text = "Show Active Views";
+            this.chkShowActiveViews.UseVisualStyleBackColor = true;
+            this.chkShowActiveViews.CheckedChanged += new System.EventHandler(this.chkShowActiveViews_CheckedChanged);
+            // 
             // ViewTransferTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -340,6 +372,8 @@
             this.tsMain.ResumeLayout(false);
             this.tsMain.PerformLayout();
             this.gbSourceViewLayout.ResumeLayout(false);
+            this.gbFilters.ResumeLayout(false);
+            this.gbFilters.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -372,6 +406,9 @@
         private System.Windows.Forms.GroupBox gbSourceViewLayout;
         private System.Windows.Forms.ListView lvSourceViewLayoutPreview;
         private System.Windows.Forms.ToolStripButton tsbTransferViews;
+        private System.Windows.Forms.ColumnHeader allViewIsActive;
+        private System.Windows.Forms.GroupBox gbFilters;
+        private System.Windows.Forms.CheckBox chkShowActiveViews;
 
     }
 }
