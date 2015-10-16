@@ -104,11 +104,13 @@ namespace McTools.Xrm.Connection
         internal const string CryptoPassPhrase = "MsCrmTools";
         internal const int CryptoPasswordIterations = 2;
         internal const string CryptoSaltValue = "Tanguy 92*";
-        private const string ConfigFileName = "mscrmtools2011.config";
+        private const string DefaultConfigFileName = "mscrmtools2011.config";
 
         #endregion Constants
 
         private static ConnectionManager instance;
+        private static string configfile;
+        private FileSystemWatcher fsw;
 
         #region Constructor
 
@@ -118,13 +120,22 @@ namespace McTools.Xrm.Connection
         private ConnectionManager()
         {
             ConnectionsList = LoadConnectionsList();
+            SetupFileSystemWatcher();
+            ServicePointManager.ServerCertificateValidationCallback += ValidateRemoteCertificate;
+        }
 
-            var fsw = new FileSystemWatcher(new FileInfo(ConfigFileName).Directory.FullName, ConfigFileName);
+        private void SetupFileSystemWatcher()
+        {
+            if (fsw != null)
+            {   // If it was already watching something, stop that!
+                fsw.EnableRaisingEvents = false;
+                fsw.Changed -= fsw_Changed;
+                fsw.Dispose();
+            }
+            fsw = new FileSystemWatcher(new FileInfo(ConfigurationFile).Directory.FullName, Path.GetFileName(ConfigurationFile));
             fsw.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
             fsw.EnableRaisingEvents = true;
             fsw.Changed += fsw_Changed;
-
-            ServicePointManager.ServerCertificateValidationCallback += ValidateRemoteCertificate;
         }
 
         // callback used to validate the certificate in an SSL conversation
@@ -170,6 +181,27 @@ namespace McTools.Xrm.Connection
         /// </summary>
         public CrmConnections ConnectionsList { get; set; }
 
+        public static string ConfigurationFile
+        {
+            get
+            {
+                return string.IsNullOrEmpty(configfile) ? DefaultConfigFileName : configfile;
+            }
+            set
+            {
+                configfile = value;
+                if (instance != null)
+                {
+                    instance.ConnectionsList = instance.LoadConnectionsList();
+                    instance.SetupFileSystemWatcher();
+                    if (instance.ConnectionListUpdated != null)
+                    {
+                        instance.ConnectionListUpdated(null, new EventArgs());
+                    }
+                }
+            }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -208,9 +240,9 @@ namespace McTools.Xrm.Connection
             try
             {
                 CrmConnections crmConnections;
-                if (File.Exists(ConfigFileName))
+                if (File.Exists(ConfigurationFile))
                 {
-                    crmConnections = CrmConnections.LoadFromFile(ConfigFileName);
+                    crmConnections = CrmConnections.LoadFromFile(ConfigurationFile);
 
                     if (!string.IsNullOrEmpty(crmConnections.Password))
                     {
@@ -278,7 +310,7 @@ namespace McTools.Xrm.Connection
                     CryptoKeySize);
             }
 
-            ConnectionsList.SerializeToFile(ConfigFileName);
+            ConnectionsList.SerializeToFile(ConfigurationFile);
         }
 
         /// <summary>
