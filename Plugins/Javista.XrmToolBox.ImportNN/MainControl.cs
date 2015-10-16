@@ -325,11 +325,13 @@ namespace Javista.XrmToolBox.ImportNN
 
                         tsbExport.Enabled = true;
                         tsbImportNN.Enabled = true;
+                        tsbDelete.Enabled = true;
                     }
                     else
                     {
                         tsbExport.Enabled = false;
                         tsbImportNN.Enabled = false;
+                        tsbDelete.Enabled = false;
 
                         MessageBox.Show(ParentForm, "An error occured: " + e.Error.Message, "Error",
                             MessageBoxButtons.OK,
@@ -351,6 +353,38 @@ namespace Javista.XrmToolBox.ImportNN
         private void tsbClose_Click(object sender, EventArgs e)
         {
             CloseTool();
+        }
+
+        private void tsbDelete_Click(object sender, EventArgs e)
+        {
+            if (txtFilePath.Text.Length == 0)
+                return;
+
+            listLog.Items.Clear();
+
+            var settings = new ImportFileSettings
+            {
+                FirstEntity = ((EntityInfo)cbbFirstEntity.SelectedItem).Metadata.LogicalName,
+                FirstAttributeIsGuid = rdbFirstGuid.Checked,
+                FirstAttributeName = ((AttributeInfo)cbbFirstEntityAttribute.SelectedItem).Metadata.LogicalName,
+                Relationship = ((RelationshipInfo)cbbRelationship.SelectedItem).Metadata.SchemaName,
+                SecondEntity = ((EntityInfo)cbbSecondEntity.SelectedItem).Metadata.LogicalName,
+                SecondAttributeIsGuid = rdbSecondGuid.Checked,
+                SecondAttributeName = ((AttributeInfo)cbbSecondEntityAttribute.SelectedItem).Metadata.LogicalName,
+            };
+
+            WorkAsync("Deleting many to many relationships...",
+                evt =>
+                {
+                    var innerSettings = (ImportFileSettings)((object[])evt.Argument)[0];
+                    var filePath = ((object[])evt.Argument)[1].ToString();
+                    var ie = new DeleteEngine(filePath, this.Service, innerSettings);
+                    ie.RaiseError += ie_RaiseError;
+                    ie.RaiseSuccess += ie_RaiseSuccess;
+                    ie.Delete();
+                },
+                evt => { },
+                new object[] { settings, txtFilePath.Text });
         }
 
         private void tsbExport_Click(object sender, EventArgs e)
@@ -389,6 +423,9 @@ namespace Javista.XrmToolBox.ImportNN
 
         private void tsbImportNN_Click(object sender, EventArgs e)
         {
+            if (txtFilePath.Text.Length == 0)
+                return;
+
             listLog.Items.Clear();
 
             var settings = new ImportFileSettings

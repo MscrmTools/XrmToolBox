@@ -80,6 +80,7 @@
     <Compile Include="AppCode\AttributeInfo.cs" />
     <Compile Include="AppCode\ExportEngine.cs" />
     <Compile Include="AppCode\EntityInfo.cs" />
+    <Compile Include="AppCode\DeleteEngine.cs" />
     <Compile Include="AppCode\ImportEngine.cs" />
     <Compile Include="AppCode\ImportFileSettings.cs" />
     <Compile Include="AppCode\RelationshipInfo.cs" />
@@ -130,7 +131,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
