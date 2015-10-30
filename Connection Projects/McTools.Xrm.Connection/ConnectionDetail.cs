@@ -409,15 +409,15 @@ namespace McTools.Xrm.Connection
                || updatedDetail.OrganizationServiceUrl != OrganizationServiceUrl
                || updatedDetail.OrganizationDataServiceUrl != OrganizationDataServiceUrl
                || updatedDetail.OrganizationUrlName != OrganizationUrlName
-               || updatedDetail.ServerName != ServerName
+               || updatedDetail.ServerName.ToLower() != ServerName.ToLower()
                || updatedDetail.ServerPort != ServerPort
                || updatedDetail.UseIfd != UseIfd
                || updatedDetail.UseOnline != UseOnline
                || updatedDetail.UseOsdp != UseOsdp
                || updatedDetail.UseSsl != UseSsl
-               || updatedDetail.UserDomain != UserDomain
-               || updatedDetail.UserName != UserName
-               || (SavePassword && updatedDetail.userPassword != userPassword)
+               || updatedDetail.UserDomain.ToLower() != UserDomain.ToLower()
+               || updatedDetail.UserName.ToLower() != UserName.ToLower()
+                //|| (SavePassword && updatedDetail.userPassword != userPassword)
                || (!SavePassword && !string.IsNullOrEmpty(updatedDetail.userPassword) && updatedDetail.userPassword != userPassword))
             {
                 return true;

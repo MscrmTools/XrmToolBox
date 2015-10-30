@@ -399,8 +399,21 @@ namespace McTools.Xrm.Connection.WinForms
                     organizations.Add(orgDetail);
 
                     comboBoxOrganizations.Items.Add(new Organization { OrganizationDetail = orgDetail });
-                    comboBoxOrganizations.SelectedIndex = 0;
                     comboBoxOrganizations.Enabled = true;
+                }
+
+                comboBoxOrganizations.SelectedIndex = 0;
+
+                // Select previously configured organization
+                int index = 0;
+                foreach (Organization item in comboBoxOrganizations.Items)
+                {
+                    if (item.OrganizationDetail.UniqueName == detail.Organization)
+                    {
+                        comboBoxOrganizations.SelectedIndex = index;
+                        break;
+                    }
+                    index++;
                 }
             }
 
