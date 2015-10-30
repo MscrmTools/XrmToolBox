@@ -201,6 +201,7 @@ namespace McTools.Xrm.Connection
         {
             ConnectionName = editedConnection.ConnectionName;
             OrganizationServiceUrl = editedConnection.OrganizationServiceUrl;
+            OrganizationDataServiceUrl = editedConnection.OrganizationDataServiceUrl;
             CrmTicket = editedConnection.CrmTicket;
             IsCustomAuth = editedConnection.IsCustomAuth;
             Organization = editedConnection.Organization;
@@ -359,6 +360,8 @@ namespace McTools.Xrm.Connection
 
         #endregion Méthodes
 
+        public string OrganizationDataServiceUrl { get; set; }
+
         public object Clone()
         {
             return new ConnectionDetail
@@ -372,6 +375,7 @@ namespace McTools.Xrm.Connection
                 Organization = Organization,
                 OrganizationFriendlyName = OrganizationFriendlyName,
                 OrganizationServiceUrl = OrganizationServiceUrl,
+                OrganizationDataServiceUrl = OrganizationDataServiceUrl,
                 OrganizationUrlName = OrganizationUrlName,
                 OrganizationVersion = OrganizationVersion,
                 SavePassword = SavePassword,
@@ -403,6 +407,7 @@ namespace McTools.Xrm.Connection
                || updatedDetail.Organization != Organization
                || updatedDetail.OrganizationFriendlyName != OrganizationFriendlyName
                || updatedDetail.OrganizationServiceUrl != OrganizationServiceUrl
+               || updatedDetail.OrganizationDataServiceUrl != OrganizationDataServiceUrl
                || updatedDetail.OrganizationUrlName != OrganizationUrlName
                || updatedDetail.ServerName != ServerName
                || updatedDetail.ServerPort != ServerPort
@@ -453,6 +458,7 @@ namespace McTools.Xrm.Connection
                     new XElement("OrganizationUrlName", OrganizationUrlName),
                     new XElement("OrganizationFriendlyName", OrganizationFriendlyName),
                     new XElement("OrganizationServiceUrl", OrganizationServiceUrl),
+                    new XElement("OrganizationDataServiceUrl", OrganizationDataServiceUrl),
                     new XElement("OrganizationVersion", OrganizationVersion),
                     new XElement("HomeRealmUrl", HomeRealmUrl),
                     new XElement("Timeout", TimeoutTicks),

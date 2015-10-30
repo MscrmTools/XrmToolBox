@@ -172,6 +172,12 @@ namespace McTools.Xrm.Connection
                         cd.OrganizationServiceUrl = organizationServiceUrlElement.Value;
                     }
 
+                    var organizationDataServiceUrlElement = elt.Element("OrganizationDataServiceUrl");
+                    if (organizationDataServiceUrlElement != null)
+                    {
+                        cd.OrganizationDataServiceUrl = organizationDataServiceUrlElement.Value;
+                    }
+
                     var organizationUrlNameElement = elt.Element("OrganizationUrlName");
                     if (organizationUrlNameElement != null)
                     {

@@ -108,8 +108,8 @@ namespace McTools.Xrm.Connection
 
         #endregion Constants
 
-        private static ConnectionManager instance;
         private static string configfile;
+        private static ConnectionManager instance;
         private FileSystemWatcher fsw;
 
         #region Constructor
@@ -122,20 +122,6 @@ namespace McTools.Xrm.Connection
             ConnectionsList = LoadConnectionsList();
             SetupFileSystemWatcher();
             ServicePointManager.ServerCertificateValidationCallback += ValidateRemoteCertificate;
-        }
-
-        private void SetupFileSystemWatcher()
-        {
-            if (fsw != null)
-            {   // If it was already watching something, stop that!
-                fsw.EnableRaisingEvents = false;
-                fsw.Changed -= fsw_Changed;
-                fsw.Dispose();
-            }
-            fsw = new FileSystemWatcher(new FileInfo(ConfigurationFile).Directory.FullName, Path.GetFileName(ConfigurationFile));
-            fsw.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
-            fsw.EnableRaisingEvents = true;
-            fsw.Changed += fsw_Changed;
         }
 
         // callback used to validate the certificate in an SSL conversation
@@ -159,27 +145,23 @@ namespace McTools.Xrm.Connection
             }
         }
 
+        private void SetupFileSystemWatcher()
+        {
+            if (fsw != null)
+            {   // If it was already watching something, stop that!
+                fsw.EnableRaisingEvents = false;
+                fsw.Changed -= fsw_Changed;
+                fsw.Dispose();
+            }
+            fsw = new FileSystemWatcher(new FileInfo(ConfigurationFile).Directory.FullName, Path.GetFileName(ConfigurationFile));
+            fsw.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size;
+            fsw.EnableRaisingEvents = true;
+            fsw.Changed += fsw_Changed;
+        }
+
         #endregion Constructor
 
         #region Properties
-
-        public static ConnectionManager Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new ConnectionManager();
-                }
-
-                return instance;
-            }
-        }
-
-        /// <summary>
-        /// List of Crm connections
-        /// </summary>
-        public CrmConnections ConnectionsList { get; set; }
 
         public static string ConfigurationFile
         {
@@ -201,6 +183,24 @@ namespace McTools.Xrm.Connection
                 }
             }
         }
+
+        public static ConnectionManager Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new ConnectionManager();
+                }
+
+                return instance;
+            }
+        }
+
+        /// <summary>
+        /// List of Crm connections
+        /// </summary>
+        public CrmConnections ConnectionsList { get; set; }
 
         #endregion Properties
 
@@ -355,11 +355,12 @@ namespace McTools.Xrm.Connection
 
                 // If the current connection detail does not contain the web
                 // application url, we search for it
-                if (string.IsNullOrEmpty(detail.WebApplicationUrl))
+                if (string.IsNullOrEmpty(detail.WebApplicationUrl) || string.IsNullOrEmpty(detail.OrganizationDataServiceUrl))
                 {
                     var discoService = (DiscoveryService)detail.GetDiscoveryService();
                     var result = (RetrieveOrganizationResponse)discoService.Execute(new RetrieveOrganizationRequest { UniqueName = detail.Organization });
                     detail.WebApplicationUrl = result.Detail.Endpoints[EndpointType.WebApplication];
+                    detail.OrganizationDataServiceUrl = result.Detail.Endpoints[EndpointType.OrganizationDataService];
                 }
 
                 // We search for organization version
@@ -372,6 +373,7 @@ namespace McTools.Xrm.Connection
                 if (currentConnection != null)
                 {
                     currentConnection.WebApplicationUrl = detail.WebApplicationUrl;
+                    currentConnection.OrganizationDataServiceUrl = detail.OrganizationDataServiceUrl;
                     currentConnection.OrganizationVersion = vResponse.Version;
                     currentConnection.SavePassword = detail.SavePassword;
                     detail.CopyPasswordTo(currentConnection);
