@@ -76,7 +76,9 @@ namespace GapConsulting.PowerBIOptionSetAssistant
 
                     var list = new List<ListViewItem>();
 
-                    foreach (var em in emc.Where(e => e.Attributes.Any(a => a.AttributeType.Value == AttributeTypeCode.Picklist)))
+                    foreach (var em in emc.Where(e => e.Attributes.Any(a => a.AttributeType.Value == AttributeTypeCode.Picklist
+                        || a.AttributeType.Value == AttributeTypeCode.State
+                        || a.AttributeType.Value == AttributeTypeCode.Status)))
                     {
                         var item = new ListViewItem(em.DisplayName == null || em.DisplayName.UserLocalizedLabel == null ? "N/A" : em.DisplayName.UserLocalizedLabel.Label);
                         item.SubItems.Add(em.LogicalName);
@@ -97,7 +99,22 @@ namespace GapConsulting.PowerBIOptionSetAssistant
         {
             foreach (var optionSet in settings.OptionSets)
             {
-                foreach (OptionMetadata option in ((PicklistAttributeMetadata)optionSet).OptionSet.Options)
+                OptionMetadataCollection omc = null;
+
+                if (optionSet is PicklistAttributeMetadata)
+                {
+                    omc = ((PicklistAttributeMetadata)optionSet).OptionSet.Options;
+                }
+                else if (optionSet is StateAttributeMetadata)
+                {
+                    omc = ((StateAttributeMetadata)optionSet).OptionSet.Options;
+                }
+                else
+                {
+                    omc = ((StatusAttributeMetadata)optionSet).OptionSet.Options;
+                }
+
+                foreach (OptionMetadata option in omc)
                 {
                     foreach (LocalizedLabel label in option.Label.LocalizedLabels)
                     {

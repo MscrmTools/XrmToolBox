@@ -2,6 +2,7 @@
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Metadata.Query;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.ComponentModel;
 
@@ -78,9 +79,12 @@ namespace GapConsulting.PowerBIOptionSetAssistant.AppCode
                     // Récupération de l'attribut spécifié
                     Criteria = new MetadataFilterExpression
                     {
+                        FilterOperator = LogicalOperator.Or,
                         Conditions =
                        {
-                           new MetadataConditionExpression("AttributeType", MetadataConditionOperator.Equals, AttributeTypeCode.Picklist)
+                           new MetadataConditionExpression("AttributeType", MetadataConditionOperator.Equals, AttributeTypeCode.Picklist),
+                           new MetadataConditionExpression("AttributeType", MetadataConditionOperator.Equals, AttributeTypeCode.State),
+                           new MetadataConditionExpression("AttributeType", MetadataConditionOperator.Equals, AttributeTypeCode.Status)
                        }
                     },
                     // Avec uniquement les données d'OptionSet
