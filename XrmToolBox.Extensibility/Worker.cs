@@ -8,13 +8,13 @@ namespace XrmToolBox.Extensibility
     {
         private Panel _infoPanel;
 
-        private BackgroundWorker worker;
+        private BackgroundWorker _worker;
 
         public void CancelWorker()
         {
-            if (worker != null && worker.WorkerSupportsCancellation)
+            if (_worker != null && _worker.WorkerSupportsCancellation)
             {
-                worker.CancelAsync();
+                _worker.CancelAsync();
 
                 if (_infoPanel != null)
                 {
@@ -45,119 +45,40 @@ namespace XrmToolBox.Extensibility
             }
         }
 
-        public void WorkAsync(Control host, string message, Action<DoWorkEventArgs> work, object argument = null, int messageWidth = 340, int messageHeight = 150)
+        public void WorkAsync(WorkAsyncInfo info)
         {
-            _infoPanel = InformationPanel.GetInformationPanel(host, message, messageWidth, messageHeight);
-
-            worker = new BackgroundWorker();
-
-            worker.DoWork += (s, e) => work(e);
-
-            worker.RunWorkerAsync(argument);
-        }
-
-        public void WorkAsync(Control host, string message, Action<DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, object argument = null, int messageWidth = 340, int messageHeight = 150)
-        {
-            _infoPanel = InformationPanel.GetInformationPanel(host, message, messageWidth, messageHeight);
-
-            worker = new BackgroundWorker();
-
-            worker.DoWork += (s, e) => work(e);
-
-            worker.RunWorkerCompleted += (s, e) =>
+            if (info.Host == null)
             {
-                if (host.Controls.Contains(_infoPanel))
-                {
-                    _infoPanel.Dispose();
-                    host.Controls.Remove(_infoPanel);
-                }
-                callback(e);
-            };
-            worker.RunWorkerAsync(argument);
-        }
-
-        public void WorkAsync(Control host, string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, Action<ProgressChangedEventArgs> progressChanged, object argument = null, int messageWidth = 340, int messageHeight = 150)
-        {
-            _infoPanel = InformationPanel.GetInformationPanel(host, message, messageWidth, messageHeight);
-
-            worker = new BackgroundWorker { WorkerReportsProgress = progressChanged != null };
-
-            worker.DoWork += (s, e) => work((BackgroundWorker)s, e);
-
-            if (worker.WorkerReportsProgress && progressChanged != null)
-            {
-                worker.ProgressChanged += (s, e) => progressChanged(e);
+                throw new NullReferenceException("WorkAsyncInfo Host property is null!");
             }
 
-            worker.RunWorkerCompleted += (s, e) =>
+            _infoPanel = InformationPanel.GetInformationPanel(info.Host, info.Message, info.MessageWidth, info.MessageHeight);
+            _worker = new BackgroundWorker
             {
-                if (host.Controls.Contains(_infoPanel))
-                {
-                    _infoPanel.Dispose();
-                    host.Controls.Remove(_infoPanel);
-                }
-                callback(e);
+                WorkerReportsProgress = info.ProgressChanged != null,
+                WorkerSupportsCancellation = info.IsCancelable
             };
-            worker.RunWorkerAsync(argument);
-        }
+            _worker.DoWork += info.PerformWork;
 
-        public void WorkAsync(Control host, string message, Action<BackgroundWorker, DoWorkEventArgs> work, object argument = null, bool enableCancellation = false, int messageWidth = 340, int messageHeight = 150)
-        {
-            _infoPanel = InformationPanel.GetInformationPanel(host, message, messageWidth, messageHeight);
-
-            worker = new BackgroundWorker();
-            worker.WorkerSupportsCancellation = enableCancellation;
-
-            worker.DoWork += (s, e) => work((BackgroundWorker)s, e);
-
-            worker.RunWorkerAsync(argument);
-        }
-
-        public void WorkAsync(Control host, string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, object argument = null, bool enableCancellation = false, int messageWidth = 340, int messageHeight = 150)
-        {
-            _infoPanel = InformationPanel.GetInformationPanel(host, message, messageWidth, messageHeight);
-
-            worker = new BackgroundWorker();
-            worker.WorkerSupportsCancellation = enableCancellation;
-
-            worker.DoWork += (s, e) => work((BackgroundWorker)s, e);
-
-            worker.RunWorkerCompleted += (s, e) =>
+            if (_worker.WorkerReportsProgress && info.ProgressChanged != null)
             {
-                if (host.Controls.Contains(_infoPanel))
-                {
-                    _infoPanel.Dispose();
-                    host.Controls.Remove(_infoPanel);
-                }
-                callback(e);
-            };
-            worker.RunWorkerAsync(argument);
-        }
-
-        public void WorkAsync(Control host, string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, Action<ProgressChangedEventArgs> progressChanged, object argument = null, bool enableCancellation = false, int messageWidth = 340, int messageHeight = 150)
-        {
-            _infoPanel = InformationPanel.GetInformationPanel(host, message, messageWidth, messageHeight);
-
-            worker = new BackgroundWorker { WorkerReportsProgress = progressChanged != null };
-            worker.WorkerSupportsCancellation = enableCancellation;
-
-            worker.DoWork += (s, e) => work((BackgroundWorker)s, e);
-
-            if (worker.WorkerReportsProgress && progressChanged != null)
-            {
-                worker.ProgressChanged += (s, e) => progressChanged(e);
+                _worker.ProgressChanged += info.PerformProgressChange;
             }
 
-            worker.RunWorkerCompleted += (s, e) =>
+            if (info.PostWorkCallBack != null)
             {
-                if (host.Controls.Contains(_infoPanel))
+                _worker.RunWorkerCompleted += (s, e) =>
                 {
-                    _infoPanel.Dispose();
-                    host.Controls.Remove(_infoPanel);
-                }
-                callback(e);
-            };
-            worker.RunWorkerAsync(argument);
+                    if (info.Host.Controls.Contains(_infoPanel))
+                    {
+                        _infoPanel.Dispose();
+                        info.Host.Controls.Remove(_infoPanel);
+                    }
+                    info.PostWorkCallBack(e);
+                };
+            }
+
+            _worker.RunWorkerAsync(info.AsyncArgument);
         }
     }
 }

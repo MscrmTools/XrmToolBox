@@ -109,6 +109,7 @@
       <DependentUpon>SmallPluginModel.cs</DependentUpon>
     </Compile>
     <Compile Include="Worker.cs" />
+    <Compile Include="WorkAsyncInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Connection Projects\McTools.Xrm.Connection.WinForms\McTools.Xrm.Connection.WinForms.csproj">
