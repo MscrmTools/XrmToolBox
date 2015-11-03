@@ -316,11 +316,6 @@ public static class DeviceIdManager
         // Ajout Tanguy
         file.Delete();
         return null;
-
-        using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
-        {
-            return Deserialize<LiveDevice>(stream);
-        }
     }
 
     private static ClientCredentials RegisterDevice(Guid applicationId, Uri issuerUri, DeviceUserName userName)

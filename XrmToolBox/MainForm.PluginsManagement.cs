@@ -206,7 +206,7 @@ namespace XrmToolBox
 
                     if (displayAdvertisement)
                     {
-                        var sc = new SupportScreen(currentReleaseNote);
+                        var sc = new SupportScreen();
                         sc.ShowDialog(this);
                         currentOptions.LastAdvertisementDisplay = DateTime.Now;
                     }

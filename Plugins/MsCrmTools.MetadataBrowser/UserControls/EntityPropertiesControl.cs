@@ -122,7 +122,7 @@ namespace MsCrmTools.MetadataBrowser.UserControls
                     {
                         value = prop.GetValue(o, null);
                     }
-                    catch (Exception error)
+                    catch
                     {
                         //MessageBox.Show(error.ToString());
                     }

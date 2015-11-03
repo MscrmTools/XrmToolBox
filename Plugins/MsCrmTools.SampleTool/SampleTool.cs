@@ -5,7 +5,6 @@
 
 using Microsoft.Crm.Sdk.Messages;
 using System;
-using System.ComponentModel;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
@@ -15,8 +14,6 @@ namespace MsCrmTools.SampleTool
     public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin
     {
         #region Base tool implementation
-
-        private BackgroundWorker bw;
 
         public SampleTool()
         {

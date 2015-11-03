@@ -8,8 +8,6 @@ namespace MsCrmTools.WebResourcesManager.Forms
 {
     public partial class CustomFolderBrowserDialog : Form
     {
-        private bool showExtensionOptions;
-
         public CustomFolderBrowserDialog(bool isLoadFromDisk, bool showExtensionOptions = true)
         {
             InitializeComponent();

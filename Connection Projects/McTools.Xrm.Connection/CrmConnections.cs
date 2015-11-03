@@ -18,8 +18,6 @@ namespace McTools.Xrm.Connection
         private string _password;
         private string _proxyAddress;
 
-        private string _proxyPort;
-
         private bool _useCustomProxy;
         private string _userName;
 

@@ -30,7 +30,6 @@ namespace XrmToolBox
         private ConnectionManager cManager;
         private ConnectionDetail currentConnectionDetail;
         private Options currentOptions;
-        private string currentReleaseNote;
         private FormHelper fHelper;
         private string initialConnectionName;
         private string initialPluginName;

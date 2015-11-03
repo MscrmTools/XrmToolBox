@@ -17,7 +17,6 @@ namespace MsCrmTools.MetadataBrowser
     public partial class MainControl : PluginControlBase
     {
         private EntityMetadata[] currentAllMetadata;
-        private EntityMetadata currentMetadata;
         private bool initialized;
         private ListViewColumnsSettings lvcSettings;
 
@@ -72,7 +71,7 @@ namespace MsCrmTools.MetadataBrowser
                     {
                         value = prop.GetValue(o, null);
                     }
-                    catch (Exception error)
+                    catch
                     {
                         //MessageBox.Show(error.ToString());
                     }

@@ -17,7 +17,6 @@ namespace McTools.Xrm.Connection.WinForms
         private readonly bool allowMultipleSelection;
         private readonly bool isConnectionSelection;
         private bool hadCreatedNewConnection;
-        private bool requiresSavingConnectionsFile;
 
         /// <summary>
         /// Connexion sélectionnée

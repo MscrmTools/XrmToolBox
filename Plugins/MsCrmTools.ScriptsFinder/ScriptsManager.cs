@@ -86,6 +86,15 @@ namespace MsCrmTools.ScriptsFinder
                     script.Name = string.Empty;
                     script.Type = "Ribbon Command";
 
+                    var parameters = new List<string>();
+
+                    foreach (XmlNode parameterNode in actionNode.ChildNodes)
+                    {
+                        parameters.Add(string.Format("{0}:{1}", parameterNode.Name, parameterNode.Attributes["Value"].Value));
+                    }
+
+                    script.Arguments = string.Join(" / ", parameters);
+
                     Scripts.Add(script);
                 }
             }
@@ -116,6 +125,7 @@ namespace MsCrmTools.ScriptsFinder
                         script.MethodCalled = handlerNode.Attributes["functionName"].Value;
                         script.IsActive = handlerNode.Attributes["enabled"].Value == "true";
                         script.Event = eventName;
+                        script.Arguments = handlerNode.Attributes["parameters"] != null ? handlerNode.Attributes["parameters"].Value : "";
 
                         if (eventName == "onchange")
                         {

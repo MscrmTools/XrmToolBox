@@ -42,7 +42,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
         private bool initialSkuSPLA;
         private string initialTitle = "";
         private string initialUrl = "";
-        private bool isCrm2013Area = false;
+        private bool isCrm2013Area;
         private IOrganizationService service;
 
         #region Delegates

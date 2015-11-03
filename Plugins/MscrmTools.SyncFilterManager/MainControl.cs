@@ -28,20 +28,6 @@ namespace MscrmTools.SyncFilterManager
 
         #endregion Constructor
 
-        #region EventHandlers
-
-        /// <summary>
-        /// EventHandler to close the current tool
-        /// </summary>
-        public event EventHandler OnCloseTool;
-
-        /// <summary>
-        /// EventHandler to request a connection to an organization
-        /// </summary>
-        public event EventHandler OnRequestConnection;
-
-        #endregion EventHandlers
-
         #region Methods
 
         private void TsbCloseClick(object sender, EventArgs e)

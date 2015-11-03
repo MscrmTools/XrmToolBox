@@ -63,35 +63,6 @@ namespace MsCrmTools.FlsBulkUpdater.AppCode
                     service.Update(field);
                 }
             }
-
-            return;
-
-            foreach (var field in Fields)
-            {
-                if (
-                    profiles.FirstOrDefault(
-                        p => p.Id == field.GetAttributeValue<EntityReference>("fieldsecurityprofileid").Id) == null)
-                {
-                    continue;
-                }
-
-                if (CanRead.HasValue)
-                {
-                    field["canread"] = new OptionSetValue(CanRead.Value ? 4 : 0);
-                }
-
-                if (CanCreate.HasValue)
-                {
-                    field["cancreate"] = new OptionSetValue(CanCreate.Value ? 4 : 0);
-                }
-
-                if (CanUpdate.HasValue)
-                {
-                    field["canupdate"] = new OptionSetValue(CanUpdate.Value ? 4 : 0);
-                }
-
-                service.Update(field);
-            }
         }
     }
 }

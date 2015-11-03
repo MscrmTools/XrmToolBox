@@ -27,11 +27,6 @@ namespace DamSim.ViewTransferTool
         private EntityMetadata _savedQueryMetadata;
 
         /// <summary>
-        /// XML Document that represents customization
-        /// </summary>
-        private XmlDocument custoDoc;
-
-        /// <summary>
         /// List of entities
         /// </summary>
         private List<EntityMetadata> entitiesCache;
@@ -50,11 +45,6 @@ namespace DamSim.ViewTransferTool
         /// Dynamics CRM 2011 target organization service
         /// </summary>
         private IOrganizationService targetService;
-
-        /// <summary>
-        /// List of views
-        /// </summary>
-        private Dictionary<Guid, Entity> viewsList;
 
         #endregion Variables
 
@@ -133,6 +123,18 @@ namespace DamSim.ViewTransferTool
                 var args = new RequestConnectionEventArgs { ActionName = "TargetOrganization", Control = this };
                 OnRequestConnection(this, args);
             }
+        }
+
+        private void chkShowActiveViews_CheckedChanged(object sender, EventArgs e)
+        {
+            PopulateSourceViews();
+        }
+
+        private void ResetFilterControls()
+        {
+            chkShowActiveViews.CheckedChanged -= chkShowActiveViews_CheckedChanged;
+            chkShowActiveViews.Checked = false;
+            chkShowActiveViews.CheckedChanged += chkShowActiveViews_CheckedChanged;
         }
 
         private void SetConnectionLabel(ConnectionDetail detail, string serviceType)
@@ -294,6 +296,7 @@ namespace DamSim.ViewTransferTool
                             case ViewHelper.VIEW_STATECODE_ACTIVE:
                                 item.SubItems.Add("Active");
                                 break;
+
                             case ViewHelper.VIEW_STATECODE_INACTIVE:
                                 item.SubItems.Add("Inactive");
                                 break;
@@ -623,18 +626,6 @@ namespace DamSim.ViewTransferTool
 
         #endregion Publish all
 
-        private void chkShowActiveViews_CheckedChanged(object sender, EventArgs e)
-        {
-            PopulateSourceViews();
-        }
-
-        private void ResetFilterControls()
-        {
-            chkShowActiveViews.CheckedChanged -= chkShowActiveViews_CheckedChanged;
-            chkShowActiveViews.Checked = false;
-            chkShowActiveViews.CheckedChanged += chkShowActiveViews_CheckedChanged;
-        }
-
         private bool ShouldDisplayItem(ListViewItem item)
         {
             bool display = true;
@@ -714,7 +705,7 @@ namespace DamSim.ViewTransferTool
                 }
             }
 
-            #endregion
+            #endregion Filters
 
             return display;
         }
