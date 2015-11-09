@@ -21,6 +21,26 @@ UpdateDownloads = function (version, published, currentcount, releaselink) {
 				var bodyWithBr = data.body.replace(/(\r\n|\n|\r)/g,"<br />");
 				var bodyWithoutDashes = bodyWithBr.replace(/(## )/g,"");
 				
+                 // Processing images
+                var imageRegexp = /!\[.+\]\((http.*)\)/g;
+                var imagesMatch = imageRegexp.exec(bodyWithoutDashes);
+                
+                
+                var imagesLinkRegexp = /!\[.+\]\(http.*\)/g;
+                var imagesLinkMatch = imagesLinkRegexp.exec(bodyWithoutDashes);
+                
+                for(var i=0; i< imagesLinkMatch.length; i++){
+                    bodyWithoutDashes = bodyWithoutDashes.replace(imagesLinkMatch[i], '<img style="max-width:700px" src="'+ imagesMatch[i*2+1] + '"/>');
+                }
+                
+                // Processing links
+                var linkRegexp = /(?!\!)\[(.+)\]\((http.*)\)/g;
+                var linksMatch = linkRegexp.exec(bodyWithoutDashes);
+                
+                 for(var i=0; i< linksMatch.length; i+=3){
+                    bodyWithoutDashes = bodyWithoutDashes.replace(linksMatch[i], '<a href="'+ linksMatch[i+2] + '">' + linksMatch[i+1] + '</a>');
+                }
+                
 				$("#release-notes").html(bodyWithoutDashes);
 				
             } else {
@@ -116,12 +136,16 @@ UpdateReleaseNotes = function (releasenotes, callback) {
         url: 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/releases/latest',
         success: function (data) {
             if (data && data.assets && data.assets.length > 0) {
+                
                 var notes = data.body;
                 var converter = new Showdown.converter();
                 var htmlnotes = converter.makeHtml(notes);
                 // Correction for github flavor of markdown, issue references
                 htmlnotes = htmlnotes.replace(/<h1>/g, '#').replace('</h1>', '');
                 htmlnotes = htmlnotes.replace(/<p>/g, '<br/><br/><p>');
+                
+               
+                                
                 $("#" + releasenotes).html(htmlnotes);
             } else {
                 $("#" + releasenotes).text("");
