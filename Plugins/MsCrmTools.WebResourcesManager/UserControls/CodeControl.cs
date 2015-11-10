@@ -79,6 +79,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             {
                 ShowLineNumbers = true,
                 FontSize = 12,
+                FontFamily = new System.Windows.Media.FontFamily("Consolas"),
                 //Focusable = true,
                 //IsHitTestVisible = true
             };
