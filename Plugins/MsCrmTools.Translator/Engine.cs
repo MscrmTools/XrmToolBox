@@ -44,7 +44,7 @@ namespace MsCrmTools.Translator
                 {
                     filters = filters | EntityFilters.Relationships;
                 }
-                if (settings.ExportAttributes)
+                if (settings.ExportAttributes || settings.ExportOptionSet || settings.ExportBooleans)
                 {
                     filters = filters | EntityFilters.Attributes;
                 }
