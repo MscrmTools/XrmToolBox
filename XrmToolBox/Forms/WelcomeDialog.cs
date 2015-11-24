@@ -7,7 +7,7 @@ namespace XrmToolBox.Forms
 {
     public partial class WelcomeDialog : Form
     {
-        public WelcomeDialog(string version)
+        public WelcomeDialog(string version, bool closeWindow = true)
         {
             InitializeComponent();
 
@@ -15,10 +15,22 @@ namespace XrmToolBox.Forms
 
             ManageLicense();
 
-            var timer = new Timer();
-            timer.Tick += TimerTick;
-            timer.Interval = 3000;
-            timer.Start();
+            if (closeWindow)
+            {
+                var timer = new Timer();
+                timer.Tick += TimerTick;
+                timer.Interval = 3000;
+                timer.Start();
+            }
+            else
+            {
+                linkClose.Visible = true;
+            }
+        }
+
+        private void linkClose_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
         private void ManageLicense()

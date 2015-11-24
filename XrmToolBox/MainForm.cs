@@ -237,6 +237,13 @@ namespace XrmToolBox
             AdaptPluginControlSize();
         }
 
+        private void aboutXrmToolBoxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            var aForm = new WelcomeDialog(version, false) { StartPosition = FormStartPosition.CenterParent };
+            aForm.ShowDialog(this);
+        }
+
         private void ConnectUponApproval(object connectionParameter)
         {
             var info = new ConnectionParameterInfo
