@@ -1377,6 +1377,11 @@ namespace MsCrmTools.WebResourcesManager
                     fileMenuUpdateAndPublish.Enabled = true;
 
                     tslResourceName.Text = script["name"].ToString();
+
+                    if (ctrl is CodeControl && ((CodeControl)ctrl).FoldingEnabled)
+                    {
+                        tsbDoFolding.Checked = true;
+                    }
                 }
                 else
                 {

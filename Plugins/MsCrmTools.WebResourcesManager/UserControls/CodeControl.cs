@@ -100,6 +100,24 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                 innerContent = System.Text.Encoding.UTF8.GetString(b);
                 originalContent = innerContent;
                 innerType = type;
+
+                switch (innerType)
+                {
+                    case Enumerations.WebResourceType.Script:
+                        {
+                            AutoEnableFolding(innerContent);
+                        }
+                        break;
+
+                    case Enumerations.WebResourceType.Data:
+                    case Enumerations.WebResourceType.WebPage:
+                    case Enumerations.WebResourceType.Css:
+                    case Enumerations.WebResourceType.Xsl:
+                        {
+                            EnableFolding(true);
+                        }
+                        break;
+                }
             }
         }
 
@@ -109,6 +127,12 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         }
 
         #endregion Constructor
+
+        #region Properties
+
+        public bool FoldingEnabled { get; private set; }
+
+        #endregion Properties
 
         #region Handlers
 
@@ -145,6 +169,17 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             return newFoldings;
         }
 
+        private void AutoEnableFolding(string innerContent)
+        {
+            var minified = DoMinifyJs(innerContent);
+            var ratio = (double)minified.Length / (double)innerContent.Length;
+
+            if (ratio <= 1 && ratio >= 0.2)
+            {
+                EnableFolding(true);
+            }
+        }
+
         private void CodeControl_Load(object sender, EventArgs e)
         {
             try
@@ -157,30 +192,35 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                     case Enumerations.WebResourceType.Script:
                         {
                             textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript");
+                            AutoEnableFolding(innerContent);
                         }
                         break;
 
                     case Enumerations.WebResourceType.Data:
                         {
                             textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("XML");
+                            EnableFolding(true);
                         }
                         break;
 
                     case Enumerations.WebResourceType.WebPage:
                         {
                             textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("HTML");
+                            EnableFolding(true);
                         }
                         break;
 
                     case Enumerations.WebResourceType.Css:
                         {
                             textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("CSS");
+                            EnableFolding(true);
                         }
                         break;
 
                     case Enumerations.WebResourceType.Xsl:
                         {
                             textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("HTML");
+                            EnableFolding(true);
                         }
                         break;
                 }
@@ -234,7 +274,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         {
             try
             {
-                textEditor.Text = Yahoo.Yui.Compressor.JavaScriptCompressor.Compress(textEditor.Text, false, true, false, false, 200);
+                textEditor.Text = DoMinifyJs(textEditor.Text);
             }
             catch (Exception error)
             {
@@ -260,6 +300,19 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             {
                 MessageBox.Show(ParentForm, "Error while updating file: " + error.Message, "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private string DoMinifyJs(string originalContent)
+        {
+            try
+            {
+                return Yahoo.Yui.Compressor.JavaScriptCompressor.Compress(originalContent, false, true, false, false, 200);
+            }
+            catch (Exception error)
+            {
+                //MessageBox.Show(ParentForm, "Error while minifying code: " + error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return originalContent;
             }
         }
 
@@ -346,11 +399,17 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                         }
                         break;
                 }
+
+                FoldingEnabled = true;
             }
             else
             {
                 if (foldingManager != null)
+                {
                     foldingManager.Clear();
+                }
+
+                FoldingEnabled = false;
             }
         }
     }
