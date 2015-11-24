@@ -242,6 +242,9 @@ namespace McTools.Xrm.Connection.WinForms
 
         private void tsbDeleteConnection_Click(object sender, EventArgs e)
         {
+            if (MessageBox.Show(this, "Are you sure you want to delete selected connection(s)?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                return;
+
             foreach (ListViewItem connectionItem in lvConnections.SelectedItems)
             {
                 var detailToRemove = (ConnectionDetail)connectionItem.Tag;

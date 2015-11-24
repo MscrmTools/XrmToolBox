@@ -254,6 +254,9 @@ namespace McTools.Xrm.Connection.WinForms
                     break;
 
                 case "Delete":
+                    if (MessageBox.Show(this, "Are you sure you want to delete selected connection(s)?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                        return;
+
                     connexionManager.DropDownItems.Remove(parentItem);
 
                     if (connexionManager.DropDownItems.Count == 2)
