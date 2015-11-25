@@ -1,29 +1,26 @@
-﻿using System;
+﻿using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
+using MsCrmTools.ChartManager.Forms;
+using MsCrmTools.ChartManager.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Metadata;
-using MsCrmTools.ChartManager.Forms;
-using MsCrmTools.ChartManager.Helpers;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.ChartManager
 {
     public partial class MainControl : PluginControlBase, IHelpPlugin
-	{
-		private ListViewItem[] listViewItemsCache;
+    {
         private string currentFolder;
+        private ListViewItem[] listViewItemsCache;
 
-        public string HelpUrl
-        {
-            get { return "https://github.com/MscrmTools/XrmToolBox/wiki/Chart-Manager"; }
-        }
+        public string HelpUrl => "https://github.com/MscrmTools/XrmToolBox/wiki/Chart-Manager";
 
         #region Constructor
 
@@ -38,23 +35,18 @@ namespace MsCrmTools.ChartManager
 
         #region Fill Entities
 
-        private void TsbLoadEntitiesClick(object sender, EventArgs e)
-        {
-            ExecuteMethod(LoadEntities);
-        }
-
         public void LoadEntities()
         {
-			txtSearchEntity.Text = string.Empty;
+            txtSearchEntity.Text = string.Empty;
             lvEntities.Items.Clear();
             gbEntities.Enabled = false;
-          
-            WorkAsync("Loading entities...",
-                e =>
-                {
-                    e.Result = MetadataHelper.RetrieveEntities(Service);
-                },
-                e =>
+
+            WorkAsync(new WorkAsyncInfo("Loading entities...", e =>
+            {
+                e.Result = MetadataHelper.RetrieveEntities(Service);
+            })
+            {
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -71,21 +63,27 @@ namespace MsCrmTools.ChartManager
                             list.Add(item);
                         }
 
-	                    listViewItemsCache = list.ToArray();
-	                    lvEntities.Items.AddRange(listViewItemsCache);
+                        listViewItemsCache = list.ToArray();
+                        lvEntities.Items.AddRange(listViewItemsCache);
 
-	                    gbEntities.Enabled = true;
+                        gbEntities.Enabled = true;
                         tsbImportCharts.Enabled = true;
                         tsbExportCharts.Enabled = true;
                         tsbEditChart.Enabled = true;
                         txtSearchEntity.Focus();
                     }
-                });
+                }
+            });
         }
 
-        #endregion
+        private void TsbLoadEntitiesClick(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadEntities);
+        }
 
-        #endregion
+        #endregion Fill Entities
+
+        #endregion Main ToolStrip Handlers
 
         #region ListViews Handlers
 
@@ -100,12 +98,13 @@ namespace MsCrmTools.ChartManager
                 Cursor = Cursors.WaitCursor;
                 lvCharts.Items.Clear();
 
-                WorkAsync("Loading charts...",
-                    evt =>
-                    {
-                        evt.Result = ChartHelper.GetChartsByEntity(evt.Argument.ToString(), Service);
-                    },
-                    evt =>
+                WorkAsync(new WorkAsyncInfo("Loading charts...", evt =>
+                {
+                    evt.Result = ChartHelper.GetChartsByEntity(evt.Argument.ToString(), Service);
+                })
+                {
+                    AsyncArgument = entityLogicalName,
+                    PostWorkCallBack = evt =>
                     {
                         if (evt.Error != null)
                         {
@@ -116,53 +115,153 @@ namespace MsCrmTools.ChartManager
                         else
                         {
                             Cursor = Cursors.Default;
-                            var charts = (EntityCollection) evt.Result;
+                            var charts = (EntityCollection)evt.Result;
                             lvCharts.Items.AddRange(charts.Entities.Select(
-                                    c => new ListViewItem(c.GetAttributeValue<string>("name")) {Tag = c}).ToArray());
+                                    c => new ListViewItem(c.GetAttributeValue<string>("name")) { Tag = c }).ToArray());
                         }
-                    },
-                    entityLogicalName);
+                    }
+                });
             }
         }
 
-        #endregion
+        #endregion Fill Views
 
-        #endregion
+        #endregion ListViews Handlers
+
+        public void ProcessFiles(List<string> files)
+        {
+            WorkAsync(new WorkAsyncInfo("Analyzing file(s)...", evt =>
+            {
+                evt.Result = ChartHelper.AnalyzeFiles((List<string>)evt.Argument, Service);
+            })
+            {
+                AsyncArgument = files,
+                PostWorkCallBack = evt =>
+                {
+                    var results = (List<ChartDefinition>)evt.Result;
+                    if (results.Any(r => r.Errors.Count > 0))
+                    {
+                        // Display errors
+                        var elForm = new ErrorsListForm(results);
+                        elForm.ShowDialog(ParentForm);
+                    }
+                    else
+                    {
+                        if (results.Any(r => r.Exists))
+                        {
+                            // Display overwrite confirmation
+                            var ocDialog = new OverwriteConfirmationDialog(results);
+                            var result = ocDialog.ShowDialog(ParentForm);
+                            if (result == DialogResult.Cancel)
+                                return;
+                        }
+
+                        WorkAsync(new WorkAsyncInfo("Importing file(s)...", (w, evt2) =>
+                        {
+                            ChartHelper.ImportFiles((List<ChartDefinition>)evt2.Argument, Service);
+
+                            w.ReportProgress(0, "Publishing entities...");
+
+                            Service.Execute(new PublishXmlRequest
+                            {
+                                ParameterXml = string.Format("<importexportxml><entities>{0}</entities><nodes/><securityroles/><settings/><workflows/></importexportxml>", string.Join("", results.Select(r => string.Format("<entity>{0}</entity>", r.Entity.GetAttributeValue<string>("primaryentitytypecode")))))
+                            });
+                        })
+                        {
+                            AsyncArgument = results,
+                            PostWorkCallBack = evt2 =>
+                            {
+                                if (evt2.Error != null)
+                                {
+                                    MessageBox.Show(ParentForm, evt2.Error.Message, "Error",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
+                                else
+                                {
+                                    MessageBox.Show(ParentForm, "Chart(s) imported!", "Information",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    lvEntities_SelectedIndexChanged(null, null);
+                                }
+                            },
+                            ProgressChanged = evt2 =>
+                            {
+                                SetWorkingMessage(evt2.UserState.ToString());
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        private void importChartsFromFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var ofd = new OpenFileDialog { Filter = "XML file|*.xml", InitialDirectory = currentFolder })
+            {
+                if (ofd.ShowDialog(ParentForm) == DialogResult.OK)
+                {
+                    ExecuteMethod(ProcessFiles, new List<string> { ofd.FileName });
+                }
+            }
+        }
+
+        private void importChartsFromFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var cfbDialog = new CustomFolderBrowserDialog(true) { FolderPath = currentFolder };
+            if (cfbDialog.ShowDialog(ParentForm) == DialogResult.OK)
+            {
+                currentFolder = cfbDialog.FolderPath;
+                ExecuteMethod(ProcessFiles, new DirectoryInfo(currentFolder).GetFiles("*.xml").Select(f => f.FullName).ToList());
+            }
+        }
+
+        private void ListViewColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            var listView = (ListView)sender;
+
+            listView.Sorting = listView.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            listView.ListViewItemSorter = new ListViewItemComparer(e.Column, listView.Sorting);
+        }
+
+        private void OnSearchKeyUp(object sender, KeyEventArgs e)
+        {
+            var entityName = txtSearchEntity.Text;
+            if (string.IsNullOrWhiteSpace(entityName))
+            {
+                lvEntities.BeginUpdate();
+                lvEntities.Items.Clear();
+                lvEntities.Items.AddRange(listViewItemsCache);
+                lvEntities.EndUpdate();
+            }
+            else
+            {
+                lvEntities.BeginUpdate();
+                lvEntities.Items.Clear();
+                var filteredItems = listViewItemsCache
+                    .Where(item => item.Text.StartsWith(entityName, StringComparison.OrdinalIgnoreCase))
+                    .ToArray();
+                lvEntities.Items.AddRange(filteredItems);
+                lvEntities.EndUpdate();
+            }
+        }
 
         private void TsbCloseThisTabClick(object sender, EventArgs e)
         {
             CloseTool();
         }
 
-        private void ListViewColumnClick(object sender, ColumnClickEventArgs e)
+        private void tsbEditChart_Click(object sender, EventArgs e)
         {
-            var listView = (ListView) sender;
+            if (lvCharts.SelectedItems.Count == 0)
+                return;
 
-            listView.Sorting = listView.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
-            listView.ListViewItemSorter = new ListViewItemComparer(e.Column, listView.Sorting);
+            var editor = new ChartEditor((Entity)lvCharts.SelectedItems[0].Tag, Service);
+            editor.ShowDialog(ParentForm);
+
+            if (editor.HasUpdatedContent)
+            {
+                lvEntities_SelectedIndexChanged(null, null);
+            }
         }
-
-		private void OnSearchKeyUp(object sender, KeyEventArgs e)
-		{
-			var entityName = txtSearchEntity.Text;
-			if (string.IsNullOrWhiteSpace(entityName))
-			{
-				lvEntities.BeginUpdate();
-				lvEntities.Items.Clear();
-				lvEntities.Items.AddRange(listViewItemsCache);
-				lvEntities.EndUpdate();
-			}
-			else
-			{
-				lvEntities.BeginUpdate();
-				lvEntities.Items.Clear();
-				var filteredItems = listViewItemsCache
-					.Where(item => item.Text.StartsWith(entityName, StringComparison.OrdinalIgnoreCase))
-				    .ToArray();
-				lvEntities.Items.AddRange(filteredItems);
-				lvEntities.EndUpdate();
-			}
-		}
 
         private void tsbExportCharts_Click(object sender, EventArgs e)
         {
@@ -204,104 +303,6 @@ namespace MsCrmTools.ChartManager
                 {
                     MessageBox.Show(ParentForm, error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
-        }
-
-        private void importChartsFromFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (var ofd = new OpenFileDialog {Filter = "XML file|*.xml", InitialDirectory = currentFolder})
-            {
-                if (ofd.ShowDialog(ParentForm) == DialogResult.OK)
-                {
-                    ExecuteMethod(ProcessFiles, new List<string> {ofd.FileName});
-                }
-            }
-        }
-
-        public void ProcessFiles(List<string> files)
-        {
-            WorkAsync("Analyzing file(s)...",
-                evt =>
-                {
-                    evt.Result = ChartHelper.AnalyzeFiles((List<string>)evt.Argument, Service);
-                },
-                evt =>
-                {
-                    var results = (List<ChartDefinition>) evt.Result;
-                    if (results.Any(r => r.Errors.Count > 0))
-                    {
-                        // Display errors
-                        var elForm = new ErrorsListForm(results);
-                        elForm.ShowDialog(ParentForm);
-                    }
-                    else
-                    {
-                        if (results.Any(r => r.Exists))
-                        {
-                            // Display overwrite confirmation
-                            var ocDialog = new OverwriteConfirmationDialog(results);
-                            var result = ocDialog.ShowDialog(ParentForm);
-                            if (result == DialogResult.Cancel)
-                                return;
-                        }
-                      
-                        WorkAsync("Importing file(s)...",
-                            (w,evt2) =>
-                            {
-                                ChartHelper.ImportFiles((List<ChartDefinition>) evt2.Argument, Service);
-
-                                w.ReportProgress(0, "Publishing entities...");
-
-                                Service.Execute(new PublishXmlRequest
-                                {
-                                    ParameterXml = string.Format("<importexportxml><entities>{0}</entities><nodes/><securityroles/><settings/><workflows/></importexportxml>", String.Join(")",results.Select(r => string.Format("<entity>{0}</entity>",r.Entity.GetAttributeValue<string>("primaryentitytypecode")))))
-                                });
-                            },
-                            evt2 =>
-                            {
-                                if (evt2.Error != null)
-                                {
-                                    MessageBox.Show(ParentForm, evt2.Error.Message, "Error",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                }
-                                else
-                                {
-                                    MessageBox.Show(ParentForm, "Chart(s) imported!", "Information",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                    lvEntities_SelectedIndexChanged(null, null);
-                                }
-                            },
-                            evt2 =>
-                            {
-                                SetWorkingMessage(evt2.UserState.ToString());
-                            },
-                           results);
-                     }
-                },
-                files);
-        }
-
-        private void importChartsFromFolderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var cfbDialog = new CustomFolderBrowserDialog(true) {FolderPath = currentFolder};
-            if (cfbDialog.ShowDialog(ParentForm) == DialogResult.OK)
-            {
-                currentFolder = cfbDialog.FolderPath;
-                ExecuteMethod(ProcessFiles, new DirectoryInfo(currentFolder).GetFiles("*.xml").Select(f => f.FullName).ToList());
-            }
-        }
-
-        private void tsbEditChart_Click(object sender, EventArgs e)
-        {
-            if (lvCharts.SelectedItems.Count == 0)
-                return;
-
-            var editor = new ChartEditor((Entity)lvCharts.SelectedItems[0].Tag, Service);
-            editor.ShowDialog(ParentForm);
-
-            if (editor.HasUpdatedContent)
-            {
-                lvEntities_SelectedIndexChanged(null, null);
             }
         }
     }
