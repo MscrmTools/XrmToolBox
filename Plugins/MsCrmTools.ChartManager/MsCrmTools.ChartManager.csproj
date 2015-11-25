@@ -30,7 +30,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.TextEditor, Version=3.0.0.3437, Culture=neutral, PublicKeyToken=4d61825e8dd49f1a, processorArchitecture=MSIL">
+    <Reference Include="ICSharpCode.TextEditor">
       <HintPath>..\..\packages\ICSharpCode.TextEditor.3.2.1.6466\lib\Net20\ICSharpCode.TextEditor.dll</HintPath>
       <Private>True</Private>
     </Reference>
@@ -138,16 +138,17 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"$(SolutionDir)packages\LibZ.Bootstrap.1.1.0.2\tools\libz.exe" inject-dll --assembly "$(TargetPath)" --include MsCrmTools.ChartManager.dll --include ICSharpCode.TextEditor.dll
-copy /y $(TargetPath) "$(SolutionDir)XrmToolBox\$(OutDir)Plugins\$(TargetFileName)"
-</PostBuildEvent>
+    <PostBuildEvent>
+      "$(SolutionDir)packages\LibZ.Bootstrap.1.1.0.2\tools\libz.exe" inject-dll --assembly "$(TargetPath)" --include MsCrmTools.ChartManager.dll --include ICSharpCode.TextEditor.dll
+      copy /y $(TargetPath) "$(SolutionDir)XrmToolBox\$(OutDir)Plugins\$(TargetFileName)"
+    </PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
       <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
