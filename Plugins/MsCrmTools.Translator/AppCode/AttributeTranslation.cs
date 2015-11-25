@@ -48,6 +48,28 @@ namespace MsCrmTools.Translator.AppCode
                     if (attribute.DisplayName != null && attribute.DisplayName.LocalizedLabels.All(l => string.IsNullOrEmpty(l.Label)))
                         continue;
 
+                    // If derived attribute from calculated field, don't process it
+                    if (attribute.LogicalName.EndsWith("_state"))
+                    {
+                        var baseName = attribute.LogicalName.Remove(attribute.LogicalName.Length - 6, 6);
+
+                        if (entity.Attributes.Any(a => a.LogicalName == baseName) &&
+                            entity.Attributes.Any(a => a.LogicalName == baseName + "_date"))
+                        {
+                            continue;
+                        }
+                    }
+                    if (attribute.LogicalName.EndsWith("_date"))
+                    {
+                        var baseName = attribute.LogicalName.Remove(attribute.LogicalName.Length - 5, 5);
+
+                        if (entity.Attributes.Any(a => a.LogicalName == baseName) &&
+                            entity.Attributes.Any(a => a.LogicalName == baseName + "_state"))
+                        {
+                            continue;
+                        }
+                    }
+
                     ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.MetadataId.Value.ToString("B");
                     ZeroBasedSheet.Cell(sheet, line, cell++).Value = entity.LogicalName;
                     ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.LogicalName;
