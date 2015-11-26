@@ -163,11 +163,6 @@ namespace McTools.Xrm.Connection.WinForms
                 }
             }
 
-            if (tbUserPassword.Text.IndexOf(";") >= 0)
-            {
-                warningMessage += "Password cannot contains semicolon character, which is a split character for Microsoft Dynamics CRM simplified connection strings\r\n";
-            }
-
             if (!goodServerData)
             {
                 warningMessage += "Please provide server name\r\n";
