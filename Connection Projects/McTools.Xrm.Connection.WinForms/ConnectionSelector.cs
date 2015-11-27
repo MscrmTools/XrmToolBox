@@ -179,6 +179,24 @@ namespace McTools.Xrm.Connection.WinForms
 
         #endregion Méthodes
 
+        private void ConnectionSelector_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.N)
+            {
+                tsbNewConnection_Click(null, null);
+            }
+
+            if (e.Control && e.KeyCode == Keys.U)
+            {
+                tsbUpdateConnection_Click(null, null);
+            }
+
+            if (e.Control && e.KeyCode == Keys.D)
+            {
+                tsbDeleteConnection_Click(null, null);
+            }
+        }
+
         private ListViewGroup GetGroup(AuthenticationProviderType type)
         {
             string groupName = string.Empty;
@@ -230,6 +248,14 @@ namespace McTools.Xrm.Connection.WinForms
             }
 
             return 0;
+        }
+
+        private void lvConnections_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode != Keys.Enter || lvConnections.SelectedItems.Count == 0)
+                return;
+
+            BValidateClick(null, null);
         }
 
         private void tsb_UseMru_CheckedChanged(object sender, EventArgs e)

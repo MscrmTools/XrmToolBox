@@ -52,6 +52,7 @@ namespace XrmToolBox
             this.xrmToolBoxHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpSelectedPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.displayHelpPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutXrmToolBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbCodePlex = new System.Windows.Forms.ToolStripDropDownButton();
             this.startADiscussionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,11 +78,14 @@ namespace XrmToolBox
             this.pnlHelp = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.aboutXrmToolBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.StatusBar = new System.Windows.Forms.StatusStrip();
+            this.tsslMessage = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tsslConnectionStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.HomePageTab.SuspendLayout();
             this.pnlHelp.SuspendLayout();
+            this.StatusBar.SuspendLayout();
             this.SuspendLayout();
             // 
             // imageList1
@@ -253,6 +257,13 @@ namespace XrmToolBox
             this.displayHelpPluginToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.displayHelpPluginToolStripMenuItem.Text = "Display help";
             this.displayHelpPluginToolStripMenuItem.Click += new System.EventHandler(this.displayHelpPluginToolStripMenuItem_Click);
+            // 
+            // aboutXrmToolBoxToolStripMenuItem
+            // 
+            this.aboutXrmToolBoxToolStripMenuItem.Name = "aboutXrmToolBoxToolStripMenuItem";
+            this.aboutXrmToolBoxToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
+            this.aboutXrmToolBoxToolStripMenuItem.Text = "About XrmToolBox";
+            this.aboutXrmToolBoxToolStripMenuItem.Click += new System.EventHandler(this.aboutXrmToolBoxToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -439,7 +450,7 @@ namespace XrmToolBox
             this.HomePageTab.Controls.Add(this.pnlHelp);
             this.HomePageTab.Location = new System.Drawing.Point(4, 22);
             this.HomePageTab.Name = "HomePageTab";
-            this.HomePageTab.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.HomePageTab.Padding = new System.Windows.Forms.Padding(3);
             this.HomePageTab.Size = new System.Drawing.Size(876, 546);
             this.HomePageTab.TabIndex = 0;
             this.HomePageTab.Text = "Home";
@@ -482,18 +493,36 @@ namespace XrmToolBox
             this.label1.Text = "Oups... no plugin found!";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // aboutXrmToolBoxToolStripMenuItem
+            // StatusBar
             // 
-            this.aboutXrmToolBoxToolStripMenuItem.Name = "aboutXrmToolBoxToolStripMenuItem";
-            this.aboutXrmToolBoxToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
-            this.aboutXrmToolBoxToolStripMenuItem.Text = "About XrmToolBox";
-            this.aboutXrmToolBoxToolStripMenuItem.Click += new System.EventHandler(this.aboutXrmToolBoxToolStripMenuItem_Click);
+            this.StatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsslMessage,
+            this.tsslConnectionStatus});
+            this.StatusBar.Location = new System.Drawing.Point(0, 575);
+            this.StatusBar.Name = "StatusBar";
+            this.StatusBar.Size = new System.Drawing.Size(884, 22);
+            this.StatusBar.TabIndex = 3;
+            this.StatusBar.Text = "statusStrip1";
+            // 
+            // tsslMessage
+            // 
+            this.tsslMessage.Name = "tsslMessage";
+            this.tsslMessage.Size = new System.Drawing.Size(783, 17);
+            this.tsslMessage.Spring = true;
+            this.tsslMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tsslConnectionStatus
+            // 
+            this.tsslConnectionStatus.Name = "tsslConnectionStatus";
+            this.tsslConnectionStatus.Size = new System.Drawing.Size(86, 17);
+            this.tsslConnectionStatus.Text = "Not connected";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 597);
+            this.Controls.Add(this.StatusBar);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.toolStrip1);
             this.DoubleBuffered = true;
@@ -505,11 +534,14 @@ namespace XrmToolBox
             this.Text = "XrmToolBox for Microsoft Dynamics CRM 2011/2013/2015";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.HomePageTab.ResumeLayout(false);
             this.pnlHelp.ResumeLayout(false);
+            this.StatusBar.ResumeLayout(false);
+            this.StatusBar.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -563,6 +595,9 @@ namespace XrmToolBox
         private System.Windows.Forms.ToolStripMenuItem HelpSelectedPluginToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem displayHelpPluginToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutXrmToolBoxToolStripMenuItem;
+        private System.Windows.Forms.StatusStrip StatusBar;
+        private System.Windows.Forms.ToolStripStatusLabel tsslMessage;
+        private System.Windows.Forms.ToolStripStatusLabel tsslConnectionStatus;
     }
 }
 
