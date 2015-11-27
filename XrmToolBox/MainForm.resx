@@ -125,7 +125,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAABA
-        PQAAAk1TRnQBSQFMAgEBAwEAAcABAQHAAQEBYAEAAWABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        PQAAAk1TRnQBSQFMAgEBAwEAAdgBAQHYAQEBYAEAAWABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
         AwABgAEBAgABYAMAAQEBAAEIBgABkBgAAYACAAGAAwACgAEAAYADAAGAAQABgAEAAoACAAPAAQABwAHc
         AcABAAHwAcoBpgEAATMFAAEzAQABMwEAATMBAAIzAgADFgEAAxwBAAMiAQADKQEAA1UBAANNAQADQgEA
         AzkBAAGAAXwB/wEAAlAB/wEAAZMBAAHWAQAB/wHsAcwBAAHGAdYB7wEAAdYC5wEAAZABqQGtAgAB/wEz
@@ -538,14 +538,14 @@
   <data name="tsbCodePlex.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGxSURBVDhPlZHNTsJQEIVZqok8g4lvoC/h1pUr2ZC4UV6A
-        FYTwNOyICSygQAm8gLDAyG+BFij/hdIaMs65IGlpIDrJCbdzZ+aeb/CdinK5/JBOp21ZlulYyON+X+oN
-        XLJIGwxotV57hDzuTw4pFoubvqbRZDKlZqtNX/XGQfhGHvdwsm9xB2wuFgZ1lR61Owp1lO5B+EYe90Wu
-        Ew2wgmlIoLlQKNByuSRV1U4K96h18a5Nk8zNhnK5HBmrFenjMY103SPkDd6FGICXnbyNZot4B6RxbmkY
-        NJvPaTqb0ZR/cYaQHw6HGPDtg+0DLzMq3R7Vap9iOopMuGJZliVk2zbp7AKuo9Hom1jYMe9gMKR6vc5O
-        ZEL0+32Bhd2gPpVK2ZFIJMTr84sB4HHy4gzbkiTRaKTTR7UqsAKBwCM33bPuRDMCHLDq5P3llLJZqlQq
-        wjI7sLj8QjQ5AxylUolfGrl4wbrdbnm5E8Ebj8df9y2e8IfD4ZdMJqODV1VVyufzLt5YLLbjPRPXYMRf
-        mUgk3oPB4FMoFHrmvJv3XAAjmUxKfLxhXbKukP9P4LXb3fGv4fP9ANXKTjB7oy10AAAAAElFTkSuQmCC
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGwSURBVDhPlZHLTsJQEIa7VBN5BhPfQF/CrStXsiFxo30B
+        VhDC07AjsMMCJfACwgIj90tbKNcWCjVknP+ApIVAdJI/nM6ZmfN/g3QqSqXSQzqddlVVpUMhj/td6XHg
+        kkW6YdBiuTwS8rg/OaRQKKz6uk7j8YQazRZ91ep74Rt53MPJrsUfsDmf29Tt9KjV7lC7090L38jjvsB1
+        ogFWMA0JNOfzebIsizRNPynco9bHu3QcclYrymazZC8WZI5GNDTNIyFv8y7EALzs5a03msQ7IJ1zlm3T
+        dDajyXRKE/7FGUJ+MBhgwLcE23teZux0e1StforpKHLgirVer4Vc1yWTXcB1NBp9Ews75DWMAdVqNXai
+        EqLf7wss7Ab1qVTKjUQiMq8vIAaAx8uLM2wrikLDoUkflYrACgaDj9x0z7oTzQhwwKqX95dTeX+ncrks
+        LLODNZdfiCZvgKNYLPJLQx8vWDebDS93LHjj8fjrruUoAuFw+CWTyZjg1TSNcrmcjzcWi215z8Q1GPFX
+        JhKJVCgUepJl+Znzft5zAYxkMqnw8YZ1ybpC/j+B1263x7+GJP0AJ6BN8TX4eQcAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="donateInUSDollarsToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -683,6 +683,9 @@ This is also not supported to run this application from a network share.
 
 Or, there is no plugin file in 'Plugins' application subfolder.</value>
   </data>
+  <metadata name="StatusBar.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>232, 17</value>
+  </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>49</value>
   </metadata>

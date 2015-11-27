@@ -141,7 +141,7 @@ namespace McTools.Xrm.Connection
             {
                 ConnectionsList = LoadConnectionsList();
 
-                ConnectionListUpdated(null, new EventArgs());
+                // ConnectionListUpdated(null, new EventArgs());
             }
         }
 
