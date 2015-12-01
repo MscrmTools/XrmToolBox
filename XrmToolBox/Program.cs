@@ -19,9 +19,10 @@ namespace XrmToolBox
             "McTools.Xrm.Connection.dll",
             "McTools.Xrm.Connection.WinForms.dll",
             "Microsoft.Crm.Sdk.Proxy.dll",
-            "Microsoft.Xrm.Client.dll",
             "Microsoft.Xrm.Sdk.Deployment.dll",
             "Microsoft.Xrm.Sdk.dll",
+            "Microsoft.Xrm.Tooling.Connector.dll",
+            "Microsoft.Xrm.Tooling.CrmConnectControl.dll",
             "XrmToolBox.Extensibility.dll",
             "McTools.StopAdvertisement.dll"
         };

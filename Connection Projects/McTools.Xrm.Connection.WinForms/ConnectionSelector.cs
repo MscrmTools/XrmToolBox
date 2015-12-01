@@ -285,10 +285,15 @@ namespace McTools.Xrm.Connection.WinForms
 
         private void tsbNewConnection_Click(object sender, EventArgs e)
         {
-            var cForm = new ConnectionForm(true, false)
+            var cForm = new Form1
             {
                 StartPosition = FormStartPosition.CenterParent
             };
+
+            //var cForm = new ConnectionForm(true, false)
+            //{
+            //    StartPosition = FormStartPosition.CenterParent
+            //};
 
             if (cForm.ShowDialog(this) == DialogResult.OK)
             {
@@ -330,11 +335,16 @@ namespace McTools.Xrm.Connection.WinForms
             {
                 ListViewItem item = lvConnections.SelectedItems[0];
 
-                var cForm = new ConnectionForm(false, false)
+                var cForm = new Form1
                 {
-                    CrmConnectionDetail = (ConnectionDetail)item.Tag,
                     StartPosition = FormStartPosition.CenterParent
                 };
+
+                //var cForm = new ConnectionForm(false, false)
+                //{
+                //    CrmConnectionDetail = (ConnectionDetail)item.Tag,
+                //    StartPosition = FormStartPosition.CenterParent
+                //};
 
                 if (cForm.ShowDialog(this) == DialogResult.OK)
                 {
