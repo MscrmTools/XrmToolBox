@@ -99,19 +99,22 @@ namespace McTools.Xrm.Connection.WinForms
         /// <returns>Created or updated connection</returns>
         public ConnectionDetail EditConnection(bool isCreation, ConnectionDetail connectionToUpdate)
         {
-            var cForm = new ConnectionForm(isCreation) { StartPosition = FormStartPosition.CenterParent };
+            var cForm = new Form1(connectionToUpdate) { StartPosition = FormStartPosition.CenterParent };
 
-            if (!isCreation)
-            {
-                cForm.CrmConnectionDetail = connectionToUpdate;
-            }
+            //var cForm = new ConnectionForm(isCreation) { StartPosition = FormStartPosition.CenterParent };
+
+            //if (!isCreation)
+            //{
+            //    cForm.CrmConnectionDetail = connectionToUpdate;
+            //}
 
             if (cForm.ShowDialog(_innerAppForm) == DialogResult.OK)
             {
-                if (cForm.DoConnect)
-                {
-                    ConnectionManager.Instance.ConnectToServer(cForm.CrmConnectionDetail);
-                }
+                // TODO on garde?
+                //if (cForm.DoConnect)
+                //{
+                //    ConnectionManager.Instance.ConnectToServer(cForm.CrmConnectionDetail);
+                //}
 
                 //if (!cForm.CrmConnectionDetail.PasswordIsEmpty && !cForm.CrmConnectionDetail.SavePassword)
                 //{

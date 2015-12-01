@@ -1,6 +1,4 @@
-﻿using Microsoft.Xrm.Client.Services;
-using Microsoft.Xrm.Sdk.Client;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -118,9 +116,10 @@ namespace XrmToolBox
 
                 if (service != null)
                 {
-                    var clonedService = (OrganizationService)currentConnectionDetail.GetOrganizationService();
-                    ((OrganizationServiceProxy)clonedService.InnerService).SdkClientVersion = currentConnectionDetail.OrganizationVersion;
+                    //var clonedService = (OrganizationService)currentConnectionDetail.GetOrganizationService();
+                    //((OrganizationServiceProxy)clonedService.InnerService).SdkClientVersion = currentConnectionDetail.OrganizationVersion;
 
+                    var clonedService = currentConnectionDetail.GetCrmServiceClient().OrganizationServiceProxy;
                     ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
                 }
 

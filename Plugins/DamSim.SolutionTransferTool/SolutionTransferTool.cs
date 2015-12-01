@@ -1,8 +1,6 @@
 ﻿using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
@@ -58,16 +56,12 @@ namespace DamSim.SolutionTransferTool
             if (actionName == "TargetOrganization")
             {
                 targetService = newService;
-                SetConnectionLabel(targetService, "Target");
-                ((OrganizationServiceProxy)((OrganizationService)targetService).InnerService).Timeout = new TimeSpan(
-                    0, 1, 0, 0);
+                SetConnectionLabel(detail, "Target");
             }
             else
             {
                 service = newService;
-                SetConnectionLabel(service, "Source");
-                ((OrganizationServiceProxy)((OrganizationService)service).InnerService).Timeout = new TimeSpan(0, 1, 0,
-                                                                                                                 0);
+                SetConnectionLabel(detail, "Source");
                 RetrieveSolutions();
             }
         }
@@ -199,16 +193,16 @@ namespace DamSim.SolutionTransferTool
             lstSourceSolutions.Items.Clear();
 
             var sourceSolutionsQuery = new QueryExpression
-                                           {
-                                               EntityName = "solution",
-                                               ColumnSet =
+            {
+                EntityName = "solution",
+                ColumnSet =
                                                    new ColumnSet(new[]
                                                                      {
                                                                          "publisherid", "installedon", "version",
                                                                          "uniquename", "friendlyname", "description"
                                                                      }),
-                                               Criteria = new FilterExpression()
-                                           };
+                Criteria = new FilterExpression()
+            };
 
             sourceSolutionsQuery.Criteria.AddCondition("ismanaged", ConditionOperator.Equal, false);
             sourceSolutionsQuery.Criteria.AddCondition("isvisible", ConditionOperator.Equal, true);
@@ -235,25 +229,9 @@ namespace DamSim.SolutionTransferTool
         /// </summary>
         /// <param name="serviceToLabel"></param>
         /// <param name="serviceType"></param>
-        private void SetConnectionLabel(IOrganizationService serviceToLabel, string serviceType)
+        private void SetConnectionLabel(ConnectionDetail detail, string serviceType)
         {
-            var serviceProxy = (OrganizationServiceProxy)((OrganizationService)serviceToLabel).InnerService;
-            var uri = serviceProxy.EndpointSwitch.PrimaryEndpoint;
-            var hostName = uri.Host;
-            string orgName;
-            if (hostName.ToLower().Contains("dynamics.com"))
-            {
-                orgName = hostName.Split('.')[0];
-                hostName = hostName.Remove(0, orgName.Length + 1);
-            }
-            else
-            {
-                orgName = uri.AbsolutePath.Substring(1);
-                var index = orgName.IndexOf("/", 0, StringComparison.Ordinal);
-                orgName = orgName.Substring(0, index);
-            }
-
-            var connectionName = string.Format("{0} ({1})", hostName, orgName);
+            var connectionName = string.Format("{0} ({1})", detail.ServerName, detail.Organization);
             switch (serviceType)
             {
                 case "Source":
@@ -375,26 +353,26 @@ namespace DamSim.SolutionTransferTool
 
                 var requests = new List<OrganizationRequest>();
                 requests.Add(new ExportSolutionRequest
-                                 {
-                                     Managed = chkExportAsManaged.Checked,
-                                     SolutionName = item.Text,
-                                     ExportAutoNumberingSettings = chkAutoNumering.Checked,
-                                     ExportCalendarSettings = chkCalendar.Checked,
-                                     ExportCustomizationSettings = chkCustomization.Checked,
-                                     ExportEmailTrackingSettings = chkEmailTracking.Checked,
-                                     ExportGeneralSettings = chkGeneral.Checked,
-                                     ExportIsvConfig = chkIsvConfig.Checked,
-                                     ExportMarketingSettings = chkMarketing.Checked,
-                                     ExportOutlookSynchronizationSettings = chkOutlookSynchronization.Checked,
-                                     ExportRelationshipRoles = chkRelationshipRoles.Checked
-                                 });
+                {
+                    Managed = chkExportAsManaged.Checked,
+                    SolutionName = item.Text,
+                    ExportAutoNumberingSettings = chkAutoNumering.Checked,
+                    ExportCalendarSettings = chkCalendar.Checked,
+                    ExportCustomizationSettings = chkCustomization.Checked,
+                    ExportEmailTrackingSettings = chkEmailTracking.Checked,
+                    ExportGeneralSettings = chkGeneral.Checked,
+                    ExportIsvConfig = chkIsvConfig.Checked,
+                    ExportMarketingSettings = chkMarketing.Checked,
+                    ExportOutlookSynchronizationSettings = chkOutlookSynchronization.Checked,
+                    ExportRelationshipRoles = chkRelationshipRoles.Checked
+                });
                 requests.Add(new ImportSolutionRequest
-                                 {
-                                     ConvertToManaged = chkConvertToManaged.Checked,
-                                     OverwriteUnmanagedCustomizations = chkOverwriteUnmanagedCustomizations.Checked,
-                                     PublishWorkflows = chkActivate.Checked,
-                                     ImportJobId = importId
-                                 });
+                {
+                    ConvertToManaged = chkConvertToManaged.Checked,
+                    OverwriteUnmanagedCustomizations = chkOverwriteUnmanagedCustomizations.Checked,
+                    PublishWorkflows = chkActivate.Checked,
+                    ImportJobId = importId
+                });
 
                 if (!chkExportAsManaged.Checked && chkPublish.Checked)
                 {
