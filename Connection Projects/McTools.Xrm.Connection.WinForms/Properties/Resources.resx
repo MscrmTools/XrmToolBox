@@ -153,4 +153,9 @@
   <data name="ConnectionWizard_PleaseEnterCredentials" xml:space="preserve">
     <value>Please enter your credentials before trying to connect</value>
   </data>
+  <data name="ConnectionWizard_InvalidTimeoutValue" xml:space="preserve">
+    <value>Wrong timeout value!
+
+Expected format : HH:mm:ss</value>
+  </data>
 </root>
