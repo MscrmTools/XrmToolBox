@@ -319,13 +319,14 @@ namespace McTools.Xrm.Connection.WinForms
                     BValidateClick(sender, e);
                 }
 
-                if (ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(
-                             d => d.ConnectionId == newConnection.ConnectionId) == null)
+                // If the connection id is not found and the user want to save
+                // the connection (ie. he provided a name for the connection)
+                if (ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(d => d.ConnectionId == newConnection.ConnectionId) == null
+                             && !string.IsNullOrEmpty(newConnection.ConnectionName))
                 {
                     ConnectionManager.Instance.ConnectionsList.Connections.Add(newConnection);
+                    ConnectionManager.Instance.SaveConnectionsFile();
                 }
-
-                ConnectionManager.Instance.SaveConnectionsFile();
             }
         }
 
@@ -335,7 +336,7 @@ namespace McTools.Xrm.Connection.WinForms
             {
                 ListViewItem item = lvConnections.SelectedItems[0];
 
-                var cForm = new Form1
+                var cForm = new Form1((ConnectionDetail)item.Tag)
                 {
                     StartPosition = FormStartPosition.CenterParent
                 };

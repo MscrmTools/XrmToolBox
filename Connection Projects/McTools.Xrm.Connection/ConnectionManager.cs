@@ -1,6 +1,7 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Discovery;
+using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -419,10 +420,10 @@ namespace McTools.Xrm.Connection
                 }
                 else
                 {
-                    var service = parameters[2] as IOrganizationService;
+                    var service = parameters[2] as CrmServiceClient;
                     if (service != null)
                     {
-                        SendSuccessMessage(service, parameters);
+                        SendSuccessMessage(service.OrganizationServiceProxy, parameters);
                     }
                 }
             }

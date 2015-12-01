@@ -55,6 +55,7 @@ namespace McTools.Xrm.Connection.WinForms
                 {
                     preConnectionRequestAction();
                 }
+
                 ConnectionManager.Instance.ConnectToServer(connectionDetail, connectionParameter);
 
                 return true;

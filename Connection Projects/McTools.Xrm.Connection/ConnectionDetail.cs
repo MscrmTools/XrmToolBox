@@ -20,6 +20,8 @@ namespace McTools.Xrm.Connection
 
         #region Propriétés
 
+        private CrmServiceClient crmSvc;
+
         public AuthenticationProviderType AuthType { get; set; }
 
         /// <summary>
@@ -86,6 +88,7 @@ namespace McTools.Xrm.Connection
         public string OrganizationUrlName { get; set; }
 
         public string OrganizationVersion { get; set; }
+        public string OriginalUrl { get; set; }
 
         /// <summary>
         /// Gets an information if the password is empty
@@ -107,6 +110,12 @@ namespace McTools.Xrm.Connection
         /// </summary>
         [DefaultValue(80)]
         public int ServerPort { get; set; }
+
+        public CrmServiceClient ServiceClient
+        {
+            get { return GetCrmServiceClient(); }
+            set { crmSvc = value; }
+        }
 
         public TimeSpan Timeout { get; set; }
 
@@ -157,9 +166,12 @@ namespace McTools.Xrm.Connection
             userPassword = null;
         }
 
-        public CrmServiceClient GetCrmServiceClient()
+        public CrmServiceClient GetCrmServiceClient(bool forceNewService = false)
         {
-            CrmServiceClient crmSvc;
+            if (forceNewService == false && crmSvc != null)
+            {
+                return crmSvc;
+            }
 
             if (UseOnline)
             {
@@ -522,6 +534,11 @@ namespace McTools.Xrm.Connection
             return false;
         }
 
+        public bool PasswordIsDifferent(string password)
+        {
+            return password != userPassword;
+        }
+
         #region IComparable Members
 
         public int CompareTo(object obj)
@@ -550,6 +567,7 @@ namespace McTools.Xrm.Connection
                     new XElement("UseSsl", UseSsl),
                     new XElement("ServerName", ServerName),
                     new XElement("ServerPort", ServerPort),
+                    new XElement("OriginalUrl", OriginalUrl),
                     new XElement("Organization", Organization),
                     new XElement("OrganizationUrlName", OrganizationUrlName),
                     new XElement("OrganizationFriendlyName", OrganizationFriendlyName),
