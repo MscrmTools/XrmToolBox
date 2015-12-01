@@ -1,8 +1,6 @@
 ﻿using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.ViewLayoutReplicator.Forms;
 using MsCrmTools.ViewLayoutReplicator.Helpers;
@@ -87,15 +85,11 @@ namespace DamSim.ViewTransferTool
             {
                 targetService = newService;
                 SetConnectionLabel(connectionDetail, "Target");
-                ((OrganizationServiceProxy)((OrganizationService)targetService).InnerService).Timeout = new TimeSpan(
-                    0, 1, 0, 0);
             }
             else
             {
                 service = newService;
                 SetConnectionLabel(connectionDetail, "Source");
-                ((OrganizationServiceProxy)((OrganizationService)service).InnerService).Timeout = new TimeSpan(0, 1, 0, 0);
-                LoadEntities();
             }
         }
 
@@ -389,7 +383,7 @@ namespace DamSim.ViewTransferTool
 
                     EntityMetadata currentEmd =
                         entitiesCache.Find(
-                            delegate(EntityMetadata emd)
+                            delegate (EntityMetadata emd)
                             { return emd.DisplayName.UserLocalizedLabel.Label == currentEntityDisplayName; });
 
                     XmlDocument layoutDoc = new XmlDocument();

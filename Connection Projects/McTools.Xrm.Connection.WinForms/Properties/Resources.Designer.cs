@@ -59,5 +59,137 @@ namespace McTools.Xrm.Connection.WinForms.Properties {
                 resourceCulture = value;
             }
         }
+
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Please wait while the wizard is trying to connect to your Microsoft Dynamics CRM organization.
+        /// </summary>
+        internal static string ConnectionWizard_ConnectingHeaderDescription
+        {
+            get
+            {
+                return ResourceManager.GetString("ConnectionWizard_ConnectingHeaderDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Enter credentials required to connect to Microsoft Dynamics CRM organization.
+        /// </summary>
+        internal static string ConnectionWizard_CredentialsHeaderDescription
+        {
+            get
+            {
+                return ResourceManager.GetString("ConnectionWizard_CredentialsHeaderDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Enter the url displayed in the browser when you are connected to your Microsoft Dynamics CRM organization.
+        /// </summary>
+        internal static string ConnectionWizard_EnterUrlHeaderDescription
+        {
+            get
+            {
+                return ResourceManager.GetString("ConnectionWizard_EnterUrlHeaderDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Your information have not been validated.
+        /// </summary>
+        internal static string ConnectionWizard_ErrorHeaderDescription
+        {
+            get
+            {
+                return ResourceManager.GetString("ConnectionWizard_ErrorHeaderDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Help us to determine if your Microsoft Dynamics CRM deployment is exposed via IFD.
+        /// </summary>
+        internal static string ConnectionWizard_IfdSelectionHeaderDescription
+        {
+            get
+            {
+                return ResourceManager.GetString("ConnectionWizard_IfdSelectionHeaderDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The url you specified does not look like a valid url for an IFD deployment. Please correct the url.
+        /// </summary>
+        internal static string ConnectionWizard_InvalidIfUrl
+        {
+            get
+            {
+                return ResourceManager.GetString("ConnectionWizard_InvalidIfUrl", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à The url you specified is invalid!.
+        /// </summary>
+        internal static string ConnectionWizard_InvalidUrl
+        {
+            get
+            {
+                return ResourceManager.GetString("ConnectionWizard_InvalidUrl", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Please enter your credentials before trying to connect.
+        /// </summary>
+        internal static string ConnectionWizard_PleaseEnterCredentials
+        {
+            get
+            {
+                return ResourceManager.GetString("ConnectionWizard_PleaseEnterCredentials", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Your information have been validated.
+        /// </summary>
+        internal static string ConnectionWizard_SuccessHeaderDescription
+        {
+            get
+            {
+                return ResourceManager.GetString("ConnectionWizard_SuccessHeaderDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à We were unable to determine the organization name based on the information you specified. Please complete the url to add the organization name inside.
+        /// </summary>
+        internal static string ConnectionWizard_UnableToDetermineOrganization
+        {
+            get
+            {
+                return ResourceManager.GetString("ConnectionWizard_UnableToDetermineOrganization", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Unable to identify organization from url, please review it!.
+        /// </summary>
+        internal static string ConnectionWizard_UnableToDetermineOrganizationFromUrl
+        {
+            get
+            {
+                return ResourceManager.GetString("ConnectionWizard_UnableToDetermineOrganizationFromUrl", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Warning.
+        /// </summary>
+        internal static string ConnectionWizard_WarningTitle
+        {
+            get
+            {
+                return ResourceManager.GetString("ConnectionWizard_WarningTitle", resourceCulture);
+            }
+        }
     }
 }

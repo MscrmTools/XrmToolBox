@@ -117,40 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-   <data name="ConnectionWizard_IfdSelectionHeaderDescription" xml:space="preserve">
-    <value>Help us to determine if your Microsoft Dynamics CRM deployment is exposed via IFD</value>
-  </data>
-  <data name="ConnectionWizard_CredentialsHeaderDescription" xml:space="preserve">
-    <value>Enter credentials required to connect to Microsoft Dynamics CRM organization</value>
-  </data>
-  <data name="ConnectionWizard_ConnectingHeaderDescription" xml:space="preserve">
-    <value>Please wait while the wizard is trying to connect to your Microsoft Dynamics CRM organization</value>
-  </data>
-  <data name="ConnectionWizard_EnterUrlHeaderDescription" xml:space="preserve">
-    <value>Enter the url displayed in the browser when you are connected to your Microsoft Dynamics CRM organization</value>
-  </data>
-  <data name="ConnectionWizard_SuccessHeaderDescription" xml:space="preserve">
-    <value>Your information have been validated</value>
-  </data>
-  <data name="ConnectionWizard_ErrorHeaderDescription" xml:space="preserve">
-    <value>Your information have not been validated</value>
-  </data>
-  <data name="ConnectionWizard_InvalidUrl" xml:space="preserve">
-    <value>The url you specified is invalid!</value>
-  </data>
-  <data name="ConnectionWizard_WarningTitle" xml:space="preserve">
-    <value>Warning</value>
-  </data>
-  <data name="ConnectionWizard_UnableToDetermineOrganization" xml:space="preserve">
-    <value>We were unable to determine the organization name based on the information you specified. Please complete the url to add the organization name inside</value>
-  </data>
-  <data name="ConnectionWizard_InvalidIfUrl" xml:space="preserve">
-    <value>The url you specified does not look like a valid url for an IFD deployment. Please correct the url</value>
-  </data>
-  <data name="ConnectionWizard_UnableToDetermineOrganizationFromUrl" xml:space="preserve">
-    <value>Unable to identify organization from url, please review it!</value>
-  </data>
-  <data name="ConnectionWizard_PleaseEnterCredentials" xml:space="preserve">
-    <value>Please enter your credentials before trying to connect</value>
-  </data>
 </root>

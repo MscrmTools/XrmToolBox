@@ -1,7 +1,5 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Discovery;
 using System;
 using System.Collections.Generic;
@@ -347,34 +345,39 @@ namespace McTools.Xrm.Connection
             // Connecting to Crm server
             try
             {
-                var service = (OrganizationService)detail.GetOrganizationService();
+                var service = detail.GetCrmServiceClient();
 
-                ((OrganizationServiceProxy)service.InnerService).SdkClientVersion = detail.OrganizationVersion;
+                //var service = (OrganizationService)detail.GetOrganizationService();
 
-                TestConnection(service);
+                //((OrganizationServiceProxy)service.InnerService).SdkClientVersion = detail.OrganizationVersion;
 
-                // If the current connection detail does not contain the web
-                // application url, we search for it
-                if (string.IsNullOrEmpty(detail.WebApplicationUrl) || string.IsNullOrEmpty(detail.OrganizationDataServiceUrl))
-                {
-                    var discoService = (DiscoveryService)detail.GetDiscoveryService();
-                    var result = (RetrieveOrganizationResponse)discoService.Execute(new RetrieveOrganizationRequest { UniqueName = detail.Organization });
-                    detail.WebApplicationUrl = result.Detail.Endpoints[EndpointType.WebApplication];
-                    detail.OrganizationDataServiceUrl = result.Detail.Endpoints[EndpointType.OrganizationDataService];
-                }
+                TestConnection(service.OrganizationServiceProxy);
+
+                //// If the current connection detail does not contain the web
+                //// application url, we search for it
+                //if (string.IsNullOrEmpty(detail.WebApplicationUrl) || string.IsNullOrEmpty(detail.OrganizationDataServiceUrl))
+                //{
+                //    var discoService = (DiscoveryService)detail.GetDiscoveryService();
+                //    var result = (RetrieveOrganizationResponse)discoService.Execute(new RetrieveOrganizationRequest { UniqueName = detail.Organization });
+                //    detail.WebApplicationUrl = result.Detail.Endpoints[EndpointType.WebApplication];
+                //    detail.OrganizationDataServiceUrl = result.Detail.Endpoints[EndpointType.OrganizationDataService];
+                //}
+                detail.WebApplicationUrl = service.ConnectedOrgPublishedEndpoints[EndpointType.WebApplication];
+                detail.OrganizationDataServiceUrl = service.ConnectedOrgPublishedEndpoints[EndpointType.OrganizationDataService];
 
                 // We search for organization version
-                var vRequest = new RetrieveVersionRequest();
-                var vResponse = (RetrieveVersionResponse)service.Execute(vRequest);
+                //var vRequest = new RetrieveVersionRequest();
+                //var vResponse = (RetrieveVersionResponse)service.Execute(vRequest);
 
-                detail.OrganizationVersion = vResponse.Version;
+                //detail.OrganizationVersion = vResponse.Version;
+                detail.OrganizationVersion = service.ConnectedOrgVersion.ToString();
 
                 var currentConnection = ConnectionsList.Connections.FirstOrDefault(x => x.ConnectionId == detail.ConnectionId);
                 if (currentConnection != null)
                 {
                     currentConnection.WebApplicationUrl = detail.WebApplicationUrl;
                     currentConnection.OrganizationDataServiceUrl = detail.OrganizationDataServiceUrl;
-                    currentConnection.OrganizationVersion = vResponse.Version;
+                    currentConnection.OrganizationVersion = detail.OrganizationVersion;
                     currentConnection.SavePassword = detail.SavePassword;
                     detail.CopyPasswordTo(currentConnection);
                 }

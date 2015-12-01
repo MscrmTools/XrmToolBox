@@ -1,12 +1,11 @@
-﻿using Microsoft.Xrm.Client;
-using Microsoft.Xrm.Client.Services;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
-using Microsoft.Xrm.Sdk.Discovery;
+﻿using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.ComponentModel;
 using System.Data.Common;
 using System.Globalization;
+using System.Net;
+using System.Security;
 using System.ServiceModel.Description;
 using System.Xml.Linq;
 
@@ -158,14 +157,48 @@ namespace McTools.Xrm.Connection
             userPassword = null;
         }
 
-        public IDiscoveryService GetDiscoveryService()
+        public CrmServiceClient GetCrmServiceClient()
         {
-            return new DiscoveryService(CrmConnection.Parse(GetDiscoveryCrmConnectionString()));
-        }
+            CrmServiceClient crmSvc;
 
-        public IOrganizationService GetOrganizationService()
-        {
-            return new OrganizationService(CrmConnection.Parse(GetOrganizationCrmConnectionString()));
+            if (UseOnline)
+            {
+                crmSvc = ConnectOnline(UseOsdp);
+            }
+            else if (UseIfd)
+            {
+                var password = CryptoManager.Decrypt(userPassword, ConnectionManager.CryptoPassPhrase,
+                   ConnectionManager.CryptoSaltValue,
+                   ConnectionManager.CryptoHashAlgorythm,
+                   ConnectionManager.CryptoPasswordIterations,
+                   ConnectionManager.CryptoInitVector,
+                   ConnectionManager.CryptoKeySize);
+
+                crmSvc = new CrmServiceClient(new NetworkCredential(UserName, password, UserDomain), AuthenticationType.IFD, ServerName, ServerPort.ToString(),
+                   OrganizationUrlName, true, UseSsl);
+            }
+            else
+            {
+                NetworkCredential credential;
+                if (!IsCustomAuth)
+                {
+                    credential = CredentialCache.DefaultNetworkCredentials;
+                }
+                else
+                {
+                    var password = CryptoManager.Decrypt(userPassword, ConnectionManager.CryptoPassPhrase,
+                  ConnectionManager.CryptoSaltValue,
+                  ConnectionManager.CryptoHashAlgorythm,
+                  ConnectionManager.CryptoPasswordIterations,
+                  ConnectionManager.CryptoInitVector,
+                  ConnectionManager.CryptoKeySize);
+
+                    credential = new NetworkCredential(UserName, password, UserDomain);
+                }
+                crmSvc = new CrmServiceClient(credential, AuthenticationType.AD, ServerName, ServerPort.ToString(), OrganizationUrlName, true, UseSsl);
+            }
+
+            return crmSvc;
         }
 
         public void SetPassword(string password, bool isEncrypted = false)
@@ -188,6 +221,10 @@ namespace McTools.Xrm.Connection
             }
         }
 
+        //public IOrganizationService GetOrganizationService()
+        //{
+        //    return new OrganizationService(CrmConnection.Parse(GetOrganizationCrmConnectionString()));
+        //}
         /// <summary>
         /// Retourne le nom de la connexion
         /// </summary>
@@ -197,6 +234,10 @@ namespace McTools.Xrm.Connection
             return ConnectionName;
         }
 
+        //public IDiscoveryService GetDiscoveryService()
+        //{
+        //    return new DiscoveryService(CrmConnection.Parse(GetDiscoveryCrmConnectionString()));
+        //}
         public void UpdateAfterEdit(ConnectionDetail editedConnection)
         {
             ConnectionName = editedConnection.ConnectionName;
@@ -216,6 +257,23 @@ namespace McTools.Xrm.Connection
             userPassword = editedConnection.userPassword;
             UseSsl = editedConnection.UseSsl;
             HomeRealmUrl = editedConnection.HomeRealmUrl;
+        }
+
+        private CrmServiceClient ConnectOnline(bool isOffice365)
+        {
+            var password = CryptoManager.Decrypt(userPassword, ConnectionManager.CryptoPassPhrase,
+                 ConnectionManager.CryptoSaltValue,
+                 ConnectionManager.CryptoHashAlgorythm,
+                 ConnectionManager.CryptoPasswordIterations,
+                 ConnectionManager.CryptoInitVector,
+                 ConnectionManager.CryptoKeySize);
+
+            var securePassword = new SecureString();
+            foreach (char c in password)
+                securePassword.AppendChar(c);
+            securePassword.MakeReadOnly();
+
+            return new CrmServiceClient(UserName, securePassword, GetOnlineRegion(ServerName), OrganizationUrlName, true, UseSsl, isOffice365: isOffice365);
         }
 
         private string GetDiscoveryCrmConnectionString()
@@ -286,6 +344,44 @@ namespace McTools.Xrm.Connection
             }
 
             return dbcb.ToString();
+        }
+
+        private string GetOnlineRegion(string hostname)
+        {
+            var prefix = hostname.Split('.')[1];
+            var region = string.Empty;
+            switch (prefix)
+            {
+                case "crm":
+                    region = "NorthAmerica";
+                    break;
+
+                case "crm2":
+                    region = "SouthAmerica";
+                    break;
+
+                case "crm4":
+                    region = "EMEA";
+                    break;
+
+                case "crm5":
+                    region = "APAC";
+                    break;
+
+                case "crm6":
+                    region = "Oceania";
+                    break;
+
+                case "crm7":
+                    region = "Japan";
+                    break;
+
+                case "crm9":
+                    region = "NorthAmerica2";
+                    break;
+            }
+
+            return region;
         }
 
         private string GetOrganizationCrmConnectionString()
@@ -417,7 +513,7 @@ namespace McTools.Xrm.Connection
                || updatedDetail.UseSsl != UseSsl
                || updatedDetail.UserDomain.ToLower() != UserDomain.ToLower()
                || updatedDetail.UserName.ToLower() != UserName.ToLower()
-                //|| (SavePassword && updatedDetail.userPassword != userPassword)
+               //|| (SavePassword && updatedDetail.userPassword != userPassword)
                || (!SavePassword && !string.IsNullOrEmpty(updatedDetail.userPassword) && updatedDetail.userPassword != userPassword))
             {
                 return true;
