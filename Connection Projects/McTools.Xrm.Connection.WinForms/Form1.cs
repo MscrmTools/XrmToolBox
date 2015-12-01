@@ -5,6 +5,8 @@ using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security;
@@ -18,6 +20,7 @@ namespace McTools.Xrm.Connection.WinForms
     {
         private readonly List<string> visitedPath;
 
+        private bool changesRequireConnectionTesting;
         private ConnectionDetail crmConnectionDetail;
         private string hostName;
         private string hostPort;
@@ -32,23 +35,39 @@ namespace McTools.Xrm.Connection.WinForms
         {
             InitializeComponent();
 
+            crmConnectionDetail = detail;
+
             visitedPath = new List<string> { pnlConnectUrl.Name };
 
             if (detail != null)
             {
-                txtOrganizationUrl.Text = detail.WebApplicationUrl;
+                txtOrganizationUrl.Text = detail.OriginalUrl;
                 txtDomain.Text = detail.UserDomain;
                 txtUsername.Text = detail.UserName;
-                // TODO kekonfait avec le mot de passe??
-                //txtPassword.Text = detail.pass
+                txtConnectionName.Text = detail.ConnectionName;
+                chkSavePassword.Checked = detail.SavePassword;
+                if (detail.PasswordIsEmpty || detail.SavePassword == false)
+                {
+                    txtPassword.PasswordChar = (char)0;
+                    txtPassword.UseSystemPasswordChar = false;
+                    txtPassword.Text = "Please specify the password";
+                    txtPassword.ForeColor = Color.DarkGray;
+                }
+                else
+                {
+                    txtPassword.PasswordChar = '•';
+                    txtPassword.UseSystemPasswordChar = true;
+                    txtPassword.Text = "@@PASSWORD@@";
+                    txtPassword.ForeColor = Color.Black;
+                }
+
                 txtHomeRealm.Text = detail.HomeRealmUrl;
-                chkUseIntegratedAuthentication.Checked = detail.IsCustomAuth;
+                chkUseIntegratedAuthentication.Checked = !detail.IsCustomAuth;
                 rbIfdYes.Checked = detail.UseIfd;
             }
         }
 
         public ConnectionDetail CrmConnectionDetail { get { return crmConnectionDetail; } }
-        public CrmServiceClient ServiceClient { get { return serviceClient; } }
 
         private void btnBack_Click(object sender, EventArgs e)
         {
@@ -72,22 +91,52 @@ namespace McTools.Xrm.Connection.WinForms
                 crmConnectionDetail = new ConnectionDetail();
             }
 
-            crmConnectionDetail.ConnectionName = textBox1.Text;
-            crmConnectionDetail.ServerName = hostName;
-            crmConnectionDetail.WebApplicationUrl = txtOrganizationUrl.Text;
-            crmConnectionDetail.Organization = serviceClient.ConnectedOrgUniqueName;
-            crmConnectionDetail.OrganizationVersion = serviceClient.ConnectedOrgVersion.ToString();
+            if (serviceClient != null)
+            {
+                // This happens when the connection is created. When updating
+                // a connection, the service client is not instanciated
+                crmConnectionDetail.Organization = serviceClient.ConnectedOrgUniqueName;
+                crmConnectionDetail.OrganizationFriendlyName = serviceClient.ConnectedOrgFriendlyName;
+                crmConnectionDetail.OrganizationUrlName = serviceClient.ConnectedOrgUniqueName;
+                crmConnectionDetail.OrganizationVersion = serviceClient.ConnectedOrgVersion.ToString();
+                crmConnectionDetail.OrganizationDataServiceUrl = serviceClient.ConnectedOrgPublishedEndpoints[EndpointType.OrganizationDataService];
+                crmConnectionDetail.OrganizationServiceUrl = serviceClient.ConnectedOrgPublishedEndpoints[EndpointType.OrganizationService];
+            }
+
+            crmConnectionDetail.ConnectionName = txtConnectionName.Text;
+            crmConnectionDetail.OriginalUrl = txtOrganizationUrl.Text;
             crmConnectionDetail.UserDomain = txtDomain.Text;
             crmConnectionDetail.UserName = txtUsername.Text;
-            crmConnectionDetail.SetPassword(txtPassword.Text); ;
+            crmConnectionDetail.SavePassword = chkSavePassword.Checked;
             crmConnectionDetail.IsCustomAuth = !chkUseIntegratedAuthentication.Checked;
             crmConnectionDetail.UseIfd = rbIfdYes.Checked;
             crmConnectionDetail.ConnectionId = Guid.NewGuid();
-            crmConnectionDetail.OrganizationDataServiceUrl = serviceClient.ConnectedOrgPublishedEndpoints[EndpointType.OrganizationDataService];
-            crmConnectionDetail.OrganizationServiceUrl = serviceClient.ConnectedOrgPublishedEndpoints[EndpointType.OrganizationService];
             crmConnectionDetail.UseOsdp = isOffice365;
             crmConnectionDetail.UseOnline = isOnline;
             crmConnectionDetail.UseSsl = txtOrganizationUrl.Text.ToLower().StartsWith("https");
+            crmConnectionDetail.ServerName = hostName;
+            crmConnectionDetail.Timeout = TimeSpan.Parse(txtTimeout.Text);
+
+            if (txtPassword.Text != "@@PASSWORD@@" && txtPassword.Text != "Please specify the password")
+            {
+                crmConnectionDetail.SetPassword(txtPassword.Text);
+            }
+
+            if (string.IsNullOrEmpty(hostPort))
+            {
+                if (useSsl)
+                {
+                    crmConnectionDetail.ServerPort = 443;
+                }
+                else
+                {
+                    crmConnectionDetail.ServerPort = 80;
+                }
+            }
+            else
+            {
+                crmConnectionDetail.ServerPort = int.Parse(hostPort);
+            }
 
             if (isOnline)
             {
@@ -97,6 +146,11 @@ namespace McTools.Xrm.Connection.WinForms
             {
                 crmConnectionDetail.AuthType = isIfd ? AuthenticationProviderType.Federation : AuthenticationProviderType.ActiveDirectory;
             }
+
+            crmConnectionDetail.ServiceClient = serviceClient;
+
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void btnGo_Click(object sender, EventArgs e)
@@ -107,6 +161,14 @@ namespace McTools.Xrm.Connection.WinForms
             if (!Uri.TryCreate(url, UriKind.Absolute, out uri))
             {
                 MessageBox.Show(Resources.ConnectionWizard_InvalidUrl);
+                return;
+            }
+
+            TimeSpan timeOut;
+            if (!TimeSpan.TryParse(txtTimeout.Text, CultureInfo.InvariantCulture, out timeOut))
+            {
+                MessageBox.Show(this, Resources.ConnectionWizard_InvalidTimeoutValue, Resources.ConnectionWizard_WarningTitle,
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -277,6 +339,10 @@ namespace McTools.Xrm.Connection.WinForms
                 Password = txtPassword.Text,
             };
 
+            if (settings.Password == "@@PASSWORD@@")
+            {
+            }
+
             var bw = new BackgroundWorker();
             bw.DoWork += (bwSender, evt) =>
             {
@@ -361,7 +427,7 @@ namespace McTools.Xrm.Connection.WinForms
 
                 lblDescription.Text = Resources.ConnectionWizard_SuccessHeaderDescription;
 
-                textBox1.Focus();
+                txtConnectionName.Focus();
                 DisplayPanel(pnlConnected);
 
                 serviceClient = crmSvc;
@@ -385,10 +451,38 @@ namespace McTools.Xrm.Connection.WinForms
                 }
             }
 
-            lblDescription.Text = Resources.ConnectionWizard_ConnectingHeaderDescription;
-            DisplayPanel(pnlWaiting);
+            if (crmConnectionDetail != null)
+            {
+                if (crmConnectionDetail.IsCustomAuth != !chkUseIntegratedAuthentication.Checked
+                    || crmConnectionDetail.UseIfd != rbIfdYes.Checked
+                    || crmConnectionDetail.UseOnline != isOnline
+                    || crmConnectionDetail.UseOsdp != isOffice365
+                    || crmConnectionDetail.UseSsl != useSsl
+                    || crmConnectionDetail.OriginalUrl != txtOrganizationUrl.Text
+                    || crmConnectionDetail.HomeRealmUrl != txtHomeRealm.Text
+                    || crmConnectionDetail.UserDomain != txtDomain.Text
+                    || crmConnectionDetail.UserName != txtUsername.Text
+                    || crmConnectionDetail.PasswordIsDifferent(txtPassword.Text) && !chkSavePassword.Checked
+                    )
+                {
+                    changesRequireConnectionTesting = true;
+                }
+            }
 
-            Connect();
+            if (changesRequireConnectionTesting)
+            {
+                lblDescription.Text = Resources.ConnectionWizard_ConnectingHeaderDescription;
+                DisplayPanel(pnlWaiting);
+
+                Connect();
+            }
+            else
+            {
+                lblDescription.Text = Resources.ConnectionWizard_SuccessHeaderDescription;
+
+                txtConnectionName.Focus();
+                DisplayPanel(pnlConnected);
+            }
         }
 
         private CrmServiceClient ConnectOnline(bool isOffice365, ConnectionSettings settings)

@@ -26,6 +26,7 @@ namespace XrmToolBox
     {
         #region Variables
 
+        private CrmConnectionStatusBar ccsb;
         private ConnectionManager cManager;
         private ConnectionDetail currentConnectionDetail;
         private Options currentOptions;
@@ -70,7 +71,7 @@ namespace XrmToolBox
         {
             cManager = ConnectionManager.Instance;
             cManager.RequestPassword += (sender, e) => fHelper.RequestPassword(e.ConnectionDetail);
-            cManager.StepChanged += (sender, e) => tsslMessage.Text = e.CurrentStep;
+            cManager.StepChanged += (sender, e) => ccsb.SetMessage(e.CurrentStep);
             cManager.ConnectionSucceed += (sender, e) =>
             {
                 var parameter = e.Parameter as ConnectionParameterInfo;
@@ -82,10 +83,8 @@ namespace XrmToolBox
 
                 currentConnectionDetail = e.ConnectionDetail;
                 service = e.OrganizationService;
-                //ccsb.SetConnectionStatus(true, e.ConnectionDetail);
-                //ccsb.SetMessage(string.Empty);
-                tsslConnectionStatus.Text = string.Format("Connected to {0} ({1})", e.ConnectionDetail.ConnectionName, e.ConnectionDetail.OrganizationFriendlyName);
-                tsslMessage.Text = string.Empty;
+                ccsb.SetConnectionStatus(true, e.ConnectionDetail);
+                ccsb.SetMessage(string.Empty);
 
                 if (parameter != null)
                 {
@@ -141,18 +140,16 @@ namespace XrmToolBox
 
                     currentConnectionDetail = null;
                     service = null;
-                    //ccsb.SetConnectionStatus(false, null);
-                    //ccsb.SetMessage(e.FailureReason);
-                    tsslConnectionStatus.Text = "Not connected";
-                    tsslMessage.Text = e.FailureReason;
+                    ccsb.SetConnectionStatus(false, null);
+                    ccsb.SetMessage(e.FailureReason);
 
                     this.StartPluginWithConnection();
                 }));
             };
 
             fHelper = new FormHelper(this);
-            //ccsb = new CrmConnectionStatusBar(fHelper) { Dock = DockStyle.Bottom };
-            //Controls.Add(ccsb);
+            ccsb = new CrmConnectionStatusBar(fHelper) { Dock = DockStyle.Bottom };
+            Controls.Add(ccsb);
         }
 
         private void StartPluginWithConnection()
