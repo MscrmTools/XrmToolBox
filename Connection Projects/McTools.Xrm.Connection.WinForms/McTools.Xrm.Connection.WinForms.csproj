@@ -56,21 +56,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Referenced Assemblies\Microsoft.IdentityModel.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
-      <HintPath>..\..\Referenced Assemblies\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms">
-      <HintPath>..\..\Referenced Assemblies\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Tooling.Connector">
       <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xrm.Tooling.CrmConnectControl">
-      <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Tooling.CrmConnectControl.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -116,11 +107,11 @@
     <Compile Include="CrmConnectionStatusBar.designer.cs">
       <DependentUpon>CrmConnectionStatusBar.cs</DependentUpon>
     </Compile>
-    <Compile Include="ConnectionWizard.cs">
+    <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ConnectionWizard.designer.cs">
-      <DependentUpon>ConnectionWizard.cs</DependentUpon>
+    <Compile Include="Form1.designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="ListViewItemComparer.cs" />
     <Compile Include="PasswordForm.cs">
@@ -148,12 +139,12 @@
     <EmbeddedResource Include="ConnectionSelector.resx">
       <DependentUpon>ConnectionSelector.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConnectionWizard.resx">
-      <DependentUpon>ConnectionWizard.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="CrmConnectionStatusBar.resx">
       <DependentUpon>CrmConnectionStatusBar.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PasswordForm.resx">
       <DependentUpon>PasswordForm.cs</DependentUpon>

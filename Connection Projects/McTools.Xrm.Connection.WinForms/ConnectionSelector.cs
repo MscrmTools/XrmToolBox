@@ -285,7 +285,7 @@ namespace McTools.Xrm.Connection.WinForms
 
         private void tsbNewConnection_Click(object sender, EventArgs e)
         {
-            var cForm = new ConnectionWizard
+            var cForm = new Form1
             {
                 StartPosition = FormStartPosition.CenterParent
             };
@@ -319,14 +319,13 @@ namespace McTools.Xrm.Connection.WinForms
                     BValidateClick(sender, e);
                 }
 
-                // If the connection id is not found and the user want to save
-                // the connection (ie. he provided a name for the connection)
-                if (ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(d => d.ConnectionId == newConnection.ConnectionId) == null
-                             && !string.IsNullOrEmpty(newConnection.ConnectionName))
+                if (ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(
+                             d => d.ConnectionId == newConnection.ConnectionId) == null)
                 {
                     ConnectionManager.Instance.ConnectionsList.Connections.Add(newConnection);
-                    ConnectionManager.Instance.SaveConnectionsFile();
                 }
+
+                ConnectionManager.Instance.SaveConnectionsFile();
             }
         }
 
@@ -336,7 +335,7 @@ namespace McTools.Xrm.Connection.WinForms
             {
                 ListViewItem item = lvConnections.SelectedItems[0];
 
-                var cForm = new ConnectionWizard((ConnectionDetail)item.Tag)
+                var cForm = new Form1
                 {
                     StartPosition = FormStartPosition.CenterParent
                 };
@@ -363,12 +362,6 @@ namespace McTools.Xrm.Connection.WinForms
                     item.Group = GetGroup(cForm.CrmConnectionDetail.AuthType);
 
                     lvConnections.Refresh();
-
-                    var updatedConnectionDetail = ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(
-                            c => c.ConnectionId == cForm.CrmConnectionDetail.ConnectionId);
-
-                    ConnectionManager.Instance.ConnectionsList.Connections.Remove(updatedConnectionDetail);
-                    ConnectionManager.Instance.ConnectionsList.Connections.Add(cForm.CrmConnectionDetail);
 
                     ConnectionManager.Instance.SaveConnectionsFile();
                 }
