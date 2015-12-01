@@ -61,12 +61,15 @@
             this.pnlConnected = new System.Windows.Forms.Panel();
             this.btnFinish = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtConnectionName = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlError = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.lblError = new System.Windows.Forms.Label();
+            this.chkSavePassword = new System.Windows.Forms.CheckBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtTimeout = new System.Windows.Forms.TextBox();
             this.pnlConnectMoreActiveDirectoryInfo.SuspendLayout();
             this.pnlConnectAuthentication.SuspendLayout();
             this.pnlHeader.SuspendLayout();
@@ -202,6 +205,7 @@
             // 
             // pnlConnectAuthentication
             // 
+            this.pnlConnectAuthentication.Controls.Add(this.chkSavePassword);
             this.pnlConnectAuthentication.Controls.Add(this.btnReset3);
             this.pnlConnectAuthentication.Controls.Add(this.btnBack3);
             this.pnlConnectAuthentication.Controls.Add(this.lblPassword);
@@ -361,6 +365,8 @@
             // 
             // pnlConnectUrl
             // 
+            this.pnlConnectUrl.Controls.Add(this.txtTimeout);
+            this.pnlConnectUrl.Controls.Add(this.label4);
             this.pnlConnectUrl.Controls.Add(this.chkUseIntegratedAuthentication);
             this.pnlConnectUrl.Controls.Add(this.txtOrganizationUrl);
             this.pnlConnectUrl.Controls.Add(this.lblUrl);
@@ -416,7 +422,7 @@
             // 
             this.pnlConnected.Controls.Add(this.btnFinish);
             this.pnlConnected.Controls.Add(this.label2);
-            this.pnlConnected.Controls.Add(this.textBox1);
+            this.pnlConnected.Controls.Add(this.txtConnectionName);
             this.pnlConnected.Controls.Add(this.label1);
             this.pnlConnected.Location = new System.Drawing.Point(0, 71);
             this.pnlConnected.Margin = new System.Windows.Forms.Padding(2);
@@ -446,13 +452,13 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Name";
             // 
-            // textBox1
+            // txtConnectionName
             // 
-            this.textBox1.Location = new System.Drawing.Point(57, 55);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(494, 22);
-            this.textBox1.TabIndex = 16;
-            this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
+            this.txtConnectionName.Location = new System.Drawing.Point(57, 55);
+            this.txtConnectionName.Name = "txtConnectionName";
+            this.txtConnectionName.Size = new System.Drawing.Size(494, 22);
+            this.txtConnectionName.TabIndex = 16;
+            this.txtConnectionName.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             // 
             // label1
             // 
@@ -509,6 +515,36 @@
             this.lblError.Size = new System.Drawing.Size(539, 83);
             this.lblError.TabIndex = 0;
             this.lblError.Text = "[lblError]";
+            // 
+            // chkSavePassword
+            // 
+            this.chkSavePassword.AutoSize = true;
+            this.chkSavePassword.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkSavePassword.Location = new System.Drawing.Point(254, 87);
+            this.chkSavePassword.Name = "chkSavePassword";
+            this.chkSavePassword.Size = new System.Drawing.Size(301, 17);
+            this.chkSavePassword.TabIndex = 12;
+            this.chkSavePassword.Text = "Save password as encrypted string in connections file";
+            this.chkSavePassword.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 71);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(85, 13);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "Service timeout";
+            // 
+            // txtTimeout
+            // 
+            this.txtTimeout.Location = new System.Drawing.Point(94, 68);
+            this.txtTimeout.Margin = new System.Windows.Forms.Padding(2);
+            this.txtTimeout.Name = "txtTimeout";
+            this.txtTimeout.Size = new System.Drawing.Size(50, 22);
+            this.txtTimeout.TabIndex = 12;
+            this.txtTimeout.Text = "00:02:00";
             // 
             // Form1
             // 
@@ -580,11 +616,14 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnFinish;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtConnectionName;
         private System.Windows.Forms.Panel pnlError;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Label lblError;
+        private System.Windows.Forms.CheckBox chkSavePassword;
+        private System.Windows.Forms.TextBox txtTimeout;
+        private System.Windows.Forms.Label label4;
     }
 }
 

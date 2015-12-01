@@ -158,6 +158,12 @@ namespace McTools.Xrm.Connection
                         cd.Organization = organizationElement.Value;
                     }
 
+                    var originalUrlElement = elt.Element("OriginalUrl");
+                    if (originalUrlElement != null)
+                    {
+                        cd.OriginalUrl = originalUrlElement.Value;
+                    }
+
                     var organizationFriendlyNameElement = elt.Element("OrganizationFriendlyName");
                     if (organizationFriendlyNameElement != null)
                     {

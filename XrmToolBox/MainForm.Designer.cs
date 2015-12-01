@@ -78,14 +78,10 @@ namespace XrmToolBox
             this.pnlHelp = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.StatusBar = new System.Windows.Forms.StatusStrip();
-            this.tsslMessage = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tsslConnectionStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.HomePageTab.SuspendLayout();
             this.pnlHelp.SuspendLayout();
-            this.StatusBar.SuspendLayout();
             this.SuspendLayout();
             // 
             // imageList1
@@ -493,36 +489,11 @@ namespace XrmToolBox
             this.label1.Text = "Oups... no plugin found!";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // StatusBar
-            // 
-            this.StatusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsslMessage,
-            this.tsslConnectionStatus});
-            this.StatusBar.Location = new System.Drawing.Point(0, 575);
-            this.StatusBar.Name = "StatusBar";
-            this.StatusBar.Size = new System.Drawing.Size(884, 22);
-            this.StatusBar.TabIndex = 3;
-            this.StatusBar.Text = "statusStrip1";
-            // 
-            // tsslMessage
-            // 
-            this.tsslMessage.Name = "tsslMessage";
-            this.tsslMessage.Size = new System.Drawing.Size(783, 17);
-            this.tsslMessage.Spring = true;
-            this.tsslMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // tsslConnectionStatus
-            // 
-            this.tsslConnectionStatus.Name = "tsslConnectionStatus";
-            this.tsslConnectionStatus.Size = new System.Drawing.Size(86, 17);
-            this.tsslConnectionStatus.Text = "Not connected";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(884, 597);
-            this.Controls.Add(this.StatusBar);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.toolStrip1);
             this.DoubleBuffered = true;
@@ -540,8 +511,6 @@ namespace XrmToolBox
             this.tabControl1.ResumeLayout(false);
             this.HomePageTab.ResumeLayout(false);
             this.pnlHelp.ResumeLayout(false);
-            this.StatusBar.ResumeLayout(false);
-            this.StatusBar.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -595,9 +564,6 @@ namespace XrmToolBox
         private System.Windows.Forms.ToolStripMenuItem HelpSelectedPluginToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem displayHelpPluginToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutXrmToolBoxToolStripMenuItem;
-        private System.Windows.Forms.StatusStrip StatusBar;
-        private System.Windows.Forms.ToolStripStatusLabel tsslMessage;
-        private System.Windows.Forms.ToolStripStatusLabel tsslConnectionStatus;
     }
 }
 
