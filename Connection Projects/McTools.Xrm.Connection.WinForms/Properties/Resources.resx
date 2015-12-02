@@ -158,4 +158,12 @@
 
 Expected format : HH:mm:ss</value>
   </data>
+  <data name="ConnectionWizard_QuestionHeaderTitle" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="ConnectionWizard_NeedToTestConnectionAgain" xml:space="preserve">
+    <value>You changed some values that require to test the connection. Would you like to test it now?
+
+Note that this is required to validate this wizard</value>
+  </data>
 </root>

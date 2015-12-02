@@ -40,6 +40,7 @@
             this.rbIfdYes = new System.Windows.Forms.RadioButton();
             this.btnValidateIfdInfo = new System.Windows.Forms.Button();
             this.pnlConnectAuthentication = new System.Windows.Forms.Panel();
+            this.chkSavePassword = new System.Windows.Forms.CheckBox();
             this.btnReset3 = new System.Windows.Forms.Button();
             this.btnBack3 = new System.Windows.Forms.Button();
             this.lblPassword = new System.Windows.Forms.Label();
@@ -54,6 +55,8 @@
             this.lblHeader = new System.Windows.Forms.Label();
             this.lblUrl = new System.Windows.Forms.Label();
             this.pnlConnectUrl = new System.Windows.Forms.Panel();
+            this.txtTimeout = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.chkUseIntegratedAuthentication = new System.Windows.Forms.CheckBox();
             this.pnlWaiting = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
@@ -67,9 +70,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.lblError = new System.Windows.Forms.Label();
-            this.chkSavePassword = new System.Windows.Forms.CheckBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtTimeout = new System.Windows.Forms.TextBox();
             this.pnlConnectMoreActiveDirectoryInfo.SuspendLayout();
             this.pnlConnectAuthentication.SuspendLayout();
             this.pnlHeader.SuspendLayout();
@@ -94,7 +94,7 @@
             this.btnGo.Margin = new System.Windows.Forms.Padding(2);
             this.btnGo.Name = "btnGo";
             this.btnGo.Size = new System.Drawing.Size(70, 23);
-            this.btnGo.TabIndex = 2;
+            this.btnGo.TabIndex = 3;
             this.btnGo.Text = "Go";
             this.btnGo.UseVisualStyleBackColor = true;
             this.btnGo.Click += new System.EventHandler(this.btnGo_Click);
@@ -222,6 +222,17 @@
             this.pnlConnectAuthentication.TabIndex = 8;
             this.pnlConnectAuthentication.Visible = false;
             // 
+            // chkSavePassword
+            // 
+            this.chkSavePassword.AutoSize = true;
+            this.chkSavePassword.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkSavePassword.Location = new System.Drawing.Point(254, 87);
+            this.chkSavePassword.Name = "chkSavePassword";
+            this.chkSavePassword.Size = new System.Drawing.Size(301, 17);
+            this.chkSavePassword.TabIndex = 6;
+            this.chkSavePassword.Text = "Save password as encrypted string in connections file";
+            this.chkSavePassword.UseVisualStyleBackColor = true;
+            // 
             // btnReset3
             // 
             this.btnReset3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -229,7 +240,7 @@
             this.btnReset3.Margin = new System.Windows.Forms.Padding(2);
             this.btnReset3.Name = "btnReset3";
             this.btnReset3.Size = new System.Drawing.Size(67, 23);
-            this.btnReset3.TabIndex = 6;
+            this.btnReset3.TabIndex = 7;
             this.btnReset3.Text = "Reset";
             this.btnReset3.UseVisualStyleBackColor = true;
             this.btnReset3.Click += new System.EventHandler(this.btnReset_Click);
@@ -241,7 +252,7 @@
             this.btnBack3.Margin = new System.Windows.Forms.Padding(2);
             this.btnBack3.Name = "btnBack3";
             this.btnBack3.Size = new System.Drawing.Size(67, 23);
-            this.btnBack3.TabIndex = 7;
+            this.btnBack3.TabIndex = 8;
             this.btnBack3.Text = "Back";
             this.btnBack3.UseVisualStyleBackColor = true;
             this.btnBack3.Click += new System.EventHandler(this.btnBack_Click);
@@ -314,7 +325,7 @@
             this.btnConnect.Margin = new System.Windows.Forms.Padding(2);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(80, 23);
-            this.btnConnect.TabIndex = 8;
+            this.btnConnect.TabIndex = 9;
             this.btnConnect.Text = "Connect";
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.Connect_Click);
@@ -376,6 +387,25 @@
             this.pnlConnectUrl.Name = "pnlConnectUrl";
             this.pnlConnectUrl.Size = new System.Drawing.Size(563, 135);
             this.pnlConnectUrl.TabIndex = 11;
+            // 
+            // txtTimeout
+            // 
+            this.txtTimeout.Location = new System.Drawing.Point(94, 68);
+            this.txtTimeout.Margin = new System.Windows.Forms.Padding(2);
+            this.txtTimeout.Name = "txtTimeout";
+            this.txtTimeout.Size = new System.Drawing.Size(50, 22);
+            this.txtTimeout.TabIndex = 2;
+            this.txtTimeout.Text = "00:02:00";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 71);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(85, 13);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "Service timeout";
             // 
             // chkUseIntegratedAuthentication
             // 
@@ -516,48 +546,18 @@
             this.lblError.TabIndex = 0;
             this.lblError.Text = "[lblError]";
             // 
-            // chkSavePassword
-            // 
-            this.chkSavePassword.AutoSize = true;
-            this.chkSavePassword.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkSavePassword.Location = new System.Drawing.Point(254, 87);
-            this.chkSavePassword.Name = "chkSavePassword";
-            this.chkSavePassword.Size = new System.Drawing.Size(301, 17);
-            this.chkSavePassword.TabIndex = 12;
-            this.chkSavePassword.Text = "Save password as encrypted string in connections file";
-            this.chkSavePassword.UseVisualStyleBackColor = true;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 71);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(85, 13);
-            this.label4.TabIndex = 11;
-            this.label4.Text = "Service timeout";
-            // 
-            // txtTimeout
-            // 
-            this.txtTimeout.Location = new System.Drawing.Point(94, 68);
-            this.txtTimeout.Margin = new System.Windows.Forms.Padding(2);
-            this.txtTimeout.Name = "txtTimeout";
-            this.txtTimeout.Size = new System.Drawing.Size(50, 22);
-            this.txtTimeout.TabIndex = 12;
-            this.txtTimeout.Text = "00:02:00";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(563, 212);
             this.Controls.Add(this.pnlHeader);
-            this.Controls.Add(this.pnlConnectUrl);
             this.Controls.Add(this.pnlConnectAuthentication);
             this.Controls.Add(this.pnlConnectMoreActiveDirectoryInfo);
             this.Controls.Add(this.pnlError);
             this.Controls.Add(this.pnlConnected);
             this.Controls.Add(this.pnlWaiting);
+            this.Controls.Add(this.pnlConnectUrl);
             this.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
