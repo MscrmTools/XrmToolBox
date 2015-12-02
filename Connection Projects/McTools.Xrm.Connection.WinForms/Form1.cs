@@ -42,7 +42,7 @@ namespace McTools.Xrm.Connection.WinForms
 
             if (detail != null)
             {
-                txtOrganizationUrl.Text = detail.OriginalUrl;
+                txtOrganizationUrl.Text = detail.OriginalUrl ?? detail.WebApplicationUrl;
                 txtDomain.Text = detail.UserDomain;
                 txtUsername.Text = detail.UserName;
                 txtConnectionName.Text = detail.ConnectionName;
