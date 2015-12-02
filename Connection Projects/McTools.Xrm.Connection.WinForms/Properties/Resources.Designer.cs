@@ -135,11 +135,31 @@ namespace McTools.Xrm.Connection.WinForms.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à You changed some values that require to test the connection. Would you like to test it now?
+        ///
+        ///Note that this is required to validate this wizard.
+        /// </summary>
+        internal static string ConnectionWizard_NeedToTestConnectionAgain {
+            get {
+                return ResourceManager.GetString("ConnectionWizard_NeedToTestConnectionAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à Please enter your credentials before trying to connect.
         /// </summary>
         internal static string ConnectionWizard_PleaseEnterCredentials {
             get {
                 return ResourceManager.GetString("ConnectionWizard_PleaseEnterCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à Question.
+        /// </summary>
+        internal static string ConnectionWizard_QuestionHeaderTitle {
+            get {
+                return ResourceManager.GetString("ConnectionWizard_QuestionHeaderTitle", resourceCulture);
             }
         }
         

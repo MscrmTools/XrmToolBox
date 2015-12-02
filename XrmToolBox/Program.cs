@@ -23,6 +23,8 @@ namespace XrmToolBox
             "Microsoft.Xrm.Sdk.dll",
             "Microsoft.Xrm.Tooling.Connector.dll",
             "Microsoft.Xrm.Tooling.CrmConnectControl.dll",
+            "Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+            "Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll",
             "XrmToolBox.Extensibility.dll",
             "McTools.StopAdvertisement.dll"
         };

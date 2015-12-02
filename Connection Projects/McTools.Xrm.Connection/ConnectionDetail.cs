@@ -210,6 +210,11 @@ namespace McTools.Xrm.Connection
                 crmSvc = new CrmServiceClient(credential, AuthenticationType.AD, ServerName, ServerPort.ToString(), OrganizationUrlName, true, UseSsl);
             }
 
+            if (!crmSvc.IsReady)
+            {
+                throw new Exception(crmSvc.LastCrmError);
+            }
+
             return crmSvc;
         }
 
@@ -497,7 +502,9 @@ namespace McTools.Xrm.Connection
                 UserDomain = UserDomain,
                 UserName = UserName,
                 userPassword = userPassword,
-                WebApplicationUrl = WebApplicationUrl
+                WebApplicationUrl = WebApplicationUrl,
+                OriginalUrl = OriginalUrl,
+                Timeout = Timeout
             };
         }
 
@@ -508,15 +515,9 @@ namespace McTools.Xrm.Connection
 
         public bool IsConnectionBrokenWithUpdatedData(ConnectionDetail updatedDetail)
         {
-            if (updatedDetail.AuthType != AuthType
-               || updatedDetail.CrmTicket != CrmTicket
-               || updatedDetail.HomeRealmUrl != HomeRealmUrl
+            if (updatedDetail.HomeRealmUrl != HomeRealmUrl
                || updatedDetail.IsCustomAuth != IsCustomAuth
                || updatedDetail.Organization != Organization
-               || updatedDetail.OrganizationFriendlyName != OrganizationFriendlyName
-               || updatedDetail.OrganizationServiceUrl != OrganizationServiceUrl
-               || updatedDetail.OrganizationDataServiceUrl != OrganizationDataServiceUrl
-               || updatedDetail.OrganizationUrlName != OrganizationUrlName
                || updatedDetail.ServerName.ToLower() != ServerName.ToLower()
                || updatedDetail.ServerPort != ServerPort
                || updatedDetail.UseIfd != UseIfd
@@ -525,7 +526,6 @@ namespace McTools.Xrm.Connection
                || updatedDetail.UseSsl != UseSsl
                || updatedDetail.UserDomain.ToLower() != UserDomain.ToLower()
                || updatedDetail.UserName.ToLower() != UserName.ToLower()
-               //|| (SavePassword && updatedDetail.userPassword != userPassword)
                || (!SavePassword && !string.IsNullOrEmpty(updatedDetail.userPassword) && updatedDetail.userPassword != userPassword))
             {
                 return true;

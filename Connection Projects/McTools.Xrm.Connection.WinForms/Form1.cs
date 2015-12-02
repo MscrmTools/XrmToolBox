@@ -29,6 +29,7 @@ namespace McTools.Xrm.Connection.WinForms
         private bool isOnline;
         private string orga;
         private CrmServiceClient serviceClient;
+        private ConnectionDetail updatedConnectionDetail;
         private bool useSsl;
 
         public Form1(ConnectionDetail detail = null)
@@ -64,6 +65,10 @@ namespace McTools.Xrm.Connection.WinForms
                 txtHomeRealm.Text = detail.HomeRealmUrl;
                 chkUseIntegratedAuthentication.Checked = !detail.IsCustomAuth;
                 rbIfdYes.Checked = detail.UseIfd;
+
+                updatedConnectionDetail = (ConnectionDetail)crmConnectionDetail.Clone();
+
+                lblHeader.Text = "Edit connection";
             }
         }
 
@@ -103,49 +108,11 @@ namespace McTools.Xrm.Connection.WinForms
                 crmConnectionDetail.OrganizationServiceUrl = serviceClient.ConnectedOrgPublishedEndpoints[EndpointType.OrganizationService];
             }
 
-            crmConnectionDetail.ConnectionName = txtConnectionName.Text;
-            crmConnectionDetail.OriginalUrl = txtOrganizationUrl.Text;
-            crmConnectionDetail.UserDomain = txtDomain.Text;
-            crmConnectionDetail.UserName = txtUsername.Text;
-            crmConnectionDetail.SavePassword = chkSavePassword.Checked;
-            crmConnectionDetail.IsCustomAuth = !chkUseIntegratedAuthentication.Checked;
-            crmConnectionDetail.UseIfd = rbIfdYes.Checked;
-            crmConnectionDetail.ConnectionId = Guid.NewGuid();
-            crmConnectionDetail.UseOsdp = isOffice365;
-            crmConnectionDetail.UseOnline = isOnline;
-            crmConnectionDetail.UseSsl = txtOrganizationUrl.Text.ToLower().StartsWith("https");
-            crmConnectionDetail.ServerName = hostName;
-            crmConnectionDetail.Timeout = TimeSpan.Parse(txtTimeout.Text);
-
-            if (txtPassword.Text != "@@PASSWORD@@" && txtPassword.Text != "Please specify the password")
+            if (crmConnectionDetail == null)
             {
-                crmConnectionDetail.SetPassword(txtPassword.Text);
+                crmConnectionDetail = new ConnectionDetail();
             }
-
-            if (string.IsNullOrEmpty(hostPort))
-            {
-                if (useSsl)
-                {
-                    crmConnectionDetail.ServerPort = 443;
-                }
-                else
-                {
-                    crmConnectionDetail.ServerPort = 80;
-                }
-            }
-            else
-            {
-                crmConnectionDetail.ServerPort = int.Parse(hostPort);
-            }
-
-            if (isOnline)
-            {
-                crmConnectionDetail.AuthType = isOffice365 ? AuthenticationProviderType.OnlineFederation : AuthenticationProviderType.LiveId;
-            }
-            else
-            {
-                crmConnectionDetail.AuthType = isIfd ? AuthenticationProviderType.Federation : AuthenticationProviderType.ActiveDirectory;
-            }
+            FillConnectionDetailFromControls(crmConnectionDetail);
 
             crmConnectionDetail.ServiceClient = serviceClient;
 
@@ -192,10 +159,29 @@ namespace McTools.Xrm.Connection.WinForms
 
                 if (hostName.IndexOf("dynamics.com", StringComparison.Ordinal) > 0)
                 {
+                    // MFA test
+                    //var t = new Task(() =>
+                    //{
+                    //    var svc1 = new CrmServiceClient("AuthType=OAuth;Username=user1@crm2016rtm.onmicrosoft.com; Password=pass@word1;Url=https://crm2016rtm.crm4.dynamics.com;AppId=7d770fd6-f087-40f0-b41f-e55bf556cdac;RedirectUri=http://www.xrmtoolbox.com;TokenCacheStorePath=c:\\temp;LoginPrompt=Always");
+                    //    //var svc1 = new CrmServiceClient("AuthType=Office365;Username=tanguy@crm2016rtm.onmicrosoft.com; Password=Emeline18*;Url=https://crm2016rtm.crm4.dynamics.com;");
+                    //});
+
+                    //t.Start();
+
+                    // return;
+
                     isOnline = true;
                     txtDomain.Enabled = false;
 
+                    if (updatedConnectionDetail == null)
+                    {
+                        updatedConnectionDetail = new ConnectionDetail();
+                    }
+                    FillConnectionDetailFromControls(updatedConnectionDetail);
+
                     lblDescription.Text = Resources.ConnectionWizard_CredentialsHeaderDescription;
+                    DisplayPanel(pnlConnectAuthentication);
+
                     if (txtDomain.Enabled)
                     {
                         txtDomain.Focus();
@@ -204,32 +190,47 @@ namespace McTools.Xrm.Connection.WinForms
                     {
                         txtUsername.Focus();
                     }
-
-                    DisplayPanel(pnlConnectAuthentication);
                 }
                 else
                 {
                     // IFD or AD??
                     // Requires additional information
                     visitedPath.Add(pnlConnectMoreActiveDirectoryInfo.Name);
+
+                    if (updatedConnectionDetail == null)
+                    {
+                        updatedConnectionDetail = new ConnectionDetail();
+                    }
+                    FillConnectionDetailFromControls(updatedConnectionDetail);
+
                     lblDescription.Text = Resources.ConnectionWizard_IfdSelectionHeaderDescription;
-                    rbIfdNo.Focus();
                     DisplayPanel(pnlConnectMoreActiveDirectoryInfo);
+                    rbIfdNo.Focus();
                 }
             }
             else
             {
                 if (chkUseIntegratedAuthentication.Checked)
                 {
-                    lblDescription.Text = Resources.ConnectionWizard_ConnectingHeaderDescription;
-                    DisplayPanel(pnlWaiting);
-
-                    Connect();
+                    FillConnectionDetailFromControls(updatedConnectionDetail);
+                    if (updatedConnectionDetail.IsConnectionBrokenWithUpdatedData(crmConnectionDetail))
+                    {
+                        lblDescription.Text = Resources.ConnectionWizard_ConnectingHeaderDescription;
+                        DisplayPanel(pnlWaiting);
+                        Connect();
+                    }
+                    else
+                    {
+                        lblDescription.Text = Resources.ConnectionWizard_SuccessHeaderDescription;
+                        DisplayPanel(pnlConnected);
+                        txtConnectionName.Focus();
+                    }
                 }
                 else
                 {
                     visitedPath.Add(pnlConnectAuthentication.Name);
                     lblDescription.Text = Resources.ConnectionWizard_CredentialsHeaderDescription;
+                    DisplayPanel(pnlConnectAuthentication);
                     if (txtDomain.Enabled)
                     {
                         txtDomain.Focus();
@@ -238,7 +239,6 @@ namespace McTools.Xrm.Connection.WinForms
                     {
                         txtUsername.Focus();
                     }
-                    DisplayPanel(pnlConnectAuthentication);
                 }
             }
         }
@@ -427,8 +427,8 @@ namespace McTools.Xrm.Connection.WinForms
 
                 lblDescription.Text = Resources.ConnectionWizard_SuccessHeaderDescription;
 
-                txtConnectionName.Focus();
                 DisplayPanel(pnlConnected);
+                txtConnectionName.Focus();
 
                 serviceClient = crmSvc;
             };
@@ -451,37 +451,34 @@ namespace McTools.Xrm.Connection.WinForms
                 }
             }
 
-            if (crmConnectionDetail != null)
+            if (updatedConnectionDetail == null)
             {
-                if (crmConnectionDetail.IsCustomAuth != !chkUseIntegratedAuthentication.Checked
-                    || crmConnectionDetail.UseIfd != rbIfdYes.Checked
-                    || crmConnectionDetail.UseOnline != isOnline
-                    || crmConnectionDetail.UseOsdp != isOffice365
-                    || crmConnectionDetail.UseSsl != useSsl
-                    || crmConnectionDetail.OriginalUrl != txtOrganizationUrl.Text
-                    || crmConnectionDetail.HomeRealmUrl != txtHomeRealm.Text
-                    || crmConnectionDetail.UserDomain != txtDomain.Text
-                    || crmConnectionDetail.UserName != txtUsername.Text
-                    || crmConnectionDetail.PasswordIsDifferent(txtPassword.Text) && !chkSavePassword.Checked
-                    )
-                {
-                    changesRequireConnectionTesting = true;
-                }
+                updatedConnectionDetail = new ConnectionDetail();
             }
-
-            if (changesRequireConnectionTesting)
+            FillConnectionDetailFromControls(updatedConnectionDetail);
+            if (crmConnectionDetail == null)
             {
                 lblDescription.Text = Resources.ConnectionWizard_ConnectingHeaderDescription;
                 DisplayPanel(pnlWaiting);
 
                 Connect();
             }
+            else if (updatedConnectionDetail.IsConnectionBrokenWithUpdatedData(crmConnectionDetail))
+            {
+                if (DialogResult.Yes == MessageBox.Show(this, Resources.ConnectionWizard_NeedToTestConnectionAgain,
+                        Resources.ConnectionWizard_QuestionHeaderTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+                {
+                    lblDescription.Text = Resources.ConnectionWizard_ConnectingHeaderDescription;
+                    DisplayPanel(pnlWaiting);
+
+                    Connect();
+                }
+            }
             else
             {
                 lblDescription.Text = Resources.ConnectionWizard_SuccessHeaderDescription;
-
-                txtConnectionName.Focus();
                 DisplayPanel(pnlConnected);
+                txtConnectionName.Focus();
             }
         }
 
@@ -504,6 +501,53 @@ namespace McTools.Xrm.Connection.WinForms
                 {
                     pnl.Visible = pnl == panel;
                 }
+            }
+        }
+
+        private void FillConnectionDetailFromControls(ConnectionDetail detail)
+        {
+            detail.ConnectionName = txtConnectionName.Text;
+            detail.OriginalUrl = txtOrganizationUrl.Text;
+            detail.UserDomain = txtDomain.Text;
+            detail.UserName = txtUsername.Text;
+            detail.SavePassword = chkSavePassword.Checked;
+            detail.IsCustomAuth = !chkUseIntegratedAuthentication.Checked;
+            detail.UseIfd = rbIfdYes.Checked;
+            detail.ConnectionId = Guid.NewGuid();
+            detail.UseOsdp = isOffice365;
+            detail.UseOnline = isOnline;
+            detail.UseSsl = txtOrganizationUrl.Text.ToLower().StartsWith("https");
+            detail.ServerName = hostName;
+            detail.Timeout = TimeSpan.Parse(txtTimeout.Text);
+
+            if (txtPassword.Text != "@@PASSWORD@@" && txtPassword.Text != "Please specify the password")
+            {
+                detail.SetPassword(txtPassword.Text);
+            }
+
+            if (string.IsNullOrEmpty(hostPort))
+            {
+                if (useSsl)
+                {
+                    detail.ServerPort = 443;
+                }
+                else
+                {
+                    detail.ServerPort = 80;
+                }
+            }
+            else
+            {
+                detail.ServerPort = int.Parse(hostPort);
+            }
+
+            if (isOnline)
+            {
+                detail.AuthType = isOffice365 ? AuthenticationProviderType.OnlineFederation : AuthenticationProviderType.LiveId;
+            }
+            else
+            {
+                detail.AuthType = isIfd ? AuthenticationProviderType.Federation : AuthenticationProviderType.ActiveDirectory;
             }
         }
 
