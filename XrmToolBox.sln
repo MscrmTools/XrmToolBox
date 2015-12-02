@@ -22,6 +22,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Referenced Assemblies", "Referenced Assemblies", "{000015F3-36AB-4D7F-A281-DB88FBCE71EA}"
 	ProjectSection(SolutionItems) = preProject
 		Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll = Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll
+		Referenced Assemblies\Microsoft.IdentityModel.Clients.ActiveDirectory.dll = Referenced Assemblies\Microsoft.IdentityModel.Clients.ActiveDirectory.dll
+		Referenced Assemblies\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll = Referenced Assemblies\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll
 		Referenced Assemblies\Microsoft.Xrm.Client.dll = Referenced Assemblies\Microsoft.Xrm.Client.dll
 		Referenced Assemblies\Microsoft.Xrm.Sdk.Deployment.dll = Referenced Assemblies\Microsoft.Xrm.Sdk.Deployment.dll
 		Referenced Assemblies\Microsoft.Xrm.Sdk.dll = Referenced Assemblies\Microsoft.Xrm.Sdk.dll
