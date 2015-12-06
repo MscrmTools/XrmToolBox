@@ -434,6 +434,11 @@ namespace XrmToolBox
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             ProcessMenuItemsForPlugin();
+
+            if (tabControl1.SelectedIndex == 0)
+            {
+                tstxtFilterPlugin.Focus();
+            }
         }
 
         private void TsbAboutClick(object sender, EventArgs e)
