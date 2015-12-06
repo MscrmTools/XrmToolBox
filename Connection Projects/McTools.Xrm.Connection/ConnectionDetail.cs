@@ -181,6 +181,8 @@ namespace McTools.Xrm.Connection
                 return crmSvc;
             }
 
+            return new CrmServiceClient(GetOrganizationCrmConnectionString());
+
             if (UseOnline)
             {
                 crmSvc = ConnectOnline(UseOsdp);
@@ -414,7 +416,8 @@ namespace McTools.Xrm.Connection
         private string GetOrganizationCrmConnectionString()
         {
             DbConnectionStringBuilder dbcb = new DbConnectionStringBuilder();
-            dbcb.Add("Url", OrganizationServiceUrl.Replace("/XRMServices/2011/Organization.svc", ""));
+            //dbcb.Add("Url", OrganizationServiceUrl.Replace("/XRMServices/2011/Organization.svc", ""));
+            dbcb.Add("Url", !string.IsNullOrEmpty(OriginalUrl) ? OriginalUrl : WebApplicationUrl);
 
             if (IsCustomAuth)
             {
@@ -451,24 +454,25 @@ namespace McTools.Xrm.Connection
                 dbcb.Add("Password", decryptedPassword);
             }
 
-            if (UseOnline)
-            {
-                ClientCredentials deviceCredentials;
+            // Online CTP is deprecated
+            //if (UseOnline)
+            //{
+            //    ClientCredentials deviceCredentials;
 
-                do
-                {
-                    deviceCredentials = DeviceIdManager.LoadDeviceCredentials() ??
-                                        DeviceIdManager.RegisterDevice();
-                } while (deviceCredentials.UserName.Password.Contains(";")
-                         || deviceCredentials.UserName.Password.Contains("=")
-                         || deviceCredentials.UserName.Password.Contains(" ")
-                         || deviceCredentials.UserName.UserName.Contains(";")
-                         || deviceCredentials.UserName.UserName.Contains("=")
-                         || deviceCredentials.UserName.UserName.Contains(" "));
+            //    do
+            //    {
+            //        deviceCredentials = DeviceIdManager.LoadDeviceCredentials() ??
+            //                            DeviceIdManager.RegisterDevice();
+            //    } while (deviceCredentials.UserName.Password.Contains(";")
+            //             || deviceCredentials.UserName.Password.Contains("=")
+            //             || deviceCredentials.UserName.Password.Contains(" ")
+            //             || deviceCredentials.UserName.UserName.Contains(";")
+            //             || deviceCredentials.UserName.UserName.Contains("=")
+            //             || deviceCredentials.UserName.UserName.Contains(" "));
 
-                dbcb.Add("DeviceID", deviceCredentials.UserName.UserName);
-                dbcb.Add("DevicePassword", deviceCredentials.UserName.Password);
-            }
+            //    dbcb.Add("DeviceID", deviceCredentials.UserName.UserName);
+            //    dbcb.Add("DevicePassword", deviceCredentials.UserName.Password);
+            //}
 
             if (UseIfd && !string.IsNullOrEmpty(HomeRealmUrl))
             {
@@ -477,6 +481,8 @@ namespace McTools.Xrm.Connection
 
             //append timeout in seconds to connectionstring
             dbcb.Add("Timeout", Timeout.ToString(@"hh\:mm\:ss"));
+
+            dbcb.Add("AuthType", UseOsdp ? "Office365" : (UseIfd ? "IFD" : "AD"));
 
             return dbcb.ToString();
         }
