@@ -60,7 +60,7 @@
             this.bCancel.Location = new System.Drawing.Point(197, 111);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
-            this.bCancel.TabIndex = 3;
+            this.bCancel.TabIndex = 5;
             this.bCancel.Text = "Cancel";
             this.bCancel.UseVisualStyleBackColor = true;
             this.bCancel.Click += new System.EventHandler(this.bCancel_Click);
@@ -88,7 +88,7 @@
             this.bValidate.Location = new System.Drawing.Point(116, 111);
             this.bValidate.Name = "bValidate";
             this.bValidate.Size = new System.Drawing.Size(75, 23);
-            this.bValidate.TabIndex = 2;
+            this.bValidate.TabIndex = 4;
             this.bValidate.Text = "OK";
             this.bValidate.UseVisualStyleBackColor = true;
             this.bValidate.Click += new System.EventHandler(this.bValidate_Click);
@@ -99,7 +99,7 @@
             this.chkShowCharacters.Location = new System.Drawing.Point(76, 58);
             this.chkShowCharacters.Name = "chkShowCharacters";
             this.chkShowCharacters.Size = new System.Drawing.Size(154, 17);
-            this.chkShowCharacters.TabIndex = 5;
+            this.chkShowCharacters.TabIndex = 2;
             this.chkShowCharacters.Text = "Show password characters";
             this.chkShowCharacters.UseVisualStyleBackColor = true;
             this.chkShowCharacters.CheckedChanged += new System.EventHandler(this.chkShowCharacters_CheckedChanged);
@@ -110,7 +110,7 @@
             this.chkSavePassword.Location = new System.Drawing.Point(76, 81);
             this.chkSavePassword.Name = "chkSavePassword";
             this.chkSavePassword.Size = new System.Drawing.Size(206, 17);
-            this.chkSavePassword.TabIndex = 6;
+            this.chkSavePassword.TabIndex = 3;
             this.chkSavePassword.Text = "Save this password (will be encrypted)";
             this.chkSavePassword.UseVisualStyleBackColor = true;
             // 
@@ -129,6 +129,7 @@
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "PasswordForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Type password";
             this.ResumeLayout(false);
             this.PerformLayout();

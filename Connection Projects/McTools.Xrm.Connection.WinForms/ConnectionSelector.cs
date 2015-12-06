@@ -364,6 +364,12 @@ namespace McTools.Xrm.Connection.WinForms
 
                     lvConnections.Refresh();
 
+                    var updatedConnectionDetail = ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(
+                            c => c.ConnectionId == cForm.CrmConnectionDetail.ConnectionId);
+
+                    ConnectionManager.Instance.ConnectionsList.Connections.Remove(updatedConnectionDetail);
+                    ConnectionManager.Instance.ConnectionsList.Connections.Add(cForm.CrmConnectionDetail);
+
                     ConnectionManager.Instance.SaveConnectionsFile();
                 }
             }
