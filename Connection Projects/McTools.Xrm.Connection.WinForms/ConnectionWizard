@@ -18,6 +18,7 @@ namespace McTools.Xrm.Connection.WinForms
 {
     public partial class Form1 : Form
     {
+        private const string SpecifyPasswordText = "Please specify the password";
         private readonly List<string> visitedPath;
 
         private bool changesRequireConnectionTesting;
@@ -42,7 +43,7 @@ namespace McTools.Xrm.Connection.WinForms
 
             if (detail != null)
             {
-                txtOrganizationUrl.Text = detail.OriginalUrl ?? detail.WebApplicationUrl;
+                txtOrganizationUrl.Text = string.IsNullOrEmpty(detail.OriginalUrl) ? detail.WebApplicationUrl : detail.OriginalUrl;
                 txtDomain.Text = detail.UserDomain;
                 txtUsername.Text = detail.UserName;
                 txtConnectionName.Text = detail.ConnectionName;
@@ -51,7 +52,7 @@ namespace McTools.Xrm.Connection.WinForms
                 {
                     txtPassword.PasswordChar = (char)0;
                     txtPassword.UseSystemPasswordChar = false;
-                    txtPassword.Text = "Please specify the password";
+                    txtPassword.Text = SpecifyPasswordText;
                     txtPassword.ForeColor = Color.DarkGray;
                 }
                 else
@@ -212,6 +213,11 @@ namespace McTools.Xrm.Connection.WinForms
             {
                 if (chkUseIntegratedAuthentication.Checked)
                 {
+                    if (updatedConnectionDetail == null)
+                    {
+                        updatedConnectionDetail = new ConnectionDetail();
+                    }
+
                     FillConnectionDetailFromControls(updatedConnectionDetail);
                     if (updatedConnectionDetail.IsConnectionBrokenWithUpdatedData(crmConnectionDetail))
                     {
@@ -360,12 +366,12 @@ namespace McTools.Xrm.Connection.WinForms
                     taskArray[0].Wait();
                     taskArray[1].Wait();
 
-                    var goodResult = taskArray.FirstOrDefault(t => string.IsNullOrEmpty(t.Result.LastCrmError));
+                    var goodResult = taskArray.FirstOrDefault(t => t.Result.IsReady);
                     if (goodResult != null)
                     {
                         crmSvc = goodResult.Result;
 
-                        isOffice365 = taskArray[0].Result.LastCrmError == null;
+                        isOffice365 = taskArray[0].Result.IsReady;
                     }
                     else
                     {
@@ -514,13 +520,13 @@ namespace McTools.Xrm.Connection.WinForms
             detail.IsCustomAuth = !chkUseIntegratedAuthentication.Checked;
             detail.UseIfd = rbIfdYes.Checked;
             detail.ConnectionId = Guid.NewGuid();
-            detail.UseOsdp = isOffice365;
+            detail.UseOsdp = isOffice365 || crmConnectionDetail.UseOsdp;
             detail.UseOnline = isOnline;
             detail.UseSsl = txtOrganizationUrl.Text.ToLower().StartsWith("https");
             detail.ServerName = hostName;
             detail.Timeout = TimeSpan.Parse(txtTimeout.Text);
 
-            if (txtPassword.Text != "@@PASSWORD@@" && txtPassword.Text != "Please specify the password")
+            if (txtPassword.Text != "@@PASSWORD@@" && txtPassword.Text != SpecifyPasswordText)
             {
                 detail.SetPassword(txtPassword.Text);
             }
@@ -543,7 +549,7 @@ namespace McTools.Xrm.Connection.WinForms
 
             if (isOnline)
             {
-                detail.AuthType = isOffice365 ? AuthenticationProviderType.OnlineFederation : AuthenticationProviderType.LiveId;
+                detail.AuthType = isOffice365 || crmConnectionDetail.UseOsdp ? AuthenticationProviderType.OnlineFederation : AuthenticationProviderType.LiveId;
             }
             else
             {
@@ -607,6 +613,17 @@ namespace McTools.Xrm.Connection.WinForms
             if (e.KeyCode == Keys.Enter)
             {
                 btnGo_Click(null, null);
+            }
+        }
+
+        private void txtPassword_Enter(object sender, EventArgs e)
+        {
+            if (txtPassword.ForeColor == Color.DarkGray && txtPassword.Text == SpecifyPasswordText)
+            {
+                txtPassword.Text = string.Empty;
+                txtPassword.ForeColor = Color.Black;
+                txtPassword.PasswordChar = '•';
+                txtPassword.UseSystemPasswordChar = true;
             }
         }
     }

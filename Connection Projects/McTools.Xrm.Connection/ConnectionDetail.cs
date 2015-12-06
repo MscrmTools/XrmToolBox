@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Common;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Security;
 using System.ServiceModel.Description;
@@ -21,7 +23,6 @@ namespace McTools.Xrm.Connection
         #region Propriétés
 
         private CrmServiceClient crmSvc;
-
         public AuthenticationProviderType AuthType { get; set; }
 
         /// <summary>
@@ -40,6 +41,11 @@ namespace McTools.Xrm.Connection
         public string CrmTicket { get; set; }
 
         /// <summary>
+        /// Gets or sets custom information for use by consuming application
+        /// </summary>
+        public Dictionary<string, string> CustomInformation { get; set; }
+
+        /// <summary>
         /// Gets or sets the Home realm url for ADFS authentication
         /// </summary>
         public string HomeRealmUrl { get; set; }
@@ -55,6 +61,8 @@ namespace McTools.Xrm.Connection
         /// Get or set the organization name
         /// </summary>
         public string Organization { get; set; }
+
+        public string OrganizationDataServiceUrl { get; set; }
 
         /// <summary>
         /// Get or set the organization friendly name
@@ -212,7 +220,9 @@ namespace McTools.Xrm.Connection
 
             if (!crmSvc.IsReady)
             {
-                throw new Exception(crmSvc.LastCrmError);
+                var error = crmSvc.LastCrmError;
+                crmSvc = null;
+                throw new Exception(error);
             }
 
             return crmSvc;
@@ -473,8 +483,6 @@ namespace McTools.Xrm.Connection
 
         #endregion Méthodes
 
-        public string OrganizationDataServiceUrl { get; set; }
-
         public object Clone()
         {
             return new ConnectionDetail
@@ -513,20 +521,20 @@ namespace McTools.Xrm.Connection
             detail.userPassword = userPassword;
         }
 
-        public bool IsConnectionBrokenWithUpdatedData(ConnectionDetail updatedDetail)
+        public bool IsConnectionBrokenWithUpdatedData(ConnectionDetail originalDetail)
         {
-            if (updatedDetail.HomeRealmUrl != HomeRealmUrl
-               || updatedDetail.IsCustomAuth != IsCustomAuth
-               || updatedDetail.Organization != Organization
-               || updatedDetail.ServerName.ToLower() != ServerName.ToLower()
-               || updatedDetail.ServerPort != ServerPort
-               || updatedDetail.UseIfd != UseIfd
-               || updatedDetail.UseOnline != UseOnline
-               || updatedDetail.UseOsdp != UseOsdp
-               || updatedDetail.UseSsl != UseSsl
-               || updatedDetail.UserDomain.ToLower() != UserDomain.ToLower()
-               || updatedDetail.UserName.ToLower() != UserName.ToLower()
-               || (!SavePassword && !string.IsNullOrEmpty(updatedDetail.userPassword) && updatedDetail.userPassword != userPassword))
+            if (originalDetail.HomeRealmUrl != HomeRealmUrl
+               || originalDetail.IsCustomAuth != IsCustomAuth
+               || originalDetail.Organization != Organization
+               || originalDetail.ServerName.ToLower() != ServerName.ToLower()
+               || originalDetail.ServerPort != ServerPort
+               || originalDetail.UseIfd != UseIfd
+               || originalDetail.UseOnline != UseOnline
+               || originalDetail.UseOsdp != UseOsdp
+               || originalDetail.UseSsl != UseSsl
+               || originalDetail.UserDomain.ToLower() != UserDomain.ToLower()
+               || originalDetail.UserName.ToLower() != UserName.ToLower()
+               || (SavePassword && !string.IsNullOrEmpty(userPassword) && originalDetail.userPassword != userPassword))
             {
                 return true;
             }
@@ -577,7 +585,17 @@ namespace McTools.Xrm.Connection
                     new XElement("HomeRealmUrl", HomeRealmUrl),
                     new XElement("Timeout", TimeoutTicks),
                     new XElement("WebApplicationUrl", WebApplicationUrl),
-                    new XElement("LastUsedOn", LastUsedOn.ToString(CultureInfo.InvariantCulture.DateTimeFormat)));
+                    new XElement("LastUsedOn", LastUsedOn.ToString(CultureInfo.InvariantCulture.DateTimeFormat)),
+                    GetCustomInfoXElement());
+        }
+
+        private XElement GetCustomInfoXElement()
+        {
+            if (CustomInformation == null)
+            {
+                return null;
+            }
+            return new XElement("CustomInformation", CustomInformation.Select(i => new XElement(i.Key, i.Value)));
         }
     }
 }
