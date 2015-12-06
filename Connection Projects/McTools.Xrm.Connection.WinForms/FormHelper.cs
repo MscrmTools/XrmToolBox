@@ -165,7 +165,6 @@ namespace McTools.Xrm.Connection.WinForms
             {
                 UserLogin = detail.UserName,
                 UserDomain = detail.UserDomain,
-                StartPosition = FormStartPosition.CenterParent
             };
 
             MethodInvoker mi = delegate
