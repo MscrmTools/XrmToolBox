@@ -16,7 +16,7 @@ using WindowsFormsApplication1;
 
 namespace McTools.Xrm.Connection.WinForms
 {
-    public partial class Form1 : Form
+    public partial class ConnectionWizard : Form
     {
         private const string SpecifyPasswordText = "Please specify the password";
         private readonly List<string> visitedPath;
@@ -33,7 +33,7 @@ namespace McTools.Xrm.Connection.WinForms
         private ConnectionDetail updatedConnectionDetail;
         private bool useSsl;
 
-        public Form1(ConnectionDetail detail = null)
+        public ConnectionWizard(ConnectionDetail detail = null)
         {
             InitializeComponent();
 
