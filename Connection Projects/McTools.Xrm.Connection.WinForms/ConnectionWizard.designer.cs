@@ -1,6 +1,6 @@
 ﻿namespace McTools.Xrm.Connection.WinForms
 {
-    partial class Form1
+    partial class ConnectionWizard
     {
         /// <summary>
         /// Variable nécessaire au concepteur.
