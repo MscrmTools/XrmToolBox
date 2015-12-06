@@ -389,6 +389,10 @@ namespace McTools.Xrm.Connection
                     region = "SouthAmerica";
                     break;
 
+                case "crm3":
+                    region = "Canada";
+                    break;
+
                 case "crm4":
                     region = "EMEA";
                     break;
@@ -403,6 +407,10 @@ namespace McTools.Xrm.Connection
 
                 case "crm7":
                     region = "Japan";
+                    break;
+
+                case "crm8":
+                    region = "India";
                     break;
 
                 case "crm9":
