@@ -81,6 +81,8 @@ namespace McTools.Xrm.Connection.WinForms
                 userDomain.Length > 0 ? "\\" : "",
                 userLogin);
 
+            tbPassword.Focus();
+
             base.OnLoad(e);
         }
 
