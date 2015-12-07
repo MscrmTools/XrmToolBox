@@ -520,7 +520,7 @@ namespace McTools.Xrm.Connection.WinForms
             detail.IsCustomAuth = !chkUseIntegratedAuthentication.Checked;
             detail.UseIfd = rbIfdYes.Checked;
             detail.ConnectionId = Guid.NewGuid();
-            detail.UseOsdp = isOffice365 || crmConnectionDetail.UseOsdp;
+            detail.UseOsdp = isOffice365 || (crmConnectionDetail != null && crmConnectionDetail.UseOsdp);
             detail.UseOnline = isOnline;
             detail.UseSsl = txtOrganizationUrl.Text.ToLower().StartsWith("https");
             detail.ServerName = hostName;
@@ -549,7 +549,7 @@ namespace McTools.Xrm.Connection.WinForms
 
             if (isOnline)
             {
-                detail.AuthType = isOffice365 || crmConnectionDetail.UseOsdp ? AuthenticationProviderType.OnlineFederation : AuthenticationProviderType.LiveId;
+                detail.AuthType = detail.UseOsdp ? AuthenticationProviderType.OnlineFederation : AuthenticationProviderType.LiveId;
             }
             else
             {
