@@ -100,7 +100,7 @@ namespace McTools.Xrm.Connection.WinForms
         /// <returns>Created or updated connection</returns>
         public ConnectionDetail EditConnection(bool isCreation, ConnectionDetail connectionToUpdate)
         {
-            var cForm = new Form1(connectionToUpdate) { StartPosition = FormStartPosition.CenterParent };
+            var cForm = new ConnectionWizard(connectionToUpdate) { StartPosition = FormStartPosition.CenterParent };
 
             //var cForm = new ConnectionForm(isCreation) { StartPosition = FormStartPosition.CenterParent };
 
@@ -165,7 +165,6 @@ namespace McTools.Xrm.Connection.WinForms
             {
                 UserLogin = detail.UserName,
                 UserDomain = detail.UserDomain,
-                StartPosition = FormStartPosition.CenterParent
             };
 
             MethodInvoker mi = delegate

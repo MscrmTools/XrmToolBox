@@ -262,6 +262,16 @@ namespace McTools.Xrm.Connection
                         cd.LastUsedOn = DateTime.Parse(lastUsedOnElt.Value, CultureInfo.InvariantCulture.DateTimeFormat);
                     }
 
+                    var customInfo = elt.Element("CustomInformation");
+                    if (customInfo != null)
+                    {
+                        cd.CustomInformation = new Dictionary<string, string>();
+                        foreach (var custel in customInfo.Elements())
+                        {
+                            cd.CustomInformation.Add(custel.Name.LocalName, custel.Value);
+                        }
+                    }
+
                     crmConnections.Connections.Add(cd);
                 }
             }

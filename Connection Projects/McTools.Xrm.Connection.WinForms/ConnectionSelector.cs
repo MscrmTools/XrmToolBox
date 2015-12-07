@@ -285,7 +285,7 @@ namespace McTools.Xrm.Connection.WinForms
 
         private void tsbNewConnection_Click(object sender, EventArgs e)
         {
-            var cForm = new Form1
+            var cForm = new ConnectionWizard
             {
                 StartPosition = FormStartPosition.CenterParent
             };
@@ -336,7 +336,7 @@ namespace McTools.Xrm.Connection.WinForms
             {
                 ListViewItem item = lvConnections.SelectedItems[0];
 
-                var cForm = new Form1((ConnectionDetail)item.Tag)
+                var cForm = new ConnectionWizard((ConnectionDetail)item.Tag)
                 {
                     StartPosition = FormStartPosition.CenterParent
                 };
@@ -363,6 +363,12 @@ namespace McTools.Xrm.Connection.WinForms
                     item.Group = GetGroup(cForm.CrmConnectionDetail.AuthType);
 
                     lvConnections.Refresh();
+
+                    var updatedConnectionDetail = ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(
+                            c => c.ConnectionId == cForm.CrmConnectionDetail.ConnectionId);
+
+                    ConnectionManager.Instance.ConnectionsList.Connections.Remove(updatedConnectionDetail);
+                    ConnectionManager.Instance.ConnectionsList.Connections.Add(cForm.CrmConnectionDetail);
 
                     ConnectionManager.Instance.SaveConnectionsFile();
                 }

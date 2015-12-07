@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Tooling.Connector;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Common;
 using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Security;
 using System.ServiceModel.Description;
@@ -21,7 +23,6 @@ namespace McTools.Xrm.Connection
         #region Propriétés
 
         private CrmServiceClient crmSvc;
-
         public AuthenticationProviderType AuthType { get; set; }
 
         /// <summary>
@@ -40,6 +41,11 @@ namespace McTools.Xrm.Connection
         public string CrmTicket { get; set; }
 
         /// <summary>
+        /// Gets or sets custom information for use by consuming application
+        /// </summary>
+        public Dictionary<string, string> CustomInformation { get; set; }
+
+        /// <summary>
         /// Gets or sets the Home realm url for ADFS authentication
         /// </summary>
         public string HomeRealmUrl { get; set; }
@@ -55,6 +61,8 @@ namespace McTools.Xrm.Connection
         /// Get or set the organization name
         /// </summary>
         public string Organization { get; set; }
+
+        public string OrganizationDataServiceUrl { get; set; }
 
         /// <summary>
         /// Get or set the organization friendly name
@@ -173,6 +181,8 @@ namespace McTools.Xrm.Connection
                 return crmSvc;
             }
 
+            return new CrmServiceClient(GetOrganizationCrmConnectionString());
+
             if (UseOnline)
             {
                 crmSvc = ConnectOnline(UseOsdp);
@@ -212,7 +222,9 @@ namespace McTools.Xrm.Connection
 
             if (!crmSvc.IsReady)
             {
-                throw new Exception(crmSvc.LastCrmError);
+                var error = crmSvc.LastCrmError;
+                crmSvc = null;
+                throw new Exception(error);
             }
 
             return crmSvc;
@@ -377,6 +389,10 @@ namespace McTools.Xrm.Connection
                     region = "SouthAmerica";
                     break;
 
+                case "crm3":
+                    region = "Canada";
+                    break;
+
                 case "crm4":
                     region = "EMEA";
                     break;
@@ -393,6 +409,10 @@ namespace McTools.Xrm.Connection
                     region = "Japan";
                     break;
 
+                case "crm8":
+                    region = "India";
+                    break;
+
                 case "crm9":
                     region = "NorthAmerica2";
                     break;
@@ -404,7 +424,8 @@ namespace McTools.Xrm.Connection
         private string GetOrganizationCrmConnectionString()
         {
             DbConnectionStringBuilder dbcb = new DbConnectionStringBuilder();
-            dbcb.Add("Url", OrganizationServiceUrl.Replace("/XRMServices/2011/Organization.svc", ""));
+            //dbcb.Add("Url", OrganizationServiceUrl.Replace("/XRMServices/2011/Organization.svc", ""));
+            dbcb.Add("Url", !string.IsNullOrEmpty(OriginalUrl) ? OriginalUrl : WebApplicationUrl);
 
             if (IsCustomAuth)
             {
@@ -441,24 +462,25 @@ namespace McTools.Xrm.Connection
                 dbcb.Add("Password", decryptedPassword);
             }
 
-            if (UseOnline)
-            {
-                ClientCredentials deviceCredentials;
+            // Online CTP is deprecated
+            //if (UseOnline)
+            //{
+            //    ClientCredentials deviceCredentials;
 
-                do
-                {
-                    deviceCredentials = DeviceIdManager.LoadDeviceCredentials() ??
-                                        DeviceIdManager.RegisterDevice();
-                } while (deviceCredentials.UserName.Password.Contains(";")
-                         || deviceCredentials.UserName.Password.Contains("=")
-                         || deviceCredentials.UserName.Password.Contains(" ")
-                         || deviceCredentials.UserName.UserName.Contains(";")
-                         || deviceCredentials.UserName.UserName.Contains("=")
-                         || deviceCredentials.UserName.UserName.Contains(" "));
+            //    do
+            //    {
+            //        deviceCredentials = DeviceIdManager.LoadDeviceCredentials() ??
+            //                            DeviceIdManager.RegisterDevice();
+            //    } while (deviceCredentials.UserName.Password.Contains(";")
+            //             || deviceCredentials.UserName.Password.Contains("=")
+            //             || deviceCredentials.UserName.Password.Contains(" ")
+            //             || deviceCredentials.UserName.UserName.Contains(";")
+            //             || deviceCredentials.UserName.UserName.Contains("=")
+            //             || deviceCredentials.UserName.UserName.Contains(" "));
 
-                dbcb.Add("DeviceID", deviceCredentials.UserName.UserName);
-                dbcb.Add("DevicePassword", deviceCredentials.UserName.Password);
-            }
+            //    dbcb.Add("DeviceID", deviceCredentials.UserName.UserName);
+            //    dbcb.Add("DevicePassword", deviceCredentials.UserName.Password);
+            //}
 
             if (UseIfd && !string.IsNullOrEmpty(HomeRealmUrl))
             {
@@ -468,12 +490,12 @@ namespace McTools.Xrm.Connection
             //append timeout in seconds to connectionstring
             dbcb.Add("Timeout", Timeout.ToString(@"hh\:mm\:ss"));
 
+            dbcb.Add("AuthType", UseOsdp ? "Office365" : (UseIfd ? "IFD" : "AD"));
+
             return dbcb.ToString();
         }
 
         #endregion Méthodes
-
-        public string OrganizationDataServiceUrl { get; set; }
 
         public object Clone()
         {
@@ -513,20 +535,20 @@ namespace McTools.Xrm.Connection
             detail.userPassword = userPassword;
         }
 
-        public bool IsConnectionBrokenWithUpdatedData(ConnectionDetail updatedDetail)
+        public bool IsConnectionBrokenWithUpdatedData(ConnectionDetail originalDetail)
         {
-            if (updatedDetail.HomeRealmUrl != HomeRealmUrl
-               || updatedDetail.IsCustomAuth != IsCustomAuth
-               || updatedDetail.Organization != Organization
-               || updatedDetail.ServerName.ToLower() != ServerName.ToLower()
-               || updatedDetail.ServerPort != ServerPort
-               || updatedDetail.UseIfd != UseIfd
-               || updatedDetail.UseOnline != UseOnline
-               || updatedDetail.UseOsdp != UseOsdp
-               || updatedDetail.UseSsl != UseSsl
-               || updatedDetail.UserDomain.ToLower() != UserDomain.ToLower()
-               || updatedDetail.UserName.ToLower() != UserName.ToLower()
-               || (!SavePassword && !string.IsNullOrEmpty(updatedDetail.userPassword) && updatedDetail.userPassword != userPassword))
+            if (originalDetail.HomeRealmUrl != HomeRealmUrl
+               || originalDetail.IsCustomAuth != IsCustomAuth
+               || originalDetail.Organization != Organization
+               || originalDetail.ServerName.ToLower() != ServerName.ToLower()
+               || originalDetail.ServerPort != ServerPort
+               || originalDetail.UseIfd != UseIfd
+               || originalDetail.UseOnline != UseOnline
+               || originalDetail.UseOsdp != UseOsdp
+               || originalDetail.UseSsl != UseSsl
+               || originalDetail.UserDomain.ToLower() != UserDomain.ToLower()
+               || originalDetail.UserName.ToLower() != UserName.ToLower()
+               || (SavePassword && !string.IsNullOrEmpty(userPassword) && originalDetail.userPassword != userPassword))
             {
                 return true;
             }
@@ -577,7 +599,17 @@ namespace McTools.Xrm.Connection
                     new XElement("HomeRealmUrl", HomeRealmUrl),
                     new XElement("Timeout", TimeoutTicks),
                     new XElement("WebApplicationUrl", WebApplicationUrl),
-                    new XElement("LastUsedOn", LastUsedOn.ToString(CultureInfo.InvariantCulture.DateTimeFormat)));
+                    new XElement("LastUsedOn", LastUsedOn.ToString(CultureInfo.InvariantCulture.DateTimeFormat)),
+                    GetCustomInfoXElement());
+        }
+
+        private XElement GetCustomInfoXElement()
+        {
+            if (CustomInformation == null)
+            {
+                return null;
+            }
+            return new XElement("CustomInformation", CustomInformation.Select(i => new XElement(i.Key, i.Value)));
         }
     }
 }
