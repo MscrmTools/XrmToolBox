@@ -348,29 +348,30 @@ namespace McTools.Xrm.Connection
             {
                 var service = detail.GetCrmServiceClient();
 
-                //var service = (OrganizationService)detail.GetOrganizationService();
+                // The connection did not succeeded
+                if (!service.IsReady)
+                {
+                    // If the connection really failed, the service has no endpoints
+                    if (service.ConnectedOrgPublishedEndpoints == null)
+                    {
+                        throw new Exception(service.LastCrmError);
+                    }
 
-                //((OrganizationServiceProxy)service.InnerService).SdkClientVersion = detail.OrganizationVersion;
+                    // When the configuration seems to be wrong, endpoints are available
+                    // so we can check if there is a difference between what the user
+                    // specified for connection.
+                    var returnedWebAppUrl = service.ConnectedOrgPublishedEndpoints[EndpointType.WebApplication];
+                    if (detail.OriginalUrl.ToLower().IndexOf(returnedWebAppUrl.ToLower(), StringComparison.Ordinal) < 0)
+                    {
+                        string message =
+                            "It seems that the connection information your provided are different from the one configured in your CRM deployment. Please review your connection information or contact your system administrator to ensure Microsoft Dynamics CRM is properly configured";
 
-                TestConnection(service.OrganizationServiceProxy);
+                        throw new Exception(string.Format("{0}{1}{1}{2}", service.LastCrmError, Environment.NewLine, message));
+                    }
+                }
 
-                //// If the current connection detail does not contain the web
-                //// application url, we search for it
-                //if (string.IsNullOrEmpty(detail.WebApplicationUrl) || string.IsNullOrEmpty(detail.OrganizationDataServiceUrl))
-                //{
-                //    var discoService = (DiscoveryService)detail.GetDiscoveryService();
-                //    var result = (RetrieveOrganizationResponse)discoService.Execute(new RetrieveOrganizationRequest { UniqueName = detail.Organization });
-                //    detail.WebApplicationUrl = result.Detail.Endpoints[EndpointType.WebApplication];
-                //    detail.OrganizationDataServiceUrl = result.Detail.Endpoints[EndpointType.OrganizationDataService];
-                //}
                 detail.WebApplicationUrl = service.ConnectedOrgPublishedEndpoints[EndpointType.WebApplication];
                 detail.OrganizationDataServiceUrl = service.ConnectedOrgPublishedEndpoints[EndpointType.OrganizationDataService];
-
-                // We search for organization version
-                //var vRequest = new RetrieveVersionRequest();
-                //var vResponse = (RetrieveVersionResponse)service.Execute(vRequest);
-
-                //detail.OrganizationVersion = vResponse.Version;
                 detail.OrganizationVersion = service.ConnectedOrgVersion.ToString();
 
                 var currentConnection = ConnectionsList.Connections.FirstOrDefault(x => x.ConnectionId == detail.ConnectionId);

@@ -122,7 +122,7 @@
             this.btnReset.Margin = new System.Windows.Forms.Padding(2);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(67, 23);
-            this.btnReset.TabIndex = 11;
+            this.btnReset.TabIndex = 8;
             this.btnReset.Text = "Reset";
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
@@ -133,7 +133,7 @@
             this.btnBack.Margin = new System.Windows.Forms.Padding(2);
             this.btnBack.Name = "btnBack";
             this.btnBack.Size = new System.Drawing.Size(67, 23);
-            this.btnBack.TabIndex = 12;
+            this.btnBack.TabIndex = 9;
             this.btnBack.Text = "Back";
             this.btnBack.UseVisualStyleBackColor = true;
             this.btnBack.Click += new System.EventHandler(this.btnBack_Click);
@@ -165,13 +165,13 @@
             this.txtHomeRealm.Margin = new System.Windows.Forms.Padding(2);
             this.txtHomeRealm.Name = "txtHomeRealm";
             this.txtHomeRealm.Size = new System.Drawing.Size(545, 22);
-            this.txtHomeRealm.TabIndex = 10;
+            this.txtHomeRealm.TabIndex = 7;
             // 
             // rbIfdNo
             // 
             this.rbIfdNo.AutoSize = true;
             this.rbIfdNo.Checked = true;
-            this.rbIfdNo.Location = new System.Drawing.Point(413, 1);
+            this.rbIfdNo.Location = new System.Drawing.Point(369, 1);
             this.rbIfdNo.Margin = new System.Windows.Forms.Padding(2);
             this.rbIfdNo.Name = "rbIfdNo";
             this.rbIfdNo.Size = new System.Drawing.Size(40, 17);
@@ -183,11 +183,11 @@
             // rbIfdYes
             // 
             this.rbIfdYes.AutoSize = true;
-            this.rbIfdYes.Location = new System.Drawing.Point(369, 1);
+            this.rbIfdYes.Location = new System.Drawing.Point(413, 1);
             this.rbIfdYes.Margin = new System.Windows.Forms.Padding(2);
             this.rbIfdYes.Name = "rbIfdYes";
             this.rbIfdYes.Size = new System.Drawing.Size(40, 17);
-            this.rbIfdYes.TabIndex = 9;
+            this.rbIfdYes.TabIndex = 6;
             this.rbIfdYes.Text = "Yes";
             this.rbIfdYes.UseVisualStyleBackColor = true;
             this.rbIfdYes.CheckedChanged += new System.EventHandler(this.rbIfdYes_CheckedChanged);
@@ -198,7 +198,7 @@
             this.btnValidateIfdInfo.Margin = new System.Windows.Forms.Padding(2);
             this.btnValidateIfdInfo.Name = "btnValidateIfdInfo";
             this.btnValidateIfdInfo.Size = new System.Drawing.Size(80, 23);
-            this.btnValidateIfdInfo.TabIndex = 13;
+            this.btnValidateIfdInfo.TabIndex = 10;
             this.btnValidateIfdInfo.Text = "Next";
             this.btnValidateIfdInfo.UseVisualStyleBackColor = true;
             this.btnValidateIfdInfo.Click += new System.EventHandler(this.btnValidaIfdInfo_Click);
@@ -547,23 +547,23 @@
             this.lblError.TabIndex = 0;
             this.lblError.Text = "[lblError]";
             // 
-            // Form1
+            // ConnectionWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(563, 212);
             this.Controls.Add(this.pnlHeader);
-            this.Controls.Add(this.pnlConnectAuthentication);
             this.Controls.Add(this.pnlConnectMoreActiveDirectoryInfo);
             this.Controls.Add(this.pnlError);
             this.Controls.Add(this.pnlConnected);
             this.Controls.Add(this.pnlWaiting);
             this.Controls.Add(this.pnlConnectUrl);
+            this.Controls.Add(this.pnlConnectAuthentication);
             this.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "Form1";
+            this.Name = "ConnectionWizard";
             this.ShowIcon = false;
             this.pnlConnectMoreActiveDirectoryInfo.ResumeLayout(false);
             this.pnlConnectMoreActiveDirectoryInfo.PerformLayout();
