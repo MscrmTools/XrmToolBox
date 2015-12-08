@@ -148,12 +148,12 @@
     <EmbeddedResource Include="ConnectionSelector.resx">
       <DependentUpon>ConnectionSelector.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ConnectionWizard.resx">
+      <DependentUpon>ConnectionWizard.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CrmConnectionStatusBar.resx">
       <DependentUpon>CrmConnectionStatusBar.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>ConnectionWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PasswordForm.resx">
       <DependentUpon>PasswordForm.cs</DependentUpon>

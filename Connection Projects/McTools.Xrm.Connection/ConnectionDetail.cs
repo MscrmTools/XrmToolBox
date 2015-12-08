@@ -117,7 +117,7 @@ namespace McTools.Xrm.Connection
         /// Get or set the server port
         /// </summary>
         [DefaultValue(80)]
-        public int ServerPort { get; set; }
+        public int? ServerPort { get; set; }
 
         public CrmServiceClient ServiceClient
         {
@@ -167,6 +167,18 @@ namespace McTools.Xrm.Connection
 
         #endregion Propriétés
 
+        #region Constructeur
+
+        public ConnectionDetail(bool createNewId = false)
+        {
+            if (createNewId)
+            {
+                ConnectionId = Guid.NewGuid();
+            }
+        }
+
+        #endregion Constructeur
+
         #region Méthodes
 
         public void ErasePassword()
@@ -181,7 +193,7 @@ namespace McTools.Xrm.Connection
                 return crmSvc;
             }
 
-            return new CrmServiceClient(GetOrganizationCrmConnectionString());
+            //return new CrmServiceClient(GetOrganizationCrmConnectionString());
 
             if (UseOnline)
             {
