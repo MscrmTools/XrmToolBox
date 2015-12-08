@@ -537,6 +537,10 @@ namespace McTools.Xrm.Connection
 
         public bool IsConnectionBrokenWithUpdatedData(ConnectionDetail originalDetail)
         {
+            if (originalDetail == null)
+            {
+                return true;
+            }
             if (originalDetail.HomeRealmUrl != HomeRealmUrl
                || originalDetail.IsCustomAuth != IsCustomAuth
                || originalDetail.Organization != Organization
