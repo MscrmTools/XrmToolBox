@@ -43,19 +43,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
-	<SpecificVersion>False</SpecificVersion>
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
-		<SpecificVersion>False</SpecificVersion>
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Tooling.Connector">
-	<SpecificVersion>False</SpecificVersion>
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Tooling.CrmConnectControl">
-	<SpecificVersion>False</SpecificVersion>
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Tooling.CrmConnectControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -71,6 +71,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Args\StatusBarMessageEventArgs.cs" />
     <Compile Include="Extensions.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -80,12 +81,13 @@
     <Compile Include="Interfaces\IGitHubPlugin.cs" />
     <Compile Include="Interfaces\IHelpPlugin.cs" />
     <Compile Include="Interfaces\IMessageBusHost.cs" />
+    <Compile Include="Interfaces\IStatusBarMessager.cs" />
     <Compile Include="Interfaces\IXrmToolBoxPluginControl.cs" />
     <Compile Include="Interfaces\IPayPalPlugin.cs" />
     <Compile Include="Interfaces\IPluginMetadata.cs" />
     <Compile Include="Interfaces\IWorkerHost.cs" />
     <Compile Include="Interfaces\IXrmToolBoxPlugin.cs" />
-    <Compile Include="MessageBusEventArgs.cs" />
+    <Compile Include="Args\MessageBusEventArgs.cs" />
     <Compile Include="PluginBase.cs" />
     <Compile Include="PluginControlBase.cs">
       <SubType>UserControl</SubType>
@@ -93,7 +95,7 @@
     <Compile Include="PluginCloseInfo.cs" />
     <Compile Include="PluginNotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestConnectionEventArgs.cs" />
+    <Compile Include="Args\RequestConnectionEventArgs.cs" />
     <Compile Include="UserControls\LargePluginModel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -136,6 +138,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Images\progress.gif" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
