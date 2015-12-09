@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.UserControls;
 using XrmToolBox.Forms;
@@ -109,6 +110,7 @@ namespace XrmToolBox
         private int DisplayPluginControl(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin)
         {
             var tabIndex = 0;
+            Guid pluginControlInstanceId = Guid.NewGuid();
 
             try
             {
@@ -130,6 +132,12 @@ namespace XrmToolBox
                     host.OnOutgoingMessage += MainForm_MessageBroker;
                 }
 
+                var statusBarMessager = pluginControl as IStatusBarMessager;
+                if (statusBarMessager != null)
+                {
+                    statusBarMessager.SendMessageToStatusBar += StatusBarMessager_SendMessageToStatusBar;
+                }
+
                 ((IXrmToolBoxPluginControl)pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
                 ((IXrmToolBoxPluginControl)pluginControl).OnCloseTool += MainForm_OnCloseTool;
 
@@ -144,6 +152,7 @@ namespace XrmToolBox
                 pluginControl.Dock = DockStyle.Fill;
                 pluginControl.Width = newTab.Width;
                 pluginControl.Height = newTab.Height;
+                pluginControl.Tag = pluginControlInstanceId;
 
                 newTab.Controls.Add(pluginControl);
 
@@ -337,6 +346,12 @@ namespace XrmToolBox
                 pluginsModels.Clear();
                 DisplayPlugins(tstxtFilterPlugin.Text);
             }
+        }
+
+        private void StatusBarMessager_SendMessageToStatusBar(object sender, StatusBarMessageEventArgs e)
+        {
+            ccsb.SetMessage(e.Message);
+            ccsb.SetProgress(e.Progress);
         }
     }
 }
