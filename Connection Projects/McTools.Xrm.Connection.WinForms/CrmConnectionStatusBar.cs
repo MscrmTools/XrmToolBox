@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace McTools.Xrm.Connection.WinForms
@@ -37,8 +38,22 @@ namespace McTools.Xrm.Connection.WinForms
             this.BuildConnectionControl();
 
             // Add label that will display information about connection
-            ToolStripLabel informationLabel = new ToolStripLabel();
+            ToolStripStatusLabel informationLabel = new ToolStripStatusLabel
+            {
+                Spring = true,
+                TextAlign = ContentAlignment.MiddleLeft
+            };
+
             this.Items.Add(informationLabel);
+
+            ToolStripProgressBar progress = new ToolStripProgressBar
+            {
+                Minimum = 0,
+                Maximum = 100,
+                Visible = false
+            };
+            this.Items.Add(progress);
+
             base.RenderMode = ToolStripRenderMode.Professional;
         }
 
@@ -86,11 +101,39 @@ namespace McTools.Xrm.Connection.WinForms
         /// <param name="message">Message to display</param>
         public void SetMessage(string message)
         {
-            ToolStripLabel label = (ToolStripLabel)this.Items[1];
+            ToolStripStatusLabel label = (ToolStripStatusLabel)this.Items[1];
 
             MethodInvoker mi = delegate
             {
                 label.Text = message;
+            };
+
+            if (this.InvokeRequired)
+            {
+                this.Invoke(mi);
+            }
+            else
+            {
+                mi();
+            }
+        }
+
+        public void SetProgress(int? percent)
+        {
+            ToolStripProgressBar progress = (ToolStripProgressBar)this.Items[2];
+
+            MethodInvoker mi = delegate
+            {
+                if (percent.HasValue)
+                {
+                    progress.Value = percent.Value;
+                    progress.Visible = true;
+                }
+                else
+                {
+                    progress.Value = 0;
+                    progress.Visible = false;
+                }
             };
 
             if (this.InvokeRequired)

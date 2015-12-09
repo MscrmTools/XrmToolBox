@@ -7,11 +7,12 @@ using Microsoft.Crm.Sdk.Messages;
 using System;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SampleTool
 {
-    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin
+    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin, IStatusBarMessager
     {
         #region Base tool implementation
 
@@ -19,6 +20,8 @@ namespace MsCrmTools.SampleTool
         {
             InitializeComponent();
         }
+
+        public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
 
         public void ProcessWhoAmI()
         {
@@ -47,6 +50,10 @@ namespace MsCrmTools.SampleTool
                 {
                     // If progress has to be notified to user, use the following method:
                     //SetWorkingMessage("Message to display");
+
+                    // If progress has to be notified to user, through the
+                    // status bar, use the following method
+                    //SendMessageToStatusBar(this, new StatusBarMessageEventArgs(50, "progress at 50%"));
                 },
                 null,
                 true,
