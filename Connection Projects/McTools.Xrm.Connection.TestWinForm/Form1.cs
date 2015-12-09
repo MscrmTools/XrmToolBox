@@ -129,10 +129,23 @@ namespace McTools.Xrm.Connection.TestWinForm
 
         private void WhoAmI()
         {
-            WhoAmIRequest request = new WhoAmIRequest();
-            WhoAmIResponse response = (WhoAmIResponse)this.service.Execute(request);
+            int i = 0;
 
-            MessageBox.Show(this, "Your ID is: " + response.UserId.ToString("B"));
+            do
+            {
+                WhoAmIRequest request = new WhoAmIRequest();
+                WhoAmIResponse response = (WhoAmIResponse)this.service.Execute(request);
+
+                i++;
+
+                ccsb.SetMessage("Doing...");
+                ccsb.SetProgress(i * 2);
+            } while (i < 50);
+
+            ccsb.SetMessage("Done");
+            ccsb.SetProgress(null);
+
+            //MessageBox.Show(this, "Your ID is: " + response.UserId.ToString("B"));
         }
 
         #endregion WhoAmI Sample methods

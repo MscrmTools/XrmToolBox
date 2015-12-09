@@ -19,6 +19,7 @@ namespace DamSim.SolutionTransferTool
         #region Variables
 
         private int currentsColumnOrder;
+        private ConnectionDetail detail;
         private Guid importId;
         private Panel infoPanel;
         private IOrganizationService service;
@@ -53,6 +54,7 @@ namespace DamSim.SolutionTransferTool
 
         public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName = "", object parameter = null)
         {
+            this.detail = detail;
             if (actionName == "TargetOrganization")
             {
                 targetService = newService;
@@ -345,6 +347,16 @@ namespace DamSim.SolutionTransferTool
         {
             if (lstSourceSolutions.SelectedItems.Count == 1 && targetService != null)
             {
+                if (detail != null && detail.OrganizationMajorVersion == 8)
+                {
+                    if (DialogResult.No == MessageBox.Show(ParentForm,
+                            "This plugin has not been tested with CRM 2016 yet, especially regarding new solution framework\r\n\r\nAre you sure you want to continue?",
+                            "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                    {
+                        return;
+                    }
+                }
+
                 importId = Guid.NewGuid();
 
                 var item = lstSourceSolutions.SelectedItems[0];

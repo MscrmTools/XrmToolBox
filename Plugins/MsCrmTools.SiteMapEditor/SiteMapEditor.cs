@@ -82,6 +82,19 @@ namespace MsCrmTools.SiteMapEditor
             ResetSiteMap("2015SP1");
         }
 
+        private void resetCRM2016SiteMapToDefaultToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ConnectionDetail.OrganizationMajorVersion != 8)
+            {
+                if (DialogResult.No == MessageBox.Show(this,
+                    "Your current organization is not a CRM 2016 organization! Are you sure you want to continue?",
+                    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                    return;
+            }
+
+            ResetSiteMap("2016");
+        }
+
         private void ResetSiteMap(object version)
         {
             if (DialogResult.Yes ==
