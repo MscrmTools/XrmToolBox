@@ -31,29 +31,33 @@ namespace GapConsulting.PowerBIOptionSetAssistant
             tsbDeleteEntity.Enabled = false;
             tsbLoadEntities.Enabled = false;
 
-            WorkAsync("Deleting entity...",
-               (evt) =>
-               {
-                   var mm = new MetadataManager(Service);
-                   var entityExists = mm.EntityExists("gap_powerbioptionsetref");
-                   if (!entityExists)
-                   {
-                       throw new Exception("There is no 'Power BI Option-Set Xref' entity on the connected organization");
-                   }
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Deleting entity...",
+                Work = (bw, evt) =>
+                {
+                    var mm = new MetadataManager(Service);
+                    var entityExists = mm.EntityExists("gap_powerbioptionsetref");
+                    if (!entityExists)
+                    {
+                        throw new Exception(
+                            "There is no 'Power BI Option-Set Xref' entity on the connected organization");
+                    }
 
-                   mm.DeleteEntity("gap_powerbioptionsetref");
-               },
-               (evt) =>
-               {
-                   if (evt.Error != null)
-                   {
-                       MessageBox.Show(this, evt.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                   }
+                    mm.DeleteEntity("gap_powerbioptionsetref");
+                },
+                PostWorkCallBack = evt =>
+                {
+                    if (evt.Error != null)
+                    {
+                        MessageBox.Show(this, evt.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
 
-                   tsbCreateRecords.Enabled = true;
-                   tsbDeleteEntity.Enabled = true;
-                   tsbLoadEntities.Enabled = true;
-               });
+                    tsbCreateRecords.Enabled = true;
+                    tsbDeleteEntity.Enabled = true;
+                    tsbLoadEntities.Enabled = true;
+                }
+            });
         }
 
         public void LoadEntities()
@@ -64,23 +68,29 @@ namespace GapConsulting.PowerBIOptionSetAssistant
             tsbDeleteEntity.Enabled = false;
             tsbLoadEntities.Enabled = false;
 
-            WorkAsync("Loading Entities...",
-                (evt) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading Entities...",
+                Work = (bw, evt) =>
                 {
                     var mm = new MetadataManager(Service);
                     evt.Result = mm.GetEntitiesMetadata();
                 },
-                (evt) =>
+                PostWorkCallBack = evt =>
                 {
                     emc = (EntityMetadataCollection)evt.Result;
 
                     var list = new List<ListViewItem>();
 
-                    foreach (var em in emc.Where(e => e.Attributes.Any(a => a.AttributeType.Value == AttributeTypeCode.Picklist
-                        || a.AttributeType.Value == AttributeTypeCode.State
-                        || a.AttributeType.Value == AttributeTypeCode.Status)))
+                    foreach (var em in emc.Where(e => e.Attributes.Any(
+                        a => a.AttributeType.Value == AttributeTypeCode.Picklist
+                             || a.AttributeType.Value == AttributeTypeCode.State
+                             || a.AttributeType.Value == AttributeTypeCode.Status)))
                     {
-                        var item = new ListViewItem(em.DisplayName == null || em.DisplayName.UserLocalizedLabel == null ? "N/A" : em.DisplayName.UserLocalizedLabel.Label);
+                        var item =
+                            new ListViewItem(em.DisplayName == null || em.DisplayName.UserLocalizedLabel == null
+                                ? "N/A"
+                                : em.DisplayName.UserLocalizedLabel.Label);
                         item.SubItems.Add(em.LogicalName);
                         item.Tag = em;
 
@@ -92,7 +102,8 @@ namespace GapConsulting.PowerBIOptionSetAssistant
                     tsbCreateRecords.Enabled = true;
                     tsbDeleteEntity.Enabled = true;
                     tsbLoadEntities.Enabled = true;
-                });
+                }
+            });
         }
 
         private void CreateRecords(Settings settings)
@@ -187,27 +198,11 @@ namespace GapConsulting.PowerBIOptionSetAssistant
             lv.ListViewItemSorter = new ListViewItemComparer(e.Column, lv.Sorting);
         }
 
-        private void llSelectAllEntities_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            foreach (ListViewItem item in lvEntities.Items)
-            {
-                item.Checked = true;
-            }
-        }
-
         private void llSelectAllOptionSet_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             foreach (ListViewItem item in lvOptionSets.Items)
             {
                 item.Checked = true;
-            }
-        }
-
-        private void llSelectNoEntity_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            foreach (ListViewItem item in lvEntities.Items)
-            {
-                item.Checked = false;
             }
         }
 
@@ -276,8 +271,11 @@ namespace GapConsulting.PowerBIOptionSetAssistant
             tsbDeleteEntity.Enabled = false;
             tsbLoadEntities.Enabled = false;
 
-            WorkAsync("Initializing...",
-                (bw, evt) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Initializing...",
+                AsyncArgument = settings,
+                Work = (bw, evt) =>
                 {
                     if (((Settings)evt.Argument).CreateEntity)
                     {
@@ -291,17 +289,17 @@ namespace GapConsulting.PowerBIOptionSetAssistant
 
                     CreateRecords(settings);
                 },
-                evt =>
+                ProgressChanged = evt =>
+                {
+                    SetWorkingMessage(evt.UserState.ToString());
+                },
+                PostWorkCallBack = evt =>
                 {
                     tsbCreateRecords.Enabled = true;
                     tsbDeleteEntity.Enabled = true;
                     tsbLoadEntities.Enabled = true;
-                },
-                evt =>
-                {
-                    SetWorkingMessage(evt.UserState.ToString());
-                },
-                settings);
+                }
+            });
         }
 
         private void tsbDeleteEntity_Click(object sender, EventArgs e)
