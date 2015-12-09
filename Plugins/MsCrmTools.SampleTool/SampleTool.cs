@@ -25,28 +25,24 @@ namespace MsCrmTools.SampleTool
 
         public void ProcessWhoAmI()
         {
-            WorkAsync("Retrieving your user id...", (w, e) =>
+            WorkAsync(new WorkAsyncInfo
             {
-                while (e.Cancel == false)
+                Message = "Retrieving your user id...",
+                Work = (w, e) =>
                 {
-                    if (w.CancellationPending)
+                    while (e.Cancel == false)
                     {
-                        e.Cancel = true;
-                    }
-                    var request = new WhoAmIRequest();
-                    var response = (WhoAmIResponse)Service.Execute(request);
+                        if (w.CancellationPending)
+                        {
+                            e.Cancel = true;
+                        }
+                        var request = new WhoAmIRequest();
+                        var response = (WhoAmIResponse)Service.Execute(request);
 
-                    e.Result = response.UserId;
-                }
-            },
-                e =>
-                {
-                    if (!e.Cancelled)
-                    {
-                        MessageBox.Show(string.Format("You are {0}", (Guid)e.Result));
+                        e.Result = response.UserId;
                     }
                 },
-                e =>
+                ProgressChanged = e =>
                 {
                     // If progress has to be notified to user, use the following method:
                     //SetWorkingMessage("Message to display");
@@ -55,10 +51,18 @@ namespace MsCrmTools.SampleTool
                     // status bar, use the following method
                     //SendMessageToStatusBar(this, new StatusBarMessageEventArgs(50, "progress at 50%"));
                 },
-                null,
-                true,
-                340,
-                150);
+                PostWorkCallBack = e =>
+                {
+                    if (!e.Cancelled)
+                    {
+                        MessageBox.Show(string.Format("You are {0}", (Guid)e.Result));
+                    }
+                },
+                AsyncArgument = null,
+                IsCancelable = true,
+                MessageWidth = 340,
+                MessageHeight = 150
+            });
         }
 
         private void BtnCloseClick(object sender, EventArgs e)
