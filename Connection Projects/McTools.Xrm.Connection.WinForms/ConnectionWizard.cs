@@ -67,6 +67,13 @@ namespace McTools.Xrm.Connection.WinForms
         {
             visitedPath.Remove(visitedPath.Last());
 
+            if (visitedPath.Count == 0)
+            {
+                visitedPath.Add(pnlConnectUrl.Name);
+                DisplayPanel(pnlConnectUrl);
+                return;
+            }
+
             foreach (var ctrl in Controls)
             {
                 var pnl = ctrl as Panel;
@@ -106,6 +113,11 @@ namespace McTools.Xrm.Connection.WinForms
                 MessageBox.Show(Resources.ConnectionWizard_InvalidUrl);
                 return;
             }
+
+            txtOrganizationUrl.Text = txtOrganizationUrl.Text.Trim();
+            txtOrganizationUrl.Text = txtOrganizationUrl.Text.EndsWith("/")
+                ? txtOrganizationUrl.Text.Remove(txtOrganizationUrl.Text.Length - 1, 1)
+                : txtOrganizationUrl.Text;
 
             updatedDetail.OriginalUrl = txtOrganizationUrl.Text.ToLower();
 
