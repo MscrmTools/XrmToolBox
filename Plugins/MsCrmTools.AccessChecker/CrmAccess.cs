@@ -52,7 +52,7 @@ namespace MsCrmTools.AccessChecker
             feStatus.AddCondition(ceStatus);
 
             var qe = new QueryExpression("systemuser");
-            qe.ColumnSet = new ColumnSet("systemuserid", "fullname", "lastname", "firstname");
+            qe.ColumnSet = new ColumnSet("systemuserid", "fullname", "lastname", "firstname", "domainname", "businessunitid");
             qe.AddOrder("lastname", OrderType.Ascending);
             qe.Criteria = new FilterExpression();
             qe.Criteria.Filters.Add(new FilterExpression());
@@ -83,10 +83,12 @@ namespace MsCrmTools.AccessChecker
                     var ce = new ConditionExpression("fullname", ConditionOperator.Like, value.Replace("*", "%"));
                     var ce2 = new ConditionExpression("firstname", ConditionOperator.Like, value.Replace("*", "%"));
                     var ce3 = new ConditionExpression("lastname", ConditionOperator.Like, value.Replace("*", "%"));
+                    var ce4 = new ConditionExpression("domainname", ConditionOperator.Like, value.Replace("*", "%"));
 
                     qe.Criteria.Filters[0].Filters[1].AddCondition(ce);
                     qe.Criteria.Filters[0].Filters[1].AddCondition(ce2);
                     qe.Criteria.Filters[0].Filters[1].AddCondition(ce3);
+                    qe.Criteria.Filters[0].Filters[1].AddCondition(ce4);
                 }
             }
 

@@ -40,6 +40,8 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.txtSearchFilter = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // button_Validate
@@ -90,7 +92,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvUsers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
-            this.columnHeader2});
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4});
             this.lvUsers.FullRowSelect = true;
             this.lvUsers.Location = new System.Drawing.Point(12, 40);
             this.lvUsers.MultiSelect = false;
@@ -142,6 +146,16 @@
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.ButtonSearchClick);
             // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "User Name";
+            this.columnHeader3.Width = 150;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Business Unit";
+            this.columnHeader4.Width = 130;
+            // 
             // CrmUserPickerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -178,5 +192,7 @@
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnHeader4;
     }
 }

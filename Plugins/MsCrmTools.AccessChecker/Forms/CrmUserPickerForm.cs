@@ -62,6 +62,8 @@ namespace MsCrmTools.AccessChecker.Forms
             {
                 var item = new ListViewItem(user.GetAttributeValue<string>("lastname")) { Tag = user.Id };
                 item.SubItems.Add(user.GetAttributeValue<string>("firstname"));
+                item.SubItems.Add(user.GetAttributeValue<string>("domainname"));
+                item.SubItems.Add(user.GetAttributeValue<EntityReference>("businessunitid").Name);
                 item.ImageIndex = 0;
                 lvUsers.Items.Add(item);
             }
