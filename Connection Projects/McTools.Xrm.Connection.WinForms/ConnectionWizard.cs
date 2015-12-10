@@ -70,7 +70,7 @@ namespace McTools.Xrm.Connection.WinForms
             if (visitedPath.Count == 0)
             {
                 visitedPath.Add(pnlConnectUrl.Name);
-                DisplayPanel(pnlConnectUrl);
+                DisplayPanel(pnlConnectUrl, btnGo);
                 return;
             }
 
@@ -171,7 +171,7 @@ namespace McTools.Xrm.Connection.WinForms
 
                     txtDomain.Enabled = false;
                     lblDescription.Text = Resources.ConnectionWizard_CredentialsHeaderDescription;
-                    DisplayPanel(pnlConnectAuthentication);
+                    DisplayPanel(pnlConnectAuthentication, btnConnect);
 
                     if (txtDomain.Enabled)
                     {
@@ -189,7 +189,7 @@ namespace McTools.Xrm.Connection.WinForms
                     visitedPath.Add(pnlConnectMoreActiveDirectoryInfo.Name);
 
                     lblDescription.Text = Resources.ConnectionWizard_IfdSelectionHeaderDescription;
-                    DisplayPanel(pnlConnectMoreActiveDirectoryInfo);
+                    DisplayPanel(pnlConnectMoreActiveDirectoryInfo, btnValidateIfdInfo);
                     rbIfdNo.Focus();
                 }
             }
@@ -200,13 +200,13 @@ namespace McTools.Xrm.Connection.WinForms
                     if (updatedDetail.IsConnectionBrokenWithUpdatedData(originalDetail))
                     {
                         lblDescription.Text = Resources.ConnectionWizard_ConnectingHeaderDescription;
-                        DisplayPanel(pnlWaiting);
+                        DisplayPanel(pnlWaiting, null);
                         Connect();
                     }
                     else
                     {
                         lblDescription.Text = Resources.ConnectionWizard_SuccessHeaderDescription;
-                        DisplayPanel(pnlConnected);
+                        DisplayPanel(pnlConnected, btnFinish);
                         txtConnectionName.Focus();
                     }
                 }
@@ -214,7 +214,7 @@ namespace McTools.Xrm.Connection.WinForms
                 {
                     visitedPath.Add(pnlConnectAuthentication.Name);
                     lblDescription.Text = Resources.ConnectionWizard_CredentialsHeaderDescription;
-                    DisplayPanel(pnlConnectAuthentication);
+                    DisplayPanel(pnlConnectAuthentication, btnConnect);
                     if (txtDomain.Enabled)
                     {
                         txtDomain.Focus();
@@ -241,7 +241,7 @@ namespace McTools.Xrm.Connection.WinForms
 
             lblDescription.Text = Resources.ConnectionWizard_EnterUrlHeaderDescription;
             txtOrganizationUrl.Focus();
-            DisplayPanel(pnlConnectUrl);
+            DisplayPanel(pnlConnectUrl, btnGo);
         }
 
         private void btnValidaIfdInfo_Click(object sender, EventArgs e)
@@ -259,7 +259,7 @@ namespace McTools.Xrm.Connection.WinForms
                         Resources.ConnectionWizard_WarningTitle, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     txtOrganizationUrl.Focus();
-                    DisplayPanel(pnlConnectUrl);
+                    DisplayPanel(pnlConnectUrl, btnGo);
                     return;
                 }
 
@@ -272,7 +272,7 @@ namespace McTools.Xrm.Connection.WinForms
                         Resources.ConnectionWizard_WarningTitle, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     txtOrganizationUrl.Focus();
-                    DisplayPanel(pnlConnectUrl);
+                    DisplayPanel(pnlConnectUrl, btnGo);
                     return;
                 }
             }
@@ -282,7 +282,7 @@ namespace McTools.Xrm.Connection.WinForms
                 visitedPath.Add(pnlConnectAuthentication.Name);
                 lblDescription.Text = Resources.ConnectionWizard_CredentialsHeaderDescription;
                 txtDomain.Enabled = !updatedDetail.UseIfd;
-                DisplayPanel(pnlConnectAuthentication);
+                DisplayPanel(pnlConnectAuthentication, btnConnect);
 
                 if (txtDomain.Enabled)
                 {
@@ -296,7 +296,7 @@ namespace McTools.Xrm.Connection.WinForms
             else
             {
                 lblDescription.Text = Resources.ConnectionWizard_ConnectingHeaderDescription;
-                DisplayPanel(pnlWaiting);
+                DisplayPanel(pnlWaiting, null);
 
                 Connect();
             }
@@ -324,7 +324,7 @@ namespace McTools.Xrm.Connection.WinForms
                     lblDescription.Text = Resources.ConnectionWizard_ErrorHeaderDescription;
 
                     lblError.Text = evt.Error.Message;
-                    DisplayPanel(pnlError);
+                    DisplayPanel(pnlError, null);
 
                     return;
                 }
@@ -336,14 +336,14 @@ namespace McTools.Xrm.Connection.WinForms
                     lblDescription.Text = Resources.ConnectionWizard_ErrorHeaderDescription;
 
                     lblError.Text = crmSvc.LastCrmError;
-                    DisplayPanel(pnlError);
+                    DisplayPanel(pnlError, null);
 
                     return;
                 }
 
                 lblDescription.Text = Resources.ConnectionWizard_SuccessHeaderDescription;
 
-                DisplayPanel(pnlConnected);
+                DisplayPanel(pnlConnected, btnFinish);
                 txtConnectionName.Focus();
 
                 serviceClient = crmSvc;
@@ -375,7 +375,7 @@ namespace McTools.Xrm.Connection.WinForms
             if (originalDetail == null)
             {
                 lblDescription.Text = Resources.ConnectionWizard_ConnectingHeaderDescription;
-                DisplayPanel(pnlWaiting);
+                DisplayPanel(pnlWaiting, null);
 
                 Connect();
             }
@@ -385,7 +385,7 @@ namespace McTools.Xrm.Connection.WinForms
                         Resources.ConnectionWizard_QuestionHeaderTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Question))
                 {
                     lblDescription.Text = Resources.ConnectionWizard_ConnectingHeaderDescription;
-                    DisplayPanel(pnlWaiting);
+                    DisplayPanel(pnlWaiting, null);
 
                     Connect();
                 }
@@ -393,7 +393,7 @@ namespace McTools.Xrm.Connection.WinForms
             else
             {
                 lblDescription.Text = Resources.ConnectionWizard_SuccessHeaderDescription;
-                DisplayPanel(pnlConnected);
+                DisplayPanel(pnlConnected, btnFinish);
                 txtConnectionName.Focus();
             }
         }
@@ -408,7 +408,7 @@ namespace McTools.Xrm.Connection.WinForms
         //    return new CrmServiceClient(settings.Username, securePassword, GetOnlineRegion(hostName), orga, true, useSsl, isOffice365: isOffice365);
         //}
 
-        private void DisplayPanel(Panel panel)
+        private void DisplayPanel(Panel panel, Button acceptButton)
         {
             foreach (var ctrl in Controls)
             {
@@ -418,6 +418,7 @@ namespace McTools.Xrm.Connection.WinForms
                     pnl.Visible = pnl == panel;
                 }
             }
+            AcceptButton = acceptButton;
         }
 
         //private void FillConnectionDetailFromControls(ConnectionDetail detail)
