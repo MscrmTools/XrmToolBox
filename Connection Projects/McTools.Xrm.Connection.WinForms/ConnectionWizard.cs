@@ -139,6 +139,11 @@ namespace McTools.Xrm.Connection.WinForms
 
             updatedDetail.ServerName = hostParts[0];
             updatedDetail.ServerPort = hostParts.Length == 2 ? int.Parse(hostParts[1]) : new int?();
+            if (!updatedDetail.ServerPort.HasValue)
+            {
+                updatedDetail.ServerPort = updatedDetail.UseSsl ? 443 : 80;
+            }
+
             updatedDetail.OrganizationUrlName = urlParts.Length > 1 && !urlParts[1].ToLower().StartsWith("main.aspx") ? urlParts[1] : null;
             updatedDetail.IsCustomAuth = !chkUseIntegratedAuthentication.Checked;
 
