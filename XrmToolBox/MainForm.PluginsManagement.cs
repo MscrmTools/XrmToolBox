@@ -350,8 +350,47 @@ namespace XrmToolBox
 
         private void StatusBarMessager_SendMessageToStatusBar(object sender, StatusBarMessageEventArgs e)
         {
-            ccsb.SetMessage(e.Message);
-            ccsb.SetProgress(e.Progress);
+            var currentPlugin = pluginControlStatuses.FirstOrDefault(pcs => pcs.Control == sender);
+            if (currentPlugin == null)
+            {
+                pluginControlStatuses.Add(new PluginControlStatus(
+                    (IXrmToolBoxPluginControl)sender,
+                    e.Progress,
+                    e.Message
+                    ));
+            }
+            else
+            {
+                currentPlugin.Percentage = e.Progress;
+                currentPlugin.Message = e.Message;
+            }
+
+            MethodInvoker mi = delegate
+            {
+                if (tabControl1.SelectedIndex != 0)
+                {
+                    var currentVisibleControl = (IXrmToolBoxPluginControl)tabControl1.SelectedTab.Controls[0];
+                    if (currentVisibleControl == sender)
+                    {
+                        ccsb.SetMessage(e.Message);
+                        ccsb.SetProgress(e.Progress);
+                    }
+                }
+                else
+                {
+                    ccsb.SetMessage(null);
+                    ccsb.SetProgress(null);
+                }
+            };
+
+            if (InvokeRequired)
+            {
+                Invoke(mi);
+            }
+            else
+            {
+                mi();
+            }
         }
     }
 }
