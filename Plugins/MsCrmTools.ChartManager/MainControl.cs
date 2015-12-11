@@ -41,11 +41,13 @@ namespace MsCrmTools.ChartManager
             lvEntities.Items.Clear();
             gbEntities.Enabled = false;
 
-            WorkAsync(new WorkAsyncInfo("Loading entities...", e =>
+            WorkAsync(new WorkAsyncInfo
             {
-                e.Result = MetadataHelper.RetrieveEntities(Service);
-            })
-            {
+                Message = "Loading entities...",
+                Work = (bw, e) =>
+                {
+                    e.Result = MetadataHelper.RetrieveEntities(Service);
+                },
                 PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
@@ -98,12 +100,14 @@ namespace MsCrmTools.ChartManager
                 Cursor = Cursors.WaitCursor;
                 lvCharts.Items.Clear();
 
-                WorkAsync(new WorkAsyncInfo("Loading charts...", evt =>
+                WorkAsync(new WorkAsyncInfo
                 {
-                    evt.Result = ChartHelper.GetChartsByEntity(evt.Argument.ToString(), Service);
-                })
-                {
+                    Message = "Loading charts...",
                     AsyncArgument = entityLogicalName,
+                    Work = (bw, evt) =>
+                    {
+                        evt.Result = ChartHelper.GetChartsByEntity(evt.Argument.ToString(), Service);
+                    },
                     PostWorkCallBack = evt =>
                     {
                         if (evt.Error != null)
@@ -130,12 +134,11 @@ namespace MsCrmTools.ChartManager
 
         public void ProcessFiles(List<string> files)
         {
-            WorkAsync(new WorkAsyncInfo("Analyzing file(s)...", evt =>
+            WorkAsync(new WorkAsyncInfo
             {
-                evt.Result = ChartHelper.AnalyzeFiles((List<string>)evt.Argument, Service);
-            })
-            {
+                Message = "Analyzing file(s)...",
                 AsyncArgument = files,
+                Work = (bw, e) => { e.Result = ChartHelper.AnalyzeFiles((List<string>)e.Argument, Service); },
                 PostWorkCallBack = evt =>
                 {
                     var results = (List<ChartDefinition>)evt.Result;

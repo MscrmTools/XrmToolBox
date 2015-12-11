@@ -141,8 +141,8 @@ namespace MsCrmTools.PrivDiscover
                 clonedItem.Tag = priv;
                 clonedItem.Group =
                     groupName != null
-                    //? ListViewDelegates.GetGroup(lvSelectedPrivileges, groupName)
-                    //: ListViewDelegates.GetGroup(lvSelectedPrivileges, "_Common");
+                        //? ListViewDelegates.GetGroup(lvSelectedPrivileges, groupName)
+                        //: ListViewDelegates.GetGroup(lvSelectedPrivileges, "_Common");
                         ? lvSelectedPrivileges.Groups[groupName]
                         : lvSelectedPrivileges.Groups["_Common"];
 
@@ -193,8 +193,11 @@ namespace MsCrmTools.PrivDiscover
             lvSelectedPrivileges.Items.Clear();
             lvRoles.Items.Clear();
 
-            WorkAsync("Retrieving roles...",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Retrieving roles...",
+                AsyncArgument = null,
+                Work = (bw, e) =>
                 {
                     var rManager = new RolesManager(Service);
                     roles = rManager.GetRoles();
@@ -208,7 +211,7 @@ namespace MsCrmTools.PrivDiscover
                     var mdManager = new MetadataManager(Service);
                     entities = mdManager.GetEntitiesWithPrivileges();
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -222,7 +225,8 @@ namespace MsCrmTools.PrivDiscover
 
                     txtSearch.Enabled = true;
                 },
-                e => SetWorkingMessage(e.UserState.ToString()));
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
+            });
         }
 
         private void TsbCloseClick(object sender, EventArgs e)

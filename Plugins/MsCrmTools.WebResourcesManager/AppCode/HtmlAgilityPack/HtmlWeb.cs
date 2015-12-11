@@ -2,6 +2,7 @@
 
 #region
 
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +13,6 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.Xsl;
-using Microsoft.Win32;
 
 #endregion
 
@@ -24,6 +24,45 @@ namespace HtmlAgilityPack
     public class HtmlWeb
     {
         #region Delegates
+
+        /// <summary>
+        /// Occurs after an HTTP request has been executed.
+        /// </summary>
+        public PostResponseHandler PostResponse;
+
+        /// <summary>
+        /// Occurs before an HTML document is handled.
+        /// </summary>
+        public PreHandleDocumentHandler PreHandleDocument;
+
+        /// <summary>
+        /// Occurs before an HTTP request is executed.
+        /// </summary>
+        public PreRequestHandler PreRequest;
+
+        private static Dictionary<string, string> _mimeTypes;
+
+        private bool _autoDetectEncoding = true;
+
+        private bool _cacheOnly;
+
+        private string _cachePath;
+
+        private bool _fromCache;
+
+        private int _requestDuration;
+
+        private Uri _responseUri;
+
+        private HttpStatusCode _statusCode = HttpStatusCode.OK;
+
+        private int _streamBufferSize = 1024;
+
+        private bool _useCookies;
+
+        private string _userAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:x.x.x) Gecko/20041107 Firefox/x.x";
+
+        private bool _usingCache;
 
         /// <summary>
         /// Represents the method that will handle the PostResponse event.
@@ -43,41 +82,122 @@ namespace HtmlAgilityPack
         #endregion
 
         #region Fields
-
-        private bool _autoDetectEncoding = true;
-        private bool _cacheOnly;
-
-        private string _cachePath;
-        private bool _fromCache;
-        private int _requestDuration;
-        private Uri _responseUri;
-        private HttpStatusCode _statusCode = HttpStatusCode.OK;
-        private int _streamBufferSize = 1024;
-        private bool _useCookies;
-        private bool _usingCache;
-        private string _userAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:x.x.x) Gecko/20041107 Firefox/x.x";
-
-        /// <summary>
-        /// Occurs after an HTTP request has been executed.
-        /// </summary>
-        public PostResponseHandler PostResponse;
-
-        /// <summary>
-        /// Occurs before an HTML document is handled.
-        /// </summary>
-        public PreHandleDocumentHandler PreHandleDocument;
-
-        /// <summary>
-        /// Occurs before an HTTP request is executed.
-        /// </summary>
-        public PreRequestHandler PreRequest;
-
-
         #endregion
 
         #region Static Members
 
-        private static Dictionary<string, string> _mimeTypes;
+        /// <summary>
+        /// Gets or Sets a value indicating if document encoding must be automatically detected.
+        /// </summary>
+        public bool AutoDetectEncoding
+        {
+            get { return _autoDetectEncoding; }
+            set { _autoDetectEncoding = value; }
+        }
+
+        /// <summary>
+        /// Gets or Sets a value indicating whether to get document only from the cache.
+        /// If this is set to true and document is not found in the cache, nothing will be loaded.
+        /// </summary>
+        public bool CacheOnly
+        {
+            get { return _cacheOnly; }
+            set
+            {
+                if ((value) && !UsingCache)
+                {
+                    throw new HtmlWebException("Cache is not enabled. Set UsingCache to true first.");
+                }
+                _cacheOnly = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or Sets the cache path. If null, no caching mechanism will be used.
+        /// </summary>
+        public string CachePath
+        {
+            get { return _cachePath; }
+            set { _cachePath = value; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating if the last document was retrieved from the cache.
+        /// </summary>
+        public bool FromCache
+        {
+            get { return _fromCache; }
+        }
+
+        /// <summary>
+        /// Gets the last request duration in milliseconds.
+        /// </summary>
+        public int RequestDuration
+        {
+            get { return _requestDuration; }
+        }
+
+        /// <summary>
+        /// Gets the URI of the Internet resource that actually responded to the request.
+        /// </summary>
+        public Uri ResponseUri
+        {
+            get { return _responseUri; }
+        }
+
+        /// <summary>
+        /// Gets the last request status.
+        /// </summary>
+        public HttpStatusCode StatusCode
+        {
+            get { return _statusCode; }
+        }
+
+        /// <summary>
+        /// Gets or Sets the size of the buffer used for memory operations.
+        /// </summary>
+        public int StreamBufferSize
+        {
+            get { return _streamBufferSize; }
+            set
+            {
+                if (_streamBufferSize <= 0)
+                {
+                    throw new ArgumentException("Size must be greater than zero.");
+                }
+                _streamBufferSize = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or Sets a value indicating if cookies will be stored.
+        /// </summary>
+        public bool UseCookies
+        {
+            get { return _useCookies; }
+            set { _useCookies = value; }
+        }
+
+        /// <summary>
+        /// Gets or Sets the User Agent HTTP 1.1 header sent on any webrequest
+        /// </summary>
+        public string UserAgent { get { return _userAgent; } set { _userAgent = value; } }
+
+        /// <summary>
+        /// Gets or Sets a value indicating whether the caching mechanisms should be used or not.
+        /// </summary>
+        public bool UsingCache
+        {
+            get { return _cachePath != null && _usingCache; }
+            set
+            {
+                if ((value) && (_cachePath == null))
+                {
+                    throw new HtmlWebException("You need to define a CachePath first.");
+                }
+                _usingCache = value;
+            }
+        }
 
         internal static Dictionary<string, string> MimeTypes
         {
@@ -740,120 +860,6 @@ namespace HtmlAgilityPack
         #endregion
 
         #region Properties
-
-        /// <summary>
-        /// Gets or Sets a value indicating if document encoding must be automatically detected.
-        /// </summary>
-        public bool AutoDetectEncoding
-        {
-            get { return _autoDetectEncoding; }
-            set { _autoDetectEncoding = value; }
-        }
-
-        /// <summary>
-        /// Gets or Sets a value indicating whether to get document only from the cache.
-        /// If this is set to true and document is not found in the cache, nothing will be loaded.
-        /// </summary>
-        public bool CacheOnly
-        {
-            get { return _cacheOnly; }
-            set
-            {
-                if ((value) && !UsingCache)
-                {
-                    throw new HtmlWebException("Cache is not enabled. Set UsingCache to true first.");
-                }
-                _cacheOnly = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or Sets the cache path. If null, no caching mechanism will be used.
-        /// </summary>
-        public string CachePath
-        {
-            get { return _cachePath; }
-            set { _cachePath = value; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating if the last document was retrieved from the cache.
-        /// </summary>
-        public bool FromCache
-        {
-            get { return _fromCache; }
-        }
-
-        /// <summary>
-        /// Gets the last request duration in milliseconds.
-        /// </summary>
-        public int RequestDuration
-        {
-            get { return _requestDuration; }
-        }
-
-        /// <summary>
-        /// Gets the URI of the Internet resource that actually responded to the request.
-        /// </summary>
-        public Uri ResponseUri
-        {
-            get { return _responseUri; }
-        }
-
-        /// <summary>
-        /// Gets the last request status.
-        /// </summary>
-        public HttpStatusCode StatusCode
-        {
-            get { return _statusCode; }
-        }
-
-        /// <summary>
-        /// Gets or Sets the size of the buffer used for memory operations.
-        /// </summary>
-        public int StreamBufferSize
-        {
-            get { return _streamBufferSize; }
-            set
-            {
-                if (_streamBufferSize <= 0)
-                {
-                    throw new ArgumentException("Size must be greater than zero.");
-                }
-                _streamBufferSize = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets or Sets a value indicating if cookies will be stored.
-        /// </summary>
-        public bool UseCookies
-        {
-            get { return _useCookies; }
-            set { _useCookies = value; }
-        }
-
-        /// <summary>
-        /// Gets or Sets the User Agent HTTP 1.1 header sent on any webrequest
-        /// </summary>
-        public string UserAgent { get { return _userAgent; } set { _userAgent = value; } }
-       
-        /// <summary>
-        /// Gets or Sets a value indicating whether the caching mechanisms should be used or not.
-        /// </summary>
-        public bool UsingCache
-        {
-            get { return _cachePath != null && _usingCache; }
-            set
-            {
-                if ((value) && (_cachePath == null))
-                {
-                    throw new HtmlWebException("You need to define a CachePath first.");
-                }
-                _usingCache = value;
-            }
-        }
-
         #endregion
 
         #region Public Methods
@@ -1593,6 +1599,5 @@ namespace HtmlAgilityPack
         }
 
         #endregion
-        
     }
 }

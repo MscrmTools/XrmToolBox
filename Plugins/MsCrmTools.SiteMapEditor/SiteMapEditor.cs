@@ -162,10 +162,11 @@ namespace MsCrmTools.SiteMapEditor
                 {
                     if (Service != null && entityCache == null)
                     {
-                        WorkAsync("Loading Entities...",
-                            (bw, evt) =>
-                            {
-                                // Recherche des métadonnées
+                        WorkAsync(new WorkAsyncInfo
+                        {
+                            Message = "Loading Entities...",
+                            Work = (bw, evt) =>
+                            { // Recherche des métadonnées
                                 entityCache = new List<EntityMetadata>();
                                 webResourcesHtmlCache = new List<Entity>();
 
@@ -206,12 +207,13 @@ namespace MsCrmTools.SiteMapEditor
                                     }
                                 }
                             },
-                            evt =>
+                            PostWorkCallBack = evt =>
                             {
                                 DisplaySiteMap();
                                 EnableControls(true);
                             },
-                            evt => SetWorkingMessage(evt.UserState.ToString()));
+                            ProgressChanged = evt => { SetWorkingMessage(evt.UserState.ToString()); }
+                        });
                     }
                     else
                     {
@@ -792,8 +794,10 @@ namespace MsCrmTools.SiteMapEditor
         {
             EnableControls(false);
 
-            WorkAsync("Loading Entities...",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading Entities...",
+                Work = (bw, e) =>
                 {
                     // Recherche des métadonnées
                     entityCache = new List<EntityMetadata>();
@@ -835,20 +839,23 @@ namespace MsCrmTools.SiteMapEditor
                         }
                     }
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     DisplaySiteMap();
                     EnableControls(true);
                 },
-                e => SetWorkingMessage(e.UserState.ToString()));
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
+            });
         }
 
         public void LoadSiteMap()
         {
             EnableControls(false);
 
-            WorkAsync("Loading SiteMap...",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading SiteMap...",
+                Work = (bw, e) =>
                 {
                     var qe = new QueryExpression("sitemap");
                     qe.ColumnSet = new ColumnSet(true);
@@ -859,13 +866,14 @@ namespace MsCrmTools.SiteMapEditor
                     siteMapDoc = new XmlDocument();
                     siteMapDoc.LoadXml(ec[0]["sitemapxml"].ToString());
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     DisplaySiteMap();
                     EnableControls(true);
                     LoadCrmItems();
                 },
-                e => SetWorkingMessage(e.UserState.ToString()));
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
+            });
         }
 
         #endregion Load SiteMap Methods
@@ -888,8 +896,10 @@ namespace MsCrmTools.SiteMapEditor
 
             EnableControls(false);
 
-            WorkAsync("Updating Sitemap...",
-                e =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Updating Sitemap...",
+                Work = (bw, e) =>
                 {
                     // Build the Xml SiteMap from SiteMap TreeView
                     var doc = new XmlDocument();
@@ -907,7 +917,7 @@ namespace MsCrmTools.SiteMapEditor
                     request.ParameterXml = "<importexportxml><sitemaps><sitemap></sitemap></sitemaps></importexportxml>";
                     Service.Execute(request);
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -924,7 +934,8 @@ namespace MsCrmTools.SiteMapEditor
                         }
                     }
                     EnableControls(true);
-                });
+                }
+            });
         }
 
         #endregion Update SiteMap Methods

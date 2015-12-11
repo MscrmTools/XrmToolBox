@@ -31,8 +31,11 @@ namespace MsCrmTools.ScriptsFinder
             tsbMainFindScripts.Enabled = false;
             tsbExportToCsv.Enabled = false;
 
-            WorkAsync("Loading scripts (this can take a while...)",
-                e =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading scripts (this can take a while...)",
+                AsyncArgument = null,
+                Work = (bw, e) =>
                 {
                     var lScripts = new List<ListViewItem>();
 
@@ -62,12 +65,13 @@ namespace MsCrmTools.ScriptsFinder
 
                     e.Result = lScripts;
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     lvScripts.Items.AddRange(((List<ListViewItem>)e.Result).ToArray());
                     tsbMainFindScripts.Enabled = true;
                     tsbExportToCsv.Enabled = true;
-                });
+                }
+            });
         }
 
         private void LvScriptsColumnClick(object sender, ColumnClickEventArgs e)

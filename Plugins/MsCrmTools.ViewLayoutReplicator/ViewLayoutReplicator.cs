@@ -54,12 +54,14 @@ namespace MsCrmTools.ViewLayoutReplicator
             lvTargetViews.Items.Clear();
             lvSourceViewLayoutPreview.Columns.Clear();
 
-            WorkAsync("Loading entities...",
-                e =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading entities...",
+                Work = (bw, e) =>
                 {
                     e.Result = MetadataHelper.RetrieveEntities(Service);
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -87,7 +89,8 @@ namespace MsCrmTools.ViewLayoutReplicator
                         tsbPublishAll.Enabled = true;
                         tsbSaveViews.Enabled = true;
                     }
-                });
+                }
+            });
         }
 
         private void TsbLoadEntitiesClick(object sender, EventArgs e)
@@ -109,13 +112,16 @@ namespace MsCrmTools.ViewLayoutReplicator
             var targetViews = lvTargetViews.CheckedItems.Cast<ListViewItem>().Select(i => (Entity)i.Tag).ToList();
             var sourceView = (Entity)lvSourceViews.SelectedItems.Cast<ListViewItem>().First().Tag;
 
-            WorkAsync("Saving views...",
-                evt =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Saving views...",
+                AsyncArgument = new object[] { sourceView, targetViews },
+                Work = (bw, evt) =>
                 {
                     var args = (object[])evt.Argument;
                     evt.Result = ViewHelper.PropagateLayout((Entity)args[0], (List<Entity>)args[1], Service);
                 },
-                evt =>
+                PostWorkCallBack = evt =>
                 {
                     if (((List<Tuple<string, string>>)evt.Result).Count > 0)
                     {
@@ -127,8 +133,8 @@ namespace MsCrmTools.ViewLayoutReplicator
                     tsbPublishAll.Enabled = true;
                     tsbSaveViews.Enabled = true;
                     tsbLoadEntities.Enabled = true;
-                },
-                new object[] { sourceView, targetViews });
+                }
+            });
         }
 
         #endregion Save Views
@@ -144,8 +150,11 @@ namespace MsCrmTools.ViewLayoutReplicator
                 tsbSaveViews.Enabled = false;
                 tsbLoadEntities.Enabled = false;
 
-                WorkAsync("Publishing entity...",
-                    evt =>
+                WorkAsync(new WorkAsyncInfo
+                {
+                    Message = "Publishing entity...",
+                    AsyncArgument = lvEntities.SelectedItems[0].Tag,
+                    Work = (bw, evt) =>
                     {
                         var pubRequest = new PublishXmlRequest();
                         pubRequest.ParameterXml = string.Format(@"<importexportxml>
@@ -158,7 +167,7 @@ namespace MsCrmTools.ViewLayoutReplicator
 
                         Service.Execute(pubRequest);
                     },
-                    evt =>
+                    PostWorkCallBack = evt =>
                     {
                         if (evt.Error != null)
                         {
@@ -171,8 +180,8 @@ namespace MsCrmTools.ViewLayoutReplicator
                         tsbPublishAll.Enabled = true;
                         tsbSaveViews.Enabled = true;
                         tsbLoadEntities.Enabled = true;
-                    },
-                    lvEntities.SelectedItems[0].Tag);
+                    }
+                });
             }
         }
 
@@ -335,8 +344,11 @@ namespace MsCrmTools.ViewLayoutReplicator
                 lvSourceViewLayoutPreview.Items.Clear();
                 lvSourceViews.Enabled = false;
 
-                WorkAsync("Loading view layout...",
-                    evt =>
+                WorkAsync(new WorkAsyncInfo
+                {
+                    Message = "Loading view layout...",
+                    AsyncArgument = lvSourceViews.SelectedItems[0].Tag,
+                    Work = (bw, evt) =>
                     {
                         Entity currentSelectedView = (Entity)evt.Argument;
                         string layoutXml = currentSelectedView["layoutxml"].ToString();
@@ -375,7 +387,7 @@ namespace MsCrmTools.ViewLayoutReplicator
 
                         evt.Result = new object[] { headers, item };
                     },
-                    evt =>
+                    PostWorkCallBack = evt =>
                     {
                         if (evt.Error != null)
                         {
@@ -393,8 +405,8 @@ namespace MsCrmTools.ViewLayoutReplicator
 
                         lvSourceViews.SelectedIndexChanged += LvSourceViewsSelectedIndexChanged;
                         lvSourceViews.Enabled = true;
-                    },
-                    lvSourceViews.SelectedItems[0].Tag);
+                    }
+                });
             }
         }
 
@@ -475,13 +487,16 @@ namespace MsCrmTools.ViewLayoutReplicator
             tsbSaveViews.Enabled = false;
             tsbLoadEntities.Enabled = false;
 
-            WorkAsync("Publishing all customizations...",
-                evt =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Publishing all customizations...",
+                AsyncArgument = null,
+                Work = (bw, evt) =>
                 {
                     var pubRequest = new PublishAllXmlRequest();
                     Service.Execute(pubRequest);
                 },
-                evt =>
+                PostWorkCallBack = evt =>
                 {
                     if (evt.Error != null)
                     {
@@ -494,7 +509,8 @@ namespace MsCrmTools.ViewLayoutReplicator
                     tsbPublishAll.Enabled = true;
                     tsbSaveViews.Enabled = true;
                     tsbLoadEntities.Enabled = true;
-                });
+                }
+            });
         }
     }
 }

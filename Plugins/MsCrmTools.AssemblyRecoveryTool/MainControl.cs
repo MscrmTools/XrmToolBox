@@ -77,13 +77,15 @@ namespace MsCrmTools.AssemblyRecoveryTool
 
         public void RetrieveAssemblies()
         {
-            WorkAsync("Loading assemblies...",
-                e =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading assemblies...",
+                Work = (bw, e) =>
                 {
                     var aManager = new AssemblyManager(Service);
                     e.Result = aManager.RetrieveAssemblies();
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     listView_Assemblies.Items.Clear();
 
@@ -99,7 +101,8 @@ namespace MsCrmTools.AssemblyRecoveryTool
 
                         listView_Assemblies.Items.Add(item);
                     }
-                });
+                }
+            });
         }
 
         private void tsbExportToDisk_Click(object sender, EventArgs e)

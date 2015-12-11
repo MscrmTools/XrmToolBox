@@ -71,15 +71,15 @@ namespace MsCrmTools.RoleUpdater
 
                         // Adds the role selection control in main form
                         var ctrl = new RoleSelectionControl(rManager.Roles, settings)
-                                       {
-                                           Width = Width,
-                                           Height = Height - 70,
-                                           Anchor =
+                        {
+                            Width = Width,
+                            Height = Height - 70,
+                            Anchor =
                                                AnchorStyles.Bottom |
                                                AnchorStyles.Left |
                                                AnchorStyles.Right |
                                                AnchorStyles.Top
-                                       };
+                        };
                         pnlSteps.Controls.Add(ctrl);
                         currentStep = 2;
                     }
@@ -231,8 +231,10 @@ namespace MsCrmTools.RoleUpdater
         {
             rManager = new RoleManager(Service);
 
-            WorkAsync("Loading roles...",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading roles...",
+                Work = (bw, e) =>
                 {
                     rManager.LoadRootRoles();
 
@@ -242,7 +244,7 @@ namespace MsCrmTools.RoleUpdater
                     bw.ReportProgress(2, "Loading Entities privileges...");
                     entities = MetadataHelper.GetEntitiesMetadata(Service, EntityFilters.Privileges);
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -259,7 +261,8 @@ namespace MsCrmTools.RoleUpdater
                         BtnResetClick(null, null);
                     }
                 },
-                e => SetWorkingMessage(e.UserState.ToString()));
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
+            });
         }
 
         private void TsbCloseThisTabClick(object sender, EventArgs e)
