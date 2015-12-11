@@ -106,8 +106,11 @@ namespace MsCrmTools.AuditCenter
             tsbChangeSystemAuditStatus.Enabled = false;
             tsbChangeSystemAuditStatus.Image = statusImageList.Images[2];
 
-            WorkAsync("Loading entities...",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading entities...",
+                AsyncArgument = null,
+                Work = (bw, e) =>
                 {
                     emds = MetadataHelper.RetrieveEntities(Service);
 
@@ -121,7 +124,7 @@ namespace MsCrmTools.AuditCenter
 
                     e.Result = orgs[0].GetAttributeValue<bool>("isauditenabled");
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -163,7 +166,11 @@ namespace MsCrmTools.AuditCenter
                     gbAttributes.Enabled = true;
                     tsbChangeSystemAuditStatus.Enabled = true;
                 },
-                e => SetWorkingMessage(e.UserState.ToString()));
+                ProgressChanged = e =>
+                {
+                    SetWorkingMessage(e.UserState.ToString());
+                }
+            });
         }
 
         #endregion Load Entities
@@ -349,8 +356,11 @@ namespace MsCrmTools.AuditCenter
 
         private void TsbChangeSystemAuditStatusClick(object sender, EventArgs e)
         {
-            WorkAsync("Updating audit status...",
-                evt =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Updating audit status...",
+                AsyncArgument = null,
+                Work = (bw, evt) =>
                 {
                     var orgs = Service.RetrieveMultiple(new QueryExpression
                     {
@@ -362,7 +372,7 @@ namespace MsCrmTools.AuditCenter
                     orgs[0]["isauditenabled"] = !auditStatus;
                     Service.Update(orgs[0]);
                 },
-                evt =>
+                PostWorkCallBack = evt =>
                 {
                     if (evt.Error != null)
                     {
@@ -376,7 +386,8 @@ namespace MsCrmTools.AuditCenter
                         tsbChangeSystemAuditStatus.Text = lblStatusStatus.Text == "ON" ? "Deactivate system audit" : "Activate system audit";
                         lblStatusStatus.ForeColor = lblStatusStatus.ForeColor == Color.Green ? Color.Red : Color.Green;
                     }
-                });
+                }
+            });
         }
 
         #endregion Global Audit settings
@@ -393,8 +404,11 @@ namespace MsCrmTools.AuditCenter
             gbAttributes.Enabled = false;
             toolStripMenu.Enabled = false;
 
-            WorkAsync("Updating entities...",
-                (bw, evt) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Updating entities...",
+                AsyncArgument = null,
+                Work = (bw, evt) =>
                 {
                     foreach (EntityInfo ei in entityInfos.OrderBy(entity => entity.Emd.LogicalName))
                     {
@@ -462,7 +476,7 @@ namespace MsCrmTools.AuditCenter
 
                     Service.Execute(publishRequest);
                 },
-                evt =>
+                PostWorkCallBack = evt =>
                 {
                     if (evt.Error != null)
                     {
@@ -477,7 +491,11 @@ namespace MsCrmTools.AuditCenter
                     tsbApplyChanges.Enabled = !((entityInfos.All(ei => ei.Action == ActionState.None) &&
                                           attributeInfos.All(ai => ai.Action == ActionState.None)));
                 },
-                evt => SetWorkingMessage(evt.UserState.ToString()));
+                ProgressChanged = evt =>
+                {
+                    SetWorkingMessage(evt.UserState.ToString());
+                }
+            });
         }
 
         #endregion Apply changes to entities and attributes

@@ -42,8 +42,10 @@ namespace MsCrmTools.SynchronousEventOrderEditor
         {
             tvEvents.Nodes.Clear();
 
-            WorkAsync("Loading Sdk message filters...",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading Sdk message filters...",
+                Work = (bw, e) =>
                 {
                     events = new List<ISynchronousEvent>();
 
@@ -68,7 +70,7 @@ namespace MsCrmTools.SynchronousEventOrderEditor
 
                     events.AddRange(SynchronousWorkflow.RetrievePluginSteps(Service));
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -85,7 +87,8 @@ namespace MsCrmTools.SynchronousEventOrderEditor
                         }
                     }
                 },
-                e => SetWorkingMessage(e.UserState.ToString()));
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
+            });
         }
 
         private void tsbClose_Click(object sender, EventArgs e)
@@ -108,8 +111,10 @@ namespace MsCrmTools.SynchronousEventOrderEditor
                 return;
             }
 
-            WorkAsync("Updating...",
-                (bw, evt) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Updating...",
+                Work = (bw, evt) =>
                 {
                     foreach (var sEvent in events.Where(ev => ev.HasChanged))
                     {
@@ -117,7 +122,7 @@ namespace MsCrmTools.SynchronousEventOrderEditor
                         sEvent.UpdateRank(Service);
                     }
                 },
-                evt =>
+                PostWorkCallBack = evt =>
                 {
                     if (evt.Error != null)
                     {
@@ -125,7 +130,8 @@ namespace MsCrmTools.SynchronousEventOrderEditor
                             MessageBoxIcon.Error);
                     }
                 },
-                evt => SetWorkingMessage(evt.UserState.ToString()));
+                ProgressChanged = evt => { SetWorkingMessage(evt.UserState.ToString()); }
+            });
         }
 
         private void tvEvents_AfterSelect(object sender, TreeViewEventArgs e)

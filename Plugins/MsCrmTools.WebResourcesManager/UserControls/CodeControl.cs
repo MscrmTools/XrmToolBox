@@ -309,7 +309,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             {
                 return Yahoo.Yui.Compressor.JavaScriptCompressor.Compress(originalContent, false, true, false, false, 200);
             }
-            catch (Exception error)
+            catch
             {
                 //MessageBox.Show(ParentForm, "Error while minifying code: " + error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return originalContent;
@@ -319,11 +319,11 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         private void SendSavedMessage()
         {
             var wrueArgs = new WebResourceUpdatedEventArgs
-                                                       {
-                                                           Base64Content = innerContent,
-                                                           IsDirty = (innerContent != originalContent),
-                                                           Type = innerType
-                                                       };
+            {
+                Base64Content = innerContent,
+                IsDirty = (innerContent != originalContent),
+                Type = innerType
+            };
 
             if (WebResourceUpdated != null)
             {

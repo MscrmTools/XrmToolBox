@@ -53,8 +53,10 @@ namespace MsCrmTools.FormParameterManager
 
             SetState(true);
 
-            WorkAsync("Loading forms...",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading forms...",
+                Work = (bw, e) =>
                 {
                     IEnumerable<CrmForm> forms = CrmForm.GetForms(Service, bw);
                     var items = new List<ListViewItem>();
@@ -71,7 +73,7 @@ namespace MsCrmTools.FormParameterManager
 
                     e.Result = items;
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -84,7 +86,8 @@ namespace MsCrmTools.FormParameterManager
 
                     SetState(false);
                 },
-                e => SetWorkingMessage(e.UserState.ToString()));
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
+            });
         }
 
         private void tsbLoadForms_Click(object sender, EventArgs e)
@@ -110,8 +113,11 @@ namespace MsCrmTools.FormParameterManager
             {
                 SetState(true);
 
-                WorkAsync("Creating attribute...",
-                    (bw, evt) =>
+                WorkAsync(new WorkAsyncInfo
+                {
+                    Message = "Creating attribute...",
+                    AsyncArgument = new object[] { pForm.Parameter, lvForms.CheckedItems },
+                    Work = (bw, evt) =>
                     {
                         var parameter = (FormParameter)((object[])evt.Argument)[0];
                         var lvItems = (ListView.CheckedListViewItemCollection)((object[])evt.Argument)[1];
@@ -138,7 +144,7 @@ namespace MsCrmTools.FormParameterManager
 
                         evt.Result = lvItems;
                     },
-                    evt =>
+                    PostWorkCallBack = evt =>
                     {
                         if (evt.Error != null)
                         {
@@ -157,8 +163,8 @@ namespace MsCrmTools.FormParameterManager
 
                         SetState(false);
                     },
-                    evt => SetWorkingMessage(evt.UserState.ToString()),
-                    new object[] { pForm.Parameter, lvForms.CheckedItems });
+                    ProgressChanged = evt => { SetWorkingMessage(evt.UserState.ToString()); }
+                });
             }
         }
 
@@ -177,8 +183,11 @@ namespace MsCrmTools.FormParameterManager
 
             SetState(true);
 
-            WorkAsync("Deleting attribute(s)...",
-                (bw, evt) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Deleting attribute(s)...",
+                AsyncArgument = new object[] { lvParameters.SelectedItems },
+                Work = (bw, evt) =>
                 {
                     var lvItems = (ListView.SelectedListViewItemCollection)((object[])evt.Argument)[0];
                     var formsUpdated = new List<CrmForm>();
@@ -209,7 +218,7 @@ namespace MsCrmTools.FormParameterManager
 
                     evt.Result = formsUpdated;
                 },
-                evt =>
+                PostWorkCallBack = evt =>
                 {
                     if (evt.Error != null)
                     {
@@ -233,8 +242,8 @@ namespace MsCrmTools.FormParameterManager
 
                     SetState(false);
                 },
-                evt => SetWorkingMessage(evt.UserState.ToString()),
-                new object[] { lvParameters.SelectedItems });
+                ProgressChanged = evt => { SetWorkingMessage(evt.UserState.ToString()); }
+            });
         }
 
         #endregion Delete Parameters

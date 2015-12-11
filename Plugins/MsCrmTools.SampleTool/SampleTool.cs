@@ -49,7 +49,8 @@ namespace MsCrmTools.SampleTool
 
                     // If progress has to be notified to user, through the
                     // status bar, use the following method
-                    //SendMessageToStatusBar(this, new StatusBarMessageEventArgs(50, "progress at 50%"));
+                    if (SendMessageToStatusBar != null)
+                        SendMessageToStatusBar(this, new StatusBarMessageEventArgs(50, "progress at 50%"));
                 },
                 PostWorkCallBack = e =>
                 {

@@ -43,7 +43,7 @@ namespace MsCrmTools.FormRelated.FormLibrariesManager.Forms
             this.scriptDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.bsScript = new System.Windows.Forms.BindingSource(this.components);
             this.functionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Enabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.IsEnabled = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.PassExecutionContext = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Parameters = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.bsFormEvent = new System.Windows.Forms.BindingSource(this.components);
@@ -123,7 +123,7 @@ namespace MsCrmTools.FormRelated.FormLibrariesManager.Forms
             this.gridLineDataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.scriptDataGridViewTextBoxColumn,
             this.functionDataGridViewTextBoxColumn,
-            this.Enabled,
+            this.IsEnabled,
             this.PassExecutionContext,
             this.Parameters});
             this.gridLineDataGridView1.DataSource = this.bsFormEvent;
@@ -174,12 +174,12 @@ namespace MsCrmTools.FormRelated.FormLibrariesManager.Forms
             // 
             // Enabled
             // 
-            this.Enabled.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-            this.Enabled.DataPropertyName = "Enabled";
-            this.Enabled.FillWeight = 126.9036F;
-            this.Enabled.HeaderText = "Enabled";
-            this.Enabled.Name = "Enabled";
-            this.Enabled.Width = 52;
+            this.IsEnabled.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+            this.IsEnabled.DataPropertyName = "Enabled";
+            this.IsEnabled.FillWeight = 126.9036F;
+            this.IsEnabled.HeaderText = "Enabled";
+            this.IsEnabled.Name = "Enabled";
+            this.IsEnabled.Width = 52;
             // 
             // PassExecutionContext
             // 
@@ -234,7 +234,7 @@ namespace MsCrmTools.FormRelated.FormLibrariesManager.Forms
         private System.Windows.Forms.BindingSource bsScript;
         private System.Windows.Forms.DataGridViewComboBoxColumn scriptDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn functionDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn Enabled;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IsEnabled;
         private System.Windows.Forms.DataGridViewCheckBoxColumn PassExecutionContext;
         private System.Windows.Forms.DataGridViewTextBoxColumn Parameters;
     }

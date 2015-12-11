@@ -33,8 +33,10 @@ namespace MsCrmTools.MetadataBrowser
             // Loads listview header column for entities
             ListViewColumnHelper.AddColumnsHeader(entityListView, typeof(EntityMetadataInfo), ListViewColumnsSettings.EntityFirstColumns, lvcSettings.EntitySelectedAttributes, ListViewColumnsSettings.EntityAttributesToIgnore);
 
-            WorkAsync("Loading Entities...",
-                e =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading Entities...",
+                Work = (bw, e) =>
                 {
                     // Search for all entities metadata
                     var request = new RetrieveAllEntitiesRequest { EntityFilters = EntityFilters.Entity };
@@ -45,12 +47,13 @@ namespace MsCrmTools.MetadataBrowser
                     // return listview items
                     e.Result = BuildEntityItems(currentAllMetadata.ToList());
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     entityListView.Items.Clear();
                     // Add listview items to listview
                     entityListView.Items.AddRange(((List<ListViewItem>)e.Result).ToArray());
-                });
+                }
+            });
         }
 
         private void AddSecondarySubItems(Type type, string[] firstColumns, string[] selectedAttributes, object o, ListViewItem item)
@@ -195,20 +198,23 @@ namespace MsCrmTools.MetadataBrowser
 
             var emd = new EntityMetadataInfo((EntityMetadata)entityListView.SelectedItems[0].Tag);
 
-            WorkAsync("Loading Entity...",
-                dwe =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading Entity...",
+                AsyncArgument = emd,
+                Work = (bw, e) =>
                 {
                     var request = new RetrieveEntityRequest
                     {
                         EntityFilters = EntityFilters.All,
-                        LogicalName = ((EntityMetadataInfo)dwe.Argument).LogicalName
+                        LogicalName = ((EntityMetadataInfo)e.Argument).LogicalName
                     };
                     var response = (RetrieveEntityResponse)Service.Execute(request);
-                    dwe.Result = response.EntityMetadata;
+                    e.Result = response.EntityMetadata;
                 },
-                wce =>
+                PostWorkCallBack = e =>
                 {
-                    var emdFull = (EntityMetadata)wce.Result;
+                    var emdFull = (EntityMetadata)e.Result;
 
                     TabPage tab;
                     if (mainTabControl.TabPages.ContainsKey(emd.SchemaName))
@@ -230,8 +236,8 @@ namespace MsCrmTools.MetadataBrowser
                         tab.Controls.Add(epc);
                         mainTabControl.SelectTab(tab);
                     }
-                },
-                emd);
+                }
+            });
         }
 
         private void MainControl_Enter(object sender, EventArgs e)
