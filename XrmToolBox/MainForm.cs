@@ -33,6 +33,7 @@ namespace XrmToolBox
         private FormHelper fHelper;
         private string initialConnectionName;
         private string initialPluginName;
+        private List<PluginControlStatus> pluginControlStatuses;
         private PluginManagerExtended pManager;
         private IOrganizationService service;
 
@@ -51,6 +52,7 @@ namespace XrmToolBox
             InitializeComponent();
 
             pluginsModels = new List<PluginModel>();
+            pluginControlStatuses = new List<PluginControlStatus>();
             ProcessMenuItemsForPlugin();
             MouseWheel += (sender, e) => HomePageTab.Focus();
 
@@ -438,6 +440,21 @@ namespace XrmToolBox
             if (tabControl1.SelectedIndex == 0)
             {
                 tstxtFilterPlugin.Focus();
+            }
+            else
+            {
+                var control = (IXrmToolBoxPluginControl)tabControl1.SelectedTab.Controls[0];
+                var currentPluginStatus = pluginControlStatuses.FirstOrDefault(pcs => pcs.Control == control);
+                if (currentPluginStatus == null)
+                {
+                    ccsb.SetMessage(null);
+                    ccsb.SetProgress(null);
+                }
+                else
+                {
+                    ccsb.SetMessage(currentPluginStatus.Message);
+                    ccsb.SetProgress(currentPluginStatus.Percentage);
+                }
             }
         }
 
