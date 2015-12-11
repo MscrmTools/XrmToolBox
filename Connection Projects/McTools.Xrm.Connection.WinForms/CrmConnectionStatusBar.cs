@@ -41,7 +41,7 @@ namespace McTools.Xrm.Connection.WinForms
             ToolStripStatusLabel informationLabel = new ToolStripStatusLabel
             {
                 Spring = true,
-                TextAlign = ContentAlignment.MiddleLeft
+                TextAlign = ContentAlignment.MiddleRight
             };
 
             this.Items.Add(informationLabel);

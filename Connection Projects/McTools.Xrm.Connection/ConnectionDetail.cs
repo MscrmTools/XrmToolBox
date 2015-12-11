@@ -3,12 +3,10 @@ using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.Common;
 using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Security;
-using System.ServiceModel.Description;
 using System.Xml.Linq;
 
 namespace McTools.Xrm.Connection
@@ -262,10 +260,6 @@ namespace McTools.Xrm.Connection
             }
         }
 
-        //public IOrganizationService GetOrganizationService()
-        //{
-        //    return new OrganizationService(CrmConnection.Parse(GetOrganizationCrmConnectionString()));
-        //}
         /// <summary>
         /// Retourne le nom de la connexion
         /// </summary>
@@ -275,10 +269,6 @@ namespace McTools.Xrm.Connection
             return ConnectionName;
         }
 
-        //public IDiscoveryService GetDiscoveryService()
-        //{
-        //    return new DiscoveryService(CrmConnection.Parse(GetDiscoveryCrmConnectionString()));
-        //}
         public void UpdateAfterEdit(ConnectionDetail editedConnection)
         {
             ConnectionName = editedConnection.ConnectionName;
@@ -315,76 +305,6 @@ namespace McTools.Xrm.Connection
             securePassword.MakeReadOnly();
 
             return new CrmServiceClient(UserName, securePassword, GetOnlineRegion(ServerName), OrganizationUrlName, true, UseSsl, isOffice365: isOffice365);
-        }
-
-        private string GetDiscoveryCrmConnectionString()
-        {
-            DbConnectionStringBuilder dbcb = new DbConnectionStringBuilder();
-            dbcb.Add("Url", string.Format("{0}://{1}:{2}",
-                UseSsl ? "https" : "http",
-                UseIfd ? ServerName : UseOsdp ? "disco." + ServerName : UseOnline ? "dev." + ServerName : ServerName,
-                ServerPort == 0 ? (UseSsl ? 443 : 80) : ServerPort));
-
-            if (IsCustomAuth)
-            {
-                if (!UseIfd)
-                {
-                    if (!string.IsNullOrEmpty(UserDomain))
-                    {
-                        dbcb.Add("Domain", UserDomain);
-                    }
-                }
-
-                string username = UserName;
-                if (UseIfd)
-                {
-                    if (!string.IsNullOrEmpty(UserDomain))
-                    {
-                        username = string.Format("{0}\\{1}", UserDomain, UserName);
-                    }
-                }
-
-                if (string.IsNullOrEmpty(userPassword))
-                {
-                    throw new Exception("User password cannot be null. If the user password is not stored in configuration file, you should request it from the end user");
-                }
-
-                var decryptedPassword = CryptoManager.Decrypt(userPassword, ConnectionManager.CryptoPassPhrase,
-                    ConnectionManager.CryptoSaltValue,
-                    ConnectionManager.CryptoHashAlgorythm,
-                    ConnectionManager.CryptoPasswordIterations,
-                    ConnectionManager.CryptoInitVector,
-                    ConnectionManager.CryptoKeySize);
-
-                dbcb.Add("Username", username);
-                dbcb.Add("Password", decryptedPassword);
-            }
-
-            if (UseOnline && !UseOsdp)
-            {
-                ClientCredentials deviceCredentials;
-
-                do
-                {
-                    deviceCredentials = DeviceIdManager.LoadDeviceCredentials() ??
-                                        DeviceIdManager.RegisterDevice();
-                } while (deviceCredentials.UserName.Password.Contains(";")
-                         || deviceCredentials.UserName.Password.Contains("=")
-                         || deviceCredentials.UserName.Password.Contains(" ")
-                         || deviceCredentials.UserName.UserName.Contains(";")
-                         || deviceCredentials.UserName.UserName.Contains("=")
-                         || deviceCredentials.UserName.UserName.Contains(" "));
-
-                dbcb.Add("DeviceID", deviceCredentials.UserName.UserName);
-                dbcb.Add("DevicePassword", deviceCredentials.UserName.Password);
-            }
-
-            if (UseIfd && !string.IsNullOrEmpty(HomeRealmUrl))
-            {
-                dbcb.Add("HomeRealmUri", HomeRealmUrl);
-            }
-
-            return dbcb.ToString();
         }
 
         private string GetOnlineRegion(string hostname)
@@ -431,80 +351,6 @@ namespace McTools.Xrm.Connection
             }
 
             return region;
-        }
-
-        private string GetOrganizationCrmConnectionString()
-        {
-            DbConnectionStringBuilder dbcb = new DbConnectionStringBuilder();
-            //dbcb.Add("Url", OrganizationServiceUrl.Replace("/XRMServices/2011/Organization.svc", ""));
-            dbcb.Add("Url", !string.IsNullOrEmpty(OriginalUrl) ? OriginalUrl : WebApplicationUrl);
-
-            if (IsCustomAuth)
-            {
-                if (!UseIfd)
-                {
-                    if (!string.IsNullOrEmpty(UserDomain))
-                    {
-                        dbcb.Add("Domain", UserDomain);
-                    }
-                }
-
-                string username = UserName;
-                if (UseIfd)
-                {
-                    if (!string.IsNullOrEmpty(UserDomain))
-                    {
-                        username = string.Format("{0}\\{1}", UserDomain, UserName);
-                    }
-                }
-
-                if (string.IsNullOrEmpty(userPassword))
-                {
-                    throw new Exception("User password cannot be null. If the user password is not stored in configuration file, you should request it from the end user");
-                }
-
-                var decryptedPassword = CryptoManager.Decrypt(userPassword, ConnectionManager.CryptoPassPhrase,
-                   ConnectionManager.CryptoSaltValue,
-                   ConnectionManager.CryptoHashAlgorythm,
-                   ConnectionManager.CryptoPasswordIterations,
-                   ConnectionManager.CryptoInitVector,
-                   ConnectionManager.CryptoKeySize);
-
-                dbcb.Add("Username", username);
-                dbcb.Add("Password", decryptedPassword);
-            }
-
-            // Online CTP is deprecated
-            //if (UseOnline)
-            //{
-            //    ClientCredentials deviceCredentials;
-
-            //    do
-            //    {
-            //        deviceCredentials = DeviceIdManager.LoadDeviceCredentials() ??
-            //                            DeviceIdManager.RegisterDevice();
-            //    } while (deviceCredentials.UserName.Password.Contains(";")
-            //             || deviceCredentials.UserName.Password.Contains("=")
-            //             || deviceCredentials.UserName.Password.Contains(" ")
-            //             || deviceCredentials.UserName.UserName.Contains(";")
-            //             || deviceCredentials.UserName.UserName.Contains("=")
-            //             || deviceCredentials.UserName.UserName.Contains(" "));
-
-            //    dbcb.Add("DeviceID", deviceCredentials.UserName.UserName);
-            //    dbcb.Add("DevicePassword", deviceCredentials.UserName.Password);
-            //}
-
-            if (UseIfd && !string.IsNullOrEmpty(HomeRealmUrl))
-            {
-                dbcb.Add("HomeRealmUri", HomeRealmUrl);
-            }
-
-            //append timeout in seconds to connectionstring
-            dbcb.Add("Timeout", Timeout.ToString(@"hh\:mm\:ss"));
-
-            dbcb.Add("AuthType", UseOsdp ? "Office365" : (UseIfd ? "IFD" : "AD"));
-
-            return dbcb.ToString();
         }
 
         #endregion Méthodes
