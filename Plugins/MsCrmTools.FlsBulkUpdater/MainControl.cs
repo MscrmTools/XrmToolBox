@@ -27,13 +27,15 @@ namespace MsCrmTools.FlsBulkUpdater
 
         public void LoadFls()
         {
-            WorkAsync("Loading Field Security profiles...",
-                (w, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading Field Security profiles...",
+                Work = (bw, e) =>
                 {
                     var flsManager = new FlsManager(Service);
                     profiles = flsManager.LoadSecureProfiles();
 
-                    w.ReportProgress(0, "Loading Secured fields...");
+                    bw.ReportProgress(0, "Loading Secured fields...");
                     fields = flsManager.LoadSecureFields();
 
                     var dico = new Dictionary<string, List<string>>();
@@ -53,7 +55,7 @@ namespace MsCrmTools.FlsBulkUpdater
 
                     metadata = MetadataHelper.LoadMetadata(dico, Service);
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     var fieldsList = new List<ListViewItem>();
                     var profilesList = new List<ListViewItem>();
@@ -89,7 +91,8 @@ namespace MsCrmTools.FlsBulkUpdater
                     lvFlsRoles.Items.AddRange(profilesList.ToArray());
                     LvSecuredAttributes.Items.AddRange(fieldsList.ToArray());
                 },
-                e => SetWorkingMessage(e.UserState.ToString()));
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
+            });
         }
 
         private void ListView_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -150,9 +153,9 @@ namespace MsCrmTools.FlsBulkUpdater
                 }
                 else
                 {
-                    item.SubItems[4].Text = "False";
-                    item.SubItems[5].Text = "False";
-                    item.SubItems[6].Text = "False";
+                    item.SubItems[4].Text = false.ToString();
+                    item.SubItems[5].Text = false.ToString();
+                    item.SubItems[6].Text = false.ToString();
                 }
             }
         }
@@ -201,8 +204,11 @@ namespace MsCrmTools.FlsBulkUpdater
                 us.CanUpdate = CbbUpdate.SelectedIndex == 2;
             }
 
-            WorkAsync("Updating secure fields...",
-                evt =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Updating secure fields...",
+                AsyncArgument = us,
+                Work = (bw, evt) =>
                 {
                     var uSettings = (UpdateSettings)evt.Argument;
 
@@ -230,7 +236,7 @@ namespace MsCrmTools.FlsBulkUpdater
                         field.Update(Service, uSettings.Profiles);
                     }
                 },
-                evt =>
+                PostWorkCallBack = evt =>
                 {
                     if (evt.Error != null)
                     {
@@ -239,8 +245,8 @@ namespace MsCrmTools.FlsBulkUpdater
                     }
 
                     lvFlsRoles_SelectedIndexChanged(null, null);
-                },
-                us);
+                }
+            });
         }
     }
 }

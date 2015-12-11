@@ -42,7 +42,6 @@ namespace MsCrmTools.SiteMapEditor.Controls
         private bool initialSkuSPLA;
         private string initialTitle = "";
         private string initialUrl = "";
-        private bool isCrm2013Area;
         private IOrganizationService service;
 
         #region Delegates
@@ -127,7 +126,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
                     collection.Add("Description", txtSubAreaDescription.Text);
                 if (txtSubAreaTitle.Text.Length > 0)
                     collection.Add("Title", txtSubAreaTitle.Text);
-                if (txtDefaultDashboardId.Text.Length > 0)// && isCrm2013Area)
+                if (txtDefaultDashboardId.Text.Length > 0)
                 {
                     collection.Add("DefaultDashboard", txtDefaultDashboardId.Text);
                 }
@@ -293,7 +292,6 @@ namespace MsCrmTools.SiteMapEditor.Controls
             if (collec.ContainsKey("DefaultDashboard") && collec.ContainsKey("Url") && collec["Url"].ToLower() == "/workplace/home_dashboards.aspx")
             {
                 txtDefaultDashboardId.Text = collec["DefaultDashboard"];
-                isCrm2013Area = true;
             }
             initialEntity = txtSubAreaEntity.Text;
             initialGetStartedPanePath = txtSubAreaGetStartedPanePath.Text;
@@ -306,10 +304,6 @@ namespace MsCrmTools.SiteMapEditor.Controls
             initialDescription = txtSubAreaDescription.Text;
             initialTitle = txtSubAreaTitle.Text;
             initialDefaultDashboard = txtDefaultDashboardId.Text;
-
-            //label4.Enabled = isCrm2013Area;
-            //txtDefaultDashboardId.Enabled = isCrm2013Area;
-            //btnBrowseDashboard.Enabled = isCrm2013Area;
 
             chkSubAreaAvailableOffline.Checked = collec.ContainsKey("AvailableOffline") ? collec["AvailableOffline"].ToLower() == "true" : false;
             chkSubAreaPassParams.Checked = collec.ContainsKey("PassParams") ? collec["PassParams"].ToLower() == "true" : false;
@@ -332,6 +326,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
             initialSkuLive = chkSubAreaSkuLive.Checked;
             initialSkuOnPremise = chkSubAreaSkuOnPremise.Checked;
             initialSkuSPLA = chkSubAreaSkuSPLA.Checked;
+            initialPassParams = chkSubAreaPassParams.Checked;
         }
 
         private void SubAreaControl_Leave(object sender, EventArgs e)
@@ -352,6 +347,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
             initialClientOutlookWorkstationClient != chkSubAreaClientOutlookWorkstationClient.Checked ||
             initialClientWeb != chkSubAreaClientWeb.Checked ||
             initialSkuAll != chkSubAreaSkuAll.Checked ||
+            initialPassParams != chkSubAreaPassParams.Checked ||
             initialSkuLive != chkSubAreaSkuLive.Checked ||
             initialSkuOnPremise != chkSubAreaSkuOnPremise.Checked ||
             initialSkuSPLA != chkSubAreaSkuSPLA.Checked ||

@@ -130,8 +130,11 @@ namespace MsCrmTools.SolutionImport
 
             EnableControls(false);
 
-            WorkAsync("Importing solution...",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Importing solution...",
+                AsyncArgument = iSettings,
+                Work = (bw, e) =>
                 {
                     var settings = (ImportSettings)e.Argument;
 
@@ -151,7 +154,7 @@ namespace MsCrmTools.SolutionImport
                         sManager.PublishAll();
                     }
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -161,8 +164,8 @@ namespace MsCrmTools.SolutionImport
 
                     EnableControls(true);
                 },
-                e => SetWorkingMessage(e.ProgressPercentage <= 100 ? "Importing solution..." : "Publishing solution..."),
-                iSettings);
+                ProgressChanged = e => { SetWorkingMessage(e.ProgressPercentage <= 100 ? "Importing solution..." : "Publishing solution..."); }
+            });
         }
 
         private void TsbCloseThisTabClick(object sender, EventArgs e)

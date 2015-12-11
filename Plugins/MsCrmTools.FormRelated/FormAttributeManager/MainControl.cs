@@ -142,20 +142,23 @@ namespace MsCrmTools.FormAttributeManager
             if (attributeSelector1.SelectedEntity == null)
                 return;
 
-            WorkAsync("Publishing entity...",
-                evt =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Publishing entity...",
+                AsyncArgument = attributeSelector1.SelectedEntity.LogicalName,
+                Work = (bw, evt) =>
                 {
                     var fm = new FormManager(Service);
                     fm.PublishForm(evt.Argument.ToString());
                 },
-                evt =>
+                PostWorkCallBack = evt =>
                 {
                     if (evt.Error != null)
                     {
                         MessageBox.Show(evt.Error.ToString());
                     }
-                },
-                attributeSelector1.SelectedEntity.LogicalName);
+                }
+            });
         }
 
         private void tsbSaveForms_Click(object sender, EventArgs e)
@@ -163,8 +166,11 @@ namespace MsCrmTools.FormAttributeManager
             if (attributeSelector1.SelectedEntity == null)
                 return;
 
-            WorkAsync("Updating forms...",
-                evt =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Updating forms...",
+                AsyncArgument = listView1.Items.Cast<ListViewItem>().Select(i => (FormInfo)i.Tag).ToList(),
+                Work = (bw, evt) =>
                 {
                     var fis = (List<FormInfo>)evt.Argument;
 
@@ -173,7 +179,7 @@ namespace MsCrmTools.FormAttributeManager
                         fi.Update(Service);
                     }
                 },
-                evt =>
+                PostWorkCallBack = evt =>
                 {
                     if (evt.Error != null)
                     {
@@ -183,8 +189,8 @@ namespace MsCrmTools.FormAttributeManager
                     {
                         tslInfo.Visible = false;
                     }
-                },
-                listView1.Items.Cast<ListViewItem>().Select(i => (FormInfo)i.Tag).ToList());
+                }
+            });
         }
 
         private void tsmiDisableFieldDisplay_Click(object sender, EventArgs e)
@@ -367,15 +373,18 @@ namespace MsCrmTools.FormAttributeManager
 
         private void attributeSelector1_OnEntitySelected(object sender, EntitySelectedEventArgs e)
         {
-            WorkAsync("Loading forms...",
-                evt =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading forms...",
+                AsyncArgument = e.Metadata,
+                Work = (bw, evt) =>
                 {
                     var formManager = new FormManager(Service);
                     var forms = formManager.GetAllFormsByTypeCode(((EntityMetadata)evt.Argument).ObjectTypeCode.Value, ConnectionDetail);
                     var items = forms.Select(form => new FormInfo(form)).Select(fi => new ListViewItem(fi.ToString()) { Tag = fi }).ToList();
                     evt.Result = items;
                 },
-                evt =>
+                PostWorkCallBack = evt =>
                 {
                     if (evt.Error != null)
                     {
@@ -389,8 +398,8 @@ namespace MsCrmTools.FormAttributeManager
                         // Adds forms list to attribute selector
                         attributeSelector1.EntityForms = ((List<ListViewItem>)evt.Result).Select(i => (FormInfo)i.Tag).ToList();
                     }
-                },
-                e.Metadata);
+                }
+            });
         }
 
         #endregion Loading Entity Forms

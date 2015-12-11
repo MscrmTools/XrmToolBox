@@ -48,17 +48,13 @@ namespace MsCrmTools.UserRolesManager.AppCode
                              new Relationship(principal.LogicalName + "roles_association"),
                              new EntityReferenceCollection { roleToUse.ToEntityReference() });
                     }
-                    catch (Exception error)
+                    catch
                     {
+                        // ignored
                     }
 
                     current++;
                 }
-                //service.Associate(
-                //    principal.LogicalName,
-                //    principal.Id,
-                //    new Relationship(principal.LogicalName + "roles_association"),
-                //    new EntityReferenceCollection(roles.Select(r => r.ToEntityReference()).ToList()));
             }
         }
 
@@ -194,8 +190,9 @@ namespace MsCrmTools.UserRolesManager.AppCode
                             new Relationship(principal.LogicalName + "roles_association"),
                             new EntityReferenceCollection { roleToUse.ToEntityReference() });
                     }
-                    catch (Exception error)
+                    catch
                     {
+                        // ignored
                     }
 
                     current++;

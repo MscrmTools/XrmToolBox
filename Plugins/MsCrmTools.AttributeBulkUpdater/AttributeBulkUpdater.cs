@@ -104,12 +104,11 @@ namespace MsCrmTools.AttributeBulkUpdater
             tsbPublishEntity.Enabled = false;
             tsbSaveAttributes.Enabled = false;
 
-            WorkAsync("Loading entities...",
-                e =>
-                {
-                    e.Result = MetadataHelper.RetrieveEntities(Service);
-                },
-                e =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading entities...",
+                Work = (bw, e) => { e.Result = MetadataHelper.RetrieveEntities(Service); },
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -129,7 +128,8 @@ namespace MsCrmTools.AttributeBulkUpdater
 
                         gbEntities.Enabled = true;
                     }
-                });
+                }
+            });
         }
 
         private void tsbLoadEntities_Click(object sender, EventArgs e)
@@ -149,8 +149,11 @@ namespace MsCrmTools.AttributeBulkUpdater
 
                 var emd = (EntityMetadata)lvEntities.SelectedItems[0].Tag;
 
-                WorkAsync("Loading attributes...",
-                    evt =>
+                WorkAsync(new WorkAsyncInfo
+                {
+                    Message = "Loading attributes...",
+                    AsyncArgument = emd.LogicalName,
+                    Work = (bw, evt) =>
                     {
                         attributesOriginalState = new Dictionary<string, AttributeMetadata>();
                         EntityMetadata metadata = MetadataHelper.RetrieveEntity(evt.Argument.ToString(), Service);
@@ -191,7 +194,7 @@ namespace MsCrmTools.AttributeBulkUpdater
 
                         evt.Result = items;
                     },
-                    evt =>
+                    PostWorkCallBack = evt =>
                     {
                         if (evt.Error != null)
                         {
@@ -210,8 +213,8 @@ namespace MsCrmTools.AttributeBulkUpdater
                             gbAttributes.Enabled = true;
                             gbPropertySelection.Enabled = true;
                         }
-                    },
-                    emd.LogicalName);
+                    }
+                });
             }
         }
 
@@ -259,8 +262,11 @@ namespace MsCrmTools.AttributeBulkUpdater
                 tsbSaveAttributes.Enabled = false;
                 tsbLoadEntities.Enabled = false;
 
-                WorkAsync("Publishing entities...",
-                    evt =>
+                WorkAsync(new WorkAsyncInfo
+                {
+                    Message = "Publishing entities...",
+                    AsyncArgument = lvEntities.SelectedItems[0].Tag,
+                    Work = (bw, evt) =>
                     {
                         var currentEmd = (EntityMetadata)evt.Argument;
 
@@ -274,7 +280,7 @@ namespace MsCrmTools.AttributeBulkUpdater
 
                         Service.Execute(pubRequest);
                     },
-                    evt =>
+                    PostWorkCallBack = evt =>
                     {
                         if (evt.Error != null)
                         {
@@ -285,8 +291,8 @@ namespace MsCrmTools.AttributeBulkUpdater
                         tsbPublishEntity.Enabled = true;
                         tsbSaveAttributes.Enabled = true;
                         tsbLoadEntities.Enabled = true;
-                    },
-                    lvEntities.SelectedItems[0].Tag);
+                    }
+                });
             }
         }
 
