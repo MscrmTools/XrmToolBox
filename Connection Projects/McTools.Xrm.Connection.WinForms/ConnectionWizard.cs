@@ -154,7 +154,6 @@ namespace McTools.Xrm.Connection.WinForms
                 IPAddress ipa;
                 if (!IPAddress.TryParse(updatedDetail.ServerName, out ipa))
                 {
-                    //orga = hostName.Split('.')[0];
                     updatedDetail.OrganizationUrlName = updatedDetail.ServerName.Split('.')[0];
                 }
 
