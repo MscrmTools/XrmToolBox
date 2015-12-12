@@ -196,6 +196,8 @@ namespace McTools.Xrm.Connection
             if (UseOnline)
             {
                 crmSvc = ConnectOnline(UseOsdp);
+
+                AuthType = AuthenticationProviderType.OnlineFederation;
             }
             else if (UseIfd)
             {
@@ -208,6 +210,8 @@ namespace McTools.Xrm.Connection
 
                 crmSvc = new CrmServiceClient(new NetworkCredential(UserName, password, UserDomain), AuthenticationType.IFD, ServerName, ServerPort.ToString(),
                    OrganizationUrlName, true, UseSsl);
+
+                AuthType = AuthenticationProviderType.Federation;
             }
             else
             {
@@ -228,6 +232,8 @@ namespace McTools.Xrm.Connection
                     credential = new NetworkCredential(UserName, password, UserDomain);
                 }
                 crmSvc = new CrmServiceClient(credential, AuthenticationType.AD, ServerName, ServerPort.ToString(), OrganizationUrlName, true, UseSsl);
+
+                AuthType = AuthenticationProviderType.ActiveDirectory;
             }
 
             if (!crmSvc.IsReady)
