@@ -74,26 +74,61 @@ UpdateDownloads = function (version, published, currentcount, releaselink) {
     });
 };
 
+var totalCountDownload = 0;
+var releasesPage = 1;
+
 UpdateTotalDownloads = function (totalcount) {
     $("#" + totalcount).text("");
-    $.ajax({
-        url: 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/releases',
-        success: function (data) {
+    countReleasesDownloadByPage('https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/releases', totalcount);
+};
+
+countReleasesDownloadByPage = function(link, totalcount){
+        $.ajax({
+        url: link,
+        success: function (data, textStatus, request) {
             if (data && data.length > 0) {
                 var count = 0;
                 $(data).each(function (index) {
                     if (this.prerelease == false && this.assets.length > 0) {
-                        count += this.assets[0].download_count;
+                        totalCountDownload += this.assets[0].download_count;
                     }
                 });
-                if (GH_REPO == "FetchXMLBuilder") {
-                    // Add codeplex count
-                    count += 1010;   // Updated 2015-04-15
-                }
-                $("#" + totalcount).text(count);
+               
+               var headerLink = request.getResponseHeader("link");
+               var parsedHeaderLink = parse_link_header(headerLink);
+               if(parsedHeaderLink.next){
+                   countReleasesDownloadByPage(parsedHeaderLink.next, totalcount);
+               }
+               else{
+                    $("#" + totalcount).text(totalCountDownload);
+               }
             }
         }
     });
+};
+
+parse_link_header = function(header) {
+    
+    if (header.length == 0) {
+        throw new Error("input must not be of zero length");
+    }
+    
+    // Split parts by comma
+    var parts = header.split(',');
+    var links = {};
+    // Parse each part into a named link
+    for(i=0;i<parts.length;i++) {
+        var section = parts[i].split(';');
+        if (section.length != 2) {
+            throw new Error("section could not be split on ';'");
+        }
+       
+        var url = section[0].replace(/<(.*)>/, '$1').trim();
+        var name = section[1].replace(/rel="(.*)"/, '$1').trim();
+        links[name] = url;
+    }
+    
+    return links;
 };
 
 GetLatestDownloadLink = function () {
