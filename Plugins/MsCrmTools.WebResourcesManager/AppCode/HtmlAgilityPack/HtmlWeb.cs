@@ -14,6 +14,8 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Xml.Xsl;
 
+#pragma warning disable 618
+
 #endregion
 
 namespace HtmlAgilityPack

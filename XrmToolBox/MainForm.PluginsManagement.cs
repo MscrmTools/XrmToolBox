@@ -169,18 +169,6 @@ namespace XrmToolBox
 
                 pluginInOption.Count++;
 
-                //var p1 = plugin as SmallPluginModel;
-                //if (p1 != null)
-                //    p1.UpdateCount(pluginInOption.Count);
-                //else
-                //{
-                //    var p2 = plugin as LargePluginModel;
-                //    if (p2 != null)
-                //    {
-                //        p2.UpdateCount(pluginInOption.Count);
-                //    }
-                //}
-
                 if (currentOptions.LastAdvertisementDisplay == new DateTime() ||
                     currentOptions.LastAdvertisementDisplay > DateTime.Now ||
                     currentOptions.LastAdvertisementDisplay.AddDays(7) < DateTime.Now)
@@ -222,7 +210,9 @@ namespace XrmToolBox
 
                 if (currentOptions.AllowLogUsage.HasValue && currentOptions.AllowLogUsage.Value)
                 {
+#pragma warning disable CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
                     LogUsage.DoLog(plugin);
+#pragma warning restore CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
                 }
 
                 currentOptions.Save();
