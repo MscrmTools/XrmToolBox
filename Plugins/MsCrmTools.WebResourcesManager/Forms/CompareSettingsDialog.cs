@@ -1,15 +1,16 @@
-﻿using System;
+﻿using MsCrmTools.WebResourcesManager.AppCode;
+using System;
 using System.Windows.Forms;
 
 namespace MsCrmTools.WebResourcesManager.Forms
 {
     public partial class CompareSettingsDialog : Form
     {
-        private readonly bool _isConfiured;
+        private readonly bool _isConfigured;
 
-        public CompareSettingsDialog(bool isConfiured)
+        public CompareSettingsDialog(bool isConfigured)
         {
-            _isConfiured = isConfiured;
+            _isConfigured = isConfigured;
 
             InitializeComponent();
         }
@@ -41,9 +42,9 @@ namespace MsCrmTools.WebResourcesManager.Forms
             var commandPath = txtCommandPath.Text.Trim().TrimStart('"').TrimEnd('"');
             var commandArgs = txtCommandArgs.Text.Trim().TrimStart('"').TrimEnd('"');
 
-            Properties.Settings.Default.CompareToolPath = commandPath;
-            Properties.Settings.Default.CompareToolArgs = commandArgs;
-            Properties.Settings.Default.Save();
+            Options.Instance.CompareToolPath = commandPath;
+            Options.Instance.CompareToolArgs = commandArgs;
+            Options.Instance.Save();
 
             DialogResult = DialogResult.OK;
             Close();
@@ -52,15 +53,16 @@ namespace MsCrmTools.WebResourcesManager.Forms
         private void CompareSettingsDialog_Load(object sender, EventArgs e)
         {
             OpenInstructions.Enabled = true;
-            txtCommandPath.Text = Properties.Settings.Default.CompareToolPath;
-            txtCommandArgs.Text = Properties.Settings.Default.CompareToolArgs;
+
+            txtCommandPath.Text = Options.Instance.CompareToolPath;
+            txtCommandArgs.Text = Options.Instance.CompareToolArgs;
         }
 
         private void OpenInstructions_Tick(object sender, EventArgs e)
         {
             OpenInstructions.Enabled = false;
 
-            if (!_isConfiured)
+            if (!_isConfigured)
                 MessageBox.Show(string.Format("In order to do a compare, you must first setup you compare tool.{0}{0}In the command field, enter the path to the compare tool executable file.{0}{0}In the arguments field, enter any command line arguments used by the compare tool executable.", Environment.NewLine), "Compare Settings", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }

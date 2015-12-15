@@ -66,6 +66,12 @@ namespace MsCrmTools.WebResourcesManager.Forms
             }
         }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
         private void FindAndReplaceForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             textToFind = txtFind2.Text;
@@ -178,6 +184,10 @@ namespace MsCrmTools.WebResourcesManager.Forms
             if (e.KeyData == Keys.Enter)
             {
                 FindNextClick(null, null);
+            }
+            else if (e.KeyData == Keys.Escape)
+            {
+                btnCancel_Click(null, null);
             }
         }
     }

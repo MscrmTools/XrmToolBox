@@ -7,7 +7,7 @@ using System;
 using System.Collections;
 using System.Windows.Forms;
 
-namespace MsCrmTools.WebResourcesManager
+namespace MsCrmTools.WebResourcesManager.AppCode
 {
     /// <summary>
     /// Compares two listview items for sorting
