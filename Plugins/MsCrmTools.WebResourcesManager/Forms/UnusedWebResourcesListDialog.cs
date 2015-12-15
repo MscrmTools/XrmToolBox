@@ -4,6 +4,7 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using Microsoft.Xrm.Sdk;
+using MsCrmTools.WebResourcesManager.AppCode;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

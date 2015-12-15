@@ -53,23 +53,22 @@
     <Reference Include="EcmaScript.NET.modified">
       <HintPath>Referenced Assemblies\EcmaScript.NET.modified.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.AvalonEdit">
-      <HintPath>..\..\packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.1.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="LibZ.Bootstrap">
-      <HintPath>..\..\packages\LibZ.Bootstrap.1.1.0.2\lib\net40-client\LibZ.Bootstrap.dll</HintPath>
+    <Reference Include="LibZ.Bootstrap, Version=1.2.0.0, Culture=neutral, PublicKeyToken=62360e53307d6ba2, processorArchitecture=MSIL">
+      <HintPath>packages\LibZ.Bootstrap.1.2.0.0\lib\net4-client\LibZ.Bootstrap.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
       <HintPath>..\..\Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Client">
-      <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
       <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk.Deployment">
-      <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Tooling.Connector">
+      <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -89,12 +88,19 @@
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="XrmToolBox">
+      <HintPath>..\..\XrmToolBox\bin\Debug\XrmToolBox.exe</HintPath>
+    </Reference>
+    <Reference Include="XrmToolBox.Extensibility">
+      <HintPath>..\..\XrmToolBox.Extensibility\bin\Debug\XrmToolBox.Extensibility.dll</HintPath>
+    </Reference>
     <Reference Include="Yahoo.Yui.Compressor">
       <HintPath>Referenced Assemblies\Yahoo.Yui.Compressor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppCode\Enumerations.cs" />
+    <Compile Include="AppCode\EventManager.cs" />
     <Compile Include="AppCode\Globals.cs" />
     <Compile Include="AppCode\HtmlAgilityPack\crc32.cs" />
     <Compile Include="AppCode\HtmlAgilityPack\EncodingFoundException.cs" />
@@ -131,14 +137,11 @@
     <Compile Include="AppCode\JsBeautifier\BeautifierOptions.cs" />
     <Compile Include="AppCode\JsBeautifier\BraceStyle.cs" />
     <Compile Include="AppCode\LoadCrmResourcesSettings.cs" />
+    <Compile Include="AppCode\Options.cs" />
     <Compile Include="AppCode\SolutionComponentType.cs" />
     <Compile Include="AppCode\TreeViewHelper.cs" />
+    <Compile Include="AppCode\XmlSerializerHelper.cs" />
     <Compile Include="DelegatesHelpers\CommonDelegates.cs" />
-    <Compile Include="DelegatesHelpers\GroupBoxDelegates.cs" />
-    <Compile Include="DelegatesHelpers\ListViewDelegates.cs" />
-    <Compile Include="DelegatesHelpers\ProgressBarDelegates.cs" />
-    <Compile Include="DelegatesHelpers\TextBoxDelegates.cs" />
-    <Compile Include="DelegatesHelpers\TreeViewDelegates.cs" />
     <Compile Include="Forms\CompareSettingsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -150,6 +153,12 @@
     </Compile>
     <Compile Include="Forms\CustomFolderBrowserDialog.Designer.cs">
       <DependentUpon>CustomFolderBrowserDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\OptionsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OptionsDialog.Designer.cs">
+      <DependentUpon>OptionsDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\UnusedWebResourcesListDialog.cs">
       <SubType>Form</SubType>
@@ -211,8 +220,24 @@
     <Compile Include="Forms\WebResourceTypeSelectorDialog.Designer.cs">
       <DependentUpon>WebResourceTypeSelectorDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="ListViewItemComparer.cs" />
+    <Compile Include="LibZResolver.cs" />
+    <Compile Include="AppCode\ListViewItemComparer.cs" />
+    <Compile Include="AppCode\EventHandlers\WebResourceContextMenuRequestedEventArgs.cs" />
+    <Compile Include="AppCode\EventHandlers\WebResourceSelectedEventArgs.cs" />
+    <Compile Include="AppCode\Extensions\TreeNodeExtensions.cs" />
+    <Compile Include="UserControls\WebresourceTreeView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\WebresourceTreeView.Designer.cs">
+      <DependentUpon>WebresourceTreeView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Plugin.cs" />
+    <Compile Include="WebResourcesManager.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WebResourcesManager.Designer.cs">
+      <DependentUpon>WebResourcesManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -224,9 +249,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Solution.cs" />
-    <Compile Include="SolutionManager.cs" />
-    <Compile Include="TreeNodeSorter.cs" />
+    <Compile Include="AppCode\TreeNodeSorter.cs" />
     <Compile Include="UserControls\CodeControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -259,14 +282,8 @@
       <DependentUpon>WebResourceTypePicker.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\WebResourceUpdatedEventArgs.cs" />
-    <Compile Include="WebResource.cs" />
-    <Compile Include="WebResourceManager.cs" />
-    <Compile Include="WebResourcesManager.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="WebResourcesManager.Designer.cs">
-      <DependentUpon>WebResourcesManager.cs</DependentUpon>
-    </Compile>
+    <Compile Include="AppCode\WebResource.cs" />
+    <Compile Include="AppCode\WebResourceManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\CompareSettingsDialog.resx">
@@ -274,6 +291,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CustomFolderBrowserDialog.resx">
       <DependentUpon>CustomFolderBrowserDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OptionsDialog.resx">
+      <DependentUpon>OptionsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UnusedWebResourcesListDialog.resx">
       <DependentUpon>UnusedWebResourcesListDialog.cs</DependentUpon>
@@ -305,6 +325,12 @@
     <EmbeddedResource Include="Forms\WebResourceTypeSelectorDialog.resx">
       <DependentUpon>WebResourceTypeSelectorDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\WebresourceTreeView.resx">
+      <DependentUpon>WebresourceTreeView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WebResourcesManager.resx">
+      <DependentUpon>WebResourcesManager.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -324,9 +350,6 @@
     <EmbeddedResource Include="UserControls\WebResourceTypePicker.resx">
       <DependentUpon>WebResourceTypePicker.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="WebResourcesManager.resx">
-      <DependentUpon>WebResourcesManager.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -338,36 +361,26 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Connection Projects\McTools.Xrm.Connection.WinForms\McTools.Xrm.Connection.WinForms.csproj">
-      <Project>{eeb5c09f-cec6-4fb5-87b5-ae61ae89c9eb}</Project>
-      <Name>McTools.Xrm.Connection.WinForms</Name>
-    </ProjectReference>
+    <Content Include="AppCode\HtmlAgilityPack\HtmlAgilityPack VS2008.csproj" />
+    <Content Include="AppCode\HtmlAgilityPack\HtmlAgilityPack.csproj" />
+    <Content Include="AppCode\HtmlAgilityPack\HtmlAgilityPack.csproj.vspscc" />
+    <Content Include="Referenced Assemblies\EcmaScript.NET.modified.dll" />
+    <Content Include="Referenced Assemblies\Yahoo.Yui.Compressor.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\Connection Projects\McTools.Xrm.Connection\McTools.Xrm.Connection.csproj">
       <Project>{c3824c2c-6e2e-4fde-a2aa-229bbc7c3b1f}</Project>
       <Name>McTools.Xrm.Connection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\XrmToolBox.Extensibility\XrmToolBox.Extensibility.csproj">
-      <Project>{df77aea3-43f7-403c-91af-3023a3bb06ec}</Project>
-      <Name>XrmToolBox.Extensibility</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\XrmToolBox\XrmToolBox.csproj">
-      <Project>{328d55be-8b9a-4087-a5c2-9fbaf623f54b}</Project>
-      <Name>XrmToolBox</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="AppCode\HtmlAgilityPack\HtmlAgilityPack VS2008.csproj" />
-    <Content Include="AppCode\HtmlAgilityPack\HtmlAgilityPack.csproj" />
-    <Content Include="AppCode\HtmlAgilityPack\HtmlAgilityPack.csproj.vspscc" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"$(SolutionDir)packages\LibZ.Bootstrap.1.1.0.2\tools\libz.exe" inject-dll --assembly "$(TargetPath)" --include MsCrmTools.WebResourcesManager.dll --include ICSharpCode.AvalonEdit.dll --include Yahoo.Yui.Compressor.dll --include EcmaScript.NET.modified.dll
+    <PostBuildEvent>"$(SolutionDir)packages\LibZ.Bootstrap.1.1.0.2\tools\libz.exe" inject-dll --assembly "$(TargetPath)" --include MsCrmTools.WebResourcesManager.dll --include ICSharpCode.AvalonEdit.dll --include Yahoo.Yui.Compressor.dll --include EcmaScript.NET.modified.dll 
 copy /y $(TargetPath) "$(SolutionDir)XrmToolBox\$(OutDir)Plugins\$(TargetFileName)"</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

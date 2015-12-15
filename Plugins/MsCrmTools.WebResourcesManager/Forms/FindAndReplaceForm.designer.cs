@@ -47,6 +47,7 @@
             this.txtReplace = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.btnCancel = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.tabMain.SuspendLayout();
             this.tpFind.SuspendLayout();
@@ -59,7 +60,7 @@
             this.cbWholeWord.Location = new System.Drawing.Point(11, 27);
             this.cbWholeWord.Name = "cbWholeWord";
             this.cbWholeWord.Size = new System.Drawing.Size(113, 17);
-            this.cbWholeWord.TabIndex = 5;
+            this.cbWholeWord.TabIndex = 7;
             this.cbWholeWord.Text = "Match whole word";
             this.cbWholeWord.UseVisualStyleBackColor = true;
             // 
@@ -69,7 +70,7 @@
             this.cbCaseSensitive.Location = new System.Drawing.Point(11, 5);
             this.cbCaseSensitive.Name = "cbCaseSensitive";
             this.cbCaseSensitive.Size = new System.Drawing.Size(82, 17);
-            this.cbCaseSensitive.TabIndex = 4;
+            this.cbCaseSensitive.TabIndex = 6;
             this.cbCaseSensitive.Text = "Match case";
             this.cbCaseSensitive.UseVisualStyleBackColor = true;
             // 
@@ -93,7 +94,7 @@
             this.cbSearchUp.Location = new System.Drawing.Point(189, 49);
             this.cbSearchUp.Name = "cbSearchUp";
             this.cbSearchUp.Size = new System.Drawing.Size(75, 17);
-            this.cbSearchUp.TabIndex = 8;
+            this.cbSearchUp.TabIndex = 10;
             this.cbSearchUp.Text = "Search up";
             this.cbSearchUp.UseVisualStyleBackColor = true;
             // 
@@ -103,7 +104,7 @@
             this.cbWildcards.Location = new System.Drawing.Point(189, 27);
             this.cbWildcards.Name = "cbWildcards";
             this.cbWildcards.Size = new System.Drawing.Size(73, 17);
-            this.cbWildcards.TabIndex = 7;
+            this.cbWildcards.TabIndex = 9;
             this.cbWildcards.Text = "Wildcards";
             this.cbWildcards.UseVisualStyleBackColor = true;
             // 
@@ -113,7 +114,7 @@
             this.cbRegex.Location = new System.Drawing.Point(189, 5);
             this.cbRegex.Name = "cbRegex";
             this.cbRegex.Size = new System.Drawing.Size(117, 17);
-            this.cbRegex.TabIndex = 6;
+            this.cbRegex.TabIndex = 8;
             this.cbRegex.Text = "Regular Expression";
             this.cbRegex.UseVisualStyleBackColor = true;
             // 
@@ -131,6 +132,7 @@
             // 
             // tpFind
             // 
+            this.tpFind.Controls.Add(this.btnCancel);
             this.tpFind.Controls.Add(this.btnFindNext);
             this.tpFind.Controls.Add(this.txtFind);
             this.tpFind.Controls.Add(this.label1);
@@ -149,7 +151,7 @@
             this.btnFindNext.Margin = new System.Windows.Forms.Padding(2);
             this.btnFindNext.Name = "btnFindNext";
             this.btnFindNext.Size = new System.Drawing.Size(75, 23);
-            this.btnFindNext.TabIndex = 13;
+            this.btnFindNext.TabIndex = 2;
             this.btnFindNext.Text = "Find Next";
             this.btnFindNext.UseVisualStyleBackColor = true;
             this.btnFindNext.Click += new System.EventHandler(this.FindNextClick);
@@ -161,7 +163,7 @@
             this.txtFind.Location = new System.Drawing.Point(9, 18);
             this.txtFind.Name = "txtFind";
             this.txtFind.Size = new System.Drawing.Size(337, 20);
-            this.txtFind.TabIndex = 5;
+            this.txtFind.TabIndex = 1;
             this.txtFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtFind_KeyDown);
             // 
             // label1
@@ -197,7 +199,7 @@
             this.btnReplaceAll.Margin = new System.Windows.Forms.Padding(2);
             this.btnReplaceAll.Name = "btnReplaceAll";
             this.btnReplaceAll.Size = new System.Drawing.Size(75, 23);
-            this.btnReplaceAll.TabIndex = 13;
+            this.btnReplaceAll.TabIndex = 5;
             this.btnReplaceAll.Text = "Replace All";
             this.btnReplaceAll.UseVisualStyleBackColor = true;
             this.btnReplaceAll.Click += new System.EventHandler(this.ReplaceAllClick);
@@ -208,7 +210,7 @@
             this.btnFindNext2.Margin = new System.Windows.Forms.Padding(2);
             this.btnFindNext2.Name = "btnFindNext2";
             this.btnFindNext2.Size = new System.Drawing.Size(75, 23);
-            this.btnFindNext2.TabIndex = 12;
+            this.btnFindNext2.TabIndex = 3;
             this.btnFindNext2.Text = "Find Next";
             this.btnFindNext2.UseVisualStyleBackColor = true;
             this.btnFindNext2.Click += new System.EventHandler(this.FindNext2Click);
@@ -219,7 +221,7 @@
             this.btnReplace.Margin = new System.Windows.Forms.Padding(2);
             this.btnReplace.Name = "btnReplace";
             this.btnReplace.Size = new System.Drawing.Size(75, 23);
-            this.btnReplace.TabIndex = 11;
+            this.btnReplace.TabIndex = 4;
             this.btnReplace.Text = "Replace";
             this.btnReplace.UseVisualStyleBackColor = true;
             this.btnReplace.Click += new System.EventHandler(this.ReplaceClick);
@@ -231,7 +233,7 @@
             this.txtFind2.Location = new System.Drawing.Point(9, 18);
             this.txtFind2.Name = "txtFind2";
             this.txtFind2.Size = new System.Drawing.Size(337, 20);
-            this.txtFind2.TabIndex = 10;
+            this.txtFind2.TabIndex = 1;
             // 
             // txtReplace
             // 
@@ -240,7 +242,7 @@
             this.txtReplace.Location = new System.Drawing.Point(9, 55);
             this.txtReplace.Name = "txtReplace";
             this.txtReplace.Size = new System.Drawing.Size(337, 20);
-            this.txtReplace.TabIndex = 9;
+            this.txtReplace.TabIndex = 2;
             // 
             // label2
             // 
@@ -260,20 +262,31 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "Text to Find:";
             // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(269, 68);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 14;
+            this.btnCancel.Text = "btnCancelHidden";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Visible = false;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
             // FindAndReplaceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(355, 222);
             this.Controls.Add(this.tabMain);
             this.Controls.Add(this.panel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FindAndReplaceForm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Find and replace";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FindAndReplaceForm_FormClosed);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -307,5 +320,6 @@
         private System.Windows.Forms.CheckBox cbSearchUp;
         private System.Windows.Forms.CheckBox cbWildcards;
         private System.Windows.Forms.CheckBox cbRegex;
-	}
+        private System.Windows.Forms.Button btnCancel;
+    }
 }

@@ -5,13 +5,15 @@
 
 using Microsoft.Xrm.Sdk;
 using MsCrmTools.WebResourcesManager.Forms;
+using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace MsCrmTools.WebResourcesManager
+namespace MsCrmTools.WebResourcesManager.AppCode
 {
-    internal class WebResource
+    public class WebResource
     {
         private static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
 
@@ -20,7 +22,7 @@ namespace MsCrmTools.WebResourcesManager
         public WebResource(Entity webResource, string filePath)
         {
             FilePath = filePath;
-            WebResourceEntity = webResource;
+            Entity = webResource;
             InitialBase64 = webResource.GetAttributeValue<string>("content");
         }
 
@@ -33,9 +35,11 @@ namespace MsCrmTools.WebResourcesManager
             get { return validExtensions; }
         }
 
+        public Entity Entity { get; set; }
         public string FilePath { get; set; }
         public string InitialBase64 { get; set; }
-        public Entity WebResourceEntity { get; set; }
+
+        public TreeNode Node { get; set; }
 
         public static int GetImageIndexFromExtension(string ext)
         {
@@ -115,7 +119,7 @@ namespace MsCrmTools.WebResourcesManager
             }
         }
 
-        public static bool IsInvalidName(string name)
+        public static bool IsNameInvalid(string name)
         {
             var isInvalidName = InValidWrNameRegex.IsMatch(name);
 
@@ -132,6 +136,12 @@ namespace MsCrmTools.WebResourcesManager
             var isInvalidName2 = regex.IsMatch(name);
 
             return isInvalidName || isInvalidName2;
+        }
+
+        public string GetPlainText()
+        {
+            byte[] b = Convert.FromBase64String(Entity.GetAttributeValue<string>("content"));
+            return Encoding.UTF8.GetString(b);
         }
 
         public WebResource ShowProperties(IOrganizationService service, Control mainControl)

@@ -5,7 +5,7 @@
 
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
-using MsCrmTools.WebResourcesManager.DelegatesHelpers;
+using MsCrmTools.WebResourcesManager.AppCode;
 using System;
 using System.ComponentModel;
 using System.ServiceModel;
@@ -44,30 +44,6 @@ namespace MsCrmTools.WebResourcesManager.Forms.Solutions
             else
             {
                 MessageBox.Show(this, "Please select a solution!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void FillList()
-        {
-            try
-            {
-                ListViewDelegates.ClearItems(lstSolutions);
-
-                EntityCollection ec = RetrieveSolutions();
-
-                foreach (Entity solution in ec.Entities)
-                {
-                    ListViewItem item = new ListViewItem(solution["friendlyname"].ToString());
-                    item.SubItems.Add(solution["version"].ToString());
-                    item.SubItems.Add(((EntityReference)solution["publisherid"]).Name);
-                    item.Tag = solution;
-
-                    ListViewDelegates.AddItem(lstSolutions, item);
-                }
-            }
-            catch (Exception error)
-            {
-                CommonDelegates.DisplayMessageBox(this, error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -112,6 +88,8 @@ namespace MsCrmTools.WebResourcesManager.Forms.Solutions
 
         private void SolutionPicker_Load(object sender, EventArgs e)
         {
+            lstSolutions.Items.Clear();
+
             BackgroundWorker worker = new BackgroundWorker();
             worker.DoWork += worker_DoWork;
             worker.RunWorkerCompleted += worker_RunWorkerCompleted;
@@ -120,25 +98,23 @@ namespace MsCrmTools.WebResourcesManager.Forms.Solutions
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            FillList();
+            e.Result = RetrieveSolutions();
         }
 
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            MethodInvoker mi = delegate
+            foreach (Entity solution in ((EntityCollection)e.Result).Entities)
             {
-                lstSolutions.Enabled = true;
-                btnSolutionPickerValidate.Enabled = true;
-            };
+                ListViewItem item = new ListViewItem(solution["friendlyname"].ToString());
+                item.SubItems.Add(solution["version"].ToString());
+                item.SubItems.Add(((EntityReference)solution["publisherid"]).Name);
+                item.Tag = solution;
 
-            if (InvokeRequired)
-            {
-                Invoke(mi);
+                lstSolutions.Items.Add(item);
             }
-            else
-            {
-                mi();
-            }
+
+            lstSolutions.Enabled = true;
+            btnSolutionPickerValidate.Enabled = true;
         }
     }
 }

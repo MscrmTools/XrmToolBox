@@ -44,6 +44,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
             if (fbd.ShowDialog(this) == DialogResult.OK)
             {
                 txtFolderPath.Text = fbd.SelectedPath;
+                FolderPath = fbd.SelectedPath;
             }
         }
 

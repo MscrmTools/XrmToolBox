@@ -6,12 +6,11 @@
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
-using MsCrmTools.WebResourcesManager.AppCode;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MsCrmTools.WebResourcesManager
+namespace MsCrmTools.WebResourcesManager.AppCode
 {
     /// <summary>
     /// Class that manages action on web resources
@@ -55,17 +54,17 @@ namespace MsCrmTools.WebResourcesManager
             return System.Text.Encoding.UTF8.GetString(b);
         }
 
-        internal void AddToSolution(List<Guid> idsToPublish, string solutionUniqueName)
+        internal void AddToSolution(List<WebResource> resources, string solutionUniqueName)
         {
-            foreach (var id in idsToPublish)
+            foreach (var resource in resources)
             {
                 var request = new AddSolutionComponentRequest
-                                  {
-                                      AddRequiredComponents = false,
-                                      ComponentId = id,
-                                      ComponentType = SolutionComponentType.WebResource,
-                                      SolutionUniqueName = solutionUniqueName
-                                  };
+                {
+                    AddRequiredComponents = false,
+                    ComponentId = resource.Entity.Id,
+                    ComponentType = SolutionComponentType.WebResource,
+                    SolutionUniqueName = solutionUniqueName
+                };
 
                 innerService.Execute(request);
             }
@@ -106,29 +105,29 @@ namespace MsCrmTools.WebResourcesManager
         internal bool HasDependencies(Guid webresourceId)
         {
             var request = new RetrieveDependenciesForDeleteRequest
-                              {
-                                  ComponentType = SolutionComponentType.WebResource,
-                                  ObjectId = webresourceId
-                              };
+            {
+                ComponentType = SolutionComponentType.WebResource,
+                ObjectId = webresourceId
+            };
 
             var response = (RetrieveDependenciesForDeleteResponse)innerService.Execute(request);
             return response.EntityCollection.Entities.Count != 0;
         }
 
-        internal void PublishWebResources(List<Guid> ids)
+        internal void PublishWebResources(List<WebResource> resources)
         {
             try
             {
                 string idsXml = string.Empty;
 
-                foreach (Guid id in ids)
+                foreach (WebResource resource in resources)
                 {
-                    idsXml += string.Format("<webresource>{0}</webresource>", id.ToString("B"));
+                    idsXml += string.Format("<webresource>{0}</webresource>", resource.Entity.Id.ToString("B"));
                 }
 
                 var pxReq1 = new PublishXmlRequest
                 {
-                    ParameterXml = String.Format("<importexportxml><webresources>{0}</webresources></importexportxml>", idsXml)
+                    ParameterXml = string.Format("<importexportxml><webresources>{0}</webresources></importexportxml>", idsXml)
                 };
 
                 innerService.Execute(pxReq1);
