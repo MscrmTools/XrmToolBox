@@ -54,11 +54,11 @@
       <HintPath>Referenced Assemblies\EcmaScript.NET.modified.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.1.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
-      <HintPath>packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+      <HintPath>..\..\packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="LibZ.Bootstrap, Version=1.2.0.0, Culture=neutral, PublicKeyToken=62360e53307d6ba2, processorArchitecture=MSIL">
-      <HintPath>packages\LibZ.Bootstrap.1.2.0.0\lib\net4-client\LibZ.Bootstrap.dll</HintPath>
+      <HintPath>..\..\packages\LibZ.Library.1.2.0.0\lib\net4-client\LibZ.Bootstrap.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
@@ -214,7 +214,6 @@
     <Compile Include="Forms\WebResourceTypeSelectorDialog.Designer.cs">
       <DependentUpon>WebResourceTypeSelectorDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="LibZResolver.cs" />
     <Compile Include="AppCode\ListViewItemComparer.cs" />
     <Compile Include="AppCode\EventHandlers\WebResourceContextMenuRequestedEventArgs.cs" />
     <Compile Include="AppCode\EventHandlers\WebResourceSelectedEventArgs.cs" />
