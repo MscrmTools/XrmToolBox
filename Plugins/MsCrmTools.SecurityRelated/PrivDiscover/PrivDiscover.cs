@@ -4,9 +4,7 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.PrivDiscover.AppCode;
 using System;
@@ -292,13 +290,7 @@ namespace MsCrmTools.PrivDiscover
             if (lvRoles.SelectedItems.Count == 0)
                 return;
 
-            Uri currentServiceUri = ((OrganizationServiceProxy)((OrganizationService)Service).InnerService).ServiceConfiguration.CurrentServiceEndpoint.Address.Uri;
-
-            string originalUrl = currentServiceUri.OriginalString;
-
-            string baseUrl = originalUrl.Substring(0, originalUrl.IndexOf("XRMServices"));
-
-            Process.Start(string.Format("{0}biz/roles/edit.aspx?id={1}", baseUrl, (Guid)lvRoles.SelectedItems[0].Tag));
+            Process.Start(string.Format("{0}/biz/roles/edit.aspx?id={1}", ConnectionDetail.OriginalUrl, (Guid)lvRoles.SelectedItems[0].Tag));
         }
 
         private void DoWork()

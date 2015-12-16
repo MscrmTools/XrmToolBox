@@ -1,4 +1,5 @@
-﻿using Microsoft.Crm.Sdk.Messages;
+﻿using McTools.Xrm.Connection;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using MscrmTools.SyncFilterManager.AppCode;
@@ -16,6 +17,7 @@ namespace MscrmTools.SyncFilterManager.Controls
     {
         #region Variables
 
+        private ConnectionDetail connectionDetail;
         private string currentAttributeGroup;
         private string entityName;
         private List<ListViewGroup> groupsCache;
@@ -32,10 +34,11 @@ namespace MscrmTools.SyncFilterManager.Controls
             InitializeComponent();
         }
 
-        public CrmSystemViewList(IOrganizationService service, string entityName)
+        public CrmSystemViewList(IOrganizationService service, string entityName, ConnectionDetail connectionDetail)
         {
             this.service = service;
             this.entityName = entityName;
+            this.connectionDetail = connectionDetail;
 
             InitializeComponent();
         }
@@ -44,6 +47,7 @@ namespace MscrmTools.SyncFilterManager.Controls
 
         #region Properties
 
+        public ConnectionDetail ConnectionDetail { set { connectionDetail = value; } }
         public bool DisplayOfflineFilter { get; set; }
         public bool DisplayOutlookFilter { get; set; }
 
@@ -113,7 +117,7 @@ namespace MscrmTools.SyncFilterManager.Controls
         private void bw_DoWork(object sender, DoWorkEventArgs e)
         {
             var arguments = (object[])e.Argument;
-            var rm = new RuleManager(entityName, service);
+            var rm = new RuleManager(entityName, service, connectionDetail);
 
             if (DisplaySystemView)
             {
@@ -270,7 +274,7 @@ namespace MscrmTools.SyncFilterManager.Controls
 
         private void bwEnable_DoWork(object sender, DoWorkEventArgs e)
         {
-            var rm = new RuleManager(entityName, service);
+            var rm = new RuleManager(entityName, service, connectionDetail);
 
             var activatedItems = new List<ListViewItem>();
 
@@ -318,7 +322,7 @@ namespace MscrmTools.SyncFilterManager.Controls
 
         private void bwDisable_DoWork(object sender, DoWorkEventArgs e)
         {
-            var rm = new RuleManager(entityName, service);
+            var rm = new RuleManager(entityName, service, connectionDetail);
 
             var deactivatedItems = new List<ListViewItem>();
 
@@ -368,7 +372,7 @@ namespace MscrmTools.SyncFilterManager.Controls
         {
             var deletedItems = new List<ListViewItem>();
 
-            var rm = new RuleManager(entityName, service);
+            var rm = new RuleManager(entityName, service, connectionDetail);
 
             foreach (ListViewItem item in (ListView.SelectedListViewItemCollection)e.Argument)
             {
@@ -445,7 +449,7 @@ namespace MscrmTools.SyncFilterManager.Controls
         private void bwApplyFiltersToUsers_DoWork(object sender, DoWorkEventArgs e)
         {
             var bw = (BackgroundWorker)sender;
-            var rm = new RuleManager("savedquery", service);
+            var rm = new RuleManager("savedquery", service, connectionDetail);
             var templates = ((EntityReferenceCollection)((object[])e.Argument)[0]);
             var users = (List<Entity>)((object[])e.Argument)[1];
             if (users == null)
@@ -524,7 +528,7 @@ namespace MscrmTools.SyncFilterManager.Controls
             var argument = (object[])e.Argument;
             var worker = (BackgroundWorker)sender;
             var items = (ListView.SelectedListViewItemCollection)argument[0];
-            var rm = new RuleManager("savedquery", service);
+            var rm = new RuleManager("savedquery", service, connectionDetail);
 
             var views = (from ListViewItem item in items select (Entity)item.Tag).ToList();
 
@@ -609,7 +613,7 @@ namespace MscrmTools.SyncFilterManager.Controls
             var view = (Entity)((object[])e.Argument)[1];
             var isSystem = (bool)((object[])e.Argument)[2];
 
-            var rm = new RuleManager("savedquery", service);
+            var rm = new RuleManager("savedquery", service, connectionDetail);
             rm.UpdateRuleFromSystemView(view, rule, (BackgroundWorker)sender);
 
             e.Result = 1;

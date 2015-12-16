@@ -43,15 +43,15 @@ namespace MsCrmTools.UserSettingsUtility
                     var sc = new SettingsCollection();
 
                     bw.ReportProgress(0, "Loading Available languages...");
-                    var ush = new UserSettingsHelper(Service);
+                    var ush = new UserSettingsHelper(Service, ConnectionDetail);
                     sc.Languages = ush.RetrieveAvailableLanguages();
 
                     bw.ReportProgress(0, "Loading Currencies...");
-                    ush = new UserSettingsHelper(Service);
+                    ush = new UserSettingsHelper(Service, ConnectionDetail);
                     sc.Currencies = ush.RetrieveCurrencies();
 
                     bw.ReportProgress(0, "Loading Time Zones...");
-                    ush = new UserSettingsHelper(Service);
+                    ush = new UserSettingsHelper(Service, ConnectionDetail);
                     sc.TimeZones = ush.RetrieveTimeZones();
 
                     bw.ReportProgress(0, "Loading SiteMap elements...");
@@ -252,7 +252,7 @@ namespace MsCrmTools.UserSettingsUtility
                 Work = (bw, evt) =>
                 {
                     var settingArg = (UserSettings)evt.Argument;
-                    var ush = new UserSettingsHelper(Service);
+                    var ush = new UserSettingsHelper(Service, ConnectionDetail);
 
                     foreach (var user in settingArg.UsersToUpdate)
                     {

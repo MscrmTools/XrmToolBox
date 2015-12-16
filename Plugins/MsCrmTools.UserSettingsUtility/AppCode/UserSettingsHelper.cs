@@ -1,7 +1,6 @@
-﻿using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Client.Services;
+﻿using McTools.Xrm.Connection;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
@@ -11,11 +10,13 @@ namespace MsCrmTools.UserSettingsUtility.AppCode
 {
     internal class UserSettingsHelper
     {
+        private readonly ConnectionDetail detail;
         private readonly IOrganizationService service;
 
-        public UserSettingsHelper(IOrganizationService service)
+        public UserSettingsHelper(IOrganizationService service, ConnectionDetail detail)
         {
             this.service = service;
+            this.detail = detail;
         }
 
         public List<Language> RetrieveAvailableLanguages()
@@ -43,9 +44,10 @@ namespace MsCrmTools.UserSettingsUtility.AppCode
 
         public void UpdateSettings(Guid userId, UserSettings settings)
         {
-            var currentUserId = ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId;
+            var currentUserId = detail.ServiceClient.OrganizationServiceProxy.CallerId;
+            detail.ServiceClient.OrganizationServiceProxy.CallerId = userId;
 
-            var records = service.RetrieveMultiple(new QueryByAttribute("usersettings")
+            var records = detail.ServiceClient.OrganizationServiceProxy.RetrieveMultiple(new QueryByAttribute("usersettings")
             {
                 Attributes = { "systemuserid" },
                 Values = { userId },
@@ -96,7 +98,7 @@ namespace MsCrmTools.UserSettingsUtility.AppCode
 
             service.Update(record);
 
-            ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId = currentUserId;
+            detail.ServiceClient.OrganizationServiceProxy.CallerId = currentUserId;
         }
     }
 }

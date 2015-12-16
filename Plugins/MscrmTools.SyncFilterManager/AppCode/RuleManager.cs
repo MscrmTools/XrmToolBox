@@ -1,7 +1,6 @@
-﻿using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Client.Services;
+﻿using McTools.Xrm.Connection;
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
@@ -15,14 +14,16 @@ namespace MscrmTools.SyncFilterManager.AppCode
 {
     internal class RuleManager
     {
+        private readonly ConnectionDetail detail;
         private readonly string entityName;
 
         private readonly IOrganizationService service;
 
-        public RuleManager(string entityName, IOrganizationService service)
+        public RuleManager(string entityName, IOrganizationService service, ConnectionDetail detail)
         {
             this.entityName = entityName;
             this.service = service;
+            this.detail = detail;
         }
 
         public void AddRulesFromUser(Entity sourceUser, List<Entity> users, BackgroundWorker worker = null)
@@ -277,7 +278,7 @@ namespace MscrmTools.SyncFilterManager.AppCode
 
         public void ResetUsersRulesFromDefault(List<Entity> users, BackgroundWorker worker = null)
         {
-            var currentId = ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId;
+            var currentId = detail.ServiceClient.OrganizationServiceProxy.CallerId;
 
             foreach (var user in users)
             {
@@ -286,16 +287,16 @@ namespace MscrmTools.SyncFilterManager.AppCode
                     worker.ReportProgress(0, "Reseting filters for user \"" + user.GetAttributeValue<string>("fullname") + "\"");
                 }
 
-                ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId = user.Id;
+                detail.ServiceClient.OrganizationServiceProxy.CallerId = user.Id;
 
                 var request = new ResetUserFiltersRequest { QueryType = 16 };
-                service.Execute(request);
+                detail.ServiceClient.OrganizationServiceProxy.Execute(request);
 
                 request = new ResetUserFiltersRequest { QueryType = 256 };
-                service.Execute(request);
+                detail.ServiceClient.OrganizationServiceProxy.Execute(request);
             }
 
-            ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId = currentId;
+            detail.ServiceClient.OrganizationServiceProxy.CallerId = currentId;
         }
 
         public void UpdateRuleFromSystemView(Entity systemView, Entity rule, BackgroundWorker worker = null)
@@ -333,17 +334,17 @@ namespace MscrmTools.SyncFilterManager.AppCode
 
         private void RemoveAllRulesForUser(Guid userId)
         {
-            var currentId = ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId;
-            ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId = userId;
+            var currentId = detail.ServiceClient.OrganizationServiceProxy.CallerId;
+            detail.ServiceClient.OrganizationServiceProxy.CallerId = userId;
 
             var rules = GetRules(new[] { 16, 256 }, new List<Entity> { new Entity("systemuser") { Id = userId } });
 
             foreach (var rule in rules.Entities)
             {
-                service.Delete(rule.LogicalName, rule.Id);
+                detail.ServiceClient.OrganizationServiceProxy.Delete(rule.LogicalName, rule.Id);
             }
 
-            ((OrganizationServiceProxy)(((OrganizationService)service).InnerService)).CallerId = currentId;
+            detail.ServiceClient.OrganizationServiceProxy.CallerId = currentId;
         }
     }
 }
