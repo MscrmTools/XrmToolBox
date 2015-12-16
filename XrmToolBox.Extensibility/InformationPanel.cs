@@ -24,12 +24,24 @@ namespace XrmToolBox.Extensibility
         /// <param name="message">Message to display</param>
         public static void ChangeInformationPanelMessage(Panel informationPanel, string message)
         {
-            foreach (var label in informationPanel.Controls.OfType<Label>())
+            MethodInvoker mi = delegate
             {
-                if (label.Name == "InfoLabel")
+                foreach (var label in informationPanel.Controls.OfType<Label>())
                 {
-                    label.Text = message;
+                    if (label.Name == "InfoLabel")
+                    {
+                        label.Text = message;
+                    }
                 }
+            };
+
+            if (informationPanel.InvokeRequired)
+            {
+                informationPanel.Invoke(mi);
+            }
+            else
+            {
+                mi();
             }
         }
 
@@ -44,29 +56,29 @@ namespace XrmToolBox.Extensibility
         public static Panel GetInformationPanel(Control parentControl, string message, int width, int height)
         {
             var panel = new Panel
-                            {
-                                Name = "informationPanel",
-                                Width = width,
-                                Height = height,
-                                Location = new Point(
+            {
+                Name = "informationPanel",
+                Width = width,
+                Height = height,
+                Location = new Point(
                                     (parentControl.Width - width) / 2,
                                     (parentControl.Height - height) / 2),
-                                BackColor = Color.FromArgb(255, 255, 224),
-                                BorderStyle = BorderStyle.FixedSingle
-                            };
+                BackColor = Color.FromArgb(255, 255, 224),
+                BorderStyle = BorderStyle.FixedSingle
+            };
 
             var label = new Label
-                            {
-                                AutoEllipsis = true,
-                                AutoSize = false,
-                                TextAlign = ContentAlignment.MiddleCenter,
-                                Width = panel.Width,
-                                Height = panel.Height / 2,
-                                Text = message,
-                                Location = new Point(0, 10),
-                                Font = new Font("Segoe UI", 10F),
-                                Name = "InfoLabel"
-                            };
+            {
+                AutoEllipsis = true,
+                AutoSize = false,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Width = panel.Width,
+                Height = panel.Height / 2,
+                Text = message,
+                Location = new Point(0, 10),
+                Font = new Font("Segoe UI", 10F),
+                Name = "InfoLabel"
+            };
 
             var hyperlink = new LinkLabel
             {
@@ -88,14 +100,14 @@ namespace XrmToolBox.Extensibility
             if (file != null)
             {
                 var pBox = new PictureBox
-                               {
-                                   Height = 36,
-                                   Width = 36,
-                                   Location = new Point(
+                {
+                    Height = 36,
+                    Width = 36,
+                    Location = new Point(
                                        (panel.Width - 36) / 2,
                                        (panel.Height - 36) / 4 * 3),
-                                   Image = Image.FromStream(file)
-                               };
+                    Image = Image.FromStream(file)
+                };
 
                 panel.Controls.Add(pBox);
             }
