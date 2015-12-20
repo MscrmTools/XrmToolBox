@@ -416,6 +416,7 @@ namespace MsCrmTools.SiteMapEditor
 
         private void ToolStripButtonMoveDownClick(object sender, EventArgs e)
         {
+            toolStripButtonMoveDown.Click -= ToolStripButtonMoveDownClick;
             toolStripButtonMoveDown.Enabled = false;
 
             TreeNode tnmNode = tvSiteMap.SelectedNode;
@@ -439,10 +440,12 @@ namespace MsCrmTools.SiteMapEditor
             }
 
             toolStripButtonMoveDown.Enabled = true;
+            toolStripButtonMoveDown.Click += ToolStripButtonMoveDownClick;
         }
 
         private void ToolStripButtonMoveUpClick(object sender, EventArgs e)
         {
+            toolStripButtonMoveUp.Click -= ToolStripButtonMoveUpClick;
             toolStripButtonMoveUp.Enabled = false;
 
             TreeNode tnmNode = tvSiteMap.SelectedNode;
@@ -466,6 +469,7 @@ namespace MsCrmTools.SiteMapEditor
             }
 
             toolStripButtonMoveUp.Enabled = true;
+            toolStripButtonMoveUp.Click += ToolStripButtonMoveUpClick;
         }
 
         #endregion TreeView ToolStrip Menu
