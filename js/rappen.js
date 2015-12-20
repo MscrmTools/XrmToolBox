@@ -28,18 +28,21 @@ UpdateDownloads = function (version, published, currentcount, releaselink) {
                 
                 var imagesLinkRegexp = /!\[.+\]\(http.*\)/g;
                 var imagesLinkMatch = imagesLinkRegexp.exec(bodyWithoutDashes);
-                
-                for(var i=0; i< imagesLinkMatch.length; i++){
-                    bodyWithoutDashes = bodyWithoutDashes.replace(imagesLinkMatch[i], '<img style="max-width:700px" src="'+ imagesMatch[i*2+1] + '"/>');
+                if(imagesLinkMatch){
+                    for(var i=0; i< imagesLinkMatch.length; i++){
+                        bodyWithoutDashes = bodyWithoutDashes.replace(imagesLinkMatch[i], '<img style="max-width:700px" src="'+ imagesMatch[i*2+1] + '"/>');
+                    }
                 }
                 
                 // Processing links
                 var linkRegexp = /(?!\!)\[(.+)\]\((http.*)\)/g;
                 var linksMatch = linkRegexp.exec(bodyWithoutDashes);
-                
-                 for(var i=0; i< linksMatch.length; i+=3){
-                    bodyWithoutDashes = bodyWithoutDashes.replace(linksMatch[i], '<a href="'+ linksMatch[i+2] + '">' + linksMatch[i+1] + '</a>');
-                }
+                if(linksMatch)
+                 {
+                     for(var i=0; i< linksMatch.length; i+=3){
+                        bodyWithoutDashes = bodyWithoutDashes.replace(linksMatch[i], '<a href="'+ linksMatch[i+2] + '">' + linksMatch[i+1] + '</a>');
+                    }
+                 }
                 
 				$("#release-notes").html(bodyWithoutDashes);
 				
