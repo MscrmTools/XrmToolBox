@@ -21,18 +21,11 @@ UpdateDownloads = function (version, published, currentcount, releaselink) {
 				var bodyWithBr = data.body.replace(/(\r\n|\n|\r)/g,"<br />");
 				var bodyWithoutDashes = bodyWithBr.replace(/(## )/g,"");
 				
-                 // Processing images
-                var imageRegexp = /!\[.+\]\((http.*)\)/g;
-                var imagesMatch = imageRegexp.exec(bodyWithoutDashes);
                 
-                
-                var imagesLinkRegexp = /!\[.+\]\(http.*\)/g;
-                var imagesLinkMatch = imagesLinkRegexp.exec(bodyWithoutDashes);
-                if(imagesLinkMatch){
-                    for(var i=0; i< imagesLinkMatch.length; i++){
-                        bodyWithoutDashes = bodyWithoutDashes.replace(imagesLinkMatch[i], '<img style="max-width:700px" src="'+ imagesMatch[i*2+1] + '"/>');
-                    }
-                }
+                // Processing images
+                bodyWithoutDashes = bodyWithoutDashes.replace(/(!\[.*?\]\()(.+?)(\))/g, function(whole, a, b, c) {
+                    return '<img style="max-width:700px" src="'+ b + '"/>';
+                 });
                 
                 // Processing links
                 var linkRegexp = /(?!\!)\[(.+)\]\((http.*)\)/g;
