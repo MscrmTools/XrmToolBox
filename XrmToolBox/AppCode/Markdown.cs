@@ -1282,9 +1282,15 @@ namespace MarkdownSharp
                 {
                     string list = match.Groups[1].Value;
                     string marker = match.Groups[3].Value;
+
+                    if (string.IsNullOrEmpty(list) || string.IsNullOrEmpty(marker))
+                    {
+                        return string.Empty;
+                    }
+
                     string listType = Regex.IsMatch(marker, _markerUL) ? "ul" : "ol";
                     string result;
-                    string start = "";
+                    string start = string.Empty;
                     if (listType == "ol")
                     {
                         var firstNumber = int.Parse(marker.Substring(0, marker.Length - 1));
