@@ -81,7 +81,15 @@ namespace XrmToolBox.AppCode
                                 currentBuildVersion == buildVersion && currentRevisionVersion < revisionVersion)
                             {
                                 var mdth = new Markdown();
-                                var html = mdth.Transform(lastRelease.body).Replace("h1", "div");
+                                var html = "";
+                                try
+                                {
+                                    html = mdth.Transform(lastRelease.body).Replace("h1", "div");
+                                }
+                                catch
+                                {
+                                    html = "<br/><br/><i>Unable to load release notes.<br/>Click the Download button to read what's new!</i>";
+                                }
 
                                 Cpi = new GithubInformation
                                 {
