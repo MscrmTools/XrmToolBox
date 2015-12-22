@@ -81,10 +81,10 @@ namespace XrmToolBox.AppCode
                                 currentBuildVersion == buildVersion && currentRevisionVersion < revisionVersion)
                             {
                                 var mdth = new Markdown();
-                                var html = "";
+                                var html = string.Empty;
                                 try
                                 {
-                                    html = mdth.Transform(lastRelease.body).Replace("h1", "div");
+                                    html = mdth.Transform(lastRelease.body);
                                 }
                                 catch
                                 {

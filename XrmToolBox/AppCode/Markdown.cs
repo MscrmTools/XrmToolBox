@@ -1510,6 +1510,7 @@ namespace MarkdownSharp
             // delimiters in inline links like [this](<url>).
             text = DoAutoLinks(text);
 
+            text = text.Replace("\n", "<br />\n");
             text = text.Replace(AutoLinkPreventionMarker, "://");
 
             text = EncodeAmpsAndAngles(text);
