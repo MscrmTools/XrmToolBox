@@ -348,7 +348,7 @@ namespace MarkdownSharp
         private static Regex _endCharRegex = new Regex(_charEndingUrl, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static Regex _headerAtx = new Regex(@"
-                ^(\#{1,6})  # $1 = string of #'s
+                ^(\#{1,6}\s)  # $1 = string of #'s
                 [ ]*
                 (.+?)       # $2 = Header text
                 [ ]*
