@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Security;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace McTools.Xrm.Connection
@@ -195,7 +195,18 @@ namespace McTools.Xrm.Connection
 
             if (UseOnline)
             {
-                crmSvc = ConnectOnline(UseOsdp);
+                var tasks = new List<Task<CrmServiceClient>>
+                {
+                    Task<CrmServiceClient>.Factory.StartNew(() => ConnectOnline(UseOsdp, true)),
+                    Task<CrmServiceClient>.Factory.StartNew(() => ConnectOnline(UseOsdp, false))
+                };
+
+                tasks[0].Wait();
+                tasks[1].Wait();
+
+                crmSvc = tasks.FirstOrDefault(t => t.Result.IsReady)?.Result;
+
+                // crmSvc = ConnectOnline(UseOsdp);
 
                 AuthType = AuthenticationProviderType.OnlineFederation;
             }
@@ -296,7 +307,7 @@ namespace McTools.Xrm.Connection
             HomeRealmUrl = editedConnection.HomeRealmUrl;
         }
 
-        private CrmServiceClient ConnectOnline(bool isOffice365)
+        private CrmServiceClient ConnectOnline(bool isOffice365, bool useSsl)
         {
             var password = CryptoManager.Decrypt(userPassword, ConnectionManager.CryptoPassPhrase,
                  ConnectionManager.CryptoSaltValue,
@@ -305,12 +316,7 @@ namespace McTools.Xrm.Connection
                  ConnectionManager.CryptoInitVector,
                  ConnectionManager.CryptoKeySize);
 
-            var securePassword = new SecureString();
-            foreach (char c in password)
-                securePassword.AppendChar(c);
-            securePassword.MakeReadOnly();
-
-            return new CrmServiceClient(UserName, securePassword, GetOnlineRegion(ServerName), OrganizationUrlName, true, UseSsl, isOffice365: isOffice365);
+            return new CrmServiceClient(UserName, CrmServiceClient.MakeSecureString(password), GetOnlineRegion(ServerName), OrganizationUrlName, true, useSsl, isOffice365: isOffice365);
         }
 
         private string GetOnlineRegion(string hostname)
