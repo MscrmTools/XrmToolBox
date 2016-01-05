@@ -19,6 +19,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
         private bool initialIsProfile;
         private string initialTitle = "";
         private string initialUrl = "";
+        private ToolTip tip;
 
         #region Delegates
 
@@ -38,7 +39,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
             collec = new Dictionary<string, string>();
 
-            ToolTip tip = new ToolTip();
+            tip = new ToolTip();
             tip.ToolTipTitle = "Information";
             tip.SetToolTip(txtGroupId, "A unique identifier for this Group element.");
             tip.SetToolTip(txtGroupUrl, "Specifies the URL to render for the Outlook folder that represents the Group in Microsoft Dynamics CRM for Outlook.");

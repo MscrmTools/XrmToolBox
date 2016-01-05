@@ -437,6 +437,10 @@ namespace MsCrmTools.SiteMapEditor
 
                     tvSiteMap.SelectedNode = tnmNode;
                 }
+                tnmNodeParent = null;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
             }
 
             toolStripButtonMoveDown.Enabled = true;
@@ -466,6 +470,11 @@ namespace MsCrmTools.SiteMapEditor
 
                     tvSiteMap.SelectedNode = tnmNode;
                 }
+
+                tnmNodeParent = null;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
             }
 
             toolStripButtonMoveUp.Enabled = true;
@@ -529,6 +538,15 @@ namespace MsCrmTools.SiteMapEditor
 
             TreeNodeHelper.AddContextMenu(e.Node, this);
             Control existingControl = panelContainer.Controls.Count > 0 ? panelContainer.Controls[0] : null;
+
+            if (existingControl != null)
+            {
+                panelContainer.Controls.Remove(existingControl);
+                existingControl.Dispose();
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+            }
 
             switch (selectedNode.Text.Split(' ')[0])
             {

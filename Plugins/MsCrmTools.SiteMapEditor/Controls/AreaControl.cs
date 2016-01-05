@@ -23,6 +23,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
         private string initialTitle = "";
         private string initialUrl = "";
         private IOrganizationService service;
+        private ToolTip tip;
         private List<Entity> webResourcesHtmlCache;
         private List<Entity> webResourcesImageCache;
 
@@ -47,7 +48,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
             collec = new Dictionary<string, string>();
 
-            ToolTip tip = new ToolTip();
+            tip = new ToolTip();
             tip.ToolTipTitle = "Information";
             tip.SetToolTip(txtAreaIcon, "Specifies a URL to a 16x16 pixel image.");
             tip.SetToolTip(txtAreaId, "Specifies a unique identifier in ASCII. Spaces are not allowed.\r\n\r\nValid values:a-z, A-Z, 0-9, and underscore (_).");

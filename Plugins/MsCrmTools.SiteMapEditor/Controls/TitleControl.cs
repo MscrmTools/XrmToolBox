@@ -17,6 +17,7 @@ namespace SiteMapEditor.Controls
 
         private string initialLCID = "";
         private string initialTitle = "";
+        private ToolTip tip;
 
         #region Delegates
 
@@ -36,7 +37,7 @@ namespace SiteMapEditor.Controls
 
             collec = new Dictionary<string, string>();
 
-            ToolTip tip = new ToolTip();
+            tip = new ToolTip();
             tip.ToolTipTitle = "Information";
             tip.SetToolTip(txtTitleLCID, "A four or five digit Locale ID for the title.");
             tip.SetToolTip(txtTitleTitle, "Text to be displayed.");

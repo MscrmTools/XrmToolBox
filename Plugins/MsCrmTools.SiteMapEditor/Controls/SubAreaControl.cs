@@ -43,6 +43,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
         private string initialTitle = "";
         private string initialUrl = "";
         private IOrganizationService service;
+        private ToolTip tip;
 
         #region Delegates
 
@@ -67,7 +68,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
             collec = new Dictionary<string, string>();
 
-            ToolTip tip = new ToolTip();
+            tip = new ToolTip();
             tip.ToolTipTitle = "Information";
             tip.SetToolTip(chkSubAreaAvailableOffline, "Controls whether SubArea is available offline.");
             tip.SetToolTip(chkSubAreaPassParams, "Specifies whether information about the organization and language context are passed to the URL.");
