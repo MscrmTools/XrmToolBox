@@ -113,6 +113,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.CancelButton = this.linkClose;
             this.ClientSize = new System.Drawing.Size(600, 300);
             this.ControlBox = false;
             this.Controls.Add(this.linkClose);

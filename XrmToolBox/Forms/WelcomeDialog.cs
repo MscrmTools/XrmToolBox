@@ -30,6 +30,7 @@ namespace XrmToolBox.Forms
 
         private void linkClose_Click(object sender, EventArgs e)
         {
+            DialogResult = DialogResult.Cancel;
             Close();
         }
 
