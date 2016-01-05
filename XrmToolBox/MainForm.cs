@@ -444,6 +444,7 @@ namespace XrmToolBox
             else
             {
                 var control = (IXrmToolBoxPluginControl)tabControl1.SelectedTab.Controls[0];
+                ((UserControl)control).Focus();
                 var currentPluginStatus = pluginControlStatuses.FirstOrDefault(pcs => pcs.Control == control);
                 if (currentPluginStatus == null)
                 {
