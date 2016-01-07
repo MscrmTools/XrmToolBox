@@ -250,7 +250,11 @@ namespace McTools.Xrm.Connection.WinForms
 
         private void btnValidaIfdInfo_Click(object sender, EventArgs e)
         {
-            updatedDetail.UseIfd = rbIfdYes.Checked;
+            if (rbIfdYes.Checked)
+            {
+                updatedDetail.UseIfd = true;
+                updatedDetail.HomeRealmUrl = txtHomeRealm.Text;
+            }
 
             if (updatedDetail.OrganizationUrlName == null || updatedDetail.OrganizationUrlName == updatedDetail.ServerName)
             {
