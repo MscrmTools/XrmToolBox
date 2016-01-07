@@ -3,6 +3,7 @@ using Microsoft.Xrm.Tooling.Connector;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -363,6 +364,66 @@ namespace McTools.Xrm.Connection
             }
 
             return region;
+        }
+
+        private string GetOrganizationCrmConnectionString()
+        {
+            DbConnectionStringBuilder dbcb = new DbConnectionStringBuilder();
+            //dbcb.Add("Url", OrganizationServiceUrl.Replace("/XRMServices/2011/Organization.svc", ""));
+            dbcb.Add("Url", !string.IsNullOrEmpty(OriginalUrl) ? OriginalUrl : WebApplicationUrl);
+
+            if (IsCustomAuth)
+            {
+                if (!UseIfd)
+                {
+                    if (!string.IsNullOrEmpty(UserDomain))
+                    {
+                        dbcb.Add("Domain", UserDomain);
+                    }
+                }
+
+                string username = UserName;
+                if (UseIfd)
+                {
+                    if (!string.IsNullOrEmpty(UserDomain))
+                    {
+                        username = string.Format("{0}\\{1}", UserDomain, UserName);
+                    }
+                }
+
+                if (string.IsNullOrEmpty(userPassword))
+                {
+                    throw new Exception("User password cannot be null. If the user password is not stored in configuration file, you should request it from the end user");
+                }
+
+                var decryptedPassword = CryptoManager.Decrypt(userPassword, ConnectionManager.CryptoPassPhrase,
+                   ConnectionManager.CryptoSaltValue,
+                   ConnectionManager.CryptoHashAlgorythm,
+                   ConnectionManager.CryptoPasswordIterations,
+                   ConnectionManager.CryptoInitVector,
+                   ConnectionManager.CryptoKeySize);
+
+                dbcb.Add("Username", username);
+                dbcb.Add("Password", decryptedPassword);
+            }
+
+            if (UseIfd && !string.IsNullOrEmpty(HomeRealmUrl))
+            {
+                dbcb.Add("HomeRealmUri", HomeRealmUrl);
+            }
+
+            //append timeout in seconds to connectionstring
+            dbcb.Add("Timeout", Timeout.ToString(@"hh\:mm\:ss"));
+
+            //dbcb.Add("AuthType", "OAuth");
+            //dbcb.Add("ClientId", "eec38f99-9962-4bb3-99fa-5e04f4bb0ea5");
+            //dbcb.Add("LoginPrompt", "Auto");
+            //dbcb.Add("RedirectUri", "http://localhost/TOTO");
+            //dbcb.Add("TokenCacheStorePath", "c:\\temp");
+
+            //dbcb.Add("AuthType", UseOsdp ? "Office365" : (UseIfd ? "IFD" : "AD"));
+
+            return dbcb.ToString();
         }
 
         #endregion Méthodes
