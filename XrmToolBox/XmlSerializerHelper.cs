@@ -12,7 +12,7 @@ namespace XrmToolBox
     public class XmlSerializerHelper
     {
         /// <summary>
-        /// Deserialize un contenu xml de type chaine de caractère en 
+        /// Deserialize un contenu xml de type chaine de caractère en
         /// une instance de la classe du type spécifié
         /// </summary>
         /// <param name="xmlContent">Contenu xml</param>

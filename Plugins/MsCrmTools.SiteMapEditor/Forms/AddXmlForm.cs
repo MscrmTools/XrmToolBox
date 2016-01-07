@@ -11,11 +11,18 @@ namespace MsCrmTools.SiteMapEditor.Forms
 {
     public partial class AddXmlForm : Form
     {
-        public XmlNode AddedXmlNode { get; set; }
-
         public AddXmlForm()
         {
             InitializeComponent();
+        }
+
+        public XmlNode AddedXmlNode { get; set; }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            AddedXmlNode = null;
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void btnOK_Click(object sender, EventArgs e)
@@ -34,13 +41,6 @@ namespace MsCrmTools.SiteMapEditor.Forms
             {
                 MessageBox.Show(this, "Error while parsing Xml: " + error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            AddedXmlNode = null;
-            DialogResult = DialogResult.Cancel;
-            Close();
         }
     }
 }

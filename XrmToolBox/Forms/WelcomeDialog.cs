@@ -1,35 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 
 namespace XrmToolBox.Forms
 {
     public partial class WelcomeDialog : Form
     {
-        public WelcomeDialog(string version)
+        public WelcomeDialog(string version, bool closeWindow = true)
         {
             InitializeComponent();
 
-            lblVersion.Text = string.Format("version: {0}",version);
+            lblVersion.Text = string.Format("version: {0}", version);
 
             ManageLicense();
 
-            var timer = new Timer();
-            timer.Tick += TimerTick;
-            timer.Interval = 3000;
-            timer.Start();
+            if (closeWindow)
+            {
+                var timer = new Timer();
+                timer.Tick += TimerTick;
+                timer.Interval = 3000;
+                timer.Start();
+            }
+            else
+            {
+                linkClose.Visible = true;
+            }
         }
 
-        void TimerTick(object sender, EventArgs e)
+        private void linkClose_Click(object sender, EventArgs e)
         {
-            ((Timer)sender).Stop();
+            DialogResult = DialogResult.Cancel;
             Close();
         }
 
@@ -45,10 +46,10 @@ namespace XrmToolBox.Forms
                 {
                     Type type = assembly.GetType("McTools.StopAdvertisement.LicenseManager");
                     if (type == null) { return; }
-                   
+
                     MethodInfo methodInfo = type.GetMethod("IsValid");
                     if (methodInfo == null) { return; }
-                        
+
                     object classInstance = Activator.CreateInstance(type, null);
 
                     if ((bool)methodInfo.Invoke(classInstance, null))
@@ -83,5 +84,10 @@ namespace XrmToolBox.Forms
             }
         }
 
+        private void TimerTick(object sender, EventArgs e)
+        {
+            ((Timer)sender).Stop();
+            Close();
+        }
     }
 }

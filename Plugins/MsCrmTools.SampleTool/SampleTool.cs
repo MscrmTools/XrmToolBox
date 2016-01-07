@@ -3,16 +3,16 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.ComponentModel.Composition;
-using System.Windows.Forms;
 using Microsoft.Crm.Sdk.Messages;
+using System;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SampleTool
 {
-   public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin
+    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin, IStatusBarMessager
     {
         #region Base tool implementation
 
@@ -21,32 +21,49 @@ namespace MsCrmTools.SampleTool
             InitializeComponent();
         }
 
-        private void BtnWhoAmIClick(object sender, EventArgs e)
-        {
-            ExecuteMethod(ProcessWhoAmI);
-        }
+        public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
 
         public void ProcessWhoAmI()
         {
-            WorkAsync(null, (w, e) =>
+            WorkAsync(new WorkAsyncInfo
             {
-                var request = new WhoAmIRequest();
-                var response = (WhoAmIResponse) Service.Execute(request);
-
-                e.Result = response.UserId;
-            },
-                e =>
+                Message = "Retrieving your user id...",
+                Work = (w, e) =>
                 {
-                    MessageBox.Show(string.Format("You are {0}", (Guid) e.Result));
+                    while (e.Cancel == false)
+                    {
+                        if (w.CancellationPending)
+                        {
+                            e.Cancel = true;
+                        }
+                        var request = new WhoAmIRequest();
+                        var response = (WhoAmIResponse)Service.Execute(request);
+
+                        e.Result = response.UserId;
+                    }
                 },
-                e =>
+                ProgressChanged = e =>
                 {
                     // If progress has to be notified to user, use the following method:
                     //SetWorkingMessage("Message to display");
+
+                    // If progress has to be notified to user, through the
+                    // status bar, use the following method
+                    if (SendMessageToStatusBar != null)
+                        SendMessageToStatusBar(this, new StatusBarMessageEventArgs(50, "progress at 50%"));
                 },
-                "Retrieving your user id...",
-                340,
-                150);
+                PostWorkCallBack = e =>
+                {
+                    if (!e.Cancelled)
+                    {
+                        MessageBox.Show(string.Format("You are {0}", (Guid)e.Result));
+                    }
+                },
+                AsyncArgument = null,
+                IsCancelable = true,
+                MessageWidth = 340,
+                MessageHeight = 150
+            });
         }
 
         private void BtnCloseClick(object sender, EventArgs e)
@@ -54,18 +71,23 @@ namespace MsCrmTools.SampleTool
             CloseTool();
         }
 
+        private void BtnWhoAmIClick(object sender, EventArgs e)
+        {
+            ExecuteMethod(ProcessWhoAmI);
+        }
+
         #endregion Base tool implementation
 
         #region Github implementation
 
-        public string UserName
-        {
-            get { return "GithubUserName"; }
-        }
-
         public string RepositoryName
         {
             get { return "GithubRepositoryName"; }
+        }
+
+        public string UserName
+        {
+            get { return "GithubUserName"; }
         }
 
         #endregion Github implementation
@@ -80,15 +102,15 @@ namespace MsCrmTools.SampleTool
         #endregion CodePlex implementation
 
         #region PayPal implementation
-        
-        public string EmailAccount
-        {
-            get { return "paypal@paypal.com"; }
-        }
 
         public string DonationDescription
         {
             get { return "paypal description"; }
+        }
+
+        public string EmailAccount
+        {
+            get { return "paypal@paypal.com"; }
         }
 
         #endregion PayPal implementation
@@ -100,6 +122,13 @@ namespace MsCrmTools.SampleTool
             get { return "http://www.google.com"; }
         }
 
-        #endregion
+        #endregion Help implementation
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            CancelWorker();
+
+            MessageBox.Show("Cancelled");
+        }
     }
 }

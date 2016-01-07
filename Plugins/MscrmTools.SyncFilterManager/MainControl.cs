@@ -3,16 +3,14 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Windows.Forms;
 using Microsoft.Xrm.Sdk;
 using MscrmTools.SyncFilterManager.AppCode;
 using MscrmTools.SyncFilterManager.Forms;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MscrmTools.SyncFilterManager
 {
@@ -30,22 +28,7 @@ namespace MscrmTools.SyncFilterManager
 
         #endregion Constructor
 
-        #region EventHandlers
-
-        /// <summary>
-        /// EventHandler to request a connection to an organization
-        /// </summary>
-        public event EventHandler OnRequestConnection;
-
-        /// <summary>
-        /// EventHandler to close the current tool
-        /// </summary>
-        public event EventHandler OnCloseTool;
-
-        #endregion EventHandlers
-
         #region Methods
-
 
         private void TsbCloseClick(object sender, EventArgs e)
         {
@@ -56,14 +39,16 @@ namespace MscrmTools.SyncFilterManager
 
         #region Users
 
-        private void tsbResetUsersFiltersToDefault_Click(object sender, EventArgs e)
+        private void crmUserList1_OnRequestConnection(object sender, EventArgs e)
         {
-            ExecuteMethod(ResetUsersFiltersToDefault);
+            ExecuteMethod(SearchUsers);
         }
 
         private void ResetUsersFiltersToDefault()
         {
             crmUserList1.Service = Service;
+            crmUserList1.ConnectionDetail = ConnectionDetail;
+
             var selectedUsers = crmUserList1.GetSelectedUsers();
 
             if (selectedUsers.Count == 0)
@@ -81,7 +66,7 @@ namespace MscrmTools.SyncFilterManager
                 WorkAsync("Reseting users local data rules...",
                    (bw, e) =>
                    {
-                       var rm = new RuleManager("userquery", Service);
+                       var rm = new RuleManager("userquery", Service, ConnectionDetail);
                        rm.ResetUsersRulesFromDefault((List<Entity>)e.Argument, bw);
                    },
                    e =>
@@ -93,29 +78,30 @@ namespace MscrmTools.SyncFilterManager
 
                        tabCtrl.Enabled = true;
                    },
-                   e=>SetWorkingMessage(e.UserState.ToString()),
+                   e => SetWorkingMessage(e.UserState.ToString()),
                    selectedUsers);
             }
-        }
-
-        private void crmUserList1_OnRequestConnection(object sender, EventArgs e)
-        {
-            ExecuteMethod(SearchUsers);
         }
 
         private void SearchUsers()
         {
             crmUserList1.Service = Service;
+            crmUserList1.ConnectionDetail = ConnectionDetail;
             crmUserList1.Search();
+        }
+
+        private void tsbResetUsersFiltersToDefault_Click(object sender, EventArgs e)
+        {
+            ExecuteMethod(ResetUsersFiltersToDefault);
         }
 
         #endregion Users
 
         #region Users Rules
 
-        private void tsbLoadUsersLocalDataRules_Click(object sender, EventArgs e)
+        private void forSpecificUsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           ExecuteMethod(LoadUserLocalDataRules);
+            ExecuteMethod(LoadUserLocalDataRulesForUsers);
         }
 
         private void LoadUserLocalDataRules()
@@ -132,11 +118,6 @@ namespace MscrmTools.SyncFilterManager
             }
         }
 
-        private void forSpecificUsersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-           ExecuteMethod(LoadUserLocalDataRulesForUsers);
-        }
-
         private void LoadUserLocalDataRulesForUsers()
         {
             var usDialog = new UserSelectionDialog(Service);
@@ -147,6 +128,18 @@ namespace MscrmTools.SyncFilterManager
                 usersLocalDataRulesView.DisplayOutlookFilter = chkDisplayOutlookFilters.Checked;
                 usersLocalDataRulesView.LoadSystemViews(usDialog.SelectedUsers);
             }
+        }
+
+        private void tsbDeleteUserRule_Click(object sender, EventArgs e)
+        {
+            if (usersLocalDataRulesView.GetSelectedSystemView().Count == 0) return;
+            if (MessageBox.Show(this, "Are you sure you want to delete this synchonization rule?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                usersLocalDataRulesView.DeleteSelectedRules();
+        }
+
+        private void tsbLoadUsersLocalDataRules_Click(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadUserLocalDataRules);
         }
 
         private void tsbUserRuleDisable_Click(object sender, EventArgs e)
@@ -161,21 +154,14 @@ namespace MscrmTools.SyncFilterManager
             usersLocalDataRulesView.EnableSelectedRules();
         }
 
-        private void tsbDeleteUserRule_Click(object sender, EventArgs e)
+        private void tsmiGroupByReturnedType_Click(object sender, EventArgs e)
         {
-            if (usersLocalDataRulesView.GetSelectedSystemView().Count == 0) return;
-            if (MessageBox.Show(this, "Are you sure you want to delete this synchonization rule?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) 
-                usersLocalDataRulesView.DeleteSelectedRules();
+            usersLocalDataRulesView.GroupBy("returnedtypecode");
         }
 
         private void tsmiGroupByRule_Click(object sender, EventArgs e)
         {
             usersLocalDataRulesView.GroupBy("name");
-        }
-
-        private void tsmiGroupByReturnedType_Click(object sender, EventArgs e)
-        {
-            usersLocalDataRulesView.GroupBy("returnedtypecode");
         }
 
         private void tsmiGroupByUser_Click(object sender, EventArgs e)
@@ -187,25 +173,20 @@ namespace MscrmTools.SyncFilterManager
 
         #region System Rules
 
-        private void tsbLoadSystemSynchronizationFilter_Click(object sender, EventArgs e)
-        {
-            ExecuteMethod(LoadSystemRules);
-        }
-
         private void LoadSystemRules()
         {
             systemRulesListView.Service = Service;
             systemRulesListView.LoadSystemViews();
         }
 
-        #endregion
+        private void tsbLoadSystemSynchronizationFilter_Click(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadSystemRules);
+        }
+
+        #endregion System Rules
 
         #region Default Rules
-
-        private void tsbLoadDefaultLocalDataRules_Click(object sender, EventArgs e)
-        {
-            ExecuteMethod(LoadDefaultLocalDataRules);
-        }
 
         private void LoadDefaultLocalDataRules()
         {
@@ -216,37 +197,38 @@ namespace MscrmTools.SyncFilterManager
             chkDisplayOutlookFilters.Enabled = true;
         }
 
-        private void tsbDefaultDelete_Click(object sender, EventArgs e)
-        {
-            if (defaultLocalDataRulesView.GetSelectedSystemView().Count == 0) return;
-            if(MessageBox.Show(this,"Are you sure you want to delete this synchonization rule?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question)== DialogResult.Yes)
-            defaultLocalDataRulesView.DeleteSelectedRules();
-        }
-
         private void tsbApplyToUsers_Click(object sender, EventArgs e)
         {
             if (defaultLocalDataRulesView.GetSelectedSystemView().Count == 0) return;
             defaultLocalDataRulesView.ApplySelectedFiltersToUsers();
         }
 
+        private void tsbDefaultDelete_Click(object sender, EventArgs e)
+        {
+            if (defaultLocalDataRulesView.GetSelectedSystemView().Count == 0) return;
+            if (MessageBox.Show(this, "Are you sure you want to delete this synchonization rule?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                defaultLocalDataRulesView.DeleteSelectedRules();
+        }
+
+        private void tsbLoadDefaultLocalDataRules_Click(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadDefaultLocalDataRules);
+        }
+
         #endregion Default Rules
 
         #region System Views
 
-        private void tsbLoadSystemViews_Click(object sender, EventArgs e)
-        {
-            ExecuteMethod(LoadSystemViews);
-        }
-
         private void LoadSystemViews()
         {
             crmSystemViewsList.Service = Service;
+            crmSystemViewsList.ConnectionDetail = ConnectionDetail;
             crmSystemViewsList.LoadSystemViews();
         }
 
-        private void tsmiCreateSystemFilterFromView_Click(object sender, EventArgs e)
+        private void tsbLoadSystemViews_Click(object sender, EventArgs e)
         {
-            crmSystemViewsList.CreateFilterFromView(true);
+            ExecuteMethod(LoadSystemViews);
         }
 
         private void tsmiCreateFilterTemplateFromView_Click(object sender, EventArgs e)
@@ -254,9 +236,9 @@ namespace MscrmTools.SyncFilterManager
             crmSystemViewsList.CreateFilterFromView(false);
         }
 
-        private void tsmiUpdateSystemFilter_Click(object sender, EventArgs e)
+        private void tsmiCreateSystemFilterFromView_Click(object sender, EventArgs e)
         {
-            crmSystemViewsList.UpdateFilterFromView(true);
+            crmSystemViewsList.CreateFilterFromView(true);
         }
 
         private void tsmiUpdateFilterTemplate_Click(object sender, EventArgs e)
@@ -264,12 +246,30 @@ namespace MscrmTools.SyncFilterManager
             crmSystemViewsList.UpdateFilterFromView(false);
         }
 
+        private void tsmiUpdateSystemFilter_Click(object sender, EventArgs e)
+        {
+            crmSystemViewsList.UpdateFilterFromView(true);
+        }
+
         #endregion System Views
 
-        private void tsbCopyToNewDefautRule_Click(object sender, EventArgs e)
+        private void chkDisplayOfflineFilters_CheckedChanged(object sender, EventArgs e)
         {
-            if (crmSystemViewsList.GetSelectedSystemView().Count == 0) return;
-            crmSystemViewsList.CreateFilterFromView(false);
+            usersLocalDataRulesView.DisplayViews(chkDisplayOutlookFilters.Checked, chkDisplayOfflineFilters.Checked);
+        }
+
+        private void chkDisplayOutlookFilters_CheckedChanged(object sender, EventArgs e)
+        {
+            usersLocalDataRulesView.DisplayViews(chkDisplayOutlookFilters.Checked, chkDisplayOfflineFilters.Checked);
+        }
+
+        private void ShowFetchXml(Entity entity)
+        {
+            if (entity != null)
+            {
+                var fxDialog = new XmlContentDisplayDialog(entity.GetAttributeValue<string>("fetchxml"));
+                fxDialog.ShowDialog(this);
+            }
         }
 
         private void tsbCopyToExistingDefaultRule_Click(object sender, EventArgs e)
@@ -278,10 +278,32 @@ namespace MscrmTools.SyncFilterManager
             crmSystemViewsList.UpdateFilterFromView(false);
         }
 
+        private void tsbCopyToNewDefautRule_Click(object sender, EventArgs e)
+        {
+            if (crmSystemViewsList.GetSelectedSystemView().Count == 0) return;
+            crmSystemViewsList.CreateFilterFromView(false);
+        }
+
+        private void tsbCopyUserFiltersToUser_Click(object sender, EventArgs e)
+        {
+            crmUserList1.ReplaceUserFilters();
+        }
+
+        private void tsbDefineAsDefault_Click(object sender, EventArgs e)
+        {
+            if (defaultLocalDataRulesView.GetSelectedSystemView().Count == 0) return;
+            defaultLocalDataRulesView.DefineAsDefault();
+        }
+
         private void tsbShowFetchXmlDefault_Click(object sender, EventArgs e)
         {
             if (defaultLocalDataRulesView.GetSelectedSystemView().Count == 0) return;
             ShowFetchXml(defaultLocalDataRulesView.GetSelectedSystemView().FirstOrDefault());
+        }
+
+        private void tsbShowFetchXmlSystemRules_Click(object sender, EventArgs e)
+        {
+            ShowFetchXml(systemRulesListView.GetSelectedSystemView().FirstOrDefault());
         }
 
         private void tsbShowFetchXmlUser_Click(object sender, EventArgs e)
@@ -295,34 +317,9 @@ namespace MscrmTools.SyncFilterManager
             ShowFetchXml(crmSystemViewsList.GetSelectedSystemView().FirstOrDefault());
         }
 
-        private void tsbShowFetchXmlSystemRules_Click(object sender, EventArgs e)
+        private void tsbSystemFilterProperties_Click(object sender, EventArgs e)
         {
-            ShowFetchXml(systemRulesListView.GetSelectedSystemView().FirstOrDefault());
-        }
-
-        private void ShowFetchXml(Entity entity)
-        {
-            if (entity != null)
-            {
-                var fxDialog = new XmlContentDisplayDialog(entity.GetAttributeValue<string>("fetchxml"));
-                fxDialog.ShowDialog(this);
-            }
-        }
-
-        private void tsbDefineAsDefault_Click(object sender, EventArgs e)
-        {
-            if (defaultLocalDataRulesView.GetSelectedSystemView().Count == 0) return;
-            defaultLocalDataRulesView.DefineAsDefault();
-        }
-
-        private void chkDisplayOutlookFilters_CheckedChanged(object sender, EventArgs e)
-        {
-            usersLocalDataRulesView.DisplayViews(chkDisplayOutlookFilters.Checked, chkDisplayOfflineFilters.Checked);
-        }
-
-        private void chkDisplayOfflineFilters_CheckedChanged(object sender, EventArgs e)
-        {
-            usersLocalDataRulesView.DisplayViews(chkDisplayOutlookFilters.Checked, chkDisplayOfflineFilters.Checked);
+            systemRulesListView.RenameView();
         }
 
         private void tsbSystemRuleDelete_Click(object sender, EventArgs e)
@@ -330,21 +327,9 @@ namespace MscrmTools.SyncFilterManager
             systemRulesListView.DeleteSelectedRules();
         }
 
-        private void tsbSystemFilterProperties_Click(object sender, EventArgs e)
-        {
-            systemRulesListView.RenameView();
-        }
-
         private void tsbTemplateFilterProperties_Click(object sender, EventArgs e)
         {
             defaultLocalDataRulesView.RenameView();
         }
-
-        private void tsbCopyUserFiltersToUser_Click(object sender, EventArgs e)
-        {
-            crmUserList1.ReplaceUserFilters();
-        }
-
-      
     }
 }

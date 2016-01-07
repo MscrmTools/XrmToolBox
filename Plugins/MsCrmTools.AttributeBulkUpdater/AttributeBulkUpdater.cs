@@ -3,18 +3,16 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
+using MsCrmTools.AttributeBulkUpdater.Helpers;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Sdk.Metadata;
-using MsCrmTools.AttributeBulkUpdater.Helpers;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 using CrmExceptionHelper = XrmToolBox.CrmExceptionHelper;
 
 namespace MsCrmTools.AttributeBulkUpdater
@@ -23,15 +21,15 @@ namespace MsCrmTools.AttributeBulkUpdater
     {
         #region Variables
 
-       /// <summary>
+        /// <summary>
         /// Original value for searchable property
         /// </summary>
-        Dictionary<string, AttributeMetadata> attributesOriginalState;
+        private Dictionary<string, AttributeMetadata> attributesOriginalState;
 
         /// <summary>
         /// Current Attributes list order column index
         /// </summary>
-        int currentAttributesColumnOrder;
+        private int currentAttributesColumnOrder;
 
         #endregion Variables
 
@@ -49,17 +47,51 @@ namespace MsCrmTools.AttributeBulkUpdater
 
         #region Methods
 
+        private void btnCheck_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in lvAttributes.Items)
+            {
+                item.Checked = ((Button)sender).Text == "Check All";
+            }
+
+            ((Button)sender).Text = ((Button)sender).Text == "Check All" ? "Clear All" : "Check All";
+        }
+
+        private void btnCheckAttrOnForms_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in lvAttributes.Items)
+            {
+                item.Checked = item.SubItems[4].Text.ToLower() == "true";
+            }
+        }
+
+        private void btnResetAttributes_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in lvAttributes.Items)
+            {
+                AttributeMetadata amd = attributesOriginalState[item.SubItems[1].Text];
+
+                if (chkValidForAdvancedFind.Checked && chkValidForAudit.Checked)
+                {
+                    item.Checked = amd.IsValidForAdvancedFind.Value && amd.IsAuditEnabled.Value;
+                }
+                else if (chkValidForAdvancedFind.Checked)
+                {
+                    item.Checked = amd.IsValidForAdvancedFind.Value;
+                }
+                else
+                {
+                    item.Checked = amd.IsAuditEnabled.Value;
+                }
+            }
+        }
+
         private void TsbCloseThisTabClick(object sender, EventArgs e)
         {
             CloseTool();
         }
 
         #region Fill Entities
-
-        private void tsbLoadEntities_Click(object sender, EventArgs e)
-        {
-            ExecuteMethod(LoadEntities);
-        }
 
         private void LoadEntities()
         {
@@ -71,13 +103,12 @@ namespace MsCrmTools.AttributeBulkUpdater
             gbEntities.Enabled = false;
             tsbPublishEntity.Enabled = false;
             tsbSaveAttributes.Enabled = false;
-            
-            WorkAsync("Loading entities...",
-                e =>
-                {
-                    e.Result = MetadataHelper.RetrieveEntities(Service);
-                },
-                e =>
+
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading entities...",
+                Work = (bw, e) => { e.Result = MetadataHelper.RetrieveEntities(Service); },
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -97,10 +128,16 @@ namespace MsCrmTools.AttributeBulkUpdater
 
                         gbEntities.Enabled = true;
                     }
-                });
+                }
+            });
         }
 
-        #endregion
+        private void tsbLoadEntities_Click(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadEntities);
+        }
+
+        #endregion Fill Entities
 
         #region Fill Attributes
 
@@ -109,20 +146,23 @@ namespace MsCrmTools.AttributeBulkUpdater
             if (lvEntities.SelectedItems.Count > 0)
             {
                 lvAttributes.Items.Clear();
-                
+
                 var emd = (EntityMetadata)lvEntities.SelectedItems[0].Tag;
 
-                WorkAsync("Loading attributes...",
-                    evt =>
+                WorkAsync(new WorkAsyncInfo
+                {
+                    Message = "Loading attributes...",
+                    AsyncArgument = emd.LogicalName,
+                    Work = (bw, evt) =>
                     {
                         attributesOriginalState = new Dictionary<string, AttributeMetadata>();
                         EntityMetadata metadata = MetadataHelper.RetrieveEntity(evt.Argument.ToString(), Service);
-                        XmlDocument allFormsDoc = MetadataHelper.RetrieveEntityForms(metadata.LogicalName, Service);
+                        XmlDocument allFormsDoc = MetadataHelper.RetrieveEntityForms(metadata.LogicalName, Service, ConnectionDetail);
                         var items = new List<ListViewItem>();
 
                         foreach (AttributeMetadata amd in metadata.Attributes)
                         {
-                            if (amd.AttributeType.HasValue 
+                            if (amd.AttributeType.HasValue
                                 && amd.AttributeType.Value != AttributeTypeCode.Virtual
                                 && string.IsNullOrEmpty(amd.AttributeOf))
                             {
@@ -154,7 +194,7 @@ namespace MsCrmTools.AttributeBulkUpdater
 
                         evt.Result = items;
                     },
-                    evt =>
+                    PostWorkCallBack = evt =>
                     {
                         if (evt.Error != null)
                         {
@@ -162,7 +202,7 @@ namespace MsCrmTools.AttributeBulkUpdater
                         }
                         else
                         {
-                            lvAttributes.Items.AddRange(((List<ListViewItem>) evt.Result).ToArray());
+                            lvAttributes.Items.AddRange(((List<ListViewItem>)evt.Result).ToArray());
 
                             lvAttributes.Enabled = true;
                             tsbSaveAttributes.Enabled = true;
@@ -173,13 +213,12 @@ namespace MsCrmTools.AttributeBulkUpdater
                             gbAttributes.Enabled = true;
                             gbPropertySelection.Enabled = true;
                         }
-
-                    },
-                    emd.LogicalName);
+                    }
+                });
             }
         }
 
-        #endregion
+        #endregion Fill Attributes
 
         #region Save Attributes
 
@@ -197,7 +236,7 @@ namespace MsCrmTools.AttributeBulkUpdater
 
             var us = new UpdateSettings
             {
-                Items = lvAttributes.Items.Cast<ListViewItem>().Select(i => (ListViewItem) i.Clone()).ToList(),
+                Items = lvAttributes.Items.Cast<ListViewItem>().Select(i => (ListViewItem)i.Clone()).ToList(),
                 UpdateValidForAdvancedFind = chkValidForAdvancedFind.Checked,
                 UpdateAuditIsEnabled = chkValidForAudit.Checked,
                 UpdateRequirementLevel = chkRequirementLevel.Checked,
@@ -211,7 +250,7 @@ namespace MsCrmTools.AttributeBulkUpdater
             lvEntities_SelectedIndexChanged(null, null);
         }
 
-        #endregion
+        #endregion Save Attributes
 
         #region Publish Entity
 
@@ -223,8 +262,11 @@ namespace MsCrmTools.AttributeBulkUpdater
                 tsbSaveAttributes.Enabled = false;
                 tsbLoadEntities.Enabled = false;
 
-                WorkAsync("Publishing entities...",
-                    evt =>
+                WorkAsync(new WorkAsyncInfo
+                {
+                    Message = "Publishing entities...",
+                    AsyncArgument = lvEntities.SelectedItems[0].Tag,
+                    Work = (bw, evt) =>
                     {
                         var currentEmd = (EntityMetadata)evt.Argument;
 
@@ -238,7 +280,7 @@ namespace MsCrmTools.AttributeBulkUpdater
 
                         Service.Execute(pubRequest);
                     },
-                    evt =>
+                    PostWorkCallBack = evt =>
                     {
                         if (evt.Error != null)
                         {
@@ -249,55 +291,30 @@ namespace MsCrmTools.AttributeBulkUpdater
                         tsbPublishEntity.Enabled = true;
                         tsbSaveAttributes.Enabled = true;
                         tsbLoadEntities.Enabled = true;
-                    },
-                    lvEntities.SelectedItems[0].Tag);
+                    }
+                });
             }
         }
 
-        #endregion
+        #endregion Publish Entity
 
-        private void btnResetAttributes_Click(object sender, EventArgs e)
-        {
-            foreach (ListViewItem item in lvAttributes.Items)
-            {
-                AttributeMetadata amd = attributesOriginalState[item.SubItems[1].Text];
-
-                if (chkValidForAdvancedFind.Checked && chkValidForAudit.Checked)
-                {
-                    item.Checked = amd.IsValidForAdvancedFind.Value && amd.IsAuditEnabled.Value;
-                }
-                else if (chkValidForAdvancedFind.Checked)
-                {
-                    item.Checked = amd.IsValidForAdvancedFind.Value;
-                }
-                else
-                {
-                    item.Checked = amd.IsAuditEnabled.Value;
-                }
-            }
-        }
-
-        private void btnCheck_Click(object sender, EventArgs e)
-        {
-            foreach (ListViewItem item in lvAttributes.Items)
-            {
-                item.Checked = ((Button)sender).Text == "Check All";
-            }
-
-            ((Button)sender).Text = ((Button)sender).Text == "Check All" ? "Clear All" : "Check All";
-        }
-
-        private void btnCheckAttrOnForms_Click(object sender, EventArgs e)
-        {
-            foreach (ListViewItem item in lvAttributes.Items)
-            {
-                item.Checked = item.SubItems[4].Text.ToLower() == "true";
-            }
-        }
-
-        #endregion
+        #endregion Methods
 
         #region Column Sorting Handlers
+
+        private void lvAttributes_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            if (e.Column == currentAttributesColumnOrder)
+            {
+                lvAttributes.Sorting = lvAttributes.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+                lvAttributes.ListViewItemSorter = new ListViewItemComparer(e.Column, lvAttributes.Sorting);
+            }
+            else
+            {
+                currentAttributesColumnOrder = e.Column;
+                lvAttributes.ListViewItemSorter = new ListViewItemComparer(e.Column, SortOrder.Ascending);
+            }
+        }
 
         private void lvEntities_ColumnClick(object sender, ColumnClickEventArgs e)
         {
@@ -315,42 +332,7 @@ namespace MsCrmTools.AttributeBulkUpdater
             lvEntities.ListViewItemSorter = new ListViewItemComparer(e.Column, lvEntities.Sorting);
         }
 
-        private void lvAttributes_ColumnClick(object sender, ColumnClickEventArgs e)
-        {
-            if (e.Column == currentAttributesColumnOrder)
-            {
-                lvAttributes.Sorting = lvAttributes.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
-                lvAttributes.ListViewItemSorter = new ListViewItemComparer(e.Column, lvAttributes.Sorting);
-            }
-            else
-            {
-                currentAttributesColumnOrder = e.Column;
-                lvAttributes.ListViewItemSorter = new ListViewItemComparer(e.Column, SortOrder.Ascending);
-            }
-        }
-
-        #endregion
-
-        private void chkValidForAdvancedFind_CheckedChanged(object sender, EventArgs e)
-        {
-            CheckItems();
-        }
-
-        private void chkValidForAudit_CheckedChanged(object sender, EventArgs e)
-        {
-            CheckItems();
-        }
-
-        private AttributeRequiredLevel? MapSdkValue(int selectedValue)
-        {
-            switch(selectedValue)
-            {
-                case 0: return AttributeRequiredLevel.ApplicationRequired;
-                case 1: return AttributeRequiredLevel.Recommended;
-                case 2: return AttributeRequiredLevel.None;
-                default: return null;
-            }
-        }
+        #endregion Column Sorting Handlers
 
         private void CheckItems()
         {
@@ -380,6 +362,27 @@ namespace MsCrmTools.AttributeBulkUpdater
         private void chkRequirementLevel_CheckedChanged(object sender, EventArgs e)
         {
             cboRequirementLevel.Enabled = chkRequirementLevel.Checked;
+        }
+
+        private void chkValidForAdvancedFind_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckItems();
+        }
+
+        private void chkValidForAudit_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckItems();
+        }
+
+        private AttributeRequiredLevel? MapSdkValue(int selectedValue)
+        {
+            switch (selectedValue)
+            {
+                case 0: return AttributeRequiredLevel.ApplicationRequired;
+                case 1: return AttributeRequiredLevel.Recommended;
+                case 2: return AttributeRequiredLevel.None;
+                default: return null;
+            }
         }
     }
 }

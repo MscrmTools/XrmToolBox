@@ -7,10 +7,12 @@ using MsCrmTools.WebResourcesManager.AppCode;
 
 namespace MsCrmTools.WebResourcesManager.UserControls
 {
-    interface IWebResourceControl
+    internal interface IWebResourceControl
     {
         string GetBase64WebResourceContent();
-        void ReplaceWithNewFile(string filename);
+
         Enumerations.WebResourceType GetWebResourceType();
+
+        void ReplaceWithNewFile(string filename);
     }
 }

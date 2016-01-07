@@ -1,22 +1,22 @@
-﻿using System;
+﻿using MarkdownSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
-using MarkdownSharp;
 
 namespace XrmToolBox.AppCode
 {
     public class GithubVersionChecker
     {
+        private static int currentBuildVersion;
         private static int currentMajorVersion;
         private static int currentMinorVersion;
-        private static int currentBuildVersion;
         private static int currentRevisionVersion;
-        private readonly string userName;
         private readonly string repositoryName;
+        private readonly string userName;
 
         public GithubVersionChecker(string currentVersion, string userName, string repositoryName)
         {
@@ -39,7 +39,7 @@ namespace XrmToolBox.AppCode
             RunAsync().Wait();
         }
 
-        async Task RunAsync()
+        private async Task RunAsync()
         {
             try
             {
@@ -61,7 +61,7 @@ namespace XrmToolBox.AppCode
                         var jSserializer = new JavaScriptSerializer();
                         var releases = jSserializer.Deserialize<List<RootObject>>(data.Result);
 
-                        var lastRelease = releases.OrderByDescending(r => r.created_at).FirstOrDefault(r=>r.prerelease == false);
+                        var lastRelease = releases.OrderByDescending(r => r.created_at).FirstOrDefault(r => r.prerelease == false);
                         if (lastRelease != null)
                         {
                             var version = lastRelease.tag_name.Replace("v.", "");
@@ -81,7 +81,15 @@ namespace XrmToolBox.AppCode
                                 currentBuildVersion == buildVersion && currentRevisionVersion < revisionVersion)
                             {
                                 var mdth = new Markdown();
-                                var html = mdth.Transform(lastRelease.body).Replace("h1", "div");
+                                var html = string.Empty;
+                                try
+                                {
+                                    html = mdth.Transform(lastRelease.body);
+                                }
+                                catch
+                                {
+                                    html = "<br/><br/><i>Unable to load release notes.<br/>Click the Download button to read what's new!</i>";
+                                }
 
                                 Cpi = new GithubInformation
                                 {

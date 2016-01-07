@@ -3,9 +3,10 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Xrm.Sdk;
+using MsCrmTools.WebResourcesManager.AppCode;
 using System;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
 
 namespace MsCrmTools.WebResourcesManager.Forms
 {
@@ -16,19 +17,19 @@ namespace MsCrmTools.WebResourcesManager.Forms
         /// <summary>
         /// Current script
         /// </summary>
-        readonly WebResource currentWebResource;
-        
-        /// <summary>
-        /// Xrm Organization Service
-        /// </summary>
-        IOrganizationService innerService;
+        private readonly WebResource currentWebResource;
 
         /// <summary>
         /// Current Prefix for names depending on selected solution
         /// </summary>
-        string currentPrefix = string.Empty;
+        private string currentPrefix = string.Empty;
 
-        #endregion 
+        /// <summary>
+        /// Xrm Organization Service
+        /// </summary>
+        private IOrganizationService innerService;
+
+        #endregion Variables
 
         #region Constructor
 
@@ -47,7 +48,6 @@ namespace MsCrmTools.WebResourcesManager.Forms
             FillControls();
         }
 
-       
         #endregion Constructor
 
         #region Properties
@@ -72,29 +72,29 @@ namespace MsCrmTools.WebResourcesManager.Forms
             if (!string.IsNullOrEmpty(currentWebResource.FilePath))
                 txtPath.Text = currentWebResource.FilePath;
 
-            if (currentWebResource.WebResourceEntity.Contains("name"))
-                txtName.Text = currentWebResource.WebResourceEntity["name"].ToString();
+            if (currentWebResource.Entity.Contains("name"))
+                txtName.Text = currentWebResource.Entity["name"].ToString();
 
-            if (currentWebResource.WebResourceEntity.Contains("displayname"))
-                txtDisplayName.Text = currentWebResource.WebResourceEntity["displayname"].ToString();
+            if (currentWebResource.Entity.Contains("displayname"))
+                txtDisplayName.Text = currentWebResource.Entity["displayname"].ToString();
 
-            if (currentWebResource.WebResourceEntity.Contains("description"))
-                txtDescription.Text = currentWebResource.WebResourceEntity["description"].ToString();
+            if (currentWebResource.Entity.Contains("description"))
+                txtDescription.Text = currentWebResource.Entity["description"].ToString();
         }
-               
-        #endregion
 
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            currentWebResource.WebResourceEntity["displayname"] = txtDisplayName.Text;
-            currentWebResource.WebResourceEntity["description"] = txtDescription.Text;
-
-            DialogResult = DialogResult.OK;
-        }
+        #endregion Methods
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            currentWebResource.Entity["displayname"] = txtDisplayName.Text;
+            currentWebResource.Entity["description"] = txtDescription.Text;
+
+            DialogResult = DialogResult.OK;
         }
     }
 }

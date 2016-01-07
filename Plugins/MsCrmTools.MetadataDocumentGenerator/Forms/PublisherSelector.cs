@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 
 namespace MsCrmTools.MetadataDocumentGenerator.Forms
 {
@@ -15,14 +12,27 @@ namespace MsCrmTools.MetadataDocumentGenerator.Forms
     {
         private readonly IOrganizationService service;
 
-        public List<string> SelectedPrefixes { get; private set; }
-
         public PublisherSelector(IOrganizationService service, string selectedPrefixes)
         {
             InitializeComponent();
 
             this.service = service;
             this.SelectedPrefixes = selectedPrefixes.Split(';').ToList();
+        }
+
+        public List<string> SelectedPrefixes { get; private set; }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            SelectedPrefixes = listView1.CheckedItems.Cast<ListViewItem>().Select(i => i.Tag.ToString()).ToList();
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void PublisherSelector_Load(object sender, EventArgs e)
@@ -35,7 +45,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Forms
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            e.Result = service.RetrieveMultiple(new QueryExpression("publisher") {ColumnSet = new ColumnSet(true)});
+            e.Result = service.RetrieveMultiple(new QueryExpression("publisher") { ColumnSet = new ColumnSet(true) });
         }
 
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -47,7 +57,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Forms
             }
             else
             {
-                var results = (EntityCollection) e.Result;
+                var results = (EntityCollection)e.Result;
                 foreach (var result in results.Entities)
                 {
                     var prefix = result.GetAttributeValue<string>("customizationprefix");
@@ -60,19 +70,6 @@ namespace MsCrmTools.MetadataDocumentGenerator.Forms
                     listView1.Items.Add(item);
                 }
             }
-        }
-
-        private void btnOK_Click(object sender, EventArgs e)
-        {
-            SelectedPrefixes = listView1.CheckedItems.Cast<ListViewItem>().Select(i => i.Tag.ToString()).ToList();
-            DialogResult = DialogResult.OK;
-            Close();
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
         }
     }
 }

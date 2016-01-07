@@ -7,7 +7,9 @@ namespace XrmToolBox.Extensibility.UserControls
     {
         private Color primaryFontColor;
         private Color secondaryFontColor;
-        public Color PrimaryFontColor {
+
+        public Color PrimaryFontColor
+        {
             set { primaryFontColor = value; }
         }
 
@@ -32,7 +34,6 @@ namespace XrmToolBox.Extensibility.UserControls
                 string secondPart = Text.Substring(indexOfBy, indexOfSeparator - indexOfBy);
                 string thirdPart = Text.Remove(0, indexOfSeparator);
 
-
                 Font normalFont = this.Font;
 
                 Font smallFont = new Font(normalFont.FontFamily, normalFont.Size - 4);
@@ -42,7 +43,7 @@ namespace XrmToolBox.Extensibility.UserControls
                 Size normalSize2 = TextRenderer.MeasureText(thirdPart, normalFont);
 
                 Rectangle normalRect1 = new Rectangle(drawPoint, normalSize1);
-                Rectangle smallRect = new Rectangle(new Point(normalSize1.Width - 10,5), smallSize);
+                Rectangle smallRect = new Rectangle(new Point(normalSize1.Width - 10, 5), smallSize);
                 Rectangle normalRect2 = new Rectangle(new Point(smallSize.Width + normalSize1.Width - 20, 0), normalSize2);
 
                 TextRenderer.DrawText(e.Graphics, firstPart, normalFont, normalRect1, primaryFontColor); //ForeColor);

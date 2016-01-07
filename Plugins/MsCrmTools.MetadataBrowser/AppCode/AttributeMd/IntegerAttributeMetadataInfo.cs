@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
-using MsCrmTools.MetadataBrowser.AppCode.AttributeMd;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
 {

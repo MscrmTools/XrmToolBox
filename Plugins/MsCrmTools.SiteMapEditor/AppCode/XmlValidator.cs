@@ -17,7 +17,12 @@ namespace MsCrmTools.SiteMapEditor.AppCode
     /// </summary>
     public class XmlValidator
     {
-        readonly List<string> messages = new List<string>();
+        private readonly List<string> messages = new List<string>();
+
+        public void ShowCompileErrors(object sender, ValidationEventArgs args)
+        {
+            messages.Add(args.Message);
+        }
 
         /// <summary>
         /// Validates the specified xml content
@@ -29,14 +34,13 @@ namespace MsCrmTools.SiteMapEditor.AppCode
             ValidationEventHandler eventHandler = ShowCompileErrors;
             XmlSchemaCollection myschemacoll = new XmlSchemaCollection();
             XmlValidatingReader vr;
-            
+
             try
             {
                 using (StreamReader schemaReader = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("MsCrmTools.SiteMapEditor.Resources.sitemap.xsd")))
                 {
                     //Load the XmlValidatingReader.
                     vr = new XmlValidatingReader(schemaReader.BaseStream, XmlNodeType.Element, null);
-
 
                     vr.Schemas.Add(myschemacoll);
                     vr.ValidationType = ValidationType.Schema;
@@ -70,13 +74,7 @@ namespace MsCrmTools.SiteMapEditor.AppCode
             {
                 vr = null;
                 myschemacoll = null;
-            }		
+            }
         }
-
-        public void ShowCompileErrors(object sender, ValidationEventArgs args)
-        {
-            messages.Add(args.Message);
-        }
-
     }
 }

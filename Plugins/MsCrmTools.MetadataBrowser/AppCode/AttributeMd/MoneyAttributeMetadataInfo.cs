@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
-using MsCrmTools.MetadataBrowser.AppCode.AttributeMd;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
 {
-    // [TypeConverter(typeof(AttributeMetadataInfoConverter))]
     public class MoneyAttributeMetadataInfo : AttributeMetadataInfo
     {
         private readonly MoneyAttributeMetadata amd;
@@ -14,14 +12,14 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
             this.amd = amd;
         }
 
-        public ImeMode ImeMode
-        {
-            get { return amd.ImeMode.Value; }
-        }
-
         public string CalculationOf
         {
             get { return amd.CalculationOf; }
+        }
+
+        public ImeMode ImeMode
+        {
+            get { return amd.ImeMode.Value; }
         }
 
         public double MaxValue

@@ -18,6 +18,13 @@
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+	<AssemblyInfoFilePath>Properties\AssemblyInfo.cs</AssemblyInfoFilePath>
+    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>True</UpdateAssemblyInfoVersion>
+    <AssemblyVersionSettings>None.YearStamp.MonthStamp.DayStamp</AssemblyVersionSettings>
+    <AssemblyFileVersionSettings>None.YearStamp.MonthStamp.DayStamp</AssemblyFileVersionSettings>
+    <AssemblyInfoVersionSettings>None.YearStamp.MonthStamp.DayStamp</AssemblyInfoVersionSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,10 +52,6 @@
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xrm.Client">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Client.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
       <SpecificVersion>False</SpecificVersion>
@@ -124,11 +127,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"C:\Program Files (x86)\Microsoft\ILMerge\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(SolutionDir)XrmToolBox\$(OutDir)Plugins\$(TargetFileName)" "$(TargetDir)MsCrmTools.SolutionImport.dll" "$(TargetDir)ICSharpCode.SharpZipLib.dll"</PostBuildEvent>
+    <PostBuildEvent>"$(SolutionDir)packages\ilmerge.2.14.1208\tools\Ilmerge.exe" /ndebug /targetplatform:v4,"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0" /lib:"C:\Windows\Microsoft.Net\Framework64\v4.0.30319" /out:"$(SolutionDir)XrmToolBox\$(OutDir)Plugins\$(TargetFileName)" "$(TargetDir)MsCrmTools.SolutionImport.dll" "$(TargetDir)ICSharpCode.SharpZipLib.dll"</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

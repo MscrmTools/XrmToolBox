@@ -117,4 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="WebresourceTreeView_InvalidFileNameWarningMessage" xml:space="preserve">
+    <value>Some file have not been added because their name does not match naming policy
+</value>
+  </data>
+  <data name="MessageBox_WarningTitle" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="MessageBox_ErrorTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="MessageBox_InformationTitle" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="MessageBox_QuestionTitle" xml:space="preserve">
+    <value>Question</value>
+  </data>
 </root>

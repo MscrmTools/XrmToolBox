@@ -13,26 +13,56 @@ namespace MsCrmTools.SiteMapEditor.Forms
 {
     public partial class SiteMapComponentPicker : Form
     {
-        public XmlNode SelectedNode { get; set; }
-
         public SiteMapComponentPicker(string componentName, string version)
         {
             InitializeComponent();
 
             XmlDocument doc = new XmlDocument();
-            
+
             Assembly myAssembly = Assembly.GetExecutingAssembly();
-            using (StreamReader reader = new StreamReader(myAssembly.GetManifestResourceStream("MsCrmTools.SiteMapEditor.Resources.sitemap"+version+".xml")))
+            using (StreamReader reader = new StreamReader(myAssembly.GetManifestResourceStream("MsCrmTools.SiteMapEditor.Resources.sitemap" + version + ".xml")))
             {
                 doc.LoadXml(reader.ReadToEnd());
             }
 
             FillList(lvCrm2011SiteMap, doc, componentName);
 
-          
             ToolTip tip = new ToolTip();
             tip.ToolTipTitle = "Information";
             tip.SetToolTip(chkAddChildComponents, "Check this control if you want to add components under the one you select (ie. Area with all child Groups and SubArea or just Area)");
+        }
+
+        public XmlNode SelectedNode { get; set; }
+
+        private void btnComponentPickerCancel_Click(object sender, EventArgs e)
+        {
+            SelectedNode = null;
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void btnComponentPickerValidate_Click(object sender, EventArgs e)
+        {
+            if (lvCrm2011SiteMap.SelectedItems.Count > 0)
+            {
+                XmlNode selectedXmlNode = (XmlNode)lvCrm2011SiteMap.SelectedItems[0].Tag;
+
+                if (!chkAddChildComponents.Checked)
+                {
+                    for (int i = selectedXmlNode.ChildNodes.Count - 1; i >= 0; i--)
+                    {
+                        selectedXmlNode.RemoveChild(selectedXmlNode.ChildNodes[i]);
+                    }
+                }
+
+                SelectedNode = selectedXmlNode;
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            else
+            {
+                MessageBox.Show(this, "Please select a component!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void FillList(ListView lv, XmlDocument doc, string componentName)
@@ -77,45 +107,13 @@ namespace MsCrmTools.SiteMapEditor.Forms
             }
             catch (Exception error)
             {
-                MessageBox.Show(this, error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);            
+                MessageBox.Show(this, error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void lstComponents_DoubleClick(object sender, EventArgs e)
         {
             btnComponentPickerValidate_Click(sender, e);
-        }
-
-        private void btnComponentPickerValidate_Click(object sender, EventArgs e)
-        {
-
-            if (lvCrm2011SiteMap.SelectedItems.Count > 0)
-            {
-                XmlNode selectedXmlNode = (XmlNode)lvCrm2011SiteMap.SelectedItems[0].Tag;
-
-                if (!chkAddChildComponents.Checked)
-                {
-                    for (int i = selectedXmlNode.ChildNodes.Count - 1; i >= 0; i--)
-                    {
-                        selectedXmlNode.RemoveChild(selectedXmlNode.ChildNodes[i]);
-                    }
-                }
-
-                SelectedNode = selectedXmlNode;
-                DialogResult = DialogResult.OK;
-                Close();
-            }
-            else
-            {
-                MessageBox.Show(this, "Please select a component!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void btnComponentPickerCancel_Click(object sender, EventArgs e)
-        {
-            SelectedNode = null;
-            DialogResult = DialogResult.Cancel;
-            Close();
         }
     }
 }

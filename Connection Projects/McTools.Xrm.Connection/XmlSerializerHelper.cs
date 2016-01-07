@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.Serialization;
 using System.Text;
-using System.Xml;
 using System.Xml.Serialization;
 
 namespace McTools.Xrm.Connection
@@ -14,7 +12,7 @@ namespace McTools.Xrm.Connection
     public class XmlSerializerHelper
     {
         /// <summary>
-        /// Deserialize un contenu xml de type chaine de caractère en 
+        /// Deserialize un contenu xml de type chaine de caractère en
         /// une instance de la classe du type spécifié
         /// </summary>
         /// <param name="xmlContent">Contenu xml</param>

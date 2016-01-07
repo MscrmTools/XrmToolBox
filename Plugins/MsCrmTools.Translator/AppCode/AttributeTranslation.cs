@@ -1,26 +1,19 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
-using System;
-using Label = Microsoft.Xrm.Sdk.Label;
-#if NO_GEMBOX
 using OfficeOpenXml;
-#else
-using GemBox.Spreadsheet;
-#endif
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using Label = Microsoft.Xrm.Sdk.Label;
 
 namespace MsCrmTools.Translator.AppCode
 {
     public class AttributeTranslation
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <example>
         /// attributeId;entityLogicalName;attributeLogicalName;Type;LCID1;LCID2;...;LCODX
@@ -34,13 +27,13 @@ namespace MsCrmTools.Translator.AppCode
 
             AddHeader(sheet, languages);
 
-            foreach (var entity in entities.OrderBy(e=>e.LogicalName))
+            foreach (var entity in entities.OrderBy(e => e.LogicalName))
             {
-                foreach (var attribute in entity.Attributes.OrderBy(a=>a.LogicalName))
+                foreach (var attribute in entity.Attributes.OrderBy(a => a.LogicalName))
                 {
                     var cell = 0;
 
-                    if(attribute.AttributeType == null
+                    if (attribute.AttributeType == null
                         || attribute.AttributeType.Value == AttributeTypeCode.BigInt
                         || attribute.AttributeType.Value == AttributeTypeCode.CalendarRules
                         || attribute.AttributeType.Value == AttributeTypeCode.EntityName
@@ -54,6 +47,28 @@ namespace MsCrmTools.Translator.AppCode
 
                     if (attribute.DisplayName != null && attribute.DisplayName.LocalizedLabels.All(l => string.IsNullOrEmpty(l.Label)))
                         continue;
+
+                    // If derived attribute from calculated field, don't process it
+                    if (attribute.LogicalName.EndsWith("_state"))
+                    {
+                        var baseName = attribute.LogicalName.Remove(attribute.LogicalName.Length - 6, 6);
+
+                        if (entity.Attributes.Any(a => a.LogicalName == baseName) &&
+                            entity.Attributes.Any(a => a.LogicalName == baseName + "_date"))
+                        {
+                            continue;
+                        }
+                    }
+                    if (attribute.LogicalName.EndsWith("_date"))
+                    {
+                        var baseName = attribute.LogicalName.Remove(attribute.LogicalName.Length - 5, 5);
+
+                        if (entity.Attributes.Any(a => a.LogicalName == baseName) &&
+                            entity.Attributes.Any(a => a.LogicalName == baseName + "_state"))
+                        {
+                            continue;
+                        }
+                    }
 
                     ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.MetadataId.Value.ToString("B");
                     ZeroBasedSheet.Cell(sheet, line, cell++).Value = entity.LogicalName;
@@ -77,7 +92,7 @@ namespace MsCrmTools.Translator.AppCode
 
                         ZeroBasedSheet.Cell(sheet, line, cell++).Value = displayName;
                     }
-                    
+
                     // Description
                     line++;
                     cell = 0;
@@ -121,7 +136,6 @@ namespace MsCrmTools.Translator.AppCode
             }
         }
 
-#if NO_GEMBOX
         public void Import(ExcelWorksheet sheet, List<EntityMetadata> emds, IOrganizationService service)
         {
             var amds = new List<MasterAttribute>();
@@ -188,91 +202,6 @@ namespace MsCrmTools.Translator.AppCode
                 service.Execute(request);
             }
         }
-#else
-        public void Import(ExcelWorksheet sheet, List<EntityMetadata> emds, IOrganizationService service)
-        {
-            var amds = new List<MasterAttribute>();
-
-            foreach (var row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
-            {
-                var amd = amds.FirstOrDefault(a => a.Amd.MetadataId == new Guid(row.Cells[0].Value.ToString()));
-                if (amd == null)
-                {
-                    var currentEntity = emds.FirstOrDefault(e => e.LogicalName == row.Cells[1].Value.ToString());
-                    if (currentEntity == null)
-                    {
-                        var request = new RetrieveEntityRequest
-                        {
-                            LogicalName = row.Cells[1].Value.ToString(),
-                            EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
-                        };
-
-                        var response = ((RetrieveEntityResponse)service.Execute(request));
-                        currentEntity = response.EntityMetadata;
-
-                        emds.Add(currentEntity);
-                    }
-
-                    amd = new MasterAttribute();
-                    amd.Amd = currentEntity.Attributes.FirstOrDefault(a => a.LogicalName == row.Cells[2].Value.ToString());
-                    amds.Add(amd);
-                }
-
-                int columnIndex = 4;
-
-                if (row.Cells[3].Value.ToString() == "DisplayName")
-                {
-                    amd.Amd.DisplayName = new Label();
-
-                    while (row.Cells[columnIndex].Value != null)
-                    {
-                        amd.Amd.DisplayName.LocalizedLabels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
-
-                        columnIndex++;
-                    }
-                }
-                else if (row.Cells[3].Value.ToString() == "Description")
-                {
-                    amd.Amd.Description = new Label();
-
-                    while (row.Cells[columnIndex].Value != null)
-                    {
-                        amd.Amd.Description.LocalizedLabels.Add(new LocalizedLabel(row.Cells[columnIndex].Value.ToString(), int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
-
-                        columnIndex++;
-                    }
-                }
-            }
-
-            var sbError = new StringBuilder();
-
-            foreach (var amd in amds)
-            {
-                if (amd.Amd.DisplayName.LocalizedLabels.All(l => string.IsNullOrEmpty(l.Label))
-                    || amd.Amd.IsRenameable.Value == false)
-                    continue;
-
-                try
-                {
-                    var request = new UpdateAttributeRequest
-                    {
-                        Attribute = amd.Amd,
-                        EntityName = amd.Amd.EntityLogicalName
-                    };
-                    service.Execute(request);
-                }
-                catch
-                {
-                    sbError.AppendLine(string.Format("- {0} ({1})", amd.Amd.LogicalName, amd.Amd.EntityLogicalName));
-                }
-            }
-
-            if (sbError.Length > 0)
-            {
-                MessageBox.Show("Following attributes were not updated due to errors:\r\n" + sbError, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-#endif
 
         private void AddHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
         {

@@ -1,22 +1,20 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace MsCrmTools.MetadataBrowser.AppCode
 {
-    public class ListViewColumnsSettings:ICloneable
+    public class ListViewColumnsSettings : ICloneable
     {
-        private static readonly string[] entityFirstColumns = { "LogicalName", "SchemaName", "ObjectTypeCode" };
-        private static readonly string[] entityAttributesToIgnore = { "Attributes", "Privileges", "OneToManyRelationships", "ManyToOneRelationships", "ManyToManyRelationships" };
         private static readonly string[] attributeFirstColumns = { "LogicalName", "SchemaName", "AttributeType" };
-        private static readonly string[] relFirstColumns = { "SchemaName" };
+        private static readonly string[] entityAttributesToIgnore = { "Attributes", "Privileges", "OneToManyRelationships", "ManyToOneRelationships", "ManyToManyRelationships" };
+        private static readonly string[] entityFirstColumns = { "LogicalName", "SchemaName", "ObjectTypeCode" };
         private static readonly string[] privFirstColumns = { "Name" };
-      
+        private static readonly string[] relFirstColumns = { "SchemaName" };
 
-        public static string[] EntityFirstColumns
+        public static string[] AttributeFirstColumns
         {
-            get { return entityFirstColumns; }
+            get { return attributeFirstColumns; }
         }
 
         public static string[] EntityAttributesToIgnore
@@ -24,14 +22,9 @@ namespace MsCrmTools.MetadataBrowser.AppCode
             get { return entityAttributesToIgnore; }
         }
 
-        public static string[] AttributeFirstColumns
+        public static string[] EntityFirstColumns
         {
-            get { return attributeFirstColumns; }
-        }
-
-        public static string[] RelFirstColumns
-        {
-            get { return relFirstColumns; }
+            get { return entityFirstColumns; }
         }
 
         public static string[] PrivFirstColumns
@@ -39,28 +32,16 @@ namespace MsCrmTools.MetadataBrowser.AppCode
             get { return privFirstColumns; }
         }
 
-        public string[] EntitySelectedAttributes { get; set; }
-        public string[] AttributeSelectedAttributes { get; set; }
-        public string[] OtmRelSelectedAttributes { get; set; }
-        public string[] MtmRelSelectedAttributes { get; set; }
-        public string[] PrivSelectedAttributes { get; set; }
-
-        public void SaveSettings()
+        public static string[] RelFirstColumns
         {
-            var fileName = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName, "MscrmTools.MetadataBrowser.config");
-
-            var settingsString = string.Format("{0}|{1}|{2}|{3}|{4}",
-                EntitySelectedAttributes != null ? String.Join(";", EntitySelectedAttributes) : "",
-                AttributeSelectedAttributes != null ? String.Join(";", AttributeSelectedAttributes) : "",
-                OtmRelSelectedAttributes != null ? String.Join(";", OtmRelSelectedAttributes) : "",
-                MtmRelSelectedAttributes != null ? String.Join(";", MtmRelSelectedAttributes) : "",
-                PrivSelectedAttributes != null ? String.Join(";", PrivSelectedAttributes) : "");
-
-            using (var writer = new StreamWriter(fileName, false))
-            {
-                writer.Write(settingsString);
-            }
+            get { return relFirstColumns; }
         }
+
+        public string[] AttributeSelectedAttributes { get; set; }
+        public string[] EntitySelectedAttributes { get; set; }
+        public string[] MtmRelSelectedAttributes { get; set; }
+        public string[] OtmRelSelectedAttributes { get; set; }
+        public string[] PrivSelectedAttributes { get; set; }
 
         public static ListViewColumnsSettings LoadSettings()
         {
@@ -76,7 +57,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode
                     return new ListViewColumnsSettings
                     {
                         EntitySelectedAttributes = string.IsNullOrEmpty(settings[0]) ? null : settings[0].Split(';'),
-                        AttributeSelectedAttributes = string.IsNullOrEmpty(settings[1])? null : settings[1].Split(';'),
+                        AttributeSelectedAttributes = string.IsNullOrEmpty(settings[1]) ? null : settings[1].Split(';'),
                         OtmRelSelectedAttributes = string.IsNullOrEmpty(settings[2]) ? null : settings[2].Split(';'),
                         MtmRelSelectedAttributes = string.IsNullOrEmpty(settings[3]) ? null : settings[3].Split(';'),
                         PrivSelectedAttributes = string.IsNullOrEmpty(settings[4]) ? null : settings[4].Split(';'),
@@ -97,6 +78,23 @@ namespace MsCrmTools.MetadataBrowser.AppCode
                 OtmRelSelectedAttributes = OtmRelSelectedAttributes == null ? null : (string[])OtmRelSelectedAttributes.Clone(),
                 PrivSelectedAttributes = PrivSelectedAttributes == null ? null : (string[])PrivSelectedAttributes.Clone()
             };
+        }
+
+        public void SaveSettings()
+        {
+            var fileName = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName, "MscrmTools.MetadataBrowser.config");
+
+            var settingsString = string.Format("{0}|{1}|{2}|{3}|{4}",
+                EntitySelectedAttributes != null ? String.Join(";", EntitySelectedAttributes) : "",
+                AttributeSelectedAttributes != null ? String.Join(";", AttributeSelectedAttributes) : "",
+                OtmRelSelectedAttributes != null ? String.Join(";", OtmRelSelectedAttributes) : "",
+                MtmRelSelectedAttributes != null ? String.Join(";", MtmRelSelectedAttributes) : "",
+                PrivSelectedAttributes != null ? String.Join(";", PrivSelectedAttributes) : "");
+
+            using (var writer = new StreamWriter(fileName, false))
+            {
+                writer.Write(settingsString);
+            }
         }
     }
 }

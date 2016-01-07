@@ -16,6 +16,13 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+	<AssemblyInfoFilePath>Properties\AssemblyInfo.cs</AssemblyInfoFilePath>
+    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>True</UpdateAssemblyInfoVersion>
+    <AssemblyVersionSettings>None.YearStamp.MonthStamp.DayStamp</AssemblyVersionSettings>
+    <AssemblyFileVersionSettings>None.YearStamp.MonthStamp.DayStamp</AssemblyFileVersionSettings>
+    <AssemblyInfoVersionSettings>None.YearStamp.MonthStamp.DayStamp</AssemblyInfoVersionSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,10 +58,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Client">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Sdk.dll</HintPath>
@@ -80,6 +83,7 @@
     <Compile Include="AppCode\AttributeInfo.cs" />
     <Compile Include="AppCode\ExportEngine.cs" />
     <Compile Include="AppCode\EntityInfo.cs" />
+    <Compile Include="AppCode\DeleteEngine.cs" />
     <Compile Include="AppCode\ImportEngine.cs" />
     <Compile Include="AppCode\ImportFileSettings.cs" />
     <Compile Include="AppCode\RelationshipInfo.cs" />

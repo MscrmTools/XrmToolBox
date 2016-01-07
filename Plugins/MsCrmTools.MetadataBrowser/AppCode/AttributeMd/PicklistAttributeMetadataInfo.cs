@@ -1,7 +1,6 @@
-﻿using System.ComponentModel;
-using Microsoft.Xrm.Sdk.Metadata;
-using MsCrmTools.MetadataBrowser.AppCode.AttributeMd;
+﻿using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.MetadataBrowser.AppCode.OptionSetMd;
+using System.ComponentModel;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
 {
@@ -20,7 +19,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
             get { return amd.DefaultFormValue.Value; }
         }
 
-        [TypeConverter(typeof (OptionSetAttributeMetadataInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public OptionSetMetadataInfo OptionSet
         {
             get { return new OptionSetMetadataInfo(amd.OptionSet); }

@@ -1,32 +1,29 @@
-﻿using System;
+﻿using MsCrmTools.UserSettingsUtility.AppCode;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Forms;
-using MsCrmTools.UserSettingsUtility.AppCode;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.UserSettingsUtility
 {
     public partial class MainControl : PluginControlBase
     {
         private List<string> areas;
-        private List<Tuple<string,string>> subAreas; 
+        private List<Tuple<string, string>> subAreas;
 
         public MainControl()
         {
             InitializeComponent();
         }
 
-        private void TsbCloseClick(object sender, EventArgs e)
+        private void cbbSiteMapArea_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CloseTool();
-        }
-
-        private void tsbLoadCrmItems_Click(object sender, EventArgs e)
-        {
-           ExecuteMethod(LoadCrmItems);
+            cbbSiteMapSubArea.Enabled = cbbSiteMapArea.SelectedIndex != 0;
+            cbbSiteMapSubArea.Items.Clear();
+            cbbSiteMapSubArea.Items.Add("No change");
+            cbbSiteMapSubArea.Items.AddRange(subAreas.Where(t => t.Item2 == cbbSiteMapArea.SelectedItem.ToString()).Select(t => t.Item1).ToArray());
+            cbbSiteMapSubArea.SelectedIndex = 0;
         }
 
         private void LoadCrmItems()
@@ -37,31 +34,34 @@ namespace MsCrmTools.UserSettingsUtility
             userSelector1.Service = Service;
             userSelector1.LoadViews();
 
-            WorkAsync("Initializing...",
-                (w, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Initializing...",
+                AsyncArgument = null,
+                Work = (bw, e) =>
                 {
                     var sc = new SettingsCollection();
 
-                    w.ReportProgress(0, "Loading Available languages...");
-                    var ush = new UserSettingsHelper(Service);
+                    bw.ReportProgress(0, "Loading Available languages...");
+                    var ush = new UserSettingsHelper(Service, ConnectionDetail);
                     sc.Languages = ush.RetrieveAvailableLanguages();
 
-                    w.ReportProgress(0, "Loading Currencies...");
-                    ush = new UserSettingsHelper(Service);
+                    bw.ReportProgress(0, "Loading Currencies...");
+                    ush = new UserSettingsHelper(Service, ConnectionDetail);
                     sc.Currencies = ush.RetrieveCurrencies();
 
-                    w.ReportProgress(0, "Loading Time Zones...");
-                    ush = new UserSettingsHelper(Service);
+                    bw.ReportProgress(0, "Loading Time Zones...");
+                    ush = new UserSettingsHelper(Service, ConnectionDetail);
                     sc.TimeZones = ush.RetrieveTimeZones();
 
-                    w.ReportProgress(0, "Loading SiteMap elements...");
+                    bw.ReportProgress(0, "Loading SiteMap elements...");
                     var smm = new SiteMapManager(Service);
                     areas = smm.GetAreaList();
                     subAreas = smm.GetSubAreaList();
 
                     e.Result = sc;
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -128,25 +128,23 @@ namespace MsCrmTools.UserSettingsUtility
                                     }
                                 }
                             }
-                            
                         }
 
                         panel1.Enabled = true;
                     }
                 },
-                e =>
-                {
-                    SetWorkingMessage(e.UserState.ToString());
-                });
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
+            });
         }
-  
-        private void cbbSiteMapArea_SelectedIndexChanged(object sender, EventArgs e)
+
+        private void TsbCloseClick(object sender, EventArgs e)
         {
-            cbbSiteMapSubArea.Enabled = cbbSiteMapArea.SelectedIndex != 0;
-            cbbSiteMapSubArea.Items.Clear();
-            cbbSiteMapSubArea.Items.Add("No change");
-            cbbSiteMapSubArea.Items.AddRange(subAreas.Where(t => t.Item2 == cbbSiteMapArea.SelectedItem.ToString()).Select(t => t.Item1).ToArray());
-            cbbSiteMapSubArea.SelectedIndex = 0;
+            CloseTool();
+        }
+
+        private void tsbLoadCrmItems_Click(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadCrmItems);
         }
 
         private void tsbUpdateUserSettings_Click(object sender, EventArgs e)
@@ -184,7 +182,7 @@ namespace MsCrmTools.UserSettingsUtility
 
             if (cbbTimeZones.SelectedIndex != 0)
             {
-                setting.TimeZoneCode = ((AppCode.TimeZone) cbbTimeZones.SelectedItem).Code;
+                setting.TimeZoneCode = ((AppCode.TimeZone)cbbTimeZones.SelectedItem).Code;
             }
 
             if (cbbWorkStartTime.SelectedIndex != 0 || cbbWorkStartTime.SelectedText != null)
@@ -245,33 +243,33 @@ namespace MsCrmTools.UserSettingsUtility
                 setting.UseCrmFormForTask = cbbUseCrmFormTask.SelectedIndex == 2;
             }
 
-            #endregion
+            #endregion Initialisation des données à mettre à jour
 
-            WorkAsync("Initializing update...",
-                (w, a) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Initializing update...",
+                AsyncArgument = setting,
+                Work = (bw, evt) =>
                 {
-                    var settingArg = (UserSettings)a.Argument;
-                    var ush = new UserSettingsHelper(Service);
+                    var settingArg = (UserSettings)evt.Argument;
+                    var ush = new UserSettingsHelper(Service, ConnectionDetail);
 
                     foreach (var user in settingArg.UsersToUpdate)
                     {
-                        w.ReportProgress(0, "Updating settings for user " + user.GetAttributeValue<string>("fullname"));
+                        bw.ReportProgress(0, "Updating settings for user " + user.GetAttributeValue<string>("fullname"));
                         ush.UpdateSettings(user.Id, setting);
                     }
                 },
-                a =>
+                PostWorkCallBack = evt =>
                 {
-                    if (a.Error != null)
+                    if (evt.Error != null)
                     {
-                        MessageBox.Show(this, "An error occured: " + a.Error.Message, "Error", MessageBoxButtons.OK,
+                        MessageBox.Show(this, "An error occured: " + evt.Error.Message, "Error", MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
                     }
                 },
-                a =>
-                {
-                    SetWorkingMessage(a.UserState.ToString());
-                },
-                setting);
+                ProgressChanged = evt => { SetWorkingMessage(evt.UserState.ToString()); }
+            });
         }
     }
 }

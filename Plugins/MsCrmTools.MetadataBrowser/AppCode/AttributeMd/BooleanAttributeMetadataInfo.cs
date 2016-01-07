@@ -1,10 +1,8 @@
-﻿using System.ComponentModel;
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.MetadataBrowser.AppCode.BooleanOptionSetMd;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
 {
-    [TypeConverter(typeof (AttributeMetadataInfoConverter))]
     public class BooleanAttributeMetadataInfo : AttributeMetadataInfo
     {
         private readonly BooleanAttributeMetadata amd;

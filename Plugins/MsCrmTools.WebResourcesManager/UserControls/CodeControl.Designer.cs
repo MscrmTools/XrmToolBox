@@ -28,29 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tecCode = new ICSharpCode.TextEditor.TextEditorControl();
             this.SuspendLayout();
-            // 
-            // tecCode
-            // 
-            this.tecCode.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tecCode.IsReadOnly = false;
-            this.tecCode.Location = new System.Drawing.Point(6, 3);
-            this.tecCode.Name = "tecCode";
-            this.tecCode.Size = new System.Drawing.Size(491, 394);
-            this.tecCode.TabIndex = 1;
-            this.tecCode.Text = "textEditorControl1";
-            this.tecCode.TextChanged += new System.EventHandler(this.tecCode_TextChanged);
             // 
             // CodeControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.tecCode);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "CodeControl";
-            this.Size = new System.Drawing.Size(500, 400);
+            this.Size = new System.Drawing.Size(750, 615);
             this.Load += new System.EventHandler(this.CodeControl_Load);
             this.ResumeLayout(false);
 
@@ -58,6 +44,6 @@
 
         #endregion
 
-        private ICSharpCode.TextEditor.TextEditorControl tecCode;
+
     }
 }

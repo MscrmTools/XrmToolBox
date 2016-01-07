@@ -3,12 +3,19 @@ using System.Windows.Forms;
 
 namespace XrmToolBox.Extensibility
 {
+    public enum ToolBoxCloseReason
+    {
+        None,
+        CloseAll,
+        CloseAllExceptActive,
+        CloseCurrent,
+        CloseMiddleClick,
+        CloseHotKey,
+        PluginRequest,
+    }
+
     public class PluginCloseInfo
     {
-        public CloseReason FormReason { get; set; }
-        public ToolBoxCloseReason ToolBoxReason { get; set; }
-        public bool Cancel { get; set; }
-
         public PluginCloseInfo()
         {
             FormReason = CloseReason.None;
@@ -37,16 +44,9 @@ namespace XrmToolBox.Extensibility
             ToolBoxReason = reason;
             Cancel = false;
         }
-    }
 
-    public enum ToolBoxCloseReason
-    {
-        None,
-        CloseAll,
-        CloseAllExceptActive,
-        CloseCurrent,
-        CloseMiddleClick,
-        CloseHotKey,
-        PluginRequest,
+        public bool Cancel { get; set; }
+        public CloseReason FormReason { get; set; }
+        public ToolBoxCloseReason ToolBoxReason { get; set; }
     }
 }

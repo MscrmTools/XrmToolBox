@@ -8,7 +8,7 @@ using System.Xml;
 
 namespace MsCrmTools.ViewLayoutReplicator.Helpers
 {
-    class XmlHelper
+    internal class XmlHelper
     {
         internal static string IndentXml(string unformatedXml)
         {

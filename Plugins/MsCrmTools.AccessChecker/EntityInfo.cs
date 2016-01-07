@@ -1,6 +1,6 @@
 ﻿namespace MsCrmTools.AccessChecker
 {
-    class EntityInfo
+    internal class EntityInfo
     {
         public EntityInfo(string logicalName, string displayName, string primaryAttribute)
         {
@@ -9,8 +9,8 @@
             PrimaryAttribute = primaryAttribute;
         }
 
-        public string LogicalName { get; private set; }
         public string DisplayName { get; private set; }
+        public string LogicalName { get; private set; }
         public string PrimaryAttribute { get; private set; }
 
         public override string ToString()

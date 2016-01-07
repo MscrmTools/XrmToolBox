@@ -3,12 +3,18 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.IO;
-using System.Windows.Forms;
+using ICSharpCode.AvalonEdit;
+using ICSharpCode.AvalonEdit.Document;
+using ICSharpCode.AvalonEdit.Folding;
+using ICSharpCode.AvalonEdit.Highlighting;
 using Jsbeautifier;
 using MsCrmTools.WebResourcesManager.AppCode;
 using MsCrmTools.WebResourcesManager.Forms;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 
 namespace MsCrmTools.WebResourcesManager.UserControls
 {
@@ -19,36 +25,44 @@ namespace MsCrmTools.WebResourcesManager.UserControls
     {
         #region Variables
 
+        //private readonly FindAndReplaceForm findForm = new FindAndReplaceForm();
+
         /// <summary>
         /// Type of web resource
         /// </summary>
-        readonly Enumerations.WebResourceType innerType;
+        private readonly Enumerations.WebResourceType innerType;
 
         /// <summary>
         /// Base64 content of the web resource when loading this control
         /// </summary>
-        readonly string originalContent;
+        private readonly string originalContent;
+
+        private FoldingManager foldingManager;
+
+        private bool foldingManagerInstalled;
+        private HtmlFoldingStrategy htmlFoldingStrategy;
 
         /// <summary>
         /// Base64 content of the web resource
         /// </summary>
-        string innerContent;
+        private string innerContent;
 
-        readonly FindAndReplaceForm findForm = new FindAndReplaceForm();
-               
+        private TextEditor textEditor;
+        private XmlFoldingStrategy xmlFoldingStrategy;
+
         #endregion Variables
 
         #region Delegates
 
         public delegate void WebResourceUpdatedEventHandler(object sender, WebResourceUpdatedEventArgs e);
 
-        #endregion
+        #endregion Delegates
 
         #region Event Handlers
 
         public event WebResourceUpdatedEventHandler WebResourceUpdated;
 
-        #endregion
+        #endregion Event Handlers
 
         #region Constructor
 
@@ -61,58 +75,152 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         {
             InitializeComponent();
 
+            textEditor = new TextEditor
+            {
+                ShowLineNumbers = true,
+                FontSize = 12,
+                FontFamily = new System.Windows.Media.FontFamily("Consolas"),
+                //Focusable = true,
+                //IsHitTestVisible = true
+            };
+
+            var wpfHost = new ElementHost
+            {
+                Child = textEditor,
+                Dock = DockStyle.Fill,
+                BackColorTransparent = true,
+            };
+
+            Controls.Add(wpfHost);
+
             if (!string.IsNullOrEmpty(content))
             {
-                // Converts base64 content to string 
+                // Converts base64 content to string
                 byte[] b = Convert.FromBase64String(content);
                 innerContent = System.Text.Encoding.UTF8.GetString(b);
                 originalContent = innerContent;
                 innerType = type;
-            }
-        }
-
-        public void Find(bool replace, IWin32Window owner)
-        {
-            findForm.StartPosition = FormStartPosition.CenterParent;
-            findForm.ShowFor(tecCode, replace, owner);
-        }
-
-        #endregion Constructor
-
-        #region Handlers
-
-        private void CodeControl_Load(object sender, EventArgs e)
-        {
-            try
-            {
-                tecCode.Text = innerContent;
-
 
                 switch (innerType)
                 {
                     case Enumerations.WebResourceType.Script:
                         {
-                            tecCode.SetHighlighting("JavaScript");
+                            AutoEnableFolding(innerContent);
                         }
                         break;
+
                     case Enumerations.WebResourceType.Data:
-                        {
-                            tecCode.SetHighlighting("XML");
-                        }
-                        break;
                     case Enumerations.WebResourceType.WebPage:
-                        {
-                            tecCode.SetHighlighting("HTML");
-                        }
-                        break;
                     case Enumerations.WebResourceType.Css:
-                        {
-                            tecCode.SetHighlighting("CSS");
-                        }
-                        break;
                     case Enumerations.WebResourceType.Xsl:
                         {
-                            tecCode.SetHighlighting("HTML");
+                            EnableFolding(true);
+                        }
+                        break;
+                }
+            }
+        }
+
+        public void Find(bool replace, IWin32Window owner)
+        {
+            FindAndReplaceForm.ShowForReplace(textEditor, replace);
+        }
+
+        #endregion Constructor
+
+        #region Properties
+
+        public bool FoldingEnabled { get; private set; }
+
+        #endregion Properties
+
+        #region Handlers
+
+        public IEnumerable<NewFolding> CreateBraceFoldings(ITextSource document)
+        {
+            List<NewFolding> newFoldings = new List<NewFolding>();
+
+            Stack<int> startOffsets = new Stack<int>();
+            int lastNewLineOffset = 0;
+            char openingBrace = '{';
+            char closingBrace = '}';
+            for (int i = 0; i < document.TextLength; i++)
+            {
+                char c = document.GetCharAt(i);
+                if (c == openingBrace)
+                {
+                    startOffsets.Push(i);
+                }
+                else if (c == closingBrace && startOffsets.Count > 0)
+                {
+                    int startOffset = startOffsets.Pop();
+                    // don't fold if opening and closing brace are on the same line
+                    if (startOffset < lastNewLineOffset)
+                    {
+                        newFoldings.Add(new NewFolding(startOffset, i + 1));
+                    }
+                }
+                else if (c == '\n' || c == '\r')
+                {
+                    lastNewLineOffset = i + 1;
+                }
+            }
+            newFoldings.Sort((a, b) => a.StartOffset.CompareTo(b.StartOffset));
+            return newFoldings;
+        }
+
+        private void AutoEnableFolding(string innerContent)
+        {
+            var minified = DoMinifyJs(innerContent);
+            var ratio = (double)minified.Length / (double)innerContent.Length;
+
+            if (ratio <= 1 && ratio >= 0.2)
+            {
+                EnableFolding(true);
+            }
+        }
+
+        private void CodeControl_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                textEditor.TextChanged += tecCode_TextChanged;
+                textEditor.Text = innerContent;
+
+                switch (innerType)
+                {
+                    case Enumerations.WebResourceType.Script:
+                        {
+                            textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript");
+                            AutoEnableFolding(innerContent);
+                        }
+                        break;
+
+                    case Enumerations.WebResourceType.Data:
+                        {
+                            textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("XML");
+                            EnableFolding(true);
+                        }
+                        break;
+
+                    case Enumerations.WebResourceType.WebPage:
+                        {
+                            textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("HTML");
+                            EnableFolding(true);
+                        }
+                        break;
+
+                    case Enumerations.WebResourceType.Css:
+                        {
+                            textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("CSS");
+                            EnableFolding(true);
+                        }
+                        break;
+
+                    case Enumerations.WebResourceType.Xsl:
+                        {
+                            textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("HTML");
+                            EnableFolding(true);
                         }
                         break;
                 }
@@ -126,8 +234,24 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         private void tecCode_TextChanged(object sender, EventArgs e)
         {
-            innerContent = tecCode.Text;
+            innerContent = textEditor.Text;
             SendSavedMessage();
+
+            if (foldingManager != null)
+            {
+                if (xmlFoldingStrategy != null)
+                {
+                    xmlFoldingStrategy.UpdateFoldings(foldingManager, textEditor.Document);
+                }
+                else if (htmlFoldingStrategy != null)
+                {
+                    htmlFoldingStrategy.UpdateFoldings(foldingManager, textEditor.Document);
+                }
+                else
+                {
+                    foldingManager.UpdateFoldings(CreateBraceFoldings(textEditor.Document), -1);
+                }
+            }
         }
 
         #endregion Handlers
@@ -136,18 +260,21 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         public string GetBase64WebResourceContent()
         {
-            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(tecCode.Text);
-         
+            byte[] bytes = System.Text.Encoding.UTF8.GetBytes(textEditor.Text);
+
             return Convert.ToBase64String(bytes);
+        }
+
+        public Enumerations.WebResourceType GetWebResourceType()
+        {
+            return innerType;
         }
 
         public void MinifyJs()
         {
             try
             {
-                tecCode.Text = Yahoo.Yui.Compressor.JavaScriptCompressor.Compress(tecCode.Text, false, true, false,
-                                                                                  false, 200);
-                tecCode.Refresh();
+                textEditor.Text = DoMinifyJs(textEditor.Text);
             }
             catch (Exception error)
             {
@@ -160,8 +287,6 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         {
             try
             {
-                string newContent = Convert.ToBase64String(File.ReadAllBytes(filename));
-
                 using (var reader = new StreamReader(filename))
                 {
                     innerContent = reader.ReadToEnd();
@@ -178,15 +303,23 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             }
         }
 
-        public Enumerations.WebResourceType GetWebResourceType()
+        private string DoMinifyJs(string originalContent)
         {
-            return innerType;
+            try
+            {
+                return Yahoo.Yui.Compressor.JavaScriptCompressor.Compress(originalContent, false, true, false, false, 200);
+            }
+            catch
+            {
+                //MessageBox.Show(ParentForm, "Error while minifying code: " + error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return originalContent;
+            }
         }
 
         private void SendSavedMessage()
         {
             var wrueArgs = new WebResourceUpdatedEventArgs
-                                                       {
+            {
                 Base64Content = innerContent,
                 IsDirty = (innerContent != originalContent),
                 Type = innerType
@@ -204,7 +337,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         {
             Beautifier b = new Beautifier(new BeautifierOptions
             {
-                BraceStyle =BraceStyle.Expand,
+                BraceStyle = BraceStyle.Expand,
                 BreakChainedMethods = false,
                 EvalCode = true,
                 IndentChar = '\t',
@@ -217,7 +350,67 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                 PreserveNewlines = true
             });
 
-            tecCode.Text = b.Beautify(tecCode.Text);
+            textEditor.Text = b.Beautify(textEditor.Text);
+        }
+
+        internal void EnableFolding(bool enableFolding)
+        {
+            if (enableFolding)
+            {
+                switch (innerType)
+                {
+                    case Enumerations.WebResourceType.Script:
+                    case Enumerations.WebResourceType.Css:
+                        {
+                            if (!foldingManagerInstalled)
+                            {
+                                foldingManager = FoldingManager.Install(textEditor.TextArea);
+                                foldingManagerInstalled = true;
+                            }
+
+                            foldingManager.UpdateFoldings(CreateBraceFoldings(textEditor.Document), -1);
+                        }
+                        break;
+
+                    case Enumerations.WebResourceType.WebPage:
+                        {
+                            if (!foldingManagerInstalled)
+                            {
+                                foldingManager = FoldingManager.Install(textEditor.TextArea);
+                                foldingManagerInstalled = true;
+                            }
+
+                            htmlFoldingStrategy = new HtmlFoldingStrategy();
+                            htmlFoldingStrategy.UpdateFoldings(foldingManager, textEditor.Document);
+                        }
+                        break;
+
+                    case Enumerations.WebResourceType.Data:
+                    case Enumerations.WebResourceType.Xsl:
+                        {
+                            if (!foldingManagerInstalled)
+                            {
+                                foldingManager = FoldingManager.Install(textEditor.TextArea);
+                                foldingManagerInstalled = true;
+                            }
+
+                            xmlFoldingStrategy = new XmlFoldingStrategy();
+                            xmlFoldingStrategy.UpdateFoldings(foldingManager, textEditor.Document);
+                        }
+                        break;
+                }
+
+                FoldingEnabled = true;
+            }
+            else
+            {
+                if (foldingManager != null)
+                {
+                    foldingManager.Clear();
+                }
+
+                FoldingEnabled = false;
+            }
         }
     }
 }

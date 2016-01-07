@@ -5,13 +5,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.ScriptsFinder
 {
@@ -26,19 +25,17 @@ namespace MsCrmTools.ScriptsFinder
 
         #endregion Constructor
 
-        private void TsbMainFindScriptsClick(object sender, EventArgs e)
-        {
-            ExecuteMethod(FindScripts);
-        }
-
-        private void FindScripts()
+        public void FindScripts()
         {
             lvScripts.Items.Clear();
             tsbMainFindScripts.Enabled = false;
             tsbExportToCsv.Enabled = false;
 
-            WorkAsync("Loading scripts (this can take a while...)",
-                e =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading scripts (this can take a while...)",
+                AsyncArgument = null,
+                Work = (bw, e) =>
                 {
                     var lScripts = new List<ListViewItem>();
 
@@ -56,7 +53,8 @@ namespace MsCrmTools.ScriptsFinder
                         item.SubItems.Add(script.AttributeLogicalName);
                         item.SubItems.Add(script.ScriptLocation);
                         item.SubItems.Add(script.MethodCalled);
-                        item.SubItems.Add(script.IsActive.HasValue ?script.IsActive.Value.ToString() : "");
+                        item.SubItems.Add(script.Arguments);
+                        item.SubItems.Add(script.IsActive.HasValue ? script.IsActive.Value.ToString() : "");
 
                         if (script.HasProblem)
                         {
@@ -67,12 +65,13 @@ namespace MsCrmTools.ScriptsFinder
 
                     e.Result = lScripts;
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     lvScripts.Items.AddRange(((List<ListViewItem>)e.Result).ToArray());
                     tsbMainFindScripts.Enabled = true;
                     tsbExportToCsv.Enabled = true;
-                });
+                }
+            });
         }
 
         private void LvScriptsColumnClick(object sender, ColumnClickEventArgs e)
@@ -89,26 +88,26 @@ namespace MsCrmTools.ScriptsFinder
         private void TsbExportToCsvClick(object sender, EventArgs e)
         {
             var sfd = new SaveFileDialog
-                          {
-                              Filter = "CSV file (*.csv)|*.csv",
-                              Title = "Select a file where to save the list of scripts"
-                          };
+            {
+                Filter = "CSV file (*.csv)|*.csv",
+                Title = "Select a file where to save the list of scripts"
+            };
 
             if (sfd.ShowDialog() == DialogResult.OK)
             {
-                using (var fs = new FileStream(sfd.FileName, FileMode.OpenOrCreate,FileAccess.ReadWrite))
+                using (var fs = new FileStream(sfd.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                 {
                     var preamble = new UTF8Encoding(true).GetPreamble();
-                    fs.Write(preamble,0,preamble.Length);
-                    
-                    var header = System.Text.Encoding.UTF8.GetBytes(
-                        "Type,Entity Display Name,Entity Logical Name,Form name,Event,Attribute Display Name,Attribute Logical Name,Script Location,Method Called,Enabled" +
+                    fs.Write(preamble, 0, preamble.Length);
+
+                    var header = Encoding.UTF8.GetBytes(
+                        "Type,Entity Display Name,Entity Logical Name,Form name,Event,Attribute Display Name,Attribute Logical Name,Script Location,Method Called,Parameters,Enabled" +
                         Environment.NewLine);
                     fs.Write(header, 0, header.Length);
-                    
+
                     foreach (ListViewItem item in lvScripts.Items)
                     {
-                        var line = System.Text.Encoding.UTF8.GetBytes(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9}{10}",
+                        var line = Encoding.UTF8.GetBytes(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}{11}",
                             item.SubItems[0].Text,
                             item.SubItems[1].Text,
                             item.SubItems[2].Text,
@@ -119,16 +118,24 @@ namespace MsCrmTools.ScriptsFinder
                             item.SubItems[7].Text,
                             item.SubItems[8].Text,
                             item.SubItems[9].Text,
+                            item.SubItems[10].Text,
                             Environment.NewLine));
 
                         fs.Write(line, 0, line.Length);
-                  
                     }
 
-                    MessageBox.Show(this, string.Format("File saved to '{0}'!", sfd.FileName), "Information",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (MessageBox.Show(this, string.Format("File saved to '{0}'!\r\n\r\nWould you like to open the file now?", sfd.FileName), "Question",
+                                    MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    {
+                        Process.Start(sfd.FileName);
+                    }
                 }
             }
+        }
+
+        private void TsbMainFindScriptsClick(object sender, EventArgs e)
+        {
+            ExecuteMethod(FindScripts);
         }
     }
 }

@@ -1,13 +1,13 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.Xrm.Sdk;
+using MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd;
+using System.ComponentModel;
 using System.Drawing.Design;
 using System.Linq;
-using Microsoft.Xrm.Sdk;
-using MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd;
 using LocalizedLabelCollection = MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd.LocalizedLabelCollection;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.LabelMd
 {
-    [TypeConverter(typeof (LabelInfoConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class LabelInfo
     {
         private readonly Label amd;
@@ -22,8 +22,8 @@ namespace MsCrmTools.MetadataBrowser.AppCode.LabelMd
             get { return amd.ExtensionData != null ? amd.ExtensionData.ToString() : ""; }
         }
 
-        [Editor(typeof (CustomCollectionEditor), typeof (UITypeEditor))]
-        [TypeConverter(typeof (LocalizedLabelCollectionConverter))]
+        [Editor(typeof(CustomCollectionEditor), typeof(UITypeEditor))]
+        [TypeConverter(typeof(LocalizedLabelCollectionConverter))]
         public LocalizedLabelCollection LocalizedLabels
         {
             get
@@ -38,10 +38,15 @@ namespace MsCrmTools.MetadataBrowser.AppCode.LabelMd
             }
         }
 
-        [TypeConverter(typeof (LocalizedLabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LocalizedLabelInfo UserLocalizedLabel
         {
             get { return new LocalizedLabelInfo(amd.UserLocalizedLabel); }
+        }
+
+        public override string ToString()
+        {
+            return amd.UserLocalizedLabel != null ? amd.UserLocalizedLabel.Label : "N/A";
         }
     }
 }

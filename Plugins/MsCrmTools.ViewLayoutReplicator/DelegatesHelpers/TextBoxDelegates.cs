@@ -31,26 +31,26 @@ namespace Tanguy.WinForm.Utilities.DelegatesHelpers
             return returnValue;
         }
 
-        public static void SetText(TextBox textBox, string text)
+        public static void SetEnableState(TextBox textBox, bool enabled)
         {
-            MethodInvoker miSetText = delegate
+            CommonDelegates.SetEnableState(textBox, enabled);
+        }
+
+        public static void SetFont(TextBox textBox, Font font)
+        {
+            MethodInvoker miSetFont = delegate
             {
-                textBox.Text = text;
+                textBox.Font = font;
             };
 
             if (textBox.InvokeRequired)
             {
-                textBox.Invoke(miSetText);
+                textBox.Invoke(miSetFont);
             }
             else
             {
-                miSetText();
+                miSetFont();
             }
-        }
-
-        public static void SetEnableState(TextBox textBox, bool enabled)
-        {
-            CommonDelegates.SetEnableState(textBox, enabled);
         }
 
         public static void SetForeColor(TextBox textBox, Color color)
@@ -70,20 +70,20 @@ namespace Tanguy.WinForm.Utilities.DelegatesHelpers
             }
         }
 
-        public static void SetFont(TextBox textBox, Font font)
+        public static void SetText(TextBox textBox, string text)
         {
-            MethodInvoker miSetFont = delegate
+            MethodInvoker miSetText = delegate
             {
-                textBox.Font = font;
+                textBox.Text = text;
             };
 
             if (textBox.InvokeRequired)
             {
-                textBox.Invoke(miSetFont);
+                textBox.Invoke(miSetText);
             }
             else
             {
-                miSetFont();
+                miSetText();
             }
         }
     }

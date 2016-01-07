@@ -3,11 +3,11 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using MsCrmTools.SiteMapEditor.AppCode;
+using MsCrmTools.SiteMapEditor.Controls;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using MsCrmTools.SiteMapEditor.AppCode;
-using MsCrmTools.SiteMapEditor.Controls;
 
 namespace SiteMapEditor.Controls
 {
@@ -17,18 +17,19 @@ namespace SiteMapEditor.Controls
 
         private string initialLCID = "";
         private string initialTitle = "";
+        private ToolTip tip;
 
         #region Delegates
 
         public delegate void SaveEventHandler(object sender, SaveEventArgs e);
 
-        #endregion
+        #endregion Delegates
 
         #region Event Handlers
 
         public event SaveEventHandler Saved;
 
-        #endregion
+        #endregion Event Handlers
 
         public TitleControl()
         {
@@ -36,7 +37,7 @@ namespace SiteMapEditor.Controls
 
             collec = new Dictionary<string, string>();
 
-            ToolTip tip = new ToolTip();
+            tip = new ToolTip();
             tip.ToolTipTitle = "Information";
             tip.SetToolTip(txtTitleLCID, "A four or five digit Locale ID for the title.");
             tip.SetToolTip(txtTitleTitle, "Text to be displayed.");
@@ -45,31 +46,10 @@ namespace SiteMapEditor.Controls
         public TitleControl(Dictionary<string, string> collection)
             : this()
         {
-            if(collection != null)
+            if (collection != null)
                 collec = collection;
 
             FillControls();
-        }
-
-        private void FillControls()
-        {
-            txtTitleLCID.Text = collec.ContainsKey("LCID") ? collec["LCID"] : "";
-            txtTitleTitle.Text = collec.ContainsKey("Title") ? collec["Title"] : "";
-
-            initialLCID = txtTitleLCID.Text;
-            initialTitle = txtTitleTitle.Text;
-        }
-
-        private void SiteMapControl_Leave(object sender, EventArgs e)
-        {
-            if (initialLCID != txtTitleLCID.Text ||
-                initialTitle != txtTitleTitle.Text)
-            {
-                if (MessageBox.Show("You didn't save your changes! Do you want to save them now?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    Save();
-                }
-            }
         }
 
         public void Save()
@@ -103,10 +83,31 @@ namespace SiteMapEditor.Controls
             }
         }
 
+        private void FillControls()
+        {
+            txtTitleLCID.Text = collec.ContainsKey("LCID") ? collec["LCID"] : "";
+            txtTitleTitle.Text = collec.ContainsKey("Title") ? collec["Title"] : "";
+
+            initialLCID = txtTitleLCID.Text;
+            initialTitle = txtTitleTitle.Text;
+        }
+
+        private void SiteMapControl_Leave(object sender, EventArgs e)
+        {
+            if (initialLCID != txtTitleLCID.Text ||
+                initialTitle != txtTitleTitle.Text)
+            {
+                if (MessageBox.Show("You didn't save your changes! Do you want to save them now?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Save();
+                }
+            }
+        }
+
         #region Send Events
 
         /// <summary>
-        /// Sends a connection success message 
+        /// Sends a connection success message
         /// </summary>
         /// <param name="service">IOrganizationService generated</param>
         /// <param name="parameters">Lsit of parameter</param>
@@ -120,7 +121,6 @@ namespace SiteMapEditor.Controls
             }
         }
 
-        #endregion
-
+        #endregion Send Events
     }
 }

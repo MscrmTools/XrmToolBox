@@ -18,6 +18,34 @@ namespace XrmToolBox.Extensibility
     public class InformationPanel
     {
         /// <summary>
+        /// Updates the message of an existing panel
+        /// </summary>
+        /// <param name="informationPanel">Panel to update</param>
+        /// <param name="message">Message to display</param>
+        public static void ChangeInformationPanelMessage(Panel informationPanel, string message)
+        {
+            MethodInvoker mi = delegate
+            {
+                foreach (var label in informationPanel.Controls.OfType<Label>())
+                {
+                    if (label.Name == "InfoLabel")
+                    {
+                        label.Text = message;
+                    }
+                }
+            };
+
+            if (informationPanel.InvokeRequired)
+            {
+                informationPanel.Invoke(mi);
+            }
+            else
+            {
+                mi();
+            }
+        }
+
+        /// <summary>
         /// Creates an information panel with a waiting animated gif and a message
         /// </summary>
         /// <param name="parentControl">Control where the panel will be added</param>
@@ -28,29 +56,29 @@ namespace XrmToolBox.Extensibility
         public static Panel GetInformationPanel(Control parentControl, string message, int width, int height)
         {
             var panel = new Panel
-                            {
-                                Name = "informationPanel",
-                                Width = width,
-                                Height = height,
-                                Location = new Point(
-                                    (parentControl.Width - width)/2,
-                                    (parentControl.Height - height)/2),
-                                    BackColor = Color.FromArgb(255,255,224),
-                                    BorderStyle = BorderStyle.FixedSingle
-                            };
+            {
+                Name = "informationPanel",
+                Width = width,
+                Height = height,
+                Location = new Point(
+                                    (parentControl.Width - width) / 2,
+                                    (parentControl.Height - height) / 2),
+                BackColor = Color.FromArgb(255, 255, 224),
+                BorderStyle = BorderStyle.FixedSingle
+            };
 
             var label = new Label
-                            {
-                                AutoEllipsis = true,
-                                AutoSize = false,
-                                TextAlign = ContentAlignment.MiddleCenter,
-                                Width = panel.Width,
-                                Height = panel.Height/2,
-                                Text = message,
-                                Location = new Point(0, 10),
-                                Font = new Font("Segoe UI", 10F),
-                                Name = "InfoLabel"
-                            };
+            {
+                AutoEllipsis = true,
+                AutoSize = false,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Width = panel.Width,
+                Height = panel.Height / 2,
+                Text = message,
+                Location = new Point(0, 10),
+                Font = new Font("Segoe UI", 10F),
+                Name = "InfoLabel"
+            };
 
             var hyperlink = new LinkLabel
             {
@@ -72,14 +100,14 @@ namespace XrmToolBox.Extensibility
             if (file != null)
             {
                 var pBox = new PictureBox
-                               {
-                                   Height = 36,
-                                   Width = 36,
-                                   Location = new Point(
-                                       (panel.Width - 36)/2,
-                                       (panel.Height - 36)/4*3),
-                                   Image = Image.FromStream(file)
-                               };
+                {
+                    Height = 36,
+                    Width = 36,
+                    Location = new Point(
+                                       (panel.Width - 36) / 2,
+                                       (panel.Height - 36) / 4 * 3),
+                    Image = Image.FromStream(file)
+                };
 
                 panel.Controls.Add(pBox);
             }
@@ -93,27 +121,11 @@ namespace XrmToolBox.Extensibility
             return panel;
         }
 
-        static void hyperlink_Click(object sender, EventArgs e)
+        private static void hyperlink_Click(object sender, EventArgs e)
         {
             Process.Start("http://mscrmtools.blogspot.fr/p/xrmtoolbox-sponsoring.html");
         }
 
-        /// <summary>
-        /// Updates the message of an existing panel
-        /// </summary>
-        /// <param name="informationPanel">Panel to update</param>
-        /// <param name="message">Message to display</param>
-        public static void ChangeInformationPanelMessage(Panel informationPanel, string message)
-        {
-            foreach (var label in informationPanel.Controls.OfType<Label>())
-            {
-                if (label.Name == "InfoLabel")
-                {
-                    label.Text = message;
-                }
-            }
-        }
-        
         /// <summary>
         /// Adjusts location of the panel when the parent container is resized
         /// </summary>
@@ -121,11 +133,11 @@ namespace XrmToolBox.Extensibility
         /// <param name="e">Event arguments</param>
         private static void ParentControlResize(object sender, EventArgs e)
         {
-            foreach (var ctrl in ((Control) sender).Controls.Cast<object>().OfType<Panel>().Where(ctrl => ctrl.Name == "informationPanel"))
+            foreach (var ctrl in ((Control)sender).Controls.Cast<object>().OfType<Panel>().Where(ctrl => ctrl.Name == "informationPanel"))
             {
                 ctrl.Location = new Point(
-                    (((Control) sender).Width - ctrl.Width)/2,
-                    (((Control) sender).Height - ctrl.Height)/2);
+                    (((Control)sender).Width - ctrl.Width) / 2,
+                    (((Control)sender).Height - ctrl.Height) / 2);
             }
         }
     }

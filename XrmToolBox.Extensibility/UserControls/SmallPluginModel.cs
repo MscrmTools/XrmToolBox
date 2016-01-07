@@ -15,7 +15,7 @@ namespace XrmToolBox.Extensibility.UserControls
 
         public override event ClickedEventHandler Clicked;
 
-        #endregion
+        #endregion Event Handlers
 
         #region Constructors
 
@@ -46,15 +46,15 @@ namespace XrmToolBox.Extensibility.UserControls
             var tip = new ToolTip();
             tip.SetToolTip(lblTitle, description);
 
-                BackColor = backColor;
+            BackColor = backColor;
         }
 
         #endregion Constructors
 
-        private new void MouseClick(object sender, EventArgs e)
+        public void UpdateCount(int count)
         {
-            if(Clicked != null)
-                Clicked(this, new EventArgs());
+            lblCount.Text = count.ToString();
+            Refresh();
         }
 
         private void LblTitleClick(object sender, EventArgs e)
@@ -62,10 +62,10 @@ namespace XrmToolBox.Extensibility.UserControls
             MouseClick(null, null);
         }
 
-        public void UpdateCount(int count)
+        private new void MouseClick(object sender, EventArgs e)
         {
-            lblCount.Text = count.ToString();
-            Refresh();
+            if (Clicked != null)
+                Clicked(this, new EventArgs());
         }
     }
 }

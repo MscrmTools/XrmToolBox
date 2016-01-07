@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
 
 namespace MscrmTools.SyncFilterManager.Forms
 {
@@ -16,6 +16,12 @@ namespace MscrmTools.SyncFilterManager.Forms
 
         public List<Entity> SelectedUsers { private set; get; }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
         private void btnOK_Click(object sender, EventArgs e)
         {
             SelectedUsers = crmUserList1.GetSelectedUsers();
@@ -28,12 +34,6 @@ namespace MscrmTools.SyncFilterManager.Forms
             }
 
             DialogResult = DialogResult.OK;
-            Close();
-        }
-
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
             Close();
         }
     }

@@ -3,11 +3,10 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk.Messages;
-using Microsoft.Xrm.Sdk.Metadata;
 using Tanguy.WinForm.Utilities.DelegatesHelpers;
 
 namespace MsCrmTools.SiteMapEditor.Forms
@@ -40,6 +39,27 @@ namespace MsCrmTools.SiteMapEditor.Forms
         #endregion Properties
 
         #region Methods
+
+        private void BtnCancelClick(object sender, EventArgs e)
+        {
+            SelectedEntity = string.Empty;
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void BtnValidateClick(object sender, EventArgs e)
+        {
+            if (lvSelectedEntities.SelectedItems.Count == 0)
+            {
+                MessageBox.Show(this, "Please select at least one entity!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+            {
+                SelectedEntity = ((EntityMetadata)lvSelectedEntities.SelectedItems[0].Tag).LogicalName;
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+        }
 
         /// <summary>
         /// Fills the list of entities
@@ -74,27 +94,6 @@ namespace MsCrmTools.SiteMapEditor.Forms
             ListViewDelegates.SetEnableState(lvSelectedEntities, true);
             CommonDelegates.SetEnableState(btnCancel, true);
             CommonDelegates.SetEnableState(btnValidate, true);
-        }
-
-        private void BtnValidateClick(object sender, EventArgs e)
-        {
-            if (lvSelectedEntities.SelectedItems.Count == 0)
-            {
-                MessageBox.Show(this, "Please select at least one entity!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else
-            {
-                SelectedEntity = ((EntityMetadata)lvSelectedEntities.SelectedItems[0].Tag).LogicalName;
-                DialogResult = DialogResult.OK;
-                Close();
-            }
-        }
-
-        private void BtnCancelClick(object sender, EventArgs e)
-        {
-            SelectedEntity = string.Empty;
-            DialogResult = DialogResult.Cancel;
-            Close();
         }
 
         #endregion Methods

@@ -17,6 +17,13 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
+	<AssemblyInfoFilePath>Properties\AssemblyInfo.cs</AssemblyInfoFilePath>
+    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>True</UpdateAssemblyInfoVersion>
+    <AssemblyVersionSettings>None.YearStamp.MonthStamp.DayStamp</AssemblyVersionSettings>
+    <AssemblyFileVersionSettings>None.YearStamp.MonthStamp.DayStamp</AssemblyFileVersionSettings>
+    <AssemblyInfoVersionSettings>None.YearStamp.MonthStamp.DayStamp</AssemblyInfoVersionSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,17 +59,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Client">
+    <Reference Include="Microsoft.IdentityModel">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Client.dll</HintPath>
+      <HintPath>..\..\Referenced Assemblies\Microsoft.IdentityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
+      <HintPath>..\..\Referenced Assemblies\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms">
+      <HintPath>..\..\Referenced Assemblies\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Sdk.Deployment">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
+    <Reference Include="Microsoft.Xrm.Tooling.Connector">
+      <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Tooling.CrmConnectControl">
+      <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Tooling.CrmConnectControl.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -95,23 +110,24 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ConnectionForm.designer.cs">
-      <DependentUpon>ConnectionForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="ConnectionSelector.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ConnectionSelector.designer.cs">
       <DependentUpon>ConnectionSelector.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConnectionSettings.cs" />
     <Compile Include="CrmConnectionStatusBar.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CrmConnectionStatusBar.designer.cs">
       <DependentUpon>CrmConnectionStatusBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConnectionWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConnectionWizard.designer.cs">
+      <DependentUpon>ConnectionWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="ListViewItemComparer.cs" />
     <Compile Include="PasswordForm.cs">
@@ -136,11 +152,11 @@
     <Compile Include="RessourceManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ConnectionForm.resx">
-      <DependentUpon>ConnectionForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ConnectionSelector.resx">
       <DependentUpon>ConnectionSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConnectionWizard.resx">
+      <DependentUpon>ConnectionWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CrmConnectionStatusBar.resx">
       <DependentUpon>CrmConnectionStatusBar.cs</DependentUpon>
@@ -198,7 +214,7 @@
       <UserProperties BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

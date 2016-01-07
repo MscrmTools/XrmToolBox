@@ -3,10 +3,10 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using MsCrmTools.WebResourcesManager.AppCode;
 using System;
 using System.IO;
 using System.Windows.Forms;
-using MsCrmTools.WebResourcesManager.AppCode;
 
 namespace MsCrmTools.WebResourcesManager.UserControls
 {
@@ -20,12 +20,12 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         /// <summary>
         /// Base64 content of the web resource when loading this control
         /// </summary>
-        readonly string originalContent;
+        private readonly string originalContent;
 
         /// <summary>
         /// Base64 content of the web resource
         /// </summary>
-        string innerContent;
+        private string innerContent;
 
         #endregion Variables
 
@@ -33,16 +33,16 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         public delegate void WebResourceUpdatedEventHandler(object sender, WebResourceUpdatedEventArgs e);
 
-        #endregion
+        #endregion Delegates
 
         #region Event Handlers
 
         public event WebResourceUpdatedEventHandler WebResourceUpdated;
 
-        #endregion
+        #endregion Event Handlers
 
         #region Constructor
-        
+
         /// <summary>
         /// Initializes a new instance of class SilverlightControl
         /// </summary>
@@ -64,6 +64,11 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             return innerContent;
         }
 
+        public Enumerations.WebResourceType GetWebResourceType()
+        {
+            throw new NotImplementedException();
+        }
+
         public void ReplaceWithNewFile(string filename)
         {
             try
@@ -76,11 +81,6 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                 MessageBox.Show(ParentForm, "Error while updating file: " + error.Message, "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        public Enumerations.WebResourceType GetWebResourceType()
-        {
-            throw new NotImplementedException();
         }
 
         private void SendSavedMessage()
@@ -98,6 +98,6 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             }
         }
 
-        #endregion  Methods
+        #endregion Methods
     }
 }

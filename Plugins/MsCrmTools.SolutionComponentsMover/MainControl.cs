@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using MsCrmTools.SolutionComponentsMover.AppCode;
 using MsCrmTools.SolutionComponentsMover.Forms;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SolutionComponentsMover
 {
@@ -19,23 +17,23 @@ namespace MsCrmTools.SolutionComponentsMover
             InitializeComponent();
         }
 
-        private void tsbLoadSolutions_Click(object sender, EventArgs e)
-        {
-            ExecuteMethod(LoadSolutions);
-        }
-
         public void LoadSolutions()
         {
             sManager = new SolutionManager(Service);
 
-            WorkAsync("Loading solutions...",
-                e => { e.Result = sManager.RetrieveSolutions(); },
-                e =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading solutions...",
+                Work = (bw, e) =>
+                {
+                    e.Result = sManager.RetrieveSolutions();
+                },
+                PostWorkCallBack = e =>
                 {
                     if (e.Error == null)
                     {
-                        sourceSolutionPicker.LoadSolutions((IEnumerable<Entity>) e.Result);
-                        targetSolutionPicker.LoadSolutions((IEnumerable<Entity>) e.Result);
+                        sourceSolutionPicker.LoadSolutions((IEnumerable<Entity>)e.Result);
+                        targetSolutionPicker.LoadSolutions((IEnumerable<Entity>)e.Result);
                     }
                     else
                     {
@@ -43,7 +41,8 @@ namespace MsCrmTools.SolutionComponentsMover
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Error);
                     }
-                });
+                },
+            });
         }
 
         private void tsbCloseThisTab_Click(object sender, EventArgs e)
@@ -69,9 +68,15 @@ namespace MsCrmTools.SolutionComponentsMover
                 return;
             }
 
-            WorkAsync("Starting copy...",
-                (bw, evt) => sManager.CopyComponents((CopySettings) evt.Argument, bw),
-                evt =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Starting copy...",
+                AsyncArgument = settings,
+                Work = (bw, evt) =>
+                {
+                    sManager.CopyComponents((CopySettings)evt.Argument, bw);
+                },
+                PostWorkCallBack = evt =>
                 {
                     if (evt.Error != null)
                     {
@@ -80,8 +85,13 @@ namespace MsCrmTools.SolutionComponentsMover
                             MessageBoxIcon.Error);
                     }
                 },
-                evt => SetWorkingMessage(evt.UserState.ToString()),
-                settings);
+                ProgressChanged = evt => { SetWorkingMessage(evt.UserState.ToString()); }
+            });
+        }
+
+        private void tsbLoadSolutions_Click(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadSolutions);
         }
     }
 }

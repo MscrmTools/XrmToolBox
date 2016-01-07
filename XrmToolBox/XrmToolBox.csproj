@@ -15,6 +15,13 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+	<AssemblyInfoFilePath>Properties\AssemblyInfo.cs</AssemblyInfoFilePath>
+    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>True</UpdateAssemblyInfoVersion>
+    <AssemblyVersionSettings>None.YearStamp.MonthStamp.DayStamp</AssemblyVersionSettings>
+    <AssemblyFileVersionSettings>None.YearStamp.MonthStamp.DayStamp</AssemblyFileVersionSettings>
+    <AssemblyInfoVersionSettings>None.YearStamp.MonthStamp.DayStamp</AssemblyInfoVersionSettings>
     <PublishUrl>publier\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -55,7 +62,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>XrmToolBox.ico</ApplicationIcon>
+    <ApplicationIcon>XrmToolBox201512.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
@@ -76,16 +83,28 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Client">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Client.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk.Deployment">
       <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Sdk.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Tooling.Connector">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Tooling.CrmConnectControl">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Tooling.CrmConnectControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Tooling.Connector">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Tooling.CrmConnectControl">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Tooling.CrmConnectControl.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -127,7 +146,9 @@
     <Compile Include="AppCode\Github.cs" />
     <Compile Include="AppCode\LogUsage.cs" />
     <Compile Include="AppCode\Markdown.cs" />
+    <Compile Include="AppCode\PluginControlStatus.cs" />
     <Compile Include="AppCode\WebProxyHelper.cs" />
+    <Compile Include="ConnectionParameterInfo.cs" />
     <Compile Include="Forms\NewVersionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -219,19 +240,11 @@
     <Compile Include="MainForm.Community.cs">
       <SubType>Form</SubType>
     </Compile>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon3Fr.ico" />
     <Content Include="XrmToolBox.ico" />
+    <Content Include="XrmToolBox201512.ico" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />
     <EmbeddedResource Include="Images\progress.gif" />
@@ -275,7 +288,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

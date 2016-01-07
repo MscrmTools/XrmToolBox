@@ -1,65 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Windows.Forms;
-using Microsoft.Crm.Sdk.Messages;
 
 namespace McTools.Xrm.Connection.WinForms
 {
     public class FormHelper
     {
+        private readonly Form _innerAppForm;
+
         public FormHelper(Form innerAppForm)
         {
             _innerAppForm = innerAppForm;
         }
 
-        private readonly Form _innerAppForm;
-    
-        /// <summary>
-        /// Checks the existence of a user password and returns it
-        /// </summary>
-        /// <param name="detail">Details of the Crm connection</param>
-        /// <returns>True if password defined</returns>
-        public bool RequestPassword(ConnectionDetail detail)
-        {
-            if (!detail.PasswordIsEmpty)
-                return true;
-
-            bool returnValue = false;
-
-            var pForm = new PasswordForm
-            {
-                UserLogin = detail.UserName,
-                UserDomain = detail.UserDomain,
-                StartPosition = FormStartPosition.CenterParent
-            };
-
-            MethodInvoker mi = delegate
-            {
-                if (pForm.ShowDialog(_innerAppForm) == DialogResult.OK)
-                {
-                    detail.SetPassword(pForm.UserPassword);
-                    detail.SavePassword = pForm.SavePassword;
-                    returnValue = true;
-                }
-            };
-
-            if (_innerAppForm.InvokeRequired)
-            {
-                _innerAppForm.Invoke(mi);
-            }
-            else
-            {
-                mi();
-            }
-
-            return returnValue;
-        }
-
         /// <summary>
         /// Asks this manager to select a Crm connection to use
         /// </summary>
-        public bool AskForConnection(object connectionParameter)
+        /// <param name="connectionParameter">The connection parameter.</param>
+        /// <param name="preConnectionRequestAction">The action to be performed before the async call to create the connection.  Useful to display a please wait message</param>
+        /// <returns></returns>
+        public bool AskForConnection(object connectionParameter, Action preConnectionRequestAction)
         {
             var cs = new ConnectionSelector
             {
@@ -88,7 +49,12 @@ namespace McTools.Xrm.Connection.WinForms
                             return false;
                         }
                     }
-                 }
+                }
+
+                if (preConnectionRequestAction != null)
+                {
+                    preConnectionRequestAction();
+                }
 
                 ConnectionManager.Instance.ConnectToServer(connectionDetail, connectionParameter);
 
@@ -96,6 +62,24 @@ namespace McTools.Xrm.Connection.WinForms
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Asks this manager to select a Crm connection to use
+        /// </summary>
+        public bool AskForConnection(object connectionParameter)
+        {
+            return AskForConnection(connectionParameter, null);
+        }
+
+        /// <summary>
+        /// Deletes a Crm connection from the connections list
+        /// </summary>
+        /// <param name="connectionToDelete">Details of the connection to delete</param>
+        public void DeleteConnection(ConnectionDetail connectionToDelete)
+        {
+            ConnectionManager.Instance.ConnectionsList.Connections.Remove(connectionToDelete);
+            ConnectionManager.Instance.SaveConnectionsFile();
         }
 
         public void DisplayConnectionsList(Form form)
@@ -108,21 +92,6 @@ namespace McTools.Xrm.Connection.WinForms
             cs.ShowDialog(form);
         }
 
-        public List<ConnectionDetail> SelectMultipleConnectionDetails()
-        {
-            var cs = new ConnectionSelector(true)
-            {
-                StartPosition = FormStartPosition.CenterParent,
-            };
-
-            if (cs.ShowDialog(_innerAppForm) == DialogResult.OK)
-            {
-                return cs.SelectedConnections;
-            }
-
-            return new List<ConnectionDetail>();
-        }
-
         /// <summary>
         /// Creates or updates a Crm connection
         /// </summary>
@@ -131,20 +100,22 @@ namespace McTools.Xrm.Connection.WinForms
         /// <returns>Created or updated connection</returns>
         public ConnectionDetail EditConnection(bool isCreation, ConnectionDetail connectionToUpdate)
         {
-            var cForm = new ConnectionForm(isCreation) { StartPosition = FormStartPosition.CenterParent };
+            var cForm = new ConnectionWizard(connectionToUpdate) { StartPosition = FormStartPosition.CenterParent };
 
-            if (!isCreation)
-            {
-                cForm.CrmConnectionDetail = connectionToUpdate;
-            }
+            //var cForm = new ConnectionForm(isCreation) { StartPosition = FormStartPosition.CenterParent };
+
+            //if (!isCreation)
+            //{
+            //    cForm.CrmConnectionDetail = connectionToUpdate;
+            //}
 
             if (cForm.ShowDialog(_innerAppForm) == DialogResult.OK)
             {
-               
-                if (cForm.DoConnect)
-                {
-                    ConnectionManager.Instance.ConnectToServer(cForm.CrmConnectionDetail);
-                }
+                // TODO on garde?
+                //if (cForm.DoConnect)
+                //{
+                //    ConnectionManager.Instance.ConnectToServer(cForm.CrmConnectionDetail);
+                //}
 
                 //if (!cForm.CrmConnectionDetail.PasswordIsEmpty && !cForm.CrmConnectionDetail.SavePassword)
                 //{
@@ -153,7 +124,6 @@ namespace McTools.Xrm.Connection.WinForms
 
                 if (isCreation)
                 {
-
                     if (ConnectionManager.Instance.ConnectionsList.Connections.FirstOrDefault(
                         d => d.ConnectionId == cForm.CrmConnectionDetail.ConnectionId) == null)
                     {
@@ -180,13 +150,58 @@ namespace McTools.Xrm.Connection.WinForms
         }
 
         /// <summary>
-        /// Deletes a Crm connection from the connections list
+        /// Checks the existence of a user password and returns it
         /// </summary>
-        /// <param name="connectionToDelete">Details of the connection to delete</param>
-        public void DeleteConnection(ConnectionDetail connectionToDelete)
+        /// <param name="detail">Details of the Crm connection</param>
+        /// <returns>True if password defined</returns>
+        public bool RequestPassword(ConnectionDetail detail)
         {
-            ConnectionManager.Instance.ConnectionsList.Connections.Remove(connectionToDelete);
-            ConnectionManager.Instance.SaveConnectionsFile();
+            if (!detail.PasswordIsEmpty)
+                return true;
+
+            bool returnValue = false;
+
+            var pForm = new PasswordForm
+            {
+                UserLogin = detail.UserName,
+                UserDomain = detail.UserDomain,
+            };
+
+            MethodInvoker mi = delegate
+            {
+                if (pForm.ShowDialog(_innerAppForm) == DialogResult.OK)
+                {
+                    detail.SetPassword(pForm.UserPassword);
+                    detail.SavePassword = pForm.SavePassword;
+                    returnValue = true;
+                }
+            };
+
+            if (_innerAppForm.InvokeRequired)
+            {
+                _innerAppForm.Invoke(mi);
+            }
+            else
+            {
+                mi();
+            }
+
+            return returnValue;
+        }
+
+        public List<ConnectionDetail> SelectMultipleConnectionDetails()
+        {
+            var cs = new ConnectionSelector(true)
+            {
+                StartPosition = FormStartPosition.CenterParent,
+            };
+
+            if (cs.ShowDialog(_innerAppForm) == DialogResult.OK)
+            {
+                return cs.SelectedConnections;
+            }
+
+            return new List<ConnectionDetail>();
         }
     }
 }

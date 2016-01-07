@@ -3,14 +3,15 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System.Threading;
 using McTools.Xrm.Connection;
 using McTools.Xrm.Connection.WinForms;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
@@ -25,27 +26,16 @@ namespace XrmToolBox
     {
         #region Variables
 
-        private FormHelper fHelper;
-
-        private ConnectionManager cManager;
-
         private CrmConnectionStatusBar ccsb;
-
-        private IOrganizationService service;
-
+        private ConnectionManager cManager;
         private ConnectionDetail currentConnectionDetail;
-
-        private PluginManagerExtended pManager;
-
         private Options currentOptions;
-
-        private string currentReleaseNote;
-
-        private Panel infoPanel;
-
+        private FormHelper fHelper;
         private string initialConnectionName;
-
         private string initialPluginName;
+        private List<PluginControlStatus> pluginControlStatuses;
+        private PluginManagerExtended pManager;
+        private IOrganizationService service;
 
         #endregion Variables
 
@@ -62,6 +52,7 @@ namespace XrmToolBox
             InitializeComponent();
 
             pluginsModels = new List<PluginModel>();
+            pluginControlStatuses = new List<PluginControlStatus>();
             ProcessMenuItemsForPlugin();
             MouseWheel += (sender, e) => HomePageTab.Focus();
 
@@ -83,29 +74,41 @@ namespace XrmToolBox
             cManager.StepChanged += (sender, e) => ccsb.SetMessage(e.CurrentStep);
             cManager.ConnectionSucceed += (sender, e) =>
             {
-                Controls.Remove(infoPanel);
-                if (infoPanel != null) infoPanel.Dispose();
+                var parameter = e.Parameter as ConnectionParameterInfo;
+                if (parameter != null)
+                {
+                    Controls.Remove(parameter.InfoPanel);
+                    parameter.InfoPanel.Dispose();
+                }
 
                 currentConnectionDetail = e.ConnectionDetail;
                 service = e.OrganizationService;
                 ccsb.SetConnectionStatus(true, e.ConnectionDetail);
                 ccsb.SetMessage(string.Empty);
 
-                if (e.Parameter != null)
+                if (parameter != null)
                 {
-                    var control = e.Parameter as UserControl;
+                    var control = parameter.ConnectionParmater as UserControl;
                     if (control != null)
                     {
-                        var realUserControl = control;
-                        DisplayPluginControl(realUserControl);
+                        var pluginModel = control.Tag as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
+                        if (pluginModel == null)
+                        {
+                            // Actual Plugin was passed, Just update the plugin's Tab.
+                            UpdateTabConnection((TabPage)control.Parent);
+                        }
+                        else
+                        {
+                            this.DisplayPluginControl(pluginModel);
+                        }
                     }
-                    else if (e.Parameter.ToString() == "ApplyConnectionToTabs" && tabControl1.TabPages.Count > 1)
+                    else if (parameter.ConnectionParmater.ToString() == "ApplyConnectionToTabs" && tabControl1.TabPages.Count > 1)
                     {
                         ApplyConnectionToTabs();
                     }
                     else
                     {
-                        var args = e.Parameter as RequestConnectionEventArgs;
+                        var args = parameter.ConnectionParmater as RequestConnectionEventArgs;
                         if (args != null)
                         {
                             var userControl = (UserControl)args.Control;
@@ -129,6 +132,7 @@ namespace XrmToolBox
             {
                 this.Invoke(new Action(() =>
                 {
+                    var infoPanel = ((ConnectionParameterInfo)e.Parameter).InfoPanel;
                     Controls.Remove(infoPanel);
                     if (infoPanel != null) infoPanel.Dispose();
 
@@ -161,14 +165,14 @@ namespace XrmToolBox
 
         private void StartPluginWithoutConnection()
         {
-            if (!string.IsNullOrEmpty(this.initialPluginName) && this.pManager != null && this.pManager.PluginsControls != null)
+            if (!string.IsNullOrEmpty(this.initialPluginName) && this.pManager != null && this.pManager.Plugins != null)
             {
-                var pluginControl = this.pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == this.initialPluginName);
-                if (pluginControl != null)
+                var plugin = this.pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == this.initialPluginName);
+                if (plugin != null)
                 {
                     this.Invoke(new Action(() =>
                     {
-                        this.DisplayPluginControl(pluginControl);
+                        this.DisplayPluginControl(plugin);
                     }));
                 }
 
@@ -180,6 +184,11 @@ namespace XrmToolBox
         #endregion Connection methods
 
         #region Tasks to launch during startup
+
+        private Task launchInitialConnection(ConnectionDetail connectionDetail)
+        {
+            return new Task(() => ConnectionManager.Instance.ConnectToServer(connectionDetail));
+        }
 
         private Task LaunchVersionCheck()
         {
@@ -217,14 +226,62 @@ namespace XrmToolBox
             })));
         }
 
-        private Task launchInitialConnection(ConnectionDetail connectionDetail)
-        {
-            return new Task(() => ConnectionManager.Instance.ConnectToServer(connectionDetail));
-        }
-
-        #endregion
+        #endregion Tasks to launch during startup
 
         #region Form events
+
+        private Thread searchThread;
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+
+            AdaptPluginControlSize();
+        }
+
+        private void aboutXrmToolBoxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            var aForm = new WelcomeDialog(version, false) { StartPosition = FormStartPosition.CenterParent };
+            aForm.ShowDialog(this);
+        }
+
+        private void ConnectUponApproval(object connectionParameter)
+        {
+            var info = new ConnectionParameterInfo
+            {
+                ConnectionParmater = connectionParameter
+            };
+            fHelper.AskForConnection(info, () => info.InfoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120));
+        }
+
+        private bool IsMessageValid(object sender, MessageBusEventArgs message)
+        {
+            if (message == null || sender == null || !(sender is UserControl) || !(sender is IXrmToolBoxPluginControl))
+            {
+                // Error. Possible reasons are:
+                // * empty sender
+                // * empty message
+                // * sender is not UserControl
+                // * sender is not XrmToolBox Plugin
+                return false;
+            }
+
+            var sourceControl = (UserControl)sender;
+
+            if (string.IsNullOrEmpty(message.SourcePlugin))
+            {
+                message.SourcePlugin = sourceControl.GetType().GetTitle();
+            }
+            else if (message.SourcePlugin != sourceControl.GetType().GetTitle())
+            {
+                // For some reason incorrect name was set in Source Plugin field
+                return false;
+            }
+
+            // Everything went ok
+            return true;
+        }
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
@@ -242,9 +299,13 @@ namespace XrmToolBox
 
             var tasks = new List<Task>
             {
-                this.LaunchWelcomeDialog(),
-                this.LaunchVersionCheck()
+                this.LaunchWelcomeDialog()
             };
+
+            if (!Debugger.IsAttached)
+            {
+                tasks.Add(this.LaunchVersionCheck());
+            }
 
             if (!string.IsNullOrEmpty(this.initialConnectionName))
             {
@@ -271,9 +332,9 @@ namespace XrmToolBox
                 // If there is no initial connection, but initial plugin is set, openning plugin
                 this.StartPluginWithoutConnection();
             }
-            
+
             tasks.ForEach(x => x.Start());
-            
+
             await Task.WhenAll(tasks.ToArray());
 
             // Adapt size of current form
@@ -299,26 +360,6 @@ namespace XrmToolBox
             }
         }
 
-        private void MainForm_OnCloseTool(object sender, EventArgs e)
-        {
-            RequestCloseTab((TabPage)((UserControl)sender).Parent, new PluginCloseInfo(ToolBoxCloseReason.PluginRequest));
-        }
-
-        protected override void OnResize(EventArgs e)
-        {
-            base.OnResize(e);
-
-            AdaptPluginControlSize();
-        }
-
-        private void MainForm_OnRequestConnection(object sender, EventArgs e)
-        {
-            if (fHelper.AskForConnection(e))
-            {
-                infoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120);
-            }
-        }
-
         private void MainForm_MessageBroker(object sender, MessageBusEventArgs message)
         {
             if (!IsMessageValid(sender, message))
@@ -337,13 +378,13 @@ namespace XrmToolBox
             else
             {
                 // Searching for suitable plugin
-                var targetModel = pManager.PluginsControls.FirstOrDefault(x => ((Type)x.Tag).GetTitle() == message.TargetPlugin);
-                if (targetModel == null)
+                var target = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == message.TargetPlugin);
+                if (target == null)
                 {
                     throw new PluginNotFoundException("Plugin {0} was not found", message.TargetPlugin);
                 }
                 // Displaying plugin and keeping number of the tab where it was opened
-                var tabIndex = DisplayPluginControl((UserControl)targetModel);
+                var tabIndex = this.DisplayPluginControl(target);
                 // Getting the tab where plugin was opened
                 tab = tabControl1.TabPages[tabIndex];
                 // New intance of the plugin was created, even if user did not explicitly asked about this.
@@ -358,51 +399,80 @@ namespace XrmToolBox
             }
         }
 
-        private bool IsMessageValid(object sender, MessageBusEventArgs message)
+        private void MainForm_OnCloseTool(object sender, EventArgs e)
         {
-            if (message == null || sender == null || !(sender is UserControl) || !(sender is IXrmToolBoxPluginControl))
-            {
-                // Error. Possible reasons are:
-                // * empty sender 
-                // * empty message
-                // * sender is not UserControl
-                // * sender is not XrmToolBox Plugin
-                return false;
-            }
-            
-            var sourceControl = (UserControl)sender;
-            
-            if (string.IsNullOrEmpty(message.SourcePlugin))
-            {
-                message.SourcePlugin = sourceControl.GetType().GetTitle();
-            }
-            else if (message.SourcePlugin != sourceControl.GetType().GetTitle())
-            {
-                // For some reason incorrect name was set in Source Plugin field
-                return false;
-            }
-            
-            // Everything went ok
-            return true;
+            RequestCloseTab((TabPage)((UserControl)sender).Parent, new PluginCloseInfo(ToolBoxCloseReason.PluginRequest));
         }
-      
-        private void TsbConnectClick(object sender, EventArgs e)
+
+        private void MainForm_OnRequestConnection(object sender, EventArgs e)
         {
-            if (fHelper.AskForConnection("ApplyConnectionToTabs"))
+            if (e is RequestConnectionEventArgs)
             {
-                infoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120);
+                ConnectUponApproval(e);
+            }
+            else
+            {
+                ConnectUponApproval(sender);
             }
         }
 
-        private void tsbManageConnections_Click(object sender, EventArgs e)
+        private void PluginClicked(object sender, EventArgs e)
         {
-            fHelper.DisplayConnectionsList(this);
+            if (service == null && MessageBox.Show(this, "Do you want to connect to an organization first?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                ConnectUponApproval(sender);
+            }
+            else
+            {
+                var plugin = ((UserControl)sender).Tag as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
+
+                if (plugin != null)
+                {
+                    DisplayPluginControl(plugin);
+                }
+            }
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ProcessMenuItemsForPlugin();
+
+            if (tabControl1.SelectedIndex == 0)
+            {
+                tstxtFilterPlugin.Focus();
+            }
+            else
+            {
+                var control = (IXrmToolBoxPluginControl)tabControl1.SelectedTab.Controls[0];
+                ((UserControl)control).Focus();
+                var currentPluginStatus = pluginControlStatuses.FirstOrDefault(pcs => pcs.Control == control);
+                if (currentPluginStatus == null)
+                {
+                    ccsb.SetMessage(null);
+                    ccsb.SetProgress(null);
+                }
+                else
+                {
+                    ccsb.SetMessage(currentPluginStatus.Message);
+                    ccsb.SetProgress(currentPluginStatus.Percentage);
+                }
+            }
         }
 
         private void TsbAboutClick(object sender, EventArgs e)
         {
             var aForm = new AboutForm { StartPosition = FormStartPosition.CenterParent };
             aForm.ShowDialog();
+        }
+
+        private void TsbConnectClick(object sender, EventArgs e)
+        {
+            ConnectUponApproval("ApplyConnectionToTabs");
+        }
+
+        private void tsbManageConnections_Click(object sender, EventArgs e)
+        {
+            fHelper.DisplayConnectionsList(this);
         }
 
         private void TsbOptionsClick(object sender, EventArgs e)
@@ -428,26 +498,23 @@ namespace XrmToolBox
             }
         }
 
-        private void PluginClicked(object sender, EventArgs e)
+        private void tstxtFilterPlugin_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyData == Keys.Enter)
+            {
+                var name = ((ToolStripTextBox)(sender)).Text.ToLower();
+                var plugin = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name.ToLower().Contains(name));
 
-            if (service == null && MessageBox.Show(this, "Do you want to connect to an organization first?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                if (fHelper.AskForConnection(sender))
-                    infoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120);
-            }
-            else
-            {
-                DisplayPluginControl((UserControl)sender);
+                if (plugin != null)
+                {
+                    this.PluginClicked(new UserControl { Tag = plugin }, new EventArgs());
+
+                    // Clear the textbox
+                    // ReSharper disable once PossibleNullReferenceException
+                    tstxtFilterPlugin.TextBox.Text = string.Empty;
+                }
             }
         }
-
-        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ProcessMenuItemsForPlugin();
-        }
-
-        private Thread searchThread;
 
         private void tstxtFilterPlugin_TextChanged(object sender, EventArgs e)
         {
@@ -460,30 +527,18 @@ namespace XrmToolBox
             searchThread.Start(tstxtFilterPlugin.Text);
         }
 
-        private void tstxtFilterPlugin_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyData == Keys.Enter)
-            {
-                var name = ((ToolStripTextBox)(sender)).Text.ToLower();
-                var plugin = pManager.Plugins.Where(p => p.Metadata.Name.ToLower().Contains(name)).FirstOrDefault();
-
-                if (plugin != null)
-                {
-                    this.PluginClicked(new UserControl { Tag = plugin }, new EventArgs());
-                }
-            }
-        }
-
         #endregion Form events
-        
+
         #region Close Tabs/Plugins
 
-        private IEnumerable<TabPage> GetPluginPages()
+        private void CloseAllTabsExceptActiveToolStripMenuItemClick(object sender, EventArgs e)
         {
-            for (var i = tabControl1.TabPages.Count - 1; i > 0; i--)
-            {
-                yield return tabControl1.TabPages[i];
-            }
+            RequestCloseTabs(GetPluginPages().Where(p => tabControl1.SelectedTab != p), new PluginCloseInfo(ToolBoxCloseReason.CloseAllExceptActive));
+        }
+
+        private void CloseAllTabsToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            RequestCloseTabs(GetPluginPages(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
         }
 
         private void closeCurrentTabToolStripMenuItem_Click(object sender, EventArgs e)
@@ -494,14 +549,32 @@ namespace XrmToolBox
             }
         }
 
-        private void CloseAllTabsToolStripMenuItemClick(object sender, EventArgs e)
+        /// <summary>
+        /// Only to be called from the RequestCloseTab
+        /// </summary>
+        /// <param name="page"></param>
+        private void CloseTab(TabPage page)
         {
-            RequestCloseTabs(GetPluginPages(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
+            tabControl1.TabPages.Remove(page);
+            if (page.Controls.Count == 0)
+            {
+                return;
+            }
+            var plugin = page.Controls[0] as UserControl;
+            if (plugin == null)
+            {
+                return;
+            }
+
+            plugin.Dispose();
         }
 
-        private void CloseAllTabsExceptActiveToolStripMenuItemClick(object sender, EventArgs e)
+        private IEnumerable<TabPage> GetPluginPages()
         {
-            RequestCloseTabs(GetPluginPages().Where(p => tabControl1.SelectedTab != p), new PluginCloseInfo(ToolBoxCloseReason.CloseAllExceptActive));
+            for (var i = tabControl1.TabPages.Count - 1; i > 0; i--)
+            {
+                yield return tabControl1.TabPages[i];
+            }
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -512,25 +585,23 @@ namespace XrmToolBox
             currentOptions.Save();
 
             // Warn to close opened plugins
+            if (currentOptions.CloseOpenedPluginsSilently)
+                return;
+
             var info = new PluginCloseInfo(e.CloseReason);
             RequestCloseTabs(GetPluginPages(), info);
             e.Cancel = info.Cancel;
         }
 
-        private void tabControl1_MouseClick(object sender, MouseEventArgs e)
+        private void RequestCloseTab(TabPage page, PluginCloseInfo info)
         {
-            var tabControl = sender as TabControl;
-            if (tabControl == null || e.Button != MouseButtons.Middle) { return; }
-
-            var tabs = tabControl.TabPages;
-            var tabPage = tabs.Cast<TabPage>()
-                .Where((t, i) => tabControl.GetTabRect(i).Contains(e.Location))
-                .FirstOrDefault();
-
-            if (tabPage != null && tabControl1.TabPages[0] != tabPage)
+            var plugin = page.GetPlugin();
+            plugin.ClosingPlugin(info);
+            if (info.Cancel)
             {
-                RequestCloseTab(tabPage, new PluginCloseInfo(ToolBoxCloseReason.CloseMiddleClick));
+                return;
             }
+            CloseTab(page);
         }
 
         private void RequestCloseTabs(IEnumerable<TabPage> pages, PluginCloseInfo info)
@@ -555,100 +626,25 @@ namespace XrmToolBox
             }
         }
 
-        private void RequestCloseTab(TabPage page, PluginCloseInfo info)
+        private void tabControl1_MouseClick(object sender, MouseEventArgs e)
         {
-            var plugin = page.GetPlugin();
-            plugin.ClosingPlugin(info);
-            if (info.Cancel)
+            var tabControl = sender as TabControl;
+            if (tabControl == null || e.Button != MouseButtons.Middle) { return; }
+
+            var tabs = tabControl.TabPages;
+            var tabPage = tabs.Cast<TabPage>()
+                .Where((t, i) => tabControl.GetTabRect(i).Contains(e.Location))
+                .FirstOrDefault();
+
+            if (tabPage != null && tabControl1.TabPages[0] != tabPage)
             {
-                return;
+                RequestCloseTab(tabPage, new PluginCloseInfo(ToolBoxCloseReason.CloseMiddleClick));
             }
-            CloseTab(page);
         }
 
-        /// <summary>
-        /// Only to be called from the RequestCloseTab
-        /// </summary>
-        /// <param name="page"></param>
-        private void CloseTab(TabPage page)
-        {
-            tabControl1.TabPages.Remove(page);
-            if (page.Controls.Count == 0)
-            {
-                return;
-            }
-            var plugin = page.Controls[0] as UserControl;
-            if (plugin == null)
-            {
-                return;
-            }
-
-            plugin.Dispose();
-        }
-
-        #endregion // Close Tabs/Plugins
+        #endregion Close Tabs/Plugins
 
         #region Other methods
-
-        private string ExtractSwitchValue(string key, ref string[] args)
-        {
-            var name = string.Empty;
-
-            foreach (var arg in args)
-            {
-                if (arg.StartsWith(key))
-                {
-                    name = arg.Substring(key.Length);
-                }
-            }
-
-            return name;
-        }
-
-        private void ApplyConnectionToTabs()
-        {
-            var tabs = tabControl1.TabPages.Cast<TabPage>().Where(tab => tab.TabIndex != 0).ToList();
-
-            var tcu = new TabConnectionUpdater(tabs) { StartPosition = FormStartPosition.CenterParent };
-
-            if (tcu.ShowDialog() == DialogResult.OK)
-            {
-                foreach (TabPage tab in tcu.SelectedTabs)
-                {
-                    tab.GetPlugin().UpdateConnection(service, currentConnectionDetail);
-
-                    tab.Text = string.Format("{0} ({1})",
-                                        tab.Controls[0].GetType().GetTitle(),
-                                        currentConnectionDetail != null
-                                            ? currentConnectionDetail.ConnectionName
-                                            : "Not connected");
-                }
-            }
-        }
-     
-        private void AdaptPluginControlSize()
-        {
-            if (GetVisibleScrollbars(HomePageTab) == ScrollBars.Vertical)
-            {
-                foreach (var ctrl in HomePageTab.Controls)
-                {
-                    if (ctrl is UserControl)
-                    {
-                        ((UserControl)ctrl).Width = HomePageTab.Width - 28;
-                    }
-                }
-            }
-            else
-            {
-                foreach (var ctrl in HomePageTab.Controls)
-                {
-                    if (ctrl is UserControl)
-                    {
-                        ((UserControl)ctrl).Width = HomePageTab.Width - 10;
-                    }
-                }
-            }
-        }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -686,7 +682,79 @@ namespace XrmToolBox
                 return ctl.VerticalScroll.Visible ? ScrollBars.Vertical : ScrollBars.None;
         }
 
+        private void AdaptPluginControlSize()
+        {
+            if (GetVisibleScrollbars(HomePageTab) == ScrollBars.Vertical)
+            {
+                foreach (var ctrl in HomePageTab.Controls)
+                {
+                    if (ctrl is UserControl)
+                    {
+                        ((UserControl)ctrl).Width = HomePageTab.Width - 28;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var ctrl in HomePageTab.Controls)
+                {
+                    if (ctrl is UserControl)
+                    {
+                        ((UserControl)ctrl).Width = HomePageTab.Width - 10;
+                    }
+                }
+            }
+        }
+
+        private void ApplyConnectionToTabs()
+        {
+            var tabs = tabControl1.TabPages.Cast<TabPage>().Where(tab => tab.TabIndex != 0).ToList();
+
+            var tcu = new TabConnectionUpdater(tabs) { StartPosition = FormStartPosition.CenterParent };
+
+            if (tcu.ShowDialog() == DialogResult.OK)
+            {
+                foreach (TabPage tab in tcu.SelectedTabs)
+                {
+                    UpdateTabConnection(tab);
+                }
+            }
+        }
+
+        private string ExtractSwitchValue(string key, ref string[] args)
+        {
+            var name = string.Empty;
+
+            foreach (var arg in args)
+            {
+                if (arg.StartsWith(key))
+                {
+                    name = arg.Substring(key.Length);
+                }
+            }
+
+            return name;
+        }
+
+        private void UpdateTabConnection(TabPage tab)
+        {
+            tab.GetPlugin().UpdateConnection(service, currentConnectionDetail);
+
+            tab.Text = string.Format("{0} ({1})",
+                ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)tab.Tag).Metadata.Name,
+                currentConnectionDetail != null
+                    ? currentConnectionDetail.ConnectionName
+                    : "Not connected");
+        }
+
         #endregion Other methods
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.Shift && e.KeyCode == Keys.C)
+            {
+                TsbConnectClick(null, null);
+            }
+        }
     }
 }
-

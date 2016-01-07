@@ -1,36 +1,51 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk.Query;
+using MsCrmTools.SynchronousEventOrderEditor.AppCode;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk.Query;
-using MsCrmTools.SynchronousEventOrderEditor.AppCode;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SynchronousEventOrderEditor
 {
     public partial class MainControl : PluginControlBase
     {
-        private List<ISynchronousEvent> events; 
+        private List<ISynchronousEvent> events;
 
         public MainControl()
         {
             InitializeComponent();
         }
 
-        private void tsbLoadEvents_Click(object sender, EventArgs e)
+        private void dgvSynchronousEvent_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            ExecuteMethod(LoadEvents);
+            if (dgvSynchronousEvent.Rows.Count == 0) return;
+            dgvSynchronousEventRank.ValueType = typeof(Int32);
+            int rank;
+
+            if (int.TryParse(dgvSynchronousEvent.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString(), out rank))
+            {
+                var sEvent = (ISynchronousEvent)dgvSynchronousEvent.Rows[e.RowIndex].Tag;
+                sEvent.Rank = rank;
+
+                dgvSynchronousEvent.Sort(dgvSynchronousEvent.Columns[e.ColumnIndex], ListSortDirection.Ascending);
+            }
+            else
+            {
+                MessageBox.Show(ParentForm, "Only integer value is allowed for rank", "Warning", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
         }
 
         private void LoadEvents()
         {
             tvEvents.Nodes.Clear();
 
-            WorkAsync("Loading Sdk message filters...",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading Sdk message filters...",
+                Work = (bw, e) =>
                 {
                     events = new List<ISynchronousEvent>();
 
@@ -55,7 +70,7 @@ namespace MsCrmTools.SynchronousEventOrderEditor
 
                     events.AddRange(SynchronousWorkflow.RetrievePluginSteps(Service));
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -72,7 +87,51 @@ namespace MsCrmTools.SynchronousEventOrderEditor
                         }
                     }
                 },
-                e=>SetWorkingMessage(e.UserState.ToString()));
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
+            });
+        }
+
+        private void tsbClose_Click(object sender, EventArgs e)
+        {
+            CloseTool();
+        }
+
+        private void tsbLoadEvents_Click(object sender, EventArgs e)
+        {
+            ExecuteMethod(LoadEvents);
+        }
+
+        private void tsbUpdate_Click(object sender, EventArgs e)
+        {
+            var updatedEvents = events.Where(ev => ev.HasChanged);
+
+            if (updatedEvents.Any(ev => ev.Type == "Workflow") && DialogResult.No ==
+                MessageBox.Show(ParentForm, "Workflows will be deactivated, updated, then activated back. Are you sure you want to continue?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            {
+                return;
+            }
+
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Updating...",
+                Work = (bw, evt) =>
+                {
+                    foreach (var sEvent in events.Where(ev => ev.HasChanged))
+                    {
+                        bw.ReportProgress(0, string.Format("Updating {0} {1}", sEvent.Type, sEvent.Name));
+                        sEvent.UpdateRank(Service);
+                    }
+                },
+                PostWorkCallBack = evt =>
+                {
+                    if (evt.Error != null)
+                    {
+                        MessageBox.Show(ParentForm, "An error occured: " + evt.Error.Message, "Error", MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+                    }
+                },
+                ProgressChanged = evt => { SetWorkingMessage(evt.UserState.ToString()); }
+            });
         }
 
         private void tvEvents_AfterSelect(object sender, TreeViewEventArgs e)
@@ -84,7 +143,7 @@ namespace MsCrmTools.SynchronousEventOrderEditor
                 return;
             }
 
-            var localEvents = (List<ISynchronousEvent>) e.Node.Tag;
+            var localEvents = (List<ISynchronousEvent>)e.Node.Tag;
 
             foreach (var sEvent in localEvents)
             {
@@ -100,61 +159,6 @@ namespace MsCrmTools.SynchronousEventOrderEditor
                     Tag = sEvent
                 });
             }
-        }
-
-        private void dgvSynchronousEvent_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            if (dgvSynchronousEvent.Rows.Count == 0) return;
-            dgvSynchronousEventRank.ValueType = typeof (Int32);
-            int rank;
-
-            if (int.TryParse(dgvSynchronousEvent.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString(), out rank))
-            {
-                var sEvent = (ISynchronousEvent) dgvSynchronousEvent.Rows[e.RowIndex].Tag;
-                sEvent.Rank = rank;
-
-                dgvSynchronousEvent.Sort(dgvSynchronousEvent.Columns[e.ColumnIndex], ListSortDirection.Ascending);
-            }
-            else
-            {
-                MessageBox.Show(ParentForm, "Only integer value is allowed for rank", "Warning", MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-            }
-        }
-
-        private void tsbUpdate_Click(object sender, EventArgs e)
-        {
-            var updatedEvents = events.Where(ev => ev.HasChanged);
-
-            if (updatedEvents.Any(ev => ev.Type == "Workflow") && DialogResult.No ==
-                MessageBox.Show(ParentForm, "Workflows will be deactivated, updated, then activated back. Are you sure you want to continue?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-            {
-                return;
-            }
-
-            WorkAsync("Updating...",
-                (bw, evt) =>
-                {
-                    foreach (var sEvent in events.Where(ev => ev.HasChanged))
-                    {
-                        bw.ReportProgress(0, string.Format("Updating {0} {1}", sEvent.Type, sEvent.Name));
-                        sEvent.UpdateRank(Service);
-                    }
-                },
-                evt =>
-                {
-                    if (evt.Error != null)
-                    {
-                        MessageBox.Show(ParentForm, "An error occured: " + evt.Error.Message, "Error", MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-                    }
-                },
-                evt=>SetWorkingMessage(evt.UserState.ToString()));
-        }
-
-        private void tsbClose_Click(object sender, EventArgs e)
-        {
-            CloseTool();
         }
     }
 }

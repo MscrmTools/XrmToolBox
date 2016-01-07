@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.MetadataBrowser.AppCode.LabelMd;
+using System.ComponentModel;
 
 namespace MsCrmTools.MetadataBrowser.AppCode
 {
-    [TypeConverter(typeof(AssociatedMenuConfigurationInfoConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class AssociatedMenuConfigurationInfo
     {
         private readonly AssociatedMenuConfiguration configuration;
@@ -28,7 +24,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode
             get { return configuration.Group != null ? configuration.Group.Value : AssociatedMenuGroup.Details; }
         }
 
-        [TypeConverter(typeof(LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo Label
         {
             get { return new LabelInfo(configuration.Label); }
@@ -37,6 +33,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode
         public int Order
         {
             get { return configuration.Order.HasValue ? configuration.Order.Value : -1; }
+        }
+
+        public override string ToString()
+        {
+            return "Expand to see properties";
         }
     }
 }

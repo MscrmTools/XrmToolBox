@@ -26,6 +26,86 @@ namespace Tanguy.WinForm.Utilities.DelegatesHelpers
             }
         }
 
+        public static void ClearItems(ComboBox combobox)
+        {
+            MethodInvoker miClearItems = delegate
+            {
+                combobox.Items.Clear();
+            };
+
+            if (combobox.InvokeRequired)
+            {
+                combobox.Invoke(miClearItems);
+            }
+            else
+            {
+                miClearItems();
+            }
+        }
+
+        public static object GetItem(ComboBox combobox, int index)
+        {
+            object item = null;
+
+            MethodInvoker miRemoveItem = delegate
+            {
+                item = combobox.Items[index];
+            };
+
+            if (combobox.InvokeRequired)
+            {
+                combobox.Invoke(miRemoveItem);
+            }
+            else
+            {
+                miRemoveItem();
+            }
+
+            return item;
+        }
+
+        public static object GetSelectedItem(ComboBox combobox)
+        {
+            object selectedItem = null;
+
+            MethodInvoker miClearItems = delegate
+            {
+                selectedItem = combobox.SelectedItem;
+            };
+
+            if (combobox.InvokeRequired)
+            {
+                combobox.Invoke(miClearItems);
+            }
+            else
+            {
+                miClearItems();
+            }
+
+            return selectedItem;
+        }
+
+        public static string GetText(ComboBox combobox)
+        {
+            string text = string.Empty;
+
+            MethodInvoker miGetText = delegate
+            {
+                text = combobox.Text;
+            };
+
+            if (combobox.InvokeRequired)
+            {
+                combobox.Invoke(miGetText);
+            }
+            else
+            {
+                miGetText();
+            }
+
+            return text;
+        }
+
         public static void InsertItem(ComboBox combobox, int index, object item)
         {
             MethodInvoker miInsertItem = delegate
@@ -75,86 +155,6 @@ namespace Tanguy.WinForm.Utilities.DelegatesHelpers
             {
                 miRemoveItem();
             }
-        }
-
-        public static object GetItem(ComboBox combobox, int index)
-        {
-            object item = null;
-
-            MethodInvoker miRemoveItem = delegate
-            {
-                item = combobox.Items[index];
-            };
-
-            if (combobox.InvokeRequired)
-            {
-                combobox.Invoke(miRemoveItem);
-            }
-            else
-            {
-                miRemoveItem();
-            }
-
-            return item;
-        }
-
-        public static void ClearItems(ComboBox combobox)
-        {
-            MethodInvoker miClearItems = delegate
-            {
-                combobox.Items.Clear();
-            };
-
-            if (combobox.InvokeRequired)
-            {
-                combobox.Invoke(miClearItems);
-            }
-            else
-            {
-                miClearItems();
-            }
-        }
-
-        public static object GetSelectedItem(ComboBox combobox)
-        {
-            object selectedItem = null;
-
-            MethodInvoker miClearItems = delegate
-            {
-                selectedItem = combobox.SelectedItem;
-            };
-
-            if (combobox.InvokeRequired)
-            {
-                combobox.Invoke(miClearItems);
-            }
-            else
-            {
-                miClearItems();
-            }
-
-            return selectedItem;
-        }
-
-        public static string GetText(ComboBox combobox)
-        {
-            string text = string.Empty;
-
-            MethodInvoker miGetText = delegate
-            {
-                text = combobox.Text;
-            };
-
-            if (combobox.InvokeRequired)
-            {
-                combobox.Invoke(miGetText);
-            }
-            else
-            {
-                miGetText();
-            }
-
-            return text;
         }
 
         public static void SetEnableState(ComboBox combobox, bool enabled)

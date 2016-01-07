@@ -3,14 +3,14 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using CSRichTextBoxSyntaxHighlighting;
+using Microsoft.Crm.Sdk.Messages;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
-using CSRichTextBoxSyntaxHighlighting;
-using Microsoft.Crm.Sdk.Messages;
 using XrmToolBox.Extensibility;
 
 namespace MsCrmTools.FetchXmlTester
@@ -42,49 +42,6 @@ namespace MsCrmTools.FetchXmlTester
 
         #region Methods
 
-        private void TsbExecuteClick(object sender, EventArgs e)
-        {
-            if (txtRequest.Text.Length == 0)
-            {
-                MessageBox.Show(this, "Please provide a fetchXml query before trying to execute it!", "Warning",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            ExecuteMethod(ProcessFetchXml);
-        }
-
-        private void ProcessFetchXml()
-        {
-            WorkAsync("Executing request...",
-                e =>
-                {
-                    var request = new ExecuteFetchRequest { FetchXml = e.Argument.ToString() };
-                    var response = (ExecuteFetchResponse)Service.Execute(request);
-
-                    e.Result = response.FetchXmlResult;
-                },
-                e =>
-                {
-                    if (e.Error == null)
-                    {
-                        txtResponse.Text = IndentXMLString(e.Result.ToString());
-                        tabControl1.SelectedTab = tabPage2;
-                    }
-                    else
-                    {
-                        MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK,
-                                        MessageBoxIcon.Error);
-                    }
-                },
-                txtRequest.Text);
-        }
-    
-        private void TsbCloseClick(object sender, EventArgs e)
-        {
-           CloseTool();
-        }
-
         private string IndentXMLString(string xml)
         {
             var ms = new MemoryStream();
@@ -109,6 +66,52 @@ namespace MsCrmTools.FetchXmlTester
             }
         }
 
+        private void ProcessFetchXml()
+        {
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Executing request...",
+                AsyncArgument = txtRequest.Text,
+                Work = (bw, e) =>
+                {
+                    var request = new ExecuteFetchRequest { FetchXml = e.Argument.ToString() };
+                    var response = (ExecuteFetchResponse)Service.Execute(request);
+
+                    e.Result = response.FetchXmlResult;
+                },
+                PostWorkCallBack = e =>
+                {
+                    if (e.Error == null)
+                    {
+                        txtResponse.Text = IndentXMLString(e.Result.ToString());
+                        tabControl1.SelectedTab = tabPage2;
+                    }
+                    else
+                    {
+                        MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK,
+                                        MessageBoxIcon.Error);
+                    }
+                }
+            });
+        }
+
+        private void TsbCloseClick(object sender, EventArgs e)
+        {
+            CloseTool();
+        }
+
+        private void TsbExecuteClick(object sender, EventArgs e)
+        {
+            if (txtRequest.Text.Length == 0)
+            {
+                MessageBox.Show(this, "Please provide a fetchXml query before trying to execute it!", "Warning",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            ExecuteMethod(ProcessFetchXml);
+        }
+
         #endregion Methods
 
         private void ToolStripButton1Click(object sender, EventArgs e)
@@ -121,7 +124,7 @@ namespace MsCrmTools.FetchXmlTester
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-           
+
                 ((XMLViewer)tabControl1.SelectedTab.Controls[0]).Process(true);
             }
             catch (Exception error)

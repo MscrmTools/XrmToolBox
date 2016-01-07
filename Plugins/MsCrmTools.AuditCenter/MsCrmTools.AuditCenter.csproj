@@ -16,6 +16,13 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
+	<AssemblyInfoFilePath>Properties\AssemblyInfo.cs</AssemblyInfoFilePath>
+    <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+    <UpdateAssemblyFileVersion>True</UpdateAssemblyFileVersion>
+    <UpdateAssemblyInfoVersion>True</UpdateAssemblyInfoVersion>
+    <AssemblyVersionSettings>None.YearStamp.MonthStamp.DayStamp</AssemblyVersionSettings>
+    <AssemblyFileVersionSettings>None.YearStamp.MonthStamp.DayStamp</AssemblyFileVersionSettings>
+    <AssemblyInfoVersionSettings>None.YearStamp.MonthStamp.DayStamp</AssemblyInfoVersionSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,10 +57,6 @@
     <Reference Include="Microsoft.Crm.Sdk.Proxy">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Referenced Assemblies\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xrm.Client">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Referenced Assemblies\Microsoft.Xrm.Client.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk">
       <SpecificVersion>False</SpecificVersion>
@@ -105,6 +108,7 @@
     <Compile Include="MainControl.Designer.cs">
       <DependentUpon>MainControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="SortingConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\AttributePicker.resx">

@@ -1,10 +1,10 @@
-﻿using System.ComponentModel;
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.MetadataBrowser.AppCode.LabelMd;
+using System.ComponentModel;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
 {
-    [TypeConverter(typeof (AttributeMetadataInfoConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class AttributeMetadataInfo
     {
         private readonly AttributeMetadata amd;
@@ -44,7 +44,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
             get { return amd.CanBeSecuredForUpdate.HasValue && amd.CanBeSecuredForUpdate.Value; }
         }
 
-        [TypeConverter(typeof(BooleanManagedPropertyInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public BooleanManagedPropertyInfo CanModifyAdditionalSettings
         {
             get { return new BooleanManagedPropertyInfo(amd.CanModifyAdditionalSettings); }
@@ -60,13 +60,13 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
             get { return amd.DeprecatedVersion; }
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo Description
         {
             get { return new LabelInfo(amd.Description); }
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo DisplayName
         {
             get { return new LabelInfo(amd.DisplayName); }
@@ -88,12 +88,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
         }
 
         public string IntroducedVersion
-
         {
             get { return amd.IntroducedVersion; }
         }
 
-        [TypeConverter(typeof(BooleanManagedPropertyInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public BooleanManagedPropertyInfo IsAuditEnabled
         {
             get { return new BooleanManagedPropertyInfo(amd.IsAuditEnabled); }
@@ -104,7 +103,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
             get { return amd.IsCustomAttribute.HasValue && amd.IsCustomAttribute.Value; }
         }
 
-        [TypeConverter(typeof(BooleanManagedPropertyInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public BooleanManagedPropertyInfo IsCustomizable
         {
             get { return new BooleanManagedPropertyInfo(amd.IsCustomizable); }
@@ -125,7 +124,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
             get { return amd.IsPrimaryName.HasValue && amd.IsPrimaryName.Value; }
         }
 
-        [TypeConverter(typeof(BooleanManagedPropertyInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public BooleanManagedPropertyInfo IsRenameable
         {
             get { return new BooleanManagedPropertyInfo(amd.IsRenameable); }
@@ -134,6 +133,12 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
         public bool IsSecured
         {
             get { return amd.IsSecured.HasValue && amd.IsSecured.Value; }
+        }
+
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public BooleanManagedPropertyInfo IsValidForAdvancedFind
+        {
+            get { return new BooleanManagedPropertyInfo(amd.IsValidForAdvancedFind); }
         }
 
         public bool IsValidForCreate
@@ -151,11 +156,6 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
             get { return amd.IsValidForUpdate.HasValue && amd.IsValidForUpdate.Value; }
         }
 
-        public BooleanManagedPropertyInfo IsValidForAdvancedFind
-        {
-            get { return new BooleanManagedPropertyInfo(amd.IsValidForAdvancedFind); }
-        }
-
         public string LinkedAttributeId
         {
             get { return amd.LinkedAttributeId.HasValue ? amd.LinkedAttributeId.Value.ToString("B") : ""; }
@@ -171,16 +171,20 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
             get { return amd.MetadataId.HasValue ? amd.MetadataId.Value.ToString("B") : ""; }
         }
 
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public AttributeRequiredLevelManagedPropertyInfo RequiredLevel
+        {
+            get { return new AttributeRequiredLevelManagedPropertyInfo(amd.RequiredLevel); }
+        }
+
         public string SchemaName
         {
             get { return amd.SchemaName; }
         }
 
-
-        [TypeConverter(typeof(AttributeRequiredLevelManagedPropertyInfoConverter))]
-        public AttributeRequiredLevelManagedPropertyInfo RequiredLevel
+        public override string ToString()
         {
-            get { return new AttributeRequiredLevelManagedPropertyInfo(amd.RequiredLevel); }
+            return amd.AttributeType.Value.ToString();
         }
     }
 }

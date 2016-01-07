@@ -1,9 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows.Forms;
-using McTools.Xrm.Connection.WinForms;
+﻿using McTools.Xrm.Connection.WinForms;
 using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
+using System;
+using System.Windows.Forms;
 
 namespace McTools.Xrm.Connection.TestWinForm
 {
@@ -12,21 +11,21 @@ namespace McTools.Xrm.Connection.TestWinForm
         #region Variables
 
         /// <summary>
-        /// Dynamics CRM 2011 organization service
-        /// </summary>
-        IOrganizationService service;
-
-        /// <summary>
         /// Connection control
         /// </summary>
-        CrmConnectionStatusBar ccsb;
+        private CrmConnectionStatusBar ccsb;
 
         /// <summary>
         /// Connection manager
         /// </summary>
-        ConnectionManager cManager;
+        private ConnectionManager cManager;
 
         private FormHelper formHelper;
+
+        /// <summary>
+        /// Dynamics CRM 2011 organization service
+        /// </summary>
+        private IOrganizationService service;
 
         #endregion Variables
 
@@ -50,8 +49,8 @@ namespace McTools.Xrm.Connection.TestWinForm
 
             this.ccsb.SetMessage("A message to display...");
         }
-   
-        bool cManager_RequestPassword(object sender, RequestPasswordEventArgs e)
+
+        private bool cManager_RequestPassword(object sender, RequestPasswordEventArgs e)
         {
             return formHelper.RequestPassword(e.ConnectionDetail);
         }
@@ -61,25 +60,15 @@ namespace McTools.Xrm.Connection.TestWinForm
         #region Connection event handlers
 
         /// <summary>
-        /// Occurs when the connection manager sends a step change
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        void cManager_StepChanged(object sender, StepChangedEventArgs e)
-        {
-            this.ccsb.SetMessage(e.CurrentStep);
-        }
-
-        /// <summary>
         /// Occurs when the connection to a server failed
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void cManager_ConnectionFailed(object sender, ConnectionFailedEventArgs e)
+        private void cManager_ConnectionFailed(object sender, ConnectionFailedEventArgs e)
         {
             // Set error message
             this.ccsb.SetMessage("Error: " + e.FailureReason);
-            
+
             // Clear the current organization service
             this.service = null;
         }
@@ -89,13 +78,13 @@ namespace McTools.Xrm.Connection.TestWinForm
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void cManager_ConnectionSucceed(object sender, ConnectionSucceedEventArgs e)
+        private void cManager_ConnectionSucceed(object sender, ConnectionSucceedEventArgs e)
         {
             ccsb.RebuildConnectionList();
 
             // Store connection Organization Service
             this.service = e.OrganizationService;
-            
+
             // Displays connection status
             this.ccsb.SetConnectionStatus(true, e.ConnectionDetail);
 
@@ -110,6 +99,16 @@ namespace McTools.Xrm.Connection.TestWinForm
                     WhoAmI();
                 }
             }
+        }
+
+        /// <summary>
+        /// Occurs when the connection manager sends a step change
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cManager_StepChanged(object sender, StepChangedEventArgs e)
+        {
+            this.ccsb.SetMessage(e.CurrentStep);
         }
 
         #endregion Connection event handlers
@@ -130,10 +129,23 @@ namespace McTools.Xrm.Connection.TestWinForm
 
         private void WhoAmI()
         {
-            WhoAmIRequest request = new WhoAmIRequest();
-            WhoAmIResponse response = (WhoAmIResponse)this.service.Execute(request);
+            int i = 0;
 
-            MessageBox.Show(this, "Your ID is: " + response.UserId.ToString("B"));
+            do
+            {
+                WhoAmIRequest request = new WhoAmIRequest();
+                WhoAmIResponse response = (WhoAmIResponse)this.service.Execute(request);
+
+                i++;
+
+                ccsb.SetMessage("Doing...");
+                ccsb.SetProgress(i * 2);
+            } while (i < 50);
+
+            ccsb.SetMessage("Done");
+            ccsb.SetProgress(null);
+
+            //MessageBox.Show(this, "Your ID is: " + response.UserId.ToString("B"));
         }
 
         #endregion WhoAmI Sample methods

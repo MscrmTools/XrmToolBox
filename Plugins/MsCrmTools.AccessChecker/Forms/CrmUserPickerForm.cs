@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
 
 namespace MsCrmTools.AccessChecker.Forms
 {
@@ -13,16 +13,16 @@ namespace MsCrmTools.AccessChecker.Forms
         #region Variables
 
         /// <summary>
-        /// CRM access object
-        /// </summary>
-        readonly CrmAccess crmAccess;
-
-        /// <summary>
         /// List of selected users
         /// </summary>
         public Dictionary<Guid, string> SelectedUsers;
 
-        #endregion
+        /// <summary>
+        /// CRM access object
+        /// </summary>
+        private readonly CrmAccess crmAccess;
+
+        #endregion Variables
 
         #region Constructor
 
@@ -37,17 +37,9 @@ namespace MsCrmTools.AccessChecker.Forms
             crmAccess = access;
         }
 
-        #endregion
+        #endregion Constructor
 
         #region Methods
-
-        /// <summary>
-        /// Action when user clicks on the validation button
-        /// </summary>
-        private void ButtonValidateClick(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.OK;
-        }
 
         /// <summary>
         /// Action when user clicks on the cancel button
@@ -68,11 +60,21 @@ namespace MsCrmTools.AccessChecker.Forms
 
             foreach (var user in users)
             {
-                var item = new ListViewItem(user.GetAttributeValue<string>("lastname")) { Tag = user.Id};
+                var item = new ListViewItem(user.GetAttributeValue<string>("lastname")) { Tag = user.Id };
                 item.SubItems.Add(user.GetAttributeValue<string>("firstname"));
+                item.SubItems.Add(user.GetAttributeValue<string>("domainname"));
+                item.SubItems.Add(user.GetAttributeValue<EntityReference>("businessunitid").Name);
                 item.ImageIndex = 0;
                 lvUsers.Items.Add(item);
             }
+        }
+
+        /// <summary>
+        /// Action when user clicks on the validation button
+        /// </summary>
+        private void ButtonValidateClick(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.OK;
         }
 
         /// <summary>
@@ -98,7 +100,7 @@ namespace MsCrmTools.AccessChecker.Forms
             }
         }
 
-        #endregion
+        #endregion Methods
 
         private void ListViewUsersMouseDoubleClick(object sender, MouseEventArgs e)
         {

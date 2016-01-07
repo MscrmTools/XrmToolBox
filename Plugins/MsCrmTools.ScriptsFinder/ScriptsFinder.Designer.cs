@@ -47,6 +47,7 @@
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -61,7 +62,7 @@
             this.tsbExportToCsv});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1367, 32);
+            this.toolStrip1.Size = new System.Drawing.Size(911, 25);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -71,21 +72,21 @@
             this.tsbCloseThisTab.Image = ((System.Drawing.Image)(resources.GetObject("tsbCloseThisTab.Image")));
             this.tsbCloseThisTab.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCloseThisTab.Name = "tsbCloseThisTab";
-            this.tsbCloseThisTab.Size = new System.Drawing.Size(28, 29);
+            this.tsbCloseThisTab.Size = new System.Drawing.Size(23, 22);
             this.tsbCloseThisTab.Text = "Close this tab";
             this.tsbCloseThisTab.Click += new System.EventHandler(this.TsbCloseThisTabClick);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbMainFindScripts
             // 
             this.tsbMainFindScripts.Image = ((System.Drawing.Image)(resources.GetObject("tsbMainFindScripts.Image")));
             this.tsbMainFindScripts.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbMainFindScripts.Name = "tsbMainFindScripts";
-            this.tsbMainFindScripts.Size = new System.Drawing.Size(130, 29);
+            this.tsbMainFindScripts.Size = new System.Drawing.Size(87, 22);
             this.tsbMainFindScripts.Text = "Find scripts";
             this.tsbMainFindScripts.ToolTipText = "Loads the list of custom registered scripts";
             this.tsbMainFindScripts.Click += new System.EventHandler(this.TsbMainFindScriptsClick);
@@ -93,14 +94,14 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbExportToCsv
             // 
             this.tsbExportToCsv.Image = ((System.Drawing.Image)(resources.GetObject("tsbExportToCsv.Image")));
             this.tsbExportToCsv.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbExportToCsv.Name = "tsbExportToCsv";
-            this.tsbExportToCsv.Size = new System.Drawing.Size(143, 29);
+            this.tsbExportToCsv.Size = new System.Drawing.Size(94, 22);
             this.tsbExportToCsv.Text = "Export to csv";
             this.tsbExportToCsv.Click += new System.EventHandler(this.TsbExportToCsvClick);
             // 
@@ -119,13 +120,13 @@
             this.columnHeader8,
             this.columnHeader5,
             this.columnHeader6,
+            this.columnHeader11,
             this.columnHeader10});
             this.lvScripts.FullRowSelect = true;
             this.lvScripts.HideSelection = false;
-            this.lvScripts.Location = new System.Drawing.Point(4, 42);
-            this.lvScripts.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.lvScripts.Location = new System.Drawing.Point(3, 27);
             this.lvScripts.Name = "lvScripts";
-            this.lvScripts.Size = new System.Drawing.Size(1355, 873);
+            this.lvScripts.Size = new System.Drawing.Size(905, 569);
             this.lvScripts.TabIndex = 1;
             this.lvScripts.UseCompatibleStateImageBehavior = false;
             this.lvScripts.View = System.Windows.Forms.View.Details;
@@ -180,6 +181,10 @@
             this.columnHeader10.Text = "Enabled";
             this.columnHeader10.Width = 100;
             // 
+            // columnHeader11
+            // 
+            this.columnHeader11.Text = "Parameters";
+            // 
             // imageList1
             // 
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
@@ -188,13 +193,12 @@
             // 
             // ScriptsFinder
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.lvScripts);
             this.Controls.Add(this.toolStrip1);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "ScriptsFinder";
-            this.Size = new System.Drawing.Size(1367, 922);
+            this.Size = new System.Drawing.Size(911, 599);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -222,5 +226,6 @@
         private System.Windows.Forms.ToolStripButton tsbExportToCsv;
         private System.Windows.Forms.ColumnHeader columnHeader9;
         private System.Windows.Forms.ColumnHeader columnHeader10;
+        private System.Windows.Forms.ColumnHeader columnHeader11;
     }
 }

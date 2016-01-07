@@ -3,13 +3,13 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://www.dotnetdust.blogspot.com/
 
+using McTools.Xrm.Connection;
+using Microsoft.Xrm.Sdk;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Reflection;
 using System.Windows.Forms;
-using McTools.Xrm.Connection;
-using Microsoft.Xrm.Sdk;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace XrmToolBox.Extensibility
@@ -25,15 +25,18 @@ namespace XrmToolBox.Extensibility
     {
         public ConnectionDetail ConnectionDetail { get; set; }
 
+        public void CloseTool()
+        {
+            if (OnCloseTool != null)
+            {
+                OnCloseTool(this, null);
+            }
+        }
+
         [Obsolete("This has been renamed to CloseTool.  Call that method instead, and if there is any required logic for Closing override the ClosingPlugin Method", true)]
         public virtual void CloseToolPrompt()
         {
             CloseTool();
-        }
-
-        public void CloseTool()
-        {
-                OnCloseTool(this, null);
         }
 
         #region IMsCrmToolsPluginUserControl Members
@@ -46,7 +49,7 @@ namespace XrmToolBox.Extensibility
 
         /// <summary>
         /// Allows for the plugin to prevent the form from closing, or preform some action before closing
-        /// By default, if the Form is being closed, or a close all or all except active is being called, it won't prompt the user to ensure they wanted to close 
+        /// By default, if the Form is being closed, or a close all or all except active is being called, it won't prompt the user to ensure they wanted to close
         /// </summary>
         /// <param name="info"></param>
         public virtual void ClosingPlugin(PluginCloseInfo info)
@@ -74,7 +77,7 @@ namespace XrmToolBox.Extensibility
             MethodInfo method;
             if (parameter == null)
             {
-                method = GetType().GetMethod(actionName);
+                method = GetType().GetMethod(actionName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                 if (method == null)
                 {
                     throw new Exception("Unable to find method " + GetType().Name + "." + actionName);
@@ -86,7 +89,7 @@ namespace XrmToolBox.Extensibility
                 var externalCaller = parameter as ExternalMethodCallerInfo;
                 if (externalCaller == null)
                 {
-                    method = GetType().GetMethod(actionName, new[] { parameter.GetType() });
+                    method = GetType().GetMethod(actionName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { parameter.GetType() }, null);
                     if (method == null)
                     {
                         throw new Exception("Unable to find method " + GetType().Name + "." + actionName);
@@ -100,26 +103,15 @@ namespace XrmToolBox.Extensibility
             }
         }
 
-        #endregion
+        #endregion IMsCrmToolsPluginUserControl Members
 
         #region IWorkerHost
 
         private readonly Worker _worker = new Worker();
 
-        public void WorkAsync(string message, Action<DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, object argument = null, int messageWidth = 340, int messageHeight = 150)
+        public void CancelWorker()
         {
-            _worker.WorkAsync(this, message, work, callback, argument, messageWidth, messageHeight);
-        }
-
-        public void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback,
-                              Action<ProgressChangedEventArgs> progressChanged, object argument = null, int messageWidth = 340, int messageHeight = 150)
-        {
-            _worker.WorkAsync(this, message, work, callback, progressChanged, argument, messageWidth, messageHeight);
-        }
-
-        public void SetWorkingMessage(string message, int width = 340, int height = 150)
-        {
-            _worker.SetWorkingMessage(this, message);
+            _worker.CancelWorker();
         }
 
         public void RaiseRequestConnectionEvent(RequestConnectionEventArgs args)
@@ -130,7 +122,113 @@ namespace XrmToolBox.Extensibility
             }
         }
 
-        #endregion // IWorkerHost
+        public void SetWorkingMessage(string message, int width = 340, int height = 150)
+        {
+            _worker.SetWorkingMessage(this, message);
+        }
+
+        public void WorkAsync(WorkAsyncInfo info)
+        {
+            info.Host = this;
+            _worker.WorkAsync(info);
+        }
+
+        #region Obsolete WorkAsync Calls
+
+        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method")]
+        public void WorkAsync(string message, Action<DoWorkEventArgs> work, object argument = null, int messageWidth = 340, int messageHeight = 150)
+        {
+            var info = new WorkAsyncInfo(message, work)
+            {
+                AsyncArgument = argument,
+                Host = this,
+                MessageWidth = messageWidth,
+                MessageHeight = messageHeight
+            };
+            _worker.WorkAsync(info);
+        }
+
+        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method")]
+        public void WorkAsync(string message, Action<DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, object argument = null, int messageWidth = 340, int messageHeight = 150)
+        {
+            var info = new WorkAsyncInfo(message, work)
+            {
+                AsyncArgument = argument,
+                Host = this,
+                MessageWidth = messageWidth,
+                MessageHeight = messageHeight,
+                PostWorkCallBack = callback
+            };
+            _worker.WorkAsync(info);
+        }
+
+        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method")]
+        public void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback,
+                              Action<ProgressChangedEventArgs> progressChanged, object argument = null, int messageWidth = 340, int messageHeight = 150)
+        {
+            var info = new WorkAsyncInfo(message, work)
+            {
+                AsyncArgument = argument,
+                Host = this,
+                MessageWidth = messageWidth,
+                MessageHeight = messageHeight,
+                PostWorkCallBack = callback,
+                ProgressChanged = progressChanged
+                
+            };
+            _worker.WorkAsync(info);
+        }
+
+        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method")]
+        public void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, object argument, bool enableCancellation, int messageWidth, int messageHeight)
+        {
+            var info = new WorkAsyncInfo(message, work)
+            {
+                AsyncArgument = argument,
+                Host = this,
+                IsCancelable = enableCancellation,
+                MessageWidth = messageWidth,
+                MessageHeight = messageHeight
+
+            };
+            _worker.WorkAsync(info);
+        }
+
+        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method")]
+        public void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, object argument, bool enableCancellation, int messageWidth, int messageHeight)
+        {
+            var info = new WorkAsyncInfo(message, work)
+            {
+                AsyncArgument = argument,
+                Host = this,
+                IsCancelable = enableCancellation,
+                MessageWidth = messageWidth,
+                MessageHeight = messageHeight,
+                PostWorkCallBack = callback
+            };
+            _worker.WorkAsync(info);
+        }
+
+        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method")]
+        public void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, Action<ProgressChangedEventArgs> progressChanged, object argument, bool enableCancellation, int messageWidth, int messageHeight)
+        {
+            var info = new WorkAsyncInfo(message, work)
+            {
+                AsyncArgument = argument,
+                Host = this,
+                IsCancelable = enableCancellation,
+                MessageWidth = messageWidth,
+                MessageHeight = messageHeight,
+                PostWorkCallBack = callback,
+                ProgressChanged = progressChanged
+
+            };
+            _worker.WorkAsync(info);
+        }
+
+        #endregion Obsolete WorkAsync Calls
+
+        #endregion IWorkerHost
 
         #region ExecuteMethod
 
@@ -149,11 +247,14 @@ namespace XrmToolBox.Extensibility
                         @"The Action of an Execute Method must not be a lambda.  Use the ExecuteAction(action, parameter) Method.");
                 }
 
-                OnRequestConnection(this, new RequestConnectionEventArgs
+                if (OnRequestConnection != null)
                 {
-                    ActionName = action.GetMethodInfo().Name,
-                    Control = this
-                });
+                    OnRequestConnection(this, new RequestConnectionEventArgs
+                    {
+                        ActionName = action.GetMethodInfo().Name,
+                        Control = this
+                    });
+                }
             }
             else
             {
@@ -171,6 +272,10 @@ namespace XrmToolBox.Extensibility
             var caller = parameter as ExternalMethodCallerInfo;
             if (Service == null)
             {
+                if (OnRequestConnection == null)
+                {
+                    return;
+                }
                 if (caller == null)
                 {
                     OnRequestConnection(this, new RequestConnectionEventArgs
@@ -206,9 +311,11 @@ namespace XrmToolBox.Extensibility
             info.ExternalAction.Invoke();
         }
 
-        #endregion // ExecuteMethod
+        #endregion ExecuteMethod
 
         #region Connection Updated
+
+        public delegate void ConnectionUpdatedHandler(object sender, ConnectionUpdatedEventArgs e);
 
         public event ConnectionUpdatedHandler ConnectionUpdated;
 
@@ -218,22 +325,18 @@ namespace XrmToolBox.Extensibility
             if (handler != null) { handler(this, e); }
         }
 
-        public delegate void ConnectionUpdatedHandler(object sender, ConnectionUpdatedEventArgs e);
-
         public class ConnectionUpdatedEventArgs : EventArgs
         {
-            public IOrganizationService Service { get; set; }
-            public ConnectionDetail ConnectionDetail { get; set; }
-
             public ConnectionUpdatedEventArgs(IOrganizationService service, ConnectionDetail connectionDetail)
             {
                 Service = service;
                 ConnectionDetail = connectionDetail;
             }
+
+            public ConnectionDetail ConnectionDetail { get; set; }
+            public IOrganizationService Service { get; set; }
         }
 
-        #endregion // Connection Updated
-
-     
+        #endregion Connection Updated
     }
 }

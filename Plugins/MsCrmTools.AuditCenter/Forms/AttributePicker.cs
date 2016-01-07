@@ -1,19 +1,19 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Metadata;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Metadata;
 
 namespace MsCrmTools.AuditCenter.Forms
 {
     public partial class AttributePicker : Form
     {
-        private readonly EntityMetadata emd;
-        private readonly IEnumerable<string> alreadySelectedAttributes;
-        private readonly IOrganizationService service;
         public List<AttributeMetadata> AttributesToAdd;
+        private readonly IEnumerable<string> alreadySelectedAttributes;
+        private readonly EntityMetadata emd;
+        private readonly IOrganizationService service;
 
         public AttributePicker(EntityMetadata emd, IEnumerable<string> alreadySelectedAttributes, IOrganizationService service)
         {
@@ -46,19 +46,6 @@ namespace MsCrmTools.AuditCenter.Forms
             Close();
         }
 
-        private void BtnOkClick(object sender, EventArgs e)
-        {
-            AttributesToAdd = new List<AttributeMetadata>();
-
-            foreach (ListViewItem item in lvAttributes.CheckedItems)
-            {
-                AttributesToAdd.Add((AttributeMetadata)item.Tag);
-            }
-
-            DialogResult = DialogResult.OK;
-            Close();
-        }
-
         private void BtnCheckAttrOnFormsClick(object sender, EventArgs e)
         {
             foreach (ListViewItem item in lvAttributes.Items)
@@ -75,6 +62,19 @@ namespace MsCrmTools.AuditCenter.Forms
             }
 
             ((Button)sender).Text = ((Button)sender).Text == "Check All" ? "Clear All" : "Check All";
+        }
+
+        private void BtnOkClick(object sender, EventArgs e)
+        {
+            AttributesToAdd = new List<AttributeMetadata>();
+
+            foreach (ListViewItem item in lvAttributes.CheckedItems)
+            {
+                AttributesToAdd.Add((AttributeMetadata)item.Tag);
+            }
+
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void ListViewColumnClick(object sender, ColumnClickEventArgs e)

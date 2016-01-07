@@ -4,7 +4,7 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace DamSim.ViewTransferTool
 {
-    [Export(typeof (IXrmToolBoxPlugin)),
+    [Export(typeof(IXrmToolBoxPlugin)),
      ExportMetadata("BackgroundColor", "MediumBlue"),
      ExportMetadata("PrimaryFontColor", "White"),
      ExportMetadata("SecondaryFontColor", "LightGray"),

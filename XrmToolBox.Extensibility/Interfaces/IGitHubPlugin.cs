@@ -9,13 +9,13 @@ namespace XrmToolBox.Extensibility.Interfaces
     public interface IGitHubPlugin
     {
         /// <summary>
-        /// Github Username
-        /// </summary>
-        String UserName { get; }
-        
-        /// <summary>
         /// Github Repository name
         /// </summary>
         String RepositoryName { get; }
+
+        /// <summary>
+        /// Github Username
+        /// </summary>
+        String UserName { get; }
     }
 }

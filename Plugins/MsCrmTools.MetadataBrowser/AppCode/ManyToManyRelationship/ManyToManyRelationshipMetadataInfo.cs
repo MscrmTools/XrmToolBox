@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using System;
 using System.ComponentModel;
-using Microsoft.Xrm.Sdk.Metadata;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.ManyToManyRelationship
 {
-    [TypeConverter(typeof (ManyToManyRelationshipMetadataInfoConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class ManyToManyRelationshipMetadataInfo
     {
         private readonly ManyToManyRelationshipMetadata mtmmd;
@@ -14,7 +14,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.ManyToManyRelationship
             this.mtmmd = mtmmd;
         }
 
-        [TypeConverter(typeof(AssociatedMenuConfigurationInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public AssociatedMenuConfigurationInfo Entity1AssociatedMenuConfiguration
         {
             get
@@ -33,7 +33,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.ManyToManyRelationship
             get { return mtmmd.Entity1LogicalName; }
         }
 
-        [TypeConverter(typeof(AssociatedMenuConfigurationInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public AssociatedMenuConfigurationInfo Entity2AssociatedMenuConfiguration
         {
             get
@@ -67,7 +67,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.ManyToManyRelationship
             get { return mtmmd.IntersectEntityName; }
         }
 
-        [TypeConverter(typeof(BooleanManagedPropertyInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public BooleanManagedPropertyInfo IsCustomizable
         {
             get { return new BooleanManagedPropertyInfo(mtmmd.IsCustomizable); }
@@ -106,6 +106,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.ManyToManyRelationship
         public SecurityTypes SecurityTypes
         {
             get { return mtmmd.SecurityTypes.Value; }
+        }
+
+        public override string ToString()
+        {
+            return mtmmd.SchemaName;
         }
     }
 }
