@@ -261,7 +261,8 @@ namespace Javista.XrmToolBox.ImportNN
                     ie.RaiseError += ie_RaiseError;
                     ie.RaiseSuccess += ie_RaiseSuccess;
                     ie.Delete();
-                }
+                },
+                PostWorkCallBack = evt => { }
             });
         }
 
@@ -297,7 +298,8 @@ namespace Javista.XrmToolBox.ImportNN
                     var ee = new ExportEngine(filePath, this.Service, innerSettings);
                     ee.RaiseError += ee_RaiseError;
                     ee.Export();
-                }
+                },
+                PostWorkCallBack = evt => { }
             });
         }
 
@@ -331,7 +333,8 @@ namespace Javista.XrmToolBox.ImportNN
                     ie.RaiseError += ie_RaiseError;
                     ie.RaiseSuccess += ie_RaiseSuccess;
                     ie.Import();
-                }
+                },
+                PostWorkCallBack = evt => { }
             });
         }
 
