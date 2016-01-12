@@ -30,29 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebresourceTreeView));
-            this.tv = new System.Windows.Forms.TreeView();
             this.ilWebResourceTypes = new System.Windows.Forms.ImageList(this.components);
             this.chkSelectAll = new System.Windows.Forms.CheckBox();
+            this.tv = new System.Windows.Forms.TreeView();
             this.SuspendLayout();
-            // 
-            // tv
-            // 
-            this.tv.AllowDrop = true;
-            this.tv.CheckBoxes = true;
-            this.tv.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tv.HideSelection = false;
-            this.tv.ImageIndex = 0;
-            this.tv.ImageList = this.ilWebResourceTypes;
-            this.tv.Location = new System.Drawing.Point(0, 0);
-            this.tv.Name = "tv";
-            this.tv.SelectedImageIndex = 0;
-            this.tv.Size = new System.Drawing.Size(409, 670);
-            this.tv.TabIndex = 0;
-            this.tv.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_AfterCheck);
-            this.tv.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_AfterSelect);
-            this.tv.DragDrop += new System.Windows.Forms.DragEventHandler(this.tv_DragDrop);
-            this.tv.DragOver += new System.Windows.Forms.DragEventHandler(this.tv_DragOver);
-            this.tv.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tv_MouseDown);
             // 
             // ilWebResourceTypes
             // 
@@ -83,12 +64,31 @@
             this.chkSelectAll.UseVisualStyleBackColor = true;
             this.chkSelectAll.Click += new System.EventHandler(this.chkSelectAll_Click);
             // 
+            // tv
+            // 
+            this.tv.AllowDrop = true;
+            this.tv.CheckBoxes = true;
+            this.tv.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tv.HideSelection = false;
+            this.tv.ImageIndex = 0;
+            this.tv.ImageList = this.ilWebResourceTypes;
+            this.tv.Location = new System.Drawing.Point(0, 0);
+            this.tv.Name = "tv";
+            this.tv.SelectedImageIndex = 0;
+            this.tv.Size = new System.Drawing.Size(409, 653);
+            this.tv.TabIndex = 84;
+            this.tv.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_AfterCheck);
+            this.tv.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_AfterSelect);
+            this.tv.DragDrop += new System.Windows.Forms.DragEventHandler(this.tv_DragDrop);
+            this.tv.DragOver += new System.Windows.Forms.DragEventHandler(this.tv_DragOver);
+            this.tv.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tv_MouseDown);
+            // 
             // WebresourceTreeView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.chkSelectAll);
             this.Controls.Add(this.tv);
+            this.Controls.Add(this.chkSelectAll);
             this.Name = "WebresourceTreeView";
             this.Size = new System.Drawing.Size(409, 670);
             this.ResumeLayout(false);
@@ -97,9 +97,8 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TreeView tv;
         private System.Windows.Forms.ImageList ilWebResourceTypes;
         private System.Windows.Forms.CheckBox chkSelectAll;
+        private System.Windows.Forms.TreeView tv;
     }
 }
