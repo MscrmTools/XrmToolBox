@@ -31,8 +31,13 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebresourceTreeView));
             this.ilWebResourceTypes = new System.Windows.Forms.ImageList(this.components);
+            this.pnlBottom = new System.Windows.Forms.Panel();
             this.chkSelectAll = new System.Windows.Forms.CheckBox();
+            this.llExpandAll = new System.Windows.Forms.LinkLabel();
+            this.lblSeparator = new System.Windows.Forms.Label();
+            this.llCollapseAll = new System.Windows.Forms.LinkLabel();
             this.tv = new System.Windows.Forms.TreeView();
+            this.pnlBottom.SuspendLayout();
             this.SuspendLayout();
             // 
             // ilWebResourceTypes
@@ -52,17 +57,62 @@
             this.ilWebResourceTypes.Images.SetKeyName(10, "xsl.png");
             this.ilWebResourceTypes.Images.SetKeyName(11, "updateicons_16.png");
             // 
+            // pnlBottom
+            // 
+            this.pnlBottom.Controls.Add(this.llCollapseAll);
+            this.pnlBottom.Controls.Add(this.lblSeparator);
+            this.pnlBottom.Controls.Add(this.llExpandAll);
+            this.pnlBottom.Controls.Add(this.chkSelectAll);
+            this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlBottom.Location = new System.Drawing.Point(0, 653);
+            this.pnlBottom.Name = "pnlBottom";
+            this.pnlBottom.Size = new System.Drawing.Size(409, 17);
+            this.pnlBottom.TabIndex = 85;
+            // 
             // chkSelectAll
             // 
             this.chkSelectAll.AutoSize = true;
-            this.chkSelectAll.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.chkSelectAll.Location = new System.Drawing.Point(0, 653);
+            this.chkSelectAll.Dock = System.Windows.Forms.DockStyle.Left;
+            this.chkSelectAll.Location = new System.Drawing.Point(0, 0);
             this.chkSelectAll.Name = "chkSelectAll";
-            this.chkSelectAll.Size = new System.Drawing.Size(409, 17);
-            this.chkSelectAll.TabIndex = 83;
+            this.chkSelectAll.Size = new System.Drawing.Size(116, 17);
+            this.chkSelectAll.TabIndex = 84;
             this.chkSelectAll.Text = "Select/Unselect all";
             this.chkSelectAll.UseVisualStyleBackColor = true;
-            this.chkSelectAll.Click += new System.EventHandler(this.chkSelectAll_Click);
+            // 
+            // llExpandAll
+            // 
+            this.llExpandAll.AutoSize = true;
+            this.llExpandAll.Dock = System.Windows.Forms.DockStyle.Right;
+            this.llExpandAll.Location = new System.Drawing.Point(353, 0);
+            this.llExpandAll.Name = "llExpandAll";
+            this.llExpandAll.Size = new System.Drawing.Size(56, 13);
+            this.llExpandAll.TabIndex = 85;
+            this.llExpandAll.TabStop = true;
+            this.llExpandAll.Text = "Expand all";
+            this.llExpandAll.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llExpandAll_LinkClicked);
+            // 
+            // lblSeparator
+            // 
+            this.lblSeparator.AutoSize = true;
+            this.lblSeparator.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lblSeparator.Location = new System.Drawing.Point(344, 0);
+            this.lblSeparator.Name = "lblSeparator";
+            this.lblSeparator.Size = new System.Drawing.Size(9, 13);
+            this.lblSeparator.TabIndex = 86;
+            this.lblSeparator.Text = "|";
+            // 
+            // llCollapseAll
+            // 
+            this.llCollapseAll.AutoSize = true;
+            this.llCollapseAll.Dock = System.Windows.Forms.DockStyle.Right;
+            this.llCollapseAll.Location = new System.Drawing.Point(284, 0);
+            this.llCollapseAll.Name = "llCollapseAll";
+            this.llCollapseAll.Size = new System.Drawing.Size(60, 13);
+            this.llCollapseAll.TabIndex = 87;
+            this.llCollapseAll.TabStop = true;
+            this.llCollapseAll.Text = "Collapse all";
+            this.llCollapseAll.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llCollapseAll_LinkClicked);
             // 
             // tv
             // 
@@ -76,7 +126,7 @@
             this.tv.Name = "tv";
             this.tv.SelectedImageIndex = 0;
             this.tv.Size = new System.Drawing.Size(409, 653);
-            this.tv.TabIndex = 84;
+            this.tv.TabIndex = 86;
             this.tv.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.tv_AfterCheck);
             this.tv.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_AfterSelect);
             this.tv.DragDrop += new System.Windows.Forms.DragEventHandler(this.tv_DragDrop);
@@ -88,16 +138,21 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tv);
-            this.Controls.Add(this.chkSelectAll);
+            this.Controls.Add(this.pnlBottom);
             this.Name = "WebresourceTreeView";
             this.Size = new System.Drawing.Size(409, 670);
+            this.pnlBottom.ResumeLayout(false);
+            this.pnlBottom.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
         private System.Windows.Forms.ImageList ilWebResourceTypes;
+        private System.Windows.Forms.Panel pnlBottom;
+        private System.Windows.Forms.LinkLabel llCollapseAll;
+        private System.Windows.Forms.Label lblSeparator;
+        private System.Windows.Forms.LinkLabel llExpandAll;
         private System.Windows.Forms.CheckBox chkSelectAll;
         private System.Windows.Forms.TreeView tv;
     }

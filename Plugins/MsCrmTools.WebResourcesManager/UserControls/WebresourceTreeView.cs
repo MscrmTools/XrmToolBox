@@ -711,6 +711,16 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
             }
         }
 
+        private void llCollapseAll_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            tv.CollapseAll();
+        }
+
+        private void llExpandAll_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            tv.ExpandAll();
+        }
+
         private void tv_AfterCheck(object sender, TreeViewEventArgs e)
         {
             foreach (TreeNode node in e.Node.Nodes)
