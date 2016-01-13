@@ -306,8 +306,8 @@ namespace MsCrmTools.SiteMapEditor.Controls
             initialTitle = txtSubAreaTitle.Text;
             initialDefaultDashboard = txtDefaultDashboardId.Text;
 
-            chkSubAreaAvailableOffline.Checked = collec.ContainsKey("AvailableOffline") ? collec["AvailableOffline"].ToLower() == "true" || collec["AvailableOffline"] == "0" : false;
-            chkSubAreaPassParams.Checked = collec.ContainsKey("PassParams") ? collec["PassParams"].ToLower() == "true" || collec["PassParams"] == "0" : false;
+            chkSubAreaAvailableOffline.Checked = collec.ContainsKey("AvailableOffline") ? collec["AvailableOffline"].ToLower() == "true" || collec["AvailableOffline"] == "1" : false;
+            chkSubAreaPassParams.Checked = collec.ContainsKey("PassParams") ? collec["PassParams"].ToLower() == "true" || collec["PassParams"] == "1" : false;
             chkSubAreaClientOutlook.Checked = collec.ContainsKey("Client") ? collec["Client"].IndexOf("Outlook") >= 0 : false;
             chkSubAreaClientOutlookLaptopClient.Checked = collec.ContainsKey("Client") ? collec["Client"].IndexOf("OutlookLaptopClient") >= 0 : false;
             chkSubAreaClientOutlookWorkstationClient.Checked = collec.ContainsKey("Client") ? collec["Client"].IndexOf("OutlookWorkstationClient") >= 0 : false;

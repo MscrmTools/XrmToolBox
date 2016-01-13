@@ -99,7 +99,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
         {
             txtGroupUrl.Text = collec.ContainsKey("Url") ? collec["Url"] : "";
             txtGroupId.Text = collec.ContainsKey("Id") ? collec["Id"] : "";
-            chkGroupIsProfile.Checked = collec.ContainsKey("IsProfile") ? collec["IsProfile"].ToLower() == "true" : false;
+            chkGroupIsProfile.Checked = collec.ContainsKey("IsProfile") ? collec["IsProfile"].ToLower() == "true" || collec["IsProfile"] == "1" : false;
             txtGroupResourceId.Text = collec.ContainsKey("ResourceId") ? collec["ResourceId"] : "";
             txtGroupDescriptionResourceId.Text = collec.ContainsKey("DescriptionResourceId") ? collec["DescriptionResourceId"] : "";
             txtGroupTitle.Text = collec.ContainsKey("Title") ? collec["Title"] : "";
