@@ -93,7 +93,7 @@ countReleasesDownloadByPage = function(link, totalcount){
                var headerLink = request.getResponseHeader("link");
                
                if(headerLink){               
-                var parsedHeaderLink = parse_link_header(headerLink);
+                var parsedHeaderLink = parse_link_header(headerLink); 
                 if(parsedHeaderLink.next){
                     countReleasesDownloadByPage(parsedHeaderLink.next, totalcount);
                 }
