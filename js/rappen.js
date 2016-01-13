@@ -91,9 +91,12 @@ countReleasesDownloadByPage = function(link, totalcount){
                 });
                
                var headerLink = request.getResponseHeader("link");
-               var parsedHeaderLink = parse_link_header(headerLink);
-               if(parsedHeaderLink.next){
-                   countReleasesDownloadByPage(parsedHeaderLink.next, totalcount);
+               
+               if(headerLink){               
+                var parsedHeaderLink = parse_link_header(headerLink);
+                if(parsedHeaderLink.next){
+                    countReleasesDownloadByPage(parsedHeaderLink.next, totalcount);
+                }
                }
                else{
                     $("#" + totalcount).text(totalCountDownload);
