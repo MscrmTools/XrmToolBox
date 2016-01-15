@@ -7,8 +7,10 @@ using MsCrmTools.MetadataBrowser.Helpers;
 using MsCrmTools.MetadataBrowser.UserControls;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
@@ -19,6 +21,7 @@ namespace MsCrmTools.MetadataBrowser
         private EntityMetadata[] currentAllMetadata;
         private bool initialized;
         private ListViewColumnsSettings lvcSettings;
+        private Thread searchThread;
 
         public MainControl()
         {
@@ -184,6 +187,36 @@ namespace MsCrmTools.MetadataBrowser
             }
         }
 
+        private void FilterEntityList(object filter = null)
+        {
+            string filterText = filter?.ToString();
+            if (filter == null)
+            {
+                return;
+            }
+
+            var action = new MethodInvoker(delegate
+            {
+                entityListView.Items.Clear();
+                entityListView.Items.AddRange(
+                    BuildEntityItems(currentAllMetadata
+                        .ToList()
+                        ).Where(item => ((EntityMetadata)item.Tag).LogicalName.Contains(filterText)
+                        || (
+                            ((EntityMetadata)item.Tag).DisplayName?.UserLocalizedLabel != null && ((EntityMetadata)item.Tag).DisplayName.UserLocalizedLabel.Label.ToLower().Contains(filterText.ToLower())))
+                        .ToArray());
+            });
+
+            if (entityListView.InvokeRequired)
+            {
+                entityListView.Invoke(action);
+            }
+            else
+            {
+                action();
+            }
+        }
+
         private void listView_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             var list = (ListView)sender;
@@ -314,6 +347,28 @@ namespace MsCrmTools.MetadataBrowser
         private void tsbLoadEntities_Click(object sender, EventArgs e)
         {
             ExecuteMethod(LoadEntities);
+        }
+
+        private void tstxtFilter_Enter(object sender, EventArgs e)
+        {
+            if (tstxtFilter.ForeColor == SystemColors.InactiveCaption)
+            {
+                tstxtFilter.TextChanged -= tstxtFilter_TextChanged;
+                tstxtFilter.ForeColor = Color.Black;
+                tstxtFilter.Text = string.Empty;
+                tstxtFilter.TextChanged += tstxtFilter_TextChanged;
+            }
+        }
+
+        private void tstxtFilter_TextChanged(object sender, EventArgs e)
+        {
+            if (searchThread != null)
+            {
+                searchThread.Abort();
+            }
+
+            searchThread = new Thread(FilterEntityList);
+            searchThread.Start(tstxtFilter.Text);
         }
     }
 }

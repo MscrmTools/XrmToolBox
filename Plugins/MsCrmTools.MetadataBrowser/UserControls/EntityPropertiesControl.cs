@@ -9,7 +9,9 @@ using MsCrmTools.MetadataBrowser.Forms;
 using MsCrmTools.MetadataBrowser.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace MsCrmTools.MetadataBrowser.UserControls
@@ -18,6 +20,7 @@ namespace MsCrmTools.MetadataBrowser.UserControls
     {
         private EntityMetadata emd;
         private ListViewColumnsSettings lvcSettings;
+        private Thread searchThread;
 
         public EntityPropertiesControl(EntityMetadata emd, ListViewColumnsSettings lvcSettings)
         {
@@ -218,6 +221,29 @@ namespace MsCrmTools.MetadataBrowser.UserControls
             tsbAttributeColumns.Visible = false;
         }
 
+        private void FilterAttributeList(object filter = null)
+        {
+            string filterText = filter?.ToString();
+            if (filter == null)
+            {
+                return;
+            }
+
+            var action = new MethodInvoker(delegate
+            {
+                LoadAttributes(emd.Attributes, filterText);
+            });
+
+            if (attributeListView.InvokeRequired)
+            {
+                attributeListView.Invoke(action);
+            }
+            else
+            {
+                action();
+            }
+        }
+
         private void listView_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             var list = (ListView)sender;
@@ -225,11 +251,13 @@ namespace MsCrmTools.MetadataBrowser.UserControls
             list.ListViewItemSorter = new ListViewItemComparer(e.Column, list.Sorting);
         }
 
-        private void LoadAttributes(IEnumerable<AttributeMetadata> attributes)
+        private void LoadAttributes(IEnumerable<AttributeMetadata> attributes, string filter = null)
         {
             var items = new List<ListViewItem>();
 
-            foreach (var attribute in attributes.ToList().OrderBy(a => a.LogicalName))
+            foreach (var attribute in attributes.ToList().OrderBy(a => a.LogicalName).Where(a => string.IsNullOrEmpty(filter) || a.LogicalName.Contains(filter.ToLower())
+            || a.DisplayName?.UserLocalizedLabel != null && a.DisplayName.UserLocalizedLabel.Label.ToLower().Contains(filter.ToLower())
+            ))
             {
                 var amd = new AttributeMetadataInfo(attribute);
                 var item = new ListViewItem(amd.LogicalName);
@@ -673,6 +701,32 @@ namespace MsCrmTools.MetadataBrowser.UserControls
                         MessageBox.Show(this, "Unexpected source for hiding panels");
                     }
                     break;
+            }
+        }
+
+        private void tstxtSearch_Enter(object sender, EventArgs e)
+        {
+            var textBox = (ToolStripTextBox)sender;
+            if (textBox.ForeColor == SystemColors.InactiveCaption)
+            {
+                textBox.TextChanged -= tstxtSearch_TextChanged;
+                textBox.ForeColor = Color.Black;
+                textBox.Text = string.Empty;
+                textBox.TextChanged += tstxtSearch_TextChanged;
+            }
+        }
+
+        private void tstxtSearch_TextChanged(object sender, EventArgs e)
+        {
+            if (searchThread != null)
+            {
+                searchThread.Abort();
+            }
+
+            if (sender == tstxtSearchContact)
+            {
+                searchThread = new Thread(FilterAttributeList);
+                searchThread.Start(((ToolStripTextBox)sender).Text);
             }
         }
     }
