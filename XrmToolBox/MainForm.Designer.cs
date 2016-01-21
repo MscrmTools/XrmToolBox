@@ -502,7 +502,7 @@ namespace XrmToolBox
             this.Name = "MainForm";
             this.Opacity = 0D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "XrmToolBox for Microsoft Dynamics CRM 2011/2013/2015";
+            this.Text = "XrmToolBox for Microsoft Dynamics CRM 2011 to 2016";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
