@@ -18,4 +18,4 @@ If you faced a bug or would like to make a suggestion to improve XrmToolBox and 
 
 # Support XrmToolBox
 
-XrmToolBox is a free tool and will remain like this. But if you think this tool improved your productivity or saved you time on your Microsoft Dynamics CRM project, then you can help me by donating whatever amount you want through PayPal
+XrmToolBox is a free tool and will remain like this. But if you think this tool improved your productivity or saved you time on your Microsoft Dynamics CRM project, then you can help me by donating whatever amount you want through PayPal.
