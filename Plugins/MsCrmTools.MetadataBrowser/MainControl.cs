@@ -189,6 +189,11 @@ namespace MsCrmTools.MetadataBrowser
 
         private void FilterEntityList(object filter = null)
         {
+            if (currentAllMetadata == null)
+            {
+                return;
+            }
+
             string filterText = filter?.ToString();
             if (filter == null)
             {
