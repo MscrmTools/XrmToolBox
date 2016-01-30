@@ -1252,6 +1252,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = true;
                         tsddbEdit.Visible = true;
                         tsddbCompare.Visible = true;
+                        tsbComment.Visible = true;
+                        tsbnUncomment.Visible = true;
                         break;
 
                     case 2:
@@ -1265,6 +1267,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = true;
                         tsddbEdit.Visible = true;
                         tsddbCompare.Visible = true;
+                        tsbComment.Visible = true;
+                        tsbnUncomment.Visible = true;
                         break;
 
                     case 3:
@@ -1280,6 +1284,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = true;
                         tsddbEdit.Visible = true;
                         tsddbCompare.Visible = true;
+                        tsbComment.Visible = true;
+                        tsbnUncomment.Visible = true;
                         break;
 
                     case 4:
@@ -1294,6 +1300,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = true;
                         tsddbEdit.Visible = true;
                         tsddbCompare.Visible = true;
+                        tsbComment.Visible = true;
+                        tsbnUncomment.Visible = true;
                         break;
 
                     case 5:
@@ -1308,6 +1316,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = false;
                         tsddbEdit.Visible = false;
                         tsddbCompare.Visible = false;
+                        tsbComment.Visible = false;
+                        tsbnUncomment.Visible = false;
                         break;
 
                     case 6:
@@ -1322,6 +1332,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = false;
                         tsddbEdit.Visible = false;
                         tsddbCompare.Visible = false;
+                        tsbComment.Visible = false;
+                        tsbnUncomment.Visible = false;
                         break;
 
                     case 7:
@@ -1336,6 +1348,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = false;
                         tsddbEdit.Visible = false;
                         tsddbCompare.Visible = false;
+                        tsbComment.Visible = false;
+                        tsbnUncomment.Visible = false;
                         break;
 
                     case 8:
@@ -1345,6 +1359,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsbDoFolding.Visible = false;
                         tsbPreviewHtml.Visible = false;
                         tsddbCompare.Visible = false;
+                        tsbComment.Visible = false;
+                        tsbnUncomment.Visible = false;
                         break;
 
                     case 9:
@@ -1359,6 +1375,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = true;
                         tsddbEdit.Visible = true;
                         tsddbCompare.Visible = true;
+                        tsbComment.Visible = true;
+                        tsbnUncomment.Visible = true;
                         break;
 
                     case 10:
@@ -1372,6 +1390,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = false;
                         tsddbEdit.Visible = false;
                         tsddbCompare.Visible = false;
+                        tsbComment.Visible = false;
+                        tsbnUncomment.Visible = false;
                         break;
                 }
 
@@ -1400,6 +1420,8 @@ namespace MsCrmTools.WebResourcesManager
                     toolStripSeparatorMinifyJS.Visible = false;
                     tsbMinifyJS.Visible = false;
                     tsbPreviewHtml.Visible = false;
+                    tsbComment.Visible = false;
+                    tsbnUncomment.Visible = false;
 
                     lblWebresourceName.Text = string.Empty;
                 }
