@@ -310,10 +310,10 @@ namespace MsCrmTools.WebResourcesManager
                         MessageBox.Show(this, e.Error.Message, Resources.MessageBox_ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
 
-                    if (tslResourceName.Text.Contains(" (not published)"))
+                    if (lblWebresourceName.Text.Contains(" (not published)"))
                     {
-                        tslResourceName.Text = tslResourceName.Text.Replace(" (not published)", "");
-                        tslResourceName.ForeColor = Color.Black;
+                        lblWebresourceName.Text = lblWebresourceName.Text.Replace(" (not published)", "");
+                        lblWebresourceName.ForeColor = Color.Black;
                     }
 
                     SetWorkingState(false);
@@ -583,7 +583,7 @@ namespace MsCrmTools.WebResourcesManager
         {
             webresourceTreeView1.ClearNodes();
             panelControl.Controls.Clear();
-            tslResourceName.Text = "";
+            lblWebresourceName.Text = "";
             tslCurrentlyLoadedSolution.Text = "";
             toolStripScriptContent.Visible = false;
             tsbClear.Visible = false;
@@ -736,10 +736,10 @@ namespace MsCrmTools.WebResourcesManager
             fileMenuSave.Enabled = false;
             fileMenuUpdateAndPublish.Enabled = true;
 
-            if (tslResourceName.Text.Contains(" (not saved)"))
+            if (lblWebresourceName.Text.Contains(" (not saved)"))
             {
-                tslResourceName.Text = tslResourceName.Text.Replace(" (not saved)", " (not published)");
-                tslResourceName.ForeColor = Color.Blue;
+                lblWebresourceName.Text = lblWebresourceName.Text.Replace(" (not saved)", " (not published)");
+                lblWebresourceName.ForeColor = Color.Blue;
             }
 
             // Save on disk in options tells so and a filepath is provided
@@ -955,6 +955,11 @@ namespace MsCrmTools.WebResourcesManager
             ((CodeControl)panelControl.Controls[0]).Beautify();
         }
 
+        private void tsbComment_Click(object sender, EventArgs e)
+        {
+            ((CodeControl)panelControl.Controls[0]).CommentSelectedLines();
+        }
+
         private void TsbCompareClick(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(Properties.Settings.Default.CompareToolPath))
@@ -1003,6 +1008,11 @@ namespace MsCrmTools.WebResourcesManager
                 ((CodeControl)panelControl.Controls[0]).MinifyJs();
         }
 
+        private void tsbnUncomment_Click(object sender, EventArgs e)
+        {
+            ((CodeControl)panelControl.Controls[0]).UncommentSelectedLines();
+        }
+
         private void TsbPreviewHtmlClick(object sender, EventArgs e)
         {
             string content = ((IWebResourceControl)panelControl.Controls[0]).GetBase64WebResourceContent();
@@ -1024,16 +1034,16 @@ namespace MsCrmTools.WebResourcesManager
             fileMenuUpdateAndPublish.Enabled = !e.IsDirty;
             if (e.IsDirty)
             {
-                if (!tslResourceName.Text.Contains(" (not saved)"))
+                if (!lblWebresourceName.Text.Contains(" (not saved)"))
                 {
-                    tslResourceName.ForeColor = Color.Red;
-                    tslResourceName.Text += " (not saved)";
+                    lblWebresourceName.ForeColor = Color.Red;
+                    lblWebresourceName.Text += " (not saved)";
                 }
             }
             else
             {
-                tslResourceName.ForeColor = Color.Black;
-                tslResourceName.Text = tslResourceName.Text.Split(' ')[0];
+                lblWebresourceName.ForeColor = Color.Black;
+                lblWebresourceName.Text = lblWebresourceName.Text.Split(' ')[0];
             }
         }
 
@@ -1221,7 +1231,7 @@ namespace MsCrmTools.WebResourcesManager
             if (e.WebResource != null)
             {
                 toolStripScriptContent.Visible = true;
-                tslResourceName.Visible = true;
+                lblWebresourceName.Visible = true;
 
                 // Displays script content
                 Entity script = e.WebResource.Entity;
@@ -1242,6 +1252,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = true;
                         tsddbEdit.Visible = true;
                         tsddbCompare.Visible = true;
+                        tsbComment.Visible = true;
+                        tsbnUncomment.Visible = true;
                         break;
 
                     case 2:
@@ -1255,6 +1267,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = true;
                         tsddbEdit.Visible = true;
                         tsddbCompare.Visible = true;
+                        tsbComment.Visible = true;
+                        tsbnUncomment.Visible = true;
                         break;
 
                     case 3:
@@ -1270,6 +1284,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = true;
                         tsddbEdit.Visible = true;
                         tsddbCompare.Visible = true;
+                        tsbComment.Visible = true;
+                        tsbnUncomment.Visible = true;
                         break;
 
                     case 4:
@@ -1284,6 +1300,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = true;
                         tsddbEdit.Visible = true;
                         tsddbCompare.Visible = true;
+                        tsbComment.Visible = true;
+                        tsbnUncomment.Visible = true;
                         break;
 
                     case 5:
@@ -1298,6 +1316,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = false;
                         tsddbEdit.Visible = false;
                         tsddbCompare.Visible = false;
+                        tsbComment.Visible = false;
+                        tsbnUncomment.Visible = false;
                         break;
 
                     case 6:
@@ -1312,6 +1332,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = false;
                         tsddbEdit.Visible = false;
                         tsddbCompare.Visible = false;
+                        tsbComment.Visible = false;
+                        tsbnUncomment.Visible = false;
                         break;
 
                     case 7:
@@ -1326,6 +1348,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = false;
                         tsddbEdit.Visible = false;
                         tsddbCompare.Visible = false;
+                        tsbComment.Visible = false;
+                        tsbnUncomment.Visible = false;
                         break;
 
                     case 8:
@@ -1335,6 +1359,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsbDoFolding.Visible = false;
                         tsbPreviewHtml.Visible = false;
                         tsddbCompare.Visible = false;
+                        tsbComment.Visible = false;
+                        tsbnUncomment.Visible = false;
                         break;
 
                     case 9:
@@ -1349,6 +1375,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = true;
                         tsddbEdit.Visible = true;
                         tsddbCompare.Visible = true;
+                        tsbComment.Visible = true;
+                        tsbnUncomment.Visible = true;
                         break;
 
                     case 10:
@@ -1362,6 +1390,8 @@ namespace MsCrmTools.WebResourcesManager
                         tsSeparatorEdit.Visible = false;
                         tsddbEdit.Visible = false;
                         tsddbCompare.Visible = false;
+                        tsbComment.Visible = false;
+                        tsbnUncomment.Visible = false;
                         break;
                 }
 
@@ -1374,7 +1404,7 @@ namespace MsCrmTools.WebResourcesManager
                     fileMenuReplace.Enabled = true;
                     fileMenuUpdateAndPublish.Enabled = true;
 
-                    tslResourceName.Text = script["name"].ToString();
+                    lblWebresourceName.Text = script["name"].ToString();
 
                     if (ctrl is CodeControl && ((CodeControl)ctrl).FoldingEnabled)
                     {
@@ -1390,8 +1420,10 @@ namespace MsCrmTools.WebResourcesManager
                     toolStripSeparatorMinifyJS.Visible = false;
                     tsbMinifyJS.Visible = false;
                     tsbPreviewHtml.Visible = false;
+                    tsbComment.Visible = false;
+                    tsbnUncomment.Visible = false;
 
-                    tslResourceName.Text = string.Empty;
+                    lblWebresourceName.Text = string.Empty;
                 }
             }
             else
@@ -1403,7 +1435,7 @@ namespace MsCrmTools.WebResourcesManager
                 fileMenuReplace.Enabled = false;
                 fileMenuUpdateAndPublish.Enabled = false;
                 toolStripScriptContent.Visible = false;
-                tslResourceName.Visible = false;
+                lblWebresourceName.Visible = false;
             }
         }
     }

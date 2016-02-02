@@ -34,6 +34,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.webresourceTreeView1 = new MsCrmTools.WebResourcesManager.New.UserControls.WebresourceTreeView();
             this.panelControl = new System.Windows.Forms.Panel();
+            this.lblWebresourceName = new System.Windows.Forms.Label();
             this.toolStripScriptContent = new System.Windows.Forms.ToolStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.fileMenuSave = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,6 +55,8 @@
             this.tsbGetLatestVersion = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.tslResourceName = new System.Windows.Forms.ToolStripLabel();
+            this.tsbComment = new System.Windows.Forms.ToolStripButton();
+            this.tsbnUncomment = new System.Windows.Forms.ToolStripButton();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.tsMain = new System.Windows.Forms.ToolStrip();
             this.tsbCloseThisTab = new System.Windows.Forms.ToolStripButton();
@@ -136,6 +139,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.panelControl);
+            this.splitContainer1.Panel2.Controls.Add(this.lblWebresourceName);
             this.splitContainer1.Panel2.Controls.Add(this.toolStripScriptContent);
             this.splitContainer1.Size = new System.Drawing.Size(894, 569);
             this.splitContainer1.SplitterDistance = 344;
@@ -157,8 +161,16 @@
             this.panelControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControl.Location = new System.Drawing.Point(0, 25);
             this.panelControl.Name = "panelControl";
-            this.panelControl.Size = new System.Drawing.Size(546, 544);
-            this.panelControl.TabIndex = 5;
+            this.panelControl.Size = new System.Drawing.Size(546, 528);
+            this.panelControl.TabIndex = 7;
+            // 
+            // lblWebresourceName
+            // 
+            this.lblWebresourceName.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblWebresourceName.Location = new System.Drawing.Point(0, 553);
+            this.lblWebresourceName.Name = "lblWebresourceName";
+            this.lblWebresourceName.Size = new System.Drawing.Size(546, 16);
+            this.lblWebresourceName.TabIndex = 6;
             // 
             // toolStripScriptContent
             // 
@@ -175,7 +187,9 @@
             this.tsbDoFolding,
             this.tsbGetLatestVersion,
             this.toolStripSeparator10,
-            this.tslResourceName});
+            this.tslResourceName,
+            this.tsbComment,
+            this.tsbnUncomment});
             this.toolStripScriptContent.Location = new System.Drawing.Point(0, 0);
             this.toolStripScriptContent.Name = "toolStripScriptContent";
             this.toolStripScriptContent.Size = new System.Drawing.Size(546, 25);
@@ -353,7 +367,7 @@
             this.tsbGetLatestVersion.Image = ((System.Drawing.Image)(resources.GetObject("tsbGetLatestVersion.Image")));
             this.tsbGetLatestVersion.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbGetLatestVersion.Name = "tsbGetLatestVersion";
-            this.tsbGetLatestVersion.Size = new System.Drawing.Size(79, 22);
+            this.tsbGetLatestVersion.Size = new System.Drawing.Size(79, 20);
             this.tsbGetLatestVersion.Text = "Get Latest";
             this.tsbGetLatestVersion.Click += new System.EventHandler(this.TsmiGetLatestVersionClick);
             // 
@@ -365,8 +379,28 @@
             // tslResourceName
             // 
             this.tslResourceName.Name = "tslResourceName";
-            this.tslResourceName.Size = new System.Drawing.Size(0, 22);
+            this.tslResourceName.Size = new System.Drawing.Size(0, 0);
             this.tslResourceName.Visible = false;
+            // 
+            // tsbComment
+            // 
+            this.tsbComment.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbComment.Image = ((System.Drawing.Image)(resources.GetObject("tsbComment.Image")));
+            this.tsbComment.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbComment.Name = "tsbComment";
+            this.tsbComment.Size = new System.Drawing.Size(23, 20);
+            this.tsbComment.Text = "Comment";
+            this.tsbComment.Click += new System.EventHandler(this.tsbComment_Click);
+            // 
+            // tsbnUncomment
+            // 
+            this.tsbnUncomment.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbnUncomment.Image = ((System.Drawing.Image)(resources.GetObject("tsbnUncomment.Image")));
+            this.tsbnUncomment.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbnUncomment.Name = "tsbnUncomment";
+            this.tsbnUncomment.Size = new System.Drawing.Size(23, 20);
+            this.tsbnUncomment.Text = "Uncomment";
+            this.tsbnUncomment.Click += new System.EventHandler(this.tsbnUncomment_Click);
             // 
             // imageList1
             // 
@@ -800,13 +834,13 @@
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.TsmiPropertieClick);
             // 
-            // PluginControl2
+            // WebResourcesManager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.tsMain);
-            this.Name = "PluginControl2";
+            this.Name = "WebResourcesManager";
             this.Size = new System.Drawing.Size(900, 599);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -880,7 +914,6 @@
         private System.Windows.Forms.ToolStripMenuItem TsmiLoadWebResourcesFromASpecificSolution;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.ToolStripButton tsbBeautify;
-        private System.Windows.Forms.Panel panelControl;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
         private System.Windows.Forms.ToolStripLabel tslResourceName;
         private System.Windows.Forms.ToolStripSeparator tssCurrentlyLoadedSolution;
@@ -898,5 +931,9 @@
         private System.Windows.Forms.ToolStripButton tsbDoFolding;
         private System.Windows.Forms.ToolStripButton tsbSettings;
         private New.UserControls.WebresourceTreeView webresourceTreeView1;
+        private System.Windows.Forms.ToolStripButton tsbComment;
+        private System.Windows.Forms.ToolStripButton tsbnUncomment;
+        private System.Windows.Forms.Panel panelControl;
+        private System.Windows.Forms.Label lblWebresourceName;
     }
 }

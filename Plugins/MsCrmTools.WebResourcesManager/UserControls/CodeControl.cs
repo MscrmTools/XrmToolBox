@@ -13,6 +13,7 @@ using MsCrmTools.WebResourcesManager.Forms;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 
@@ -353,6 +354,11 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             textEditor.Text = b.Beautify(textEditor.Text);
         }
 
+        internal void CommentSelectedLines()
+        {
+            Comment(true);
+        }
+
         internal void EnableFolding(bool enableFolding)
         {
             if (enableFolding)
@@ -410,6 +416,120 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                 }
 
                 FoldingEnabled = false;
+            }
+        }
+
+        internal void UncommentSelectedLines()
+        {
+            Comment(false);
+        }
+
+        private void Comment(bool comment)
+        {
+            TextDocument document = textEditor.Document;
+            DocumentLine start = document.GetLineByOffset(textEditor.SelectionStart);
+            DocumentLine end = document.GetLineByOffset(textEditor.SelectionStart + textEditor.SelectionLength);
+
+            // Specific comment behavior for JavaScript (//)
+            if (innerType == Enumerations.WebResourceType.Script)
+            {
+                for (DocumentLine line = start; line.LineNumber < end.LineNumber + 1; line = line.NextLine)
+                {
+                    if (comment)
+                    {
+                        if (document.GetText(line).Trim().StartsWith("//")) continue;
+
+                        document.Insert(line.Offset, "//");
+                    }
+                    else
+                    {
+                        if (!document.GetText(line).Trim().StartsWith("//")) continue;
+
+                        document.Remove(line.Offset, 2);
+                    }
+                }
+            }
+
+            // Specific comment for HTML, XML and XSLT (<!-- -->)
+            if (innerType == Enumerations.WebResourceType.Data
+                || innerType == Enumerations.WebResourceType.WebPage
+                || innerType == Enumerations.WebResourceType.Xsl)
+            {
+                var selectedText = textEditor.SelectedText.Trim();
+                string line = document.GetText(document.GetLineByOffset(textEditor.SelectionStart)).Trim();
+
+                if (comment && (selectedText.StartsWith("<!--") && selectedText.EndsWith("-->") || line.StartsWith("<!--") && line.EndsWith("-->")))
+                {
+                    return;
+                }
+
+                if (!comment && !selectedText.StartsWith("<!--") && !selectedText.EndsWith("-->") && !line.StartsWith("<!--") && !line.EndsWith("-->"))
+                {
+                    return;
+                }
+
+                if (comment)
+                {
+                    var numberOfCommentStarts = Regex.Matches(selectedText, "<!--").Count;
+                    var numberOfCommentEnds = Regex.Matches(selectedText, "-->").Count;
+
+                    if (numberOfCommentEnds != numberOfCommentStarts)
+                    {
+                        MessageBox.Show(ParentForm,
+                            "You cannot comment this selection because the result will contain an orphan comment start or end tag",
+                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                        return;
+                    }
+
+                    document.Insert(start.Offset, "<!--");
+                    document.Insert(end.Offset + end.Length, "-->");
+                }
+                else
+                {
+                    document.Remove(start.Offset, 4);
+                    document.Remove(end.Offset + end.Length - 3, 3);
+                }
+            }
+
+            // Specific comment for Css (/* */)
+            if (innerType == Enumerations.WebResourceType.Css)
+            {
+                var selectedText = textEditor.SelectedText.Trim();
+                string line = document.GetText(document.GetLineByOffset(textEditor.SelectionStart)).Trim();
+
+                if (comment && selectedText.StartsWith("/*") && selectedText.EndsWith("*/") || line.StartsWith("/*") && line.EndsWith("*/"))
+                {
+                    return;
+                }
+
+                if (!comment && !selectedText.StartsWith("/*") && !selectedText.EndsWith("*/") && !line.StartsWith("/*") && !line.EndsWith("*/"))
+                {
+                    return;
+                }
+
+                if (comment)
+                {
+                    var numberOfCommentStarts = Regex.Matches(selectedText, "/\\*").Count;
+                    var numberOfCommentEnds = Regex.Matches(selectedText, "\\*/").Count;
+
+                    if (numberOfCommentEnds != numberOfCommentStarts)
+                    {
+                        MessageBox.Show(ParentForm,
+                            "You cannot comment this selection because the result will contain an orphan comment start or end tag",
+                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                        return;
+                    }
+
+                    document.Insert(start.Offset, "/*");
+                    document.Insert(end.Offset + end.Length, "*/");
+                }
+                else
+                {
+                    document.Remove(start.Offset, 2);
+                    document.Remove(end.Offset + end.Length - 2, 2);
+                }
             }
         }
     }
