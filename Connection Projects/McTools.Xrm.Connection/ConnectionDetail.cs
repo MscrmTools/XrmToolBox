@@ -206,7 +206,11 @@ namespace McTools.Xrm.Connection
                 tasks[0].Wait();
                 tasks[1].Wait();
 
-                crmSvc = tasks.FirstOrDefault(t => t.Result.IsReady)?.Result;
+                crmSvc = tasks.FirstOrDefault(t => t.Result != null && t.Result.IsReady)?.Result;
+                if (crmSvc == null)
+                {   // None of the attempts above were successful, so get a failed one to be able to display correct error message
+                    crmSvc = tasks.FirstOrDefault(t => t.Result != null).Result;
+                }
 
                 // crmSvc = ConnectOnline(UseOsdp);
 
