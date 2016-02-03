@@ -63,6 +63,16 @@ namespace McTools.Xrm.Connection.WinForms
 
         public ConnectionDetail CrmConnectionDetail { get { return updatedDetail; } }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Escape)
+            {
+                Close();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         private void btnBack_Click(object sender, EventArgs e)
         {
             visitedPath.Remove(visitedPath.Last());
