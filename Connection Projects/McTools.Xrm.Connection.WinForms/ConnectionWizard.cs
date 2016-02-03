@@ -416,16 +416,6 @@ namespace McTools.Xrm.Connection.WinForms
             }
         }
 
-        //private CrmServiceClient ConnectOnline(bool isOffice365, ConnectionSettings settings)
-        //{
-        //    var securePassword = new SecureString();
-        //    foreach (char c in settings.Password)
-        //        securePassword.AppendChar(c);
-        //    securePassword.MakeReadOnly();
-
-        //    return new CrmServiceClient(settings.Username, securePassword, GetOnlineRegion(hostName), orga, true, useSsl, isOffice365: isOffice365);
-        //}
-
         private void DisplayPanel(Panel panel, Button acceptButton)
         {
             foreach (var ctrl in Controls)
@@ -438,53 +428,6 @@ namespace McTools.Xrm.Connection.WinForms
             }
             AcceptButton = acceptButton;
         }
-
-        //private void FillConnectionDetailFromControls(ConnectionDetail detail)
-        //{
-        //    detail.ConnectionName = txtConnectionName.Text;
-        //    detail.OriginalUrl = txtOrganizationUrl.Text;
-        //    detail.UserDomain = txtDomain.Text;
-        //    detail.UserName = txtUsername.Text;
-        //    detail.SavePassword = chkSavePassword.Checked;
-        //    detail.IsCustomAuth = !chkUseIntegratedAuthentication.Checked;
-        //    detail.UseIfd = rbIfdYes.Checked;
-        //    detail.ConnectionId = Guid.NewGuid();
-        //    detail.UseOsdp = isOffice365 || (originalDetail != null && originalDetail.UseOsdp);
-        //    detail.UseOnline = isOnline;
-        //    detail.UseSsl = txtOrganizationUrl.Text.ToLower().StartsWith("https");
-        //    detail.ServerName = hostName;
-        //    detail.Timeout = TimeSpan.Parse(txtTimeout.Text);
-
-        //    if (txtPassword.Text != "@@PASSWORD@@" && txtPassword.Text != SpecifyPasswordText)
-        //    {
-        //        detail.SetPassword(txtPassword.Text);
-        //    }
-
-        //    if (string.IsNullOrEmpty(hostPort))
-        //    {
-        //        if (useSsl)
-        //        {
-        //            detail.ServerPort = 443;
-        //        }
-        //        else
-        //        {
-        //            detail.ServerPort = 80;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        detail.ServerPort = int.Parse(hostPort);
-        //    }
-
-        //    if (isOnline)
-        //    {
-        //        detail.AuthType = detail.UseOsdp ? AuthenticationProviderType.OnlineFederation : AuthenticationProviderType.LiveId;
-        //    }
-        //    else
-        //    {
-        //        detail.AuthType = isIfd ? AuthenticationProviderType.Federation : AuthenticationProviderType.ActiveDirectory;
-        //    }
-        //}
 
         private void rbIfdYes_CheckedChanged(object sender, EventArgs e)
         {
