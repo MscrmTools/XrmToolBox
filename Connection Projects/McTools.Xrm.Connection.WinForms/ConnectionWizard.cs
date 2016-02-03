@@ -14,11 +14,17 @@ namespace McTools.Xrm.Connection.WinForms
 {
     public partial class ConnectionWizard : Form
     {
+        #region Private Fields
+
         private const string SpecifyPasswordText = "Please specify the password";
         private readonly ConnectionDetail originalDetail;
         private readonly List<string> visitedPath;
         private CrmServiceClient serviceClient;
         private ConnectionDetail updatedDetail;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public ConnectionWizard(ConnectionDetail detail = null)
         {
@@ -61,7 +67,15 @@ namespace McTools.Xrm.Connection.WinForms
             }
         }
 
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public ConnectionDetail CrmConnectionDetail { get { return updatedDetail; } }
+
+        #endregion Public Properties
+
+        #region Protected Methods
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
@@ -72,6 +86,10 @@ namespace McTools.Xrm.Connection.WinForms
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
+
+        #endregion Protected Methods
+
+        #region Private Methods
 
         private void btnBack_Click(object sender, EventArgs e)
         {
@@ -98,8 +116,8 @@ namespace McTools.Xrm.Connection.WinForms
         {
             if (serviceClient != null)
             {
-                // This happens when the connection is created. When updating
-                // a connection, the service client is not instanciated
+                // This happens when the connection is created. When updating a connection, the
+                // service client is not instanciated
                 updatedDetail.Organization = serviceClient.ConnectedOrgUniqueName;
                 updatedDetail.OrganizationFriendlyName = serviceClient.ConnectedOrgFriendlyName;
                 updatedDetail.OrganizationUrlName = serviceClient.ConnectedOrgUniqueName;
@@ -198,8 +216,7 @@ namespace McTools.Xrm.Connection.WinForms
                 }
                 else
                 {
-                    // IFD or AD??
-                    // Requires additional information
+                    // IFD or AD?? Requires additional information
                     visitedPath.Add(pnlConnectMoreActiveDirectoryInfo.Name);
 
                     lblDescription.Text = Resources.ConnectionWizard_IfdSelectionHeaderDescription;
@@ -460,5 +477,7 @@ namespace McTools.Xrm.Connection.WinForms
                 txtPassword.UseSystemPasswordChar = true;
             }
         }
+
+        #endregion Private Methods
     }
 }
