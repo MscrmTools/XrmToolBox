@@ -14,11 +14,17 @@ namespace McTools.Xrm.Connection.WinForms
 {
     public partial class ConnectionWizard : Form
     {
+        #region Private Fields
+
         private const string SpecifyPasswordText = "Please specify the password";
         private readonly ConnectionDetail originalDetail;
         private readonly List<string> visitedPath;
         private CrmServiceClient serviceClient;
         private ConnectionDetail updatedDetail;
+
+        #endregion Private Fields
+
+        #region Public Constructors
 
         public ConnectionWizard(ConnectionDetail detail = null)
         {
@@ -61,7 +67,29 @@ namespace McTools.Xrm.Connection.WinForms
             }
         }
 
+        #endregion Public Constructors
+
+        #region Public Properties
+
         public ConnectionDetail CrmConnectionDetail { get { return updatedDetail; } }
+
+        #endregion Public Properties
+
+        #region Protected Methods
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Escape)
+            {
+                Close();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        #endregion Protected Methods
+
+        #region Private Methods
 
         private void btnBack_Click(object sender, EventArgs e)
         {
@@ -88,8 +116,8 @@ namespace McTools.Xrm.Connection.WinForms
         {
             if (serviceClient != null)
             {
-                // This happens when the connection is created. When updating
-                // a connection, the service client is not instanciated
+                // This happens when the connection is created. When updating a connection, the
+                // service client is not instanciated
                 updatedDetail.Organization = serviceClient.ConnectedOrgUniqueName;
                 updatedDetail.OrganizationFriendlyName = serviceClient.ConnectedOrgFriendlyName;
                 updatedDetail.OrganizationUrlName = serviceClient.ConnectedOrgUniqueName;
@@ -188,8 +216,7 @@ namespace McTools.Xrm.Connection.WinForms
                 }
                 else
                 {
-                    // IFD or AD??
-                    // Requires additional information
+                    // IFD or AD?? Requires additional information
                     visitedPath.Add(pnlConnectMoreActiveDirectoryInfo.Name);
 
                     lblDescription.Text = Resources.ConnectionWizard_IfdSelectionHeaderDescription;
@@ -406,16 +433,6 @@ namespace McTools.Xrm.Connection.WinForms
             }
         }
 
-        //private CrmServiceClient ConnectOnline(bool isOffice365, ConnectionSettings settings)
-        //{
-        //    var securePassword = new SecureString();
-        //    foreach (char c in settings.Password)
-        //        securePassword.AppendChar(c);
-        //    securePassword.MakeReadOnly();
-
-        //    return new CrmServiceClient(settings.Username, securePassword, GetOnlineRegion(hostName), orga, true, useSsl, isOffice365: isOffice365);
-        //}
-
         private void DisplayPanel(Panel panel, Button acceptButton)
         {
             foreach (var ctrl in Controls)
@@ -428,53 +445,6 @@ namespace McTools.Xrm.Connection.WinForms
             }
             AcceptButton = acceptButton;
         }
-
-        //private void FillConnectionDetailFromControls(ConnectionDetail detail)
-        //{
-        //    detail.ConnectionName = txtConnectionName.Text;
-        //    detail.OriginalUrl = txtOrganizationUrl.Text;
-        //    detail.UserDomain = txtDomain.Text;
-        //    detail.UserName = txtUsername.Text;
-        //    detail.SavePassword = chkSavePassword.Checked;
-        //    detail.IsCustomAuth = !chkUseIntegratedAuthentication.Checked;
-        //    detail.UseIfd = rbIfdYes.Checked;
-        //    detail.ConnectionId = Guid.NewGuid();
-        //    detail.UseOsdp = isOffice365 || (originalDetail != null && originalDetail.UseOsdp);
-        //    detail.UseOnline = isOnline;
-        //    detail.UseSsl = txtOrganizationUrl.Text.ToLower().StartsWith("https");
-        //    detail.ServerName = hostName;
-        //    detail.Timeout = TimeSpan.Parse(txtTimeout.Text);
-
-        //    if (txtPassword.Text != "@@PASSWORD@@" && txtPassword.Text != SpecifyPasswordText)
-        //    {
-        //        detail.SetPassword(txtPassword.Text);
-        //    }
-
-        //    if (string.IsNullOrEmpty(hostPort))
-        //    {
-        //        if (useSsl)
-        //        {
-        //            detail.ServerPort = 443;
-        //        }
-        //        else
-        //        {
-        //            detail.ServerPort = 80;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        detail.ServerPort = int.Parse(hostPort);
-        //    }
-
-        //    if (isOnline)
-        //    {
-        //        detail.AuthType = detail.UseOsdp ? AuthenticationProviderType.OnlineFederation : AuthenticationProviderType.LiveId;
-        //    }
-        //    else
-        //    {
-        //        detail.AuthType = isIfd ? AuthenticationProviderType.Federation : AuthenticationProviderType.ActiveDirectory;
-        //    }
-        //}
 
         private void rbIfdYes_CheckedChanged(object sender, EventArgs e)
         {
@@ -507,5 +477,7 @@ namespace McTools.Xrm.Connection.WinForms
                 txtPassword.UseSystemPasswordChar = true;
             }
         }
+
+        #endregion Private Methods
     }
 }
