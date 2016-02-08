@@ -623,7 +623,8 @@ namespace MsCrmTools.WebResourcesManager
                 if (name1 != name2)
                 {
                     var command = new WorkAsyncInfo(string.Format("Trying to rename '{0}' to '{1}'", name1, name2),
-                    (a) => {
+                    (a) =>
+                    {
                         // Check if resource with the same name already exists
                         var query = new QueryExpression("webresource");
                         query.Criteria.AddCondition("name", ConditionOperator.Equal, name2);
@@ -632,12 +633,31 @@ namespace MsCrmTools.WebResourcesManager
 
                         if (result == 0)
                         {
-                            // It's safe to update web resource
-                            Service.Delete(webResource.Entity.LogicalName, webResource.Entity.Id);
-                            webResource.Entity.Attributes["name"] = name2;
-                            Service.Create(webResource.Entity);
+                            try
+                            {
+                                // It's safe to update web resource. Direct rename is not possible, 
+                                // but deletion with different name, but same ID will have same result
+                                Service.Delete(webResource.Entity.LogicalName, webResource.Entity.Id);
+                                webResource.Entity.Attributes["name"] = name2;
+                                Service.Create(webResource.Entity);
+                            }
+                            catch
+                            {
+                                Invoke(new Action(() =>
+                                {
+                                    MessageBox.Show("It was impossible to rename web resource!", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }));
+                            }
                         }
-                    });
+                    })
+                    {
+                        PostWorkCallBack = (a) =>
+                        {
+                            webresourceTreeView1.DisplayWebResources();
+                            webresourceTreeView1.Enabled = true;
+                        }
+                    };
+                    
 
                     WorkAsync(command);
                 }
@@ -1217,7 +1237,7 @@ namespace MsCrmTools.WebResourcesManager
                         toolStripSeparatorExpandCollapse.Visible = true;
                     }
                     break;
-                
+
                 // First-level: virtual folder
                 case 1:
                     {
@@ -1239,7 +1259,7 @@ namespace MsCrmTools.WebResourcesManager
                         toolStripSeparatorExpandCollapse.Visible = true;
                     }
                     break;
-                
+
                 // Default-level: resource name
                 default:
                     {
