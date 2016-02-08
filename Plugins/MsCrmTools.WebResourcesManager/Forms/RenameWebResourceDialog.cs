@@ -12,7 +12,6 @@ namespace MsCrmTools.WebResourcesManager.Forms
 {
     public partial class RenameWebResourceDialog : Form
     {
-        private readonly string _extension;
         private readonly Regex inValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant));
 
         private string _webResourceName;
@@ -22,8 +21,6 @@ namespace MsCrmTools.WebResourcesManager.Forms
             InitializeComponent();
 
             txtWebResourceName.Text = name;
-
-            // _extension = name;
         }
 
         public string WebResourceName { get { return _webResourceName; } }
@@ -61,7 +58,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
 
         private void TxtWebResourceNameTextChanged(object sender, EventArgs e)
         {
-            label2.Text = string.Format("Final file name: {0}.{1}", txtWebResourceName.Text, _extension);
+            label2.Text = string.Format("Final file name: {0}", txtWebResourceName.Text);
         }
     }
 }
