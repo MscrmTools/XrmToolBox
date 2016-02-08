@@ -645,13 +645,13 @@ namespace MsCrmTools.WebResourcesManager
                             {
                                 Invoke(new Action(() =>
                                 {
-                                    MessageBox.Show("It was impossible to rename web resource!", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    MessageBox.Show("It was impossible to rename web resource!", Resources.MessageBox_ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
                                 }));
                             }
                         }
                         else
                         {
-                            MessageBox.Show("Resource with the same name already exist, rename impossible!", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show("Resource with the same name already exist, rename impossible!", Resources.MessageBox_ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     })
                     {
@@ -661,7 +661,6 @@ namespace MsCrmTools.WebResourcesManager
                             webresourceTreeView1.Enabled = true;
                         }
                     };
-                    
 
                     WorkAsync(command);
                 }
