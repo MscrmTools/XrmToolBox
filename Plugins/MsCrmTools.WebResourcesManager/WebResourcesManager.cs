@@ -606,6 +606,9 @@ namespace MsCrmTools.WebResourcesManager
 
         private void TsmiRenameWebResourceClick(object sender, EventArgs e)
         {
+            if (TreeViewHelper.CheckOnlyThisNode(webresourceTreeView1))
+                return;
+
             webresourceTreeView1.RenameWebResource();
         }
 

@@ -17,11 +17,13 @@ namespace MsCrmTools.WebResourcesManager.Forms
 
         private string _webResourceName;
 
-        public RenameWebResourceDialog(string extension)
+        public RenameWebResourceDialog(string name)
         {
             InitializeComponent();
 
-            _extension = extension;
+            txtWebResourceName.Text = name;
+
+            // _extension = name;
         }
 
         public string WebResourceName { get { return _webResourceName; } }

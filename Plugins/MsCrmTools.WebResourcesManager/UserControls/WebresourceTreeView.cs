@@ -649,7 +649,17 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
         internal void RenameWebResource()
         {
-            throw new NotImplementedException();
+            var nodes = new List<TreeNode>();
+
+            GetNodes(nodes, tv, true);
+
+            var renameWebResource = new RenameWebResourceDialog(GetName(nodes.FirstOrDefault()));
+            renameWebResource.StartPosition = FormStartPosition.CenterParent;
+
+            if (renameWebResource.ShowDialog() == DialogResult.OK)
+            {
+
+            }
         }
 
         /// <summary>
