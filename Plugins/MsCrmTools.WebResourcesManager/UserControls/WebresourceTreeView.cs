@@ -263,13 +263,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
             GetNodes(nodes, tv, true);
 
-            return nodes
-                .Select(n => (WebResource)n.Tag)
-                .Select(x =>
-                {
-                    x.Name = GetName(x.Node);
-                    return x;
-                }).ToList();
+            return nodes.Select(n => (WebResource)n.Tag).ToList();
         }
 
         /// <summary>
