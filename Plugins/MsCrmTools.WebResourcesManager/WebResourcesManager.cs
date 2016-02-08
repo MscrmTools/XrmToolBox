@@ -1170,6 +1170,7 @@ namespace MsCrmTools.WebResourcesManager
                         updateFromDiskToolStripMenuItem.Enabled = true;
                         copyWebResourceNameToClipboardToolStripMenuItem.Enabled = false;
                         getLatestVersionToolStripMenuItem.Enabled = false;
+                        renameWebResourceToolStripMenuItem.Enabled = false;
 
                         expandincludingChildrensToolStripMenuItem.Visible = !webresourceTreeView1.SelectedNode.IsExpanded;
                         collapseIncludingChildrensToolStripMenuItem.Visible = webresourceTreeView1.SelectedNode.IsExpanded;
@@ -1191,6 +1192,7 @@ namespace MsCrmTools.WebResourcesManager
                         updateFromDiskToolStripMenuItem.Enabled = true;
                         copyWebResourceNameToClipboardToolStripMenuItem.Enabled = false;
                         getLatestVersionToolStripMenuItem.Enabled = false;
+                        renameWebResourceToolStripMenuItem.Enabled = false;
 
                         expandincludingChildrensToolStripMenuItem.Visible = !webresourceTreeView1.SelectedNode.IsExpanded;
                         collapseIncludingChildrensToolStripMenuItem.Visible = webresourceTreeView1.SelectedNode.IsExpanded;
@@ -1212,6 +1214,7 @@ namespace MsCrmTools.WebResourcesManager
                         updateFromDiskToolStripMenuItem.Enabled = false;
                         copyWebResourceNameToClipboardToolStripMenuItem.Enabled = true;
                         getLatestVersionToolStripMenuItem.Enabled = true;
+                        renameWebResourceToolStripMenuItem.Enabled = true;
 
                         expandincludingChildrensToolStripMenuItem.Visible = false;
                         collapseIncludingChildrensToolStripMenuItem.Visible = false;
