@@ -40,6 +40,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         public string InitialBase64 { get; set; }
 
         public TreeNode Node { get; set; }
+        public string Name { get; set; }
 
         public static int GetImageIndexFromExtension(string ext)
         {
