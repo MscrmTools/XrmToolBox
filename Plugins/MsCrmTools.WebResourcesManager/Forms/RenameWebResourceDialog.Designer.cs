@@ -82,9 +82,9 @@
             this.label1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(348, 25);
+            this.label1.Size = new System.Drawing.Size(333, 25);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Type the name of the new web resource";
+            this.label1.Text = "Change the name of the web resource";
             // 
             // panel1
             // 
@@ -95,7 +95,7 @@
             this.panel1.Size = new System.Drawing.Size(390, 60);
             this.panel1.TabIndex = 15;
             // 
-            // NewWebResourceDialog
+            // RenameWebResourceDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -107,7 +107,7 @@
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Name = "NewWebResourceDialog";
+            this.Name = "RenameWebResourceDialog";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
