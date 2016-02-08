@@ -1156,6 +1156,7 @@ namespace MsCrmTools.WebResourcesManager
         {
             switch (webresourceTreeView1.SelectedNode.ImageIndex)
             {
+                // Top-level: publisher prefix
                 case 0:
                     {
                         addNewFolderToolStripMenuItem.Enabled = true;
@@ -1175,7 +1176,8 @@ namespace MsCrmTools.WebResourcesManager
                         toolStripSeparatorExpandCollapse.Visible = true;
                     }
                     break;
-
+                
+                // First-level: virtual folder
                 case 1:
                     {
                         addNewFolderToolStripMenuItem.Enabled = true;
@@ -1195,7 +1197,8 @@ namespace MsCrmTools.WebResourcesManager
                         toolStripSeparatorExpandCollapse.Visible = true;
                     }
                     break;
-
+                
+                // Default-level: resource name
                 default:
                     {
                         addNewFolderToolStripMenuItem.Enabled = false;
