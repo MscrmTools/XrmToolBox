@@ -649,6 +649,10 @@ namespace MsCrmTools.WebResourcesManager
                                 }));
                             }
                         }
+                        else
+                        {
+                            MessageBox.Show("Resource with the same name already exist, rename impossible!", "Failure", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     })
                     {
                         PostWorkCallBack = (a) =>
