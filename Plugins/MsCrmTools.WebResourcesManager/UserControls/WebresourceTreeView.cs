@@ -647,6 +647,11 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
             }
         }
 
+        internal void RenameWebResource()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Obtain the full name for a web resource
         /// </summary>

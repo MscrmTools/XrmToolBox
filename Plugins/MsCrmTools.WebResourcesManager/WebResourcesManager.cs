@@ -604,6 +604,11 @@ namespace MsCrmTools.WebResourcesManager
             webresourceTreeView1.AddExistingWebResource();
         }
 
+        private void TsmiRenameWebResourceClick(object sender, EventArgs e)
+        {
+            webresourceTreeView1.RenameWebResource();
+        }
+
         private void TsmiCopyWebResourceNameToClipboardClick(object sender, EventArgs e)
         {
             var name = webresourceTreeView1.SelectedResource.Entity.GetAttributeValue<string>("name");

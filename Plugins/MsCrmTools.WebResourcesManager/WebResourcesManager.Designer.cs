@@ -90,6 +90,8 @@
             this.dataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xSLTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.renameWebResourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.collapseIncludingChildrensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expandincludingChildrensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -108,8 +110,6 @@
             this.copyWebResourceNameToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.renameWebResourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -715,6 +715,18 @@
             this.addNewFolderToolStripMenuItem.Text = "Add new folder";
             this.addNewFolderToolStripMenuItem.Click += new System.EventHandler(this.TsmiAddNewFolderClick);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(334, 6);
+            // 
+            // renameWebResourceToolStripMenuItem
+            // 
+            this.renameWebResourceToolStripMenuItem.Name = "renameWebResourceToolStripMenuItem";
+            this.renameWebResourceToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.renameWebResourceToolStripMenuItem.Text = "Rename web resource";
+            this.renameWebResourceToolStripMenuItem.Click += new System.EventHandler(this.TsmiRenameWebResourceClick);
+            // 
             // toolStripSeparator11
             // 
             this.toolStripSeparator11.Name = "toolStripSeparator11";
@@ -837,17 +849,6 @@
             this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
             this.propertiesToolStripMenuItem.Text = "Properties";
             this.propertiesToolStripMenuItem.Click += new System.EventHandler(this.TsmiPropertieClick);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(334, 6);
-            // 
-            // renameWebResourceToolStripMenuItem
-            // 
-            this.renameWebResourceToolStripMenuItem.Name = "renameWebResourceToolStripMenuItem";
-            this.renameWebResourceToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
-            this.renameWebResourceToolStripMenuItem.Text = "Rename web resource";
             // 
             // WebResourcesManager
             // 
