@@ -263,7 +263,13 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
             GetNodes(nodes, tv, true);
 
-            return nodes.Select(n => (WebResource)n.Tag).ToList();
+            return nodes
+                .Select(n => (WebResource)n.Tag)
+                .Select(x =>
+                {
+                    x.Name = GetName(x.Node);
+                    return x;
+                }).ToList();
         }
 
         /// <summary>
@@ -644,21 +650,6 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
             else
             {
                 ((TreeView)parent).Nodes.Add(node);
-            }
-        }
-
-        internal void RenameWebResource()
-        {
-            var nodes = new List<TreeNode>();
-
-            GetNodes(nodes, tv, true);
-
-            var renameWebResource = new RenameWebResourceDialog(GetName(nodes.FirstOrDefault()));
-            renameWebResource.StartPosition = FormStartPosition.CenterParent;
-
-            if (renameWebResource.ShowDialog() == DialogResult.OK)
-            {
-
             }
         }
 
