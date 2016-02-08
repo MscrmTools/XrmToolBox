@@ -609,7 +609,15 @@ namespace MsCrmTools.WebResourcesManager
             if (TreeViewHelper.CheckOnlyThisNode(webresourceTreeView1))
                 return;
 
-            webresourceTreeView1.RenameWebResource();
+            var webResource = webresourceTreeView1.GetCheckedResources().FirstOrDefault();
+
+            var renameWebResource = new RenameWebResourceDialog(webResource.Name);
+            renameWebResource.StartPosition = FormStartPosition.CenterParent;
+
+            if (renameWebResource.ShowDialog() == DialogResult.OK && renameWebResource.WebResourceName != webResource.Name)
+            {
+                 
+            }
         }
 
         private void TsmiCopyWebResourceNameToClipboardClick(object sender, EventArgs e)
