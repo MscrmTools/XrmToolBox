@@ -4,6 +4,7 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using MsCrmTools.WebResourcesManager.AppCode;
 using MsCrmTools.WebResourcesManager.DelegatesHelpers;
 using MsCrmTools.WebResourcesManager.Forms;
@@ -610,13 +611,36 @@ namespace MsCrmTools.WebResourcesManager
                 return;
 
             var webResource = webresourceTreeView1.GetCheckedResources().FirstOrDefault();
+            var name1 = (string)webResource.Entity["name"];
 
-            var renameWebResource = new RenameWebResourceDialog(webResource.Name);
+            var renameWebResource = new RenameWebResourceDialog(name1);
             renameWebResource.StartPosition = FormStartPosition.CenterParent;
 
-            if (renameWebResource.ShowDialog() == DialogResult.OK && renameWebResource.WebResourceName != webResource.Name)
+            if (renameWebResource.ShowDialog() == DialogResult.OK)
             {
-                 
+                var name2 = renameWebResource.WebResourceName;
+
+                if (name1 != name2)
+                {
+                    var command = new WorkAsyncInfo(string.Format("Trying to rename '{0}' to '{1}'", name1, name2),
+                    (a) => {
+                        // Check if resource with the same name already exists
+                        var query = new QueryExpression("webresource");
+                        query.Criteria.AddCondition("name", ConditionOperator.Equal, name2);
+
+                        var result = Service.RetrieveMultiple(query)?.Entities?.Count;
+
+                        if (result == 0)
+                        {
+                            // It's safe to update web resource
+                            Service.Delete(webResource.Entity.LogicalName, webResource.Entity.Id);
+                            webResource.Entity.Attributes["name"] = name2;
+                            Service.Create(webResource.Entity);
+                        }
+                    });
+
+                    WorkAsync(command);
+                }
             }
         }
 
