@@ -198,6 +198,12 @@
     <Compile Include="Forms\CustomFolderBrowserDialog.Designer.cs">
       <DependentUpon>CustomFolderBrowserDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\RenameWebResourceDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RenameWebResourceDialog.Designer.cs">
+      <DependentUpon>RenameWebResourceDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\OptionsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -334,6 +340,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CustomFolderBrowserDialog.resx">
       <DependentUpon>CustomFolderBrowserDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RenameWebResourceDialog.resx">
+      <DependentUpon>RenameWebResourceDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\OptionsDialog.resx">
       <DependentUpon>OptionsDialog.cs</DependentUpon>
