@@ -90,6 +90,8 @@
             this.dataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.xSLTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addNewFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.renameWebResourceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.collapseIncludingChildrensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expandincludingChildrensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -367,7 +369,7 @@
             this.tsbGetLatestVersion.Image = ((System.Drawing.Image)(resources.GetObject("tsbGetLatestVersion.Image")));
             this.tsbGetLatestVersion.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbGetLatestVersion.Name = "tsbGetLatestVersion";
-            this.tsbGetLatestVersion.Size = new System.Drawing.Size(79, 20);
+            this.tsbGetLatestVersion.Size = new System.Drawing.Size(79, 22);
             this.tsbGetLatestVersion.Text = "Get Latest";
             this.tsbGetLatestVersion.Click += new System.EventHandler(this.TsmiGetLatestVersionClick);
             // 
@@ -379,7 +381,7 @@
             // tslResourceName
             // 
             this.tslResourceName.Name = "tslResourceName";
-            this.tslResourceName.Size = new System.Drawing.Size(0, 0);
+            this.tslResourceName.Size = new System.Drawing.Size(0, 22);
             this.tslResourceName.Visible = false;
             // 
             // tsbComment
@@ -388,7 +390,7 @@
             this.tsbComment.Image = ((System.Drawing.Image)(resources.GetObject("tsbComment.Image")));
             this.tsbComment.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbComment.Name = "tsbComment";
-            this.tsbComment.Size = new System.Drawing.Size(23, 20);
+            this.tsbComment.Size = new System.Drawing.Size(23, 22);
             this.tsbComment.Text = "Comment";
             this.tsbComment.Click += new System.EventHandler(this.tsbComment_Click);
             // 
@@ -398,7 +400,7 @@
             this.tsbnUncomment.Image = ((System.Drawing.Image)(resources.GetObject("tsbnUncomment.Image")));
             this.tsbnUncomment.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbnUncomment.Name = "tsbnUncomment";
-            this.tsbnUncomment.Size = new System.Drawing.Size(23, 20);
+            this.tsbnUncomment.Size = new System.Drawing.Size(23, 22);
             this.tsbnUncomment.Text = "Uncomment";
             this.tsbnUncomment.Click += new System.EventHandler(this.tsbnUncomment_Click);
             // 
@@ -597,7 +599,7 @@
             this.toolStripDropDownButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton2.Image")));
             this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
-            this.toolStripDropDownButton2.Size = new System.Drawing.Size(48, 22);
+            this.toolStripDropDownButton2.Size = new System.Drawing.Size(49, 22);
             this.toolStripDropDownButton2.Text = "Tools";
             // 
             // findUnusedWebResourcesToolStripMenuItem
@@ -626,6 +628,8 @@
             this.addNewWebResourceToolStripMenuItem,
             this.addNewEmptyWebResourceToolStripMenuItem,
             this.addNewFolderToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.renameWebResourceToolStripMenuItem,
             this.toolStripSeparator11,
             this.collapseIncludingChildrensToolStripMenuItem,
             this.expandincludingChildrensToolStripMenuItem,
@@ -645,7 +649,7 @@
             this.toolStripSeparator7,
             this.propertiesToolStripMenuItem});
             this.cmsWebResourceTreeView.Name = "contextMenuStripTreeView";
-            this.cmsWebResourceTreeView.Size = new System.Drawing.Size(338, 370);
+            this.cmsWebResourceTreeView.Size = new System.Drawing.Size(338, 420);
             // 
             // addNewWebResourceToolStripMenuItem
             // 
@@ -710,6 +714,18 @@
             this.addNewFolderToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
             this.addNewFolderToolStripMenuItem.Text = "Add new folder";
             this.addNewFolderToolStripMenuItem.Click += new System.EventHandler(this.TsmiAddNewFolderClick);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(334, 6);
+            // 
+            // renameWebResourceToolStripMenuItem
+            // 
+            this.renameWebResourceToolStripMenuItem.Name = "renameWebResourceToolStripMenuItem";
+            this.renameWebResourceToolStripMenuItem.Size = new System.Drawing.Size(337, 22);
+            this.renameWebResourceToolStripMenuItem.Text = "Rename web resource";
+            this.renameWebResourceToolStripMenuItem.Click += new System.EventHandler(this.TsmiRenameWebResourceClick);
             // 
             // toolStripSeparator11
             // 
@@ -935,5 +951,7 @@
         private System.Windows.Forms.ToolStripButton tsbnUncomment;
         private System.Windows.Forms.Panel panelControl;
         private System.Windows.Forms.Label lblWebresourceName;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem renameWebResourceToolStripMenuItem;
     }
 }
