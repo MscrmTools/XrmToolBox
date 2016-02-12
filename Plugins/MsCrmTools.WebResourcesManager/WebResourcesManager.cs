@@ -605,68 +605,6 @@ namespace MsCrmTools.WebResourcesManager
             webresourceTreeView1.AddExistingWebResource();
         }
 
-        private void TsmiRenameWebResourceClick(object sender, EventArgs e)
-        {
-            if (TreeViewHelper.CheckOnlyThisNode(webresourceTreeView1))
-                return;
-
-            var webResource = webresourceTreeView1.GetCheckedResources().FirstOrDefault();
-            var name1 = (string)webResource.Entity["name"];
-
-            var renameWebResource = new RenameWebResourceDialog(name1);
-            renameWebResource.StartPosition = FormStartPosition.CenterParent;
-
-            if (renameWebResource.ShowDialog() == DialogResult.OK)
-            {
-                var name2 = renameWebResource.WebResourceName;
-
-                if (name1 != name2)
-                {
-                    var command = new WorkAsyncInfo(string.Format("Trying to rename '{0}' to '{1}'", name1, name2),
-                    (a) =>
-                    {
-                        // Check if resource with the same name already exists
-                        var query = new QueryExpression("webresource");
-                        query.Criteria.AddCondition("name", ConditionOperator.Equal, name2);
-
-                        var result = Service.RetrieveMultiple(query)?.Entities?.Count;
-
-                        if (result == 0)
-                        {
-                            try
-                            {
-                                // It's safe to update web resource. Direct rename is not possible, 
-                                // but deletion with different name, but same ID will have same result
-                                Service.Delete(webResource.Entity.LogicalName, webResource.Entity.Id);
-                                webResource.Entity.Attributes["name"] = name2;
-                                Service.Create(webResource.Entity);
-                            }
-                            catch
-                            {
-                                Invoke(new Action(() =>
-                                {
-                                    MessageBox.Show("It was impossible to rename web resource!", Resources.MessageBox_ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                }));
-                            }
-                        }
-                        else
-                        {
-                            MessageBox.Show("Resource with the same name already exist, rename impossible!", Resources.MessageBox_ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    })
-                    {
-                        PostWorkCallBack = (a) =>
-                        {
-                            webresourceTreeView1.DisplayWebResources();
-                            webresourceTreeView1.Enabled = true;
-                        }
-                    };
-
-                    WorkAsync(command);
-                }
-            }
-        }
-
         private void TsmiCopyWebResourceNameToClipboardClick(object sender, EventArgs e)
         {
             var name = webresourceTreeView1.SelectedResource.Entity.GetAttributeValue<string>("name");
@@ -718,6 +656,68 @@ namespace MsCrmTools.WebResourcesManager
                 return;
 
             webresourceTreeView1.SelectedNode.Tag = ((WebResource)webresourceTreeView1.SelectedNode.Tag).ShowProperties(Service, this);
+        }
+
+        private void TsmiRenameWebResourceClick(object sender, EventArgs e)
+        {
+            if (TreeViewHelper.CheckOnlyThisNode(webresourceTreeView1))
+                return;
+
+            var webResource = webresourceTreeView1.GetCheckedResources().FirstOrDefault();
+            var name1 = (string)webResource.Entity["name"];
+
+            var renameWebResource = new RenameWebResourceDialog(name1);
+            renameWebResource.StartPosition = FormStartPosition.CenterParent;
+
+            if (renameWebResource.ShowDialog() == DialogResult.OK)
+            {
+                var name2 = renameWebResource.WebResourceName;
+
+                if (name1 != name2)
+                {
+                    var command = new WorkAsyncInfo(string.Format("Trying to rename '{0}' to '{1}'", name1, name2),
+                    (a) =>
+                    {
+                        // Check if resource with the same name already exists
+                        var query = new QueryExpression("webresource");
+                        query.Criteria.AddCondition("name", ConditionOperator.Equal, name2);
+
+                        var result = Service.RetrieveMultiple(query).Entities.Count;
+
+                        if (result == 0)
+                        {
+                            try
+                            {
+                                // It's safe to update web resource. Direct rename is not possible,
+                                // but deletion with different name, but same ID will have same result
+                                Service.Delete(webResource.Entity.LogicalName, webResource.Entity.Id);
+                                webResource.Entity.Attributes["name"] = name2;
+                                Service.Create(webResource.Entity);
+                            }
+                            catch
+                            {
+                                Invoke(new Action(() =>
+                                {
+                                    MessageBox.Show("It was impossible to rename web resource!", Resources.MessageBox_ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }));
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Resource with the same name already exist, rename impossible!", Resources.MessageBox_ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    })
+                    {
+                        PostWorkCallBack = (a) =>
+                        {
+                            webresourceTreeView1.DisplayWebResources();
+                            webresourceTreeView1.Enabled = true;
+                        }
+                    };
+
+                    WorkAsync(command);
+                }
+            }
         }
 
         private void UpdateFromDiskToolStripMenuItemClick(object sender, EventArgs e)

@@ -113,6 +113,7 @@
             this.chkSelectAll.TabIndex = 84;
             this.chkSelectAll.Text = "Select/Unselect all";
             this.chkSelectAll.UseVisualStyleBackColor = true;
+            this.chkSelectAll.Click += new System.EventHandler(this.chkSelectAll_Click);
             // 
             // tv
             // 
