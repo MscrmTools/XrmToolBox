@@ -1,4 +1,5 @@
 using Microsoft.Crm.Sdk.Messages;
+using Microsoft.VisualBasic.FileIO;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
@@ -44,7 +45,20 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                     lineNumber++;
                     try
                     {
-                        var data = line.Split(',');
+                        string[] data = new string[2];
+
+                        using (TextFieldParser parser = new TextFieldParser(new StringReader(line))
+                        {
+                            HasFieldsEnclosedInQuotes = true
+                        })
+                        {
+                            parser.SetDelimiters(",");
+
+                            while (!parser.EndOfData)
+                            {
+                                data = parser.ReadFields();
+                            }
+                        }
 
                         Guid firstGuid = Guid.Empty;
                         Guid secondGuid = Guid.Empty;
