@@ -49,8 +49,28 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                         {
                             string dataFirst;
                             string dataSecond;
-                            var guidFirst = result.GetAttributeValue<Guid>(settings.FirstEntity + "id");
-                            var guidSecond = result.GetAttributeValue<Guid>(settings.SecondEntity + "id");
+
+                            Guid guidFirst, guidSecond;
+
+                            if (settings.FirstEntity == "list" && (settings.SecondEntity == "contact"
+                                                                   || settings.SecondEntity == "account"
+                                                                   || settings.SecondEntity == "lead"))
+                            {
+                                guidFirst = result.GetAttributeValue<EntityReference>("listid").Id;
+                                guidSecond = result.GetAttributeValue<EntityReference>("entityid").Id;
+                            }
+                            else if (settings.SecondEntity == "list" && (settings.FirstEntity == "contact"
+                                                                         || settings.FirstEntity == "account"
+                                                                         || settings.FirstEntity == "lead"))
+                            {
+                                guidFirst = result.GetAttributeValue<EntityReference>("entityid").Id;
+                                guidSecond = result.GetAttributeValue<EntityReference>("listid").Id;
+                            }
+                            else
+                            {
+                                guidFirst = result.GetAttributeValue<Guid>(settings.FirstEntity + "id");
+                                guidSecond = result.GetAttributeValue<Guid>(settings.SecondEntity + "id");
+                            }
 
                             if (!settings.FirstAttributeIsGuid)
                             {
