@@ -512,5 +512,32 @@ namespace MsCrmTools.Iconator
         {
             CloseTool();
         }
+
+        private void tsbToggleBackground_Click(object sender, EventArgs e)
+        {
+            listViewWebRessources16.BackColor = listViewWebRessources16.BackColor == Color.FromName("Window")
+                ? Color.Black
+                : Color.FromName("Window");
+
+            listViewWebRessources16.ForeColor = listViewWebRessources16.ForeColor == Color.FromName("WindowText")
+                ? Color.White
+                : Color.FromName("WindowText");
+
+            listViewWebRessources32.BackColor = listViewWebRessources32.BackColor == Color.FromName("Window")
+                ? Color.Black
+                : Color.FromName("Window");
+
+            listViewWebRessources32.ForeColor = listViewWebRessources32.ForeColor == Color.FromName("WindowText")
+                ? Color.White
+                : Color.FromName("WindowText");
+
+            listViewWebRessourcesOther.BackColor = listViewWebRessourcesOther.BackColor == Color.FromName("Window")
+                ? Color.Black
+                : Color.FromName("Window");
+
+            listViewWebRessourcesOther.ForeColor = listViewWebRessourcesOther.ForeColor == Color.FromName("WindowText")
+               ? Color.White
+               : Color.FromName("WindowText");
+        }
     }
 }
