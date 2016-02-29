@@ -32,6 +32,9 @@ namespace XrmToolBox.AppCode
             else if (ConnectionManager.Instance.ConnectionsList.UseInternetExplorerProxy)
             {
                 WebRequest.DefaultWebProxy = WebRequest.GetSystemWebProxy();
+                //Use default credentials if no proxy credentials
+                if (WebRequest.DefaultWebProxy.Credentials == null)
+                    WebRequest.DefaultWebProxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
             }
             else
             {
