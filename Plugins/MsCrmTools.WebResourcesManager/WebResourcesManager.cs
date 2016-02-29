@@ -459,7 +459,7 @@ namespace MsCrmTools.WebResourcesManager
         {
             try
             {
-                SaveWebResourcesToDisk(webresourceTreeView1.GetAllResources(), true);
+                SaveWebResourcesToDisk(webresourceTreeView1.GetCheckedResources(), true);
             }
             catch (Exception error)
             {
