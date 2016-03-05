@@ -132,6 +132,7 @@
     <Compile Include="AppCode\CrmSiteMapArea.cs" />
     <Compile Include="AppCode\CrmSiteMapGroup.cs" />
     <Compile Include="AppCode\CrmSiteMapSubArea.cs" />
+    <Compile Include="AppCode\CrmVisualization.cs" />
     <Compile Include="AppCode\DashboardTranslation.cs" />
     <Compile Include="AppCode\GlobalOptionSetTranslation.cs" />
     <Compile Include="AppCode\CrmFormLabel.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="AppCode\MasterAttribute.cs" />
     <Compile Include="AppCode\RibbonTranslation.cs" />
     <Compile Include="AppCode\SiteMapTranslation.cs" />
+    <Compile Include="AppCode\VisualizationTranslation.cs" />
     <Compile Include="AppCode\ViewTranslation.cs" />
     <Compile Include="AppCode\OptionSetTranslation.cs" />
     <Compile Include="AppCode\EntityTranslation.cs" />
