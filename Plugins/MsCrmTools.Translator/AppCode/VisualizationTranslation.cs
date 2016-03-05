@@ -134,7 +134,7 @@ namespace MsCrmTools.Translator.AppCode
         public void Import(ExcelWorksheet sheet, IOrganizationService service)
         {
             var rowsCount = sheet.Dimension.Rows;
-
+            var cellsCount = sheet.Dimension.Columns;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
                 var currentVisualizationId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString());
@@ -147,10 +147,16 @@ namespace MsCrmTools.Translator.AppCode
                 var labels = new List<LocalizedLabel>();
 
                 var columnIndex = 3;
-                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                while (columnIndex < cellsCount)
                 {
-                    var currentLcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
-                    labels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), currentLcid));
+                    if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    {
+                        var lcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
+                        var label = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
+
+                        labels.Add(new LocalizedLabel(label, lcid));
+                    }
+
                     columnIndex++;
                 }
 

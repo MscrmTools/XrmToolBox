@@ -166,6 +166,7 @@ namespace MsCrmTools.Translator.AppCode
             var requests = new List<UpdateOptionValueRequest>();
 
             var rowsCount = sheet.Dimension.Rows;
+            var cellsCount = sheet.Dimension.Columns;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
                 UpdateOptionValueRequest request = requests.FirstOrDefault(r => r.OptionSetName == ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString());
@@ -185,31 +186,29 @@ namespace MsCrmTools.Translator.AppCode
 
                     if (ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString() == "Label")
                     {
-                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex &&
-                        while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex) != null && ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                        while (columnIndex < cellsCount)
                         {
-                            var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
-                            var sLabel = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
-
-                            if (sLcid.Length > 0 && sLabel.Length > 0)
+                            if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                             {
-                                request.Label.LocalizedLabels.Add(new LocalizedLabel(sLabel, int.Parse(sLcid)));
+                                var lcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
+                                var label = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
+                                request.Label.LocalizedLabels.Add(new LocalizedLabel(label, lcid));
                             }
+
                             columnIndex++;
                         }
                     }
                     else if (ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString() == "Description")
                     {
-                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex &&
-                        while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex) != null && ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                        while (columnIndex < cellsCount)
                         {
-                            var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
-                            var sLabel = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
-
-                            if (sLcid.Length > 0 && sLabel.Length > 0)
+                            if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                             {
-                                request.Description.LocalizedLabels.Add(new LocalizedLabel(sLabel, int.Parse(sLcid)));
+                                var lcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
+                                var label = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
+                                request.Description.LocalizedLabels.Add(new LocalizedLabel(label, lcid));
                             }
+
                             columnIndex++;
                         }
                     }
@@ -222,8 +221,7 @@ namespace MsCrmTools.Translator.AppCode
 
                     if (ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString() == "Label")
                     {
-                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex &&
-                        while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex) != null && ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                        while (columnIndex < cellsCount)
                         {
                             var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
                             var sLabel = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
@@ -237,8 +235,7 @@ namespace MsCrmTools.Translator.AppCode
                     }
                     else if (ZeroBasedSheet.Cell(sheet, rowI, 4).Value.ToString() == "Description")
                     {
-                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex &&
-                        while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex) != null && ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                        while (columnIndex < cellsCount)
                         {
                             var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
                             var sLabel = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
