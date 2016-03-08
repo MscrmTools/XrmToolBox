@@ -30,6 +30,8 @@ namespace MsCrmTools.SampleTool
                 Message = "Retrieving your user id...",
                 Work = (w, e) =>
                 {
+                    // The while loop is just here to illustrate the possibility to cancel
+                    // a long running process made of multiple calls
                     while (e.Cancel == false)
                     {
                         if (w.CancellationPending)
