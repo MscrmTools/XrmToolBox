@@ -131,6 +131,7 @@
     <Compile Include="Interfaces\IGitHubPlugin.cs" />
     <Compile Include="Interfaces\IHelpPlugin.cs" />
     <Compile Include="Interfaces\IMessageBusHost.cs" />
+    <Compile Include="Interfaces\IStatusBarMessenger.cs" />
     <Compile Include="Interfaces\IStatusBarMessager.cs" />
     <Compile Include="Interfaces\IXrmToolBoxPluginControl.cs" />
     <Compile Include="Interfaces\IPayPalPlugin.cs" />
