@@ -154,6 +154,19 @@ namespace MsCrmTools.Translator
                 StyleMutator.FontDefaults(sheet);
             }
 
+            if (settings.ExportCharts && emds.Count > 0)
+            {
+                if (worker != null && worker.WorkerReportsProgress)
+                {
+                    worker.ReportProgress(0, "Exporting Charts translations...");
+                }
+
+                var sheet = file.Workbook.Worksheets.Add("Charts");
+                var vt = new VisualizationTranslation();
+                vt.Export(emds, lcids, sheet, service);
+                StyleMutator.FontDefaults(sheet);
+            }
+
             if ((settings.ExportForms || settings.ExportFormTabs || settings.ExportFormSections || settings.ExportFormFields) && emds.Count > 0)
             {
                 if (worker != null && worker.WorkerReportsProgress)
@@ -304,6 +317,16 @@ namespace MsCrmTools.Translator
 
                         var vt = new ViewTranslation();
                         vt.Import(sheet, service);
+                        break;
+
+                    case "Charts":
+                        if (worker != null && worker.WorkerReportsProgress)
+                        {
+                            worker.ReportProgress(0, "Importing charts translations...");
+                        }
+
+                        var vt2 = new VisualizationTranslation();
+                        vt2.Import(sheet, service);
                         break;
 
                     case "Forms":

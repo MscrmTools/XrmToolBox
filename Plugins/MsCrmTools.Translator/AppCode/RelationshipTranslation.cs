@@ -16,6 +16,7 @@ namespace MsCrmTools.Translator.AppCode
             var rmds = new List<OneToManyRelationshipMetadata>();
 
             var rowsCount = sheet.Dimension.Rows;
+            var cellsCount = sheet.Dimension.Columns;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
                 var rmd = rmds.FirstOrDefault(r => r.MetadataId == new Guid(ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString()));
@@ -53,11 +54,15 @@ namespace MsCrmTools.Translator.AppCode
 
                 rmd.AssociatedMenuConfiguration.Label = new Label();
 
-                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                while (columnIndex < cellsCount)
                 {
-                    rmd.AssociatedMenuConfiguration.Label.LocalizedLabels.Add(
-                        new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(),
-                            int.Parse(sheet.Cells[0, columnIndex].Value.ToString())));
+                    if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    {
+                        var lcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
+                        var label = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
+
+                        rmd.AssociatedMenuConfiguration.Label.LocalizedLabels.Add(new LocalizedLabel(label, lcid));
+                    }
 
                     columnIndex++;
                 }

@@ -83,6 +83,7 @@ namespace MsCrmTools.Translator
                         ExportGlobalOptionSet = chkExportGlobalOptSet.Checked,
                         ExportOptionSet = chkExportPicklists.Checked,
                         ExportViews = chkExportViews.Checked,
+                        ExportCharts = chkExportCharts.Checked,
                         ExportCustomizedRelationships = chkExportCustomizedRelationships.Checked,
                         ExportSiteMap = chkExportSiteMap.Checked,
                         ExportDashboards = chkExportDashboards.Checked,

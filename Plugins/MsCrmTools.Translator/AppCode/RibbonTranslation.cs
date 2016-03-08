@@ -71,14 +71,14 @@ namespace MsCrmTools.Translator.AppCode
         public void Import(ExcelWorksheet sheet, IOrganizationService service)
         {
             var rowsCount = sheet.Dimension.Rows;
-
+            var cellsCount = sheet.Dimension.Columns;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
                 var xml = new StringBuilder(string.Format("<LocLabel Id=\"{0}\"><Titles>", ZeroBasedSheet.Cell(sheet, rowI, 2).Value));
 
                 var columnIndex = 3;
 
-                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                while (columnIndex < cellsCount)
                 {
                     xml.Append(string.Format("<Title description=\"{0}\" languagecode=\"{1}\"/>",
                                              ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value,
