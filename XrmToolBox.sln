@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox", "XrmToolBox\XrmToolBox.csproj", "{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console.Test", "Console.Test\Console.Test.csproj", "{7D7B8DFB-A4FC-4249-BE09-666039D53375}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{1A7814D2-1185-484E-92CC-7DD71DDE6488}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Referenced Assemblies", "Referenced Assemblies", "{000015F3-36AB-4D7F-A281-DB88FBCE71EA}"
@@ -96,14 +94,6 @@ Global
 		{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}.Release|x86.ActiveCfg = Release|Any CPU
-		{7D7B8DFB-A4FC-4249-BE09-666039D53375}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D7B8DFB-A4FC-4249-BE09-666039D53375}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D7B8DFB-A4FC-4249-BE09-666039D53375}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{7D7B8DFB-A4FC-4249-BE09-666039D53375}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{7D7B8DFB-A4FC-4249-BE09-666039D53375}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D7B8DFB-A4FC-4249-BE09-666039D53375}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7D7B8DFB-A4FC-4249-BE09-666039D53375}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{7D7B8DFB-A4FC-4249-BE09-666039D53375}.Release|x86.ActiveCfg = Release|Any CPU
 		{CAD450A3-C85A-45F7-9F65-0D3226DFF5B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CAD450A3-C85A-45F7-9F65-0D3226DFF5B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAD450A3-C85A-45F7-9F65-0D3226DFF5B4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
