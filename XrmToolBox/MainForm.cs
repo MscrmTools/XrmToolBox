@@ -43,6 +43,9 @@ namespace XrmToolBox
 
         public MainForm(string[] args)
         {
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+
             if (args.Length > 0)
             {
                 this.initialConnectionName = ExtractSwitchValue("/connection:", ref args);
