@@ -433,143 +433,140 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
 
                 var emdDisplayNameLabel = emd.DisplayName.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
 
-                if (emdDisplayNameLabel != null)
+                var sheet = AddWorkSheet(emdDisplayNameLabel == null ? "N/A" : emdDisplayNameLabel.Label, emd.SchemaName);
+
+                if (!settings.AddEntitiesSummary)
                 {
-                    var sheet = AddWorkSheet(emdDisplayNameLabel == null ? "N/A" : emdDisplayNameLabel.Label, emd.SchemaName);
-
-                    if (!settings.AddEntitiesSummary)
-                    {
-                        AddEntityMetadata(emd, sheet);
-                    }
-
-                    if (settings.AddFormLocation)
-                    {
-                        currentEntityForms = MetadataHelper.RetrieveEntityFormList(emd.LogicalName, service);
-                    }
-
-                    List<AttributeMetadata> amds = new List<AttributeMetadata>();
-
-                    switch (settings.AttributesSelection)
-                    {
-                        case AttributeSelectionOption.AllAttributes:
-                            amds = emd.Attributes.ToList();
-                            break;
-
-                        case AttributeSelectionOption.AttributesOptionSet:
-                            amds =
-                                emd.Attributes.Where(
-                                    x => x.AttributeType != null && (x.AttributeType.Value == AttributeTypeCode.Boolean
-                                                                     || x.AttributeType.Value == AttributeTypeCode.Picklist
-                                                                     || x.AttributeType.Value == AttributeTypeCode.State
-                                                                     || x.AttributeType.Value == AttributeTypeCode.Status)).ToList();
-                            break;
-
-                        case AttributeSelectionOption.AttributeManualySelected:
-
-                            amds =
-                                emd.Attributes.Where(
-                                    x =>
-                                    settings.EntitiesToProceed.FirstOrDefault(y => y.Name == emd.LogicalName).Attributes.Contains(
-                                        x.LogicalName)).ToList();
-                            break;
-
-                        case AttributeSelectionOption.AttributesOnForm:
-
-                            // If no forms selected, we search attributes in all forms
-                            if (entity.Forms.Count == 0)
-                            {
-                                foreach (var form in entity.FormsDefinitions)
-                                {
-                                    var tempStringDoc = form.GetAttributeValue<string>("formxml");
-                                    var tempDoc = new XmlDocument();
-                                    tempDoc.LoadXml(tempStringDoc);
-
-                                    amds.AddRange(emd.Attributes.Where(x =>
-                                        tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") !=
-                                        null));
-                                }
-                            }
-                            else
-                            {
-                                // else we parse selected forms
-                                foreach (var formId in entity.Forms)
-                                {
-                                    var form = entity.FormsDefinitions.FirstOrDefault(f => f.Id == formId);
-                                    var tempStringDoc = form.GetAttributeValue<string>("formxml");
-                                    var tempDoc = new XmlDocument();
-                                    tempDoc.LoadXml(tempStringDoc);
-
-                                    amds.AddRange(emd.Attributes.Where(x =>
-                                        tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") !=
-                                        null));
-                                }
-                            }
-
-                            break;
-
-                        case AttributeSelectionOption.AttributesNotOnForm:
-                            // If no forms selected, we search attributes in all forms
-                            if (entity.Forms.Count == 0)
-                            {
-                                foreach (var form in entity.FormsDefinitions)
-                                {
-                                    var tempStringDoc = form.GetAttributeValue<string>("formxml");
-                                    var tempDoc = new XmlDocument();
-                                    tempDoc.LoadXml(tempStringDoc);
-
-                                    amds.AddRange(emd.Attributes.Where(x =>
-                                        tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") ==
-                                        null));
-                                }
-                            }
-                            else
-                            {
-                                // else we parse selected forms
-                                foreach (var formId in entity.Forms)
-                                {
-                                    var form = entity.FormsDefinitions.FirstOrDefault(f => f.Id == formId);
-                                    var tempStringDoc = form.GetAttributeValue<string>("formxml");
-                                    var tempDoc = new XmlDocument();
-                                    tempDoc.LoadXml(tempStringDoc);
-
-                                    amds.AddRange(emd.Attributes.Where(x =>
-                                        tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") ==
-                                        null));
-                                }
-                            }
-
-                            break;
-                    }
-
-
-                    if (settings.Prefixes != null && settings.Prefixes.Count > 0)
-                    {
-                        var filteredAmds = new List<AttributeMetadata>();
-
-                        foreach (var prefix in settings.Prefixes)
-                        {
-                            filteredAmds.AddRange(amds.Where(a => a.LogicalName.StartsWith(prefix) /*|| a.IsCustomAttribute.Value == false*/));
-                        }
-
-                        amds = filteredAmds;
-                    }
-
-                    if (amds.Any())
-                    {
-                        foreach (var amd in amds.Distinct(new AttributeMetadataComparer()).OrderBy(a => a.LogicalName))
-                        {
-                            AddAttribute(emd.Attributes.FirstOrDefault(x => x.LogicalName == amd.LogicalName), sheet);
-                        }
-                    }
-                    else
-                    {
-                        Write("no attributes to display", sheet, 1, !settings.AddEntitiesSummary ? 10 : 1);
-                    }
-
-                    sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
-
-                    processed++;
+                    AddEntityMetadata(emd, sheet);
                 }
+
+                if (settings.AddFormLocation)
+                {
+                    currentEntityForms = MetadataHelper.RetrieveEntityFormList(emd.LogicalName, service);
+                }
+
+                List<AttributeMetadata> amds = new List<AttributeMetadata>();
+
+                switch (settings.AttributesSelection)
+                {
+                    case AttributeSelectionOption.AllAttributes:
+                        amds = emd.Attributes.ToList();
+                        break;
+
+                    case AttributeSelectionOption.AttributesOptionSet:
+                        amds =
+                            emd.Attributes.Where(
+                                x => x.AttributeType != null && (x.AttributeType.Value == AttributeTypeCode.Boolean
+                                                                 || x.AttributeType.Value == AttributeTypeCode.Picklist
+                                                                 || x.AttributeType.Value == AttributeTypeCode.State
+                                                                 || x.AttributeType.Value == AttributeTypeCode.Status)).ToList();
+                        break;
+
+                    case AttributeSelectionOption.AttributeManualySelected:
+
+                        amds =
+                            emd.Attributes.Where(
+                                x =>
+                                settings.EntitiesToProceed.FirstOrDefault(y => y.Name == emd.LogicalName).Attributes.Contains(
+                                    x.LogicalName)).ToList();
+                        break;
+
+                    case AttributeSelectionOption.AttributesOnForm:
+
+                        // If no forms selected, we search attributes in all forms
+                        if (entity.Forms.Count == 0)
+                        {
+                            foreach (var form in entity.FormsDefinitions)
+                            {
+                                var tempStringDoc = form.GetAttributeValue<string>("formxml");
+                                var tempDoc = new XmlDocument();
+                                tempDoc.LoadXml(tempStringDoc);
+
+                                amds.AddRange(emd.Attributes.Where(x =>
+                                    tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") !=
+                                    null));
+                            }
+                        }
+                        else
+                        {
+                            // else we parse selected forms
+                            foreach (var formId in entity.Forms)
+                            {
+                                var form = entity.FormsDefinitions.FirstOrDefault(f => f.Id == formId);
+                                var tempStringDoc = form.GetAttributeValue<string>("formxml");
+                                var tempDoc = new XmlDocument();
+                                tempDoc.LoadXml(tempStringDoc);
+
+                                amds.AddRange(emd.Attributes.Where(x =>
+                                    tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") !=
+                                    null));
+                            }
+                        }
+
+                        break;
+
+                    case AttributeSelectionOption.AttributesNotOnForm:
+                        // If no forms selected, we search attributes in all forms
+                        if (entity.Forms.Count == 0)
+                        {
+                            foreach (var form in entity.FormsDefinitions)
+                            {
+                                var tempStringDoc = form.GetAttributeValue<string>("formxml");
+                                var tempDoc = new XmlDocument();
+                                tempDoc.LoadXml(tempStringDoc);
+
+                                amds.AddRange(emd.Attributes.Where(x =>
+                                    tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") ==
+                                    null));
+                            }
+                        }
+                        else
+                        {
+                            // else we parse selected forms
+                            foreach (var formId in entity.Forms)
+                            {
+                                var form = entity.FormsDefinitions.FirstOrDefault(f => f.Id == formId);
+                                var tempStringDoc = form.GetAttributeValue<string>("formxml");
+                                var tempDoc = new XmlDocument();
+                                tempDoc.LoadXml(tempStringDoc);
+
+                                amds.AddRange(emd.Attributes.Where(x =>
+                                    tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") ==
+                                    null));
+                            }
+                        }
+
+                        break;
+                }
+
+
+                if (settings.Prefixes != null && settings.Prefixes.Count > 0)
+                {
+                    var filteredAmds = new List<AttributeMetadata>();
+
+                    foreach (var prefix in settings.Prefixes)
+                    {
+                        filteredAmds.AddRange(amds.Where(a => a.LogicalName.StartsWith(prefix) /*|| a.IsCustomAttribute.Value == false*/));
+                    }
+
+                    amds = filteredAmds;
+                }
+
+                if (amds.Any())
+                {
+                    foreach (var amd in amds.Distinct(new AttributeMetadataComparer()).OrderBy(a => a.LogicalName))
+                    {
+                        AddAttribute(emd.Attributes.FirstOrDefault(x => x.LogicalName == amd.LogicalName), sheet);
+                    }
+                }
+                else
+                {
+                    Write("no attributes to display", sheet, 1, !settings.AddEntitiesSummary ? 10 : 1);
+                }
+
+                sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
+
+                processed++;
             }
 
             if (settings.AddEntitiesSummary)
