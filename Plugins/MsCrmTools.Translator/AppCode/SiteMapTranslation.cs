@@ -87,7 +87,7 @@ namespace MsCrmTools.Translator.AppCode
                         {
                             subArea.Titles.Add(int.Parse(titleNode.Attributes["LCID"].Value), titleNode.Attributes["Title"].Value);
                         }
-                        foreach (XmlNode titleNode in groupNode.SelectNodes("Descriptions/Description"))
+                        foreach (XmlNode titleNode in subAreaNode.SelectNodes("Descriptions/Description"))
                         {
                             subArea.Descriptions.Add(int.Parse(titleNode.Attributes["LCID"].Value), titleNode.Attributes["Description"].Value);
                         }
