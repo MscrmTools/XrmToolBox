@@ -96,6 +96,17 @@ namespace XrmToolBox.AppCode
                                     Description = html,
                                     Version = version
                                 };
+
+                                response = await client.GetAsync(lastRelease.assets_url).ConfigureAwait(continueOnCapturedContext: false);
+                                response.EnsureSuccessStatusCode();
+                                if (response.IsSuccessStatusCode)
+                                {
+                                    data = response.Content.ReadAsStringAsync();
+                                    jSserializer = new JavaScriptSerializer();
+                                    var assets = jSserializer.Deserialize<List<Asset>>(data.Result);
+
+                                    Cpi.PackageUrl = assets.First(a => a.name.ToLower() == "xrmtoolbox.zip").browser_download_url;
+                                }
                             }
                         }
                     }

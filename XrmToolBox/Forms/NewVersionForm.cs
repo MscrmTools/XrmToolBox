@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace XrmToolBox.Forms
@@ -35,7 +37,33 @@ namespace XrmToolBox.Forms
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
-            Process.Start(downloadUrl.ToString());
+            var currentAssemblyFolder = new FileInfo(Assembly.GetExecutingAssembly().FullName).DirectoryName;
+            var updaterFile = Path.Combine(currentAssemblyFolder, "XrmToolBox.AutoUpdater.exe");
+
+            if (File.Exists(updaterFile))
+            {
+                var destinationFolder =
+                    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                        "XrmToolBox");
+                if (!Directory.Exists(destinationFolder))
+                {
+                    Directory.CreateDirectory(destinationFolder);
+                }
+
+                var destinationFile = Path.Combine(destinationFolder, "XrmToolBox.AutoUpdater.exe");
+
+                File.Copy(updaterFile, destinationFile, true);
+
+                Process.Start(destinationFile, downloadUrl.ToString());
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            else
+            {
+                MessageBox.Show(this,
+                    "Auto updater has not been found! The new version will be downloaded only. Please install it manually");
+                Process.Start(downloadUrl.ToString());
+            }
         }
     }
 }

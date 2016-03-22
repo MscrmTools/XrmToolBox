@@ -75,6 +75,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GapConsulting.PowerBIOption
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.ChartManager", "Plugins\MsCrmTools.ChartManager\MsCrmTools.ChartManager.csproj", "{DE964006-6E7B-4FA8-9D04-07B2E1819774}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox.AutoUpdater", "XrmToolBox.AutoUpdater\XrmToolBox.AutoUpdater.csproj", "{564C72C8-586E-4218-B6B3-F464F7C3903A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -378,6 +380,18 @@ Global
 		{DE964006-6E7B-4FA8-9D04-07B2E1819774}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DE964006-6E7B-4FA8-9D04-07B2E1819774}.Release|x86.ActiveCfg = Release|Any CPU
 		{DE964006-6E7B-4FA8-9D04-07B2E1819774}.Release|x86.Build.0 = Release|Any CPU
+		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Debug|x86.Build.0 = Debug|Any CPU
+		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Release|x86.ActiveCfg = Release|Any CPU
+		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
