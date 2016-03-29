@@ -1,9 +1,11 @@
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+
 
 namespace MsCrmTools.UserRolesManager.AppCode
 {
@@ -60,7 +62,12 @@ namespace MsCrmTools.UserRolesManager.AppCode
 
         public List<Entity> GetRoles()
         {
-            return service.RetrieveMultiple(new QueryExpression("role") { ColumnSet = new ColumnSet(true) }).Entities.ToList();
+            OrganizationServiceContext org = new OrganizationServiceContext(service);
+            return (from role in org.CreateQuery("role")
+                    select new Entity("role")
+                    {
+                        Id = role.Id
+                    }).ToList();
         }
 
         public Guid GetRootBusinessUnitId()
