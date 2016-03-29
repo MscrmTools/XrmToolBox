@@ -207,4 +207,3 @@
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.Button btnResetToDefault;
     }
-}
