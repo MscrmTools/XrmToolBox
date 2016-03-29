@@ -194,7 +194,6 @@
             // 
             this.attributeListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.attributeListView.FullRowSelect = true;
-            this.attributeListView.GridLines = true;
             this.attributeListView.HideSelection = false;
             this.attributeListView.Location = new System.Drawing.Point(0, 0);
             this.attributeListView.Name = "attributeListView";
@@ -277,7 +276,6 @@
             // 
             this.OneToManyListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.OneToManyListView.FullRowSelect = true;
-            this.OneToManyListView.GridLines = true;
             this.OneToManyListView.HideSelection = false;
             this.OneToManyListView.Location = new System.Drawing.Point(0, 0);
             this.OneToManyListView.Name = "OneToManyListView";
@@ -359,7 +357,6 @@
             // 
             this.manyToOneListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.manyToOneListView.FullRowSelect = true;
-            this.manyToOneListView.GridLines = true;
             this.manyToOneListView.HideSelection = false;
             this.manyToOneListView.Location = new System.Drawing.Point(0, 0);
             this.manyToOneListView.Name = "manyToOneListView";
@@ -441,7 +438,6 @@
             // 
             this.manyToManyListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.manyToManyListView.FullRowSelect = true;
-            this.manyToManyListView.GridLines = true;
             this.manyToManyListView.HideSelection = false;
             this.manyToManyListView.Location = new System.Drawing.Point(0, 0);
             this.manyToManyListView.Name = "manyToManyListView";
@@ -523,7 +519,6 @@
             // 
             this.privilegeListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.privilegeListView.FullRowSelect = true;
-            this.privilegeListView.GridLines = true;
             this.privilegeListView.HideSelection = false;
             this.privilegeListView.Location = new System.Drawing.Point(0, 0);
             this.privilegeListView.Name = "privilegeListView";
