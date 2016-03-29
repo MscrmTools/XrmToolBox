@@ -146,7 +146,6 @@
             this.columnHeader1});
             this.attributeListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.attributeListView.FullRowSelect = true;
-            this.attributeListView.GridLines = true;
             this.attributeListView.Location = new System.Drawing.Point(0, 132);
             this.attributeListView.Name = "attributeListView";
             this.attributeListView.Size = new System.Drawing.Size(844, 363);
