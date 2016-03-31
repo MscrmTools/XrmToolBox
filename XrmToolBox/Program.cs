@@ -18,9 +18,11 @@ namespace XrmToolBox
         {
             "McTools.Xrm.Connection.dll",
             "McTools.Xrm.Connection.WinForms.dll",
+            "Microsoft.IdentityModel.dll",
             "Microsoft.Crm.Sdk.Proxy.dll",
             "Microsoft.Xrm.Sdk.Deployment.dll",
             "Microsoft.Xrm.Sdk.dll",
+            "Microsoft.Xrm.Sdk.Workflow.dll",
             "Microsoft.Xrm.Tooling.Connector.dll",
             "Microsoft.Xrm.Tooling.CrmConnectControl.dll",
             "Microsoft.IdentityModel.Clients.ActiveDirectory.dll",

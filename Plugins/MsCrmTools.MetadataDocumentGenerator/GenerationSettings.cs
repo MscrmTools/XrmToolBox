@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace MsCrmTools.MetadataDocumentGenerator
 {
@@ -37,7 +38,10 @@ namespace MsCrmTools.MetadataDocumentGenerator
 
         public List<string> Attributes { get; set; }
         public List<Guid> Forms { get; set; }
+
+        [XmlIgnore]
         public List<Entity> FormsDefinitions { get; set; }
+
         public string Name { get; set; }
     }
 
@@ -84,10 +88,10 @@ namespace MsCrmTools.MetadataDocumentGenerator
         public static GenerationSettings CreateFromFile()
         {
             var ofDialog = new OpenFileDialog
-                               {
-                                   Title = "Select a settings file",
-                                   Filter = "Metadata Document Generator settings file|*.msettings"
-                               };
+            {
+                Title = "Select a settings file",
+                Filter = "Metadata Document Generator settings file|*.msettings"
+            };
 
             if (ofDialog.ShowDialog() == DialogResult.OK)
             {
@@ -107,28 +111,28 @@ namespace MsCrmTools.MetadataDocumentGenerator
         public object Clone()
         {
             return new GenerationSettings
-                       {
-                           AddAuditInformation = AddAuditInformation,
-                           AddEntitiesSummary = AddEntitiesSummary,
-                           AddFieldSecureInformation = AddFieldSecureInformation,
-                           AddRequiredLevelInformation = AddRequiredLevelInformation,
-                           AddValidForAdvancedFind = AddValidForAdvancedFind,
-                           DisplayNamesLangugageCode = DisplayNamesLangugageCode,
-                           EntitiesToProceed = EntitiesToProceed,
-                           FilePath = FilePath,
-                           IncludeOnlyAttributesOnForms = IncludeOnlyAttributesOnForms,
-                           AttributesSelection = AttributesSelection,
-                           Prefixes = Prefixes
-                       };
+            {
+                AddAuditInformation = AddAuditInformation,
+                AddEntitiesSummary = AddEntitiesSummary,
+                AddFieldSecureInformation = AddFieldSecureInformation,
+                AddRequiredLevelInformation = AddRequiredLevelInformation,
+                AddValidForAdvancedFind = AddValidForAdvancedFind,
+                DisplayNamesLangugageCode = DisplayNamesLangugageCode,
+                EntitiesToProceed = EntitiesToProceed,
+                FilePath = FilePath,
+                IncludeOnlyAttributesOnForms = IncludeOnlyAttributesOnForms,
+                AttributesSelection = AttributesSelection,
+                Prefixes = Prefixes
+            };
         }
 
         public void SaveToFile()
         {
             var sfDialog = new SaveFileDialog
-                               {
-                                   Title = "Select location to save the settings",
-                                   Filter = "Metadata Document Generator settings file|*.msettings"
-                               };
+            {
+                Title = "Select location to save the settings",
+                Filter = "Metadata Document Generator settings file|*.msettings"
+            };
 
             if (sfDialog.ShowDialog() == DialogResult.OK)
             {

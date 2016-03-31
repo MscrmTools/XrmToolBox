@@ -8,7 +8,6 @@ using McTools.Xrm.Connection.WinForms;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -43,6 +42,9 @@ namespace XrmToolBox
 
         public MainForm(string[] args)
         {
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+
             if (args.Length > 0)
             {
                 this.initialConnectionName = ExtractSwitchValue("/connection:", ref args);
@@ -205,8 +207,12 @@ namespace XrmToolBox
                     {
                         this.Invoke(new Action(() =>
                         {
-                            var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description, "MsCrmTools", "XrmToolBox");
-                            nvForm.ShowDialog(this);
+                            var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description, "MsCrmTools", "XrmToolBox", new Uri(cvc.Cpi.PackageUrl));
+                            var result = nvForm.ShowDialog(this);
+                            if (result == DialogResult.OK)
+                            {
+                                Close();
+                            }
                         }));
                     }
                 }
@@ -302,10 +308,10 @@ namespace XrmToolBox
                 this.LaunchWelcomeDialog()
             };
 
-            if (!Debugger.IsAttached)
-            {
-                tasks.Add(this.LaunchVersionCheck());
-            }
+            //if (!Debugger.IsAttached)
+            //{
+            tasks.Add(this.LaunchVersionCheck());
+            //}
 
             if (!string.IsNullOrEmpty(this.initialConnectionName))
             {

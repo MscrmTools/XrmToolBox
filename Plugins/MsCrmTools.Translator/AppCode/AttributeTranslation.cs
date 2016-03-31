@@ -141,6 +141,7 @@ namespace MsCrmTools.Translator.AppCode
             var amds = new List<MasterAttribute>();
 
             var rowsCount = sheet.Dimension.Rows;
+            var cellsCount = sheet.Dimension.Columns;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
                 var amd = amds.FirstOrDefault(a => a.Amd.MetadataId == new Guid(ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString()));
@@ -172,10 +173,14 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     amd.Amd.DisplayName = new Label();
 
-                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    while (columnIndex < cellsCount)
                     {
-                        amd.Amd.DisplayName.LocalizedLabels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString())));
-
+                        if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                        {
+                            var lcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
+                            var label = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
+                            amd.Amd.DisplayName.LocalizedLabels.Add(new LocalizedLabel(label, lcid));
+                        }
                         columnIndex++;
                     }
                 }
@@ -183,9 +188,14 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     amd.Amd.Description = new Label();
 
-                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    while (columnIndex < cellsCount)
                     {
-                        amd.Amd.Description.LocalizedLabels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString())));
+                        if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                        {
+                            var lcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
+                            var label = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
+                            amd.Amd.Description.LocalizedLabels.Add(new LocalizedLabel(label, lcid));
+                        }
 
                         columnIndex++;
                     }

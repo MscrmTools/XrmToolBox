@@ -32,10 +32,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WebresourceTreeView));
             this.ilWebResourceTypes = new System.Windows.Forms.ImageList(this.components);
             this.pnlBottom = new System.Windows.Forms.Panel();
-            this.chkSelectAll = new System.Windows.Forms.CheckBox();
-            this.llExpandAll = new System.Windows.Forms.LinkLabel();
-            this.lblSeparator = new System.Windows.Forms.Label();
             this.llCollapseAll = new System.Windows.Forms.LinkLabel();
+            this.lblSeparator = new System.Windows.Forms.Label();
+            this.llExpandAll = new System.Windows.Forms.LinkLabel();
+            this.chkSelectAll = new System.Windows.Forms.CheckBox();
             this.tv = new System.Windows.Forms.TreeView();
             this.pnlBottom.SuspendLayout();
             this.SuspendLayout();
@@ -69,16 +69,27 @@
             this.pnlBottom.Size = new System.Drawing.Size(409, 17);
             this.pnlBottom.TabIndex = 85;
             // 
-            // chkSelectAll
+            // llCollapseAll
             // 
-            this.chkSelectAll.AutoSize = true;
-            this.chkSelectAll.Dock = System.Windows.Forms.DockStyle.Left;
-            this.chkSelectAll.Location = new System.Drawing.Point(0, 0);
-            this.chkSelectAll.Name = "chkSelectAll";
-            this.chkSelectAll.Size = new System.Drawing.Size(116, 17);
-            this.chkSelectAll.TabIndex = 84;
-            this.chkSelectAll.Text = "Select/Unselect all";
-            this.chkSelectAll.UseVisualStyleBackColor = true;
+            this.llCollapseAll.AutoSize = true;
+            this.llCollapseAll.Dock = System.Windows.Forms.DockStyle.Right;
+            this.llCollapseAll.Location = new System.Drawing.Point(284, 0);
+            this.llCollapseAll.Name = "llCollapseAll";
+            this.llCollapseAll.Size = new System.Drawing.Size(60, 13);
+            this.llCollapseAll.TabIndex = 87;
+            this.llCollapseAll.TabStop = true;
+            this.llCollapseAll.Text = "Collapse all";
+            this.llCollapseAll.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llCollapseAll_LinkClicked);
+            // 
+            // lblSeparator
+            // 
+            this.lblSeparator.AutoSize = true;
+            this.lblSeparator.Dock = System.Windows.Forms.DockStyle.Right;
+            this.lblSeparator.Location = new System.Drawing.Point(344, 0);
+            this.lblSeparator.Name = "lblSeparator";
+            this.lblSeparator.Size = new System.Drawing.Size(9, 13);
+            this.lblSeparator.TabIndex = 86;
+            this.lblSeparator.Text = "|";
             // 
             // llExpandAll
             // 
@@ -92,27 +103,17 @@
             this.llExpandAll.Text = "Expand all";
             this.llExpandAll.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llExpandAll_LinkClicked);
             // 
-            // lblSeparator
+            // chkSelectAll
             // 
-            this.lblSeparator.AutoSize = true;
-            this.lblSeparator.Dock = System.Windows.Forms.DockStyle.Right;
-            this.lblSeparator.Location = new System.Drawing.Point(344, 0);
-            this.lblSeparator.Name = "lblSeparator";
-            this.lblSeparator.Size = new System.Drawing.Size(9, 13);
-            this.lblSeparator.TabIndex = 86;
-            this.lblSeparator.Text = "|";
-            // 
-            // llCollapseAll
-            // 
-            this.llCollapseAll.AutoSize = true;
-            this.llCollapseAll.Dock = System.Windows.Forms.DockStyle.Right;
-            this.llCollapseAll.Location = new System.Drawing.Point(284, 0);
-            this.llCollapseAll.Name = "llCollapseAll";
-            this.llCollapseAll.Size = new System.Drawing.Size(60, 13);
-            this.llCollapseAll.TabIndex = 87;
-            this.llCollapseAll.TabStop = true;
-            this.llCollapseAll.Text = "Collapse all";
-            this.llCollapseAll.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llCollapseAll_LinkClicked);
+            this.chkSelectAll.AutoSize = true;
+            this.chkSelectAll.Dock = System.Windows.Forms.DockStyle.Left;
+            this.chkSelectAll.Location = new System.Drawing.Point(0, 0);
+            this.chkSelectAll.Name = "chkSelectAll";
+            this.chkSelectAll.Size = new System.Drawing.Size(116, 17);
+            this.chkSelectAll.TabIndex = 84;
+            this.chkSelectAll.Text = "Select/Unselect all";
+            this.chkSelectAll.UseVisualStyleBackColor = true;
+            this.chkSelectAll.Click += new System.EventHandler(this.chkSelectAll_Click);
             // 
             // tv
             // 

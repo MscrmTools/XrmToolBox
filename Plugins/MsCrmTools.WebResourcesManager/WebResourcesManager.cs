@@ -4,6 +4,7 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
 using MsCrmTools.WebResourcesManager.AppCode;
 using MsCrmTools.WebResourcesManager.DelegatesHelpers;
 using MsCrmTools.WebResourcesManager.Forms;
@@ -458,7 +459,7 @@ namespace MsCrmTools.WebResourcesManager
         {
             try
             {
-                SaveWebResourcesToDisk(webresourceTreeView1.GetAllResources(), true);
+                SaveWebResourcesToDisk(webresourceTreeView1.GetCheckedResources(), true);
             }
             catch (Exception error)
             {
@@ -655,6 +656,68 @@ namespace MsCrmTools.WebResourcesManager
                 return;
 
             webresourceTreeView1.SelectedNode.Tag = ((WebResource)webresourceTreeView1.SelectedNode.Tag).ShowProperties(Service, this);
+        }
+
+        private void TsmiRenameWebResourceClick(object sender, EventArgs e)
+        {
+            if (TreeViewHelper.CheckOnlyThisNode(webresourceTreeView1))
+                return;
+
+            var webResource = webresourceTreeView1.GetCheckedResources().FirstOrDefault();
+            var name1 = (string)webResource.Entity["name"];
+
+            var renameWebResource = new RenameWebResourceDialog(name1);
+            renameWebResource.StartPosition = FormStartPosition.CenterParent;
+
+            if (renameWebResource.ShowDialog() == DialogResult.OK)
+            {
+                var name2 = renameWebResource.WebResourceName;
+
+                if (name1 != name2)
+                {
+                    var command = new WorkAsyncInfo(string.Format("Trying to rename '{0}' to '{1}'", name1, name2),
+                    (a) =>
+                    {
+                        // Check if resource with the same name already exists
+                        var query = new QueryExpression("webresource");
+                        query.Criteria.AddCondition("name", ConditionOperator.Equal, name2);
+
+                        var result = Service.RetrieveMultiple(query).Entities.Count;
+
+                        if (result == 0)
+                        {
+                            try
+                            {
+                                // It's safe to update web resource. Direct rename is not possible,
+                                // but deletion with different name, but same ID will have same result
+                                Service.Delete(webResource.Entity.LogicalName, webResource.Entity.Id);
+                                webResource.Entity.Attributes["name"] = name2;
+                                Service.Create(webResource.Entity);
+                            }
+                            catch
+                            {
+                                Invoke(new Action(() =>
+                                {
+                                    MessageBox.Show("It was impossible to rename web resource!", Resources.MessageBox_ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }));
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("Resource with the same name already exist, rename impossible!", Resources.MessageBox_ErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    })
+                    {
+                        PostWorkCallBack = (a) =>
+                        {
+                            webresourceTreeView1.DisplayWebResources();
+                            webresourceTreeView1.Enabled = true;
+                        }
+                    };
+
+                    WorkAsync(command);
+                }
+            }
         }
 
         private void UpdateFromDiskToolStripMenuItemClick(object sender, EventArgs e)
@@ -1156,6 +1219,7 @@ namespace MsCrmTools.WebResourcesManager
         {
             switch (webresourceTreeView1.SelectedNode.ImageIndex)
             {
+                // Top-level: publisher prefix
                 case 0:
                     {
                         addNewFolderToolStripMenuItem.Enabled = true;
@@ -1169,6 +1233,7 @@ namespace MsCrmTools.WebResourcesManager
                         updateFromDiskToolStripMenuItem.Enabled = true;
                         copyWebResourceNameToClipboardToolStripMenuItem.Enabled = false;
                         getLatestVersionToolStripMenuItem.Enabled = false;
+                        renameWebResourceToolStripMenuItem.Enabled = false;
 
                         expandincludingChildrensToolStripMenuItem.Visible = !webresourceTreeView1.SelectedNode.IsExpanded;
                         collapseIncludingChildrensToolStripMenuItem.Visible = webresourceTreeView1.SelectedNode.IsExpanded;
@@ -1176,6 +1241,7 @@ namespace MsCrmTools.WebResourcesManager
                     }
                     break;
 
+                // First-level: virtual folder
                 case 1:
                     {
                         addNewFolderToolStripMenuItem.Enabled = true;
@@ -1189,6 +1255,7 @@ namespace MsCrmTools.WebResourcesManager
                         updateFromDiskToolStripMenuItem.Enabled = true;
                         copyWebResourceNameToClipboardToolStripMenuItem.Enabled = false;
                         getLatestVersionToolStripMenuItem.Enabled = false;
+                        renameWebResourceToolStripMenuItem.Enabled = false;
 
                         expandincludingChildrensToolStripMenuItem.Visible = !webresourceTreeView1.SelectedNode.IsExpanded;
                         collapseIncludingChildrensToolStripMenuItem.Visible = webresourceTreeView1.SelectedNode.IsExpanded;
@@ -1196,6 +1263,7 @@ namespace MsCrmTools.WebResourcesManager
                     }
                     break;
 
+                // Default-level: resource name
                 default:
                     {
                         addNewFolderToolStripMenuItem.Enabled = false;
@@ -1209,6 +1277,7 @@ namespace MsCrmTools.WebResourcesManager
                         updateFromDiskToolStripMenuItem.Enabled = false;
                         copyWebResourceNameToClipboardToolStripMenuItem.Enabled = true;
                         getLatestVersionToolStripMenuItem.Enabled = true;
+                        renameWebResourceToolStripMenuItem.Enabled = true;
 
                         expandincludingChildrensToolStripMenuItem.Visible = false;
                         collapseIncludingChildrensToolStripMenuItem.Visible = false;

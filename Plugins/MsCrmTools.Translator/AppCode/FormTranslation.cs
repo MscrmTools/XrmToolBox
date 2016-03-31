@@ -259,6 +259,7 @@ namespace MsCrmTools.Translator.AppCode
         public void ImportFormName(ExcelWorksheet sheet, IOrganizationService service)
         {
             var rowsCount = sheet.Dimension.Rows;
+            var cellsCount = sheet.Dimension.Columns;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
                 var currentFormId = new Guid(ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString());
@@ -272,10 +273,16 @@ namespace MsCrmTools.Translator.AppCode
                 var labels = new List<LocalizedLabel>();
 
                 var columnIndex = 4;
-                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                while (columnIndex < cellsCount)
                 {
-                    var currentLcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
-                    labels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), currentLcid));
+                    if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    {
+                        var lcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
+                        var label = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
+
+                        labels.Add(new LocalizedLabel(label, lcid));
+                    }
+
                     columnIndex++;
                 }
 
@@ -296,7 +303,7 @@ namespace MsCrmTools.Translator.AppCode
         public void PrepareFormLabels(ExcelWorksheet sheet, IOrganizationService service, List<Entity> forms)
         {
             var rowsCount = sheet.Dimension.Rows;
-
+            var cellsCount = sheet.Dimension.Columns;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
                 var labelId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
@@ -320,10 +327,16 @@ namespace MsCrmTools.Translator.AppCode
                 if (cellNode != null)
                 {
                     var columnIndex = 8;
-                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    while (columnIndex < cellsCount)
                     {
-                        UpdateXmlNode(cellNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
+                        if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                        {
+                            var lcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
+                            var label = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
+
+                            UpdateXmlNode(cellNode, lcid, label);
+                        }
+
                         columnIndex++;
                     }
                 }
@@ -335,7 +348,7 @@ namespace MsCrmTools.Translator.AppCode
         public void PrepareFormSections(ExcelWorksheet sheet, IOrganizationService service, List<Entity> forms)
         {
             var rowsCount = sheet.Dimension.Rows;
-
+            var cellsCount = sheet.Dimension.Columns;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
                 var sectionId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
@@ -359,10 +372,16 @@ namespace MsCrmTools.Translator.AppCode
                 if (sectionNode != null)
                 {
                     var columnIndex = 6;
-                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    while (columnIndex < cellsCount)
                     {
-                        UpdateXmlNode(sectionNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
+                        if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                        {
+                            var lcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
+                            var label = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
+
+                            UpdateXmlNode(sectionNode, lcid, label);
+                        }
+
                         columnIndex++;
                     }
                 }
@@ -374,7 +393,7 @@ namespace MsCrmTools.Translator.AppCode
         public void PrepareFormTabs(ExcelWorksheet sheet, IOrganizationService service, List<Entity> forms)
         {
             var rowsCount = sheet.Dimension.Rows;
-
+            var cellsCount = sheet.Dimension.Columns;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
                 var tabId = ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString();
@@ -396,10 +415,16 @@ namespace MsCrmTools.Translator.AppCode
                 if (tabNode != null)
                 {
                     var columnIndex = 5;
-                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    while (columnIndex < cellsCount)
                     {
-                        UpdateXmlNode(tabNode, ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
+                        if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                        {
+                            var lcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
+                            var label = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
+
+                            UpdateXmlNode(tabNode, lcid, label);
+                        }
+
                         columnIndex++;
                     }
                 }

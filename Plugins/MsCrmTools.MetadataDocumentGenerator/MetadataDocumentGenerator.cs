@@ -286,7 +286,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
 
             if (e.Item.Checked)
             {
-                currentEntity.Attributes.Add(lvAttributes.CheckedItems[0].Tag.ToString());
+                currentEntity.Attributes.Add(e.Item.Tag.ToString());
             }
             else
             {
@@ -452,7 +452,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
                 currentEntity = settings.EntitiesToProceed.FirstOrDefault(x => x.Name == currentEntityName);
             }
 
-            var form = (Entity)lvForms.CheckedItems[0].Tag;
+            var form = (Entity)e.Item.Tag;
 
             if (e.Item.Checked)
             {

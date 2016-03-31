@@ -132,7 +132,13 @@ namespace XrmToolBox
                     host.OnOutgoingMessage += MainForm_MessageBroker;
                 }
 
-                var statusBarMessager = pluginControl as IStatusBarMessager;
+                var statusBarMessager_old = pluginControl as IStatusBarMessager;
+                if (statusBarMessager_old != null)
+                {
+                    statusBarMessager_old.SendMessageToStatusBar += StatusBarMessager_SendMessageToStatusBar;
+                }
+
+                var statusBarMessager = pluginControl as IStatusBarMessenger;
                 if (statusBarMessager != null)
                 {
                     statusBarMessager.SendMessageToStatusBar += StatusBarMessager_SendMessageToStatusBar;
