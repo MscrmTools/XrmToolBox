@@ -18,7 +18,7 @@ namespace MsCrmTools.Iconator
             pBox.Width = img.Width;
             pBox.Height = img.Height;
 
-            if(img.Width < 300 && img.Height < 300)
+            if (img.Width < 300 && img.Height < 300)
             {
                 pBox.Location = new Point(Width / 2 - img.Width / 2, Height / 2 - img.Height / 2);
             }

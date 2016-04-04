@@ -47,19 +47,17 @@
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Controls.Add(this.lblTitle);
             this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(656, 74);
+            this.panel1.Size = new System.Drawing.Size(492, 60);
             this.panel1.TabIndex = 0;
             // 
             // lblTitle
             // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI Light", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitle.Location = new System.Drawing.Point(24, 16);
-            this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblTitle.Location = new System.Drawing.Point(18, 13);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(202, 32);
+            this.lblTitle.Size = new System.Drawing.Size(163, 25);
             this.lblTitle.TabIndex = 0;
             this.lblTitle.Text = "Folder and options";
             // 
@@ -69,11 +67,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.txtFolderPath);
             this.groupBox1.Controls.Add(this.btnBrowse);
-            this.groupBox1.Location = new System.Drawing.Point(16, 81);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Location = new System.Drawing.Point(12, 66);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox1.Size = new System.Drawing.Size(613, 66);
+            this.groupBox1.Size = new System.Drawing.Size(460, 54);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Folder";
@@ -82,19 +78,17 @@
             // 
             this.txtFolderPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtFolderPath.Location = new System.Drawing.Point(8, 26);
-            this.txtFolderPath.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtFolderPath.Location = new System.Drawing.Point(6, 21);
             this.txtFolderPath.Name = "txtFolderPath";
-            this.txtFolderPath.Size = new System.Drawing.Size(535, 22);
+            this.txtFolderPath.Size = new System.Drawing.Size(402, 20);
             this.txtFolderPath.TabIndex = 1;
             // 
             // btnBrowse
             // 
             this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowse.Location = new System.Drawing.Point(552, 23);
-            this.btnBrowse.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnBrowse.Location = new System.Drawing.Point(414, 19);
             this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(53, 28);
+            this.btnBrowse.Size = new System.Drawing.Size(40, 23);
             this.btnBrowse.TabIndex = 0;
             this.btnBrowse.Text = "...";
             this.btnBrowse.UseVisualStyleBackColor = true;
@@ -103,10 +97,10 @@
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCancel.Location = new System.Drawing.Point(529, 324);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(397, 263);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(100, 28);
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 3;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
@@ -115,10 +109,9 @@
             // btnOk
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOk.Location = new System.Drawing.Point(421, 324);
-            this.btnOk.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnOk.Location = new System.Drawing.Point(316, 263);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(100, 28);
+            this.btnOk.Size = new System.Drawing.Size(75, 23);
             this.btnOk.TabIndex = 4;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
@@ -126,24 +119,23 @@
             // 
             // webResourceTypePicker1
             // 
-            this.webResourceTypePicker1.Location = new System.Drawing.Point(16, 155);
-            this.webResourceTypePicker1.Margin = new System.Windows.Forms.Padding(4);
+            this.webResourceTypePicker1.Location = new System.Drawing.Point(12, 126);
             this.webResourceTypePicker1.Name = "webResourceTypePicker1";
-            this.webResourceTypePicker1.Size = new System.Drawing.Size(613, 160);
+            this.webResourceTypePicker1.Size = new System.Drawing.Size(460, 130);
             this.webResourceTypePicker1.TabIndex = 5;
             // 
             // CustomFolderBrowserDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(645, 364);
+            this.CancelButton = this.btnCancel;
+            this.ClientSize = new System.Drawing.Size(484, 296);
             this.Controls.Add(this.webResourceTypePicker1);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "CustomFolderBrowserDialog";

@@ -29,7 +29,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd
             get { return collection.GetType(); }
         }
 
-        public override string DisplayName
+        public override string Description
         {
             get
             {
@@ -38,7 +38,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd
             }
         }
 
-        public override string Description
+        public override string DisplayName
         {
             get
             {
@@ -76,14 +76,14 @@ namespace MsCrmTools.MetadataBrowser.AppCode.LocalizedLabelMd
         {
         }
 
-        public override bool ShouldSerializeValue(object component)
-        {
-            return true;
-        }
-
         public override void SetValue(object component, object value)
         {
             // collection[index] = value;
+        }
+
+        public override bool ShouldSerializeValue(object component)
+        {
+            return true;
         }
     }
 }

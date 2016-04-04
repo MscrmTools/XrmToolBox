@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using System;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
 
 namespace MscrmTools.SyncFilterManager.Forms
 {
     public partial class RuleSelectionDialog : Form
     {
-        private string returnedTypeExpected;
         private bool isSystem;
+        private string returnedTypeExpected;
 
         public RuleSelectionDialog(IOrganizationService service, string returnedTypeExpected = null, bool isSystem = false)
         {
@@ -25,11 +25,6 @@ namespace MscrmTools.SyncFilterManager.Forms
         public Entity SelectedRule { private set; get; }
 
         public IOrganizationService Service { get; set; }
-
-        private void RuleSelectionDialog_Load(object sender, EventArgs e)
-        {
-            crmSystemViewList1.LoadSystemViews(returnedTypeExpected: returnedTypeExpected);
-        }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
@@ -50,6 +45,11 @@ namespace MscrmTools.SyncFilterManager.Forms
 
             DialogResult = DialogResult.OK;
             Close();
+        }
+
+        private void RuleSelectionDialog_Load(object sender, EventArgs e)
+        {
+            crmSystemViewList1.LoadSystemViews(returnedTypeExpected: returnedTypeExpected);
         }
     }
 }

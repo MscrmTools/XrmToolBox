@@ -9,20 +9,19 @@ namespace XrmToolBox.Forms
 {
     public partial class SupportScreen : Form
     {
-        public SupportScreen(string codeplexNote)
+        public SupportScreen()
         {
             InitializeComponent();
         }
-        
 
-       private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-       {
-           Process.Start("http://mscrmtools.blogspot.fr/p/xrmtoolbox-sponsoring.html");
-       }
+        private void linkClose_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Close();
+        }
 
-       private void linkClose_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-       {
-           Close();
-       }
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("http://mscrmtools.blogspot.fr/p/xrmtoolbox-sponsoring.html");
+        }
     }
 }

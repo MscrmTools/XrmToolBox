@@ -1,15 +1,14 @@
-﻿using System;
-using System.ComponentModel;
-using System.Drawing.Design;
-
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.MetadataBrowser.AppCode.LabelMd;
 using MsCrmTools.MetadataBrowser.AppCode.OptionMd;
+using System;
+using System.ComponentModel;
+using System.Drawing.Design;
 using OptionMetadataCollection = MsCrmTools.MetadataBrowser.AppCode.OptionMd.OptionMetadataCollection;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.OptionSetMd
 {
-    [TypeConverter(typeof (OptionSetAttributeMetadataInfoConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class OptionSetMetadataInfo
     {
         private readonly OptionSetMetadata amd;
@@ -19,13 +18,13 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OptionSetMd
             this.amd = amd;
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo Description
         {
             get { return new LabelInfo(amd.Description); }
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo DisplayName
         {
             get { return new LabelInfo(amd.DisplayName); }
@@ -36,25 +35,20 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OptionSetMd
             get { return amd.ExtensionData != null ? amd.ExtensionData.ToString() : ""; }
         }
 
-        public string Name
-        {
-            get { return amd.Name; }
-        }
-
         public string IntroducedVersion
         {
             get { return amd.IntroducedVersion; }
         }
 
-        public bool IsCustomOptionSet
-        {
-            get { return amd.IsCustomOptionSet.HasValue && amd.IsCustomOptionSet.Value; }
-        }
-
-        [TypeConverter(typeof(BooleanManagedPropertyInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public BooleanManagedPropertyInfo IsCustomizable
         {
             get { return new BooleanManagedPropertyInfo(amd.IsCustomizable); }
+        }
+
+        public bool IsCustomOptionSet
+        {
+            get { return amd.IsCustomOptionSet.HasValue && amd.IsCustomOptionSet.Value; }
         }
 
         public bool IsGlobal
@@ -72,13 +66,13 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OptionSetMd
             get { return amd.MetadataId.Value; }
         }
 
-        public OptionSetType OptionSetType
+        public string Name
         {
-            get { return amd.OptionSetType.Value; }
+            get { return amd.Name; }
         }
 
-        [Editor(typeof (CustomCollectionEditor), typeof (UITypeEditor))]
-        [TypeConverter(typeof (OptionMetadataCollectionConverter))]
+        [Editor(typeof(CustomCollectionEditor), typeof(UITypeEditor))]
+        [TypeConverter(typeof(OptionMetadataCollectionConverter))]
         public OptionMetadataCollection Options
         {
             get
@@ -91,6 +85,16 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OptionSetMd
 
                 return collec;
             }
+        }
+
+        public OptionSetType OptionSetType
+        {
+            get { return amd.OptionSetType.Value; }
+        }
+
+        public override string ToString()
+        {
+            return amd.Name;
         }
     }
 }

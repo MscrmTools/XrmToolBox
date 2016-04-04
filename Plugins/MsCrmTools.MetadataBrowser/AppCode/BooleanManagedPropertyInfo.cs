@@ -1,9 +1,9 @@
-﻿using System.ComponentModel;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
+using System.ComponentModel;
 
 namespace MsCrmTools.MetadataBrowser.AppCode
 {
-    [TypeConverter(typeof(BooleanManagedPropertyInfoConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class BooleanManagedPropertyInfo
     {
         private readonly BooleanManagedProperty property;
@@ -18,14 +18,19 @@ namespace MsCrmTools.MetadataBrowser.AppCode
             get { return property.CanBeChanged; }
         }
 
+        public string ManagedPropertyLogicalName
+        {
+            get { return property.ManagedPropertyLogicalName; }
+        }
+
         public bool Value
         {
             get { return property.Value; }
         }
 
-        public string ManagedPropertyLogicalName
+        public override string ToString()
         {
-            get { return property.ManagedPropertyLogicalName; }
+            return string.Format("Value: {0} / Can be changed: {1}", Value, CanBeChanged);
         }
     }
 }

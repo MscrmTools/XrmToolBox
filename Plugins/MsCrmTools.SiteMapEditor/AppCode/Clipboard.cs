@@ -15,12 +15,16 @@ namespace MsCrmTools.SiteMapEditor.AppCode
     /// </summary>
     internal class Clipboard
     {
-        #region Variables 
+        #region Variables
+
+        private bool _hasBeenPasted;
+
+        private bool _isCutAction;
 
         /// <summary>
-        /// TreeNode in memory
+        /// Original index of treenode in memory
         /// </summary>
-        private TreeNode _tempTreeNode;
+        private int _originalIndex;
 
         /// <summary>
         /// Original parent of treenode in memory
@@ -28,47 +32,36 @@ namespace MsCrmTools.SiteMapEditor.AppCode
         private TreeNode _originalParentNode;
 
         /// <summary>
-        /// Original index of treenode in memory
+        /// TreeNode in memory
         /// </summary>
-        private int _originalIndex;
-
-        private bool _isCutAction;
-
-        private bool _hasBeenPasted;
+        private TreeNode _tempTreeNode;
 
         #endregion Variables
 
         #region Methods
 
         /// <summary>
-        /// Checks if the in-memory TreeNode can be pasted to the selected TreeNode
+        /// Copies the selected TreeNode
         /// </summary>
-        /// <param name="targetNodeName">TreeNode currently selected</param>
-        /// <returns>Flag that indicates if the in-memory TreeNode can be pasted</returns>
-        internal bool IsValidForPaste(string targetNodeName)
+        /// <param name="node">selected TreeNode</param>
+        /// <param name="isCut">Flag that indicates if the copy action is a cut action</param>
+        internal void Copy(TreeNode node, bool isCut = false)
         {
-            if (_tempTreeNode != null)
+            // If there was already a TreeNode in memory which is different
+            // from the currently selected one, we replace the current in-memory
+            // TreeNode to its original location
+            if (!_hasBeenPasted && _tempTreeNode != null && _tempTreeNode != node && _isCutAction)
             {
-                switch (targetNodeName)
-                {
-                    case "SiteMap":
-                        return _tempTreeNode.Text.StartsWith("Area");
-                    case "Area":
-                        return _tempTreeNode.Text.StartsWith("Group") || _tempTreeNode.Text.StartsWith("Descriptions") || _tempTreeNode.Text.StartsWith("Titles");
-                    case "Group":
-                        return _tempTreeNode.Text.StartsWith("SubArea") || _tempTreeNode.Text.StartsWith("Descriptions") || _tempTreeNode.Text.StartsWith("Titles");
-                    case "SubArea":
-                        return _tempTreeNode.Text.StartsWith("Privilege") || _tempTreeNode.Text.StartsWith("Descriptions") || _tempTreeNode.Text.StartsWith("Titles");
-                    case "Titles":
-                        return _tempTreeNode.Text.StartsWith("Title");
-                    case "Descriptions":
-                        return _tempTreeNode.Text.StartsWith("Description");
-                    default:
-                        return false;
-                }
+                _originalParentNode.Nodes.Insert(_originalIndex, _tempTreeNode);
             }
-         
-            return false;
+
+            // Saves the current selected TreeNode information
+            _tempTreeNode = node;
+            _originalParentNode = node.Parent;
+            _originalIndex = node.Index;
+
+            _isCutAction = isCut;
+            _hasBeenPasted = false;
         }
 
         /// <summary>
@@ -83,27 +76,40 @@ namespace MsCrmTools.SiteMapEditor.AppCode
         }
 
         /// <summary>
-        /// Copies the selected TreeNode
+        /// Checks if the in-memory TreeNode can be pasted to the selected TreeNode
         /// </summary>
-        /// <param name="node">selected TreeNode</param>
-        /// <param name="isCut">Flag that indicates if the copy action is a cut action</param>
-        internal void Copy(TreeNode node, bool isCut = false)
+        /// <param name="targetNodeName">TreeNode currently selected</param>
+        /// <returns>Flag that indicates if the in-memory TreeNode can be pasted</returns>
+        internal bool IsValidForPaste(string targetNodeName)
         {
-            // If there was already a TreeNode in memory which is different
-            // from the currently selected one, we replace the current in-memory
-            // TreeNode to its original location
-            if (!_hasBeenPasted  && _tempTreeNode != null && _tempTreeNode != node && _isCutAction)
+            if (_tempTreeNode != null)
             {
-                _originalParentNode.Nodes.Insert(_originalIndex, _tempTreeNode);
-            }
-             
-            // Saves the current selected TreeNode information
-            _tempTreeNode = node;
-            _originalParentNode = node.Parent;
-            _originalIndex = node.Index;
+                switch (targetNodeName)
+                {
+                    case "SiteMap":
+                        return _tempTreeNode.Text.StartsWith("Area");
 
-            _isCutAction = isCut;
-            _hasBeenPasted = false;
+                    case "Area":
+                        return _tempTreeNode.Text.StartsWith("Group") || _tempTreeNode.Text.StartsWith("Descriptions") || _tempTreeNode.Text.StartsWith("Titles");
+
+                    case "Group":
+                        return _tempTreeNode.Text.StartsWith("SubArea") || _tempTreeNode.Text.StartsWith("Descriptions") || _tempTreeNode.Text.StartsWith("Titles");
+
+                    case "SubArea":
+                        return _tempTreeNode.Text.StartsWith("Privilege") || _tempTreeNode.Text.StartsWith("Descriptions") || _tempTreeNode.Text.StartsWith("Titles");
+
+                    case "Titles":
+                        return _tempTreeNode.Text.StartsWith("Title");
+
+                    case "Descriptions":
+                        return _tempTreeNode.Text.StartsWith("Description");
+
+                    default:
+                        return false;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -121,7 +127,7 @@ namespace MsCrmTools.SiteMapEditor.AppCode
                 // of the same TreeNode in the TreeView
                 var clonedNode = (TreeNode)_tempTreeNode.Clone();
 
-                // If the target TreeNode already contains the in-memory TreeNode or 
+                // If the target TreeNode already contains the in-memory TreeNode or
                 // another TreeNode with the same Text, we need to change the name
                 if (targetNode.Nodes.ContainsKey(_tempTreeNode.Text.Replace(" ", "")))
                 {
@@ -137,7 +143,7 @@ namespace MsCrmTools.SiteMapEditor.AppCode
 
                 targetNode.Nodes.Add(clonedNode);
                 targetNode.TreeView.SelectedNode = clonedNode;
-                
+
                 // Clean the in-memory TreeNode
                 // tempTreeNode = null;
                 _hasBeenPasted = true;
@@ -145,6 +151,43 @@ namespace MsCrmTools.SiteMapEditor.AppCode
             else
             {
                 MessageBox.Show("You can't paste this item under the selected node!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void UpdateContentForCloning(TreeNode node)
+        {
+            var attributes = (Dictionary<string, string>)node.Tag;
+            var clonedAttributes = attributes.Keys.ToDictionary(key => key, key => attributes[key]);
+            clonedAttributes.Remove("ResourceId");
+            clonedAttributes.Remove("DescriptionResourceId");
+            node.Tag = clonedAttributes;
+
+            foreach (TreeNode childNode in node.Nodes)
+            {
+                UpdateContentForCloning(childNode);
+            }
+        }
+
+        /// <summary>
+        /// Updates all Ids for the current node tag
+        /// </summary>
+        /// <param name="node">Current treenode</param>
+        /// <param name="idPart"> </param>
+        private void UpdateIds(TreeNode node, ref long idPart)
+        {
+            var attributes = (Dictionary<string, string>)node.Tag;
+            if (attributes.ContainsKey("Id"))
+                attributes["Id"] = string.Format("{0}_{1}",
+                                                 attributes["Id"],
+                                                 idPart);
+
+            node.Tag = attributes;
+
+            idPart++;
+
+            foreach (TreeNode childNode in node.Nodes)
+            {
+                UpdateIds(childNode, ref idPart);
             }
         }
 
@@ -176,43 +219,6 @@ namespace MsCrmTools.SiteMapEditor.AppCode
                 return true;
             return false;
         }
-
-        /// <summary>
-        /// Updates all Ids for the current node tag
-        /// </summary>
-        /// <param name="node">Current treenode</param>
-        /// <param name="idPart"> </param>
-        private void UpdateIds(TreeNode node, ref long idPart)
-        {
-            var attributes = (Dictionary<string, string>)node.Tag;
-            if (attributes.ContainsKey("Id"))
-                attributes["Id"] = string.Format("{0}_{1}",
-                                                 attributes["Id"],
-                                                 idPart);
-
-            node.Tag = attributes;
-
-            idPart++;
-
-            foreach(TreeNode childNode in node.Nodes)
-            {
-                UpdateIds(childNode, ref idPart);
-            }
-        }
-
-       private void UpdateContentForCloning(TreeNode node)
-       {
-           var attributes = (Dictionary<string, string>)node.Tag;
-           var clonedAttributes = attributes.Keys.ToDictionary(key => key, key => attributes[key]);
-           clonedAttributes.Remove("ResourceId");
-           clonedAttributes.Remove("DescriptionResourceId");
-           node.Tag = clonedAttributes;
-
-           foreach(TreeNode childNode in node.Nodes)
-           {
-               UpdateContentForCloning(childNode);
-           }
-       }
 
         #endregion Methods
     }

@@ -3,13 +3,11 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows.Forms;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
-using Tanguy.WinForm.Utilities.DelegatesHelpers;
+using System;
+using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace MsCrmTools.SiteMapEditor.Forms
 {
@@ -47,7 +45,7 @@ namespace MsCrmTools.SiteMapEditor.Forms
             btnOK.Enabled = false;
             btnRefresh.Enabled = false;
             lstDashboards.Items.Clear();
-            
+
             // Run work
             var worker = new BackgroundWorker();
             worker.DoWork += worker_DoWork;
@@ -55,17 +53,65 @@ namespace MsCrmTools.SiteMapEditor.Forms
             worker.RunWorkerAsync();
         }
 
-
         #endregion Constructor
 
         #region Methods
 
-        void worker_DoWork(object sender, DoWorkEventArgs e)
+        private void BtnRefreshClick(object sender, EventArgs e)
         {
-           e.Result = GetDashboards();
+            FillValues();
         }
 
-        void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void btnWebResourcePickerCancel_Click(object sender, EventArgs e)
+        {
+            SelectedDashboard = null;
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
+        private void btnWebResourcePickerValidate_Click(object sender, EventArgs e)
+        {
+            if (lstDashboards.SelectedItems.Count > 0)
+            {
+                Entity dashboard = (Entity)lstDashboards.SelectedItems[0].Tag;
+                SelectedDashboard = dashboard; ;
+                DialogResult = DialogResult.OK;
+                Close();
+            }
+            else
+            {
+                MessageBox.Show(this, "Please select a web resource!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private EntityCollection GetDashboards()
+        {
+            var qe = new QueryExpression("systemform")
+            {
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                        {
+                            new ConditionExpression("type", ConditionOperator.Equal, 0)
+                        }
+                },
+                ColumnSet = { AllColumns = true }
+            };
+
+            return service.RetrieveMultiple(qe);
+        }
+
+        private void lstWebResources_DoubleClick(object sender, EventArgs e)
+        {
+            btnWebResourcePickerValidate_Click(null, null);
+        }
+
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            e.Result = GetDashboards();
+        }
+
+        private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Error != null)
             {
@@ -90,55 +136,6 @@ namespace MsCrmTools.SiteMapEditor.Forms
                 btnOK.Enabled = true;
                 btnRefresh.Enabled = true;
             }
-        }
-
-        private void BtnRefreshClick(object sender, EventArgs e)
-        {
-            FillValues();
-        }
-
-        private EntityCollection GetDashboards()
-        {
-                var qe = new QueryExpression("systemform")
-                {
-                    Criteria = new FilterExpression
-                    {
-                        Conditions =
-                        {
-                            new ConditionExpression("type", ConditionOperator.Equal, 0)
-                        }
-                    },
-                    ColumnSet = {AllColumns = true}
-                };
-
-           return service.RetrieveMultiple(qe);
-        }
-       
-        private void lstWebResources_DoubleClick(object sender, EventArgs e)
-        {
-            btnWebResourcePickerValidate_Click(null, null);
-        }
-
-        private void btnWebResourcePickerValidate_Click(object sender, EventArgs e)
-        {
-            if (lstDashboards.SelectedItems.Count > 0)
-            {
-                Entity dashboard = (Entity)lstDashboards.SelectedItems[0].Tag;
-                SelectedDashboard = dashboard; ;
-                DialogResult = DialogResult.OK;
-                Close();
-            }
-            else
-            {
-                MessageBox.Show(this, "Please select a web resource!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-        }
-
-        private void btnWebResourcePickerCancel_Click(object sender, EventArgs e)
-        {
-            SelectedDashboard = null;
-            DialogResult = DialogResult.Cancel;
-            Close();
         }
 
         #endregion Methods

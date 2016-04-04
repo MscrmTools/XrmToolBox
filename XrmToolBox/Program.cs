@@ -6,41 +6,32 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Microsoft.Win32;
 
 namespace XrmToolBox
 {
-    static class Program
+    internal static class Program
     {
-        /// <summary>
-        /// Point d'entrée principal de l'application.
-        /// </summary>
-        [STAThread]
-        static void Main()
+        private static readonly string[] rootFiles =
         {
-            try
-            {
-                if (!CheckRequiredAssemblies())
-                {
-                    return;
-                }
+            "McTools.Xrm.Connection.dll",
+            "McTools.Xrm.Connection.WinForms.dll",
+            "Microsoft.IdentityModel.dll",
+            "Microsoft.Crm.Sdk.Proxy.dll",
+            "Microsoft.Xrm.Sdk.Deployment.dll",
+            "Microsoft.Xrm.Sdk.dll",
+            "Microsoft.Xrm.Sdk.Workflow.dll",
+            "Microsoft.Xrm.Tooling.Connector.dll",
+            "Microsoft.Xrm.Tooling.CrmConnectControl.dll",
+            "Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+            "Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll",
+            "XrmToolBox.Extensibility.dll",
+            "McTools.StopAdvertisement.dll"
+        };
 
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new MainForm());
-            }
-            catch (Exception error)
-            {
-                const string lockedMessage = "One reason can be that at least one file is locked by Windows. Please unlock each locked files or unlock XrmToolBox.zip before extracting its content";
-                MessageBox.Show("An unexpected error occured: " + error + "\r\n\r\n" + lockedMessage, "Error", MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-            }
-        }
-
-        static bool CheckRequiredAssemblies()
+        private static bool CheckRequiredAssemblies()
         {
             try
             {
@@ -67,6 +58,58 @@ namespace XrmToolBox
                 }
 
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Point d'entrée principal de l'application.
+        /// </summary>
+        [STAThread]
+        private static void Main(string[] args)
+        {
+            try
+            {
+                if (!CheckRequiredAssemblies())
+                {
+                    return;
+                }
+
+                SearchAndDestroyPluginsInRootFolder();
+
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainForm(args));
+            }
+            catch (Exception error)
+            {
+                const string lockedMessage = "One reason can be that at least one file is locked by Windows. Please unlock each locked files or unlock XrmToolBox.zip before extracting its content";
+                MessageBox.Show("An unexpected error occured: " + error + "\r\n\r\n" + lockedMessage, "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+        }
+
+        private static void SearchAndDestroyPluginsInRootFolder()
+        {
+            var currentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Location).Directory;
+
+            if (currentDirectory == null)
+                return;
+
+            var unwantedFiles = currentDirectory.GetFiles("*.dll").Where(f => !rootFiles.Contains(f.Name)).ToList();
+
+            if (unwantedFiles.Any())
+            {
+                if (DialogResult.Yes == MessageBox.Show(
+                    string.Format(
+                        "The following unknown file(s) currently exist in the XrmToolBox root folder:\r\n{0}\r\n\r\nThese files could result in unexpected behaviors like preventing the latest version of plugins to load. Would you like to delete these files?",
+                        String.Join("\r\n", unwantedFiles.Select(f => "- " + f))), "Warning", MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning))
+                {
+                    foreach (var file in unwantedFiles)
+                    {
+                        File.Delete(file.FullName);
+                    }
+                }
             }
         }
     }

@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using System;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 
 namespace MsCrmTools.UserSettingsUtility.AppCode
 {
@@ -20,10 +20,10 @@ namespace MsCrmTools.UserSettingsUtility.AppCode
             {
                 throw new Exception("Cannot find node 'entity' in FetchXml");
             }
-            
+
             AddMissingCrmAttribute(xDoc, "firstname");
             AddMissingCrmAttribute(xDoc, "lastname");
-            
+
             return service.RetrieveMultiple(new FetchExpression(xDoc.ToString()));
         }
 

@@ -1,18 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Crm.Sdk.Messages;
+using Microsoft.VisualBasic.FileIO;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.IO;
+using System.Linq;
+using System.ServiceModel;
+using System.Text;
 
 namespace Javista.XrmToolBox.ImportNN.AppCode
 {
-    class ImportEngine
+    public class ResultEventArgs : EventArgs
+    {
+        public int LineNumber;
+        public string Message;
+    }
+
+    internal class ImportEngine
     {
         private readonly string filePath;
         private readonly IOrganizationService service;
@@ -26,8 +31,8 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
         }
 
         public event EventHandler<ResultEventArgs> RaiseError;
-        public event EventHandler<ResultEventArgs> RaiseSuccess;
 
+        public event EventHandler<ResultEventArgs> RaiseSuccess;
 
         public void Import()
         {
@@ -40,7 +45,20 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                     lineNumber++;
                     try
                     {
-                        var data = line.Split(';');
+                        string[] data = new string[2];
+
+                        using (TextFieldParser parser = new TextFieldParser(new StringReader(line))
+                        {
+                            HasFieldsEnclosedInQuotes = true
+                        })
+                        {
+                            parser.SetDelimiters(",");
+
+                            while (!parser.EndOfData)
+                            {
+                                data = parser.ReadFields();
+                            }
+                        }
 
                         Guid firstGuid = Guid.Empty;
                         Guid secondGuid = Guid.Empty;
@@ -113,7 +131,7 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                             {
                                 secondGuid = records.Entities.First().Id;
                             }
-                            else if(records.Entities.Count > 1)
+                            else if (records.Entities.Count > 1)
                             {
                                 RaiseError(this,
                                     new ResultEventArgs
@@ -137,22 +155,37 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                             }
                         }
 
-                        var request = new AssociateRequest
+                        if (settings.Relationship == "listcontact_association"
+                            || settings.Relationship == "listaccount_association"
+                            || settings.Relationship == "listlead_association")
                         {
-                            Target = new EntityReference(settings.FirstEntity, firstGuid),
-                            Relationship = new Relationship(settings.Relationship),
-                            RelatedEntities = new EntityReferenceCollection
+                            var request = new AddListMembersListRequest
                             {
-                                new EntityReference(settings.SecondEntity, secondGuid)
-                            }
-                        };
+                                ListId = settings.FirstEntity == "list" ? firstGuid : secondGuid,
+                                MemberIds = new[] { settings.FirstEntity == "list" ? secondGuid : firstGuid }
+                            };
 
-                        if (request.Target.LogicalName == request.RelatedEntities.First().LogicalName)
-                        {
-                            request.Relationship.PrimaryEntityRole = EntityRole.Referenced;
+                            service.Execute(request);
                         }
+                        else
+                        {
+                            var request = new AssociateRequest
+                            {
+                                Target = new EntityReference(settings.FirstEntity, firstGuid),
+                                Relationship = new Relationship(settings.Relationship),
+                                RelatedEntities = new EntityReferenceCollection
+                                {
+                                    new EntityReference(settings.SecondEntity, secondGuid)
+                                }
+                            };
 
-                        service.Execute(request);
+                            if (request.Target.LogicalName == request.RelatedEntities.First().LogicalName)
+                            {
+                                request.Relationship.PrimaryEntityRole = EntityRole.Referenced;
+                            }
+
+                            service.Execute(request);
+                        }
 
                         OnRaiseSuccess(new ResultEventArgs { LineNumber = lineNumber });
                     }
@@ -168,7 +201,6 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                         }
                     }
                 }
-                
             }
         }
 
@@ -191,11 +223,5 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                 handler(this, e);
             }
         }
-    }
-
-    public class ResultEventArgs : EventArgs
-    {
-        public int LineNumber;
-        public string Message;
     }
 }

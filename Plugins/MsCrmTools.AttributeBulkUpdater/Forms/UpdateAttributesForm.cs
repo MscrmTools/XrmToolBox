@@ -1,8 +1,11 @@
-﻿// PROJECT : MsCrmTools.AttributeBulkUpdater
+// PROJECT : MsCrmTools.AttributeBulkUpdater
 // This project was developed by Tanguy Touzard
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,9 +13,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
-using Microsoft.Xrm.Sdk.Metadata;
 using XrmToolBox;
 
 namespace MsCrmTools.AttributeBulkUpdater.Forms
@@ -23,28 +23,28 @@ namespace MsCrmTools.AttributeBulkUpdater.Forms
     public partial class UpdateAttributesForm : Form
     {
         #region Variables
-    
+
         /// <summary>
         /// Crm Organization service
         /// </summary>
-        readonly IOrganizationService innerService;
+        private readonly IOrganizationService innerService;
 
         /// <summary>
         /// Background worker for attributes update
         /// </summary>
-        BackgroundWorker bwUpdateAttributes;
+        private BackgroundWorker bwUpdateAttributes;
 
         /// <summary>
         /// Item update result
         /// </summary>
-        enum Result
+        private enum Result
         {
             Success,
             Warning,
             Error
         }
 
-        #endregion
+        #endregion Variables
 
         #region Constructor
 
@@ -63,14 +63,19 @@ namespace MsCrmTools.AttributeBulkUpdater.Forms
             UpdateAttributes(us);
         }
 
-        #endregion
+        #endregion Constructor
 
         #region Handlers
 
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
         private void bwUpdateAttributes_DoWork(object sender, DoWorkEventArgs e)
         {
-            var bw = (BackgroundWorker) sender;
-            var arg = (Tuple<List<ListViewItem>, UpdateSettings>) e.Argument;
+            var bw = (BackgroundWorker)sender;
+            var arg = (Tuple<List<ListViewItem>, UpdateSettings>)e.Argument;
             var itemsToManage = arg.Item1;
             var us = arg.Item2;
             int attributesProcessed = 0;
@@ -78,7 +83,7 @@ namespace MsCrmTools.AttributeBulkUpdater.Forms
             // We process the items
             foreach (ListViewItem item in itemsToManage)
             {
-                var amd = (AttributeMetadata) item.Tag;
+                var amd = (AttributeMetadata)item.Tag;
 
                 try
                 {
@@ -96,45 +101,45 @@ namespace MsCrmTools.AttributeBulkUpdater.Forms
                             amd.IsAuditEnabled.Value = item.Checked;
                         }
 
+                        if (us.UpdateRequirementLevel && us.RequirementLevelValue.HasValue)
+                        {
+                            amd.RequiredLevel = new AttributeRequiredLevelManagedProperty(us.RequirementLevelValue.Value);
+                        }
+
                         innerService.Execute(new UpdateAttributeRequest
                         {
                             Attribute = amd,
                             EntityName = amd.EntityLogicalName
                         });
 
-                        AddItemToInformationList(bw,Convert.ToInt32(attributesProcessed*100/itemsToManage.Count), amd.DisplayName.UserLocalizedLabel.Label, null, Result.Success);
+                        AddItemToInformationList(bw, Convert.ToInt32(attributesProcessed * 100 / itemsToManage.Count), amd.DisplayName.UserLocalizedLabel.Label, null, Result.Success);
                     }
                     else
                     {
-                        AddItemToInformationList(bw,Convert.ToInt32(attributesProcessed*100/itemsToManage.Count), amd.DisplayName.UserLocalizedLabel.Label, "Attribute not customizable!",
+                        AddItemToInformationList(bw, Convert.ToInt32(attributesProcessed * 100 / itemsToManage.Count), amd.DisplayName.UserLocalizedLabel.Label, "Attribute not customizable!",
                             Result.Warning);
                     }
                 }
                 catch (Exception error)
                 {
                     string errorMessage = CrmExceptionHelper.GetErrorMessage(error, false);
-                    AddItemToInformationList(bw, Convert.ToInt32(attributesProcessed*100/itemsToManage.Count),amd.DisplayName.UserLocalizedLabel.Label, errorMessage, Result.Error);
+                    AddItemToInformationList(bw, Convert.ToInt32(attributesProcessed * 100 / itemsToManage.Count), amd.DisplayName.UserLocalizedLabel.Label, errorMessage, Result.Error);
                 }
             }
         }
 
-        void bwUpdateAttributes_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void bwUpdateAttributes_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             pbUpdate.Value = e.ProgressPercentage;
-            lvInformation.Items.Add((ListViewItem) e.UserState);
+            lvInformation.Items.Add((ListViewItem)e.UserState);
         }
 
-        void bwUpdateAttributes_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void bwUpdateAttributes_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             btnClose.Enabled = true;
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        #endregion
+        #endregion Handlers
 
         #region Methods
 
@@ -147,11 +152,12 @@ namespace MsCrmTools.AttributeBulkUpdater.Forms
             // We need to process only items that have their IsValidForAdvancedFind
             // property updated
             var itemsToManage = (from item in us.Items
-                let amd = (AttributeMetadata) item.Tag
-                where
-                    amd.IsValidForAdvancedFind.Value != item.Checked && us.UpdateValidForAdvancedFind ||
-                    amd.IsAuditEnabled.Value != item.Checked && us.UpdateAuditIsEnabled
-                select item).ToList();
+                                 let amd = (AttributeMetadata)item.Tag
+                                 where
+                                     amd.IsValidForAdvancedFind.Value != item.Checked && us.UpdateValidForAdvancedFind ||
+                                     amd.IsAuditEnabled.Value != item.Checked && us.UpdateAuditIsEnabled ||
+                                     (item.Checked && amd.RequiredLevel.Value != AttributeRequiredLevel.SystemRequired && amd.RequiredLevel.Value != us.RequirementLevelValue && us.UpdateRequirementLevel)
+                                 select item).ToList();
 
             if (itemsToManage.Count == 0)
             {
@@ -167,7 +173,7 @@ namespace MsCrmTools.AttributeBulkUpdater.Forms
             bwUpdateAttributes.DoWork += bwUpdateAttributes_DoWork;
             bwUpdateAttributes.WorkerReportsProgress = true;
             bwUpdateAttributes.WorkerSupportsCancellation = true;
-            bwUpdateAttributes.RunWorkerAsync(new Tuple<List<ListViewItem>,UpdateSettings>(itemsToManage, us));
+            bwUpdateAttributes.RunWorkerAsync(new Tuple<List<ListViewItem>, UpdateSettings>(itemsToManage, us));
         }
 
         /// <summary>
@@ -191,11 +197,13 @@ namespace MsCrmTools.AttributeBulkUpdater.Forms
                         item.ImageIndex = 0;
                     }
                     break;
+
                 case Result.Warning:
                     {
                         item.ImageIndex = 1;
                     }
                     break;
+
                 case Result.Error:
                     {
                         item.ImageIndex = 2;
@@ -235,6 +243,6 @@ namespace MsCrmTools.AttributeBulkUpdater.Forms
             }
         }
 
-        #endregion
+        #endregion Methods
     }
 }

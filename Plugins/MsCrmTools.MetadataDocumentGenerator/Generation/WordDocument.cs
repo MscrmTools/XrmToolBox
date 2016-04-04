@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Windows.Forms;
-using System.Xml;
-using GemBox.Document;
+﻿using GemBox.Document;
 using GemBox.Document.Tables;
 using GemBox.LicenseKey;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.MetadataDocumentGenerator.Helper;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
+using System.Windows.Forms;
+using System.Xml;
 using BorderStyle = GemBox.Document.BorderStyle;
 using Orientation = GemBox.Document.Orientation;
 
@@ -26,22 +26,25 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
         /// </summary>
         private readonly DocumentModel _innerDocument;
 
+        private readonly List<EntityMetadata> emdCache;
+
+        private ParagraphStyle _cellContent;
+
+        private ParagraphStyle _cellHeader;
+
+        private ListStyle _numberList;
+
         /// <summary>
         /// Generation Settings
         /// </summary>
         private GenerationSettings _settings;
-        private BackgroundWorker worker;
 
-        private readonly List<EntityMetadata> emdCache;
-        private IEnumerable<Entity> currentEntityForms; 
-
+        private TableCellFormat _tcfContent;
+        private TableCellFormat _tcfHeader;
         private ParagraphStyle _title1;
         private ParagraphStyle _title2;
-        private ParagraphStyle _cellHeader;
-        private ParagraphStyle _cellContent;
-        private ListStyle _numberList;
-        private TableCellFormat _tcfHeader;
-        private TableCellFormat _tcfContent;
+        private IEnumerable<Entity> currentEntityForms;
+        private BackgroundWorker worker;
 
         #endregion Variables
 
@@ -63,7 +66,6 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
             }
             catch (Exception error)
             {
-
                 MessageBox.Show(error.ToString());
             }
         }
@@ -83,286 +85,13 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
 
         #region Methods
 
-        private void ReportProgress(int percentage, string message)
-        {
-            if (worker.WorkerReportsProgress)
-                worker.ReportProgress(percentage, message);
-        }
-
-        public void Generate(IOrganizationService service)
-        {
-
-            int totalEntities = _settings.EntitiesToProceed.Count;
-            int processed = 0;
-
-            foreach (var entity in _settings.EntitiesToProceed)
-            {
-                ReportProgress(processed * 100 / totalEntities, string.Format("Processing entity '{0}'...", entity.Name));
-             
-                var emd = emdCache.FirstOrDefault(x => x.LogicalName == entity.Name);
-                if (emd == null)
-                {
-                    var reRequest = new RetrieveEntityRequest
-                                        {
-                                            LogicalName = entity.Name,
-                                            EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
-                                        };
-                    var reResponse = (RetrieveEntityResponse) service.Execute(reRequest);
-
-                    emdCache.Add(reResponse.EntityMetadata);
-                    emd = reResponse.EntityMetadata;
-                }
-
-                AddEntityMetadata(emd);
-
-                var doc = MetadataHelper.RetrieveEntityForms(emd.LogicalName, service);
-
-                IEnumerable<AttributeMetadata> amds = new List<AttributeMetadata>();
-
-                if (_settings.AddFormLocation)
-                {
-                    currentEntityForms = MetadataHelper.RetrieveEntityFormList(emd.LogicalName, service);
-                }
-
-                switch (_settings.AttributesSelection)
-                {
-                    case AttributeSelectionOption.AllAttributes:
-                        amds = emd.Attributes;
-                        break;
-                    case AttributeSelectionOption.AttributesOptionSet:
-                        amds =
-                            emd.Attributes.Where(
-                                x => x.AttributeType != null && (x.AttributeType.Value == AttributeTypeCode.Boolean
-                                                                 || x.AttributeType.Value == AttributeTypeCode.Picklist
-                                                                 || x.AttributeType.Value == AttributeTypeCode.State
-                                                                 || x.AttributeType.Value == AttributeTypeCode.Status));
-                        break;
-                    case AttributeSelectionOption.AttributeManualySelected:
-                        amds =
-                            emd.Attributes.Where(
-                                x =>
-                                _settings.EntitiesToProceed.First(y => y.Name == emd.LogicalName).Attributes.Contains(
-                                    x.LogicalName));
-                        break;
-                    case AttributeSelectionOption.AttributesOnForm:
-                        amds =
-                            emd.Attributes.Where(
-                                x =>
-                                doc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") != null);
-                        break;
-                    case AttributeSelectionOption.AttributesNotOnForm:
-                        amds =
-                            emd.Attributes.Where(
-                                x =>
-                                doc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") == null);
-                        break;
-                }
-
-                if (Settings.Prefixes != null && Settings.Prefixes.Count > 0)
-                {
-                    var filteredAmds = new List<AttributeMetadata>();
-
-                    foreach (var prefix in Settings.Prefixes)
-                    {
-                        filteredAmds.AddRange(amds.Where(a => a.LogicalName.StartsWith(prefix) || a.IsCustomAttribute.Value == false));
-                    }
-
-                    amds = filteredAmds;
-                }
-
-
-                AddAttribute(amds);
-                processed++;
-            }
-            SaveDocument(_settings.FilePath);
-        }
-
-        private void InitializesStyles()
-        {
-            _title1 = (ParagraphStyle) Style.CreateStyle(StyleTemplateType.Heading1, _innerDocument);
-            _title1.CharacterFormat.FontName = "Segoe UI";
-            _title1.CharacterFormat.FontColor = new Color(18, 97, 225);
-
-            _title2 = (ParagraphStyle) Style.CreateStyle(StyleTemplateType.Heading2, _innerDocument);
-            _title2.CharacterFormat.FontName = "Segoe UI";
-            _title2.CharacterFormat.FontColor = new Color(59, 59, 59);
-
-            _innerDocument.Styles.Add(_title1);
-            _innerDocument.Styles.Add(_title2);
-
-            _cellHeader = (ParagraphStyle) Style.CreateStyle(StyleTemplateType.Normal, _innerDocument);
-            _cellHeader.Name = "MyHeaderCells";
-            _cellHeader.CharacterFormat.Bold = true;
-            _cellHeader.CharacterFormat.FontName = "Segoe UI";
-            _innerDocument.Styles.Add(_cellHeader);
-
-            _cellContent = (ParagraphStyle) Style.CreateStyle(StyleTemplateType.Normal, _innerDocument);
-            _cellContent.Name = "MyContentCells";
-            _cellContent.CharacterFormat.FontName = "Segoe UI";
-            _innerDocument.Styles.Add(_cellContent);
-
-            _tcfHeader = new TableCellFormat();
-            _tcfHeader.Borders.SetBorders(MultipleBorderTypes.Bottom, BorderStyle.Single, new Color(165, 172, 181), 1);
-            _tcfHeader.Borders.SetBorders(MultipleBorderTypes.Left | MultipleBorderTypes.Right, BorderStyle.None,
-                                          Color.White, 0);
-            _tcfHeader.BackgroundColor = new Color(245, 247, 249);
-
-            _tcfContent = new TableCellFormat();
-            _tcfContent.Borders.SetBorders(MultipleBorderTypes.All, BorderStyle.None, new Color(255, 255, 255), 0);
-
-            _numberList = new ListStyle("NumberWithDot", ListTemplateType.NumberWithDot);
-
-            _innerDocument.Styles.Add(_numberList);
-        }
-
-        private TableRow CreateHeaderRow(IEnumerable<string> columns)
-        {
-            var row = new TableRow(_innerDocument);
-
-            foreach (var column in columns)
-            {
-                row.Cells.Add(new TableCell(_innerDocument, new Paragraph(_innerDocument, column)
-                                                                {
-                                                                    ParagraphFormat =
-                                                                        new ParagraphFormat {Style = _cellHeader}
-                                                                })
-                                  {
-                                      CellFormat = _tcfHeader.Clone()
-                                  });
-            }
-
-            return row;
-        }
-
-        private TableRow CreateContentRow(IEnumerable<string> values)
-        {
-            var row = new TableRow(_innerDocument);
-
-            foreach (var value in values)
-            {
-                var transformedValue = value.Split('\n');
-
-                var p = new Paragraph(_innerDocument)
-                            {
-                                ParagraphFormat = new ParagraphFormat {Style = _cellContent}
-                            };
-
-                foreach (var s in transformedValue)
-                {
-                    p.Inlines.Add(new Run(_innerDocument, s));
-                    p.Inlines.Add(new SpecialCharacter(_innerDocument, SpecialCharacterType.LineBreak));
-                }
-
-                row.Cells.Add(new TableCell(_innerDocument, p)
-                                  {
-                                      CellFormat = _tcfContent.Clone()
-                                  });
-            }
-
-            return row;
-        }
-
-        private Section AddHeading1(string text)
-        {
-            var p = new Paragraph(_innerDocument, text)
-                        {
-                            ParagraphFormat = new ParagraphFormat {Style = _title1},
-                            ListFormat = {Style = _numberList}
-                        };
-            p.ParagraphFormat.NoSpaceBetweenParagraphsOfSameStyle = true;
-
-            var section = new Section(_innerDocument, p);
-
-            _innerDocument.Sections.Add(section);
-
-            return section;
-        }
-
-        private void AddHeading2(Section section, string text)
-        {
-            var p = new Paragraph(_innerDocument, text)
-                        {
-                            ParagraphFormat = new ParagraphFormat {Style = _title2},
-                            ListFormat = {Style = _numberList}
-                        };
-
-            p.ParagraphFormat.NoSpaceBetweenParagraphsOfSameStyle = true;
-            p.ListFormat.ListLevelNumber++;
-
-            section.Blocks.Add(p);
-        }
-
-        /// <summary>
-        /// Adds metadata of an entity
-        /// </summary>
-        /// <param name="emd">Entity metadata</param>
-        public void AddEntityMetadata(EntityMetadata emd)
-        {
-            var displayNameLabel = emd.DisplayName.LocalizedLabels.Count == 0
-                                       ? null
-                                       : emd.DisplayName.LocalizedLabels.FirstOrDefault(
-                                           l => l.LanguageCode == _settings.DisplayNamesLangugageCode);
-            var pluralDisplayNameLabel = emd.DisplayCollectionName.LocalizedLabels.Count == 0
-                                             ? null
-                                             : emd.DisplayCollectionName.LocalizedLabels.FirstOrDefault(
-                                                 l => l.LanguageCode == _settings.DisplayNamesLangugageCode);
-            var descriptionLabel = emd.Description.LocalizedLabels.Count == 0
-                                       ? null
-                                       : emd.Description.LocalizedLabels.FirstOrDefault(
-                                           l => l.LanguageCode == _settings.DisplayNamesLangugageCode);
-
-            var displayName = displayNameLabel != null ? displayNameLabel.Label : "Not Translated";
-            var pluralDisplayName = pluralDisplayNameLabel != null ? pluralDisplayNameLabel.Label : "Not Translated";
-            var description = descriptionLabel != null ? descriptionLabel.Label : "Not Translated";
-
-            var section = AddHeading1("Entity: " + displayName);
-            AddHeading2(section, "Metadata");
-
-            var table = new Table(_innerDocument);
-            table.TableFormat.Borders.SetBorders(MultipleBorderTypes.Outside, BorderStyle.Single,
-                                                 new Color(165, 172, 181), 1);
-
-            table.Rows.Add(CreateHeaderRow(new[] {"Property", "Value"}));
-            table.Rows.Add(CreateContentRow(new[] {"Display Name", displayName}));
-            table.Rows.Add(CreateContentRow(new[] {"Plural Display Name", pluralDisplayName}));
-            table.Rows.Add(CreateContentRow(new[] {"Description", description}));
-            table.Rows.Add(CreateContentRow(new[] {"Schema Name", emd.SchemaName}));
-            table.Rows.Add(CreateContentRow(new[] {"Logical Name", emd.LogicalName}));
-            table.Rows.Add(
-                CreateContentRow(new[]
-                                     {
-                                         "Object Type Code",
-                                         emd.ObjectTypeCode != null
-                                             ? emd.ObjectTypeCode.Value.ToString(CultureInfo.InvariantCulture)
-                                             : string.Empty
-                                     }));
-            table.Rows.Add(
-                CreateContentRow(new[]
-                                     {
-                                         "Is Custom Entity",
-                                         (emd.IsCustomEntity != null && emd.IsCustomEntity.Value).ToString(
-                                             CultureInfo.InvariantCulture)
-                                     }));
-            table.Rows.Add(
-                CreateContentRow(new[]
-                                     {
-                                         "Ownership Type",
-                                         emd.OwnershipType != null ? emd.OwnershipType.Value.ToString() : string.Empty
-                                     }));
-
-            table.TableFormat.Borders.SetBorders(MultipleBorderTypes.Outside, BorderStyle.Single,
-                                                 new Color(165, 172, 181), 1);
-
-            section.Blocks.Add(table);
-        }
-
         /// <summary>
         /// Add an attribute metadata
         /// </summary>
         /// <param name="attributeMetadataList">List of Attribute metadata</param>
         public void AddAttribute(IEnumerable<AttributeMetadata> attributeMetadataList)
         {
-            var section = new Section(_innerDocument) {PageSetup = {Orientation = Orientation.Landscape}};
+            var section = new Section(_innerDocument) { PageSetup = { Orientation = Orientation.Landscape } };
             _innerDocument.Sections.Add(section);
             AddHeading2(section, "Attributes");
 
@@ -378,7 +107,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                                  "Is Custom"
                              };
 
-            foreach (var amd in attributeMetadataList.OrderBy(attr => attr.SchemaName))
+            foreach (var amd in attributeMetadataList.OrderBy(attr => attr.SchemaName).Distinct(new AttributeMetadataComparer()))
             {
                 var displayNameLabel = amd.DisplayName.LocalizedLabels.Count == 0
                                            ? null
@@ -388,7 +117,6 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                                            ? null
                                            : amd.Description.LocalizedLabels.FirstOrDefault(
                                                l => l.LanguageCode == _settings.DisplayNamesLangugageCode);
-
 
                 var displayName = displayNameLabel != null ? displayNameLabel.Label : "Not Translated";
                 var description = descriptionLabel != null ? descriptionLabel.Label : "Not Translated";
@@ -433,7 +161,9 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                 {
                     string data = string.Empty;
 
-                    foreach (var form in currentEntityForms)
+                    var entity = _settings.EntitiesToProceed.First(e => e.Name == amd.EntityLogicalName);
+
+                    foreach (var form in entity.FormsDefinitions.Where(fd => entity.Forms.Contains(fd.Id) || entity.Forms.Count == 0))
                     {
                         var formName = form.GetAttributeValue<string>("name");
                         var xmlDocument = new XmlDocument();
@@ -506,12 +236,294 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
         }
 
         /// <summary>
+        /// Adds metadata of an entity
+        /// </summary>
+        /// <param name="emd">Entity metadata</param>
+        public void AddEntityMetadata(EntityMetadata emd)
+        {
+            var displayNameLabel = emd.DisplayName.LocalizedLabels.Count == 0
+                                       ? null
+                                       : emd.DisplayName.LocalizedLabels.FirstOrDefault(
+                                           l => l.LanguageCode == _settings.DisplayNamesLangugageCode);
+            var pluralDisplayNameLabel = emd.DisplayCollectionName.LocalizedLabels.Count == 0
+                                             ? null
+                                             : emd.DisplayCollectionName.LocalizedLabels.FirstOrDefault(
+                                                 l => l.LanguageCode == _settings.DisplayNamesLangugageCode);
+            var descriptionLabel = emd.Description.LocalizedLabels.Count == 0
+                                       ? null
+                                       : emd.Description.LocalizedLabels.FirstOrDefault(
+                                           l => l.LanguageCode == _settings.DisplayNamesLangugageCode);
+
+            var displayName = displayNameLabel != null ? displayNameLabel.Label : "Not Translated";
+            var pluralDisplayName = pluralDisplayNameLabel != null ? pluralDisplayNameLabel.Label : "Not Translated";
+            var description = descriptionLabel != null ? descriptionLabel.Label : "Not Translated";
+
+            var section = AddHeading1("Entity: " + displayName);
+            AddHeading2(section, "Metadata");
+
+            var table = new Table(_innerDocument);
+            table.TableFormat.Borders.SetBorders(MultipleBorderTypes.Outside, BorderStyle.Single,
+                                                 new Color(165, 172, 181), 1);
+
+            table.Rows.Add(CreateHeaderRow(new[] { "Property", "Value" }));
+            table.Rows.Add(CreateContentRow(new[] { "Display Name", displayName }));
+            table.Rows.Add(CreateContentRow(new[] { "Plural Display Name", pluralDisplayName }));
+            table.Rows.Add(CreateContentRow(new[] { "Description", description }));
+            table.Rows.Add(CreateContentRow(new[] { "Schema Name", emd.SchemaName }));
+            table.Rows.Add(CreateContentRow(new[] { "Logical Name", emd.LogicalName }));
+            table.Rows.Add(
+                CreateContentRow(new[]
+                                     {
+                                         "Object Type Code",
+                                         emd.ObjectTypeCode != null
+                                             ? emd.ObjectTypeCode.Value.ToString(CultureInfo.InvariantCulture)
+                                             : string.Empty
+                                     }));
+            table.Rows.Add(
+                CreateContentRow(new[]
+                                     {
+                                         "Is Custom Entity",
+                                         (emd.IsCustomEntity != null && emd.IsCustomEntity.Value).ToString(
+                                             CultureInfo.InvariantCulture)
+                                     }));
+            table.Rows.Add(
+                CreateContentRow(new[]
+                                     {
+                                         "Ownership Type",
+                                         emd.OwnershipType != null ? emd.OwnershipType.Value.ToString() : string.Empty
+                                     }));
+
+            table.TableFormat.Borders.SetBorders(MultipleBorderTypes.Outside, BorderStyle.Single,
+                                                 new Color(165, 172, 181), 1);
+
+            section.Blocks.Add(table);
+        }
+
+        public void Generate(IOrganizationService service)
+        {
+            int totalEntities = _settings.EntitiesToProceed.Count;
+            int processed = 0;
+
+            foreach (var entity in _settings.EntitiesToProceed)
+            {
+                ReportProgress(processed * 100 / totalEntities, string.Format("Processing entity '{0}'...", entity.Name));
+
+                var emd = emdCache.FirstOrDefault(x => x.LogicalName == entity.Name);
+                if (emd == null)
+                {
+                    var reRequest = new RetrieveEntityRequest
+                                        {
+                                            LogicalName = entity.Name,
+                                            EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
+                                        };
+                    var reResponse = (RetrieveEntityResponse)service.Execute(reRequest);
+
+                    emdCache.Add(reResponse.EntityMetadata);
+                    emd = reResponse.EntityMetadata;
+                }
+
+                AddEntityMetadata(emd);
+
+                List<AttributeMetadata> amds = new List<AttributeMetadata>();
+
+                if (_settings.AddFormLocation)
+                {
+                    currentEntityForms = MetadataHelper.RetrieveEntityFormList(emd.LogicalName, service);
+                }
+
+                switch (_settings.AttributesSelection)
+                {
+                    case AttributeSelectionOption.AllAttributes:
+                        amds = emd.Attributes.ToList();
+                        break;
+
+                    case AttributeSelectionOption.AttributesOptionSet:
+                        amds =
+                            emd.Attributes.Where(
+                                x => x.AttributeType != null && (x.AttributeType.Value == AttributeTypeCode.Boolean
+                                                                 || x.AttributeType.Value == AttributeTypeCode.Picklist
+                                                                 || x.AttributeType.Value == AttributeTypeCode.State
+                                                                 || x.AttributeType.Value == AttributeTypeCode.Status)).ToList();
+                        break;
+
+                    case AttributeSelectionOption.AttributeManualySelected:
+                        amds =
+                            emd.Attributes.Where(
+                                x =>
+                                _settings.EntitiesToProceed.First(y => y.Name == emd.LogicalName).Attributes.Contains(
+                                    x.LogicalName)).ToList();
+                        break;
+
+                    case AttributeSelectionOption.AttributesOnForm:
+
+                        // If no forms selected, we search attributes in all forms
+                        if (entity.Forms.Count == 0)
+                        {
+                            foreach (var form in entity.FormsDefinitions)
+                            {
+                                var tempStringDoc = form.GetAttributeValue<string>("formxml");
+                                var tempDoc = new XmlDocument();
+                                tempDoc.LoadXml(tempStringDoc);
+
+                                amds.AddRange(emd.Attributes.Where(x =>
+                                    tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") !=
+                                    null));
+                            }
+                        }
+                        else
+                        {
+                            // else we parse selected forms
+                            foreach (var formId in entity.Forms)
+                            {
+                                var form = entity.FormsDefinitions.First(f => f.Id == formId);
+                                var tempStringDoc = form.GetAttributeValue<string>("formxml");
+                                var tempDoc = new XmlDocument();
+                                tempDoc.LoadXml(tempStringDoc);
+
+                                amds.AddRange(emd.Attributes.Where(x =>
+                                    tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") !=
+                                    null));
+                            }
+                        }
+
+                        break;
+
+                    case AttributeSelectionOption.AttributesNotOnForm:
+                        // If no forms selected, we search attributes in all forms
+                        if (entity.Forms.Count == 0)
+                        {
+                            foreach (var form in entity.FormsDefinitions)
+                            {
+                                var tempStringDoc = form.GetAttributeValue<string>("formxml");
+                                var tempDoc = new XmlDocument();
+                                tempDoc.LoadXml(tempStringDoc);
+
+                                amds.AddRange(emd.Attributes.Where(x =>
+                                    tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") ==
+                                    null));
+                            }
+                        }
+                        else
+                        {
+                            // else we parse selected forms
+                            foreach (var formId in entity.Forms)
+                            {
+                                var form = entity.FormsDefinitions.First(f => f.Id == formId);
+                                var tempStringDoc = form.GetAttributeValue<string>("formxml");
+                                var tempDoc = new XmlDocument();
+                                tempDoc.LoadXml(tempStringDoc);
+
+                                amds.AddRange(emd.Attributes.Where(x =>
+                                    tempDoc.SelectSingleNode("//control[@datafieldname='" + x.LogicalName + "']") ==
+                                    null));
+                            }
+                        }
+
+                        break;
+                }
+
+                if (Settings.Prefixes != null && Settings.Prefixes.Count > 0)
+                {
+                    var filteredAmds = new List<AttributeMetadata>();
+
+                    foreach (var prefix in Settings.Prefixes)
+                    {
+                        filteredAmds.AddRange(amds.Where(a => a.LogicalName.StartsWith(prefix) /*|| a.IsCustomAttribute.Value == false*/));
+                    }
+
+                    amds = filteredAmds;
+                }
+
+                AddAttribute(amds);
+                processed++;
+            }
+            SaveDocument(_settings.FilePath);
+        }
+
+        /// <summary>
         /// Saves the current workbook
         /// </summary>
         /// <param name="path">Path where to save the document</param>
         public void SaveDocument(string path)
         {
             _innerDocument.Save(path, SaveOptions.DocxDefault);
+        }
+
+        private Section AddHeading1(string text)
+        {
+            var p = new Paragraph(_innerDocument, text)
+                        {
+                            ParagraphFormat = new ParagraphFormat { Style = _title1 },
+                            ListFormat = { Style = _numberList }
+                        };
+            p.ParagraphFormat.NoSpaceBetweenParagraphsOfSameStyle = true;
+
+            var section = new Section(_innerDocument, p);
+
+            _innerDocument.Sections.Add(section);
+
+            return section;
+        }
+
+        private void AddHeading2(Section section, string text)
+        {
+            var p = new Paragraph(_innerDocument, text)
+                        {
+                            ParagraphFormat = new ParagraphFormat { Style = _title2 },
+                            ListFormat = { Style = _numberList }
+                        };
+
+            p.ParagraphFormat.NoSpaceBetweenParagraphsOfSameStyle = true;
+            p.ListFormat.ListLevelNumber++;
+
+            section.Blocks.Add(p);
+        }
+
+        private TableRow CreateContentRow(IEnumerable<string> values)
+        {
+            var row = new TableRow(_innerDocument);
+
+            foreach (var value in values)
+            {
+                var transformedValue = value.Split('\n');
+
+                var p = new Paragraph(_innerDocument)
+                            {
+                                ParagraphFormat = new ParagraphFormat { Style = _cellContent }
+                            };
+
+                foreach (var s in transformedValue)
+                {
+                    p.Inlines.Add(new Run(_innerDocument, s));
+                    p.Inlines.Add(new SpecialCharacter(_innerDocument, SpecialCharacterType.LineBreak));
+                }
+
+                row.Cells.Add(new TableCell(_innerDocument, p)
+                                  {
+                                      CellFormat = _tcfContent.Clone()
+                                  });
+            }
+
+            return row;
+        }
+
+        private TableRow CreateHeaderRow(IEnumerable<string> columns)
+        {
+            var row = new TableRow(_innerDocument);
+
+            foreach (var column in columns)
+            {
+                row.Cells.Add(new TableCell(_innerDocument, new Paragraph(_innerDocument, column)
+                                                                {
+                                                                    ParagraphFormat =
+                                                                        new ParagraphFormat { Style = _cellHeader }
+                                                                })
+                                  {
+                                      CellFormat = _tcfHeader.Clone()
+                                  });
+            }
+
+            return row;
         }
 
         private string GetAddAdditionalData(AttributeMetadata amd)
@@ -521,7 +533,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                 {
                     case AttributeTypeCode.BigInt:
                         {
-                            var bamd = (BigIntAttributeMetadata) amd;
+                            var bamd = (BigIntAttributeMetadata)amd;
 
                             return string.Format(
                                 "Minimum value: {0}\nMaximum value: {1}",
@@ -534,7 +546,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                         }
                     case AttributeTypeCode.Boolean:
                         {
-                            var bamd = (BooleanAttributeMetadata) amd;
+                            var bamd = (BooleanAttributeMetadata)amd;
 
                             var trueLabel = bamd.OptionSet.TrueOption.Label.LocalizedLabels.Count == 0
                                                 ? null
@@ -563,9 +575,10 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                             // Do Nothing
                         }
                         break;
+
                     case AttributeTypeCode.DateTime:
                         {
-                            var damd = (DateTimeAttributeMetadata) amd;
+                            var damd = (DateTimeAttributeMetadata)amd;
 
                             return string.Format(
                                 "Format: {0}",
@@ -573,7 +586,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                         }
                     case AttributeTypeCode.Decimal:
                         {
-                            var damd = (DecimalAttributeMetadata) amd;
+                            var damd = (DecimalAttributeMetadata)amd;
 
                             return string.Format(
                                 "Minimum value: {0}\nMaximum value: {1}\nPrecision: {2}",
@@ -589,7 +602,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                         }
                     case AttributeTypeCode.Double:
                         {
-                            var damd = (DoubleAttributeMetadata) amd;
+                            var damd = (DoubleAttributeMetadata)amd;
 
                             return string.Format(
                                 "Minimum value: {0}\nMaximum value: {1}\nPrecision: {2}",
@@ -608,9 +621,10 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                             // Do nothing
                         }
                         break;
+
                     case AttributeTypeCode.Integer:
                         {
-                            var iamd = (IntegerAttributeMetadata) amd;
+                            var iamd = (IntegerAttributeMetadata)amd;
 
                             return string.Format(
                                 "Minimum value: {0}\nMaximum value: {1}",
@@ -623,13 +637,13 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                         }
                     case AttributeTypeCode.Lookup:
                         {
-                            var lamd = (LookupAttributeMetadata) amd;
+                            var lamd = (LookupAttributeMetadata)amd;
 
                             return lamd.Targets.Aggregate("Targets:", (current, entity) => current + ("\n" + entity));
                         }
                     case AttributeTypeCode.Memo:
                         {
-                            var mamd = (MemoAttributeMetadata) amd;
+                            var mamd = (MemoAttributeMetadata)amd;
 
                             return string.Format(
                                 "Format: {0}\nMax length: {1}",
@@ -640,7 +654,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                         }
                     case AttributeTypeCode.Money:
                         {
-                            var mamd = (MoneyAttributeMetadata) amd;
+                            var mamd = (MoneyAttributeMetadata)amd;
 
                             return string.Format(
                                 "Minimum value: {0}\nMaximum value: {1}\nPrecision: {2}",
@@ -659,14 +673,16 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                             // Do nothing
                         }
                         break;
+
                     case AttributeTypeCode.PartyList:
                         {
                             // Do nothing
                         }
                         break;
+
                     case AttributeTypeCode.Picklist:
                         {
-                            var pamd = (PicklistAttributeMetadata) amd;
+                            var pamd = (PicklistAttributeMetadata)amd;
 
                             var format = "Options:";
 
@@ -693,7 +709,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                         }
                     case AttributeTypeCode.State:
                         {
-                            var samd = (StateAttributeMetadata) amd;
+                            var samd = (StateAttributeMetadata)amd;
 
                             var format = "States:";
 
@@ -714,7 +730,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                         }
                     case AttributeTypeCode.Status:
                         {
-                            var samd = (StatusAttributeMetadata) amd;
+                            var samd = (StatusAttributeMetadata)amd;
 
                             string format = "States:";
 
@@ -735,7 +751,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                         }
                     case AttributeTypeCode.String:
                         {
-                            var samd = (StringAttributeMetadata) amd;
+                            var samd = (StringAttributeMetadata)amd;
 
                             return string.Format(
                                 "Format: {0}\nMax length: {1}",
@@ -752,6 +768,50 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                 }
 
             return string.Empty;
+        }
+
+        private void InitializesStyles()
+        {
+            _title1 = (ParagraphStyle)Style.CreateStyle(StyleTemplateType.Heading1, _innerDocument);
+            _title1.CharacterFormat.FontName = "Segoe UI";
+            _title1.CharacterFormat.FontColor = new Color(18, 97, 225);
+
+            _title2 = (ParagraphStyle)Style.CreateStyle(StyleTemplateType.Heading2, _innerDocument);
+            _title2.CharacterFormat.FontName = "Segoe UI";
+            _title2.CharacterFormat.FontColor = new Color(59, 59, 59);
+
+            _innerDocument.Styles.Add(_title1);
+            _innerDocument.Styles.Add(_title2);
+
+            _cellHeader = (ParagraphStyle)Style.CreateStyle(StyleTemplateType.Normal, _innerDocument);
+            _cellHeader.Name = "MyHeaderCells";
+            _cellHeader.CharacterFormat.Bold = true;
+            _cellHeader.CharacterFormat.FontName = "Segoe UI";
+            _innerDocument.Styles.Add(_cellHeader);
+
+            _cellContent = (ParagraphStyle)Style.CreateStyle(StyleTemplateType.Normal, _innerDocument);
+            _cellContent.Name = "MyContentCells";
+            _cellContent.CharacterFormat.FontName = "Segoe UI";
+            _innerDocument.Styles.Add(_cellContent);
+
+            _tcfHeader = new TableCellFormat();
+            _tcfHeader.Borders.SetBorders(MultipleBorderTypes.Bottom, BorderStyle.Single, new Color(165, 172, 181), 1);
+            _tcfHeader.Borders.SetBorders(MultipleBorderTypes.Left | MultipleBorderTypes.Right, BorderStyle.None,
+                                          Color.White, 0);
+            _tcfHeader.BackgroundColor = new Color(245, 247, 249);
+
+            _tcfContent = new TableCellFormat();
+            _tcfContent.Borders.SetBorders(MultipleBorderTypes.All, BorderStyle.None, new Color(255, 255, 255), 0);
+
+            _numberList = new ListStyle("NumberWithDot", ListTemplateType.NumberWithDot);
+
+            _innerDocument.Styles.Add(_numberList);
+        }
+
+        private void ReportProgress(int percentage, string message)
+        {
+            if (worker.WorkerReportsProgress)
+                worker.ReportProgress(percentage, message);
         }
 
         #endregion Methods

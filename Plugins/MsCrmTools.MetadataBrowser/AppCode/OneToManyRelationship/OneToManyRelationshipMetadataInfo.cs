@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk.Metadata;
+using System;
 using System.ComponentModel;
-using Microsoft.Xrm.Sdk.Metadata;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.OneToManyRelationship
 {
-    [TypeConverter(typeof (OneToManyRelationshipMetadataInfoConverter))]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class OneToManyRelationshipMetadataInfo
     {
         private readonly OneToManyRelationshipMetadata otmmd;
@@ -14,7 +14,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OneToManyRelationship
             this.otmmd = otmmd;
         }
 
-        [TypeConverter(typeof(AssociatedMenuConfigurationInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public AssociatedMenuConfigurationInfo AssociatedMenuConfiguration
         {
             get
@@ -23,7 +23,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OneToManyRelationship
             }
         }
 
-        [TypeConverter(typeof(CascadeConfigurationInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public CascadeConfigurationInfo CascadeConfiguration
         {
             get { return new CascadeConfigurationInfo(otmmd.CascadeConfiguration); }
@@ -33,12 +33,13 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OneToManyRelationship
         {
             get { return otmmd.ExtensionData != null ? otmmd.ExtensionData.ToString() : ""; }
         }
+
         public bool HasChanged
         {
             get { return otmmd.HasChanged.HasValue && otmmd.HasChanged.Value; }
         }
 
-        [TypeConverter(typeof(BooleanManagedPropertyInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public BooleanManagedPropertyInfo IsCustomizable
         {
             get { return new BooleanManagedPropertyInfo(otmmd.IsCustomizable); }
@@ -97,6 +98,11 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OneToManyRelationship
         public SecurityTypes SecurityTypes
         {
             get { return otmmd.SecurityTypes.Value; }
+        }
+
+        public override string ToString()
+        {
+            return otmmd.SchemaName;
         }
     }
 }

@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Metadata.Query;
 using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.ServiceModel;
 
 namespace MsCrmTools.FlsBulkUpdater.AppCode
 {
@@ -28,7 +26,6 @@ namespace MsCrmTools.FlsBulkUpdater.AppCode
                 entityFilter.Conditions.Add(new MetadataConditionExpression("LogicalName",
                     MetadataConditionOperator.In,
                     attributes.Keys.ToArray()));
-                    
 
                 var entityQueryExpression = new EntityQueryExpression()
                 {
@@ -53,7 +50,7 @@ namespace MsCrmTools.FlsBulkUpdater.AppCode
                 };
 
                 return
-                    ((RetrieveMetadataChangesResponse) service.Execute(retrieveMetadataChangesRequest)).EntityMetadata;
+                    ((RetrieveMetadataChangesResponse)service.Execute(retrieveMetadataChangesRequest)).EntityMetadata;
             }
             catch (FaultException<OrganizationServiceFault> error)
             {

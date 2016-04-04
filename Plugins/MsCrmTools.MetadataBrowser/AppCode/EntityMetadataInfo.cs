@@ -1,13 +1,13 @@
-﻿using System;
-using System.ComponentModel;
-using System.Drawing.Design;
-using System.Linq;
-using Microsoft.Xrm.Sdk.Metadata;
+﻿using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.MetadataBrowser.AppCode.AttributeMd;
 using MsCrmTools.MetadataBrowser.AppCode.LabelMd;
 using MsCrmTools.MetadataBrowser.AppCode.ManyToManyRelationship;
 using MsCrmTools.MetadataBrowser.AppCode.OneToManyRelationship;
 using MsCrmTools.MetadataBrowser.AppCode.SecurityPrivilege;
+using System;
+using System.ComponentModel;
+using System.Drawing.Design;
+using System.Linq;
 
 namespace MsCrmTools.MetadataBrowser.AppCode
 {
@@ -25,8 +25,8 @@ namespace MsCrmTools.MetadataBrowser.AppCode
             get { return emd.ActivityTypeMask.Value; }
         }
 
-        [Editor(typeof (CustomCollectionEditor), typeof (UITypeEditor))]
-        [TypeConverter(typeof (AttributeMetadataCollectionConverter))]
+        [Editor(typeof(CustomCollectionEditor), typeof(UITypeEditor))]
+        [TypeConverter(typeof(AttributeMetadataCollectionConverter))]
         public AttributeMetadataCollection Attributes
         {
             get
@@ -36,93 +36,108 @@ namespace MsCrmTools.MetadataBrowser.AppCode
                 {
                     return collection;
                 }
-                
+
                 foreach (AttributeMetadata rmd in emd.Attributes.OrderBy(r => r.SchemaName))
                 {
                     switch (rmd.AttributeType.Value)
                     {
                         case AttributeTypeCode.Boolean:
-                        {
-                            collection.Add(new BooleanAttributeMetadataInfo((BooleanAttributeMetadata) rmd));
-                        }
+                            {
+                                collection.Add(new BooleanAttributeMetadataInfo((BooleanAttributeMetadata)rmd));
+                            }
                             break;
+
                         case AttributeTypeCode.BigInt:
-                        {
-                            collection.Add(new BigIntAttributeMetadataInfo((BigIntAttributeMetadata) rmd));
-                        }
+                            {
+                                collection.Add(new BigIntAttributeMetadataInfo((BigIntAttributeMetadata)rmd));
+                            }
                             break;
+
                         case AttributeTypeCode.Customer:
                         case AttributeTypeCode.Lookup:
                         case AttributeTypeCode.Owner:
-                        {
-                            collection.Add(new LookupAttributeMetadataInfo((LookupAttributeMetadata) rmd));
-                        }
+                            {
+                                collection.Add(new LookupAttributeMetadataInfo((LookupAttributeMetadata)rmd));
+                            }
                             break;
+
                         case AttributeTypeCode.DateTime:
-                        {
-                            collection.Add(new DateTimeAttributeMetadataInfo((DateTimeAttributeMetadata) rmd));
-                        }
+                            {
+                                collection.Add(new DateTimeAttributeMetadataInfo((DateTimeAttributeMetadata)rmd));
+                            }
                             break;
+
                         case AttributeTypeCode.Decimal:
-                        {
-                            collection.Add(new DecimalAttributeMetadataInfo((DecimalAttributeMetadata) rmd));
-                        }
+                            {
+                                collection.Add(new DecimalAttributeMetadataInfo((DecimalAttributeMetadata)rmd));
+                            }
                             break;
+
                         case AttributeTypeCode.Double:
-                        {
-                            collection.Add(new DoubleAttributeMetadataInfo((DoubleAttributeMetadata) rmd));
-                        }
+                            {
+                                collection.Add(new DoubleAttributeMetadataInfo((DoubleAttributeMetadata)rmd));
+                            }
                             break;
+
                         case AttributeTypeCode.EntityName:
-                        {
-                            collection.Add(new AttributeMetadataInfo(rmd));
-                        }
+                            {
+                                collection.Add(new AttributeMetadataInfo(rmd));
+                            }
                             break;
+
                         case AttributeTypeCode.Integer:
-                        {
-                            collection.Add(new IntegerAttributeMetadataInfo((IntegerAttributeMetadata) rmd));
-                        }
+                            {
+                                collection.Add(new IntegerAttributeMetadataInfo((IntegerAttributeMetadata)rmd));
+                            }
                             break;
+
                         case AttributeTypeCode.ManagedProperty:
-                        {
-                            collection.Add(
-                                new ManagedPropertyAttributeMetadataInfo((ManagedPropertyAttributeMetadata) rmd));
-                        }
+                            {
+                                collection.Add(
+                                    new ManagedPropertyAttributeMetadataInfo((ManagedPropertyAttributeMetadata)rmd));
+                            }
                             break;
+
                         case AttributeTypeCode.Memo:
-                        {
-                            collection.Add(new MemoAttributeMetadataInfo((MemoAttributeMetadata) rmd));
-                        }
+                            {
+                                collection.Add(new MemoAttributeMetadataInfo((MemoAttributeMetadata)rmd));
+                            }
                             break;
+
                         case AttributeTypeCode.Money:
-                        {
-                            collection.Add(new MoneyAttributeMetadataInfo((MoneyAttributeMetadata) rmd));
-                        }
+                            {
+                                collection.Add(new MoneyAttributeMetadataInfo((MoneyAttributeMetadata)rmd));
+                            }
                             break;
+
                         case AttributeTypeCode.Picklist:
-                        {
-                            collection.Add(new PicklistAttributeMetadataInfo((PicklistAttributeMetadata) rmd));
-                        }
+                            {
+                                collection.Add(new PicklistAttributeMetadataInfo((PicklistAttributeMetadata)rmd));
+                            }
                             break;
+
                         case AttributeTypeCode.State:
-                        {
-                            collection.Add(new StateAttributeMetadataInfo((StateAttributeMetadata) rmd));
-                        }
+                            {
+                                collection.Add(new StateAttributeMetadataInfo((StateAttributeMetadata)rmd));
+                            }
                             break;
+
                         case AttributeTypeCode.Status:
-                        {
-                            collection.Add(new StatusAttributeMetadataInfo((StatusAttributeMetadata) rmd));
-                        }
+                            {
+                                collection.Add(new StatusAttributeMetadataInfo((StatusAttributeMetadata)rmd));
+                            }
                             break;
+
                         case AttributeTypeCode.String:
-                        {
-                            collection.Add(new StringAttributeMetadataInfo((StringAttributeMetadata) rmd));
-                        }
+                            {
+                                collection.Add(new StringAttributeMetadataInfo((StringAttributeMetadata)rmd));
+                            }
                             break;
+
                         default:
-                        {
-                            collection.Add(new AttributeMetadataInfo(rmd));
-                        }
+                            {
+                                collection.Add(new AttributeMetadataInfo(rmd));
+                            }
                             break;
                     }
                 }
@@ -181,19 +196,19 @@ namespace MsCrmTools.MetadataBrowser.AppCode
             get { return emd.CanTriggerWorkflow.HasValue && emd.CanTriggerWorkflow.Value; }
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo Description
         {
             get { return new LabelInfo(emd.Description); }
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo DisplayCollectionName
         {
             get { return new LabelInfo(emd.DisplayCollectionName); }
         }
 
-        [TypeConverter(typeof (LabelInfoConverter))]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
         public LabelInfo DisplayName
         {
             get { return new LabelInfo(emd.DisplayName); }
@@ -334,8 +349,8 @@ namespace MsCrmTools.MetadataBrowser.AppCode
             get { return emd.LogicalName; }
         }
 
-        [Editor(typeof (CustomCollectionEditor), typeof (UITypeEditor))]
-        [TypeConverter(typeof (ManyToManyRelationshipCollectionConverter))]
+        [Editor(typeof(CustomCollectionEditor), typeof(UITypeEditor))]
+        [TypeConverter(typeof(ManyToManyRelationshipCollectionConverter))]
         public ManyToManyRelationshipCollection ManyToManyRelationships
         {
             get
@@ -345,7 +360,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode
                 {
                     return collection;
                 }
-                
+
                 foreach (ManyToManyRelationshipMetadata rmd in emd.ManyToManyRelationships.OrderBy(r => r.SchemaName))
                 {
                     collection.Add(new ManyToManyRelationshipMetadataInfo(rmd));
@@ -355,8 +370,8 @@ namespace MsCrmTools.MetadataBrowser.AppCode
             }
         }
 
-        [Editor(typeof (CustomCollectionEditor), typeof (UITypeEditor))]
-        [TypeConverter(typeof (OneToManyRelationshipCollectionConverter))]
+        [Editor(typeof(CustomCollectionEditor), typeof(UITypeEditor))]
+        [TypeConverter(typeof(OneToManyRelationshipCollectionConverter))]
         public OneToManyRelationshipCollection ManyToOneRelationships
         {
             get
@@ -365,8 +380,8 @@ namespace MsCrmTools.MetadataBrowser.AppCode
                 if (emd.ManyToOneRelationships == null)
                 {
                     return collection;
-                } 
-                
+                }
+
                 foreach (OneToManyRelationshipMetadata rmd in emd.ManyToOneRelationships.OrderBy(r => r.SchemaName))
                 {
                     collection.Add(new OneToManyRelationshipMetadataInfo(rmd));
@@ -386,8 +401,8 @@ namespace MsCrmTools.MetadataBrowser.AppCode
             get { return emd.ObjectTypeCode.Value; }
         }
 
-        [Editor(typeof (CustomCollectionEditor), typeof (UITypeEditor))]
-        [TypeConverter(typeof (OneToManyRelationshipCollectionConverter))]
+        [Editor(typeof(CustomCollectionEditor), typeof(UITypeEditor))]
+        [TypeConverter(typeof(OneToManyRelationshipCollectionConverter))]
         public OneToManyRelationshipCollection OneToManyRelationships
         {
             get
@@ -397,7 +412,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode
                 {
                     return collection;
                 }
-                
+
                 foreach (OneToManyRelationshipMetadata rmd in emd.OneToManyRelationships.OrderBy(r => r.SchemaName))
                 {
                     collection.Add(new OneToManyRelationshipMetadataInfo(rmd));
@@ -422,8 +437,8 @@ namespace MsCrmTools.MetadataBrowser.AppCode
             get { return emd.PrimaryNameAttribute; }
         }
 
-        [Editor(typeof (CustomCollectionEditor), typeof (UITypeEditor))]
-        [TypeConverter(typeof (SecurityPrivilegeCollectionConverter))]
+        [Editor(typeof(CustomCollectionEditor), typeof(UITypeEditor))]
+        [TypeConverter(typeof(SecurityPrivilegeCollectionConverter))]
         public SecurityPrivilegeCollection Privileges
         {
             get
@@ -433,7 +448,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode
                 {
                     return collection;
                 }
-                
+
                 foreach (SecurityPrivilegeMetadata rmd in emd.Privileges.OrderBy(r => r.Name))
                 {
                     collection.Add(new SecurityPrivilegeInfo(rmd));

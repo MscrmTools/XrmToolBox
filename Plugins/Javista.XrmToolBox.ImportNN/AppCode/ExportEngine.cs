@@ -1,17 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.IO;
+using System.Text;
 
 namespace Javista.XrmToolBox.ImportNN.AppCode
 {
-    class ExportEngine
+    public class ExportResultEventArgs : EventArgs
+    {
+        public string Message;
+    }
+
+    internal class ExportEngine
     {
         private readonly string filePath;
         private readonly IOrganizationService service;
@@ -25,6 +25,7 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
         }
 
         public event EventHandler<ExportResultEventArgs> RaiseError;
+
         public event EventHandler<ExportResultEventArgs> RaiseSuccess;
 
         public void Export()
@@ -32,7 +33,7 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
             var qe = new QueryExpression(settings.Relationship)
             {
                 ColumnSet = new ColumnSet(true),
-                PageInfo = new PagingInfo {Count = 250, PageNumber = 1}
+                PageInfo = new PagingInfo { Count = 250, PageNumber = 1 }
             };
 
             EntityCollection results;
@@ -48,8 +49,28 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                         {
                             string dataFirst;
                             string dataSecond;
-                            var guidFirst = result.GetAttributeValue<Guid>(settings.FirstEntity + "id");
-                            var guidSecond = result.GetAttributeValue<Guid>(settings.SecondEntity + "id");
+
+                            Guid guidFirst, guidSecond;
+
+                            if (settings.FirstEntity == "list" && (settings.SecondEntity == "contact"
+                                                                   || settings.SecondEntity == "account"
+                                                                   || settings.SecondEntity == "lead"))
+                            {
+                                guidFirst = result.GetAttributeValue<EntityReference>("listid").Id;
+                                guidSecond = result.GetAttributeValue<EntityReference>("entityid").Id;
+                            }
+                            else if (settings.SecondEntity == "list" && (settings.FirstEntity == "contact"
+                                                                         || settings.FirstEntity == "account"
+                                                                         || settings.FirstEntity == "lead"))
+                            {
+                                guidFirst = result.GetAttributeValue<EntityReference>("entityid").Id;
+                                guidSecond = result.GetAttributeValue<EntityReference>("listid").Id;
+                            }
+                            else
+                            {
+                                guidFirst = result.GetAttributeValue<Guid>(settings.FirstEntity + "id");
+                                guidSecond = result.GetAttributeValue<Guid>(settings.SecondEntity + "id");
+                            }
 
                             if (!settings.FirstAttributeIsGuid)
                             {
@@ -60,7 +81,7 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                                 {
                                     OnRaiseError(new ExportResultEventArgs
                                     {
-                                        Message = 
+                                        Message =
                                             string.Format("The record '{0}' ({1}) does not contain value for attribute '{2}' and so the NN relationship cannot be exported",
                                             record.Id.ToString("B"),
                                             settings.FirstEntity,
@@ -97,10 +118,9 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                             else
                             {
                                 dataSecond = guidSecond.ToString("B");
-
                             }
 
-                            writer.WriteLine("{0};{1}", dataFirst, dataSecond);
+                            writer.WriteLine("{0},{1}", dataFirst, dataSecond);
 
                             OnRaiseSuccess(new ExportResultEventArgs());
                         }
@@ -115,7 +135,6 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                 }
 
                 qe.PageInfo.PageNumber++;
-                
             } while (results.MoreRecords);
         }
 
@@ -138,10 +157,5 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                 handler(this, e);
             }
         }
-    }
-
-    public class ExportResultEventArgs : EventArgs
-    {
-        public string Message;
     }
 }

@@ -19,18 +19,21 @@ namespace MsCrmTools.UserRolesManager.AppCode
 
         public List<Entity> GetRoles()
         {
-            return service.RetrieveMultiple(new QueryExpression("role") {ColumnSet = new ColumnSet(true)}).Entities.ToList();
+            return service.RetrieveMultiple(new QueryExpression("role") { ColumnSet = new ColumnSet(true) }).Entities.ToList();
         }
 
         public Guid GetRootBusinessUnitId()
         {
-            return service.RetrieveMultiple(new QueryExpression("businessunit") {Criteria = new FilterExpression
+            return service.RetrieveMultiple(new QueryExpression("businessunit")
             {
-                Conditions =
+                Criteria = new FilterExpression
+                    {
+                        Conditions =
                 {
                     new ConditionExpression("parentbusinessunitid", ConditionOperator.Null)
                 }
-            }}).Entities.First().Id;
+                    }
+            }).Entities.First().Id;
         }
 
         public void AddRolesToPrincipals(List<Entity> roles, List<Entity> principals, List<Entity> allRoles, BackgroundWorker worker = null)
@@ -53,24 +56,21 @@ namespace MsCrmTools.UserRolesManager.AppCode
                         var currentPrincipalBuId = principal.GetAttributeValue<EntityReference>("businessunitid").Id;
                         if (role.GetAttributeValue<EntityReference>("businessunitid").Id != currentPrincipalBuId)
                         {
-                            roleToUse = allRoles.First(
-                                r => r.GetAttributeValue<EntityReference>("businessunitid").Id == currentPrincipalBuId
-                                     && r.GetAttributeValue<EntityReference>("parentroleid") != null
-                                     && r.GetAttributeValue<EntityReference>("parentroleid").Id == role.Id);
+                            roleToUse = GetRoleRecursive(currentPrincipalBuId, new List<Entity> { role }, allRoles);
                         }
                     }
 
                     try
                     {
-                       service.Associate(
-                            principal.LogicalName,
-                            principal.Id,
-                            new Relationship(principal.LogicalName + "roles_association"),
-                            new EntityReferenceCollection { roleToUse.ToEntityReference() });
+                        service.Associate(
+                             principal.LogicalName,
+                             principal.Id,
+                             new Relationship(principal.LogicalName + "roles_association"),
+                             new EntityReferenceCollection { roleToUse.ToEntityReference() });
                     }
                     catch (Exception error)
                     {
-                        
+
                     }
 
                     current++;
@@ -94,7 +94,7 @@ namespace MsCrmTools.UserRolesManager.AppCode
                 {
                     if (worker != null && worker.WorkerReportsProgress)
                     {
-                        worker.ReportProgress(current*100/total, "Removing roles from principals ({0} %)...");
+                        worker.ReportProgress(current * 100 / total, "Removing roles from principals ({0} %)...");
                     }
 
                     var roleToUse = role;
@@ -104,10 +104,7 @@ namespace MsCrmTools.UserRolesManager.AppCode
                         var currentPrincipalBuId = principal.GetAttributeValue<EntityReference>("businessunitid").Id;
                         if (role.GetAttributeValue<EntityReference>("businessunitid").Id != currentPrincipalBuId)
                         {
-                            roleToUse = allRoles.First(
-                                r => r.GetAttributeValue<EntityReference>("businessunitid").Id == currentPrincipalBuId
-                                     && r.GetAttributeValue<EntityReference>("parentroleid") != null
-                                     && r.GetAttributeValue<EntityReference>("parentroleid").Id == role.Id);
+                            roleToUse = GetRoleRecursive(currentPrincipalBuId, new List<Entity> { role }, allRoles);
                         }
                     }
 
@@ -117,7 +114,7 @@ namespace MsCrmTools.UserRolesManager.AppCode
                             principal.LogicalName,
                             principal.Id,
                             new Relationship(principal.LogicalName + "roles_association"),
-                            new EntityReferenceCollection {roleToUse.ToEntityReference()});
+                            new EntityReferenceCollection { roleToUse.ToEntityReference() });
                     }
                     catch (Exception error)
                     {
@@ -190,7 +187,7 @@ namespace MsCrmTools.UserRolesManager.AppCode
 
                 int total = links.Entities.Count;
                 int current = 0;
-                
+
                 foreach (var link in links.Entities)
                 {
                     if (worker != null && worker.WorkerReportsProgress)
@@ -212,6 +209,33 @@ namespace MsCrmTools.UserRolesManager.AppCode
                     current++;
                 }
             }
+        }
+
+        Entity GetRoleRecursive(Guid buId, List<Entity> roles, List<Entity> allRoles)
+        {
+            if (roles == null || allRoles == null)
+            {
+                return null;
+            }
+
+            foreach (var role in roles)
+            {
+                if (role.GetAttributeValue<EntityReference>("businessunitid").Id == buId)
+                {
+                    return role;
+                }
+
+                var childRole = GetRoleRecursive(buId,
+                       allRoles.Where(a => a.GetAttributeValue<EntityReference>("parentroleid") != null && a.GetAttributeValue<EntityReference>("parentroleid").Id == role.Id).ToList(),
+                       allRoles);
+
+                if (childRole != null)
+                {
+                    return childRole;
+                }
+            }
+
+            return null;
         }
     }
 }

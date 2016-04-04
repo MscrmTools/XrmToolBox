@@ -42,6 +42,8 @@
             // 
             // panel1
             // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.Controls.Add(this.lblHeader);
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -61,6 +63,8 @@
             // 
             // btnWebResourcePickerCancel
             // 
+            this.btnWebResourcePickerCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnWebResourcePickerCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnWebResourcePickerCancel.Location = new System.Drawing.Point(413, 277);
             this.btnWebResourcePickerCancel.Name = "btnWebResourcePickerCancel";
             this.btnWebResourcePickerCancel.Size = new System.Drawing.Size(75, 23);
@@ -71,6 +75,7 @@
             // 
             // btnWebResourcePickerValidate
             // 
+            this.btnWebResourcePickerValidate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnWebResourcePickerValidate.Location = new System.Drawing.Point(332, 277);
             this.btnWebResourcePickerValidate.Name = "btnWebResourcePickerValidate";
             this.btnWebResourcePickerValidate.Size = new System.Drawing.Size(75, 23);
@@ -81,6 +86,9 @@
             // 
             // lstWebResources
             // 
+            this.lstWebResources.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lstWebResources.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2});
@@ -108,6 +116,7 @@
             // 
             // btnNewResource
             // 
+            this.btnNewResource.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnNewResource.Location = new System.Drawing.Point(7, 251);
             this.btnNewResource.Name = "btnNewResource";
             this.btnNewResource.Size = new System.Drawing.Size(100, 23);
@@ -118,6 +127,7 @@
             // 
             // btnRefresh
             // 
+            this.btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnRefresh.Enabled = false;
             this.btnRefresh.Location = new System.Drawing.Point(113, 251);
             this.btnRefresh.Name = "btnRefresh";
@@ -129,8 +139,10 @@
             // 
             // WebResourcePicker
             // 
+            this.AcceptButton = this.btnWebResourcePickerValidate;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.btnWebResourcePickerCancel;
             this.ClientSize = new System.Drawing.Size(500, 312);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.btnNewResource);
@@ -138,7 +150,6 @@
             this.Controls.Add(this.btnWebResourcePickerCancel);
             this.Controls.Add(this.btnWebResourcePickerValidate);
             this.Controls.Add(this.panel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "WebResourcePicker";

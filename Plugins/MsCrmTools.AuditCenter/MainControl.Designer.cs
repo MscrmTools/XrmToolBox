@@ -79,7 +79,8 @@
             this.tsbApplyChanges});
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
-            this.toolStripMenu.Size = new System.Drawing.Size(911, 25);
+            this.toolStripMenu.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStripMenu.Size = new System.Drawing.Size(1366, 32);
             this.toolStripMenu.TabIndex = 2;
             this.toolStripMenu.Text = "toolStrip1";
             // 
@@ -89,21 +90,21 @@
             this.tsbClose.Image = ((System.Drawing.Image)(resources.GetObject("tsbClose.Image")));
             this.tsbClose.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(23, 22);
+            this.tsbClose.Size = new System.Drawing.Size(28, 29);
             this.tsbClose.Text = "Close this tool";
             this.tsbClose.Click += new System.EventHandler(this.TsbCloseClick);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 32);
             // 
             // tsbConnect
             // 
             this.tsbConnect.Image = ((System.Drawing.Image)(resources.GetObject("tsbConnect.Image")));
             this.tsbConnect.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbConnect.Name = "tsbConnect";
-            this.tsbConnect.Size = new System.Drawing.Size(79, 22);
+            this.tsbConnect.Size = new System.Drawing.Size(119, 29);
             this.tsbConnect.Text = "Load data";
             this.tsbConnect.ToolTipText = "Load:\r\n- Entities metadata\r\n- Attributes metadata\r\n- System audit status\r\n\r\n(This" +
     " operation can take some times as it retrieves all entities and all attributes m" +
@@ -113,7 +114,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
             // 
             // tsbChangeSystemAuditStatus
             // 
@@ -121,14 +122,14 @@
             this.tsbChangeSystemAuditStatus.Image = ((System.Drawing.Image)(resources.GetObject("tsbChangeSystemAuditStatus.Image")));
             this.tsbChangeSystemAuditStatus.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbChangeSystemAuditStatus.Name = "tsbChangeSystemAuditStatus";
-            this.tsbChangeSystemAuditStatus.Size = new System.Drawing.Size(132, 22);
+            this.tsbChangeSystemAuditStatus.Size = new System.Drawing.Size(197, 29);
             this.tsbChangeSystemAuditStatus.Text = "Change audit status";
             this.tsbChangeSystemAuditStatus.Click += new System.EventHandler(this.TsbChangeSystemAuditStatusClick);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 32);
             // 
             // tsbApplyChanges
             // 
@@ -136,7 +137,7 @@
             this.tsbApplyChanges.Image = ((System.Drawing.Image)(resources.GetObject("tsbApplyChanges.Image")));
             this.tsbApplyChanges.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbApplyChanges.Name = "tsbApplyChanges";
-            this.tsbApplyChanges.Size = new System.Drawing.Size(105, 22);
+            this.tsbApplyChanges.Size = new System.Drawing.Size(157, 29);
             this.tsbApplyChanges.Text = "Apply changes";
             this.tsbApplyChanges.ToolTipText = "Apply changes made to entities and attributes.\r\n\r\nThis command does not change sy" +
     "stem audit status";
@@ -154,9 +155,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbGlobalSettings.Controls.Add(this.lblStatusStatus);
             this.gbGlobalSettings.Controls.Add(this.lblStatusLabel);
-            this.gbGlobalSettings.Location = new System.Drawing.Point(3, 28);
+            this.gbGlobalSettings.Location = new System.Drawing.Point(4, 43);
+            this.gbGlobalSettings.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.gbGlobalSettings.Name = "gbGlobalSettings";
-            this.gbGlobalSettings.Size = new System.Drawing.Size(905, 52);
+            this.gbGlobalSettings.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbGlobalSettings.Size = new System.Drawing.Size(1358, 80);
             this.gbGlobalSettings.TabIndex = 3;
             this.gbGlobalSettings.TabStop = false;
             this.gbGlobalSettings.Text = "Global audit settings";
@@ -166,9 +169,10 @@
             this.lblStatusStatus.AutoSize = true;
             this.lblStatusStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStatusStatus.ForeColor = System.Drawing.Color.Black;
-            this.lblStatusStatus.Location = new System.Drawing.Point(223, 16);
+            this.lblStatusStatus.Location = new System.Drawing.Point(334, 25);
+            this.lblStatusStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblStatusStatus.Name = "lblStatusStatus";
-            this.lblStatusStatus.Size = new System.Drawing.Size(42, 24);
+            this.lblStatusStatus.Size = new System.Drawing.Size(62, 32);
             this.lblStatusStatus.TabIndex = 1;
             this.lblStatusStatus.Text = "N/A";
             // 
@@ -176,9 +180,10 @@
             // 
             this.lblStatusLabel.AutoSize = true;
             this.lblStatusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblStatusLabel.Location = new System.Drawing.Point(6, 16);
+            this.lblStatusLabel.Location = new System.Drawing.Point(9, 25);
+            this.lblStatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblStatusLabel.Name = "lblStatusLabel";
-            this.lblStatusLabel.Size = new System.Drawing.Size(211, 24);
+            this.lblStatusLabel.Size = new System.Drawing.Size(323, 32);
             this.lblStatusLabel.TabIndex = 0;
             this.lblStatusLabel.Text = "System audit is currently";
             // 
@@ -189,9 +194,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbEntitiesAndAttributes.Controls.Add(this.gbAttributes);
             this.gbEntitiesAndAttributes.Controls.Add(this.gbEntities);
-            this.gbEntitiesAndAttributes.Location = new System.Drawing.Point(3, 86);
+            this.gbEntitiesAndAttributes.Location = new System.Drawing.Point(4, 132);
+            this.gbEntitiesAndAttributes.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.gbEntitiesAndAttributes.Name = "gbEntitiesAndAttributes";
-            this.gbEntitiesAndAttributes.Size = new System.Drawing.Size(905, 511);
+            this.gbEntitiesAndAttributes.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbEntitiesAndAttributes.Size = new System.Drawing.Size(1358, 786);
             this.gbEntitiesAndAttributes.TabIndex = 4;
             this.gbEntitiesAndAttributes.TabStop = false;
             this.gbEntitiesAndAttributes.Text = "Entities and attributes to audit";
@@ -204,9 +211,11 @@
             this.gbAttributes.Controls.Add(this.toolStrip2);
             this.gbAttributes.Controls.Add(this.lvAttributes);
             this.gbAttributes.Enabled = false;
-            this.gbAttributes.Location = new System.Drawing.Point(342, 19);
+            this.gbAttributes.Location = new System.Drawing.Point(513, 29);
+            this.gbAttributes.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.gbAttributes.Name = "gbAttributes";
-            this.gbAttributes.Size = new System.Drawing.Size(557, 486);
+            this.gbAttributes.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbAttributes.Size = new System.Drawing.Size(836, 748);
             this.gbAttributes.TabIndex = 90;
             this.gbAttributes.TabStop = false;
             this.gbAttributes.Text = "Attributes";
@@ -216,9 +225,10 @@
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnAddAttribute,
             this.btnRemoveAttribute});
-            this.toolStrip2.Location = new System.Drawing.Point(3, 16);
+            this.toolStrip2.Location = new System.Drawing.Point(4, 24);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(551, 25);
+            this.toolStrip2.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStrip2.Size = new System.Drawing.Size(828, 32);
             this.toolStrip2.TabIndex = 3;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -227,7 +237,7 @@
             this.btnAddAttribute.Image = ((System.Drawing.Image)(resources.GetObject("btnAddAttribute.Image")));
             this.btnAddAttribute.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnAddAttribute.Name = "btnAddAttribute";
-            this.btnAddAttribute.Size = new System.Drawing.Size(97, 22);
+            this.btnAddAttribute.Size = new System.Drawing.Size(146, 29);
             this.btnAddAttribute.Text = "Add attribute";
             this.btnAddAttribute.Click += new System.EventHandler(this.PbAddAttributeClick);
             // 
@@ -236,7 +246,7 @@
             this.btnRemoveAttribute.Image = ((System.Drawing.Image)(resources.GetObject("btnRemoveAttribute.Image")));
             this.btnRemoveAttribute.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnRemoveAttribute.Name = "btnRemoveAttribute";
-            this.btnRemoveAttribute.Size = new System.Drawing.Size(177, 22);
+            this.btnRemoveAttribute.Size = new System.Drawing.Size(263, 29);
             this.btnRemoveAttribute.Text = "Remove selected attribute(s)";
             this.btnRemoveAttribute.Click += new System.EventHandler(this.PbRemoveAttributeClick);
             // 
@@ -249,9 +259,10 @@
             this.columnHeader2,
             this.columnHeader1});
             this.lvAttributes.FullRowSelect = true;
-            this.lvAttributes.Location = new System.Drawing.Point(6, 44);
+            this.lvAttributes.Location = new System.Drawing.Point(9, 68);
+            this.lvAttributes.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lvAttributes.Name = "lvAttributes";
-            this.lvAttributes.Size = new System.Drawing.Size(545, 436);
+            this.lvAttributes.Size = new System.Drawing.Size(816, 669);
             this.lvAttributes.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvAttributes.TabIndex = 2;
             this.lvAttributes.UseCompatibleStateImageBehavior = false;
@@ -276,9 +287,11 @@
             this.gbEntities.Controls.Add(this.lvEntities);
             this.gbEntities.Cursor = System.Windows.Forms.Cursors.Hand;
             this.gbEntities.Enabled = false;
-            this.gbEntities.Location = new System.Drawing.Point(10, 19);
+            this.gbEntities.Location = new System.Drawing.Point(15, 29);
+            this.gbEntities.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.gbEntities.Name = "gbEntities";
-            this.gbEntities.Size = new System.Drawing.Size(326, 486);
+            this.gbEntities.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbEntities.Size = new System.Drawing.Size(489, 748);
             this.gbEntities.TabIndex = 89;
             this.gbEntities.TabStop = false;
             this.gbEntities.Text = "Entities";
@@ -288,9 +301,10 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnAddEntity,
             this.btnRemoveEntity});
-            this.toolStrip1.Location = new System.Drawing.Point(3, 16);
+            this.toolStrip1.Location = new System.Drawing.Point(4, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(320, 25);
+            this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStrip1.Size = new System.Drawing.Size(481, 32);
             this.toolStrip1.TabIndex = 83;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -299,7 +313,7 @@
             this.btnAddEntity.Image = ((System.Drawing.Image)(resources.GetObject("btnAddEntity.Image")));
             this.btnAddEntity.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnAddEntity.Name = "btnAddEntity";
-            this.btnAddEntity.Size = new System.Drawing.Size(82, 22);
+            this.btnAddEntity.Size = new System.Drawing.Size(123, 29);
             this.btnAddEntity.Text = "Add entity";
             this.btnAddEntity.Click += new System.EventHandler(this.PbAddEntityClick);
             // 
@@ -308,7 +322,7 @@
             this.btnRemoveEntity.Image = ((System.Drawing.Image)(resources.GetObject("btnRemoveEntity.Image")));
             this.btnRemoveEntity.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnRemoveEntity.Name = "btnRemoveEntity";
-            this.btnRemoveEntity.Size = new System.Drawing.Size(157, 22);
+            this.btnRemoveEntity.Size = new System.Drawing.Size(234, 29);
             this.btnRemoveEntity.Text = "Remove selected entities";
             this.btnRemoveEntity.Click += new System.EventHandler(this.PbRemoveEntityClick);
             // 
@@ -321,14 +335,16 @@
             this.columnHeader7});
             this.lvEntities.FullRowSelect = true;
             this.lvEntities.HideSelection = false;
-            this.lvEntities.Location = new System.Drawing.Point(6, 44);
+            this.lvEntities.Location = new System.Drawing.Point(9, 68);
+            this.lvEntities.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lvEntities.Name = "lvEntities";
-            this.lvEntities.Size = new System.Drawing.Size(314, 436);
+            this.lvEntities.Size = new System.Drawing.Size(469, 669);
             this.lvEntities.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvEntities.TabIndex = 79;
             this.lvEntities.UseCompatibleStateImageBehavior = false;
             this.lvEntities.View = System.Windows.Forms.View.Details;
             this.lvEntities.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.ListViewColumnClick);
+            this.lvEntities.SelectedIndexChanged += new System.EventHandler(this.lvEntities_SelectedIndexChanged);
             // 
             // columnHeader4
             // 
@@ -350,13 +366,14 @@
             // 
             // MainControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.gbEntitiesAndAttributes);
             this.Controls.Add(this.gbGlobalSettings);
             this.Controls.Add(this.toolStripMenu);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "MainControl";
-            this.Size = new System.Drawing.Size(911, 600);
+            this.Size = new System.Drawing.Size(1366, 923);
             this.toolStripMenu.ResumeLayout(false);
             this.toolStripMenu.PerformLayout();
             this.gbGlobalSettings.ResumeLayout(false);

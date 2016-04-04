@@ -2,7 +2,10 @@
 
 [![Join the chat at https://gitter.im/MscrmTools/XrmToolBox](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/MscrmTools/XrmToolBox?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-XrmToolBox is an application that can connect to Microsoft Dynamics CRM 2011, 2013 and 2015 (Online, OnPremise of IFD). It is shipped with more than 20 plugins to handle several administration, customization or configuration tasks.
+[![Build status](https://ci.appveyor.com/api/projects/status/dp6r9n9vhcprpur6?svg=true)](https://ci.appveyor.com/project/MscrmTools/xrmtoolbox)
+
+
+XrmToolBox is an application that can connect to Microsoft Dynamics CRM 2011, 2013, 2015 and 2016 (Online, OnPremise of IFD). It is shipped with more than 20 plugins to handle several administration, customization or configuration tasks.
 
 One of the great point about XrmToolBox is its capability to welcome external plugins written by other developers, just by implementing specific part of XrmToolBox code.
 
@@ -15,4 +18,4 @@ If you faced a bug or would like to make a suggestion to improve XrmToolBox and 
 
 # Support XrmToolBox
 
-XrmToolBox is a free tool and will remain like this. But if you think this tool improved your productivity or saved you time on your Microsoft Dynamics CRM project, then you can help me by donating whatever amount you want through PayPal
+XrmToolBox is a free tool and will remain like this. But if you think this tool improved your productivity or saved you time on your Microsoft Dynamics CRM project, then you can help me by donating whatever amount you want through PayPal.

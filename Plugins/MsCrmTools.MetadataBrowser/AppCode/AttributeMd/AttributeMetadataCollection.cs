@@ -14,9 +14,19 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
             list = new List<AttributeMetadataInfo>();
         }
 
+        public new int Count
+        {
+            get { return list.Count; }
+        }
+
         public AttributeMetadataInfo this[int index]
         {
             get { return list[index]; }
+        }
+
+        public void Add(AttributeMetadataInfo info)
+        {
+            list.Add(info);
         }
 
         public AttributeCollection GetAttributes()
@@ -83,11 +93,6 @@ namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
         public object GetPropertyOwner(PropertyDescriptor pd)
         {
             return this;
-        }
-
-        public void Add(AttributeMetadataInfo info)
-        {
-            list.Add(info);
         }
 
         public void Remove(AttributeMetadataInfo info)

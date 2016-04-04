@@ -9,6 +9,11 @@ namespace Tanguy.WinForm.Utilities.DelegatesHelpers
 {
     public class ButtonDelegates
     {
+        public static void SetEnableState(Button button, bool enabled)
+        {
+            CommonDelegates.SetEnableState(button, enabled);
+        }
+
         public static void SetText(Button button, string text)
         {
             MethodInvoker miSetText = delegate
@@ -24,11 +29,6 @@ namespace Tanguy.WinForm.Utilities.DelegatesHelpers
             {
                 miSetText();
             }
-        }
-
-        public static void SetEnableState(Button button, bool enabled)
-        {
-            CommonDelegates.SetEnableState(button, enabled);
         }
     }
 }

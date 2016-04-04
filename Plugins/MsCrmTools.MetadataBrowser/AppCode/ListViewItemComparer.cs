@@ -11,7 +11,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode
     /// <summary>
     /// Compares two listview items for sorting
     /// </summary>
-    class ListViewItemComparer : IComparer
+    internal class ListViewItemComparer : IComparer
     {
         #region Variables
 
@@ -27,7 +27,7 @@ namespace MsCrmTools.MetadataBrowser.AppCode
 
         private bool isNumericColumn = false;
 
-        #endregion
+        #endregion Variables
 
         #region Constructors
 
@@ -45,13 +45,13 @@ namespace MsCrmTools.MetadataBrowser.AppCode
         /// </summary>
         /// <param name="column">Index of sorting column</param>
         /// <param name="order">Sort order</param>
-        public ListViewItemComparer(int column,SortOrder order)
+        public ListViewItemComparer(int column, SortOrder order)
         {
             col = column;
             innerOrder = order;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -97,6 +97,6 @@ namespace MsCrmTools.MetadataBrowser.AppCode
             }
         }
 
-        #endregion
+        #endregion Methods
     }
 }

@@ -18,6 +18,12 @@ namespace MsCrmTools.Iconator
 
         public int ImageSizeSelected { get; set; }
 
+        private void BtnCancelClick(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
         private void BtnOkClick(object sender, EventArgs e)
         {
             if (comboBox1.SelectedIndex == 0)
@@ -26,12 +32,6 @@ namespace MsCrmTools.Iconator
                 ImageSizeSelected = 32;
 
             DialogResult = DialogResult.OK;
-            Close();
-        }
-
-        private void BtnCancelClick(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
             Close();
         }
     }

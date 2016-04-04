@@ -4,10 +4,18 @@ using System.Windows.Forms;
 
 namespace MsCrmTools.FlsBulkUpdater.AppCode
 {
+    internal class GroupComparer : IComparer
+    {
+        public int Compare(object objA, object objB)
+        {
+            return String.Compare(((ListViewGroup)objA).Header, ((ListViewGroup)objB).Header, StringComparison.Ordinal);
+        }
+    }
+
     /// <summary>
     /// Compares two listview items for sorting
     /// </summary>
-    class ListViewItemComparer : IComparer
+    internal class ListViewItemComparer : IComparer
     {
         #region Variables
 
@@ -21,7 +29,7 @@ namespace MsCrmTools.FlsBulkUpdater.AppCode
         /// </summary>
         private readonly SortOrder innerOrder;
 
-        #endregion
+        #endregion Variables
 
         #region Constructors
 
@@ -39,13 +47,13 @@ namespace MsCrmTools.FlsBulkUpdater.AppCode
         /// </summary>
         /// <param name="column">Index of sorting column</param>
         /// <param name="order">Sort order</param>
-        public ListViewItemComparer(int column,SortOrder order)
+        public ListViewItemComparer(int column, SortOrder order)
         {
             col = column;
             innerOrder = order;
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Methods
 
@@ -75,14 +83,6 @@ namespace MsCrmTools.FlsBulkUpdater.AppCode
             return String.CompareOrdinal(y.SubItems[col].Text, x.SubItems[col].Text);
         }
 
-        #endregion
-    }
-
-    class GroupComparer : IComparer
-    {
-        public int Compare(object objA, object objB)
-        {
-            return String.Compare(((ListViewGroup)objA).Header, ((ListViewGroup)objB).Header, StringComparison.Ordinal);
-        }
+        #endregion Methods
     }
 }

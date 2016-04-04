@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MsCrmTools.ViewLayoutReplicator.Forms
@@ -19,6 +14,11 @@ namespace MsCrmTools.ViewLayoutReplicator.Forms
             InitializeComponent();
         }
 
+        private void BtnCloseClick(object sender, EventArgs e)
+        {
+            Close();
+        }
+
         private void ErrorListLoad(object sender, EventArgs e)
         {
             foreach (var error in errors)
@@ -28,11 +28,6 @@ namespace MsCrmTools.ViewLayoutReplicator.Forms
 
                 lvErrors.Items.Add(item);
             }
-        }
-
-        private void BtnCloseClick(object sender, EventArgs e)
-        {
-            Close();
         }
     }
 }

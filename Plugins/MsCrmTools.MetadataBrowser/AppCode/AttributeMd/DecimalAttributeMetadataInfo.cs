@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xrm.Sdk.Metadata;
-using MsCrmTools.MetadataBrowser.AppCode.AttributeMd;
 
 namespace MsCrmTools.MetadataBrowser.AppCode.AttributeMd
 {
-    // [TypeConverter(typeof(AttributeMetadataInfoConverter))]
     public class DecimalAttributeMetadataInfo : AttributeMetadataInfo
     {
         private readonly DecimalAttributeMetadata amd;

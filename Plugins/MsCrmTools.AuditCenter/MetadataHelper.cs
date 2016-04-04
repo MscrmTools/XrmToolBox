@@ -3,23 +3,23 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Metadata;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Messages;
-using Microsoft.Xrm.Sdk.Metadata;
-using Microsoft.Xrm.Sdk.Query;
 using XrmToolBox;
 
 namespace MsCrmTools.AuditCenter
 {
     /// <summary>
-    /// Class for querying Crm Metadata 
+    /// Class for querying Crm Metadata
     /// </summary>
-    class MetadataHelper
+    internal class MetadataHelper
     {
         /// <summary>
         /// Gets the list of entities metadata (only Entity Items)
@@ -27,7 +27,7 @@ namespace MsCrmTools.AuditCenter
         /// <returns>List of entities metadata</returns>
         public static List<EntityMetadata> RetrieveEntities(IOrganizationService oService)
         {
-            var response = (RetrieveAllEntitiesResponse) oService.Execute(new RetrieveAllEntitiesRequest
+            var response = (RetrieveAllEntitiesResponse)oService.Execute(new RetrieveAllEntitiesRequest
             {
                 EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
             });
@@ -51,10 +51,10 @@ namespace MsCrmTools.AuditCenter
             {
                 var response = (RetrieveEntityResponse)oService.Execute(new RetrieveEntityRequest
                                                     {
-                    LogicalName = logicalName,
-                    EntityFilters = EntityFilters.Attributes,
-                    RetrieveAsIfPublished = true
-                });
+                                                        LogicalName = logicalName,
+                                                        EntityFilters = EntityFilters.Attributes,
+                                                        RetrieveAsIfPublished = true
+                                                    });
 
                 return response.EntityMetadata;
             }

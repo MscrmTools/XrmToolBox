@@ -10,7 +10,7 @@ namespace MsCrmTools.SolutionImport
     /// <summary>
     /// Class allowing to create zip archive
     /// </summary>
-    class ZipManager
+    internal class ZipManager
     {
         public static void ZipFiles(string inputFolderPath, string outputPathAndFile)
         {

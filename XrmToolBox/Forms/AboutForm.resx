@@ -214,7 +214,7 @@
 </value>
   </data>
   <data name="label1.Text" xml:space="preserve">
-    <value>This tool helps you to retrieve your favorite tools for Microsoft Dynamics CRM 2011, 2013 and 2015 in a single location.
+    <value>This tool helps you to retrieve your favorite tools for Microsoft Dynamics CRM 2011, 2013, 2015 and 2016 in a single location.
 
 You can also develop your own tool taking advantage of provided features like connection management and information message display (Credits to Daryl LaBar for plugin development optimization). To learn how to develop your own tool embedded in the Xrm Toolbox, visit the CodePlex project page.</value>
   </data>

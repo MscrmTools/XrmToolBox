@@ -3,22 +3,23 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
+using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
-using XrmToolBox;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Xml;
+using CrmExceptionHelper = XrmToolBox.CrmExceptionHelper;
 
 namespace MsCrmTools.AttributeBulkUpdater.Helpers
 {
     /// <summary>
-    /// Class for querying Crm Metadata 
+    /// Class for querying Crm Metadata
     /// </summary>
-    class MetadataHelper
+    internal class MetadataHelper
     {
         /// <summary>
         /// Gets the list of entities metadata (only Entity Items)
@@ -30,8 +31,8 @@ namespace MsCrmTools.AttributeBulkUpdater.Helpers
 
             RetrieveAllEntitiesRequest request = new RetrieveAllEntitiesRequest
                                                      {
-                EntityFilters = EntityFilters.Entity
-            };
+                                                         EntityFilters = EntityFilters.Entity
+                                                     };
 
             RetrieveAllEntitiesResponse response = (RetrieveAllEntitiesResponse)oService.Execute(request);
 
@@ -58,10 +59,10 @@ namespace MsCrmTools.AttributeBulkUpdater.Helpers
             {
                 RetrieveEntityRequest request = new RetrieveEntityRequest
                                                     {
-                    LogicalName = logicalName,
-                    EntityFilters = EntityFilters.Attributes,
-                    RetrieveAsIfPublished = true
-                };
+                                                        LogicalName = logicalName,
+                                                        EntityFilters = EntityFilters.Attributes,
+                                                        RetrieveAsIfPublished = true
+                                                    };
 
                 RetrieveEntityResponse response = (RetrieveEntityResponse)oService.Execute(request);
 
@@ -80,14 +81,27 @@ namespace MsCrmTools.AttributeBulkUpdater.Helpers
         /// <param name="logicalName">Entity logical name</param>
         /// <param name="oService">Crm organization service</param>
         /// <returns>Document containing all forms definition</returns>
-        public static XmlDocument RetrieveEntityForms(string logicalName, IOrganizationService oService)
+        public static XmlDocument RetrieveEntityForms(string logicalName, IOrganizationService oService, ConnectionDetail detail)
         {
-            QueryByAttribute qba = new QueryByAttribute("systemform");
-            qba.Attributes.AddRange("objecttypecode", "type");
-            qba.Values.AddRange(logicalName, 2);
-            qba.ColumnSet = new ColumnSet(true);
+            var qe = new QueryExpression("systemform")
+            {
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("objecttypecode", ConditionOperator.Equal, logicalName),
+                        new ConditionExpression("type", ConditionOperator.In, new[] {2, 7}),
+                    }
+                },
+                ColumnSet = new ColumnSet(true)
+            };
 
-            EntityCollection ec = oService.RetrieveMultiple(qba);
+            if (detail.OrganizationMajorVersion > 5)
+            {
+                qe.Criteria.Conditions.Add(new ConditionExpression("formactivationstate", ConditionOperator.Equal, 1));
+            }
+
+            EntityCollection ec = oService.RetrieveMultiple(qe);
 
             StringBuilder allFormsXml = new StringBuilder();
             allFormsXml.Append("<root>");

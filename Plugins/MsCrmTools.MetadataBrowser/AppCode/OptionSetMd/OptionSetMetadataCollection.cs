@@ -14,9 +14,19 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OptionSetMd
             list = new List<OptionSetMetadataInfo>();
         }
 
+        public new int Count
+        {
+            get { return list.Count; }
+        }
+
         public OptionSetMetadataInfo this[int index]
         {
             get { return list[index]; }
+        }
+
+        public void Add(OptionSetMetadataInfo info)
+        {
+            list.Add(info);
         }
 
         public AttributeCollection GetAttributes()
@@ -83,11 +93,6 @@ namespace MsCrmTools.MetadataBrowser.AppCode.OptionSetMd
         public object GetPropertyOwner(PropertyDescriptor pd)
         {
             return this;
-        }
-
-        public void Add(OptionSetMetadataInfo info)
-        {
-            list.Add(info);
         }
 
         public void Remove(OptionSetMetadataInfo info)

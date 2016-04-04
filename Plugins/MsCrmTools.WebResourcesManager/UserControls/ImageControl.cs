@@ -3,11 +3,11 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using MsCrmTools.WebResourcesManager.AppCode;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using MsCrmTools.WebResourcesManager.AppCode;
 
 namespace MsCrmTools.WebResourcesManager.UserControls
 {
@@ -21,17 +21,17 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         /// <summary>
         /// Type of web resource
         /// </summary>
-        readonly Enumerations.WebResourceType innerType;
+        private readonly Enumerations.WebResourceType innerType;
 
         /// <summary>
         /// Base64 content of the web resource when loading this control
         /// </summary>
-        readonly string originalContent;
+        private readonly string originalContent;
 
         /// <summary>
         /// Base64 content of the web resource
         /// </summary>
-        string innerContent;
+        private string innerContent;
 
         #endregion Variables
 
@@ -39,13 +39,13 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         public delegate void WebResourceUpdatedEventHandler(object sender, WebResourceUpdatedEventArgs e);
 
-        #endregion
+        #endregion Delegates
 
         #region Event Handlers
 
         public event WebResourceUpdatedEventHandler WebResourceUpdated;
 
-        #endregion
+        #endregion Event Handlers
 
         #region Constructor
 
@@ -88,8 +88,8 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                     pictureBox1.Width = panel1.Width;
 
                 pictureBox1.Location = new Point(
-                    panel1.Width/2 - pictureBox1.Width/2,
-                    panel1.Height/2 - pictureBox1.Height/2);
+                    panel1.Width / 2 - pictureBox1.Width / 2,
+                    panel1.Height / 2 - pictureBox1.Height / 2);
             }
             catch (Exception error)
             {
@@ -102,10 +102,14 @@ namespace MsCrmTools.WebResourcesManager.UserControls
 
         #region Methods
 
-       
         public string GetBase64WebResourceContent()
         {
             return innerContent;
+        }
+
+        public Enumerations.WebResourceType GetWebResourceType()
+        {
+            return innerType;
         }
 
         public void ReplaceWithNewFile(string filename)
@@ -124,19 +128,14 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             }
         }
 
-        public Enumerations.WebResourceType GetWebResourceType()
-        {
-            return innerType;
-        }
-
         private void SendSavedMessage()
         {
             var wrueArgs = new WebResourceUpdatedEventArgs
-                                                       { 
-                Base64Content = innerContent,
-                IsDirty = (innerContent != originalContent),
-                Type = innerType
-            };
+                                                       {
+                                                           Base64Content = innerContent,
+                                                           IsDirty = (innerContent != originalContent),
+                                                           Type = innerType
+                                                       };
 
             if (WebResourceUpdated != null)
             {

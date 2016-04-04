@@ -1,19 +1,19 @@
-﻿using System;
-using System.Linq;
-using System.Windows.Forms;
-using System.Xml;
-using Microsoft.Crm.Sdk.Messages;
+﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.Linq;
+using System.Windows.Forms;
+using System.Xml;
 
 namespace MsCrmTools.AccessChecker.Forms
 {
     public partial class LookupSingle : Form
     {
-        private readonly IOrganizationService service;
         private readonly string entityName;
+        private readonly IOrganizationService service;
         private EntityMetadata metadata;
 
         public LookupSingle(string entityName, IOrganizationService service)
@@ -25,79 +25,26 @@ namespace MsCrmTools.AccessChecker.Forms
         }
 
         public Guid SelectedRecordId { get; private set; }
-        public string SelectedRecordText { get; private set; }
 
-        private void LookupSingleLoad(object sender, EventArgs e)
+        private void BtnCancelClick(object sender, EventArgs e)
         {
-            var request = new RetrieveEntityRequest {LogicalName = entityName, EntityFilters = EntityFilters.Attributes};
-            metadata = ((RetrieveEntityResponse) service.Execute(request)).EntityMetadata;
-
-            var qe = new QueryExpression("savedquery");
-            qe.ColumnSet = new ColumnSet(true);
-            qe.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
-            qe.Criteria.AddCondition("querytype", ConditionOperator.Equal, 4);
-            var records = service.RetrieveMultiple(qe);
-
-            int index = 0;
-            int defaultViewIndex = 0;
-
-            foreach (var record in records.Entities)
-            {
-                if ((bool) record["isdefault"])
-                    defaultViewIndex = index;
-
-                var view = new ViewInfo();
-                view.Entity = record;
-
-                cbbViews.Items.Add(view);
-
-                index++;
-            }
-
-            cbbViews.SelectedIndex = defaultViewIndex;
+            SelectedRecordId = Guid.Empty;
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
-        private void CbbViewsSelectedIndexChanged(object sender, EventArgs e)
+        private void BtnOkClick(object sender, EventArgs e)
         {
-            lvResults.Columns.Clear();
-
-            var view = ((ViewInfo) cbbViews.SelectedItem).Entity;
-            var layout = new XmlDocument();
-            layout.LoadXml(view["layoutxml"].ToString());
-
-            foreach (XmlNode cell in layout.SelectNodes("//cell"))
-            {
-                var ch = new ColumnHeader();
-                try
-                {
-                    ch.Text =
-                        metadata.Attributes.First(a => a.LogicalName == cell.Attributes["name"].Value)
-                            .DisplayName.UserLocalizedLabel.Label;
-                    ch.Width = int.Parse(cell.Attributes["width"].Value);
-                }
-                catch
-                {
-                    ch.Text = cell.Attributes["name"].Value;
-                }
-                lvResults.Columns.Add(ch);
-            }
-        }
-
-        private int GetIntPart(string text)
-        {
-            int returnedValue;
-            if (int.TryParse(text, out returnedValue))
-            {
-                return returnedValue;
-            }
-            return -1;
+            SelectedRecordId = new Guid(lvResults.SelectedItems[0].Tag.ToString());
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void BtnSearchClick(object sender, EventArgs e)
         {
             try
             {
-                var view = ((ViewInfo) cbbViews.SelectedItem).Entity;
+                var view = ((ViewInfo)cbbViews.SelectedItem).Entity;
                 var layout = new XmlDocument();
                 layout.LoadXml(view["layoutxml"].ToString());
 
@@ -130,16 +77,15 @@ namespace MsCrmTools.AccessChecker.Forms
                 }
 
                 var results =
-                    ((ExecuteFetchResponse) service.Execute(new ExecuteFetchRequest {FetchXml = fetch.OuterXml}))
+                    ((ExecuteFetchResponse)service.Execute(new ExecuteFetchRequest { FetchXml = fetch.OuterXml }))
                         .FetchXmlResult;
                 var resultsDoc = new XmlDocument();
                 resultsDoc.LoadXml(results);
 
-                
                 foreach (XmlNode node in resultsDoc.SelectNodes("//result"))
                 {
                     bool isFirstCell = true;
-                    
+
                     var item = new ListViewItem();
                     item.Tag = node.SelectSingleNode(metadata.PrimaryIdAttribute).InnerText;
 
@@ -205,28 +151,70 @@ namespace MsCrmTools.AccessChecker.Forms
             }
         }
 
-        private void BtnOkClick(object sender, EventArgs e)
+        private void CbbViewsSelectedIndexChanged(object sender, EventArgs e)
         {
-            SelectedRecordId = new Guid(lvResults.SelectedItems[0].Tag.ToString());
-            SelectedRecordText = lvResults.SelectedItems[0].Text;
-            DialogResult = DialogResult.OK;
-            Close();
-        }
+            lvResults.Columns.Clear();
 
-        private void BtnCancelClick(object sender, EventArgs e)
-        {
-            SelectedRecordId = Guid.Empty;
-            SelectedRecordText = string.Empty;
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
+            var view = ((ViewInfo)cbbViews.SelectedItem).Entity;
+            var layout = new XmlDocument();
+            layout.LoadXml(view["layoutxml"].ToString());
 
-        private void TxtSearchKeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Return)
+            foreach (XmlNode cell in layout.SelectNodes("//cell"))
             {
-                BtnSearchClick(null, null);
+                var ch = new ColumnHeader();
+                try
+                {
+                    ch.Text =
+                        metadata.Attributes.First(a => a.LogicalName == cell.Attributes["name"].Value)
+                            .DisplayName.UserLocalizedLabel.Label;
+                    ch.Width = int.Parse(cell.Attributes["width"].Value);
+                }
+                catch
+                {
+                    ch.Text = cell.Attributes["name"].Value;
+                }
+                lvResults.Columns.Add(ch);
             }
+        }
+
+        private int GetIntPart(string text)
+        {
+            int returnedValue;
+            if (int.TryParse(text, out returnedValue))
+            {
+                return returnedValue;
+            }
+            return -1;
+        }
+
+        private void LookupSingleLoad(object sender, EventArgs e)
+        {
+            var request = new RetrieveEntityRequest { LogicalName = entityName, EntityFilters = EntityFilters.Attributes };
+            metadata = ((RetrieveEntityResponse)service.Execute(request)).EntityMetadata;
+
+            var qe = new QueryExpression("savedquery");
+            qe.ColumnSet = new ColumnSet(true);
+            qe.Criteria.AddCondition("returnedtypecode", ConditionOperator.Equal, entityName);
+            qe.Criteria.AddCondition("querytype", ConditionOperator.Equal, 4);
+            var records = service.RetrieveMultiple(qe);
+
+            int index = 0;
+            int defaultViewIndex = 0;
+
+            foreach (var record in records.Entities)
+            {
+                if ((bool)record["isdefault"])
+                    defaultViewIndex = index;
+
+                var view = new ViewInfo();
+                view.Entity = record;
+
+                cbbViews.Items.Add(view);
+
+                index++;
+            }
+
+            cbbViews.SelectedIndex = defaultViewIndex;
         }
 
         private void LvResultsColumnClick(object sender, ColumnClickEventArgs e)
@@ -238,6 +226,14 @@ namespace MsCrmTools.AccessChecker.Forms
         private void LvResultsDoubleClick(object sender, EventArgs e)
         {
             BtnOkClick(null, null);
+        }
+
+        private void TxtSearchKeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Return)
+            {
+                BtnSearchClick(null, null);
+            }
         }
     }
 }

@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Query;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml;
 using XrmToolBox;
 
 namespace MsCrmTools.MetadataDocumentGenerator.Helper
 {
     /// <summary>
-    /// Class for querying Crm Metadata 
+    /// Class for querying Crm Metadata
     /// </summary>
-    class MetadataHelper
+    internal class MetadataHelper
     {
         /// <summary>
         /// Gets the list of entities metadata (only Entity Items)
@@ -66,29 +65,30 @@ namespace MsCrmTools.MetadataDocumentGenerator.Helper
         /// <param name="logicalName">Entity logical name</param>
         /// <param name="oService">Crm organization service</param>
         /// <returns>Document containing all forms definition</returns>
-        public static XmlDocument RetrieveEntityForms(string logicalName, IOrganizationService oService)
+        public static IEnumerable<Entity> RetrieveEntityFormList(string logicalName, IOrganizationService oService)
         {
-            var qba = new QueryByAttribute("systemform");
-            qba.Attributes.AddRange("objecttypecode", "type");
-            qba.Values.AddRange(logicalName, 2);
-            qba.ColumnSet = new ColumnSet(true);
-
-            var ec = oService.RetrieveMultiple(qba);
-
-            var allFormsXml = new StringBuilder();
-            allFormsXml.Append("<root>");
-
-            foreach (var form in ec.Entities)
+            var qe = new QueryExpression("systemform")
             {
-                allFormsXml.Append(form.GetAttributeValue<string>("formxml"));
+                ColumnSet = new ColumnSet(true),
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("objecttypecode", ConditionOperator.Equal, logicalName),
+                        new ConditionExpression("type", ConditionOperator.In, new[] {2,7}),
+                    }
+                }
+            };
+
+            try
+            {
+                return oService.RetrieveMultiple(qe).Entities;
             }
-
-            allFormsXml.Append("</root>");
-
-            var docAllForms = new XmlDocument();
-            docAllForms.LoadXml(allFormsXml.ToString());
-
-            return docAllForms;
+            catch
+            {
+                qe.Criteria.Conditions.RemoveAt(qe.Criteria.Conditions.Count - 1);
+                return oService.RetrieveMultiple(qe).Entities;
+            }
         }
 
         /// <summary>
@@ -97,16 +97,37 @@ namespace MsCrmTools.MetadataDocumentGenerator.Helper
         /// <param name="logicalName">Entity logical name</param>
         /// <param name="oService">Crm organization service</param>
         /// <returns>Document containing all forms definition</returns>
-        public static IEnumerable<Entity> RetrieveEntityFormList(string logicalName, IOrganizationService oService)
+        public static List<XmlDocument> RetrieveEntityForms(string logicalName, List<Guid> formsIds, IOrganizationService oService)
         {
-            var qba = new QueryByAttribute("systemform");
-            qba.Attributes.AddRange("objecttypecode", "type");
-            qba.Values.AddRange(logicalName, 2);
-            qba.ColumnSet = new ColumnSet(true);
+            var qe = new QueryExpression("systemform")
+            {
+                ColumnSet = new ColumnSet(true),
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("objecttypecode", ConditionOperator.Equal, logicalName),
+                        new ConditionExpression("type", ConditionOperator.Equal, 2),
+                    }
+                }
+            };
 
-            var ec = oService.RetrieveMultiple(qba);
+            if (formsIds.Count > 0)
+            {
+                qe.Criteria.AddCondition("formid", ConditionOperator.In, formsIds.Select(f => f.ToString()).ToArray());
+            }
 
-            return ec.Entities;
+            var ec = oService.RetrieveMultiple(qe);
+
+            var docs = new List<XmlDocument>();
+            foreach (var form in ec.Entities)
+            {
+                var doc = new XmlDocument();
+                doc.LoadXml(form.GetAttributeValue<string>("formxml"));
+                docs.Add(doc);
+            }
+
+            return docs;
         }
     }
 }

@@ -1,23 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.Linq;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
-
-#if NO_GEMBOX
 using OfficeOpenXml;
-#else
-using GemBox.Spreadsheet;
-#endif
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace MsCrmTools.Translator.AppCode
 {
     public class GlobalOptionSetTranslation
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <example>
         /// OptionSet Id;OptionSet Name;OptionSetValue;Type;LCID1;LCID2;...;LCIDX
@@ -32,13 +26,13 @@ namespace MsCrmTools.Translator.AppCode
             AddHeader(sheet, languages);
 
             var request = new RetrieveAllOptionSetsRequest();
-            var response = (RetrieveAllOptionSetsResponse) service.Execute(request);
+            var response = (RetrieveAllOptionSetsResponse)service.Execute(request);
 
             foreach (var omd in response.OptionSetMetadata)
             {
                 if (omd is OptionSetMetadata)
                 {
-                    var oomd = (OptionSetMetadata) omd;
+                    var oomd = (OptionSetMetadata)omd;
                     foreach (var option in oomd.Options.OrderBy(o => o.Value))
                     {
                         var cell = 0;
@@ -204,7 +198,6 @@ namespace MsCrmTools.Translator.AppCode
             }
         }
 
-#if NO_GEMBOX
         public void Import(ExcelWorksheet sheet, IOrganizationService service)
         {
             var requests = new List<UpdateOptionValueRequest>();
@@ -230,7 +223,7 @@ namespace MsCrmTools.Translator.AppCode
 
                     if (ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Label")
                     {
-                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex && 
+                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex &&
                         while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex) != null && ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                         {
                             var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
@@ -246,7 +239,7 @@ namespace MsCrmTools.Translator.AppCode
                     }
                     else if (ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Description")
                     {
-                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex && 
+                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex &&
                         while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex) != null && ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                         {
                             var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
@@ -269,7 +262,7 @@ namespace MsCrmTools.Translator.AppCode
 
                     if (ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Label")
                     {
-                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex && 
+                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex &&
                         while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex) != null && ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                         {
                             var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
@@ -284,7 +277,7 @@ namespace MsCrmTools.Translator.AppCode
                     }
                     else if (ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Description")
                     {
-                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex && 
+                        // WTF: QUESTIONABLE DELETION: row.Cells.Count() > columnIndex &&
                         while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex) != null && ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                         {
                             var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
@@ -305,102 +298,7 @@ namespace MsCrmTools.Translator.AppCode
                 service.Execute(request);
             }
         }
-#else
-        public void Import(ExcelWorksheet sheet, IOrganizationService service)
-        {
-            var requests = new List<UpdateOptionValueRequest>();
 
-            foreach (ExcelRow row in sheet.Rows.Where(r => r.Index != 0).OrderBy(r => r.Index))
-            {
-                UpdateOptionValueRequest request = requests.FirstOrDefault(r => r.OptionSetName == row.Cells[1].Value.ToString()
-                    && r.Value == int.Parse(row.Cells[2].Value.ToString()));
-                if (request == null)
-                {
-                    request = new UpdateOptionValueRequest
-                                  {
-                                      OptionSetName = row.Cells[1].Value.ToString(),
-                                      Value = int.Parse(row.Cells[2].Value.ToString()),
-                                      Label = new Label(),
-                                      Description = new Label(),
-                                      MergeLabels = true
-                                  };
-
-                    int columnIndex = 4;
-
-                    if (row.Cells[3].Value.ToString() == "Label")
-                    {
-                        while (row.Cells.Count() > columnIndex && row.Cells[columnIndex] != null && row.Cells[columnIndex].Value != null)
-                        {
-                            var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
-                            var sLabel = row.Cells[columnIndex].Value.ToString();
-
-                            if (sLcid.Length > 0 && sLabel.Length > 0)
-                            {
-                                request.Label.LocalizedLabels.Add(new LocalizedLabel(sLabel, int.Parse(sLcid)));
-                            }
-                            
-                            columnIndex++;
-                        }
-                    }
-                    else if (row.Cells[3].Value.ToString() == "Description")
-                    {
-                        while (row.Cells.Count() > columnIndex && row.Cells[columnIndex] != null && row.Cells[columnIndex].Value != null)
-                        {
-                            var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
-                            var sLabel = row.Cells[columnIndex].Value.ToString();
-
-                            if (sLcid.Length > 0 && sLabel.Length > 0)
-                            {
-                                request.Description.LocalizedLabels.Add(new LocalizedLabel(sLabel, int.Parse(sLcid)));
-                            } 
-                            
-                            columnIndex++;
-                        }
-                    }
-
-                    requests.Add(request);
-                }
-                else
-                {
-                    int columnIndex = 4;
-
-                    if (row.Cells[3].Value.ToString() == "Label")
-                    {
-                        while (row.Cells.Count() > columnIndex && row.Cells[columnIndex] != null && row.Cells[columnIndex].Value != null)
-                        {
-                            var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
-                            var sLabel = row.Cells[columnIndex].Value.ToString();
-
-                            if (sLcid.Length > 0 && sLabel.Length > 0)
-                            {
-                                request.Label.LocalizedLabels.Add(new LocalizedLabel(sLabel, int.Parse(sLcid)));
-                            } 
-                            columnIndex++;
-                        }
-                    }
-                    else if (row.Cells[3].Value.ToString() == "Description")
-                    {
-                        while (row.Cells.Count() > columnIndex && row.Cells[columnIndex] != null && row.Cells[columnIndex].Value != null)
-                        {
-                            var sLcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
-                            var sLabel = row.Cells[columnIndex].Value.ToString();
-
-                            if (sLcid.Length > 0 && sLabel.Length > 0)
-                            {
-                                request.Description.LocalizedLabels.Add(new LocalizedLabel(sLabel, int.Parse(sLcid)));
-                            } 
-                            columnIndex++;
-                        }
-                    }
-                }
-            }
-
-            foreach (var request in requests)
-            {
-                service.Execute(request);
-            }
-        }
-#endif
         private void AddHeader(ExcelWorksheet sheet, IEnumerable<int> languages)
         {
             var cell = 0;

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xrm.Sdk;
+﻿using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MsCrmTools.AssemblyRecoveryTool.AppCode
 {
@@ -18,7 +18,7 @@ namespace MsCrmTools.AssemblyRecoveryTool.AppCode
         /// </summary>
         private IOrganizationService service;
 
-        #endregion
+        #endregion Variables
 
         #region Constructor
 
@@ -31,7 +31,7 @@ namespace MsCrmTools.AssemblyRecoveryTool.AppCode
             this.service = service;
         }
 
-        #endregion
+        #endregion Constructor
 
         #region Methods
 
@@ -67,7 +67,7 @@ namespace MsCrmTools.AssemblyRecoveryTool.AppCode
                 }
             };
 
-            var response = (RetrieveMultipleResponse) service.Execute(new RetrieveMultipleRequest {Query = qe});
+            var response = (RetrieveMultipleResponse)service.Execute(new RetrieveMultipleRequest { Query = qe });
 
             foreach (Entity pAssembly in response.EntityCollection.Entities.Where(pAssembly => list.Find(x => x["publickeytoken"].ToString() == pAssembly["publickeytoken"].ToString() && x["name"].ToString() == pAssembly["name"].ToString()) == null))
             {
@@ -77,6 +77,6 @@ namespace MsCrmTools.AssemblyRecoveryTool.AppCode
             return list;
         }
 
-        #endregion
+        #endregion Methods
     }
 }
