@@ -141,16 +141,15 @@ namespace XrmToolBox.Forms
                 manager.InstallPackage(package, false, false);
 
                 var packageFolder = Path.Combine(nugetPluginsFolder, package.Id + "." + package.Version);
-                var packageAssembliesFolder = Path.Combine(packageFolder, "lib", "net");
 
-                foreach (var fi in new DirectoryInfo(packageAssembliesFolder).GetFiles())
+                foreach (var fi in package.AssemblyReferences)
                 {
                     if (item.ForeColor == DefaultForeColor)
                     {
                         try
                         {
                             // Can install plugin directly
-                            File.Copy(fi.FullName, Path.Combine(applicationPluginsFolder, fi.Name));
+                            File.Copy(Path.Combine(packageFolder, fi.Path), Path.Combine(applicationPluginsFolder, fi.Name));
                         }
                         catch (Exception error)
                         {
@@ -164,7 +163,7 @@ namespace XrmToolBox.Forms
                     {
                         pus.Plugins.Add(new PluginUpdate
                         {
-                            Source = fi.FullName,
+                            Source = Path.Combine(packageFolder, fi.Path),
                             Destination = Path.Combine(applicationPluginsFolder, fi.Name)
                         });
                     }
