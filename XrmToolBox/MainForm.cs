@@ -762,5 +762,11 @@ namespace XrmToolBox
                 TsbConnectClick(null, null);
             }
         }
+
+        private void tsbPlugins_Click(object sender, EventArgs e)
+        {
+            var dialog = new PluginsChecker();
+            dialog.ShowDialog(this);
+        }
     }
 }
