@@ -33,6 +33,7 @@
             this.pbThanks = new System.Windows.Forms.PictureBox();
             this.pnlSupport = new System.Windows.Forms.Panel();
             this.lblSupport = new System.Windows.Forms.Label();
+            this.linkClose = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pbThanks)).BeginInit();
             this.pnlSupport.SuspendLayout();
             this.SuspendLayout();
@@ -43,9 +44,10 @@
             this.lblVersion.BackColor = System.Drawing.Color.Transparent;
             this.lblVersion.Font = new System.Drawing.Font("Segoe UI Light", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblVersion.ForeColor = System.Drawing.Color.White;
-            this.lblVersion.Location = new System.Drawing.Point(659, 423);
+            this.lblVersion.Location = new System.Drawing.Point(439, 276);
+            this.lblVersion.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(229, 28);
+            this.lblVersion.Size = new System.Drawing.Size(153, 18);
             this.lblVersion.TabIndex = 0;
             this.lblVersion.Text = "[Version]";
             this.lblVersion.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -55,9 +57,10 @@
             this.pbThanks.BackColor = System.Drawing.Color.Transparent;
             this.pbThanks.Image = ((System.Drawing.Image)(resources.GetObject("pbThanks.Image")));
             this.pbThanks.InitialImage = null;
-            this.pbThanks.Location = new System.Drawing.Point(3, 3);
+            this.pbThanks.Location = new System.Drawing.Point(2, 2);
+            this.pbThanks.Margin = new System.Windows.Forms.Padding(2);
             this.pbThanks.Name = "pbThanks";
-            this.pbThanks.Size = new System.Drawing.Size(133, 127);
+            this.pbThanks.Size = new System.Drawing.Size(89, 83);
             this.pbThanks.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbThanks.TabIndex = 1;
             this.pbThanks.TabStop = false;
@@ -67,9 +70,10 @@
             this.pnlSupport.BackColor = System.Drawing.Color.Transparent;
             this.pnlSupport.Controls.Add(this.lblSupport);
             this.pnlSupport.Controls.Add(this.pbThanks);
-            this.pnlSupport.Location = new System.Drawing.Point(40, 270);
+            this.pnlSupport.Location = new System.Drawing.Point(27, 175);
+            this.pnlSupport.Margin = new System.Windows.Forms.Padding(2);
             this.pnlSupport.Name = "pnlSupport";
-            this.pnlSupport.Size = new System.Drawing.Size(848, 154);
+            this.pnlSupport.Size = new System.Drawing.Size(565, 100);
             this.pnlSupport.TabIndex = 2;
             this.pnlSupport.Visible = false;
             // 
@@ -77,23 +81,46 @@
             // 
             this.lblSupport.Font = new System.Drawing.Font("Segoe UI Light", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSupport.ForeColor = System.Drawing.Color.White;
-            this.lblSupport.Location = new System.Drawing.Point(153, 35);
+            this.lblSupport.Location = new System.Drawing.Point(102, 23);
+            this.lblSupport.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSupport.Name = "lblSupport";
-            this.lblSupport.Size = new System.Drawing.Size(692, 119);
+            this.lblSupport.Size = new System.Drawing.Size(461, 77);
             this.lblSupport.TabIndex = 2;
             this.lblSupport.Text = "Sponsored by you, {0}{1}!\r\nThank you very much for your support!";
             // 
+            // linkClose
+            // 
+            this.linkClose.AutoSize = true;
+            this.linkClose.BackColor = System.Drawing.Color.Transparent;
+            this.linkClose.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkClose.DisabledLinkColor = System.Drawing.Color.White;
+            this.linkClose.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkClose.ForeColor = System.Drawing.Color.White;
+            this.linkClose.LinkArea = new System.Windows.Forms.LinkArea(0, 0);
+            this.linkClose.LinkColor = System.Drawing.Color.White;
+            this.linkClose.Location = new System.Drawing.Point(565, 9);
+            this.linkClose.Name = "linkClose";
+            this.linkClose.Size = new System.Drawing.Size(23, 25);
+            this.linkClose.TabIndex = 8;
+            this.linkClose.Text = "X";
+            this.linkClose.Visible = false;
+            this.linkClose.VisitedLinkColor = System.Drawing.Color.White;
+            this.linkClose.Click += new System.EventHandler(this.linkClose_Click);
+            // 
             // WelcomeDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(900, 460);
+            this.CancelButton = this.linkClose;
+            this.ClientSize = new System.Drawing.Size(600, 300);
             this.ControlBox = false;
+            this.Controls.Add(this.linkClose);
             this.Controls.Add(this.pnlSupport);
             this.Controls.Add(this.lblVersion);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "WelcomeDialog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
@@ -101,6 +128,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbThanks)).EndInit();
             this.pnlSupport.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -110,5 +138,6 @@
         private System.Windows.Forms.PictureBox pbThanks;
         private System.Windows.Forms.Panel pnlSupport;
         private System.Windows.Forms.Label lblSupport;
+        private System.Windows.Forms.LinkLabel linkClose;
     }
 }

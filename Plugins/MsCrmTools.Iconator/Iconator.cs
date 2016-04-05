@@ -112,8 +112,11 @@ namespace MsCrmTools.Iconator
             listViewWebRessources32.Items.Clear();
             listViewWebRessourcesOther.Items.Clear();
 
-            WorkAsync("Loading Entities...",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading Entities...",
+                AsyncArgument = null,
+                Work = (bw, e) =>
                 {
                     var cc = new CrmComponents();
 
@@ -184,12 +187,15 @@ namespace MsCrmTools.Iconator
 
                             webResourceRetrivedList.Add(webResource);
                         }
-                        catch { }
+                        catch
+                        {
+                            // ignored
+                        }
                     }
 
                     e.Result = cc;
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -230,7 +236,8 @@ namespace MsCrmTools.Iconator
 
                     SetEnableState(true);
                 },
-                e => SetWorkingMessage(e.UserState.ToString()));
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
+            });
         }
 
         private void TsbAddIconClick(object sender, EventArgs e)
@@ -306,9 +313,15 @@ namespace MsCrmTools.Iconator
             var mappingList = (from ListViewItem item in lvMappings.Items select (EntityImageMap)item.Tag).ToList();
             SetEnableState(false);
 
-            WorkAsync("Applying images to entities. Please wait...",
-                evt => MetadataManager.ApplyImagesToEntities((List<EntityImageMap>)evt.Argument, Service),
-                evt =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Applying images to entities. Please wait...",
+                AsyncArgument = mappingList,
+                Work = (bw, evt) =>
+                {
+                    MetadataManager.ApplyImagesToEntities((List<EntityImageMap>)evt.Argument, Service);
+                },
+                PostWorkCallBack = evt =>
                 {
                     SetEnableState(true);
 
@@ -322,8 +335,8 @@ namespace MsCrmTools.Iconator
                         lvMappings.Items.Clear();
                         LvEntitiesSelectedIndexChanged(null, null);
                     }
-                },
-                mappingList);
+                }
+            });
         }
 
         #endregion Apply Images to entities
@@ -429,9 +442,15 @@ namespace MsCrmTools.Iconator
                 {
                     SetEnableState(false);
 
-                    WorkAsync("Reseting icons for entity. Please wait...",
-                        evt => MetadataManager.ResetIcons((EntityMetadata)evt.Argument, Service),
-                        evt =>
+                    WorkAsync(new WorkAsyncInfo
+                    {
+                        Message = "Reseting icons for entity. Please wait...",
+                        AsyncArgument = listViewEntities.SelectedItems[0].Tag,
+                        Work = (bw, evt) =>
+                        {
+                            MetadataManager.ResetIcons((EntityMetadata)evt.Argument, Service);
+                        },
+                        PostWorkCallBack = evt =>
                         {
                             SetEnableState(true);
 
@@ -446,7 +465,7 @@ namespace MsCrmTools.Iconator
                                 LvEntitiesSelectedIndexChanged(null, null);
                             }
                         },
-                        listViewEntities.SelectedItems[0].Tag);
+                    });
                 }
             }
             else
@@ -492,6 +511,33 @@ namespace MsCrmTools.Iconator
         private void TsbCloseThisTabClick(object sender, EventArgs e)
         {
             CloseTool();
+        }
+
+        private void tsbToggleBackground_Click(object sender, EventArgs e)
+        {
+            listViewWebRessources16.BackColor = listViewWebRessources16.BackColor == Color.FromName("Window")
+                ? Color.Black
+                : Color.FromName("Window");
+
+            listViewWebRessources16.ForeColor = listViewWebRessources16.ForeColor == Color.FromName("WindowText")
+                ? Color.White
+                : Color.FromName("WindowText");
+
+            listViewWebRessources32.BackColor = listViewWebRessources32.BackColor == Color.FromName("Window")
+                ? Color.Black
+                : Color.FromName("Window");
+
+            listViewWebRessources32.ForeColor = listViewWebRessources32.ForeColor == Color.FromName("WindowText")
+                ? Color.White
+                : Color.FromName("WindowText");
+
+            listViewWebRessourcesOther.BackColor = listViewWebRessourcesOther.BackColor == Color.FromName("Window")
+                ? Color.Black
+                : Color.FromName("Window");
+
+            listViewWebRessourcesOther.ForeColor = listViewWebRessourcesOther.ForeColor == Color.FromName("WindowText")
+               ? Color.White
+               : Color.FromName("WindowText");
         }
     }
 }

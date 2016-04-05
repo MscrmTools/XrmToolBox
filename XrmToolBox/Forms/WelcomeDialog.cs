@@ -7,7 +7,7 @@ namespace XrmToolBox.Forms
 {
     public partial class WelcomeDialog : Form
     {
-        public WelcomeDialog(string version)
+        public WelcomeDialog(string version, bool closeWindow = true)
         {
             InitializeComponent();
 
@@ -15,34 +15,48 @@ namespace XrmToolBox.Forms
 
             ManageLicense();
 
-            var timer = new Timer();
-            timer.Tick += TimerTick;
-            timer.Interval = 3000;
-            timer.Start();
+            if (closeWindow)
+            {
+                var timer = new Timer();
+                timer.Tick += TimerTick;
+                timer.Interval = 3000;
+                timer.Start();
+            }
+            else
+            {
+                linkClose.Visible = true;
+            }
+        }
+
+        private void linkClose_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void ManageLicense()
         {
             try
             {
-                var location = Assembly.GetExecutingAssembly().Location;
-                var fiLocation = new FileInfo(location);
-                var assembly = Assembly.LoadFile(fiLocation.Directory + "\\McTools.StopAdvertisement.dll");
+                var stopAdvertisementLocation = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "McTools.StopAdvertisement.dll");
 
-                if (assembly != null)
+                if (File.Exists(stopAdvertisementLocation))
                 {
-                    Type type = assembly.GetType("McTools.StopAdvertisement.LicenseManager");
-                    if (type == null) { return; }
+                    var type = Assembly.LoadFile(stopAdvertisementLocation).GetType("McTools.StopAdvertisement.LicenseManager");
+                    if (type == null)
+                    {
+                        return;
+                    }
 
-                    MethodInfo methodInfo = type.GetMethod("IsValid");
+                    var methodInfo = type.GetMethod("IsValid");
                     if (methodInfo == null) { return; }
 
                     object classInstance = Activator.CreateInstance(type, null);
 
                     if ((bool)methodInfo.Invoke(classInstance, null))
                     {
-                        PropertyInfo userNameInfo = type.GetProperty("UserName");
-                        PropertyInfo orgNameInfo = type.GetProperty("OrganizationName");
+                        var userNameInfo = type.GetProperty("UserName");
+                        var orgNameInfo = type.GetProperty("OrganizationName");
 
                         var userName = userNameInfo.GetValue(classInstance, null).ToString();
                         var orgName = orgNameInfo.GetValue(classInstance, null).ToString();
@@ -63,11 +77,6 @@ namespace XrmToolBox.Forms
             {
                 MessageBox.Show(this,
                     "It seems you maybe forgot to unblock XrmToolBox.zip before extracting it. XrmToolBox can't work as expected until you unblocked all files. To do so, display XrmToolBox.zip properties and unblock the file before extracting it", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                //pnlSupport.Visible = false;
-                //panel2.Visible = true;
             }
         }
 

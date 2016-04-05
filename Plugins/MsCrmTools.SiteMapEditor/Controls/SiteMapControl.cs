@@ -15,6 +15,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
         private readonly Dictionary<string, string> collec;
 
         private string initialUrl = "";
+        private ToolTip tip;
 
         #region Delegates
 
@@ -34,7 +35,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
             collec = new Dictionary<string, string>();
 
-            ToolTip tip = new ToolTip();
+            tip = new ToolTip();
             tip.ToolTipTitle = "Information";
             tip.SetToolTip(txtSiteMapUrl, "Specifies the URL for Microsoft Dynamics CRM for Outlook to render.");
         }

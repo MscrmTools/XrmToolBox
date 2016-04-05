@@ -16,6 +16,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
         private string initialDescription = "";
         private string initialLCID = "";
+        private ToolTip tip;
 
         #region Delegates
 
@@ -35,7 +36,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
             collec = new Dictionary<string, string>();
 
-            ToolTip tip = new ToolTip();
+            tip = new ToolTip();
             tip.ToolTipTitle = "Information";
             tip.SetToolTip(txtDescriptionLCID, "A four or five digit locale ID for the Description.");
             tip.SetToolTip(txtDescriptionDescription, "Text to be displayed.");

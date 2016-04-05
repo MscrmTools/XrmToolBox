@@ -1,6 +1,4 @@
-﻿using Microsoft.Xrm.Client.Services;
-using Microsoft.Xrm.Sdk.Client;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -9,6 +7,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.UserControls;
 using XrmToolBox.Forms;
@@ -111,6 +110,7 @@ namespace XrmToolBox
         private int DisplayPluginControl(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin)
         {
             var tabIndex = 0;
+            Guid pluginControlInstanceId = Guid.NewGuid();
 
             try
             {
@@ -118,9 +118,10 @@ namespace XrmToolBox
 
                 if (service != null)
                 {
-                    var clonedService = (OrganizationService)currentConnectionDetail.GetOrganizationService();
-                    ((OrganizationServiceProxy)clonedService.InnerService).SdkClientVersion = currentConnectionDetail.OrganizationVersion;
+                    //var clonedService = (OrganizationService)currentConnectionDetail.GetOrganizationService();
+                    //((OrganizationServiceProxy)clonedService.InnerService).SdkClientVersion = currentConnectionDetail.OrganizationVersion;
 
+                    var clonedService = currentConnectionDetail.GetCrmServiceClient().OrganizationServiceProxy;
                     ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
                 }
 
@@ -129,6 +130,18 @@ namespace XrmToolBox
                 if (host != null)
                 {
                     host.OnOutgoingMessage += MainForm_MessageBroker;
+                }
+
+                var statusBarMessager_old = pluginControl as IStatusBarMessager;
+                if (statusBarMessager_old != null)
+                {
+                    statusBarMessager_old.SendMessageToStatusBar += StatusBarMessager_SendMessageToStatusBar;
+                }
+
+                var statusBarMessager = pluginControl as IStatusBarMessenger;
+                if (statusBarMessager != null)
+                {
+                    statusBarMessager.SendMessageToStatusBar += StatusBarMessager_SendMessageToStatusBar;
                 }
 
                 ((IXrmToolBoxPluginControl)pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
@@ -145,6 +158,7 @@ namespace XrmToolBox
                 pluginControl.Dock = DockStyle.Fill;
                 pluginControl.Width = newTab.Width;
                 pluginControl.Height = newTab.Height;
+                pluginControl.Tag = pluginControlInstanceId;
 
                 newTab.Controls.Add(pluginControl);
 
@@ -160,18 +174,6 @@ namespace XrmToolBox
                 }
 
                 pluginInOption.Count++;
-
-                //var p1 = plugin as SmallPluginModel;
-                //if (p1 != null)
-                //    p1.UpdateCount(pluginInOption.Count);
-                //else
-                //{
-                //    var p2 = plugin as LargePluginModel;
-                //    if (p2 != null)
-                //    {
-                //        p2.UpdateCount(pluginInOption.Count);
-                //    }
-                //}
 
                 if (currentOptions.LastAdvertisementDisplay == new DateTime() ||
                     currentOptions.LastAdvertisementDisplay > DateTime.Now ||
@@ -206,7 +208,7 @@ namespace XrmToolBox
 
                     if (displayAdvertisement)
                     {
-                        var sc = new SupportScreen(currentReleaseNote);
+                        var sc = new SupportScreen();
                         sc.ShowDialog(this);
                         currentOptions.LastAdvertisementDisplay = DateTime.Now;
                     }
@@ -214,7 +216,9 @@ namespace XrmToolBox
 
                 if (currentOptions.AllowLogUsage.HasValue && currentOptions.AllowLogUsage.Value)
                 {
+#pragma warning disable CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
                     LogUsage.DoLog(plugin);
+#pragma warning restore CS4014 // Dans la mesure où cet appel n'est pas attendu, l'exécution de la méthode actuelle continue avant la fin de l'appel
                 }
 
                 currentOptions.Save();
@@ -337,6 +341,51 @@ namespace XrmToolBox
                 pManager.Recompose();
                 pluginsModels.Clear();
                 DisplayPlugins(tstxtFilterPlugin.Text);
+            }
+        }
+
+        private void StatusBarMessager_SendMessageToStatusBar(object sender, StatusBarMessageEventArgs e)
+        {
+            var currentPlugin = pluginControlStatuses.FirstOrDefault(pcs => pcs.Control == sender);
+            if (currentPlugin == null)
+            {
+                pluginControlStatuses.Add(new PluginControlStatus(
+                    (IXrmToolBoxPluginControl)sender,
+                    e.Progress,
+                    e.Message
+                    ));
+            }
+            else
+            {
+                currentPlugin.Percentage = e.Progress;
+                currentPlugin.Message = e.Message;
+            }
+
+            MethodInvoker mi = delegate
+            {
+                if (tabControl1.SelectedIndex != 0)
+                {
+                    var currentVisibleControl = (IXrmToolBoxPluginControl)tabControl1.SelectedTab.Controls[0];
+                    if (currentVisibleControl == sender)
+                    {
+                        ccsb.SetMessage(e.Message);
+                        ccsb.SetProgress(e.Progress);
+                    }
+                }
+                else
+                {
+                    ccsb.SetMessage(null);
+                    ccsb.SetProgress(null);
+                }
+            };
+
+            if (InvokeRequired)
+            {
+                Invoke(mi);
+            }
+            else
+            {
+                mi();
             }
         }
     }

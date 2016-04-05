@@ -5,56 +5,67 @@
 
 using Microsoft.Crm.Sdk.Messages;
 using System;
-using System.ComponentModel;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SampleTool
 {
-    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin
+    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin, IStatusBarMessenger
     {
         #region Base tool implementation
-
-        private BackgroundWorker bw;
 
         public SampleTool()
         {
             InitializeComponent();
         }
 
+        public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
+
         public void ProcessWhoAmI()
         {
-            WorkAsync("Retrieving your user id...", (w, e) =>
+            WorkAsync(new WorkAsyncInfo
             {
-                while (e.Cancel == false)
+                Message = "Retrieving your user id...",
+                Work = (w, e) =>
                 {
-                    if (w.CancellationPending)
+                    // The while loop is just here to illustrate the possibility to cancel
+                    // a long running process made of multiple calls
+                    while (e.Cancel == false)
                     {
-                        e.Cancel = true;
-                    }
-                    var request = new WhoAmIRequest();
-                    var response = (WhoAmIResponse)Service.Execute(request);
+                        if (w.CancellationPending)
+                        {
+                            e.Cancel = true;
+                        }
+                        var request = new WhoAmIRequest();
+                        var response = (WhoAmIResponse)Service.Execute(request);
 
-                    e.Result = response.UserId;
-                }
-            },
-                e =>
+                        e.Result = response.UserId;
+                    }
+                },
+                ProgressChanged = e =>
+                {
+                    // If progress has to be notified to user, use the following method:
+                    //SetWorkingMessage("Message to display");
+
+                    // If progress has to be notified to user, through the
+                    // status bar, use the following method
+                    if (SendMessageToStatusBar != null)
+                        SendMessageToStatusBar(this, new StatusBarMessageEventArgs(50, "progress at 50%"));
+                },
+                PostWorkCallBack = e =>
                 {
                     if (!e.Cancelled)
                     {
                         MessageBox.Show(string.Format("You are {0}", (Guid)e.Result));
                     }
                 },
-                e =>
-                {
-                    // If progress has to be notified to user, use the following method:
-                    //SetWorkingMessage("Message to display");
-                },
-                null,
-                true,
-                340,
-                150);
+                AsyncArgument = null,
+                IsCancelable = true,
+                MessageWidth = 340,
+                MessageHeight = 150
+            });
         }
 
         private void BtnCloseClick(object sender, EventArgs e)

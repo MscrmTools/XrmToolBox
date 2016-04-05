@@ -52,6 +52,7 @@ namespace XrmToolBox
             this.xrmToolBoxHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpSelectedPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.displayHelpPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutXrmToolBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbCodePlex = new System.Windows.Forms.ToolStripDropDownButton();
             this.startADiscussionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,6 +78,7 @@ namespace XrmToolBox
             this.pnlHelp = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.tsbPlugins = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.HomePageTab.SuspendLayout();
@@ -93,6 +95,7 @@ namespace XrmToolBox
             // 
             // toolStrip1
             // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbConnect,
             this.toolStripSeparator2,
@@ -100,6 +103,7 @@ namespace XrmToolBox
             this.toolStripSeparator5,
             this.tsbManageTabs,
             this.tsbOptions,
+            this.tsbPlugins,
             this.toolStripSeparator1,
             this.tslFilterPlugin,
             this.tstxtFilterPlugin,
@@ -218,7 +222,8 @@ namespace XrmToolBox
             this.tsbHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.displayXrmToolBoxHelpToolStripMenuItem,
             this.xrmToolBoxHelpToolStripMenuItem,
-            this.HelpSelectedPluginToolStripMenuItem});
+            this.HelpSelectedPluginToolStripMenuItem,
+            this.aboutXrmToolBoxToolStripMenuItem});
             this.tsbHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsbHelp.Image")));
             this.tsbHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbHelp.Name = "tsbHelp";
@@ -252,6 +257,13 @@ namespace XrmToolBox
             this.displayHelpPluginToolStripMenuItem.Size = new System.Drawing.Size(194, 30);
             this.displayHelpPluginToolStripMenuItem.Text = "Display help";
             this.displayHelpPluginToolStripMenuItem.Click += new System.EventHandler(this.displayHelpPluginToolStripMenuItem_Click);
+            // 
+            // aboutXrmToolBoxToolStripMenuItem
+            // 
+            this.aboutXrmToolBoxToolStripMenuItem.Name = "aboutXrmToolBoxToolStripMenuItem";
+            this.aboutXrmToolBoxToolStripMenuItem.Size = new System.Drawing.Size(294, 30);
+            this.aboutXrmToolBoxToolStripMenuItem.Text = "About XrmToolBox";
+            this.aboutXrmToolBoxToolStripMenuItem.Click += new System.EventHandler(this.aboutXrmToolBoxToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
@@ -425,7 +437,7 @@ namespace XrmToolBox
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tabControl1.Location = new System.Drawing.Point(0, 32);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1326, 886);
@@ -438,9 +450,9 @@ namespace XrmToolBox
             this.HomePageTab.AutoScroll = true;
             this.HomePageTab.Controls.Add(this.pnlHelp);
             this.HomePageTab.Location = new System.Drawing.Point(4, 32);
-            this.HomePageTab.Margin = new System.Windows.Forms.Padding(4);
+            this.HomePageTab.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.HomePageTab.Name = "HomePageTab";
-            this.HomePageTab.Padding = new System.Windows.Forms.Padding(4);
+            this.HomePageTab.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.HomePageTab.Size = new System.Drawing.Size(1318, 850);
             this.HomePageTab.TabIndex = 0;
             this.HomePageTab.Text = "Home";
@@ -454,7 +466,7 @@ namespace XrmToolBox
             this.pnlHelp.Controls.Add(this.label2);
             this.pnlHelp.Controls.Add(this.label1);
             this.pnlHelp.Location = new System.Drawing.Point(4, 9);
-            this.pnlHelp.Margin = new System.Windows.Forms.Padding(4);
+            this.pnlHelp.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pnlHelp.Name = "pnlHelp";
             this.pnlHelp.Size = new System.Drawing.Size(1298, 831);
             this.pnlHelp.TabIndex = 0;
@@ -486,6 +498,16 @@ namespace XrmToolBox
             this.label1.Text = "Oups... no plugin found!";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // tsbPlugins
+            // 
+            this.tsbPlugins.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbPlugins.Image = ((System.Drawing.Image)(resources.GetObject("tsbPlugins.Image")));
+            this.tsbPlugins.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbPlugins.Name = "tsbPlugins";
+            this.tsbPlugins.Size = new System.Drawing.Size(28, 29);
+            this.tsbPlugins.Text = "Search for plugins";
+            this.tsbPlugins.Click += new System.EventHandler(this.tsbPlugins_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -496,13 +518,14 @@ namespace XrmToolBox
             this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "MainForm";
             this.Opacity = 0D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "XrmToolBox for Microsoft Dynamics CRM 2011/2013/2015";
+            this.Text = "XrmToolBox for Microsoft Dynamics CRM 2011 to 2016";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -560,6 +583,8 @@ namespace XrmToolBox
         private System.Windows.Forms.ToolStripMenuItem xrmToolBoxHelpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem HelpSelectedPluginToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem displayHelpPluginToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutXrmToolBoxToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton tsbPlugins;
     }
 }
 

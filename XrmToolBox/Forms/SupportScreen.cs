@@ -9,7 +9,7 @@ namespace XrmToolBox.Forms
 {
     public partial class SupportScreen : Form
     {
-        public SupportScreen(string codeplexNote)
+        public SupportScreen()
         {
             InitializeComponent();
         }

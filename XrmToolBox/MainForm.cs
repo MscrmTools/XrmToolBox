@@ -8,7 +8,6 @@ using McTools.Xrm.Connection.WinForms;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -30,10 +29,10 @@ namespace XrmToolBox
         private ConnectionManager cManager;
         private ConnectionDetail currentConnectionDetail;
         private Options currentOptions;
-        private string currentReleaseNote;
         private FormHelper fHelper;
         private string initialConnectionName;
         private string initialPluginName;
+        private List<PluginControlStatus> pluginControlStatuses;
         private PluginManagerExtended pManager;
         private IOrganizationService service;
 
@@ -43,6 +42,9 @@ namespace XrmToolBox
 
         public MainForm(string[] args)
         {
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+
             if (args.Length > 0)
             {
                 this.initialConnectionName = ExtractSwitchValue("/connection:", ref args);
@@ -52,6 +54,7 @@ namespace XrmToolBox
             InitializeComponent();
 
             pluginsModels = new List<PluginModel>();
+            pluginControlStatuses = new List<PluginControlStatus>();
             ProcessMenuItemsForPlugin();
             MouseWheel += (sender, e) => HomePageTab.Focus();
 
@@ -204,8 +207,12 @@ namespace XrmToolBox
                     {
                         this.Invoke(new Action(() =>
                         {
-                            var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description, "MsCrmTools", "XrmToolBox");
-                            nvForm.ShowDialog(this);
+                            var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description, "MsCrmTools", "XrmToolBox", new Uri(cvc.Cpi.PackageUrl));
+                            var result = nvForm.ShowDialog(this);
+                            if (result == DialogResult.OK)
+                            {
+                                Close();
+                            }
                         }));
                     }
                 }
@@ -236,6 +243,13 @@ namespace XrmToolBox
             base.OnResize(e);
 
             AdaptPluginControlSize();
+        }
+
+        private void aboutXrmToolBoxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            var aForm = new WelcomeDialog(version, false) { StartPosition = FormStartPosition.CenterParent };
+            aForm.ShowDialog(this);
         }
 
         private void ConnectUponApproval(object connectionParameter)
@@ -294,10 +308,10 @@ namespace XrmToolBox
                 this.LaunchWelcomeDialog()
             };
 
-            if (!Debugger.IsAttached)
-            {
-                tasks.Add(this.LaunchVersionCheck());
-            }
+            //if (!Debugger.IsAttached)
+            //{
+            tasks.Add(this.LaunchVersionCheck());
+            //}
 
             if (!string.IsNullOrEmpty(this.initialConnectionName))
             {
@@ -428,6 +442,27 @@ namespace XrmToolBox
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             ProcessMenuItemsForPlugin();
+
+            if (tabControl1.SelectedIndex == 0)
+            {
+                tstxtFilterPlugin.Focus();
+            }
+            else
+            {
+                var control = (IXrmToolBoxPluginControl)tabControl1.SelectedTab.Controls[0];
+                ((UserControl)control).Focus();
+                var currentPluginStatus = pluginControlStatuses.FirstOrDefault(pcs => pcs.Control == control);
+                if (currentPluginStatus == null)
+                {
+                    ccsb.SetMessage(null);
+                    ccsb.SetProgress(null);
+                }
+                else
+                {
+                    ccsb.SetMessage(currentPluginStatus.Message);
+                    ccsb.SetProgress(currentPluginStatus.Percentage);
+                }
+            }
         }
 
         private void TsbAboutClick(object sender, EventArgs e)
@@ -719,5 +754,19 @@ namespace XrmToolBox
         }
 
         #endregion Other methods
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.Shift && e.KeyCode == Keys.C)
+            {
+                TsbConnectClick(null, null);
+            }
+        }
+
+        private void tsbPlugins_Click(object sender, EventArgs e)
+        {
+            var dialog = new PluginsChecker();
+            dialog.ShowDialog(this);
+        }
     }
 }

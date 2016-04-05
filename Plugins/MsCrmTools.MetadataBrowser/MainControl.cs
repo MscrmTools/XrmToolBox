@@ -7,8 +7,10 @@ using MsCrmTools.MetadataBrowser.Helpers;
 using MsCrmTools.MetadataBrowser.UserControls;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
@@ -17,9 +19,9 @@ namespace MsCrmTools.MetadataBrowser
     public partial class MainControl : PluginControlBase
     {
         private EntityMetadata[] currentAllMetadata;
-        private EntityMetadata currentMetadata;
         private bool initialized;
         private ListViewColumnsSettings lvcSettings;
+        private Thread searchThread;
 
         public MainControl()
         {
@@ -34,8 +36,10 @@ namespace MsCrmTools.MetadataBrowser
             // Loads listview header column for entities
             ListViewColumnHelper.AddColumnsHeader(entityListView, typeof(EntityMetadataInfo), ListViewColumnsSettings.EntityFirstColumns, lvcSettings.EntitySelectedAttributes, ListViewColumnsSettings.EntityAttributesToIgnore);
 
-            WorkAsync("Loading Entities...",
-                e =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading Entities...",
+                Work = (bw, e) =>
                 {
                     // Search for all entities metadata
                     var request = new RetrieveAllEntitiesRequest { EntityFilters = EntityFilters.Entity };
@@ -46,12 +50,13 @@ namespace MsCrmTools.MetadataBrowser
                     // return listview items
                     e.Result = BuildEntityItems(currentAllMetadata.ToList());
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     entityListView.Items.Clear();
                     // Add listview items to listview
                     entityListView.Items.AddRange(((List<ListViewItem>)e.Result).ToArray());
-                });
+                }
+            });
         }
 
         private void AddSecondarySubItems(Type type, string[] firstColumns, string[] selectedAttributes, object o, ListViewItem item)
@@ -72,7 +77,7 @@ namespace MsCrmTools.MetadataBrowser
                     {
                         value = prop.GetValue(o, null);
                     }
-                    catch (Exception error)
+                    catch
                     {
                         //MessageBox.Show(error.ToString());
                     }
@@ -182,6 +187,41 @@ namespace MsCrmTools.MetadataBrowser
             }
         }
 
+        private void FilterEntityList(object filter = null)
+        {
+            if (currentAllMetadata == null)
+            {
+                return;
+            }
+
+            string filterText = filter?.ToString();
+            if (filter == null)
+            {
+                return;
+            }
+
+            var action = new MethodInvoker(delegate
+            {
+                entityListView.Items.Clear();
+                entityListView.Items.AddRange(
+                    BuildEntityItems(currentAllMetadata
+                        .ToList()
+                        ).Where(item => ((EntityMetadata)item.Tag).LogicalName.Contains(filterText)
+                        || (
+                            ((EntityMetadata)item.Tag).DisplayName?.UserLocalizedLabel != null && ((EntityMetadata)item.Tag).DisplayName.UserLocalizedLabel.Label.ToLower().Contains(filterText.ToLower())))
+                        .ToArray());
+            });
+
+            if (entityListView.InvokeRequired)
+            {
+                entityListView.Invoke(action);
+            }
+            else
+            {
+                action();
+            }
+        }
+
         private void listView_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             var list = (ListView)sender;
@@ -196,20 +236,23 @@ namespace MsCrmTools.MetadataBrowser
 
             var emd = new EntityMetadataInfo((EntityMetadata)entityListView.SelectedItems[0].Tag);
 
-            WorkAsync("Loading Entity...",
-                dwe =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading Entity...",
+                AsyncArgument = emd,
+                Work = (bw, e) =>
                 {
                     var request = new RetrieveEntityRequest
                     {
                         EntityFilters = EntityFilters.All,
-                        LogicalName = ((EntityMetadataInfo)dwe.Argument).LogicalName
+                        LogicalName = ((EntityMetadataInfo)e.Argument).LogicalName
                     };
                     var response = (RetrieveEntityResponse)Service.Execute(request);
-                    dwe.Result = response.EntityMetadata;
+                    e.Result = response.EntityMetadata;
                 },
-                wce =>
+                PostWorkCallBack = e =>
                 {
-                    var emdFull = (EntityMetadata)wce.Result;
+                    var emdFull = (EntityMetadata)e.Result;
 
                     TabPage tab;
                     if (mainTabControl.TabPages.ContainsKey(emd.SchemaName))
@@ -231,8 +274,8 @@ namespace MsCrmTools.MetadataBrowser
                         tab.Controls.Add(epc);
                         mainTabControl.SelectTab(tab);
                     }
-                },
-                emd);
+                }
+            });
         }
 
         private void MainControl_Enter(object sender, EventArgs e)
@@ -309,6 +352,28 @@ namespace MsCrmTools.MetadataBrowser
         private void tsbLoadEntities_Click(object sender, EventArgs e)
         {
             ExecuteMethod(LoadEntities);
+        }
+
+        private void tstxtFilter_Enter(object sender, EventArgs e)
+        {
+            if (tstxtFilter.ForeColor == SystemColors.InactiveCaption)
+            {
+                tstxtFilter.TextChanged -= tstxtFilter_TextChanged;
+                tstxtFilter.ForeColor = Color.Black;
+                tstxtFilter.Text = string.Empty;
+                tstxtFilter.TextChanged += tstxtFilter_TextChanged;
+            }
+        }
+
+        private void tstxtFilter_TextChanged(object sender, EventArgs e)
+        {
+            if (searchThread != null)
+            {
+                searchThread.Abort();
+            }
+
+            searchThread = new Thread(FilterEntityList);
+            searchThread.Start(tstxtFilter.Text);
         }
     }
 }

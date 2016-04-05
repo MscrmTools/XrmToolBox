@@ -57,8 +57,10 @@ namespace MsCrmTools.MetadataDocumentGenerator
             lvEntities.Items.Clear();
             cbbLcid.Items.Clear();
 
-            WorkAsync("Retrieving entities...",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Retrieving entities...",
+                Work = (bw, e) =>
                 {
                     emdCache = new List<EntityMetadata>();
 
@@ -78,7 +80,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
                         lcidResponse.RetrieveProvisionedLanguages.Select(
                             lcid => new LanguageCode { Lcid = lcid, Label = CultureInfo.GetCultureInfo(lcid).EnglishName });
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     foreach (var emd in emdCache)
                     {
@@ -91,9 +93,9 @@ namespace MsCrmTools.MetadataDocumentGenerator
                         {
                             Text = displayName,
                             SubItems =
-                                                 {
-                                                     name
-                                                 },
+                            {
+                                name
+                            },
                             Tag = name
                         });
                     }
@@ -110,7 +112,8 @@ namespace MsCrmTools.MetadataDocumentGenerator
 
                     SetWorkingState(false);
                 },
-                e => SetWorkingMessage(e.UserState.ToString()));
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
+            });
         }
 
         private void SetWorkingState(bool isWorking)
@@ -142,13 +145,13 @@ namespace MsCrmTools.MetadataDocumentGenerator
         private void BtnBrowseFilePathClick(object sender, EventArgs e)
         {
             var sfDialog = new SaveFileDialog
-                               {
-                                   Filter =
+            {
+                Filter =
                                        cbbOutputType.SelectedIndex == 0
                                            ? "Excel workbook|*.xlsx"
                                            : "Word Document|*.docx",
-                                   Title = "Select a location for the file generated"
-                               };
+                Title = "Select a location for the file generated"
+            };
 
             if (sfDialog.ShowDialog(this) == DialogResult.OK)
             {
@@ -283,7 +286,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
 
             if (e.Item.Checked)
             {
-                currentEntity.Attributes.Add(lvAttributes.CheckedItems[0].Tag.ToString());
+                currentEntity.Attributes.Add(e.Item.Tag.ToString());
             }
             else
             {
@@ -303,11 +306,11 @@ namespace MsCrmTools.MetadataDocumentGenerator
                     return;
 
                 settings.EntitiesToProceed.Add(new EntityItem
-                                                   {
-                                                       Attributes = new List<string>(),
-                                                       Name = e.Item.Tag.ToString(),
-                                                       Forms = new List<Guid>()
-                                                   });
+                {
+                    Attributes = new List<string>(),
+                    Name = e.Item.Tag.ToString(),
+                    Forms = new List<Guid>()
+                });
             }
             else
             {
@@ -339,8 +342,11 @@ namespace MsCrmTools.MetadataDocumentGenerator
                 var entityName = lvEntities.SelectedItems[0].Tag.ToString();
                 SetWorkingState(true);
 
-                WorkAsync("Retrieving attributes...",
-                    evt =>
+                WorkAsync(new WorkAsyncInfo
+                {
+                    Message = "Retrieving attributes...",
+                    AsyncArgument = entityName,
+                    Work = (bw, evt) =>
                     {
                         var entityLogicalName = evt.Argument.ToString();
 
@@ -349,7 +355,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
 
                         evt.Result = response.EntityMetadata;
                     },
-                    evt =>
+                    PostWorkCallBack = evt =>
                     {
                         var currentEntityMd = settings.EntitiesToProceed.FirstOrDefault(x => x.Name == lvEntities.SelectedItems[0].Tag.ToString());
 
@@ -372,8 +378,8 @@ namespace MsCrmTools.MetadataDocumentGenerator
                         }
 
                         SetWorkingState(false);
-                    },
-                    entityName);
+                    }
+                });
             }
             else if (cbbSelectionType.SelectedIndex == (int)AttributeSelectionOption.AttributesOnForm
                 || cbbSelectionType.SelectedIndex == (int)AttributeSelectionOption.AttributesNotOnForm)
@@ -386,8 +392,11 @@ namespace MsCrmTools.MetadataDocumentGenerator
                 var theEntity = settings.EntitiesToProceed.First(x => x.Name == lvEntities.SelectedItems[0].Tag.ToString());
                 theEntity.FormsDefinitions.Clear();
 
-                WorkAsync("Retrieving forms...",
-                    evt =>
+                WorkAsync(new WorkAsyncInfo
+                {
+                    Message = "Retrieving forms...",
+                    AsyncArgument = entityName,
+                    Work = (bw, evt) =>
                     {
                         var qe = new QueryExpression("systemform")
                         {
@@ -405,7 +414,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
 
                         evt.Result = Service.RetrieveMultiple(qe).Entities;
                     },
-                    evt =>
+                    PostWorkCallBack = evt =>
                     {
                         var currentEntityMd = settings.EntitiesToProceed.FirstOrDefault(x => x.Name == lvEntities.SelectedItems[0].Tag.ToString());
 
@@ -424,8 +433,8 @@ namespace MsCrmTools.MetadataDocumentGenerator
                         }
 
                         SetWorkingState(false);
-                    },
-                    entityName);
+                    }
+                });
             }
         }
 
@@ -443,7 +452,7 @@ namespace MsCrmTools.MetadataDocumentGenerator
                 currentEntity = settings.EntitiesToProceed.FirstOrDefault(x => x.Name == currentEntityName);
             }
 
-            var form = (Entity)lvForms.CheckedItems[0].Tag;
+            var form = (Entity)e.Item.Tag;
 
             if (e.Item.Checked)
             {
@@ -489,8 +498,11 @@ namespace MsCrmTools.MetadataDocumentGenerator
 
             SetWorkingState(true);
 
-            WorkAsync("",
-                (bw, evt) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "",
+                AsyncArgument = null,
+                Work = (bw, evt) =>
                 {
                     // If we need attribute location but miss at least one
                     // form definition for entity, then we retrieve forms
@@ -532,12 +544,13 @@ namespace MsCrmTools.MetadataDocumentGenerator
                         docGenerator.Settings = settings;
                         docGenerator.Generate(Service);
                     }
-                    else
-                    {
-                        //docGenerator = new WordDocumentDocX();
-                    }
+                    //else
+                    //{
+                    //    // Depecrated
+                    //    //docGenerator = new WordDocumentDocX();
+                    //}
                 },
-                evt =>
+                PostWorkCallBack = evt =>
                 {
                     SetWorkingState(false);
 
@@ -554,8 +567,8 @@ namespace MsCrmTools.MetadataDocumentGenerator
                         }
                     }
                 },
-                evt => SetWorkingMessage(string.Format("{0}%\r\n{1}", evt.ProgressPercentage, evt.UserState)),
-                messageHeight: 180);
+                ProgressChanged = evt => { SetWorkingMessage(string.Format("{0}%\r\n{1}", evt.ProgressPercentage, evt.UserState)); }
+            });
         }
 
         #region Settings

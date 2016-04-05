@@ -65,18 +65,18 @@ namespace XrmToolBox.Extensibility
                 _worker.ProgressChanged += info.PerformProgressChange;
             }
 
-            if (info.PostWorkCallBack != null)
+            _worker.RunWorkerCompleted += (s, e) =>
             {
-                _worker.RunWorkerCompleted += (s, e) =>
+                if (info.Host.Controls.Contains(_infoPanel))
                 {
-                    if (info.Host.Controls.Contains(_infoPanel))
-                    {
-                        _infoPanel.Dispose();
-                        info.Host.Controls.Remove(_infoPanel);
-                    }
+                    _infoPanel.Dispose();
+                    info.Host.Controls.Remove(_infoPanel);
+                }
+                if (info.PostWorkCallBack != null)
+                {
                     info.PostWorkCallBack(e);
-                };
-            }
+                }
+            };
 
             _worker.RunWorkerAsync(info.AsyncArgument);
         }

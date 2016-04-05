@@ -40,7 +40,6 @@
             this.tabPageAutre = new System.Windows.Forms.TabPage();
             this.btnPreview = new System.Windows.Forms.Button();
             this.labelSizeWr = new System.Windows.Forms.Label();
-            this.listViewWebRessourcesOther = new System.Windows.Forms.ListView();
             this.btnMap = new System.Windows.Forms.Button();
             this.gbMapping = new System.Windows.Forms.GroupBox();
             this.lvMappings = new System.Windows.Forms.ListView();
@@ -66,7 +65,10 @@
             this.tsbAddIcon = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbApply = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbToggleBackground = new System.Windows.Forms.ToolStripButton();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.listViewWebRessourcesOther = new System.Windows.Forms.ListView();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -152,15 +154,13 @@
             // 
             // listViewWebRessources16
             // 
-            this.listViewWebRessources16.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewWebRessources16.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewWebRessources16.HideSelection = false;
-            this.listViewWebRessources16.Location = new System.Drawing.Point(4, 4);
+            this.listViewWebRessources16.Location = new System.Drawing.Point(2, 2);
             this.listViewWebRessources16.Margin = new System.Windows.Forms.Padding(2);
             this.listViewWebRessources16.MultiSelect = false;
             this.listViewWebRessources16.Name = "listViewWebRessources16";
-            this.listViewWebRessources16.Size = new System.Drawing.Size(550, 224);
+            this.listViewWebRessources16.Size = new System.Drawing.Size(554, 228);
             this.listViewWebRessources16.TabIndex = 2;
             this.listViewWebRessources16.UseCompatibleStateImageBehavior = false;
             this.listViewWebRessources16.SelectedIndexChanged += new System.EventHandler(this.LvWebRessourcesSelectedIndexChanged);
@@ -180,15 +180,13 @@
             // 
             // listViewWebRessources32
             // 
-            this.listViewWebRessources32.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewWebRessources32.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewWebRessources32.HideSelection = false;
-            this.listViewWebRessources32.Location = new System.Drawing.Point(4, 4);
+            this.listViewWebRessources32.Location = new System.Drawing.Point(2, 2);
             this.listViewWebRessources32.Margin = new System.Windows.Forms.Padding(2);
             this.listViewWebRessources32.MultiSelect = false;
             this.listViewWebRessources32.Name = "listViewWebRessources32";
-            this.listViewWebRessources32.Size = new System.Drawing.Size(550, 224);
+            this.listViewWebRessources32.Size = new System.Drawing.Size(554, 228);
             this.listViewWebRessources32.TabIndex = 1;
             this.listViewWebRessources32.UseCompatibleStateImageBehavior = false;
             this.listViewWebRessources32.SelectedIndexChanged += new System.EventHandler(this.LvWebRessourcesSelectedIndexChanged);
@@ -196,9 +194,9 @@
             // 
             // tabPageAutre
             // 
+            this.tabPageAutre.Controls.Add(this.listViewWebRessourcesOther);
             this.tabPageAutre.Controls.Add(this.btnPreview);
             this.tabPageAutre.Controls.Add(this.labelSizeWr);
-            this.tabPageAutre.Controls.Add(this.listViewWebRessourcesOther);
             this.tabPageAutre.Location = new System.Drawing.Point(4, 22);
             this.tabPageAutre.Margin = new System.Windows.Forms.Padding(2);
             this.tabPageAutre.Name = "tabPageAutre";
@@ -209,10 +207,10 @@
             // 
             // btnPreview
             // 
-            this.btnPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPreview.Location = new System.Drawing.Point(420, 204);
+            this.btnPreview.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnPreview.Location = new System.Drawing.Point(0, 209);
             this.btnPreview.Name = "btnPreview";
-            this.btnPreview.Size = new System.Drawing.Size(135, 23);
+            this.btnPreview.Size = new System.Drawing.Size(558, 23);
             this.btnPreview.TabIndex = 5;
             this.btnPreview.Text = "Preview";
             this.btnPreview.UseVisualStyleBackColor = true;
@@ -227,22 +225,6 @@
             this.labelSizeWr.Name = "labelSizeWr";
             this.labelSizeWr.Size = new System.Drawing.Size(0, 13);
             this.labelSizeWr.TabIndex = 4;
-            // 
-            // listViewWebRessourcesOther
-            // 
-            this.listViewWebRessourcesOther.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listViewWebRessourcesOther.HideSelection = false;
-            this.listViewWebRessourcesOther.Location = new System.Drawing.Point(4, 4);
-            this.listViewWebRessourcesOther.Margin = new System.Windows.Forms.Padding(2);
-            this.listViewWebRessourcesOther.MultiSelect = false;
-            this.listViewWebRessourcesOther.Name = "listViewWebRessourcesOther";
-            this.listViewWebRessourcesOther.Size = new System.Drawing.Size(550, 195);
-            this.listViewWebRessourcesOther.TabIndex = 3;
-            this.listViewWebRessourcesOther.UseCompatibleStateImageBehavior = false;
-            this.listViewWebRessourcesOther.SelectedIndexChanged += new System.EventHandler(this.LvWebRessourcesOtherSelectedIndexChanged);
-            this.listViewWebRessourcesOther.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.LvWebRessourcesMouseDoubleClick);
             // 
             // btnMap
             // 
@@ -434,7 +416,9 @@
             this.toolStripSeparator1,
             this.tsbAddIcon,
             this.toolStripSeparator2,
-            this.tsbApply});
+            this.tsbApply,
+            this.toolStripSeparator4,
+            this.tsbToggleBackground});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Size = new System.Drawing.Size(911, 25);
@@ -495,11 +479,38 @@
             this.tsbApply.Text = "Apply and Publish";
             this.tsbApply.Click += new System.EventHandler(this.TsbApplyClick);
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tsbToggleBackground
+            // 
+            this.tsbToggleBackground.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbToggleBackground.Image = ((System.Drawing.Image)(resources.GetObject("tsbToggleBackground.Image")));
+            this.tsbToggleBackground.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbToggleBackground.Name = "tsbToggleBackground";
+            this.tsbToggleBackground.Size = new System.Drawing.Size(23, 22);
+            this.tsbToggleBackground.Text = "Toggle Icons list background and text";
+            this.tsbToggleBackground.Click += new System.EventHandler(this.tsbToggleBackground_Click);
+            // 
             // imageList1
             // 
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "Icon.png");
+            // 
+            // listViewWebRessourcesOther
+            // 
+            this.listViewWebRessourcesOther.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listViewWebRessourcesOther.HideSelection = false;
+            this.listViewWebRessourcesOther.Location = new System.Drawing.Point(0, 0);
+            this.listViewWebRessourcesOther.Margin = new System.Windows.Forms.Padding(2);
+            this.listViewWebRessourcesOther.MultiSelect = false;
+            this.listViewWebRessourcesOther.Name = "listViewWebRessourcesOther";
+            this.listViewWebRessourcesOther.Size = new System.Drawing.Size(558, 209);
+            this.listViewWebRessourcesOther.TabIndex = 6;
+            this.listViewWebRessourcesOther.UseCompatibleStateImageBehavior = false;
             // 
             // Iconator
             // 
@@ -545,7 +556,6 @@
         private System.Windows.Forms.TabPage tabPageAutre;
         private System.Windows.Forms.Button btnPreview;
         private System.Windows.Forms.Label labelSizeWr;
-        private System.Windows.Forms.ListView listViewWebRessourcesOther;
         private System.Windows.Forms.Button btnMap;
         private System.Windows.Forms.GroupBox gbMapping;
         private System.Windows.Forms.ListView lvMappings;
@@ -572,5 +582,8 @@
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ToolStripButton tsbCloseThisTab;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripButton tsbToggleBackground;
+        private System.Windows.Forms.ListView listViewWebRessourcesOther;
     }
 }

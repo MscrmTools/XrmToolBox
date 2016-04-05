@@ -81,13 +81,32 @@ namespace XrmToolBox.AppCode
                                 currentBuildVersion == buildVersion && currentRevisionVersion < revisionVersion)
                             {
                                 var mdth = new Markdown();
-                                var html = mdth.Transform(lastRelease.body).Replace("h1", "div");
+                                var html = string.Empty;
+                                try
+                                {
+                                    html = mdth.Transform(lastRelease.body);
+                                }
+                                catch
+                                {
+                                    html = "<br/><br/><i>Unable to load release notes.<br/>Click the Download button to read what's new!</i>";
+                                }
 
                                 Cpi = new GithubInformation
                                 {
                                     Description = html,
                                     Version = version
                                 };
+
+                                response = await client.GetAsync(lastRelease.assets_url).ConfigureAwait(continueOnCapturedContext: false);
+                                response.EnsureSuccessStatusCode();
+                                if (response.IsSuccessStatusCode)
+                                {
+                                    data = response.Content.ReadAsStringAsync();
+                                    jSserializer = new JavaScriptSerializer();
+                                    var assets = jSserializer.Deserialize<List<Asset>>(data.Result);
+
+                                    Cpi.PackageUrl = assets.First(a => a.name.ToLower() == "xrmtoolbox.zip").browser_download_url;
+                                }
                             }
                         }
                     }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xrm.Sdk;
+﻿using McTools.Xrm.Connection;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
 using MscrmTools.SyncFilterManager.AppCode;
 using MscrmTools.SyncFilterManager.Forms;
@@ -13,6 +14,7 @@ namespace MscrmTools.SyncFilterManager.Controls
 {
     public partial class CrmUserList : UserControl
     {
+        private ConnectionDetail connectionDetail;
         private Panel loadingPanel;
 
         private IOrganizationService service;
@@ -22,9 +24,10 @@ namespace MscrmTools.SyncFilterManager.Controls
             InitializeComponent();
         }
 
-        public CrmUserList(IOrganizationService service, bool selectMultipleUsers)
+        public CrmUserList(IOrganizationService service, bool selectMultipleUsers, ConnectionDetail connectionDetail)
         {
             this.service = service;
+            this.connectionDetail = connectionDetail;
 
             InitializeComponent();
 
@@ -35,6 +38,11 @@ namespace MscrmTools.SyncFilterManager.Controls
         /// EventHandler to request a connection to an organization
         /// </summary>
         public event EventHandler OnRequestConnection;
+
+        public ConnectionDetail ConnectionDetail
+        {
+            set { connectionDetail = value; }
+        }
 
         [Description("Select Multiple Users"), Category("List")]
         public bool SelectMultipleUsers
@@ -182,7 +190,7 @@ namespace MscrmTools.SyncFilterManager.Controls
             var sourceUser = (Entity)((object[])e.Argument)[0];
             var targetUsers = (List<Entity>)((object[])e.Argument)[1];
 
-            var rManager = new RuleManager("userquery", service);
+            var rManager = new RuleManager("userquery", service, connectionDetail);
             rManager.AddRulesFromUser(sourceUser, targetUsers, worker);
         }
 

@@ -1,3 +1,4 @@
+using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
@@ -138,22 +139,37 @@ namespace Javista.XrmToolBox.ImportNN.AppCode
                             }
                         }
 
-                        var request = new DisassociateRequest
+                        if (settings.Relationship == "listcontact_association"
+                           || settings.Relationship == "listaccount_association"
+                           || settings.Relationship == "listlead_association")
                         {
-                            Target = new EntityReference(settings.FirstEntity, firstGuid),
-                            Relationship = new Relationship(settings.Relationship),
-                            RelatedEntities = new EntityReferenceCollection
+                            var request = new RemoveMemberListRequest
                             {
-                                new EntityReference(settings.SecondEntity, secondGuid)
-                            }
-                        };
+                                ListId = settings.FirstEntity == "list" ? firstGuid : secondGuid,
+                                EntityId = settings.FirstEntity == "list" ? secondGuid : firstGuid
+                            };
 
-                        if (request.Target.LogicalName == request.RelatedEntities.First().LogicalName)
-                        {
-                            request.Relationship.PrimaryEntityRole = EntityRole.Referenced;
+                            service.Execute(request);
                         }
+                        else
+                        {
+                            var request = new DisassociateRequest
+                            {
+                                Target = new EntityReference(settings.FirstEntity, firstGuid),
+                                Relationship = new Relationship(settings.Relationship),
+                                RelatedEntities = new EntityReferenceCollection
+                                {
+                                    new EntityReference(settings.SecondEntity, secondGuid)
+                                }
+                            };
 
-                        service.Execute(request);
+                            if (request.Target.LogicalName == request.RelatedEntities.First().LogicalName)
+                            {
+                                request.Relationship.PrimaryEntityRole = EntityRole.Referenced;
+                            }
+
+                            service.Execute(request);
+                        }
 
                         OnRaiseSuccess(new ResultEventArgs { LineNumber = lineNumber });
                     }

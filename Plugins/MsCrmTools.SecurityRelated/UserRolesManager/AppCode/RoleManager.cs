@@ -1,9 +1,11 @@
+using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
+
 
 namespace MsCrmTools.UserRolesManager.AppCode
 {
@@ -14,25 +16,6 @@ namespace MsCrmTools.UserRolesManager.AppCode
         public RoleManager(IOrganizationService service)
         {
             this.service = service;
-        }
-
-        public List<Entity> GetRoles()
-        {
-            return service.RetrieveMultiple(new QueryExpression("role") { ColumnSet = new ColumnSet(true) }).Entities.ToList();
-        }
-
-        public Guid GetRootBusinessUnitId()
-        {
-            return service.RetrieveMultiple(new QueryExpression("businessunit")
-            {
-                Criteria = new FilterExpression
-                {
-                    Conditions =
-                {
-                    new ConditionExpression("parentbusinessunitid", ConditionOperator.Null)
-                }
-                }
-            }).Entities.First().Id;
         }
 
         public void AddRolesToPrincipals(List<Entity> roles, List<Entity> principals, List<Entity> allRoles, BackgroundWorker worker = null)
@@ -67,67 +50,38 @@ namespace MsCrmTools.UserRolesManager.AppCode
                              new Relationship(principal.LogicalName + "roles_association"),
                              new EntityReferenceCollection { roleToUse.ToEntityReference() });
                     }
-                    catch (Exception error)
+                    catch
                     {
-
+                        // ignored
                     }
 
                     current++;
                 }
-                //service.Associate(
-                //    principal.LogicalName,
-                //    principal.Id,
-                //    new Relationship(principal.LogicalName + "roles_association"),
-                //    new EntityReferenceCollection(roles.Select(r => r.ToEntityReference()).ToList()));
             }
         }
 
-        public void RemoveRolesFromPrincipals(List<Entity> roles, List<Entity> principals, List<Entity> allRoles, BackgroundWorker worker = null)
+        public List<Entity> GetRoles()
         {
-            int total = principals.Count * roles.Count;
-            int current = 0;
+            OrganizationServiceContext org = new OrganizationServiceContext(service);
+            return (from role in org.CreateQuery("role")
+                    select new Entity("role")
+                    {
+                        Id = role.Id
+                    }).ToList();
+        }
 
-            foreach (var principal in principals)
+        public Guid GetRootBusinessUnitId()
+        {
+            return service.RetrieveMultiple(new QueryExpression("businessunit")
             {
-                foreach (var role in roles)
+                Criteria = new FilterExpression
                 {
-                    if (worker != null && worker.WorkerReportsProgress)
-                    {
-                        worker.ReportProgress(current * 100 / total, "Removing roles from principals ({0} %)...");
-                    }
-
-                    var roleToUse = role;
-
-                    if (allRoles != null)
-                    {
-                        var currentPrincipalBuId = principal.GetAttributeValue<EntityReference>("businessunitid").Id;
-                        if (role.GetAttributeValue<EntityReference>("businessunitid").Id != currentPrincipalBuId)
-                        {
-                            roleToUse = GetRoleRecursive(currentPrincipalBuId, new List<Entity> { role }, allRoles);
-                        }
-                    }
-
-                    try
-                    {
-                        service.Disassociate(
-                            principal.LogicalName,
-                            principal.Id,
-                            new Relationship(principal.LogicalName + "roles_association"),
-                            new EntityReferenceCollection { roleToUse.ToEntityReference() });
-                    }
-                    catch (Exception error)
-                    {
-
-                    }
-
-                    current++;
+                    Conditions =
+                {
+                    new ConditionExpression("parentbusinessunitid", ConditionOperator.Null)
                 }
-                //service.Disassociate(
-                //    principal.LogicalName,
-                //    principal.Id,
-                //    new Relationship(principal.LogicalName + "roles_association"),
-                //    new EntityReferenceCollection(roles.Select(r => r.ToEntityReference()).ToList()));
-            }
+                }
+            }).Entities.First().Id;
         }
 
         public void RemoveExistingRolesFromPrincipals(List<Entity> principals, BackgroundWorker worker = null)
@@ -210,7 +164,55 @@ namespace MsCrmTools.UserRolesManager.AppCode
             }
         }
 
-        Entity GetRoleRecursive(Guid buId, List<Entity> roles, List<Entity> allRoles)
+        public void RemoveRolesFromPrincipals(List<Entity> roles, List<Entity> principals, List<Entity> allRoles, BackgroundWorker worker = null)
+        {
+            int total = principals.Count * roles.Count;
+            int current = 0;
+
+            foreach (var principal in principals)
+            {
+                foreach (var role in roles)
+                {
+                    if (worker != null && worker.WorkerReportsProgress)
+                    {
+                        worker.ReportProgress(current * 100 / total, "Removing roles from principals ({0} %)...");
+                    }
+
+                    var roleToUse = role;
+
+                    if (allRoles != null)
+                    {
+                        var currentPrincipalBuId = principal.GetAttributeValue<EntityReference>("businessunitid").Id;
+                        if (role.GetAttributeValue<EntityReference>("businessunitid").Id != currentPrincipalBuId)
+                        {
+                            roleToUse = GetRoleRecursive(currentPrincipalBuId, new List<Entity> { role }, allRoles);
+                        }
+                    }
+
+                    try
+                    {
+                        service.Disassociate(
+                            principal.LogicalName,
+                            principal.Id,
+                            new Relationship(principal.LogicalName + "roles_association"),
+                            new EntityReferenceCollection { roleToUse.ToEntityReference() });
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+
+                    current++;
+                }
+                //service.Disassociate(
+                //    principal.LogicalName,
+                //    principal.Id,
+                //    new Relationship(principal.LogicalName + "roles_association"),
+                //    new EntityReferenceCollection(roles.Select(r => r.ToEntityReference()).ToList()));
+            }
+        }
+
+        private Entity GetRoleRecursive(Guid buId, List<Entity> roles, List<Entity> allRoles)
         {
             if (roles == null || allRoles == null)
             {

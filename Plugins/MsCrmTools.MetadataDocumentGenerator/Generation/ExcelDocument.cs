@@ -1,4 +1,4 @@
-﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.MetadataDocumentGenerator.Helper;
@@ -105,13 +105,15 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
             sheet.Cells[lineNumber, y].Value = (amd.SchemaName);
             y++;
 
-            sheet.Cells[lineNumber, y].Value = (amd.DisplayName.LocalizedLabels.Count == 0 ? "N/A" : amd.DisplayName.LocalizedLabels.First(l => l.LanguageCode == settings.DisplayNamesLangugageCode).Label);
+            var amdDisplayName = amd.DisplayName.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
+            sheet.Cells[lineNumber, y].Value = (amd.DisplayName.LocalizedLabels.Count == 0 ? "N/A" : amdDisplayName != null ? amdDisplayName.Label : "");
             y++;
 
             if (amd.AttributeType != null) sheet.Cells[lineNumber, y].Value = (amd.AttributeType.Value.ToString());
             y++;
 
-            sheet.Cells[lineNumber, y].Value = (amd.Description.LocalizedLabels.Count == 0 ? "N/A" : amd.Description.LocalizedLabels.First(l => l.LanguageCode == settings.DisplayNamesLangugageCode).Label);
+            var amdDescription = amd.Description.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
+            sheet.Cells[lineNumber, y].Value = (amd.Description.LocalizedLabels.Count == 0 ? "N/A" : amdDescription != null ? amdDescription.Label : "");
             y++;
 
             sheet.Cells[lineNumber, y].Value = ((amd.IsCustomAttribute != null && amd.IsCustomAttribute.Value).ToString(CultureInfo.InvariantCulture));
@@ -143,57 +145,66 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
 
             if (settings.AddFormLocation)
             {
-                var entity = settings.EntitiesToProceed.First(e => e.Name == amd.EntityLogicalName);
-
-                foreach (var form in entity.FormsDefinitions.Where(fd => entity.Forms.Contains(fd.Id) || entity.Forms.Count == 0))
+                var entity = settings.EntitiesToProceed.FirstOrDefault(e => e.Name == amd.EntityLogicalName);
+                if (entity != null)
                 {
-                    var formName = form.GetAttributeValue<string>("name");
-                    var xmlDocument = new XmlDocument();
-                    xmlDocument.LoadXml(form["formxml"].ToString());
-
-                    var controlNode = xmlDocument.SelectSingleNode("//control[@datafieldname='" + amd.LogicalName + "']");
-                    if (controlNode != null)
+                    foreach (var form in entity.FormsDefinitions.Where(fd => entity.Forms.Contains(fd.Id) || entity.Forms.Count == 0))
                     {
-                        XmlNodeList sectionNodes = controlNode.SelectNodes("ancestor::section");
-                        XmlNodeList headerNodes = controlNode.SelectNodes("ancestor::header");
-                        XmlNodeList footerNodes = controlNode.SelectNodes("ancestor::footer");
+                        var formName = form.GetAttributeValue<string>("name");
+                        var xmlDocument = new XmlDocument();
+                        xmlDocument.LoadXml(form["formxml"].ToString());
 
-                        if (sectionNodes.Count > 0)
+                        var controlNode = xmlDocument.SelectSingleNode("//control[@datafieldname='" + amd.LogicalName + "']");
+                        if (controlNode != null)
                         {
-                            var sectionName = sectionNodes[0].SelectSingleNode("labels/label[@languagecode='" + settings.DisplayNamesLangugageCode + "']").Attributes["description"].Value;
+                            XmlNodeList sectionNodes = controlNode.SelectNodes("ancestor::section");
+                            XmlNodeList headerNodes = controlNode.SelectNodes("ancestor::header");
+                            XmlNodeList footerNodes = controlNode.SelectNodes("ancestor::footer");
 
-                            XmlNode tabNode = sectionNodes[0].SelectNodes("ancestor::tab")[0];
-                            var tabName = tabNode.SelectSingleNode("labels/label[@languagecode='" + settings.DisplayNamesLangugageCode + "']").Attributes["description"].Value;
+                            if (sectionNodes.Count > 0)
+                            {
+                                if (sectionNodes[0].SelectSingleNode("labels/label[@languagecode='" + settings.DisplayNamesLangugageCode + "']") != null)
+                                {
+                                    var sectionName = sectionNodes[0].SelectSingleNode("labels/label[@languagecode='" + settings.DisplayNamesLangugageCode + "']").Attributes["description"].Value;
 
-                            if (sheet.Cells[lineNumber, y].Value != null)
-                            {
-                                sheet.Cells[lineNumber, y].Value = sheet.Cells[lineNumber, y].Value + "\r\n" + string.Format("{0}/{1}/{2}", formName, tabName, sectionName);
+                                    XmlNode tabNode = sectionNodes[0].SelectNodes("ancestor::tab")[0];
+                                    if (tabNode != null && tabNode.SelectSingleNode("labels/label[@languagecode='" + settings.DisplayNamesLangugageCode + "']") != null)
+                                    {
+
+                                        var tabName = tabNode.SelectSingleNode("labels/label[@languagecode='" + settings.DisplayNamesLangugageCode + "']").Attributes["description"].Value;
+
+                                        if (sheet.Cells[lineNumber, y].Value != null)
+                                        {
+                                            sheet.Cells[lineNumber, y].Value = sheet.Cells[lineNumber, y].Value + "\r\n" + string.Format("{0}/{1}/{2}", formName, tabName, sectionName);
+                                        }
+                                        else
+                                        {
+                                            sheet.Cells[lineNumber, y].Value = string.Format("{0}/{1}/{2}", formName, tabName, sectionName);
+                                        }
+                                    }
+                                }
                             }
-                            else
+                            else if (headerNodes.Count > 0)
                             {
-                                sheet.Cells[lineNumber, y].Value = string.Format("{0}/{1}/{2}", formName, tabName, sectionName);
+                                if (sheet.Cells[lineNumber, y].Value != null)
+                                {
+                                    sheet.Cells[lineNumber, y].Value = sheet.Cells[lineNumber, y].Value + "\r\n" + string.Format("{0}/Header", formName);
+                                }
+                                else
+                                {
+                                    sheet.Cells[lineNumber, y].Value = string.Format("{0}/Header", formName);
+                                }
                             }
-                        }
-                        else if (headerNodes.Count > 0)
-                        {
-                            if (sheet.Cells[lineNumber, y].Value != null)
+                            else if (footerNodes.Count > 0)
                             {
-                                sheet.Cells[lineNumber, y].Value = sheet.Cells[lineNumber, y].Value + "\r\n" + string.Format("{0}/Header", formName);
-                            }
-                            else
-                            {
-                                sheet.Cells[lineNumber, y].Value = string.Format("{0}/Header", formName);
-                            }
-                        }
-                        else if (footerNodes.Count > 0)
-                        {
-                            if (sheet.Cells[lineNumber, y].Value != null)
-                            {
-                                sheet.Cells[lineNumber, y].Value = sheet.Cells[lineNumber, y].Value + "\r\n" + string.Format("{0}/Footer", formName);
-                            }
-                            else
-                            {
-                                sheet.Cells[lineNumber, y].Value = string.Format("{0}/Footer", formName);
+                                if (sheet.Cells[lineNumber, y].Value != null)
+                                {
+                                    sheet.Cells[lineNumber, y].Value = sheet.Cells[lineNumber, y].Value + "\r\n" + string.Format("{0}/Footer", formName);
+                                }
+                                else
+                                {
+                                    sheet.Cells[lineNumber, y].Value = string.Format("{0}/Footer", formName);
+                                }
                             }
                         }
                     }
@@ -223,21 +234,24 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
             sheet.Cells[lineNumber, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
             sheet.Cells[lineNumber, 1].Style.Fill.BackgroundColor.SetColor(Color.PowderBlue);
             sheet.Cells[lineNumber, 1].Style.Font.Bold = true;
-            sheet.Cells[lineNumber, 2].Value = emd.DisplayName.LocalizedLabels.Count == 0 ? emd.SchemaName : emd.DisplayName.LocalizedLabels.First(l => l.LanguageCode == settings.DisplayNamesLangugageCode).Label;
+            var emdDisplayName = emd.DisplayName.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
+            sheet.Cells[lineNumber, 2].Value = emd.DisplayName.LocalizedLabels.Count == 0 ? emd.SchemaName : emdDisplayName != null ? emdDisplayName.Label : null;
             lineNumber++;
 
             sheet.Cells[lineNumber, 1].Value = ("Plural Display Name");
             sheet.Cells[lineNumber, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
             sheet.Cells[lineNumber, 1].Style.Fill.BackgroundColor.SetColor(Color.PowderBlue);
             sheet.Cells[lineNumber, 1].Style.Font.Bold = true;
-            sheet.Cells[lineNumber, 2].Value = (emd.DisplayCollectionName.LocalizedLabels.Count == 0 ? "N/A" : emd.DisplayCollectionName.LocalizedLabels.First(l => l.LanguageCode == settings.DisplayNamesLangugageCode).Label);
+            var emdDisplayCollectionName = emd.DisplayCollectionName.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
+            sheet.Cells[lineNumber, 2].Value = (emd.DisplayCollectionName.LocalizedLabels.Count == 0 ? "N/A" : emdDisplayCollectionName != null ? emdDisplayCollectionName.Label : null);
             lineNumber++;
 
             sheet.Cells[lineNumber, 1].Value = ("Description");
             sheet.Cells[lineNumber, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
             sheet.Cells[lineNumber, 1].Style.Fill.BackgroundColor.SetColor(Color.PowderBlue);
             sheet.Cells[lineNumber, 1].Style.Font.Bold = true;
-            sheet.Cells[lineNumber, 2].Value = (emd.Description.LocalizedLabels.Count == 0 ? "N/A" : emd.Description.LocalizedLabels.First(l => l.LanguageCode == settings.DisplayNamesLangugageCode).Label);
+            var emdDescription = emd.Description.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
+            sheet.Cells[lineNumber, 2].Value = (emd.Description.LocalizedLabels.Count == 0 ? "N/A" : emdDescription != null ? emdDescription.Label : null);
             lineNumber++;
 
             sheet.Cells[lineNumber, 1].Value = ("Schema Name");
@@ -292,13 +306,16 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
             }
             summaryLineNumber++;
 
-            sheet.Cells[summaryLineNumber, y].Value = (emd.DisplayName.LocalizedLabels.Count == 0 ? emd.SchemaName : emd.DisplayName.LocalizedLabels.First(l => l.LanguageCode == settings.DisplayNamesLangugageCode).Label);
+            var emdDisplayName = emd.DisplayName.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
+            sheet.Cells[summaryLineNumber, y].Value = (emd.DisplayName.LocalizedLabels.Count == 0 ? emd.SchemaName : emdDisplayName != null ? emdDisplayName.Label : null);
             y++;
 
-            sheet.Cells[summaryLineNumber, y].Value = (emd.DisplayCollectionName.LocalizedLabels.Count == 0 ? "N/A" : emd.DisplayCollectionName.LocalizedLabels.First(l => l.LanguageCode == settings.DisplayNamesLangugageCode).Label);
+            var emdDisplayCollectionName = emd.DisplayCollectionName.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
+            sheet.Cells[summaryLineNumber, y].Value = (emd.DisplayCollectionName.LocalizedLabels.Count == 0 ? "N/A" : emdDisplayCollectionName != null ? emdDisplayCollectionName.Label : null);
             y++;
 
-            sheet.Cells[summaryLineNumber, y].Value = (emd.Description.LocalizedLabels.Count == 0 ? "N/A" : emd.Description.LocalizedLabels.First(l => l.LanguageCode == settings.DisplayNamesLangugageCode).Label);
+            var emdDescription = emd.Description.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
+            sheet.Cells[summaryLineNumber, y].Value = (emd.Description.LocalizedLabels.Count == 0 ? "N/A" : emdDescription != null ? emdDescription.Label : null);
             y++;
 
             sheet.Cells[summaryLineNumber, y].Value = (emd.SchemaName);
@@ -397,10 +414,10 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                 if (emd == null)
                 {
                     var reRequest = new RetrieveEntityRequest
-                                        {
-                                            LogicalName = entity.Name,
-                                            EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
-                                        };
+                    {
+                        LogicalName = entity.Name,
+                        EntityFilters = EntityFilters.Entity | EntityFilters.Attributes
+                    };
                     var reResponse = (RetrieveEntityResponse)service.Execute(reRequest);
 
                     emdCache.Add(reResponse.EntityMetadata);
@@ -414,9 +431,9 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
 
                 lineNumber = 1;
 
-                var displayNameLabel = emd.DisplayName.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
+                var emdDisplayNameLabel = emd.DisplayName.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
 
-                var sheet = AddWorkSheet(displayNameLabel == null ? "N/A" : displayNameLabel.Label, emd.SchemaName);
+                var sheet = AddWorkSheet(emdDisplayNameLabel == null ? "N/A" : emdDisplayNameLabel.Label, emd.SchemaName);
 
                 if (!settings.AddEntitiesSummary)
                 {
@@ -446,10 +463,11 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                         break;
 
                     case AttributeSelectionOption.AttributeManualySelected:
+
                         amds =
                             emd.Attributes.Where(
                                 x =>
-                                settings.EntitiesToProceed.First(y => y.Name == emd.LogicalName).Attributes.Contains(
+                                settings.EntitiesToProceed.FirstOrDefault(y => y.Name == emd.LogicalName).Attributes.Contains(
                                     x.LogicalName)).ToList();
                         break;
 
@@ -474,7 +492,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                             // else we parse selected forms
                             foreach (var formId in entity.Forms)
                             {
-                                var form = entity.FormsDefinitions.First(f => f.Id == formId);
+                                var form = entity.FormsDefinitions.FirstOrDefault(f => f.Id == formId);
                                 var tempStringDoc = form.GetAttributeValue<string>("formxml");
                                 var tempDoc = new XmlDocument();
                                 tempDoc.LoadXml(tempStringDoc);
@@ -507,7 +525,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                             // else we parse selected forms
                             foreach (var formId in entity.Forms)
                             {
-                                var form = entity.FormsDefinitions.First(f => f.Id == formId);
+                                var form = entity.FormsDefinitions.FirstOrDefault(f => f.Id == formId);
                                 var tempStringDoc = form.GetAttributeValue<string>("formxml");
                                 var tempDoc = new XmlDocument();
                                 tempDoc.LoadXml(tempStringDoc);
@@ -520,6 +538,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
 
                         break;
                 }
+
 
                 if (settings.Prefixes != null && settings.Prefixes.Count > 0)
                 {
@@ -537,7 +556,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                 {
                     foreach (var amd in amds.Distinct(new AttributeMetadataComparer()).OrderBy(a => a.LogicalName))
                     {
-                        AddAttribute(emd.Attributes.First(x => x.LogicalName == amd.LogicalName), sheet);
+                        AddAttribute(emd.Attributes.FirstOrDefault(x => x.LogicalName == amd.LogicalName), sheet);
                     }
                 }
                 else
@@ -600,10 +619,13 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                         {
                             var bamd = (BooleanAttributeMetadata)amd;
 
+                            var bamdOptionSetTrue = bamd.OptionSet.TrueOption.Label.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
+                            var bamdOptionSetFalse = bamd.OptionSet.FalseOption.Label.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
+
                             sheet.Cells[x, y].Value = (string.Format(
                                 "True: {0}\r\nFalse: {1}\r\nDefault Value: {2}",
-                                bamd.OptionSet.TrueOption.Label.LocalizedLabels.First(l => l.LanguageCode == settings.DisplayNamesLangugageCode).Label,
-                                bamd.OptionSet.FalseOption.Label.LocalizedLabels.First(l => l.LanguageCode == settings.DisplayNamesLangugageCode).Label,
+                                bamdOptionSetTrue != null ? bamdOptionSetTrue.Label : "",
+                                bamdOptionSetFalse != null ? bamdOptionSetFalse.Label : "",
                                 bamd.DefaultValue.HasValue ? bamd.DefaultValue.Value.ToString(CultureInfo.InvariantCulture) : "N/A"));
                         }
                         break;
@@ -718,9 +740,15 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
 
                             foreach (var omd in pamd.OptionSet.Options)
                             {
-                                format += string.Format("\r\n{0}: {1}",
-                                                        omd.Value,
-                                                        omd.Label.LocalizedLabels.First(l => l.LanguageCode == settings.DisplayNamesLangugageCode).Label);
+                                var omdLocLabel = omd.Label.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
+                                if (omdLocLabel != null)
+                                {
+                                    var label = omdLocLabel.Label;
+
+                                    format += string.Format("\r\n{0}: {1}",
+                                                            omd.Value,
+                                                            label);
+                                }
                             }
 
                             format += string.Format("\r\nDefault: {0}", pamd.DefaultFormValue.HasValue ? pamd.DefaultFormValue.Value.ToString(CultureInfo.InvariantCulture) : "N/A");
@@ -737,9 +765,10 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
 
                             foreach (var omd in samd.OptionSet.Options)
                             {
+                                var omdLocLabel = omd.Label.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
                                 format += string.Format("\r\n{0}: {1}",
                                                         omd.Value,
-                                                        omd.Label.LocalizedLabels.First(l => l.LanguageCode == settings.DisplayNamesLangugageCode).Label);
+                                                        omdLocLabel != null ? omdLocLabel.Label : "");
                             }
 
                             sheet.Cells[x, y].Value = (format);
@@ -754,9 +783,10 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
 
                             foreach (OptionMetadata omd in samd.OptionSet.Options)
                             {
+                                var omdLocLabel = omd.Label.LocalizedLabels.FirstOrDefault(l => l.LanguageCode == settings.DisplayNamesLangugageCode);
                                 format += string.Format("\r\n{0}: {1}",
                                                         omd.Value,
-                                                        omd.Label.LocalizedLabels.First(l => l.LanguageCode == settings.DisplayNamesLangugageCode).Label);
+                                                        omdLocLabel != null ? omdLocLabel.Label : "");
                             }
 
                             sheet.Cells[x, y].Value = (format);

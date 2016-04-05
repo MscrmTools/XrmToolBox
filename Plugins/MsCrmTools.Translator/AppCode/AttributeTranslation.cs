@@ -48,6 +48,28 @@ namespace MsCrmTools.Translator.AppCode
                     if (attribute.DisplayName != null && attribute.DisplayName.LocalizedLabels.All(l => string.IsNullOrEmpty(l.Label)))
                         continue;
 
+                    // If derived attribute from calculated field, don't process it
+                    if (attribute.LogicalName.EndsWith("_state"))
+                    {
+                        var baseName = attribute.LogicalName.Remove(attribute.LogicalName.Length - 6, 6);
+
+                        if (entity.Attributes.Any(a => a.LogicalName == baseName) &&
+                            entity.Attributes.Any(a => a.LogicalName == baseName + "_date"))
+                        {
+                            continue;
+                        }
+                    }
+                    if (attribute.LogicalName.EndsWith("_date"))
+                    {
+                        var baseName = attribute.LogicalName.Remove(attribute.LogicalName.Length - 5, 5);
+
+                        if (entity.Attributes.Any(a => a.LogicalName == baseName) &&
+                            entity.Attributes.Any(a => a.LogicalName == baseName + "_state"))
+                        {
+                            continue;
+                        }
+                    }
+
                     ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.MetadataId.Value.ToString("B");
                     ZeroBasedSheet.Cell(sheet, line, cell++).Value = entity.LogicalName;
                     ZeroBasedSheet.Cell(sheet, line, cell++).Value = attribute.LogicalName;
@@ -119,6 +141,7 @@ namespace MsCrmTools.Translator.AppCode
             var amds = new List<MasterAttribute>();
 
             var rowsCount = sheet.Dimension.Rows;
+            var cellsCount = sheet.Dimension.Columns;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
                 var amd = amds.FirstOrDefault(a => a.Amd.MetadataId == new Guid(ZeroBasedSheet.Cell(sheet, rowI, 0).Value.ToString()));
@@ -150,10 +173,14 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     amd.Amd.DisplayName = new Label();
 
-                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    while (columnIndex < cellsCount)
                     {
-                        amd.Amd.DisplayName.LocalizedLabels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString())));
-
+                        if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                        {
+                            var lcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
+                            var label = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
+                            amd.Amd.DisplayName.LocalizedLabels.Add(new LocalizedLabel(label, lcid));
+                        }
                         columnIndex++;
                     }
                 }
@@ -161,9 +188,14 @@ namespace MsCrmTools.Translator.AppCode
                 {
                     amd.Amd.Description = new Label();
 
-                    while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                    while (columnIndex < cellsCount)
                     {
-                        amd.Amd.Description.LocalizedLabels.Add(new LocalizedLabel(ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString(), int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString())));
+                        if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                        {
+                            var lcid = int.Parse(ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString());
+                            var label = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
+                            amd.Amd.Description.LocalizedLabels.Add(new LocalizedLabel(label, lcid));
+                        }
 
                         columnIndex++;
                     }

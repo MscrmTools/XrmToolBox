@@ -26,6 +26,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
         private bool initialPrivShare;
         private bool initialPrivUseInternetMarketing;
         private bool initialPrivWrite;
+        private ToolTip tip;
 
         #region Delegates
 
@@ -45,7 +46,7 @@ namespace MsCrmTools.SiteMapEditor.Controls
 
             collec = new Dictionary<string, string>();
 
-            ToolTip tip = new ToolTip();
+            tip = new ToolTip();
             tip.ToolTipTitle = "Information";
             tip.SetToolTip(txtPrivilegeEntity, "Specifies the name of the entity to check privileges for.");
         }

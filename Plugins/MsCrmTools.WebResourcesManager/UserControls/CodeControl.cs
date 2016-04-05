@@ -13,6 +13,7 @@ using MsCrmTools.WebResourcesManager.Forms;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 
@@ -79,6 +80,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             {
                 ShowLineNumbers = true,
                 FontSize = 12,
+                FontFamily = new System.Windows.Media.FontFamily("Consolas"),
                 //Focusable = true,
                 //IsHitTestVisible = true
             };
@@ -99,6 +101,24 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                 innerContent = System.Text.Encoding.UTF8.GetString(b);
                 originalContent = innerContent;
                 innerType = type;
+
+                switch (innerType)
+                {
+                    case Enumerations.WebResourceType.Script:
+                        {
+                            AutoEnableFolding(innerContent);
+                        }
+                        break;
+
+                    case Enumerations.WebResourceType.Data:
+                    case Enumerations.WebResourceType.WebPage:
+                    case Enumerations.WebResourceType.Css:
+                    case Enumerations.WebResourceType.Xsl:
+                        {
+                            EnableFolding(true);
+                        }
+                        break;
+                }
             }
         }
 
@@ -108,6 +128,12 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         }
 
         #endregion Constructor
+
+        #region Properties
+
+        public bool FoldingEnabled { get; private set; }
+
+        #endregion Properties
 
         #region Handlers
 
@@ -144,6 +170,17 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             return newFoldings;
         }
 
+        private void AutoEnableFolding(string innerContent)
+        {
+            var minified = DoMinifyJs(innerContent);
+            var ratio = (double)minified.Length / (double)innerContent.Length;
+
+            if (ratio <= 1 && ratio >= 0.2)
+            {
+                EnableFolding(true);
+            }
+        }
+
         private void CodeControl_Load(object sender, EventArgs e)
         {
             try
@@ -156,30 +193,35 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                     case Enumerations.WebResourceType.Script:
                         {
                             textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("JavaScript");
+                            AutoEnableFolding(innerContent);
                         }
                         break;
 
                     case Enumerations.WebResourceType.Data:
                         {
                             textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("XML");
+                            EnableFolding(true);
                         }
                         break;
 
                     case Enumerations.WebResourceType.WebPage:
                         {
                             textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("HTML");
+                            EnableFolding(true);
                         }
                         break;
 
                     case Enumerations.WebResourceType.Css:
                         {
                             textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("CSS");
+                            EnableFolding(true);
                         }
                         break;
 
                     case Enumerations.WebResourceType.Xsl:
                         {
                             textEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("HTML");
+                            EnableFolding(true);
                         }
                         break;
                 }
@@ -233,7 +275,7 @@ namespace MsCrmTools.WebResourcesManager.UserControls
         {
             try
             {
-                textEditor.Text = Yahoo.Yui.Compressor.JavaScriptCompressor.Compress(textEditor.Text, false, true, false, false, 200);
+                textEditor.Text = DoMinifyJs(textEditor.Text);
             }
             catch (Exception error)
             {
@@ -262,14 +304,27 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             }
         }
 
+        private string DoMinifyJs(string originalContent)
+        {
+            try
+            {
+                return Yahoo.Yui.Compressor.JavaScriptCompressor.Compress(originalContent, false, true, false, false, 200);
+            }
+            catch
+            {
+                //MessageBox.Show(ParentForm, "Error while minifying code: " + error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return originalContent;
+            }
+        }
+
         private void SendSavedMessage()
         {
             var wrueArgs = new WebResourceUpdatedEventArgs
-                                                       {
-                                                           Base64Content = innerContent,
-                                                           IsDirty = (innerContent != originalContent),
-                                                           Type = innerType
-                                                       };
+            {
+                Base64Content = innerContent,
+                IsDirty = (innerContent != originalContent),
+                Type = innerType
+            };
 
             if (WebResourceUpdated != null)
             {
@@ -297,6 +352,11 @@ namespace MsCrmTools.WebResourcesManager.UserControls
             });
 
             textEditor.Text = b.Beautify(textEditor.Text);
+        }
+
+        internal void CommentSelectedLines()
+        {
+            Comment(true);
         }
 
         internal void EnableFolding(bool enableFolding)
@@ -345,11 +405,131 @@ namespace MsCrmTools.WebResourcesManager.UserControls
                         }
                         break;
                 }
+
+                FoldingEnabled = true;
             }
             else
             {
                 if (foldingManager != null)
+                {
                     foldingManager.Clear();
+                }
+
+                FoldingEnabled = false;
+            }
+        }
+
+        internal void UncommentSelectedLines()
+        {
+            Comment(false);
+        }
+
+        private void Comment(bool comment)
+        {
+            TextDocument document = textEditor.Document;
+            DocumentLine start = document.GetLineByOffset(textEditor.SelectionStart);
+            DocumentLine end = document.GetLineByOffset(textEditor.SelectionStart + textEditor.SelectionLength);
+
+            // Specific comment behavior for JavaScript (//)
+            if (innerType == Enumerations.WebResourceType.Script)
+            {
+                for (DocumentLine line = start; line.LineNumber < end.LineNumber + 1; line = line.NextLine)
+                {
+                    if (comment)
+                    {
+                        if (document.GetText(line).Trim().StartsWith("//")) continue;
+
+                        document.Insert(line.Offset, "//");
+                    }
+                    else
+                    {
+                        if (!document.GetText(line).Trim().StartsWith("//")) continue;
+
+                        document.Remove(line.Offset, 2);
+                    }
+                }
+            }
+
+            // Specific comment for HTML, XML and XSLT (<!-- -->)
+            if (innerType == Enumerations.WebResourceType.Data
+                || innerType == Enumerations.WebResourceType.WebPage
+                || innerType == Enumerations.WebResourceType.Xsl)
+            {
+                var selectedText = textEditor.SelectedText.Trim();
+                string line = document.GetText(document.GetLineByOffset(textEditor.SelectionStart)).Trim();
+
+                if (comment && (selectedText.StartsWith("<!--") && selectedText.EndsWith("-->") || line.StartsWith("<!--") && line.EndsWith("-->")))
+                {
+                    return;
+                }
+
+                if (!comment && !selectedText.StartsWith("<!--") && !selectedText.EndsWith("-->") && !line.StartsWith("<!--") && !line.EndsWith("-->"))
+                {
+                    return;
+                }
+
+                if (comment)
+                {
+                    var numberOfCommentStarts = Regex.Matches(selectedText, "<!--").Count;
+                    var numberOfCommentEnds = Regex.Matches(selectedText, "-->").Count;
+
+                    if (numberOfCommentEnds != numberOfCommentStarts)
+                    {
+                        MessageBox.Show(ParentForm,
+                            "You cannot comment this selection because the result will contain an orphan comment start or end tag",
+                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                        return;
+                    }
+
+                    document.Insert(start.Offset, "<!--");
+                    document.Insert(end.Offset + end.Length, "-->");
+                }
+                else
+                {
+                    document.Remove(start.Offset, 4);
+                    document.Remove(end.Offset + end.Length - 3, 3);
+                }
+            }
+
+            // Specific comment for Css (/* */)
+            if (innerType == Enumerations.WebResourceType.Css)
+            {
+                var selectedText = textEditor.SelectedText.Trim();
+                string line = document.GetText(document.GetLineByOffset(textEditor.SelectionStart)).Trim();
+
+                if (comment && selectedText.StartsWith("/*") && selectedText.EndsWith("*/") || line.StartsWith("/*") && line.EndsWith("*/"))
+                {
+                    return;
+                }
+
+                if (!comment && !selectedText.StartsWith("/*") && !selectedText.EndsWith("*/") && !line.StartsWith("/*") && !line.EndsWith("*/"))
+                {
+                    return;
+                }
+
+                if (comment)
+                {
+                    var numberOfCommentStarts = Regex.Matches(selectedText, "/\\*").Count;
+                    var numberOfCommentEnds = Regex.Matches(selectedText, "\\*/").Count;
+
+                    if (numberOfCommentEnds != numberOfCommentStarts)
+                    {
+                        MessageBox.Show(ParentForm,
+                            "You cannot comment this selection because the result will contain an orphan comment start or end tag",
+                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                        return;
+                    }
+
+                    document.Insert(start.Offset, "/*");
+                    document.Insert(end.Offset + end.Length, "*/");
+                }
+                else
+                {
+                    document.Remove(start.Offset, 2);
+                    document.Remove(end.Offset + end.Length - 2, 2);
+                }
             }
         }
     }

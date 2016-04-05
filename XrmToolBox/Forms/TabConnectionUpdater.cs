@@ -22,6 +22,12 @@ namespace XrmToolBox.Forms
 
         public List<TabPage> SelectedTabs { get; private set; }
 
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
+        }
+
         private void BtnOkClick(object sender, EventArgs e)
         {
             SelectedTabs = new List<TabPage>();

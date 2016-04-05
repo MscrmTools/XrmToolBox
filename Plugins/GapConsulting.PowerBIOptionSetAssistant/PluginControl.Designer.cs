@@ -30,23 +30,23 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PluginControl));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tsbCloseThisTab = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbLoadEntities = new System.Windows.Forms.ToolStripButton();
             this.tsbCreateRecords = new System.Windows.Forms.ToolStripButton();
             this.tsbDeleteEntity = new System.Windows.Forms.ToolStripButton();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.lvEntities = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.llSelectNoOptionSet = new System.Windows.Forms.LinkLabel();
-            this.llSelectAllOptionSet = new System.Windows.Forms.LinkLabel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.lvOptionSets = new System.Windows.Forms.ListView();
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tsbCloseThisTab = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.llSelectNoOptionSet = new System.Windows.Forms.LinkLabel();
+            this.llSelectAllOptionSet = new System.Windows.Forms.LinkLabel();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -69,6 +69,22 @@
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // tsbCloseThisTab
+            // 
+            this.tsbCloseThisTab.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbCloseThisTab.Font = new System.Drawing.Font("Segoe UI", 8.25F);
+            this.tsbCloseThisTab.Image = ((System.Drawing.Image)(resources.GetObject("tsbCloseThisTab.Image")));
+            this.tsbCloseThisTab.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbCloseThisTab.Name = "tsbCloseThisTab";
+            this.tsbCloseThisTab.Size = new System.Drawing.Size(23, 22);
+            this.tsbCloseThisTab.Text = "Close this tab";
+            this.tsbCloseThisTab.Click += new System.EventHandler(this.tsbCloseThisTab_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
             // tsbLoadEntities
             // 
             this.tsbLoadEntities.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadEntities.Image")));
@@ -83,8 +99,8 @@
             this.tsbCreateRecords.Image = ((System.Drawing.Image)(resources.GetObject("tsbCreateRecords.Image")));
             this.tsbCreateRecords.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCreateRecords.Name = "tsbCreateRecords";
-            this.tsbCreateRecords.Size = new System.Drawing.Size(229, 22);
-            this.tsbCreateRecords.Text = "Create records for checked option sets";
+            this.tsbCreateRecords.Size = new System.Drawing.Size(228, 22);
+            this.tsbCreateRecords.Text = "Create records for selected option sets";
             this.tsbCreateRecords.Click += new System.EventHandler(this.tsbCreateRecords_Click);
             // 
             // tsbDeleteEntity
@@ -92,8 +108,9 @@
             this.tsbDeleteEntity.Image = ((System.Drawing.Image)(resources.GetObject("tsbDeleteEntity.Image")));
             this.tsbDeleteEntity.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDeleteEntity.Name = "tsbDeleteEntity";
-            this.tsbDeleteEntity.Size = new System.Drawing.Size(93, 22);
-            this.tsbDeleteEntity.Text = "Delete entity";
+            this.tsbDeleteEntity.Size = new System.Drawing.Size(223, 22);
+            this.tsbDeleteEntity.Text = "Delete PowerBi Option-set Xref Entity";
+            this.tsbDeleteEntity.ToolTipText = "Delete PowerBi Option-set Xref Entity from the connect organization";
             this.tsbDeleteEntity.Click += new System.EventHandler(this.tsbDeleteEntity_Click);
             // 
             // splitContainer1
@@ -114,14 +131,6 @@
             this.splitContainer1.Size = new System.Drawing.Size(1278, 775);
             this.splitContainer1.SplitterDistance = 426;
             this.splitContainer1.TabIndex = 1;
-            // 
-            // panel1
-            // 
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(426, 26);
-            this.panel1.TabIndex = 2;
             // 
             // lvEntities
             // 
@@ -150,37 +159,13 @@
             this.columnHeader2.Text = "Logical name";
             this.columnHeader2.Width = 200;
             // 
-            // panel2
+            // panel1
             // 
-            this.panel2.Controls.Add(this.llSelectNoOptionSet);
-            this.panel2.Controls.Add(this.llSelectAllOptionSet);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(848, 26);
-            this.panel2.TabIndex = 4;
-            // 
-            // llSelectNoOptionSet
-            // 
-            this.llSelectNoOptionSet.AutoSize = true;
-            this.llSelectNoOptionSet.Location = new System.Drawing.Point(61, 4);
-            this.llSelectNoOptionSet.Name = "llSelectNoOptionSet";
-            this.llSelectNoOptionSet.Size = new System.Drawing.Size(64, 13);
-            this.llSelectNoOptionSet.TabIndex = 1;
-            this.llSelectNoOptionSet.TabStop = true;
-            this.llSelectNoOptionSet.Text = "Select none";
-            this.llSelectNoOptionSet.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llSelectNoOptionSet_LinkClicked);
-            // 
-            // llSelectAllOptionSet
-            // 
-            this.llSelectAllOptionSet.AutoSize = true;
-            this.llSelectAllOptionSet.Location = new System.Drawing.Point(4, 4);
-            this.llSelectAllOptionSet.Name = "llSelectAllOptionSet";
-            this.llSelectAllOptionSet.Size = new System.Drawing.Size(50, 13);
-            this.llSelectAllOptionSet.TabIndex = 0;
-            this.llSelectAllOptionSet.TabStop = true;
-            this.llSelectAllOptionSet.Text = "Select all";
-            this.llSelectAllOptionSet.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llSelectAllOptionSet_LinkClicked);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(426, 26);
+            this.panel1.TabIndex = 2;
             // 
             // lvOptionSets
             // 
@@ -214,21 +199,37 @@
             this.columnHeader5.Text = "Entity";
             this.columnHeader5.Width = 200;
             // 
-            // tsbCloseThisTab
+            // panel2
             // 
-            this.tsbCloseThisTab.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbCloseThisTab.Font = new System.Drawing.Font("Segoe UI", 8.25F);
-            this.tsbCloseThisTab.Image = ((System.Drawing.Image)(resources.GetObject("tsbCloseThisTab.Image")));
-            this.tsbCloseThisTab.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbCloseThisTab.Name = "tsbCloseThisTab";
-            this.tsbCloseThisTab.Size = new System.Drawing.Size(23, 22);
-            this.tsbCloseThisTab.Text = "Close this tab";
-            this.tsbCloseThisTab.Click += new System.EventHandler(this.tsbCloseThisTab_Click);
+            this.panel2.Controls.Add(this.llSelectNoOptionSet);
+            this.panel2.Controls.Add(this.llSelectAllOptionSet);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(848, 26);
+            this.panel2.TabIndex = 4;
             // 
-            // toolStripSeparator2
+            // llSelectNoOptionSet
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.llSelectNoOptionSet.AutoSize = true;
+            this.llSelectNoOptionSet.Location = new System.Drawing.Point(61, 4);
+            this.llSelectNoOptionSet.Name = "llSelectNoOptionSet";
+            this.llSelectNoOptionSet.Size = new System.Drawing.Size(64, 13);
+            this.llSelectNoOptionSet.TabIndex = 1;
+            this.llSelectNoOptionSet.TabStop = true;
+            this.llSelectNoOptionSet.Text = "Select none";
+            this.llSelectNoOptionSet.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llSelectNoOptionSet_LinkClicked);
+            // 
+            // llSelectAllOptionSet
+            // 
+            this.llSelectAllOptionSet.AutoSize = true;
+            this.llSelectAllOptionSet.Location = new System.Drawing.Point(4, 4);
+            this.llSelectAllOptionSet.Name = "llSelectAllOptionSet";
+            this.llSelectAllOptionSet.Size = new System.Drawing.Size(50, 13);
+            this.llSelectAllOptionSet.TabIndex = 0;
+            this.llSelectAllOptionSet.TabStop = true;
+            this.llSelectAllOptionSet.Text = "Select all";
+            this.llSelectAllOptionSet.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llSelectAllOptionSet_LinkClicked);
             // 
             // PluginControl
             // 

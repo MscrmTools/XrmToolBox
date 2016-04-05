@@ -173,8 +173,6 @@ namespace MsCrmTools.RoleUpdater
         /// <param name="role">List of roles to update</param>
         public void RemovePrivilegesToRole(List<RolePrivilege> privileges, Entity role)
         {
-            bool hasChanged = false;
-
             Guid roleId = (Guid)role["roleid"];
 
             // Retrieve the privileges for the current security role

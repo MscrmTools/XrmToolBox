@@ -68,15 +68,18 @@ namespace MsCrmTools.FetchXmlTester
 
         private void ProcessFetchXml()
         {
-            WorkAsync("Executing request...",
-                e =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Executing request...",
+                AsyncArgument = txtRequest.Text,
+                Work = (bw, e) =>
                 {
                     var request = new ExecuteFetchRequest { FetchXml = e.Argument.ToString() };
                     var response = (ExecuteFetchResponse)Service.Execute(request);
 
                     e.Result = response.FetchXmlResult;
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error == null)
                     {
@@ -88,8 +91,8 @@ namespace MsCrmTools.FetchXmlTester
                         MessageBox.Show(this, "An error occured: " + e.Error.Message, "Error", MessageBoxButtons.OK,
                                         MessageBoxIcon.Error);
                     }
-                },
-                txtRequest.Text);
+                }
+            });
         }
 
         private void TsbCloseClick(object sender, EventArgs e)

@@ -17,7 +17,10 @@ namespace XrmToolBox.AppCode
     /// </summary>
     public class LogUsage
     {
+#pragma warning disable CS1998 // Cette méthode async n'a pas d'opérateur 'await' et elle s'exécutera de façon synchrone
+
         public static async Task DoLog(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin)
+#pragma warning restore CS1998 // Cette méthode async n'a pas d'opérateur 'await' et elle s'exécutera de façon synchrone
         {
 #if !DEBUG
             try

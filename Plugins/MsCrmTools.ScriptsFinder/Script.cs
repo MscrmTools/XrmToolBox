@@ -9,6 +9,7 @@ namespace MsCrmTools.ScriptsFinder
 {
     public class Script
     {
+        public string Arguments { get; set; }
         public string Attribute { get; set; }
         public string AttributeLogicalName { get; set; }
         public List<string> Dependencies { get; set; }

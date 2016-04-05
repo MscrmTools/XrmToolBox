@@ -348,7 +348,7 @@ namespace MarkdownSharp
         private static Regex _endCharRegex = new Regex(_charEndingUrl, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private static Regex _headerAtx = new Regex(@"
-                ^(\#{1,6})  # $1 = string of #'s
+                ^(\#{1,6}\s)  # $1 = string of #'s
                 [ ]*
                 (.+?)       # $2 = Header text
                 [ ]*
@@ -1282,9 +1282,15 @@ namespace MarkdownSharp
                 {
                     string list = match.Groups[1].Value;
                     string marker = match.Groups[3].Value;
+
+                    if (string.IsNullOrEmpty(list) || string.IsNullOrEmpty(marker))
+                    {
+                        return string.Empty;
+                    }
+
                     string listType = Regex.IsMatch(marker, _markerUL) ? "ul" : "ol";
                     string result;
-                    string start = "";
+                    string start = string.Empty;
                     if (listType == "ol")
                     {
                         var firstNumber = int.Parse(marker.Substring(0, marker.Length - 1));
@@ -1504,6 +1510,7 @@ namespace MarkdownSharp
             // delimiters in inline links like [this](<url>).
             text = DoAutoLinks(text);
 
+            text = text.Replace("\n", "<br />\n");
             text = text.Replace(AutoLinkPreventionMarker, "://");
 
             text = EncodeAmpsAndAngles(text);

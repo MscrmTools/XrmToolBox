@@ -8,8 +8,6 @@ namespace MsCrmTools.WebResourcesManager.Forms
 {
     public partial class CustomFolderBrowserDialog : Form
     {
-        private bool showExtensionOptions;
-
         public CustomFolderBrowserDialog(bool isLoadFromDisk, bool showExtensionOptions = true)
         {
             InitializeComponent();
@@ -46,6 +44,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
             if (fbd.ShowDialog(this) == DialogResult.OK)
             {
                 txtFolderPath.Text = fbd.SelectedPath;
+                FolderPath = fbd.SelectedPath;
             }
         }
 

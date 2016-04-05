@@ -82,6 +82,19 @@ namespace MsCrmTools.SiteMapEditor
             ResetSiteMap("2015SP1");
         }
 
+        private void resetCRM2016SiteMapToDefaultToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ConnectionDetail.OrganizationMajorVersion != 8)
+            {
+                if (DialogResult.No == MessageBox.Show(this,
+                    "Your current organization is not a CRM 2016 organization! Are you sure you want to continue?",
+                    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                    return;
+            }
+
+            ResetSiteMap("2016");
+        }
+
         private void ResetSiteMap(object version)
         {
             if (DialogResult.Yes ==
@@ -149,10 +162,11 @@ namespace MsCrmTools.SiteMapEditor
                 {
                     if (Service != null && entityCache == null)
                     {
-                        WorkAsync("Loading Entities...",
-                            (bw, evt) =>
-                            {
-                                // Recherche des métadonnées
+                        WorkAsync(new WorkAsyncInfo
+                        {
+                            Message = "Loading Entities...",
+                            Work = (bw, evt) =>
+                            { // Recherche des métadonnées
                                 entityCache = new List<EntityMetadata>();
                                 webResourcesHtmlCache = new List<Entity>();
 
@@ -193,12 +207,13 @@ namespace MsCrmTools.SiteMapEditor
                                     }
                                 }
                             },
-                            evt =>
+                            PostWorkCallBack = evt =>
                             {
                                 DisplaySiteMap();
                                 EnableControls(true);
                             },
-                            evt => SetWorkingMessage(evt.UserState.ToString()));
+                            ProgressChanged = evt => { SetWorkingMessage(evt.UserState.ToString()); }
+                        });
                     }
                     else
                     {
@@ -401,6 +416,7 @@ namespace MsCrmTools.SiteMapEditor
 
         private void ToolStripButtonMoveDownClick(object sender, EventArgs e)
         {
+            toolStripButtonMoveDown.Click -= ToolStripButtonMoveDownClick;
             toolStripButtonMoveDown.Enabled = false;
 
             TreeNode tnmNode = tvSiteMap.SelectedNode;
@@ -421,13 +437,19 @@ namespace MsCrmTools.SiteMapEditor
 
                     tvSiteMap.SelectedNode = tnmNode;
                 }
+                tnmNodeParent = null;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
             }
 
             toolStripButtonMoveDown.Enabled = true;
+            toolStripButtonMoveDown.Click += ToolStripButtonMoveDownClick;
         }
 
         private void ToolStripButtonMoveUpClick(object sender, EventArgs e)
         {
+            toolStripButtonMoveUp.Click -= ToolStripButtonMoveUpClick;
             toolStripButtonMoveUp.Enabled = false;
 
             TreeNode tnmNode = tvSiteMap.SelectedNode;
@@ -448,9 +470,15 @@ namespace MsCrmTools.SiteMapEditor
 
                     tvSiteMap.SelectedNode = tnmNode;
                 }
+
+                tnmNodeParent = null;
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
             }
 
             toolStripButtonMoveUp.Enabled = true;
+            toolStripButtonMoveUp.Click += ToolStripButtonMoveUpClick;
         }
 
         #endregion TreeView ToolStrip Menu
@@ -510,6 +538,15 @@ namespace MsCrmTools.SiteMapEditor
 
             TreeNodeHelper.AddContextMenu(e.Node, this);
             Control existingControl = panelContainer.Controls.Count > 0 ? panelContainer.Controls[0] : null;
+
+            if (existingControl != null)
+            {
+                panelContainer.Controls.Remove(existingControl);
+                existingControl.Dispose();
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+                GC.Collect();
+            }
 
             switch (selectedNode.Text.Split(' ')[0])
             {
@@ -779,8 +816,10 @@ namespace MsCrmTools.SiteMapEditor
         {
             EnableControls(false);
 
-            WorkAsync("Loading Entities...",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading Entities...",
+                Work = (bw, e) =>
                 {
                     // Recherche des métadonnées
                     entityCache = new List<EntityMetadata>();
@@ -822,20 +861,23 @@ namespace MsCrmTools.SiteMapEditor
                         }
                     }
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     DisplaySiteMap();
                     EnableControls(true);
                 },
-                e => SetWorkingMessage(e.UserState.ToString()));
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
+            });
         }
 
         public void LoadSiteMap()
         {
             EnableControls(false);
 
-            WorkAsync("Loading SiteMap...",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading SiteMap...",
+                Work = (bw, e) =>
                 {
                     var qe = new QueryExpression("sitemap");
                     qe.ColumnSet = new ColumnSet(true);
@@ -846,13 +888,14 @@ namespace MsCrmTools.SiteMapEditor
                     siteMapDoc = new XmlDocument();
                     siteMapDoc.LoadXml(ec[0]["sitemapxml"].ToString());
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     DisplaySiteMap();
                     EnableControls(true);
                     LoadCrmItems();
                 },
-                e => SetWorkingMessage(e.UserState.ToString()));
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
+            });
         }
 
         #endregion Load SiteMap Methods
@@ -875,8 +918,10 @@ namespace MsCrmTools.SiteMapEditor
 
             EnableControls(false);
 
-            WorkAsync("Updating Sitemap...",
-                e =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Updating Sitemap...",
+                Work = (bw, e) =>
                 {
                     // Build the Xml SiteMap from SiteMap TreeView
                     var doc = new XmlDocument();
@@ -894,7 +939,7 @@ namespace MsCrmTools.SiteMapEditor
                     request.ParameterXml = "<importexportxml><sitemaps><sitemap></sitemap></sitemaps></importexportxml>";
                     Service.Execute(request);
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -911,7 +956,8 @@ namespace MsCrmTools.SiteMapEditor
                         }
                     }
                     EnableControls(true);
-                });
+                }
+            });
         }
 
         #endregion Update SiteMap Methods

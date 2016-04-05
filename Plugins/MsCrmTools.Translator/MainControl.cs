@@ -39,10 +39,10 @@ namespace MsCrmTools.Translator
         private void BtnBrowseImportFileClick(object sender, EventArgs e)
         {
             var ofd = new OpenFileDialog
-                          {
-                              Title = "Select translation file",
-                              Filter = "Excel Workbook|*.xlsx"
-                          };
+            {
+                Title = "Select translation file",
+                Filter = "Excel Workbook|*.xlsx"
+            };
 
             if (ofd.ShowDialog(this) == DialogResult.OK)
             {
@@ -72,33 +72,37 @@ namespace MsCrmTools.Translator
                 if (sfd.ShowDialog(this) == DialogResult.OK)
                 {
                     var settings = new ExportSettings
-                                       {
-                                           ExportAttributes = chkExportAttributes.Checked,
-                                           ExportBooleans = chkExportBooleans.Checked,
-                                           ExportEntities = chkExportEntity.Checked,
-                                           ExportForms = chkExportForms.Checked,
-                                           ExportFormFields = chkExportFormsFields.Checked,
-                                           ExportFormSections = chkExportFormsSections.Checked,
-                                           ExportFormTabs = chkExportFormsTabs.Checked,
-                                           ExportGlobalOptionSet = chkExportGlobalOptSet.Checked,
-                                           ExportOptionSet = chkExportPicklists.Checked,
-                                           ExportViews = chkExportViews.Checked,
-                                           ExportCustomizedRelationships = chkExportCustomizedRelationships.Checked,
-                                           ExportSiteMap = chkExportSiteMap.Checked,
-                                           ExportDashboards = chkExportDashboards.Checked,
-                                           FilePath = sfd.FileName,
-                                           Entities = entities
-                                       };
+                    {
+                        ExportAttributes = chkExportAttributes.Checked,
+                        ExportBooleans = chkExportBooleans.Checked,
+                        ExportEntities = chkExportEntity.Checked,
+                        ExportForms = chkExportForms.Checked,
+                        ExportFormFields = chkExportFormsFields.Checked,
+                        ExportFormSections = chkExportFormsSections.Checked,
+                        ExportFormTabs = chkExportFormsTabs.Checked,
+                        ExportGlobalOptionSet = chkExportGlobalOptSet.Checked,
+                        ExportOptionSet = chkExportPicklists.Checked,
+                        ExportViews = chkExportViews.Checked,
+                        ExportCharts = chkExportCharts.Checked,
+                        ExportCustomizedRelationships = chkExportCustomizedRelationships.Checked,
+                        ExportSiteMap = chkExportSiteMap.Checked,
+                        ExportDashboards = chkExportDashboards.Checked,
+                        FilePath = sfd.FileName,
+                        Entities = entities
+                    };
 
                     SetState(true);
 
-                    WorkAsync("Exporting Translations...",
-                        (bw, evt) =>
+                    WorkAsync(new WorkAsyncInfo
+                    {
+                        Message = "Exporting Translations...",
+                        AsyncArgument = settings,
+                        Work = (bw, evt) =>
                         {
                             var engine = new Engine();
                             engine.Export((ExportSettings)evt.Argument, Service, bw);
                         },
-                        evt =>
+                        PostWorkCallBack = evt =>
                         {
                             SetState(false);
 
@@ -108,8 +112,8 @@ namespace MsCrmTools.Translator
                                 MessageBox.Show(this, errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         },
-                        evt => SetWorkingMessage(evt.UserState.ToString()),
-                        settings);
+                        ProgressChanged = evt => { SetWorkingMessage(evt.UserState.ToString()); }
+                    });
                 }
             }
         }
@@ -133,13 +137,16 @@ namespace MsCrmTools.Translator
         {
             SetState(false);
 
-            WorkAsync("",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "",
+                AsyncArgument = txtFilePath.Text,
+                Work = (bw, e) =>
                 {
                     var engine = new Engine();
                     engine.Import(e.Argument.ToString(), Service, bw);
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -149,21 +156,23 @@ namespace MsCrmTools.Translator
 
                     SetState(false);
                 },
-                e => SetWorkingMessage(e.UserState.ToString()),
-                txtFilePath.Text);
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
+            });
         }
 
         private void LoadEntities()
         {
             lvEntities.Items.Clear();
 
-            WorkAsync("Loading entities...",
-                e =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Loading entities...",
+                Work = (bw, e) =>
                 {
                     List<EntityMetadata> entities = MetadataHelper.RetrieveEntities(Service);
                     e.Result = entities;
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -179,7 +188,8 @@ namespace MsCrmTools.Translator
                             lvEntities.Items.Add(item);
                         }
                     }
-                });
+                }
+            });
         }
 
         private void LvEntitiesColumnClick(object sender, ColumnClickEventArgs e)

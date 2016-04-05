@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using XrmToolBox.AppCode;
 
 namespace XrmToolBox
 {
@@ -18,12 +19,19 @@ namespace XrmToolBox
         {
             "McTools.Xrm.Connection.dll",
             "McTools.Xrm.Connection.WinForms.dll",
+            "Microsoft.IdentityModel.dll",
             "Microsoft.Crm.Sdk.Proxy.dll",
-            "Microsoft.Xrm.Client.dll",
             "Microsoft.Xrm.Sdk.Deployment.dll",
             "Microsoft.Xrm.Sdk.dll",
+            "Microsoft.Xrm.Sdk.Workflow.dll",
+            "Microsoft.Xrm.Tooling.Connector.dll",
+            "Microsoft.Xrm.Tooling.CrmConnectControl.dll",
+            "Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
+            "Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll",
             "XrmToolBox.Extensibility.dll",
-            "McTools.StopAdvertisement.dll"
+            "McTools.StopAdvertisement.dll",
+            "NuGet.Core.dll",
+            "Microsoft.Web.XmlTransform.dll"
         };
 
         private static bool CheckRequiredAssemblies()
@@ -56,6 +64,26 @@ namespace XrmToolBox
             }
         }
 
+        private static void CopyUpdatedPlugins()
+        {
+            var updateFile = Path.Combine(new FileInfo(Assembly.GetExecutingAssembly().Location).DirectoryName, "Update.xml");
+
+            if (!File.Exists(updateFile))
+                return;
+
+            using (StreamReader reader = new StreamReader(updateFile))
+            {
+                var pus = (PluginUpdates)XmlSerializerHelper.Deserialize(reader.ReadToEnd(), typeof(PluginUpdates));
+
+                foreach (var pu in pus.Plugins)
+                {
+                    File.Copy(pu.Source, pu.Destination, true);
+                }
+            }
+
+            File.Delete(updateFile);
+        }
+
         /// <summary>
         /// Point d'entrée principal de l'application.
         /// </summary>
@@ -70,6 +98,8 @@ namespace XrmToolBox
                 }
 
                 SearchAndDestroyPluginsInRootFolder();
+
+                CopyUpdatedPlugins();
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);

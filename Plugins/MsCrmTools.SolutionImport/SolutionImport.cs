@@ -28,11 +28,11 @@ namespace MsCrmTools.SolutionImport
         private void BtnBrowseFolderClick(object sender, EventArgs e)
         {
             var fbDialog = new FolderBrowserDialog
-                               {
-                                   Description =
+            {
+                Description =
                                        "Select a folder containing the three files of a solution.\r\nThe folder must be name like a solution archive (ie. MySolution_1_0_0_0)",
-                                   ShowNewFolderButton = true
-                               };
+                ShowNewFolderButton = true
+            };
 
             if (fbDialog.ShowDialog() == DialogResult.OK)
             {
@@ -43,16 +43,16 @@ namespace MsCrmTools.SolutionImport
         private void BtnImportClick(object sender, EventArgs e)
         {
             var iSettings = new ImportSettings
-                                {
-                                    ImportId = Guid.NewGuid(),
-                                    DownloadLog = chkDownload.Checked,
-                                    IsFolder = true,
-                                    Path = txtFolderPath.Text,
-                                    Publish = chkPublish.Checked,
-                                    Activate = chkActivate.Checked,
-                                    ConvertToManaged = chkConvertToManaged.Checked,
-                                    OverwriteUnmanagedCustomizations = chkOverwriteUnmanagedCustomizations.Checked,
-                                };
+            {
+                ImportId = Guid.NewGuid(),
+                DownloadLog = chkDownload.Checked,
+                IsFolder = true,
+                Path = txtFolderPath.Text,
+                Publish = chkPublish.Checked,
+                Activate = chkActivate.Checked,
+                ConvertToManaged = chkConvertToManaged.Checked,
+                OverwriteUnmanagedCustomizations = chkOverwriteUnmanagedCustomizations.Checked,
+            };
 
             ExecuteMethod(ImportArchive, iSettings);
         }
@@ -83,16 +83,16 @@ namespace MsCrmTools.SolutionImport
         private void GbImportSolutionDragDrop(object sender, DragEventArgs e)
         {
             var iSettings = new ImportSettings
-                                {
-                                    ImportId = Guid.NewGuid(),
-                                    DownloadLog = chkDownload.Checked,
-                                    IsFolder = false,
-                                    Path = ((string[])e.Data.GetData(DataFormats.FileDrop))[0],
-                                    Publish = chkPublish.Checked,
-                                    Activate = chkActivate.Checked,
-                                    ConvertToManaged = chkConvertToManaged.Checked,
-                                    OverwriteUnmanagedCustomizations = chkOverwriteUnmanagedCustomizations.Checked,
-                                };
+            {
+                ImportId = Guid.NewGuid(),
+                DownloadLog = chkDownload.Checked,
+                IsFolder = false,
+                Path = ((string[])e.Data.GetData(DataFormats.FileDrop))[0],
+                Publish = chkPublish.Checked,
+                Activate = chkActivate.Checked,
+                ConvertToManaged = chkConvertToManaged.Checked,
+                OverwriteUnmanagedCustomizations = chkOverwriteUnmanagedCustomizations.Checked,
+            };
             ExecuteMethod(ImportArchive, iSettings);
         }
 
@@ -113,6 +113,16 @@ namespace MsCrmTools.SolutionImport
 
         private void ImportArchive(ImportSettings iSettings)
         {
+            if (ConnectionDetail.OrganizationMajorVersion == 8)
+            {
+                if (DialogResult.No == MessageBox.Show(ParentForm,
+                        "This plugin has not been tested with CRM 2016 yet, especially regarding new solution framework\r\n\r\nAre you sure you want to continue?",
+                        "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
+                {
+                    return;
+                }
+            }
+
             sManager = new SolutionManager(Service);
             iSettings.MajorVersion = ConnectionDetail.OrganizationMajorVersion;
 
@@ -120,8 +130,11 @@ namespace MsCrmTools.SolutionImport
 
             EnableControls(false);
 
-            WorkAsync("Importing solution...",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Importing solution...",
+                AsyncArgument = iSettings,
+                Work = (bw, e) =>
                 {
                     var settings = (ImportSettings)e.Argument;
 
@@ -141,7 +154,7 @@ namespace MsCrmTools.SolutionImport
                         sManager.PublishAll();
                     }
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -151,8 +164,8 @@ namespace MsCrmTools.SolutionImport
 
                     EnableControls(true);
                 },
-                e => SetWorkingMessage(e.ProgressPercentage <= 100 ? "Importing solution..." : "Publishing solution..."),
-                iSettings);
+                ProgressChanged = e => { SetWorkingMessage(e.ProgressPercentage <= 100 ? "Importing solution..." : "Publishing solution..."); }
+            });
         }
 
         private void TsbCloseThisTabClick(object sender, EventArgs e)

@@ -28,20 +28,6 @@ namespace MscrmTools.SyncFilterManager
 
         #endregion Constructor
 
-        #region EventHandlers
-
-        /// <summary>
-        /// EventHandler to close the current tool
-        /// </summary>
-        public event EventHandler OnCloseTool;
-
-        /// <summary>
-        /// EventHandler to request a connection to an organization
-        /// </summary>
-        public event EventHandler OnRequestConnection;
-
-        #endregion EventHandlers
-
         #region Methods
 
         private void TsbCloseClick(object sender, EventArgs e)
@@ -61,6 +47,8 @@ namespace MscrmTools.SyncFilterManager
         private void ResetUsersFiltersToDefault()
         {
             crmUserList1.Service = Service;
+            crmUserList1.ConnectionDetail = ConnectionDetail;
+
             var selectedUsers = crmUserList1.GetSelectedUsers();
 
             if (selectedUsers.Count == 0)
@@ -78,7 +66,7 @@ namespace MscrmTools.SyncFilterManager
                 WorkAsync("Reseting users local data rules...",
                    (bw, e) =>
                    {
-                       var rm = new RuleManager("userquery", Service);
+                       var rm = new RuleManager("userquery", Service, ConnectionDetail);
                        rm.ResetUsersRulesFromDefault((List<Entity>)e.Argument, bw);
                    },
                    e =>
@@ -98,6 +86,7 @@ namespace MscrmTools.SyncFilterManager
         private void SearchUsers()
         {
             crmUserList1.Service = Service;
+            crmUserList1.ConnectionDetail = ConnectionDetail;
             crmUserList1.Search();
         }
 
@@ -233,6 +222,7 @@ namespace MscrmTools.SyncFilterManager
         private void LoadSystemViews()
         {
             crmSystemViewsList.Service = Service;
+            crmSystemViewsList.ConnectionDetail = ConnectionDetail;
             crmSystemViewsList.LoadSystemViews();
         }
 

@@ -87,7 +87,7 @@ namespace MsCrmTools.Translator.AppCode
                         {
                             subArea.Titles.Add(int.Parse(titleNode.Attributes["LCID"].Value), titleNode.Attributes["Title"].Value);
                         }
-                        foreach (XmlNode titleNode in groupNode.SelectNodes("Descriptions/Description"))
+                        foreach (XmlNode titleNode in subAreaNode.SelectNodes("Descriptions/Description"))
                         {
                             subArea.Descriptions.Add(int.Parse(titleNode.Attributes["LCID"].Value), titleNode.Attributes["Description"].Value);
                         }
@@ -262,7 +262,7 @@ namespace MsCrmTools.Translator.AppCode
             siteMapDoc.LoadXml(siteMap["sitemapxml"].ToString());
 
             var rowsCount = sheet.Dimension.Rows;
-
+            var cellsCount = sheet.Dimension.Columns;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
                 if (ZeroBasedSheet.Cell(sheet, rowI, 0).Value == null) break;
@@ -275,18 +275,23 @@ namespace MsCrmTools.Translator.AppCode
                 }
 
                 var columnIndex = 2;
-                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                while (columnIndex < cellsCount)
                 {
-                    if (ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString() == "Title")
+                    if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                     {
-                        UpdateXmlNode(areaNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
+                        var lcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
+                        var label = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
+
+                        if (ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString() == "Title")
+                        {
+                            UpdateXmlNode(areaNode, "Titles", "Title", lcid, label);
+                        }
+                        else
+                        {
+                            UpdateXmlNode(areaNode, "Descriptions", "Description", lcid, label);
+                        }
                     }
-                    else
-                    {
-                        UpdateXmlNode(areaNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                         ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
-                    }
+
                     columnIndex++;
                 }
             }
@@ -305,7 +310,7 @@ namespace MsCrmTools.Translator.AppCode
             siteMapDoc.LoadXml(siteMap["sitemapxml"].ToString());
 
             var rowsCount = sheet.Dimension.Rows;
-
+            var cellsCount = sheet.Dimension.Columns;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
                 if (ZeroBasedSheet.Cell(sheet, rowI, 0).Value == null) break;
@@ -319,18 +324,23 @@ namespace MsCrmTools.Translator.AppCode
                 }
 
                 var columnIndex = 3;
-                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                while (columnIndex < cellsCount)
                 {
-                    if (ZeroBasedSheet.Cell(sheet, rowI, 2).Value.ToString() == "Title")
+                    if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                     {
-                        UpdateXmlNode(groupNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
+                        var lcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
+                        var label = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
+
+                        if (ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString() == "Title")
+                        {
+                            UpdateXmlNode(groupNode, "Titles", "Title", lcid, label);
+                        }
+                        else
+                        {
+                            UpdateXmlNode(groupNode, "Descriptions", "Description", lcid, label);
+                        }
                     }
-                    else
-                    {
-                        UpdateXmlNode(groupNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                         ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
-                    }
+
                     columnIndex++;
                 }
             }
@@ -349,7 +359,7 @@ namespace MsCrmTools.Translator.AppCode
             siteMapDoc.LoadXml(siteMap["sitemapxml"].ToString());
 
             var rowsCount = sheet.Dimension.Rows;
-
+            var cellsCount = sheet.Dimension.Columns;
             for (var rowI = 1; rowI < rowsCount; rowI++)
             {
                 if (ZeroBasedSheet.Cell(sheet, rowI, 0).Value == null) break;
@@ -364,17 +374,21 @@ namespace MsCrmTools.Translator.AppCode
                 }
 
                 var columnIndex = 4;
-                while (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
+                while (columnIndex < cellsCount)
                 {
-                    if (ZeroBasedSheet.Cell(sheet, rowI, 3).Value.ToString() == "Title")
+                    if (ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value != null)
                     {
-                        UpdateXmlNode(subAreaNode, "Titles", "Title", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                            ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
-                    }
-                    else
-                    {
-                        UpdateXmlNode(subAreaNode, "Descriptions", "Description", ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString(),
-                         ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString());
+                        var lcid = ZeroBasedSheet.Cell(sheet, 0, columnIndex).Value.ToString();
+                        var label = ZeroBasedSheet.Cell(sheet, rowI, columnIndex).Value.ToString();
+
+                        if (ZeroBasedSheet.Cell(sheet, rowI, 1).Value.ToString() == "Title")
+                        {
+                            UpdateXmlNode(subAreaNode, "Titles", "Title", lcid, label);
+                        }
+                        else
+                        {
+                            UpdateXmlNode(subAreaNode, "Descriptions", "Description", lcid, label);
+                        }
                     }
                     columnIndex++;
                 }

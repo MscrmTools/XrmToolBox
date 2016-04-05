@@ -4,9 +4,7 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using Microsoft.Crm.Sdk.Messages;
-using Microsoft.Xrm.Client.Services;
 using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Metadata;
 using MsCrmTools.PrivDiscover.AppCode;
 using System;
@@ -141,8 +139,8 @@ namespace MsCrmTools.PrivDiscover
                 clonedItem.Tag = priv;
                 clonedItem.Group =
                     groupName != null
-                    //? ListViewDelegates.GetGroup(lvSelectedPrivileges, groupName)
-                    //: ListViewDelegates.GetGroup(lvSelectedPrivileges, "_Common");
+                        //? ListViewDelegates.GetGroup(lvSelectedPrivileges, groupName)
+                        //: ListViewDelegates.GetGroup(lvSelectedPrivileges, "_Common");
                         ? lvSelectedPrivileges.Groups[groupName]
                         : lvSelectedPrivileges.Groups["_Common"];
 
@@ -193,8 +191,11 @@ namespace MsCrmTools.PrivDiscover
             lvSelectedPrivileges.Items.Clear();
             lvRoles.Items.Clear();
 
-            WorkAsync("Retrieving roles...",
-                (bw, e) =>
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Retrieving roles...",
+                AsyncArgument = null,
+                Work = (bw, e) =>
                 {
                     var rManager = new RolesManager(Service);
                     roles = rManager.GetRoles();
@@ -208,7 +209,7 @@ namespace MsCrmTools.PrivDiscover
                     var mdManager = new MetadataManager(Service);
                     entities = mdManager.GetEntitiesWithPrivileges();
                 },
-                e =>
+                PostWorkCallBack = e =>
                 {
                     if (e.Error != null)
                     {
@@ -222,7 +223,8 @@ namespace MsCrmTools.PrivDiscover
 
                     txtSearch.Enabled = true;
                 },
-                e => SetWorkingMessage(e.UserState.ToString()));
+                ProgressChanged = e => { SetWorkingMessage(e.UserState.ToString()); }
+            });
         }
 
         private void TsbCloseClick(object sender, EventArgs e)
@@ -288,13 +290,7 @@ namespace MsCrmTools.PrivDiscover
             if (lvRoles.SelectedItems.Count == 0)
                 return;
 
-            Uri currentServiceUri = ((OrganizationServiceProxy)((OrganizationService)Service).InnerService).ServiceConfiguration.CurrentServiceEndpoint.Address.Uri;
-
-            string originalUrl = currentServiceUri.OriginalString;
-
-            string baseUrl = originalUrl.Substring(0, originalUrl.IndexOf("XRMServices"));
-
-            Process.Start(string.Format("{0}biz/roles/edit.aspx?id={1}", baseUrl, (Guid)lvRoles.SelectedItems[0].Tag));
+            Process.Start(string.Format("{0}/biz/roles/edit.aspx?id={1}", ConnectionDetail.OriginalUrl, (Guid)lvRoles.SelectedItems[0].Tag));
         }
 
         private void DoWork()

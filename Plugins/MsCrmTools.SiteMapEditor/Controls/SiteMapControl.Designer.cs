@@ -17,6 +17,9 @@
             {
                 components.Dispose();
             }
+
+            tip.Dispose();
+
             base.Dispose(disposing);
         }
 

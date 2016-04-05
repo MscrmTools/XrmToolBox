@@ -10,13 +10,13 @@ namespace MsCrmTools.WebResourcesManager.Forms
 {
     public partial class FindAndReplaceForm : Form
     {
-        private static bool caseSensitive = true;
+        private static bool caseSensitive = false;
         private static bool searchUp;
         private static string textToFind = "";
         private static FindAndReplaceForm theDialog;
         private static bool useRegex;
         private static bool useWildcards;
-        private static bool wholeWord = true;
+        private static bool wholeWord = false;
         private readonly TextEditor editor;
 
         public FindAndReplaceForm(TextEditor editor)
@@ -55,6 +55,21 @@ namespace MsCrmTools.WebResourcesManager.Forms
                 theDialog.txtFind2.SelectAll();
                 theDialog.txtFind2.Focus();
             }
+
+            if (replace)
+            {
+                theDialog.txtFind2.Focus();
+            }
+            else
+            {
+                theDialog.txtFind.Focus();
+            }
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void FindAndReplaceForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -72,11 +87,12 @@ namespace MsCrmTools.WebResourcesManager.Forms
         private bool FindNext(string textToFind)
         {
             Regex regex = GetRegEx(textToFind);
-            int start = regex.Options.HasFlag(RegexOptions.RightToLeft) ?
-            editor.SelectionStart : editor.SelectionStart + editor.SelectionLength;
+            int start = regex.Options.HasFlag(RegexOptions.RightToLeft)
+                ? editor.SelectionStart
+                : editor.SelectionStart + editor.SelectionLength;
             Match match = regex.Match(editor.Text, start);
 
-            if (!match.Success)  // start again from beginning or end
+            if (!match.Success) // start again from beginning or end
             {
                 if (regex.Options.HasFlag(RegexOptions.RightToLeft))
                     match = regex.Match(editor.Text, editor.Text.Length);
@@ -132,7 +148,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
         private void ReplaceAllClick(object sender, EventArgs e)
         {
             if (MessageBox.Show("Are you sure you want to Replace All occurences of \"" +
-            txtFind2.Text + "\" with \"" + txtReplace.Text + "\"?",
+                                txtFind2.Text + "\" with \"" + txtReplace.Text + "\"?",
                 "Replace All", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
             {
                 Regex regex = GetRegEx(txtFind2.Text, true);
@@ -161,6 +177,18 @@ namespace MsCrmTools.WebResourcesManager.Forms
 
             if (!FindNext(txtFind2.Text) && !replaced)
                 SystemSounds.Beep.Play();
+        }
+
+        private void txtFind_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                FindNextClick(null, null);
+            }
+            else if (e.KeyData == Keys.Escape)
+            {
+                btnCancel_Click(null, null);
+            }
         }
     }
 }
