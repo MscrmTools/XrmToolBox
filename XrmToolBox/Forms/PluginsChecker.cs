@@ -154,7 +154,9 @@ namespace XrmToolBox.Forms
                         }
                         catch (Exception error)
                         {
-                            MessageBox.Show(this, "An error occured while copying files: " + error.Message + "\r\n\r\nCopy has been aborted", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                            MessageBox.Show(this,
+                                "An error occured while copying files: " + error.Message +
+                                "\r\n\r\nCopy has been aborted", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
                     }
