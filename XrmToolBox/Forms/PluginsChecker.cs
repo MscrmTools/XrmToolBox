@@ -15,6 +15,9 @@ namespace XrmToolBox.Forms
 {
     public partial class PluginsChecker : Form
     {
+        // This is the minimum version of XrmToolBox that does not include breaking changes
+        private static Version MinCompatibleVersion = new Version(1, 2015, 12, 20);
+
         private readonly string applicationDataFolder;
         private readonly string applicationFolder;
         private readonly string applicationPluginsFolder;
@@ -63,31 +66,46 @@ namespace XrmToolBox.Forms
                     item.SubItems.Add(package.Version.ToString());
                     item.SubItems.Add(string.Join(", ", package.Authors));
                     item.SubItems.Add(package.Description);
-                    item.Tag = package;
 
                     var files = package.GetFiles();
 
-                    bool install = false, update = false;
+                    bool install = false, update = false, compatible = false;
 
-                    foreach (var file in files)
+                    var xtbDependency = package.FindDependency("XrmToolBox", null);
+                    if (xtbDependency != null)
                     {
-                        var existingPluginFile = plugins.FirstOrDefault(p => file.EffectivePath.EndsWith(p.Name));
-                        if (existingPluginFile == null)
-                        {
-                            install = true;
-                        }
-                        else
-                        {
-                            var existingFileVersion = FileVersionInfo.GetVersionInfo(existingPluginFile.FullName);
+                        var xtbDependencyVersion = xtbDependency.VersionSpec.MinVersion.Version;
+                        compatible = IsPluginDependencyCompatible(xtbDependencyVersion);
+                    }
 
-                            if (new Version(existingFileVersion.FileVersion) < package.Version.Version)
+                    if (compatible)
+                    {
+                        item.Tag = package;
+                        foreach (var file in files)
+                        {
+                            var existingPluginFile = plugins.FirstOrDefault(p => file.EffectivePath.EndsWith(p.Name));
+                            if (existingPluginFile == null)
                             {
-                                update = true;
+                                install = true;
+                            }
+                            else
+                            {
+                                var existingFileVersion = FileVersionInfo.GetVersionInfo(existingPluginFile.FullName);
+
+                                if (new Version(existingFileVersion.FileVersion) < package.Version.Version)
+                                {
+                                    update = true;
+                                }
                             }
                         }
                     }
 
-                    if (update)
+                    if (!compatible)
+                    {
+                        item.SubItems.Add("Incompatible");
+                        item.ForeColor = Color.Red;
+                    }
+                    else if (update)
                     {
                         item.SubItems.Add("Update");
                         item.ForeColor = Color.Blue;
@@ -123,6 +141,12 @@ namespace XrmToolBox.Forms
             bw.RunWorkerAsync();
         }
 
+        private bool IsPluginDependencyCompatible(Version xtbDependencyVersion)
+        {
+            // Verify version plugin is built for with current XTB version and a compatibility list
+            return xtbDependencyVersion >= MinCompatibleVersion;
+        }
+
         private void PluginsChecker_Load(object sender, EventArgs e)
         {
             RefreshPluginsList();
@@ -135,7 +159,7 @@ namespace XrmToolBox.Forms
 
             var pus = new PluginUpdates();
 
-            foreach (ListViewItem item in lvPlugins.CheckedItems.Cast<ListViewItem>().Where(l => l.ForeColor != Color.Gray))
+            foreach (ListViewItem item in lvPlugins.CheckedItems.Cast<ListViewItem>().Where(l => l.Tag is IPackage))
             {
                 var package = (IPackage)item.Tag;
                 manager.InstallPackage(package, false, false);
