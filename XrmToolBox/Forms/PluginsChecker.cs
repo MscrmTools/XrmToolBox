@@ -162,7 +162,7 @@ namespace XrmToolBox.Forms
             foreach (ListViewItem item in lvPlugins.CheckedItems.Cast<ListViewItem>().Where(l => l.Tag is IPackage))
             {
                 var package = (IPackage)item.Tag;
-                manager.InstallPackage(package, false, false);
+                manager.InstallPackage(package, true, false);
 
                 var packageFolder = Path.Combine(nugetPluginsFolder, package.Id + "." + package.Version);
 
