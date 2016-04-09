@@ -62,75 +62,7 @@ namespace XrmToolBox.Forms
                 var lvic = new List<ListViewItem>();
                 foreach (var package in packages)
                 {
-                    var xtbPackage = new XtbNuGetPackage(package, PackageInstallAction.None);
-                    var item = new ListViewItem(xtbPackage.ToString());
-                    item.Tag = xtbPackage;
-                    item.SubItems.Add(package.Version.ToString());
-                    var currentVerItem = item.SubItems.Add("");  //Current version
-                    item.SubItems.Add(package.Description);
-                    item.SubItems.Add(string.Join(", ", package.Authors));
-                    var actionItem = item.SubItems.Add("None");
-
-                    var files = package.GetFiles();
-
-                    bool install = false, update = false, compatible = false;
-
-                    var xtbDependency = package.FindDependency("XrmToolBox", null);
-                    if (xtbDependency != null)
-                    {
-                        var xtbDependencyVersion = xtbDependency.VersionSpec.MinVersion.Version;
-                        compatible = IsPluginDependencyCompatible(xtbDependencyVersion);
-                    }
-
-                    var currentVersion = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);
-                    var currentVersionFound = false;
-
-                    // TODO: Don't compare with all files, plugin packages may contain other dll's and exe's that have other versioning
-                    // How to determine actual version of existing plugin?
-                    foreach (var file in files)
-                    {
-                        var existingPluginFile = plugins.FirstOrDefault(p => file.EffectivePath.EndsWith(p.Name));
-                        if (existingPluginFile == null)
-                        {
-                            install = true;
-                        }
-                        else
-                        {
-                            var existingFileVersion = FileVersionInfo.GetVersionInfo(existingPluginFile.FullName);
-                            var fileVersion = Version.Parse(existingFileVersion.FileVersion);
-                            if (fileVersion < currentVersion)
-                            {
-                                currentVersion = fileVersion;
-                                currentVersionFound = true;
-                            }
-                            if (fileVersion < package.Version.Version)
-                            {
-                                update = true;
-                            }
-                        }
-                    }
-                    if (currentVersionFound)
-                    {
-                        currentVerItem.Text = currentVersion.ToString();
-                    }
-                    if (!compatible)
-                    {
-                        actionItem.Text = "Incompatible";
-                        item.ForeColor = Color.Red;
-                        xtbPackage.Action = PackageInstallAction.Unavailable;
-                    }
-                    else if (update)
-                    {
-                        actionItem.Text = "Update";
-                        item.ForeColor = Color.Blue;
-                        xtbPackage.Action = PackageInstallAction.Update;
-                    }
-                    else if (install)
-                    {
-                        actionItem.Text = "Install";
-                        item.ForeColor = Color.Gray;
-                        xtbPackage.Action = PackageInstallAction.Install;
-                    }
+                    var item = AddPackage(package);
                     lvic.Add(item);
                 }
                 e.Result = lvic;
@@ -149,6 +81,84 @@ namespace XrmToolBox.Forms
                 lvPlugins.Items.AddRange(((List<ListViewItem>)e.Result).ToArray());
             };
             bw.RunWorkerAsync();
+        }
+
+        private ListViewItem AddPackage(IPackage package)
+        {
+            var xtbPackage = new XtbNuGetPackage(package, PackageInstallAction.None);
+            var item = new ListViewItem(xtbPackage.ToString());
+            item.Tag = xtbPackage;
+            item.SubItems.Add(package.Version.ToString());
+            var currentVerItem = item.SubItems.Add("");  //Current version
+            item.SubItems.Add(package.Description);
+            item.SubItems.Add(string.Join(", ", package.Authors));
+            var actionItem = item.SubItems.Add("None");
+
+            var files = package.GetFiles();
+
+            bool install = false, update = false, compatible = false;
+
+            var xtbDependency = package.FindDependency("XrmToolBox", null);
+            if (xtbDependency != null)
+            {
+                var xtbDependencyVersion = xtbDependency.VersionSpec.MinVersion.Version;
+                compatible = IsPluginDependencyCompatible(xtbDependencyVersion);
+            }
+
+            var currentVersion = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);
+            var currentVersionFound = false;
+
+            // TODO: Don't compare with all files, plugin packages may contain other dll's and exe's that have other versioning
+            // How to determine actual version of existing plugin?
+            foreach (var file in files)
+            {
+                if (Path.GetDirectoryName(file.EffectivePath).ToLower() == "plugins")
+                {   // Only check version of files in the Plugins folder
+                    var existingPluginFile = plugins.FirstOrDefault(p => file.EffectivePath.EndsWith(p.Name));
+                    if (existingPluginFile == null)
+                    {
+                        install = true;
+                    }
+                    else
+                    {
+                        var existingFileVersion = FileVersionInfo.GetVersionInfo(existingPluginFile.FullName);
+                        var fileVersion = Version.Parse(existingFileVersion.FileVersion);
+                        if (fileVersion < currentVersion)
+                        {
+                            currentVersion = fileVersion;
+                            currentVersionFound = true;
+                        }
+                        if (fileVersion < package.Version.Version)
+                        {
+                            update = true;
+                        }
+                    }
+                }
+            }
+            if (currentVersionFound)
+            {
+                currentVerItem.Text = currentVersion.ToString();
+            }
+            if (!compatible)
+            {
+                actionItem.Text = "Incompatible";
+                item.ForeColor = Color.Red;
+                xtbPackage.Action = PackageInstallAction.Unavailable;
+            }
+            else if (update)
+            {
+                actionItem.Text = "Update";
+                item.ForeColor = Color.Blue;
+                xtbPackage.Action = PackageInstallAction.Update;
+            }
+            else if (install)
+            {
+                actionItem.Text = "Install";
+                item.ForeColor = Color.Gray;
+                xtbPackage.Action = PackageInstallAction.Install;
+            }
+
+            return item;
         }
 
         private bool IsPluginDependencyCompatible(Version xtbDependencyVersion)
