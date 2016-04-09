@@ -165,39 +165,10 @@ namespace XrmToolBox.Forms
                 manager.InstallPackage(package, true, false);
 
                 var packageFolder = Path.Combine(nugetPluginsFolder, package.Id + "." + package.Version);
-                var packageRootFolder = string.Empty;
-                var inconsistentfolders = false;
 
-                foreach (var fi in package.AssemblyReferences)
+                foreach (var fi in package.GetFiles())
                 {
-                    var packagefilepath = Path.GetDirectoryName(fi.Path);
-                    if (string.IsNullOrEmpty(packageRootFolder))
-                    {
-                        packageRootFolder = packagefilepath;
-                    }
-                    if (!packagefilepath.Equals(packageRootFolder, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        if (!packagefilepath.StartsWith(packageRootFolder) && !packageRootFolder.StartsWith(packagefilepath))
-                        {
-                            inconsistentfolders = true;
-                        }
-                        else if (!packagefilepath.StartsWith(packageRootFolder) && packageRootFolder.StartsWith(packagefilepath))
-                        {
-                            packageRootFolder = packagefilepath;
-                        }
-                    }
-                }
-
-                if (inconsistentfolders)
-                {
-                    MessageBox.Show("Cannot determine plugin root folder for package. Ooops.");
-                    return;
-                }
-
-                foreach (var fi in package.AssemblyReferences)
-                {
-                    var destinationRelativePath = fi.Path.Replace(packageRootFolder, "").Trim('\\');
-                    var destinationFile = Path.Combine(applicationPluginsFolder, destinationRelativePath);
+                    var destinationFile = Path.Combine(applicationFolder, fi.EffectivePath);
                     if (item.ForeColor == DefaultForeColor)
                     {
                         try
