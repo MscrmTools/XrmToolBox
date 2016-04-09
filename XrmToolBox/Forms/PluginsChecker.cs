@@ -162,18 +162,53 @@ namespace XrmToolBox.Forms
             foreach (ListViewItem item in lvPlugins.CheckedItems.Cast<ListViewItem>().Where(l => l.Tag is IPackage))
             {
                 var package = (IPackage)item.Tag;
-                manager.InstallPackage(package, false, false);
+                manager.InstallPackage(package, true, false);
 
                 var packageFolder = Path.Combine(nugetPluginsFolder, package.Id + "." + package.Version);
+                var packageRootFolder = string.Empty;
+                var inconsistentfolders = false;
 
                 foreach (var fi in package.AssemblyReferences)
                 {
+                    var packagefilepath = Path.GetDirectoryName(fi.Path);
+                    if (string.IsNullOrEmpty(packageRootFolder))
+                    {
+                        packageRootFolder = packagefilepath;
+                    }
+                    if (!packagefilepath.Equals(packageRootFolder, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        if (!packagefilepath.StartsWith(packageRootFolder) && !packageRootFolder.StartsWith(packagefilepath))
+                        {
+                            inconsistentfolders = true;
+                        }
+                        else if (!packagefilepath.StartsWith(packageRootFolder) && packageRootFolder.StartsWith(packagefilepath))
+                        {
+                            packageRootFolder = packagefilepath;
+                        }
+                    }
+                }
+
+                if (inconsistentfolders)
+                {
+                    MessageBox.Show("Cannot determine plugin root folder for package. Ooops.");
+                    return;
+                }
+
+                foreach (var fi in package.AssemblyReferences)
+                {
+                    var destinationRelativePath = fi.Path.Replace(packageRootFolder, "").Trim('\\');
+                    var destinationFile = Path.Combine(applicationPluginsFolder, destinationRelativePath);
                     if (item.ForeColor == DefaultForeColor)
                     {
                         try
                         {
                             // Can install plugin directly
-                            File.Copy(Path.Combine(packageFolder, fi.Path), Path.Combine(applicationPluginsFolder, fi.Name));
+                            var destinationDirectory = Path.GetDirectoryName(destinationFile);
+                            if (!Directory.Exists(destinationDirectory))
+                            {
+                                Directory.CreateDirectory(destinationDirectory);
+                            }
+                            File.Copy(Path.Combine(packageFolder, fi.Path), destinationFile);
                         }
                         catch (Exception error)
                         {
@@ -188,7 +223,7 @@ namespace XrmToolBox.Forms
                         pus.Plugins.Add(new PluginUpdate
                         {
                             Source = Path.Combine(packageFolder, fi.Path),
-                            Destination = Path.Combine(applicationPluginsFolder, fi.Name)
+                            Destination = destinationFile
                         });
                     }
                 }
