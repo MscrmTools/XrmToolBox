@@ -363,6 +363,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                         }
 
                         resource.Entity["content"] = Convert.ToBase64String(File.ReadAllBytes(resource.FilePath));
+                        resource.RefreshAssociatedContent();
                         tv_AfterSelect(tv, new TreeViewEventArgs(selectedItem));
                     }
                 }
@@ -835,6 +836,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                     {
                         var wr = (WebResource)subNodes[fiChild.Name].Tag;
                         wr.Entity["content"] = Convert.ToBase64String(File.ReadAllBytes(wr.FilePath));
+                        wr.RefreshAssociatedContent();
                     }
                 }
             }

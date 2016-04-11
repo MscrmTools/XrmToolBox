@@ -148,6 +148,14 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             return this;
         }
 
+        public void RefreshAssociatedContent()
+        {
+            foreach (var associated in AssociatedResources)
+            {
+                associated.Entity["content"] = Convert.ToBase64String(File.ReadAllBytes(associated.FilePath));
+            }
+        }
+
         private void LoadAssociatedResources()
         {
             if (!Options.Instance.PushTsMapFiles || string.IsNullOrWhiteSpace(FilePath) || !Path.HasExtension(FilePath) || Path.GetExtension(FilePath).ToLower() != ".js")
