@@ -78,14 +78,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                     }
                     else
                     {
-                        var webResource = new Entity("webresource");
-                        webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(fileName));
-                        webResource["webresourcetype"] =
-                            new OptionSetValue(WebResource.GetTypeFromExtension(fi.Extension.Remove(0, 1)));
-                        webResource["name"] = string.Format("{0}/{1}", name, fi.Name);
-                        webResource["displayname"] = string.Format("{0}/{1}", name, fi.Name);
-                        var wr = new WebResource(webResource, fileName);
-
+                        var wr = WebResource.LoadWebResourceFromDisk(fileName, string.Format("{0}/{1}", name, fi.Name), string.Format("{0}/{1}", name, fi.Name));
                         var node = new TreeNode(fi.Name)
                         {
                             ImageIndex =
@@ -562,69 +555,16 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                     fileName = string.Format("{0}/{1}", parentNode.Text, fileName);
             }
 
-            int imageIndex = 0;
-
-            switch (fiChild.Extension.ToLower().Remove(0, 1))
-            {
-                case "html":
-                case "htm":
-                    imageIndex = 2;
-                    break;
-
-                case "css":
-                    imageIndex = 3;
-                    break;
-
-                case "js":
-                    imageIndex = 4;
-                    break;
-
-                case "xml":
-                    imageIndex = 5;
-                    break;
-
-                case "png":
-                    imageIndex = 6;
-                    break;
-
-                case "jpg":
-                    imageIndex = 7;
-                    break;
-
-                case "gif":
-                    imageIndex = 8;
-                    break;
-
-                case "xap":
-                    imageIndex = 9;
-                    break;
-
-                case "xsl":
-                    imageIndex = 10;
-                    break;
-
-                case "ico":
-                    imageIndex = 11;
-                    break;
-            }
-
-            // Create new virtual web resource
-            var script = new Entity("webresource");
-            script["name"] = fileName;
-            script["webresourcetype"] = new OptionSetValue(imageIndex - 1);
-
-            // Add content
-            script["content"] = Convert.ToBase64String(File.ReadAllBytes(fiChild.FullName));
-
             // Generate display name (Credit to badhabits)
             var lastSlash = fileName.LastIndexOf("/", StringComparison.Ordinal);
             var displayName = lastSlash > -1
                 ? fileName.Substring(lastSlash + 1)
                 : fileName;
-            script["displayname"] = displayName;
 
-            var resource = new WebResource(script, fiChild.FullName);
+            // Create new virtual web resource
+            var resource = WebResource.LoadWebResourceFromDisk(fiChild.FullName, fileName, displayName);
 
+            var imageIndex = WebResource.GetImageIndexFromExtension(fiChild.Extension);
             var node = new TreeNode
             {
                 Text = scriptName,
@@ -761,15 +701,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 else
                 {
                     // Create CRM web resource
-                    var webResource = new Entity("webresource")
-                    {
-                        ["content"] = Convert.ToBase64String(File.ReadAllBytes(file)),
-                        ["webresourcetype"] = new OptionSetValue(WebResource.GetTypeFromExtension(fi.Extension.Remove(0, 1))),
-                        ["name"] = string.Format("{0}/{1}", nodeObjectName, fi.Name),
-                        ["displayname"] = string.Format("{0}/{1}", nodeObjectName, fi.Name)
-                    };
-
-                    var newWebResource = new WebResource(webResource, fi.FullName);
+                    var newWebResource = WebResource.LoadWebResourceFromDisk(file, string.Format("{0}/{1}", nodeObjectName, fi.Name));
 
                     // Create file if the current node has a filepath in its tag
                     // this means, wen resources come from disk

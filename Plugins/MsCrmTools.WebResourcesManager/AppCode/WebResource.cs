@@ -7,6 +7,7 @@ using Microsoft.Xrm.Sdk;
 using MsCrmTools.WebResourcesManager.Forms;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -21,9 +22,12 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
         public WebResource(Entity webResource, string filePath)
         {
+            AssociatedResources = new List<WebResource>();
             FilePath = filePath;
             Entity = webResource;
             InitialBase64 = webResource.GetAttributeValue<string>("content");
+
+            LoadAssociatedResources();
         }
 
         public WebResource(Entity webresource)
@@ -35,6 +39,17 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             get { return validExtensions; }
         }
 
+        public static WebResource LoadWebResourceFromDisk(string fileName, string name, string displayName = null)
+        {
+            var entity = new Entity("webresource");
+            entity["content"] = Convert.ToBase64String(File.ReadAllBytes(fileName));
+            entity["webresourcetype"] = new OptionSetValue(GetTypeFromExtension(Path.GetExtension(fileName)));
+            entity["name"] = name;
+            entity["displayname"] = displayName ?? name;
+            return new WebResource(entity, fileName);
+        }
+
+        public List<WebResource> AssociatedResources { get; set; }
         public Entity Entity { get; set; }
         public string FilePath { get; set; }
         public string InitialBase64 { get; set; }
@@ -43,46 +58,18 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
         public static int GetImageIndexFromExtension(string ext)
         {
-            switch (ext.ToLower())
-            {
-                case "htm":
-                case "html":
-                    return 2;
-
-                case "css":
-                    return 3;
-
-                case "js":
-                    return 4;
-
-                case "xml":
-                    return 5;
-
-                case "png":
-                    return 6;
-
-                case "jpg":
-                case "jpeg":
-                    return 7;
-
-                case "gif":
-                    return 8;
-
-                case "xap":
-                    return 9;
-
-                case "xsl":
-                case "xslt":
-                    return 10;
-
-                default:
-                    return 11;
-            }
+            return GetTypeFromExtension(ext) + 1;
         }
 
+        /// <summary>
+        /// Gets the CRM WebResourceType from extension.
+        /// </summary>
+        /// <param name="ext">The file extension.</param>
+        /// <returns></returns>
         public static int GetTypeFromExtension(string ext)
         {
-            switch (ext.ToLower())
+            ext = ext.StartsWith(".") ? ext.Remove(0, 1).ToLower() : ext.ToLower();
+            switch (ext)
             {
                 case "htm":
                 case "html":
@@ -92,6 +79,8 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                     return 2;
 
                 case "js":
+                case "map":
+                case "ts":
                     return 3;
 
                 case "xml":
@@ -157,6 +146,28 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             }
 
             return this;
+        }
+
+        private void LoadAssociatedResources()
+        {
+            if (!Options.Instance.PushTsMapFiles || string.IsNullOrWhiteSpace(FilePath) || !Path.HasExtension(FilePath) || Path.GetExtension(FilePath).ToLower() != ".js")
+            {
+                // Not loaded from Disk, not Extension, not Javascript 
+                return;
+            }
+
+            var mapPath = FilePath + ".map";
+            var name = Entity.GetAttributeValue<string>("name");
+            var displayName = Entity.GetAttributeValue<string>("displayname");
+            if (File.Exists(mapPath))
+            {
+                AssociatedResources.Add(LoadWebResourceFromDisk(mapPath, name + ".map", displayName +".map"));
+            }
+            var tsPath = Path.ChangeExtension(FilePath, "ts");
+            if (File.Exists(tsPath))
+            {
+                AssociatedResources.Add(LoadWebResourceFromDisk(tsPath, Path.ChangeExtension(name, "ts"), Path.ChangeExtension(displayName, "ts")));
+            }
         }
     }
 }

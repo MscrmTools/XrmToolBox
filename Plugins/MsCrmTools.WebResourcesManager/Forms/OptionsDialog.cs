@@ -20,6 +20,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
         private void btnValidate_Click(object sender, EventArgs e)
         {
             Options.Instance.SaveOnDisk = chkSaveOnDisk.Checked;
+            Options.Instance.PushTsMapFiles = chkPushMapAndTsFiles.Checked;
             Options.Instance.AfterUpdateCommand = txtUpdateEvent.Text;
             Options.Instance.AfterPublishCommand = txtPublishEvent.Text;
 
@@ -30,6 +31,7 @@ namespace MsCrmTools.WebResourcesManager.Forms
         private void OptionsDialog_Load(object sender, EventArgs e)
         {
             chkSaveOnDisk.Checked = Options.Instance.SaveOnDisk;
+            chkPushMapAndTsFiles.Checked = Options.Instance.PushTsMapFiles;
             txtUpdateEvent.Text = Options.Instance.AfterUpdateCommand;
             txtPublishEvent.Text = Options.Instance.AfterPublishCommand;
         }

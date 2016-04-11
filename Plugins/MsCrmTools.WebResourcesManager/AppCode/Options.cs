@@ -49,6 +49,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
         public string CompareToolPath { get; set; }
         public string LastFolderUsed { get; set; }
         public bool SaveOnDisk { get; set; }
+        public bool PushTsMapFiles { get; set; }
 
         public void Save()
         {
