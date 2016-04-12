@@ -18,7 +18,8 @@ namespace MsCrmTools.WebResourcesManager.AppCode
     {
         private static readonly Regex InValidWrNameRegex = new Regex("[^a-z0-9A-Z_\\./]|[/]{2,}", (RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase));
 
-        private static readonly List<string> validExtensions = new List<string> { "htm", "html", "css", "js", "xml", "jpg", "jpeg", "png", "gif", "ico", "xap", "xslt" };
+        private static readonly HashSet<string> validExtensions = new HashSet<string> { "htm", "html", "css", "js", "xml", "jpg", "jpeg", "png", "gif", "ico", "xap", "xslt" };
+        private static readonly HashSet<string> extensionsToSkipLoadingErrorMessage = new HashSet<string> {"map", "ts"}; 
 
         public WebResource(Entity webResource, string filePath)
         {
@@ -34,9 +35,21 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             : this(webresource, string.Empty)
         { }
 
-        public static List<string> ValidExtensions
+        public static bool IsValidExtension(string ext)
         {
-            get { return validExtensions; }
+            ext = ext.StartsWith(".") ? ext.Remove(0, 1).ToLower() : ext.ToLower();
+            return validExtensions.Contains(ext);
+        }
+
+        /// <summary>
+        /// Map and TypeScript files are not valid to be loaded, but don't want to display as error either...
+        /// </summary>
+        /// <param name="ext">The ext.</param>
+        /// <returns></returns>
+        public static bool SkipErrorForInvalidExtension(string ext)
+        {
+            ext = ext.StartsWith(".") ? ext.Remove(0, 1).ToLower() : ext.ToLower();
+            return validExtensions.Contains(ext) || (Options.Instance.PushTsMapFiles && extensionsToSkipLoadingErrorMessage.Contains(ext));
         }
 
         public static WebResource LoadWebResourceFromDisk(string fileName, string name, string displayName = null)
@@ -108,9 +121,12 @@ namespace MsCrmTools.WebResourcesManager.AppCode
             }
         }
 
-        public static bool IsNameInvalid(string name)
+        public static bool IsNameValid(string name)
         {
-            var isInvalidName = InValidWrNameRegex.IsMatch(name);
+            if (InValidWrNameRegex.IsMatch(name))
+            {
+                return false;
+            }
 
             const string pattern = "*.config .* _* *.bin";
 
@@ -122,9 +138,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
 
             var regex = new Regex(regexPattern, RegexOptions.IgnoreCase);
 
-            var isInvalidName2 = regex.IsMatch(name);
-
-            return isInvalidName || isInvalidName2;
+            return !regex.IsMatch(name);
         }
 
         public string GetPlainText()
