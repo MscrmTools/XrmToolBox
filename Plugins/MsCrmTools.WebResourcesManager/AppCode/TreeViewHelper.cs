@@ -88,6 +88,7 @@ namespace MsCrmTools.WebResourcesManager.AppCode
                         if (wr != null)
                         {
                             wr.Entity["content"] = content;
+                            wr.RefreshAssociatedContent();
 
                             string nameToDisplay = name;
                             var currentDirectory = file.Directory;

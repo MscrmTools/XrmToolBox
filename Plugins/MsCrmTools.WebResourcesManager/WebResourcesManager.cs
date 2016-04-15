@@ -223,7 +223,14 @@ namespace MsCrmTools.WebResourcesManager
                  {
                      var webResourceManager = new AppCode.WebResourceManager(Service);
                      var resourceToPublish = new List<WebResource>();
-                     var resources = ((IEnumerable<WebResource>)((object[])e.Argument)[0]).ToList();
+                     var resources = new List<WebResource>();
+                     
+                     // Add Regular Resources, and Associated Web Resources
+                     foreach (var resource in (IEnumerable<WebResource>)((object[])e.Argument)[0])
+                     {
+                         resources.Add(resource);
+                         resources.AddRange(resource.AssociatedResources);
+                     }
 
                      var wrDifferentFromServer = new List<WebResource>();
 

@@ -72,20 +72,9 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                     var fi = new FileInfo(fileName);
 
                     //Test valid characters
-                    if (WebResource.IsNameInvalid(fi.Name))
+                    if (WebResource.IsNameValid(fi.Name))
                     {
-                        errorList.Add(fileName);
-                    }
-                    else
-                    {
-                        var webResource = new Entity("webresource");
-                        webResource["content"] = Convert.ToBase64String(File.ReadAllBytes(fileName));
-                        webResource["webresourcetype"] =
-                            new OptionSetValue(WebResource.GetTypeFromExtension(fi.Extension.Remove(0, 1)));
-                        webResource["name"] = string.Format("{0}/{1}", name, fi.Name);
-                        webResource["displayname"] = string.Format("{0}/{1}", name, fi.Name);
-                        var wr = new WebResource(webResource, fileName);
-
+                        var wr = WebResource.LoadWebResourceFromDisk(fileName, string.Format("{0}/{1}", name, fi.Name), string.Format("{0}/{1}", name, fi.Name));
                         var node = new TreeNode(fi.Name)
                         {
                             ImageIndex =
@@ -98,6 +87,10 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                         selectedNode.Nodes.Add(node);
 
                         selectedNode.Expand();
+                    }
+                    else
+                    {
+                        errorList.Add(fileName);
                     }
 
                     if (errorList.Count > 0)
@@ -283,18 +276,23 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
             // the prefix of customizations
             foreach (DirectoryInfo diChild in di.GetDirectories("*_", SearchOption.TopDirectoryOnly))
             {
-                if (WebResource.IsNameInvalid(diChild.Name))
+                if (WebResource.IsNameValid(diChild.Name))
+                {
+                    // Create a root treenode
+                    var rootFolderNode = new TreeNode(diChild.Name)
+                    {
+                        ImageIndex = 0,
+                        Tag = diChild.FullName
+                    };
+                    tv.Nodes.Add(rootFolderNode);
+
+                    // Add child folders
+                    CreateFolderStructure(rootFolderNode, diChild, invalidFilenames, extensionsToLoad);
+                }
+                else
                 {
                     invalidFilenames.Add(diChild.FullName);
-                    continue;
                 }
-
-                // Create a root treenode
-                var rootFolderNode = new TreeNode(diChild.Name) { ImageIndex = 0, Tag = diChild.FullName };
-                tv.Nodes.Add(rootFolderNode);
-
-                // Add child folders
-                CreateFolderStructure(rootFolderNode, diChild, invalidFilenames, extensionsToLoad);
             }
 
             // For each files that wouldn't use virtual folders structure, all
@@ -311,16 +309,17 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
                 // Do not process files with invalid names or extensions not related
                 // to web resources
-                if (WebResource.IsNameInvalid(fiChild.Name) || !WebResource.ValidExtensions.Contains(fiChild.Extension.Remove(0, 1).ToLower()))
+                if (WebResource.IsNameValid(fiChild.Name) && WebResource.IsValidExtension(fiChild.Extension))
                 {
-                    invalidFilenames.Add(fiChild.FullName);
-                    continue;
+                    // If the file is of type we want to load, the node is created
+                    if (extensionsToLoad.Contains(fiChild.Extension))
+                    {
+                        CreateWebResourceNode(fiChild, tv);
+                    }
                 }
-
-                // If the file is of type we want to load, the node is created
-                if (extensionsToLoad.Contains(fiChild.Extension))
+                else if (!WebResource.IsNameValid(fiChild.Name) || !WebResource.SkipErrorForInvalidExtension(fiChild.Extension))
                 {
-                    CreateWebResourceNode(fiChild, tv);
+                    invalidFilenames.Add(fiChild.FullName);    
                 }
             }
 
@@ -370,6 +369,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                         }
 
                         resource.Entity["content"] = Convert.ToBase64String(File.ReadAllBytes(resource.FilePath));
+                        resource.RefreshAssociatedContent();
                         tv_AfterSelect(tv, new TreeViewEventArgs(selectedItem));
                     }
                 }
@@ -501,7 +501,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
         {
             foreach (DirectoryInfo diChild in di.GetDirectories())
             {
-                if (WebResource.IsNameInvalid(diChild.Name))
+                if (!WebResource.IsNameValid(diChild.Name))
                 {
                     invalidFilenames.Add(diChild.FullName);
                     continue;
@@ -521,16 +521,16 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
             foreach (FileInfo fiChild in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
             {
-                if (WebResource.IsNameInvalid(fiChild.Name) || !WebResource.ValidExtensions.Contains(fiChild.Extension.Remove(0, 1).ToLower()))
+                if (WebResource.IsNameValid(fiChild.Name) && WebResource.IsValidExtension(fiChild.Extension))
+                {
+                    if (extensionsToLoad == null || extensionsToLoad.Contains(fiChild.Extension))
+                    {
+                        // Create a TreeNode for each javascript file
+                        CreateWebResourceNode(fiChild, parentFolderNode);
+                    }
+                } else if (!WebResource.IsNameValid(fiChild.Name) || !WebResource.SkipErrorForInvalidExtension(fiChild.Extension))
                 {
                     invalidFilenames.Add(fiChild.FullName);
-                    continue;
-                }
-
-                if (extensionsToLoad == null || extensionsToLoad.Contains(fiChild.Extension))
-                {
-                    // Create a TreeNode for each javascript file
-                    CreateWebResourceNode(fiChild, parentFolderNode);
                 }
             }
         }
@@ -562,69 +562,16 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                     fileName = string.Format("{0}/{1}", parentNode.Text, fileName);
             }
 
-            int imageIndex = 0;
-
-            switch (fiChild.Extension.ToLower().Remove(0, 1))
-            {
-                case "html":
-                case "htm":
-                    imageIndex = 2;
-                    break;
-
-                case "css":
-                    imageIndex = 3;
-                    break;
-
-                case "js":
-                    imageIndex = 4;
-                    break;
-
-                case "xml":
-                    imageIndex = 5;
-                    break;
-
-                case "png":
-                    imageIndex = 6;
-                    break;
-
-                case "jpg":
-                    imageIndex = 7;
-                    break;
-
-                case "gif":
-                    imageIndex = 8;
-                    break;
-
-                case "xap":
-                    imageIndex = 9;
-                    break;
-
-                case "xsl":
-                    imageIndex = 10;
-                    break;
-
-                case "ico":
-                    imageIndex = 11;
-                    break;
-            }
-
-            // Create new virtual web resource
-            var script = new Entity("webresource");
-            script["name"] = fileName;
-            script["webresourcetype"] = new OptionSetValue(imageIndex - 1);
-
-            // Add content
-            script["content"] = Convert.ToBase64String(File.ReadAllBytes(fiChild.FullName));
-
             // Generate display name (Credit to badhabits)
             var lastSlash = fileName.LastIndexOf("/", StringComparison.Ordinal);
             var displayName = lastSlash > -1
                 ? fileName.Substring(lastSlash + 1)
                 : fileName;
-            script["displayname"] = displayName;
 
-            var resource = new WebResource(script, fiChild.FullName);
+            // Create new virtual web resource
+            var resource = WebResource.LoadWebResourceFromDisk(fiChild.FullName, fileName, displayName);
 
+            var imageIndex = WebResource.GetImageIndexFromExtension(fiChild.Extension);
             var node = new TreeNode
             {
                 Text = scriptName,
@@ -754,22 +701,10 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 string nodeObjectName = GetName(currentNode);
 
                 // Test valid characters
-                if (WebResource.IsNameInvalid(fi.Name))
-                {
-                    errorList.Add(file);
-                }
-                else
+                if (WebResource.IsNameValid(fi.Name))
                 {
                     // Create CRM web resource
-                    var webResource = new Entity("webresource")
-                    {
-                        ["content"] = Convert.ToBase64String(File.ReadAllBytes(file)),
-                        ["webresourcetype"] = new OptionSetValue(WebResource.GetTypeFromExtension(fi.Extension.Remove(0, 1))),
-                        ["name"] = string.Format("{0}/{1}", nodeObjectName, fi.Name),
-                        ["displayname"] = string.Format("{0}/{1}", nodeObjectName, fi.Name)
-                    };
-
-                    var newWebResource = new WebResource(webResource, fi.FullName);
+                    var newWebResource = WebResource.LoadWebResourceFromDisk(file, string.Format("{0}/{1}", nodeObjectName, fi.Name));
 
                     // Create file if the current node has a filepath in its tag
                     // this means, wen resources come from disk
@@ -801,6 +736,10 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                     currentNode.Nodes.Add(node);
                     currentNode.Expand();
                 }
+                else
+                {
+                    errorList.Add(file);
+                }
             }
 
             if (errorList.Any())
@@ -825,7 +764,7 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
                 var files = (string[])e.Data.GetData(DataFormats.FileDrop);
 
                 // File must be an expected file format
-                bool isExtensionValid = files.All(f => WebResource.ValidExtensions.Contains(new FileInfo(f).Extension.Remove(0, 1).ToLower()));
+                bool isExtensionValid = files.All(f => WebResource.IsValidExtension(Path.GetExtension(f)));
 
                 // Destination node must be a Root or Folder node
                 bool isNodeValid = currentNode != null && currentNode.ImageIndex <= 1;
@@ -887,23 +826,25 @@ namespace MsCrmTools.WebResourcesManager.New.UserControls
 
             foreach (FileInfo fiChild in di.GetFiles("*.*", SearchOption.TopDirectoryOnly))
             {
-                if (WebResource.IsNameInvalid(fiChild.Name) || !WebResource.ValidExtensions.Contains(fiChild.Extension.Remove(0, 1).ToLower()))
+                if (WebResource.IsNameValid(fiChild.Name) && WebResource.IsValidExtension(fiChild.Extension))
+                {
+                    if (extensionsToLoad == null || extensionsToLoad.Contains(fiChild.Extension))
+                    {
+                        if (!subNodes.ContainsKey(fiChild.Name) || subNodes[fiChild.Name].ImageIndex <= 1)
+                        {
+                            CreateWebResourceNode(fiChild, parentFolderNode);
+                        }
+                        else
+                        {
+                            var wr = (WebResource)subNodes[fiChild.Name].Tag;
+                            wr.Entity["content"] = Convert.ToBase64String(File.ReadAllBytes(wr.FilePath));
+                            wr.RefreshAssociatedContent();
+                        }
+                    }
+                }
+                else  if (!WebResource.IsNameValid(fiChild.Name) || !WebResource.SkipErrorForInvalidExtension(fiChild.Extension))
                 {
                     invalidFilenames.Add(fiChild.FullName);
-                    continue;
-                }
-
-                if (extensionsToLoad == null || extensionsToLoad.Contains(fiChild.Extension))
-                {
-                    if (!subNodes.ContainsKey(fiChild.Name) || subNodes[fiChild.Name].ImageIndex <= 1)
-                    {
-                        CreateWebResourceNode(fiChild, parentFolderNode);
-                    }
-                    else
-                    {
-                        var wr = (WebResource)subNodes[fiChild.Name].Tag;
-                        wr.Entity["content"] = Convert.ToBase64String(File.ReadAllBytes(wr.FilePath));
-                    }
                 }
             }
         }

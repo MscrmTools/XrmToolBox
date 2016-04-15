@@ -32,9 +32,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnValidate = new System.Windows.Forms.Button();
-            this.chkSaveOnDisk = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.chkSaveOnDisk = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.chkPushMapAndTsFiles = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label4 = new System.Windows.Forms.Label();
             this.txtPublishEvent = new System.Windows.Forms.TextBox();
@@ -62,7 +63,7 @@
             this.label1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(294, 25);
+            this.label1.Size = new System.Drawing.Size(292, 25);
             this.label1.TabIndex = 0;
             this.label1.Text = "Web Resources Manager Settings";
             // 
@@ -70,7 +71,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(669, 272);
+            this.btnCancel.Location = new System.Drawing.Point(669, 288);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
             this.btnCancel.TabIndex = 2;
@@ -81,7 +82,7 @@
             // btnValidate
             // 
             this.btnValidate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnValidate.Location = new System.Drawing.Point(588, 272);
+            this.btnValidate.Location = new System.Drawing.Point(588, 288);
             this.btnValidate.Name = "btnValidate";
             this.btnValidate.Size = new System.Drawing.Size(75, 23);
             this.btnValidate.TabIndex = 1;
@@ -89,40 +90,51 @@
             this.btnValidate.UseVisualStyleBackColor = true;
             this.btnValidate.Click += new System.EventHandler(this.btnValidate_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.chkPushMapAndTsFiles);
+            this.groupBox1.Controls.Add(this.chkSaveOnDisk);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox1.Location = new System.Drawing.Point(0, 60);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(756, 92);
+            this.groupBox1.TabIndex = 12;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Options when loaded from / saved to disk";
+            // 
             // chkSaveOnDisk
             // 
             this.chkSaveOnDisk.AutoSize = true;
             this.chkSaveOnDisk.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkSaveOnDisk.Location = new System.Drawing.Point(17, 19);
+            this.chkSaveOnDisk.Location = new System.Drawing.Point(6, 40);
             this.chkSaveOnDisk.Name = "chkSaveOnDisk";
             this.chkSaveOnDisk.Size = new System.Drawing.Size(387, 17);
-            this.chkSaveOnDisk.TabIndex = 11;
+            this.chkSaveOnDisk.TabIndex = 12;
             this.chkSaveOnDisk.Text = "Save file content to disk when saving web resource content in the text editor";
             this.chkSaveOnDisk.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Controls.Add(this.chkSaveOnDisk);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.Location = new System.Drawing.Point(0, 60);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(756, 73);
-            this.groupBox1.TabIndex = 12;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Text editor";
-            // 
             // label5
             // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.Dock = System.Windows.Forms.DockStyle.Top;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(14, 39);
+            this.label5.Location = new System.Drawing.Point(3, 16);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(727, 21);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "This option applies only for web resources that have been loaded from disk or loa" +
-    "ded from CRM organization and saved to disk";
+            this.label5.Size = new System.Drawing.Size(750, 21);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "These option applies only for web resources that have been loaded from disk or lo" +
+    "aded from CRM organization and saved to disk";
+            // 
+            // chkPushMapAndTsFiles
+            // 
+            this.chkPushMapAndTsFiles.AutoSize = true;
+            this.chkPushMapAndTsFiles.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkPushMapAndTsFiles.Location = new System.Drawing.Point(6, 63);
+            this.chkPushMapAndTsFiles.Name = "chkPushMapAndTsFiles";
+            this.chkPushMapAndTsFiles.Size = new System.Drawing.Size(275, 17);
+            this.chkPushMapAndTsFiles.TabIndex = 13;
+            this.chkPushMapAndTsFiles.Text = "Push \".js.map\" and \".ts\" files when pushing \".js\" files";
+            this.chkPushMapAndTsFiles.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -132,7 +144,7 @@
             this.groupBox2.Controls.Add(this.txtUpdateEvent);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox2.Location = new System.Drawing.Point(0, 133);
+            this.groupBox2.Location = new System.Drawing.Point(0, 152);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(756, 125);
             this.groupBox2.TabIndex = 13;
@@ -189,7 +201,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(756, 304);
+            this.ClientSize = new System.Drawing.Size(756, 320);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnValidate);
@@ -224,5 +236,6 @@
         private System.Windows.Forms.TextBox txtUpdateEvent;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox chkPushMapAndTsFiles;
     }
 }
