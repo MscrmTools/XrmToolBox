@@ -30,18 +30,19 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PluginsChecker));
             this.tsMain = new System.Windows.Forms.ToolStrip();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsbLoadPlugins = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbInstall = new System.Windows.Forms.ToolStripButton();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tssProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.tssLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.lvPlugins = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colAction = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colTitle = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colCurrent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colAuthor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tsMain.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -55,9 +56,32 @@
             this.tsbInstall});
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
-            this.tsMain.Size = new System.Drawing.Size(1047, 32);
+            this.tsMain.Size = new System.Drawing.Size(998, 31);
             this.tsMain.TabIndex = 0;
             this.tsMain.Text = "toolStrip1";
+            // 
+            // tsbLoadPlugins
+            // 
+            this.tsbLoadPlugins.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadPlugins.Image")));
+            this.tsbLoadPlugins.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbLoadPlugins.Name = "tsbLoadPlugins";
+            this.tsbLoadPlugins.Size = new System.Drawing.Size(179, 28);
+            this.tsbLoadPlugins.Text = "Reload plugins from NuGet";
+            this.tsbLoadPlugins.Click += new System.EventHandler(this.tsbLoadPlugins_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
+            // 
+            // tsbInstall
+            // 
+            this.tsbInstall.Image = ((System.Drawing.Image)(resources.GetObject("tsbInstall.Image")));
+            this.tsbInstall.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbInstall.Name = "tsbInstall";
+            this.tsbInstall.Size = new System.Drawing.Size(172, 28);
+            this.tsbInstall.Text = "Install selected package(s)";
+            this.tsbInstall.Click += new System.EventHandler(this.tsbInstall_Click);
             // 
             // statusStrip1
             // 
@@ -65,46 +89,24 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tssProgress,
             this.tssLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 524);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 333);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1047, 22);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 9, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(998, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
-            // 
-            // tsbLoadPlugins
-            // 
-            this.tsbLoadPlugins.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadPlugins.Image")));
-            this.tsbLoadPlugins.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbLoadPlugins.Name = "tsbLoadPlugins";
-            this.tsbLoadPlugins.Size = new System.Drawing.Size(255, 29);
-            this.tsbLoadPlugins.Text = "Reload plugins from Nuget";
-            this.tsbLoadPlugins.Click += new System.EventHandler(this.tsbLoadPlugins_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
-            // 
-            // tsbInstall
-            // 
-            this.tsbInstall.Image = ((System.Drawing.Image)(resources.GetObject("tsbInstall.Image")));
-            this.tsbInstall.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbInstall.Name = "tsbInstall";
-            this.tsbInstall.Size = new System.Drawing.Size(244, 29);
-            this.tsbInstall.Text = "Install selected package(s)";
-            this.tsbInstall.Click += new System.EventHandler(this.tsbInstall_Click);
             // 
             // tssProgress
             // 
             this.tssProgress.Name = "tssProgress";
-            this.tssProgress.Size = new System.Drawing.Size(200, 22);
+            this.tssProgress.Size = new System.Drawing.Size(133, 16);
             this.tssProgress.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.tssProgress.Visible = false;
             // 
             // tssLabel
             // 
             this.tssLabel.Name = "tssLabel";
-            this.tssLabel.Size = new System.Drawing.Size(1032, 17);
+            this.tssLabel.Size = new System.Drawing.Size(988, 17);
             this.tssLabel.Spring = true;
             this.tssLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -112,52 +114,61 @@
             // 
             this.lvPlugins.CheckBoxes = true;
             this.lvPlugins.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader5});
+            this.colTitle,
+            this.colVersion,
+            this.colCurrent,
+            this.colDescription,
+            this.colAuthor,
+            this.colAction});
             this.lvPlugins.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvPlugins.GridLines = true;
-            this.lvPlugins.Location = new System.Drawing.Point(0, 32);
+            this.lvPlugins.Location = new System.Drawing.Point(0, 31);
+            this.lvPlugins.Margin = new System.Windows.Forms.Padding(2);
             this.lvPlugins.Name = "lvPlugins";
-            this.lvPlugins.Size = new System.Drawing.Size(1047, 492);
+            this.lvPlugins.Size = new System.Drawing.Size(998, 302);
             this.lvPlugins.TabIndex = 3;
             this.lvPlugins.UseCompatibleStateImageBehavior = false;
             this.lvPlugins.View = System.Windows.Forms.View.Details;
             // 
-            // columnHeader1
+            // colAction
             // 
-            this.columnHeader1.Text = "Title";
-            this.columnHeader1.Width = 300;
+            this.colAction.Text = "Action";
+            this.colAction.Width = 100;
             // 
-            // columnHeader2
+            // colTitle
             // 
-            this.columnHeader2.Text = "Version";
-            this.columnHeader2.Width = 100;
+            this.colTitle.Text = "Title";
+            this.colTitle.Width = 217;
             // 
-            // columnHeader3
+            // colVersion
             // 
-            this.columnHeader3.Text = "Author";
-            this.columnHeader3.Width = 200;
+            this.colVersion.Text = "Version";
+            this.colVersion.Width = 100;
             // 
-            // columnHeader4
+            // colCurrent
             // 
-            this.columnHeader4.Text = "Description";
-            this.columnHeader4.Width = 400;
+            this.colCurrent.Text = "Current Version";
+            this.colCurrent.Width = 100;
             // 
-            // columnHeader5
+            // colDescription
             // 
-            this.columnHeader5.Text = "Action";
+            this.colDescription.Text = "Description";
+            this.colDescription.Width = 317;
+            // 
+            // colAuthor
+            // 
+            this.colAuthor.Text = "Author";
+            this.colAuthor.Width = 133;
             // 
             // PluginsChecker
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1047, 546);
+            this.ClientSize = new System.Drawing.Size(998, 355);
             this.Controls.Add(this.lvPlugins);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tsMain);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "PluginsChecker";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -182,10 +193,11 @@
         private System.Windows.Forms.ToolStripProgressBar tssProgress;
         private System.Windows.Forms.ToolStripStatusLabel tssLabel;
         private System.Windows.Forms.ListView lvPlugins;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.ColumnHeader colTitle;
+        private System.Windows.Forms.ColumnHeader colVersion;
+        private System.Windows.Forms.ColumnHeader colAuthor;
+        private System.Windows.Forms.ColumnHeader colDescription;
+        private System.Windows.Forms.ColumnHeader colAction;
+        private System.Windows.Forms.ColumnHeader colCurrent;
     }
 }

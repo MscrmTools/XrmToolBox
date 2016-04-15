@@ -62,67 +62,9 @@ namespace XrmToolBox.Forms
                 var lvic = new List<ListViewItem>();
                 foreach (var package in packages)
                 {
-                    var item = new ListViewItem(package.Title);
-                    item.SubItems.Add(package.Version.ToString());
-                    item.SubItems.Add(string.Join(", ", package.Authors));
-                    item.SubItems.Add(package.Description);
-
-                    var files = package.GetFiles();
-
-                    bool install = false, update = false, compatible = false;
-
-                    var xtbDependency = package.FindDependency("XrmToolBox", null);
-                    if (xtbDependency != null)
-                    {
-                        var xtbDependencyVersion = xtbDependency.VersionSpec.MinVersion.Version;
-                        compatible = IsPluginDependencyCompatible(xtbDependencyVersion);
-                    }
-
-                    if (compatible)
-                    {
-                        item.Tag = package;
-                        foreach (var file in files)
-                        {
-                            var existingPluginFile = plugins.FirstOrDefault(p => file.EffectivePath.EndsWith(p.Name));
-                            if (existingPluginFile == null)
-                            {
-                                install = true;
-                            }
-                            else
-                            {
-                                var existingFileVersion = FileVersionInfo.GetVersionInfo(existingPluginFile.FullName);
-
-                                if (new Version(existingFileVersion.FileVersion) < package.Version.Version)
-                                {
-                                    update = true;
-                                }
-                            }
-                        }
-                    }
-
-                    if (!compatible)
-                    {
-                        item.SubItems.Add("Incompatible");
-                        item.ForeColor = Color.Red;
-                    }
-                    else if (update)
-                    {
-                        item.SubItems.Add("Update");
-                        item.ForeColor = Color.Blue;
-                    }
-                    else if (install)
-                    {
-                        item.SubItems.Add("Install");
-                    }
-                    else
-                    {
-                        item.SubItems.Add("None");
-                        item.ForeColor = Color.Gray;
-                    }
-
+                    var item = AddPackage(package);
                     lvic.Add(item);
                 }
-
                 e.Result = lvic;
             };
             bw.RunWorkerCompleted += (sender, e) =>
@@ -139,6 +81,84 @@ namespace XrmToolBox.Forms
                 lvPlugins.Items.AddRange(((List<ListViewItem>)e.Result).ToArray());
             };
             bw.RunWorkerAsync();
+        }
+
+        private ListViewItem AddPackage(IPackage package)
+        {
+            var xtbPackage = new XtbNuGetPackage(package, PackageInstallAction.None);
+            var item = new ListViewItem(xtbPackage.ToString());
+            item.Tag = xtbPackage;
+            item.SubItems.Add(package.Version.ToString());
+            var currentVerItem = item.SubItems.Add("");  //Current version
+            item.SubItems.Add(package.Description);
+            item.SubItems.Add(string.Join(", ", package.Authors));
+            var actionItem = item.SubItems.Add("None");
+
+            var files = package.GetFiles();
+
+            bool install = false, update = false, compatible = false;
+
+            var xtbDependency = package.FindDependency("XrmToolBox", null);
+            if (xtbDependency != null)
+            {
+                var xtbDependencyVersion = xtbDependency.VersionSpec.MinVersion.Version;
+                compatible = IsPluginDependencyCompatible(xtbDependencyVersion);
+            }
+
+            var currentVersion = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);
+            var currentVersionFound = false;
+
+            // TODO: Don't compare with all files, plugin packages may contain other dll's and exe's that have other versioning
+            // How to determine actual version of existing plugin?
+            foreach (var file in files)
+            {
+                if (Path.GetDirectoryName(file.EffectivePath).ToLower() == "plugins")
+                {   // Only check version of files in the Plugins folder
+                    var existingPluginFile = plugins.FirstOrDefault(p => file.EffectivePath.EndsWith(p.Name));
+                    if (existingPluginFile == null)
+                    {
+                        install = true;
+                    }
+                    else
+                    {
+                        var existingFileVersion = FileVersionInfo.GetVersionInfo(existingPluginFile.FullName);
+                        var fileVersion = Version.Parse(existingFileVersion.FileVersion);
+                        if (fileVersion < currentVersion)
+                        {
+                            currentVersion = fileVersion;
+                            currentVersionFound = true;
+                        }
+                        if (fileVersion < package.Version.Version)
+                        {
+                            update = true;
+                        }
+                    }
+                }
+            }
+            if (currentVersionFound)
+            {
+                currentVerItem.Text = currentVersion.ToString();
+            }
+            if (!compatible)
+            {
+                actionItem.Text = "Incompatible";
+                item.ForeColor = Color.Red;
+                xtbPackage.Action = PackageInstallAction.Unavailable;
+            }
+            else if (update)
+            {
+                actionItem.Text = "Update";
+                item.ForeColor = Color.Blue;
+                xtbPackage.Action = PackageInstallAction.Update;
+            }
+            else if (install)
+            {
+                actionItem.Text = "Install";
+                item.ForeColor = Color.Gray;
+                xtbPackage.Action = PackageInstallAction.Install;
+            }
+
+            return item;
         }
 
         private bool IsPluginDependencyCompatible(Version xtbDependencyVersion)
@@ -159,46 +179,33 @@ namespace XrmToolBox.Forms
 
             var pus = new PluginUpdates();
 
-            foreach (ListViewItem item in lvPlugins.CheckedItems.Cast<ListViewItem>().Where(l => l.Tag is IPackage))
+            foreach (ListViewItem item in lvPlugins.CheckedItems.Cast<ListViewItem>().Where(l => l.Tag is XtbNuGetPackage))
             {
-                var package = (IPackage)item.Tag;
-                manager.InstallPackage(package, true, false);
+                var xtbPackage = (XtbNuGetPackage)item.Tag;
 
-                var packageFolder = Path.Combine(nugetPluginsFolder, package.Id + "." + package.Version);
-                var packageRootFolder = string.Empty;
-                var inconsistentfolders = false;
-
-                foreach (var fi in package.AssemblyReferences)
+                if (xtbPackage.Action == PackageInstallAction.Unavailable)
                 {
-                    var packagefilepath = Path.GetDirectoryName(fi.Path);
-                    if (string.IsNullOrEmpty(packageRootFolder))
+                    if (xtbPackage.Package.ProjectUrl != null && !string.IsNullOrEmpty(xtbPackage.Package.ProjectUrl.ToString()))
                     {
-                        packageRootFolder = packagefilepath;
-                    }
-                    if (!packagefilepath.Equals(packageRootFolder, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        if (!packagefilepath.StartsWith(packageRootFolder) && !packageRootFolder.StartsWith(packagefilepath))
+                        if (DialogResult.Yes == MessageBox.Show($"{xtbPackage.Package.Title}\nis incompatible with this version of XrmToolBox.\nOpen project URL?", "Incompatible plugin", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
                         {
-                            inconsistentfolders = true;
-                        }
-                        else if (!packagefilepath.StartsWith(packageRootFolder) && packageRootFolder.StartsWith(packagefilepath))
-                        {
-                            packageRootFolder = packagefilepath;
+                            Process.Start(xtbPackage.Package.ProjectUrl.ToString());
                         }
                     }
+                    else
+                    {
+                        MessageBox.Show($"{xtbPackage.Package.Title}\nis incompatible with this version of XrmToolBox.", "Incompatible plugin", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                    continue;
                 }
+                manager.InstallPackage(xtbPackage.Package, true, false);
 
-                if (inconsistentfolders)
-                {
-                    MessageBox.Show("Cannot determine plugin root folder for package. Ooops.");
-                    return;
-                }
+                var packageFolder = Path.Combine(nugetPluginsFolder, xtbPackage.Package.Id + "." + xtbPackage.Package.Version);
 
-                foreach (var fi in package.AssemblyReferences)
+                foreach (var fi in xtbPackage.Package.GetFiles())
                 {
-                    var destinationRelativePath = fi.Path.Replace(packageRootFolder, "").Trim('\\');
-                    var destinationFile = Path.Combine(applicationPluginsFolder, destinationRelativePath);
-                    if (item.ForeColor == DefaultForeColor)
+                    var destinationFile = Path.Combine(applicationFolder, fi.EffectivePath);
+                    if (xtbPackage.Action == PackageInstallAction.Install)
                     {
                         try
                         {
@@ -218,7 +225,7 @@ namespace XrmToolBox.Forms
                             return;
                         }
                     }
-                    else
+                    else if (xtbPackage.Action == PackageInstallAction.Update)
                     {
                         pus.Plugins.Add(new PluginUpdate
                         {
@@ -246,6 +253,42 @@ namespace XrmToolBox.Forms
         private void tsbLoadPlugins_Click(object sender, EventArgs e)
         {
             RefreshPluginsList();
+        }
+    }
+
+    enum PackageInstallAction
+    {
+        None,
+        Install,
+        Update,
+        Unavailable
+    }
+
+    class XtbNuGetPackage
+    {
+        public PackageInstallAction Action;
+        public IPackage Package;
+
+        public XtbNuGetPackage(IPackage package, PackageInstallAction action)
+        {
+            Action = action;
+            Package = package;
+        }
+
+        public override string ToString()
+        {
+            if (Package != null)
+            {
+                if (!string.IsNullOrWhiteSpace(Package.Title))
+                {
+                    return Package.Title;
+                }
+                else
+                {
+                    return Package.Id;
+                }
+            }
+            return "?";
         }
     }
 }
