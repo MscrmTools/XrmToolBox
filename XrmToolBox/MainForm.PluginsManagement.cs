@@ -388,5 +388,17 @@ namespace XrmToolBox
                 mi();
             }
         }
+
+        public void ReloadPluginsList()
+        {
+            pManager.Recompose();
+            pluginsModels.Clear();
+            DisplayPlugins(tstxtFilterPlugin.Text);
+        }
+
+        public void EnableNewPluginsWatching(bool enable)
+        {
+            pManager.IsWatchingForNewPlugins = enable;
+        }
     }
 }

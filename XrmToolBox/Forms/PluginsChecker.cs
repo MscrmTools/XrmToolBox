@@ -13,6 +13,14 @@ using XrmToolBox.AppCode;
 
 namespace XrmToolBox.Forms
 {
+    internal enum PackageInstallAction
+    {
+        None,
+        Install,
+        Update,
+        Unavailable
+    }
+
     public partial class PluginsChecker : Form
     {
         // This is the minimum version of XrmToolBox that does not include breaking changes
@@ -47,8 +55,8 @@ namespace XrmToolBox.Forms
         public void RefreshPluginsList()
         {
             lvPlugins.Items.Clear();
-            tssProgress.Visible = true;
             tssLabel.Text = "Retrieving plugins from Nuget feed...";
+            tssProgress.Visible = true;
 
             var bw = new BackgroundWorker();
             bw.DoWork += (sender, e) =>
@@ -154,8 +162,14 @@ namespace XrmToolBox.Forms
             else if (install)
             {
                 actionItem.Text = "Install";
-                item.ForeColor = Color.Gray;
+                item.ForeColor = Color.Black;
                 xtbPackage.Action = PackageInstallAction.Install;
+            }
+            else
+            {
+                actionItem.Text = "N/A";
+                item.ForeColor = Color.Gray;
+                xtbPackage.Action = PackageInstallAction.None;
             }
 
             return item;
@@ -176,6 +190,8 @@ namespace XrmToolBox.Forms
         {
             if (lvPlugins.CheckedItems.Count == 0)
                 return;
+
+            ((MainForm)Owner).EnableNewPluginsWatching(false);
 
             var pus = new PluginUpdates();
 
@@ -215,7 +231,7 @@ namespace XrmToolBox.Forms
                             {
                                 Directory.CreateDirectory(destinationDirectory);
                             }
-                            File.Copy(Path.Combine(packageFolder, fi.Path), destinationFile);
+                            File.Copy(Path.Combine(packageFolder, fi.Path), destinationFile, true);
                         }
                         catch (Exception error)
                         {
@@ -248,6 +264,15 @@ namespace XrmToolBox.Forms
                     Environment.Exit(0);
                 }
             }
+            else
+            {
+                // Refresh plugins list when installation is done
+                ((MainForm)Owner).ReloadPluginsList();
+                RefreshPluginsList();
+                MessageBox.Show("Installation done!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+             ((MainForm)Owner).EnableNewPluginsWatching(true);
         }
 
         private void tsbLoadPlugins_Click(object sender, EventArgs e)
@@ -256,15 +281,7 @@ namespace XrmToolBox.Forms
         }
     }
 
-    enum PackageInstallAction
-    {
-        None,
-        Install,
-        Update,
-        Unavailable
-    }
-
-    class XtbNuGetPackage
+    internal class XtbNuGetPackage
     {
         public PackageInstallAction Action;
         public IPackage Package;

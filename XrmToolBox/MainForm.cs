@@ -295,7 +295,7 @@ namespace XrmToolBox
 
             tstxtFilterPlugin.Focus();
 
-            pManager = new PluginManagerExtended(this);
+            pManager = new PluginManagerExtended(this) { IsWatchingForNewPlugins = true };
             pManager.Initialize();
             pManager.PluginsListUpdated += pManager_PluginsListUpdated;
 

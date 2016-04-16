@@ -43,6 +43,7 @@ namespace XrmToolBox
             this.closeAllTabsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeAllTabsExceptActiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbOptions = new System.Windows.Forms.ToolStripButton();
+            this.tsbPlugins = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tslFilterPlugin = new System.Windows.Forms.ToolStripLabel();
             this.tstxtFilterPlugin = new System.Windows.Forms.ToolStripTextBox();
@@ -78,7 +79,6 @@ namespace XrmToolBox
             this.pnlHelp = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.tsbPlugins = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.HomePageTab.SuspendLayout();
@@ -95,7 +95,6 @@ namespace XrmToolBox
             // 
             // toolStrip1
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbConnect,
             this.toolStripSeparator2,
@@ -190,6 +189,16 @@ namespace XrmToolBox
             this.tsbOptions.Size = new System.Drawing.Size(28, 29);
             this.tsbOptions.Text = "Settings";
             this.tsbOptions.Click += new System.EventHandler(this.TsbOptionsClick);
+            // 
+            // tsbPlugins
+            // 
+            this.tsbPlugins.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbPlugins.Image = ((System.Drawing.Image)(resources.GetObject("tsbPlugins.Image")));
+            this.tsbPlugins.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbPlugins.Name = "tsbPlugins";
+            this.tsbPlugins.Size = new System.Drawing.Size(28, 29);
+            this.tsbPlugins.Text = "Search for plugins";
+            this.tsbPlugins.Click += new System.EventHandler(this.tsbPlugins_Click);
             // 
             // toolStripSeparator1
             // 
@@ -497,16 +506,6 @@ namespace XrmToolBox
             this.label1.TabIndex = 0;
             this.label1.Text = "Oups... no plugin found!";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // tsbPlugins
-            // 
-            this.tsbPlugins.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbPlugins.Image = ((System.Drawing.Image)(resources.GetObject("tsbPlugins.Image")));
-            this.tsbPlugins.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbPlugins.Name = "tsbPlugins";
-            this.tsbPlugins.Size = new System.Drawing.Size(28, 29);
-            this.tsbPlugins.Text = "Search for plugins";
-            this.tsbPlugins.Click += new System.EventHandler(this.tsbPlugins_Click);
             // 
             // MainForm
             // 

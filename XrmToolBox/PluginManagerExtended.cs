@@ -33,6 +33,8 @@ namespace XrmToolBox
 
         public event EventHandler PluginsListUpdated;
 
+        public bool IsWatchingForNewPlugins { get; set; }
+
         [ImportMany(AllowRecomposition = true)]
         public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> Plugins { get; set; }
 
@@ -80,7 +82,10 @@ namespace XrmToolBox
             {
                 ((FileSystemWatcher)sender).EnableRaisingEvents = false;
 
-                PluginsListUpdated(this, new EventArgs());
+                if (IsWatchingForNewPlugins)
+                {
+                    PluginsListUpdated(this, new EventArgs());
+                }
             }
             finally
             {
