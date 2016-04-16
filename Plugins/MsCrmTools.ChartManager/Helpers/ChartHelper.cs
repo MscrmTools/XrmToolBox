@@ -1,37 +1,36 @@
-﻿using System;
+﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Query;
+using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using Microsoft.Xrm.Sdk;
-using Microsoft.Xrm.Sdk.Query;
 
 namespace MsCrmTools.ChartManager.Helpers
 {
+    public class ChartDefinition
+    {
+        public Entity Entity { get; set; }
+        public List<string> Errors { get; set; }
+        public bool Exists { get; set; }
+        public string FileName { get; set; }
+        public bool IsValid { get; set; }
+        public string Name { get; set; }
+        public bool Overwrite { get; set; }
+    }
+
     internal class ChartHelper
     {
-        public static EntityCollection GetChartsByEntity(string entityLogicalName, IOrganizationService service)
-        {
-            return service.RetrieveMultiple(new QueryExpression("savedqueryvisualization")
-            {
-                ColumnSet = new ColumnSet(true),
-                Criteria = new FilterExpression
-                {
-                    Conditions =
-                    {
-                        new ConditionExpression("primaryentitytypecode", ConditionOperator.Equal, entityLogicalName)
-                    }
-                }
-            });
-        }
-
         public static List<ChartDefinition> AnalyzeFiles(List<string> filenames, IOrganizationService service)
         {
             var list = new List<ChartDefinition>();
 
             foreach (var fileName in filenames)
             {
+                var fi = new FileInfo(fileName);
+                var name = fi.Name.Replace(fi.Extension, "");
+                var systemChart = !name.EndsWith("_personal");
+
                 var doc = XDocument.Load(fileName);
 
                 var cd = new ChartDefinition
@@ -49,12 +48,12 @@ namespace MsCrmTools.ChartManager.Helpers
                     continue;
                 }
 
-                var chart = new Entity("savedqueryvisualization");
+                var chart = new Entity(systemChart ? "savedqueryvisualization" : "userqueryvisualization");
 
                 var idElement = doc.Descendants("visualizationid").FirstOrDefault();
                 if (idElement != null)
                 {
-                      chart.Id = new Guid(idElement.Value);
+                    chart.Id = new Guid(idElement.Value);
                 }
 
                 var nameElement = doc.Descendants("name").FirstOrDefault();
@@ -139,6 +138,36 @@ namespace MsCrmTools.ChartManager.Helpers
             return list;
         }
 
+        public static EntityCollection GetChartsByEntity(string entityLogicalName, IOrganizationService service)
+        {
+            var savedqueries = service.RetrieveMultiple(new QueryExpression("savedqueryvisualization")
+            {
+                ColumnSet = new ColumnSet(true),
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("primaryentitytypecode", ConditionOperator.Equal, entityLogicalName)
+                    }
+                }
+            });
+
+            var userqueries = service.RetrieveMultiple(new QueryExpression("userqueryvisualization")
+            {
+                ColumnSet = new ColumnSet(true),
+                Criteria = new FilterExpression
+                {
+                    Conditions =
+                    {
+                        new ConditionExpression("primaryentitytypecode", ConditionOperator.Equal, entityLogicalName)
+                    }
+                }
+            });
+
+            savedqueries.Entities.AddRange(userqueries.Entities.ToArray());
+            return savedqueries;
+        }
+
         public static void ImportFiles(List<ChartDefinition> charts, IOrganizationService service)
         {
             foreach (var chart in charts)
@@ -149,8 +178,9 @@ namespace MsCrmTools.ChartManager.Helpers
                     {
                         chart.Entity["name"] = string.Format("{0}_{1}", chart.Entity.GetAttributeValue<string>("name"), DateTime.Now.ToShortTimeString());
                         chart.Entity.Attributes.Remove("savedqueryvisualizationid");
+                        chart.Entity.Attributes.Remove("userqueryvisualizationid");
                         chart.Entity.Id = Guid.Empty;
-                        
+
                         service.Create(chart.Entity);
                     }
                     else
@@ -164,16 +194,5 @@ namespace MsCrmTools.ChartManager.Helpers
                 }
             }
         }
-    }
-
-    public class ChartDefinition
-    {
-        public string FileName { get; set; }
-        public bool IsValid { get; set; }
-        public Entity Entity { get; set; }
-        public bool Exists { get; set; }
-        public List<string> Errors { get; set; }
-        public string Name { get; set; }
-        public bool Overwrite { get; set; }
     }
 }

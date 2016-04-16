@@ -292,7 +292,11 @@ namespace MsCrmTools.ChartManager
                                     new XElement("isdefault", chart.GetAttributeValue<bool>("isdefault"))
                                     ));
 
-                            doc.Save(Path.Combine(cfbDialog.FolderPath, chart.GetAttributeValue<string>("name") + ".xml"));
+                            var filename = string.Format("{0}{1}.xml",
+                                chart.GetAttributeValue<string>("name"),
+                                chart.LogicalName == "savedqueryvisualization" ? "" : "_personal");
+
+                            doc.Save(Path.Combine(cfbDialog.FolderPath, filename));
                         }
 
                         if (MessageBox.Show(ParentForm, "Would you like to open destination folder?", "Question",
