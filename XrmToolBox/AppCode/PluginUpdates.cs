@@ -16,5 +16,7 @@ namespace XrmToolBox.AppCode
         }
 
         public List<PluginUpdate> Plugins { get; set; }
+
+        public int PreviousProcessId { get; set; }
     }
 }

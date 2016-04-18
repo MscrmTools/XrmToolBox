@@ -121,7 +121,8 @@ namespace XrmToolBox.Forms
             foreach (var file in files)
             {
                 if (Path.GetDirectoryName(file.EffectivePath).ToLower() == "plugins")
-                {   // Only check version of files in the Plugins folder
+                {   
+                    // Only check version of files in the Plugins folder
                     var existingPluginFile = plugins.FirstOrDefault(p => file.EffectivePath.EndsWith(p.Name));
                     if (existingPluginFile == null)
                     {
@@ -129,20 +130,27 @@ namespace XrmToolBox.Forms
                     }
                     else
                     {
-                        var existingFileVersion = FileVersionInfo.GetVersionInfo(existingPluginFile.FullName);
-                        var fileVersion = Version.Parse(existingFileVersion.FileVersion);
-                        if (fileVersion < currentVersion)
+                        // If a file is found, we check version only if the file 
+                        // contains classes that implement IXrmToolBoxPlugin
+                        if (!existingPluginFile.ImplementsXrmToolBoxPlugin())
                         {
-                            currentVersion = fileVersion;
+                            continue;
+                        }
+
+                        var existingFileVersion = existingPluginFile.GetAssemblyVersion();
+                        if (existingFileVersion < currentVersion)
+                        {
+                            currentVersion = existingFileVersion;
                             currentVersionFound = true;
                         }
-                        if (fileVersion < package.Version.Version)
+                        if (existingFileVersion < package.Version.Version)
                         {
                             update = true;
                         }
                     }
                 }
             }
+
             if (currentVersionFound)
             {
                 currentVerItem.Text = currentVersion.ToString();
@@ -193,7 +201,7 @@ namespace XrmToolBox.Forms
 
             ((MainForm)Owner).EnableNewPluginsWatching(false);
 
-            var pus = new PluginUpdates();
+            var pus = new PluginUpdates { PreviousProcessId = Process.GetCurrentProcess().Id };
 
             foreach (ListViewItem item in lvPlugins.CheckedItems.Cast<ListViewItem>().Where(l => l.Tag is XtbNuGetPackage))
             {
@@ -261,7 +269,6 @@ namespace XrmToolBox.Forms
                     "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
                 {
                     Application.Restart();
-                    Environment.Exit(0);
                 }
             }
             else
