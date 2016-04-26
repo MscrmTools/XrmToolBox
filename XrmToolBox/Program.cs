@@ -71,9 +71,21 @@ namespace XrmToolBox
             if (!File.Exists(updateFile))
                 return;
 
+           
+
             using (StreamReader reader = new StreamReader(updateFile))
             {
                 var pus = (PluginUpdates)XmlSerializerHelper.Deserialize(reader.ReadToEnd(), typeof(PluginUpdates));
+
+                try
+                {
+                    var oldProcess = Process.GetProcessById(pus.PreviousProcessId);
+                    if (oldProcess != null)
+                    {
+                        oldProcess.WaitForExit(1000);
+                    }
+                }
+                catch { }
 
                 foreach (var pu in pus.Plugins)
                 {
