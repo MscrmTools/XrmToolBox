@@ -224,7 +224,7 @@ namespace MsCrmTools.WebResourcesManager
                      var webResourceManager = new AppCode.WebResourceManager(Service);
                      var resourceToPublish = new List<WebResource>();
                      var resources = new List<WebResource>();
-                     
+
                      // Add Regular Resources, and Associated Web Resources
                      foreach (var resource in (IEnumerable<WebResource>)((object[])e.Argument)[0])
                      {
@@ -1107,7 +1107,7 @@ namespace MsCrmTools.WebResourcesManager
                 if (!lblWebresourceName.Text.Contains(" (not saved)"))
                 {
                     lblWebresourceName.ForeColor = Color.Red;
-                    lblWebresourceName.Text += " (not saved)";
+                    lblWebresourceName.Text = lblWebresourceName.Text.Split(' ')[0] + " (not saved)";
                 }
             }
             else
