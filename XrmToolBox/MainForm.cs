@@ -36,6 +36,8 @@ namespace XrmToolBox
         private PluginManagerExtended pManager;
         private IOrganizationService service;
 
+        protected internal Options Options { get { return currentOptions; } }
+
         #endregion Variables
 
         #region Constructor
@@ -363,6 +365,12 @@ namespace XrmToolBox
             {
                 currentOptions.AllowLogUsage = LogUsage.PromptToLog();
                 currentOptions.Save();
+            }
+
+            if (currentOptions.DisplayPluginsStoreOnStartup)
+            {
+                var dlg = new PluginsChecker();
+                dlg.ShowDialog(this);
             }
         }
 

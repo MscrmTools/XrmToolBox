@@ -66,6 +66,7 @@ namespace XrmToolBox
             Size = new FormSize();
             MostUsedList = new List<PluginUseCount>();
             AllowLogUsage = null;
+            DisplayPluginsStoreOnStartup = true;
         }
 
         public bool? AllowLogUsage { get; set; }
@@ -73,6 +74,7 @@ namespace XrmToolBox
         public bool CloseOpenedPluginsSilently { get; set; }
         public bool DisplayLargeIcons { get; set; }
         public bool DisplayMostUsedFirst { get; set; }
+        public bool DisplayPluginsStoreOnStartup { get; set; }
         public List<string> HiddenPlugins { get; set; }
         public DateTime LastAdvertisementDisplay { get; set; }
         public DateTime LastUpdateCheck { get; set; }
@@ -106,7 +108,8 @@ namespace XrmToolBox
                 HiddenPlugins = HiddenPlugins,
                 LastUpdateCheck = LastUpdateCheck,
                 AllowLogUsage = AllowLogUsage,
-                CloseOpenedPluginsSilently = CloseOpenedPluginsSilently
+                CloseOpenedPluginsSilently = CloseOpenedPluginsSilently,
+                DisplayPluginsStoreOnStartup = DisplayPluginsStoreOnStartup
             };
         }
 

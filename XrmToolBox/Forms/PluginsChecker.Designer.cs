@@ -33,6 +33,8 @@
             this.tsbLoadPlugins = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbInstall = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbShowThisScreenOnStartup = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tssProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.tssLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -52,7 +54,9 @@
             this.tsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbLoadPlugins,
             this.toolStripSeparator1,
-            this.tsbInstall});
+            this.tsbInstall,
+            this.toolStripSeparator2,
+            this.tsbShowThisScreenOnStartup});
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
             this.tsMain.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
@@ -83,6 +87,21 @@
             this.tsbInstall.Text = "Install selected package(s)";
             this.tsbInstall.Click += new System.EventHandler(this.tsbInstall_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 32);
+            // 
+            // tsbShowThisScreenOnStartup
+            // 
+            this.tsbShowThisScreenOnStartup.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsbShowThisScreenOnStartup.Image = ((System.Drawing.Image)(resources.GetObject("tsbShowThisScreenOnStartup.Image")));
+            this.tsbShowThisScreenOnStartup.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbShowThisScreenOnStartup.Name = "tsbShowThisScreenOnStartup";
+            this.tsbShowThisScreenOnStartup.Size = new System.Drawing.Size(331, 29);
+            this.tsbShowThisScreenOnStartup.Text = "Show this screen on XrmToolBoxStartup";
+            this.tsbShowThisScreenOnStartup.Click += new System.EventHandler(this.tsbShowThisScreenOnStartup_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -106,7 +125,7 @@
             // tssLabel
             // 
             this.tssLabel.Name = "tssLabel";
-            this.tssLabel.Size = new System.Drawing.Size(1481, 17);
+            this.tssLabel.Size = new System.Drawing.Size(1233, 26);
             this.tssLabel.Spring = true;
             this.tssLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -170,7 +189,7 @@
             this.Name = "PluginsChecker";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Install/Update XrmToolBox plugins";
+            this.Text = "XrmToolBox plugins store";
             this.Load += new System.EventHandler(this.PluginsChecker_Load);
             this.tsMain.ResumeLayout(false);
             this.tsMain.PerformLayout();
@@ -197,5 +216,7 @@
         private System.Windows.Forms.ColumnHeader colDescription;
         private System.Windows.Forms.ColumnHeader colAction;
         private System.Windows.Forms.ColumnHeader colCurrent;
+        private System.Windows.Forms.ToolStripButton tsbShowThisScreenOnStartup;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }

@@ -183,6 +183,8 @@ namespace XrmToolBox.Forms
 
         private void PluginsChecker_Load(object sender, EventArgs e)
         {
+            tsbShowThisScreenOnStartup.Checked = ((MainForm)Owner).Options.DisplayPluginsStoreOnStartup;
+
             RefreshPluginsList();
         }
 
@@ -278,6 +280,13 @@ namespace XrmToolBox.Forms
         private void tsbLoadPlugins_Click(object sender, EventArgs e)
         {
             RefreshPluginsList();
+        }
+
+        private void tsbShowThisScreenOnStartup_Click(object sender, EventArgs e)
+        {
+            ((ToolStripButton)sender).Checked = !((ToolStripButton)sender).Checked;
+            ((MainForm)Owner).Options.DisplayPluginsStoreOnStartup = ((ToolStripButton)sender).Checked;
+            ((MainForm)Owner).Options.Save();
         }
     }
 

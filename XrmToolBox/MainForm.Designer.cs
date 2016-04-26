@@ -192,12 +192,11 @@ namespace XrmToolBox
             // 
             // tsbPlugins
             // 
-            this.tsbPlugins.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsbPlugins.Image = ((System.Drawing.Image)(resources.GetObject("tsbPlugins.Image")));
             this.tsbPlugins.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbPlugins.Name = "tsbPlugins";
-            this.tsbPlugins.Size = new System.Drawing.Size(28, 29);
-            this.tsbPlugins.Text = "Search for plugins";
+            this.tsbPlugins.Size = new System.Drawing.Size(134, 29);
+            this.tsbPlugins.Text = "Plugins store";
             this.tsbPlugins.Click += new System.EventHandler(this.tsbPlugins_Click);
             // 
             // toolStripSeparator1
@@ -236,7 +235,7 @@ namespace XrmToolBox
             this.tsbHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsbHelp.Image")));
             this.tsbHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbHelp.Name = "tsbHelp";
-            this.tsbHelp.Size = new System.Drawing.Size(91, 29);
+            this.tsbHelp.Size = new System.Drawing.Size(83, 29);
             this.tsbHelp.Text = "Help";
             // 
             // displayXrmToolBoxHelpToolStripMenuItem
@@ -289,7 +288,7 @@ namespace XrmToolBox
             this.tsbCodePlex.Image = ((System.Drawing.Image)(resources.GetObject("tsbCodePlex.Image")));
             this.tsbCodePlex.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCodePlex.Name = "tsbCodePlex";
-            this.tsbCodePlex.Size = new System.Drawing.Size(129, 29);
+            this.tsbCodePlex.Size = new System.Drawing.Size(121, 29);
             this.tsbCodePlex.Text = "Feedback";
             // 
             // startADiscussionToolStripMenuItem
@@ -373,7 +372,7 @@ namespace XrmToolBox
             this.tsbDonate.Image = ((System.Drawing.Image)(resources.GetObject("tsbDonate.Image")));
             this.tsbDonate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDonate.Name = "tsbDonate";
-            this.tsbDonate.Size = new System.Drawing.Size(112, 29);
+            this.tsbDonate.Size = new System.Drawing.Size(104, 29);
             this.tsbDonate.Text = "Donate";
             // 
             // donateInUSDollarsToolStripMenuItem
