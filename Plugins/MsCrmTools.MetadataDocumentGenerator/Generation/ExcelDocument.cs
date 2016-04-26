@@ -751,7 +751,7 @@ namespace MsCrmTools.MetadataDocumentGenerator.Generation
                                 }
                             }
 
-                            format += string.Format("\r\nDefault: {0}", pamd.DefaultFormValue.HasValue ? pamd.DefaultFormValue.Value.ToString(CultureInfo.InvariantCulture) : "N/A");
+                            format += string.Format("\r\nDefault: {0}", pamd.DefaultFormValue.HasValue && pamd.DefaultFormValue.Value != -1 ? pamd.DefaultFormValue.Value.ToString(CultureInfo.InvariantCulture) : "N/A");
 
                             sheet.Cells[x, y].Value = (format);
                         }
