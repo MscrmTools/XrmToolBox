@@ -31,7 +31,7 @@ namespace XrmToolBox.Forms
         private readonly string applicationPluginsFolder;
         private readonly PackageManager manager;
         private readonly string nugetPluginsFolder;
-        private readonly FileInfo[] plugins;
+        private FileInfo[] plugins;
 
         public PluginsChecker()
         {
@@ -54,6 +54,8 @@ namespace XrmToolBox.Forms
 
         public void RefreshPluginsList()
         {
+            plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
+
             lvPlugins.Items.Clear();
             tssLabel.Text = "Retrieving plugins from Nuget feed...";
             tssProgress.Visible = true;
@@ -121,7 +123,7 @@ namespace XrmToolBox.Forms
             foreach (var file in files)
             {
                 if (Path.GetDirectoryName(file.EffectivePath).ToLower() == "plugins")
-                {   
+                {
                     // Only check version of files in the Plugins folder
                     var existingPluginFile = plugins.FirstOrDefault(p => file.EffectivePath.EndsWith(p.Name));
                     if (existingPluginFile == null)
@@ -130,7 +132,7 @@ namespace XrmToolBox.Forms
                     }
                     else
                     {
-                        // If a file is found, we check version only if the file 
+                        // If a file is found, we check version only if the file
                         // contains classes that implement IXrmToolBoxPlugin
                         if (!existingPluginFile.ImplementsXrmToolBoxPlugin())
                         {
