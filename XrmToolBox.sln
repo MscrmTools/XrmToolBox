@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox", "XrmToolBox\XrmToolBox.csproj", "{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}"
 EndProject
@@ -76,6 +76,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.ChartManager", "Plugins\MsCrmTools.ChartManager\MsCrmTools.ChartManager.csproj", "{DE964006-6E7B-4FA8-9D04-07B2E1819774}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox.AutoUpdater", "XrmToolBox.AutoUpdater\XrmToolBox.AutoUpdater.csproj", "{564C72C8-586E-4218-B6B3-F464F7C3903A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gvw.CopyDynamicMarketingListToSavedQuery", "Plugins\Gvw.CopyDynamicMarketingListToSavedQuery\Gvw.CopyDynamicMarketingListToSavedQuery.csproj", "{DC48FDA9-AE8E-4F69-AA99-6FDB308BBFE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -392,6 +394,18 @@ Global
 		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Release|x86.ActiveCfg = Release|Any CPU
 		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Release|x86.Build.0 = Release|Any CPU
+		{DC48FDA9-AE8E-4F69-AA99-6FDB308BBFE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC48FDA9-AE8E-4F69-AA99-6FDB308BBFE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC48FDA9-AE8E-4F69-AA99-6FDB308BBFE3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DC48FDA9-AE8E-4F69-AA99-6FDB308BBFE3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DC48FDA9-AE8E-4F69-AA99-6FDB308BBFE3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DC48FDA9-AE8E-4F69-AA99-6FDB308BBFE3}.Debug|x86.Build.0 = Debug|Any CPU
+		{DC48FDA9-AE8E-4F69-AA99-6FDB308BBFE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC48FDA9-AE8E-4F69-AA99-6FDB308BBFE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC48FDA9-AE8E-4F69-AA99-6FDB308BBFE3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DC48FDA9-AE8E-4F69-AA99-6FDB308BBFE3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DC48FDA9-AE8E-4F69-AA99-6FDB308BBFE3}.Release|x86.ActiveCfg = Release|Any CPU
+		{DC48FDA9-AE8E-4F69-AA99-6FDB308BBFE3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -424,6 +438,7 @@ Global
 		{ACC1243E-912B-45E7-A8B0-E312EE9141DD} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{4ED8E9F8-52DF-433F-834C-D43A44EC6C89} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{DE964006-6E7B-4FA8-9D04-07B2E1819774} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
+		{DC48FDA9-AE8E-4F69-AA99-6FDB308BBFE3} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		BuildVersion_ConfigurationName = Release
