@@ -191,6 +191,12 @@ namespace XrmToolBox.Forms
             return xtbDependencyVersion >= MinCompatibleVersion;
         }
 
+        private void lvPlugins_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            lvPlugins.Sorting = lvPlugins.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+            lvPlugins.ListViewItemSorter = new ListViewItemComparer(e.Column, lvPlugins.Sorting);
+        }
+
         private void PluginsChecker_Load(object sender, EventArgs e)
         {
             tsbShowThisScreenOnStartup.Checked = ((MainForm)Owner).Options.DisplayPluginsStoreOnStartup;

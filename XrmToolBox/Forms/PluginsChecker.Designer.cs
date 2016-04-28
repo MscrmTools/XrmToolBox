@@ -98,8 +98,8 @@
             this.tsbShowThisScreenOnStartup.Image = ((System.Drawing.Image)(resources.GetObject("tsbShowThisScreenOnStartup.Image")));
             this.tsbShowThisScreenOnStartup.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbShowThisScreenOnStartup.Name = "tsbShowThisScreenOnStartup";
-            this.tsbShowThisScreenOnStartup.Size = new System.Drawing.Size(331, 29);
-            this.tsbShowThisScreenOnStartup.Text = "Show this screen on XrmToolBoxStartup";
+            this.tsbShowThisScreenOnStartup.Size = new System.Drawing.Size(335, 29);
+            this.tsbShowThisScreenOnStartup.Text = "Show this screen on XrmToolBox startup";
             this.tsbShowThisScreenOnStartup.Click += new System.EventHandler(this.tsbShowThisScreenOnStartup_Click);
             // 
             // statusStrip1
@@ -125,7 +125,7 @@
             // tssLabel
             // 
             this.tssLabel.Name = "tssLabel";
-            this.tssLabel.Size = new System.Drawing.Size(1233, 26);
+            this.tssLabel.Size = new System.Drawing.Size(1481, 17);
             this.tssLabel.Spring = true;
             this.tssLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -144,9 +144,11 @@
             this.lvPlugins.Location = new System.Drawing.Point(0, 32);
             this.lvPlugins.Name = "lvPlugins";
             this.lvPlugins.Size = new System.Drawing.Size(1497, 492);
+            this.lvPlugins.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvPlugins.TabIndex = 3;
             this.lvPlugins.UseCompatibleStateImageBehavior = false;
             this.lvPlugins.View = System.Windows.Forms.View.Details;
+            this.lvPlugins.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvPlugins_ColumnClick);
             // 
             // colTitle
             // 
@@ -189,7 +191,7 @@
             this.Name = "PluginsChecker";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "XrmToolBox plugins store";
+            this.Text = "XrmToolBox Plugins Store";
             this.Load += new System.EventHandler(this.PluginsChecker_Load);
             this.tsMain.ResumeLayout(false);
             this.tsMain.PerformLayout();
