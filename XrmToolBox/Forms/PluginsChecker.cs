@@ -52,6 +52,23 @@ namespace XrmToolBox.Forms
             manager = new PackageManager(repository, nugetPluginsFolder);
         }
 
+        internal List<XtbNuGetPackage> RetrieveNugetPackages()
+        {
+            var packages = manager.SourceRepository.GetPackages()
+                      .Where(p => p.Tags.ToLower().StartsWith("xrmtoolbox")
+                                  && p.Tags.ToLower() != "xrmtoolbox"
+                                  && p.IsLatestVersion)
+                      .ToList();
+
+            var list = new List<XtbNuGetPackage>();
+            foreach (var package in packages)
+            {
+                list.Add(GetXtbPackage(package));
+            }
+
+            return list;
+        }
+
         public void RefreshPluginsList()
         {
             plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
@@ -63,17 +80,12 @@ namespace XrmToolBox.Forms
             var bw = new BackgroundWorker();
             bw.DoWork += (sender, e) =>
             {
-                var packages = manager.SourceRepository.GetPackages()
-                    .Where(p => p.Tags.ToLower().StartsWith("xrmtoolbox")
-                                && p.Tags.ToLower() != "xrmtoolbox"
-                                && p.IsLatestVersion)
-                    .ToList();
+                var xtbPackages = RetrieveNugetPackages();
 
                 var lvic = new List<ListViewItem>();
-                foreach (var package in packages)
+                foreach (var xtbPackage in xtbPackages)
                 {
-                    var item = AddPackage(package);
-                    lvic.Add(item);
+                    lvic.Add(xtbPackage.GetPluginsStoreItem());
                 }
                 e.Result = lvic;
             };
@@ -93,17 +105,10 @@ namespace XrmToolBox.Forms
             bw.RunWorkerAsync();
         }
 
-        private ListViewItem AddPackage(IPackage package)
+        private XtbNuGetPackage GetXtbPackage(IPackage package)
         {
             var xtbPackage = new XtbNuGetPackage(package, PackageInstallAction.None);
-            var item = new ListViewItem(xtbPackage.ToString());
-            item.Tag = xtbPackage;
-            item.SubItems.Add(package.Version.ToString());
-            var currentVerItem = item.SubItems.Add("");  //Current version
-            item.SubItems.Add(package.Description);
-            item.SubItems.Add(string.Join(", ", package.Authors));
-            var actionItem = item.SubItems.Add("None");
-
+           
             var files = package.GetFiles();
 
             bool install = false, update = false, compatible = false;
@@ -155,34 +160,27 @@ namespace XrmToolBox.Forms
 
             if (currentVersionFound)
             {
-                currentVerItem.Text = currentVersion.ToString();
+                xtbPackage.CurrentVersion = currentVersion;
             }
+
             if (!compatible)
             {
-                actionItem.Text = "Incompatible";
-                item.ForeColor = Color.Red;
                 xtbPackage.Action = PackageInstallAction.Unavailable;
             }
             else if (update)
             {
-                actionItem.Text = "Update";
-                item.ForeColor = Color.Blue;
                 xtbPackage.Action = PackageInstallAction.Update;
             }
             else if (install)
             {
-                actionItem.Text = "Install";
-                item.ForeColor = Color.Black;
                 xtbPackage.Action = PackageInstallAction.Install;
             }
             else
             {
-                actionItem.Text = "N/A";
-                item.ForeColor = Color.Gray;
                 xtbPackage.Action = PackageInstallAction.None;
             }
 
-            return item;
+            return xtbPackage;
         }
 
         private bool IsPluginDependencyCompatible(Version xtbDependencyVersion)
@@ -309,11 +307,47 @@ namespace XrmToolBox.Forms
     {
         public PackageInstallAction Action;
         public IPackage Package;
+        public Version CurrentVersion { get; set; }
 
         public XtbNuGetPackage(IPackage package, PackageInstallAction action)
         {
             Action = action;
             Package = package;
+        }
+
+        public ListViewItem GetPluginsStoreItem()
+        {
+            var item = new ListViewItem(this.ToString());
+            item.Tag = this;
+            item.SubItems.Add(Package.Version.ToString());
+            item.SubItems.Add(CurrentVersion?.ToString()); 
+            item.SubItems.Add(Package.Description);
+            item.SubItems.Add(string.Join(", ", Package.Authors));
+            var actionItem = item.SubItems.Add("None");
+            item.SubItems.Add(Package.DownloadCount.ToString());
+
+            switch (Action)
+            {
+                case PackageInstallAction.Unavailable:
+                    actionItem.Text = "Incompatible";
+                    item.ForeColor = Color.Red;
+                    break;
+                case PackageInstallAction.Update:
+                    actionItem.Text = "Update";
+                    item.ForeColor = Color.Blue;
+                    break;
+                case PackageInstallAction.Install:
+                    actionItem.Text = "Install";
+                    item.ForeColor = Color.Black;
+                    break;
+                case PackageInstallAction.None:
+                default:
+                    actionItem.Text = "N/A";
+                    item.ForeColor = Color.Gray;
+                    break;
+            }
+
+            return item;
         }
 
         public override string ToString()

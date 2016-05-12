@@ -32,7 +32,6 @@ namespace XrmToolBox
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbConnect = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
@@ -79,19 +78,12 @@ namespace XrmToolBox
             this.pnlHelp = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.pluginsCheckerImageList = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.HomePageTab.SuspendLayout();
             this.pnlHelp.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // imageList1
-            // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "access.png");
-            this.imageList1.Images.SetKeyName(1, "acroread.png");
-            this.imageList1.Images.SetKeyName(2, "agent.png");
             // 
             // toolStrip1
             // 
@@ -195,7 +187,7 @@ namespace XrmToolBox
             this.tsbPlugins.Image = ((System.Drawing.Image)(resources.GetObject("tsbPlugins.Image")));
             this.tsbPlugins.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbPlugins.Name = "tsbPlugins";
-            this.tsbPlugins.Size = new System.Drawing.Size(134, 29);
+            this.tsbPlugins.Size = new System.Drawing.Size(142, 29);
             this.tsbPlugins.Text = "Plugins store";
             this.tsbPlugins.Click += new System.EventHandler(this.tsbPlugins_Click);
             // 
@@ -235,7 +227,7 @@ namespace XrmToolBox
             this.tsbHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsbHelp.Image")));
             this.tsbHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbHelp.Name = "tsbHelp";
-            this.tsbHelp.Size = new System.Drawing.Size(83, 29);
+            this.tsbHelp.Size = new System.Drawing.Size(91, 29);
             this.tsbHelp.Text = "Help";
             // 
             // displayXrmToolBoxHelpToolStripMenuItem
@@ -288,7 +280,7 @@ namespace XrmToolBox
             this.tsbCodePlex.Image = ((System.Drawing.Image)(resources.GetObject("tsbCodePlex.Image")));
             this.tsbCodePlex.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCodePlex.Name = "tsbCodePlex";
-            this.tsbCodePlex.Size = new System.Drawing.Size(121, 29);
+            this.tsbCodePlex.Size = new System.Drawing.Size(129, 29);
             this.tsbCodePlex.Text = "Feedback";
             // 
             // startADiscussionToolStripMenuItem
@@ -372,7 +364,7 @@ namespace XrmToolBox
             this.tsbDonate.Image = ((System.Drawing.Image)(resources.GetObject("tsbDonate.Image")));
             this.tsbDonate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDonate.Name = "tsbDonate";
-            this.tsbDonate.Size = new System.Drawing.Size(104, 29);
+            this.tsbDonate.Size = new System.Drawing.Size(112, 29);
             this.tsbDonate.Text = "Donate";
             // 
             // donateInUSDollarsToolStripMenuItem
@@ -506,6 +498,13 @@ namespace XrmToolBox
             this.label1.Text = "Oups... no plugin found!";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // pluginsCheckerImageList
+            // 
+            this.pluginsCheckerImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("pluginsCheckerImageList.ImageStream")));
+            this.pluginsCheckerImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.pluginsCheckerImageList.Images.SetKeyName(0, "plugin.png");
+            this.pluginsCheckerImageList.Images.SetKeyName(1, "plugin.png");
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -535,8 +534,6 @@ namespace XrmToolBox
         }
 
         #endregion
-
-        private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton tsbConnect;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
@@ -583,6 +580,7 @@ namespace XrmToolBox
         private System.Windows.Forms.ToolStripMenuItem displayHelpPluginToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutXrmToolBoxToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton tsbPlugins;
+        private System.Windows.Forms.ImageList pluginsCheckerImageList;
     }
 }
 

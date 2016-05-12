@@ -45,6 +45,7 @@
             this.colDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAuthor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAction = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colDownloadCount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tsMain.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -138,7 +139,8 @@
             this.colCurrent,
             this.colDescription,
             this.colAuthor,
-            this.colAction});
+            this.colAction,
+            this.colDownloadCount});
             this.lvPlugins.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvPlugins.GridLines = true;
             this.lvPlugins.Location = new System.Drawing.Point(0, 32);
@@ -178,7 +180,11 @@
             // colAction
             // 
             this.colAction.Text = "Action";
-            this.colAction.Width = 100;
+            // 
+            // colDownloadCount
+            // 
+            this.colDownloadCount.Text = "Downloads";
+            this.colDownloadCount.Width = 100;
             // 
             // PluginsChecker
             // 
@@ -220,5 +226,6 @@
         private System.Windows.Forms.ColumnHeader colCurrent;
         private System.Windows.Forms.ToolStripButton tsbShowThisScreenOnStartup;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ColumnHeader colDownloadCount;
     }
 }

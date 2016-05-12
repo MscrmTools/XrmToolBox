@@ -234,6 +234,28 @@ namespace XrmToolBox
             })));
         }
 
+        private Task CheckForPluginsUpdate()
+        {
+            return new Task(() => this.Invoke(new Action(() =>
+            {
+                var pc = new PluginsChecker();
+                var packages = pc.RetrieveNugetPackages();
+
+                if(packages.Any(p=>p.Action == PackageInstallAction.Update))
+                {
+                    tsbPlugins.Image = pluginsCheckerImageList.Images[1];
+
+                    tsbPlugins.ToolTipText = string.Format("{0} new plugins\r\n{1} plugins updates",
+                        packages.Count(p => p.Action == PackageInstallAction.Install),
+                        packages.Count(p => p.Action == PackageInstallAction.Update));
+                }
+                else
+                {
+                    tsbPlugins.Image = pluginsCheckerImageList.Images[0];
+                }
+            })));
+        }
+
         #endregion Tasks to launch during startup
 
         #region Form events
@@ -307,7 +329,8 @@ namespace XrmToolBox
 
             var tasks = new List<Task>
             {
-                this.LaunchWelcomeDialog()
+                this.LaunchWelcomeDialog(),
+                this.CheckForPluginsUpdate(),
             };
 
             //if (!Debugger.IsAttached)

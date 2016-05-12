@@ -68,12 +68,26 @@ namespace XrmToolBox.AppCode
         /// <returns></returns>
         public int Compare(ListViewItem x, ListViewItem y)
         {
-            if (innerOrder == SortOrder.Ascending)
+            var xValue = x.SubItems[col].Text;
+            var yValue = y.SubItems[col].Text;
+
+            int ixValue, iyValue;
+            if(int.TryParse(xValue, out ixValue) && int.TryParse(yValue, out iyValue))
             {
-                return String.CompareOrdinal(x.SubItems[col].Text, y.SubItems[col].Text);
+                if(innerOrder == SortOrder.Ascending)
+                {
+                    return ixValue < iyValue ? 1 : -1;
+                }
+
+                return iyValue < ixValue ? 1 : -1;
             }
 
-            return String.CompareOrdinal(y.SubItems[col].Text, x.SubItems[col].Text);
+            if (innerOrder == SortOrder.Ascending)
+            {
+                return String.CompareOrdinal(xValue, yValue);
+            }
+
+            return String.CompareOrdinal(yValue, xValue);
         }
 
         #endregion Methods
