@@ -106,7 +106,6 @@ namespace MsCrmTools.AssemblyRecoveryTool
                         item.SubItems.Add(pAssembly["publickeytoken"].ToString());
 
                         item.Tag = pAssembly.Id;
-                        //item.Tag = pAssembly["content"];
 
                         listView_Assemblies.Items.Add(item);
                     }
@@ -140,7 +139,6 @@ namespace MsCrmTools.AssemblyRecoveryTool
                             : fbDialog.SelectedPath + "\\"),
                         item.Text);
 
-                        // byte[] buffer = Convert.FromBase64String(item.Tag.ToString());
                         byte[] buffer = Manager.RetrieveAssembly((Guid)item.Tag);
 
                         using (var writer = new BinaryWriter(File.Open(filename, FileMode.Create)))

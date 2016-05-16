@@ -85,7 +85,9 @@ namespace MsCrmTools.AssemblyRecoveryTool.AppCode
         /// <returns></returns>
         public byte[] RetrieveAssembly(Guid id)
         {
-            throw new NotImplementedException();
+            var response = service.Retrieve("pluginassembly", id, new ColumnSet("content"));
+
+            return Convert.FromBase64String((string)response["content"]);
         }
 
         #endregion Methods
