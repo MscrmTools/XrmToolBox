@@ -140,7 +140,9 @@ namespace MsCrmTools.AssemblyRecoveryTool
                             : fbDialog.SelectedPath + "\\"),
                         item.Text);
 
-                        byte[] buffer = Convert.FromBase64String(item.Tag.ToString());
+                        // byte[] buffer = Convert.FromBase64String(item.Tag.ToString());
+                        byte[] buffer = Manager.RetrieveAssembly((Guid)item.Tag);
+
                         using (var writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
                         {
                             writer.Write(buffer);
