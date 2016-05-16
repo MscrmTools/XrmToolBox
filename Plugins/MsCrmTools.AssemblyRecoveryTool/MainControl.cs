@@ -15,6 +15,12 @@ namespace MsCrmTools.AssemblyRecoveryTool
 {
     public partial class MainControl : PluginControlBase
     {
+        public AssemblyManager Manager
+        {
+            get;
+            private set;
+        }
+
         #region Constructor
 
         /// <summary>
@@ -77,13 +83,15 @@ namespace MsCrmTools.AssemblyRecoveryTool
 
         public void RetrieveAssemblies()
         {
+            // Initalizing plugin wide AssemblyManager instanace
+            Manager = new AssemblyManager(Service);
+
             WorkAsync(new WorkAsyncInfo
             {
                 Message = "Loading assemblies...",
                 Work = (bw, e) =>
                 {
-                    var aManager = new AssemblyManager(Service);
-                    e.Result = aManager.RetrieveAssemblies();
+                    e.Result = Manager.RetrieveAssemblies();
                 },
                 PostWorkCallBack = e =>
                 {
@@ -97,7 +105,7 @@ namespace MsCrmTools.AssemblyRecoveryTool
                         item.SubItems.Add(pAssembly["version"].ToString());
                         item.SubItems.Add(pAssembly["publickeytoken"].ToString());
 
-                        item.Tag = pAssembly["content"];
+                        item.Tag = pAssembly.Id;
 
                         listView_Assemblies.Items.Add(item);
                     }
@@ -131,7 +139,8 @@ namespace MsCrmTools.AssemblyRecoveryTool
                             : fbDialog.SelectedPath + "\\"),
                         item.Text);
 
-                        byte[] buffer = Convert.FromBase64String(item.Tag.ToString());
+                        byte[] buffer = Manager.RetrieveAssembly((Guid)item.Tag);
+
                         using (var writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
                         {
                             writer.Write(buffer);

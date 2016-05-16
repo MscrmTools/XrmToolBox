@@ -3,6 +3,7 @@ using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Query;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace MsCrmTools.AssemblyRecoveryTool.AppCode
 {
@@ -36,7 +37,7 @@ namespace MsCrmTools.AssemblyRecoveryTool.AppCode
         #region Methods
 
         /// <summary>
-        /// Retrieve the assemblies for the specified irganization
+        /// Retrieve list of assemblies for the specified organization
         /// </summary>
         /// <returns>List of plugin assemblies</returns>
         public List<Entity> RetrieveAssemblies()
@@ -45,7 +46,7 @@ namespace MsCrmTools.AssemblyRecoveryTool.AppCode
 
             var qe = new QueryExpression("pluginassembly")
             {
-                ColumnSet = new ColumnSet(true),
+                ColumnSet = new ColumnSet("name", "version", "publickeytoken"),
                 Distinct = false,
                 LinkEntities =
                 {
@@ -75,6 +76,18 @@ namespace MsCrmTools.AssemblyRecoveryTool.AppCode
             }
 
             return list;
+        }
+
+        /// <summary>
+        /// Retrieve binary assembly contents from specified organization
+        /// </summary>
+        /// <param name="id">Assembly identifier</param>
+        /// <returns></returns>
+        public byte[] RetrieveAssembly(Guid id)
+        {
+            var response = service.Retrieve("pluginassembly", id, new ColumnSet("content"));
+
+            return Convert.FromBase64String((string)response["content"]);
         }
 
         #endregion Methods
