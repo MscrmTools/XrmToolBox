@@ -301,6 +301,50 @@ namespace XrmToolBox.Forms
             ((MainForm)Owner).Options.DisplayPluginsStoreOnStartup = ((ToolStripButton)sender).Checked;
             ((MainForm)Owner).Options.Save();
         }
+
+        private void lvPlugins_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            pnlReleaseNotesDetails.Controls.Clear();
+
+            if (lvPlugins.SelectedItems.Count == 0)
+            {
+                return;
+            }
+
+            var item = lvPlugins.SelectedItems[0];
+            var releaseNotes = ((XtbNuGetPackage)item.Tag).Package.ReleaseNotes;
+
+            if (!string.IsNullOrEmpty(releaseNotes))
+            {
+                Uri releaseNotesUri;
+                if(Uri.TryCreate(releaseNotes, UriKind.Absolute, out releaseNotesUri))
+                {
+                    var llbl = new LinkLabel { Text = releaseNotes };
+                    llbl.Click += (s, evt) => { Process.Start(((LinkLabel)s).Text); };
+                    llbl.AutoSize = false;
+                    llbl.Dock = DockStyle.Fill;
+
+                    pnlReleaseNotesDetails.Controls.Add(llbl);
+                }
+                else
+                {
+                    var lbl = new Label { Text = releaseNotes };
+                    lbl.Dock = DockStyle.Fill;
+                    lbl.AutoSize = false;
+
+                    pnlReleaseNotesDetails.Controls.Add(lbl);
+                }
+            }
+            else
+            {
+                var lbl = new Label { Text = "N/A" };
+                lbl.Dock = DockStyle.Fill;
+                lbl.AutoSize = false;
+
+                pnlReleaseNotesDetails.Controls.Add(lbl);
+            }
+
+        }
     }
 
     internal class XtbNuGetPackage

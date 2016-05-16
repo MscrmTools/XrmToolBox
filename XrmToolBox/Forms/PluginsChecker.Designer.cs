@@ -38,6 +38,9 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tssProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.tssLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.pnlReleaseNotes = new System.Windows.Forms.Panel();
+            this.pnlReleaseNotesDetails = new System.Windows.Forms.Panel();
+            this.lblReleaseNotes = new System.Windows.Forms.Label();
             this.lvPlugins = new System.Windows.Forms.ListView();
             this.colTitle = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -46,8 +49,14 @@
             this.colAuthor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAction = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colDownloadCount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tsMain.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.pnlReleaseNotes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tsMain
@@ -130,6 +139,34 @@
             this.tssLabel.Spring = true;
             this.tssLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // pnlReleaseNotes
+            // 
+            this.pnlReleaseNotes.Controls.Add(this.pnlReleaseNotesDetails);
+            this.pnlReleaseNotes.Controls.Add(this.lblReleaseNotes);
+            this.pnlReleaseNotes.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlReleaseNotes.Location = new System.Drawing.Point(0, 0);
+            this.pnlReleaseNotes.Name = "pnlReleaseNotes";
+            this.pnlReleaseNotes.Size = new System.Drawing.Size(1497, 113);
+            this.pnlReleaseNotes.TabIndex = 4;
+            // 
+            // pnlReleaseNotesDetails
+            // 
+            this.pnlReleaseNotesDetails.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlReleaseNotesDetails.Location = new System.Drawing.Point(0, 20);
+            this.pnlReleaseNotesDetails.Name = "pnlReleaseNotesDetails";
+            this.pnlReleaseNotesDetails.Size = new System.Drawing.Size(1497, 93);
+            this.pnlReleaseNotesDetails.TabIndex = 1;
+            // 
+            // lblReleaseNotes
+            // 
+            this.lblReleaseNotes.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblReleaseNotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblReleaseNotes.Location = new System.Drawing.Point(0, 0);
+            this.lblReleaseNotes.Name = "lblReleaseNotes";
+            this.lblReleaseNotes.Size = new System.Drawing.Size(1497, 20);
+            this.lblReleaseNotes.TabIndex = 0;
+            this.lblReleaseNotes.Text = "Release notes";
+            // 
             // lvPlugins
             // 
             this.lvPlugins.CheckBoxes = true;
@@ -142,15 +179,17 @@
             this.colAction,
             this.colDownloadCount});
             this.lvPlugins.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lvPlugins.FullRowSelect = true;
             this.lvPlugins.GridLines = true;
-            this.lvPlugins.Location = new System.Drawing.Point(0, 32);
+            this.lvPlugins.Location = new System.Drawing.Point(0, 0);
             this.lvPlugins.Name = "lvPlugins";
-            this.lvPlugins.Size = new System.Drawing.Size(1497, 492);
+            this.lvPlugins.Size = new System.Drawing.Size(1497, 375);
             this.lvPlugins.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.lvPlugins.TabIndex = 3;
+            this.lvPlugins.TabIndex = 5;
             this.lvPlugins.UseCompatibleStateImageBehavior = false;
             this.lvPlugins.View = System.Windows.Forms.View.Details;
             this.lvPlugins.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvPlugins_ColumnClick);
+            this.lvPlugins.SelectedIndexChanged += new System.EventHandler(this.lvPlugins_SelectedIndexChanged);
             // 
             // colTitle
             // 
@@ -186,12 +225,30 @@
             this.colDownloadCount.Text = "Downloads";
             this.colDownloadCount.Width = 100;
             // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 32);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.lvPlugins);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.pnlReleaseNotes);
+            this.splitContainer1.Size = new System.Drawing.Size(1497, 492);
+            this.splitContainer1.SplitterDistance = 375;
+            this.splitContainer1.TabIndex = 6;
+            // 
             // PluginsChecker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1497, 546);
-            this.Controls.Add(this.lvPlugins);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tsMain);
             this.Name = "PluginsChecker";
@@ -203,6 +260,11 @@
             this.tsMain.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.pnlReleaseNotes.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -217,15 +279,19 @@
         private System.Windows.Forms.ToolStripButton tsbInstall;
         private System.Windows.Forms.ToolStripProgressBar tssProgress;
         private System.Windows.Forms.ToolStripStatusLabel tssLabel;
-        private System.Windows.Forms.ListView lvPlugins;
-        private System.Windows.Forms.ColumnHeader colTitle;
-        private System.Windows.Forms.ColumnHeader colVersion;
-        private System.Windows.Forms.ColumnHeader colAuthor;
-        private System.Windows.Forms.ColumnHeader colDescription;
-        private System.Windows.Forms.ColumnHeader colAction;
-        private System.Windows.Forms.ColumnHeader colCurrent;
         private System.Windows.Forms.ToolStripButton tsbShowThisScreenOnStartup;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.Panel pnlReleaseNotes;
+        private System.Windows.Forms.Panel pnlReleaseNotesDetails;
+        private System.Windows.Forms.Label lblReleaseNotes;
+        private System.Windows.Forms.ColumnHeader colTitle;
+        private System.Windows.Forms.ColumnHeader colVersion;
+        private System.Windows.Forms.ColumnHeader colCurrent;
+        private System.Windows.Forms.ColumnHeader colDescription;
+        private System.Windows.Forms.ColumnHeader colAuthor;
+        private System.Windows.Forms.ColumnHeader colAction;
         private System.Windows.Forms.ColumnHeader colDownloadCount;
+        private System.Windows.Forms.ListView lvPlugins;
+        private System.Windows.Forms.SplitContainer splitContainer1;
     }
 }
