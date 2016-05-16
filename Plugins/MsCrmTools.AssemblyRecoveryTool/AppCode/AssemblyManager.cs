@@ -45,7 +45,7 @@ namespace MsCrmTools.AssemblyRecoveryTool.AppCode
 
             var qe = new QueryExpression("pluginassembly")
             {
-                ColumnSet = new ColumnSet(true),
+                ColumnSet = new ColumnSet("name", "version", "publickeytoken"),
                 Distinct = false,
                 LinkEntities =
                 {

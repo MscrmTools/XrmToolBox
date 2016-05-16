@@ -97,7 +97,7 @@ namespace MsCrmTools.AssemblyRecoveryTool
                         item.SubItems.Add(pAssembly["version"].ToString());
                         item.SubItems.Add(pAssembly["publickeytoken"].ToString());
 
-                        item.Tag = pAssembly["content"];
+                        //item.Tag = pAssembly["content"];
 
                         listView_Assemblies.Items.Add(item);
                     }
