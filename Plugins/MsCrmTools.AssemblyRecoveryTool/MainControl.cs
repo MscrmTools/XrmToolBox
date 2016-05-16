@@ -15,6 +15,12 @@ namespace MsCrmTools.AssemblyRecoveryTool
 {
     public partial class MainControl : PluginControlBase
     {
+        public AssemblyManager Manager
+        {
+            get;
+            private set;
+        }
+
         #region Constructor
 
         /// <summary>
@@ -77,13 +83,15 @@ namespace MsCrmTools.AssemblyRecoveryTool
 
         public void RetrieveAssemblies()
         {
+            // Initalizing plugin wide AssemblyManager instanace
+            Manager = new AssemblyManager(Service);
+
             WorkAsync(new WorkAsyncInfo
             {
                 Message = "Loading assemblies...",
                 Work = (bw, e) =>
                 {
-                    var aManager = new AssemblyManager(Service);
-                    e.Result = aManager.RetrieveAssemblies();
+                    e.Result = Manager.RetrieveAssemblies();
                 },
                 PostWorkCallBack = e =>
                 {
