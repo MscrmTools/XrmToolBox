@@ -49,7 +49,7 @@ function displayPlugins(){
 		'<td>'+nugetPackage.version+'</td>' +
 		'<td>'+nugetPackage.authors+'</td>' +
 		'<td>'+nugetPackage.description+'</td>' +
-		'<td style="text-align:center;"><a href="'+nugetPackage.projectUrl+'"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span></a></td>' +
+		'<td style="text-align:center;"><a href="'+nugetPackage.projectUrl+'" target="_blank"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span></a></td>' +
 		'<td>'+nugetPackage.totalDownloads+'</td>' +
 		'</tr>');
 	}
