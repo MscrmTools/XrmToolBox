@@ -17,7 +17,7 @@
     <!-- Custom CSS -->
     <link href="css/modern-business.css" rel="stylesheet">
     <link href="css/gitter.css" rel="stylesheet">
- 
+
     <!-- Custom Fonts -->
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
@@ -31,7 +31,7 @@
 </head>
 
 <body>
-<script type="text/javascript">
+    <script type="text/javascript">
     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
     document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
     </script>
@@ -97,59 +97,41 @@
         <!-- Page Heading/Breadcrumbs -->
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">About
-                    <small>this website</small>
+                <h1 class="page-header">Plugins
+                    <small>available in XrmToolBox Plugins Store</small>
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="index.html">Home</a>
                     </li>
-                    <li class="active">About</li>
+                    <li class="active">Plugins</li>
                 </ol>
             </div>
         </div>
-        <!-- /.row -->
-
-        <!-- Intro Content -->
+       
+        <!-- Content Row -->
         <div class="row">
-           <div class="col-md-4 text-center">
-				<h2>Who is MscrmTools ?</h2>
-				<hr>
-                <div class="thumbnail">
-                    <img class="img-responsive" src="images/Tanguy.png" alt="">
-                    <div class="caption">
-                        <h3>Tanguy TOUZARD<br>
-                            <small>Dynamics CRM Technical consultant - MVP</small>
-                        </h3>
-                        
-                        <ul class="list-inline">
-                            <li><a href="https://www.facebook.com/tanguy.touzard"><i class="fa fa-2x fa-facebook-square"></i></a>
-                            </li>
-                            <li><a href="https://www.linkedin.com/in/tanguytouzard"><i class="fa fa-2x fa-linkedin-square"></i></a>
-                            </li>
-                            <li><a href="https://twitter.com/tanguytouzard"><i class="fa fa-2x fa-twitter-square"></i></a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-8">
-			<h2>This website was made with...</h2>
-				<hr>
-                <p>The web site template is from Modern Business - Start Bootstrap Template</p>
-                <p>JavaScript to request Github information comes from Jonas Rapp, the excellent author of FetchXML Builder for XrmToolBox</p>
-                <p>Designed with BootStrap</p>
-				
-				<h2>Chat with us</h2>
-				<hr>
+            <div class="col-lg-12">
+                <p>The table below lists plugins available through XrmToolBox Plugins Store. The store is available on XrmToolBox May 2016 version and above.</p>
 				<p>
-				You can join the chat in <a href="https://gitter.im/MscrmTools/XrmToolBox?utm_source=share-link&utm_medium=link&utm_campaign=share-link">XrmToolBox's Gitter room</a>
-				</p>
+                    <table class="table table-condensed table-striped table-bordered" id="PluginsTable">
+                        <thead>
+                        <td id="title" class="sortable"><strong>Name</strong> <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></td>
+                        <td id="version" class="sortable"><strong>Version</strong></td>
+                        <td id="version" class="sortable"><strong>Authors</strong></td>
+                        <td id="description"><strong>Description</strong></td>
+                        <td id="projectUrl"><strong>Project</strong></td>
+                        <td id="totalDownloads" class="sortable"><strong>Downloads</strong></td>
+                        </thead>
+                    </table>
+                </p>
             </div>
-        </div>
-        <!-- /.row -->
-
-        <hr>
-
+	   </div>
+       <div class="row">
+            <div class="col-lg-12">
+                To distribute your plugin through XrmToolBox Plugins Store, <a target="_blank" href="https://github.com/MscrmTools/XrmToolBox/wiki/Distribute-your-plugins-through-XrmToolBox-and-Nuget">follow this documentation</a>
+            </div>
+	   </div>
+       
         <!-- Footer -->
         <footer>
             <div class="row">
@@ -167,6 +149,8 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
+    
+    <script src="js/nugetPlugins.js"></script>
 
 </body>
 
