@@ -80,11 +80,41 @@ namespace XrmToolBox.Forms
             var bw = new BackgroundWorker();
             bw.DoWork += (sender, e) =>
             {
+                var options = ((MainForm)Owner).Options;
+
                 var xtbPackages = RetrieveNugetPackages();
 
                 var lvic = new List<ListViewItem>();
                 foreach (var xtbPackage in xtbPackages)
                 {
+                    if (xtbPackage.Action == PackageInstallAction.Unavailable
+                        && options.PluginsStoreShowIncompatible.HasValue
+                        && options.PluginsStoreShowIncompatible.Value == false)
+                    {
+                        continue;
+                    }
+
+                    if (xtbPackage.Action == PackageInstallAction.Install
+                       && options.PluginsStoreShowNew.HasValue
+                       && options.PluginsStoreShowNew.Value == false)
+                    {
+                        continue;
+                    }
+
+                    if (xtbPackage.Action == PackageInstallAction.Update
+                       && options.PluginsStoreShowUpdates.HasValue
+                       && options.PluginsStoreShowUpdates.Value == false)
+                    {
+                        continue;
+                    }
+
+                    if (xtbPackage.Action == PackageInstallAction.None
+                      && options.PluginsStoreShowInstalled.HasValue
+                      && options.PluginsStoreShowInstalled.Value == false)
+                    {
+                        continue;
+                    }
+
                     lvic.Add(xtbPackage.GetPluginsStoreItem());
                 }
                 e.Result = lvic;
@@ -111,7 +141,7 @@ namespace XrmToolBox.Forms
            
             var files = package.GetFiles();
 
-            bool install = false, update = false, compatible = false;
+            bool install = false, update = false, compatible = false, otherFilesFound = false;
 
             var xtbDependency = package.FindDependency("XrmToolBox", null);
             if (xtbDependency != null)
@@ -141,6 +171,7 @@ namespace XrmToolBox.Forms
                         // contains classes that implement IXrmToolBoxPlugin
                         if (!existingPluginFile.ImplementsXrmToolBoxPlugin())
                         {
+                            otherFilesFound = true;
                             continue;
                         }
 
@@ -161,6 +192,11 @@ namespace XrmToolBox.Forms
             if (currentVersionFound)
             {
                 xtbPackage.CurrentVersion = currentVersion;
+            }
+
+            if (otherFilesFound || update)
+            {
+                xtbPackage.RequiresXtbRestart = true;
             }
 
             if (!compatible)
@@ -197,7 +233,13 @@ namespace XrmToolBox.Forms
 
         private void PluginsChecker_Load(object sender, EventArgs e)
         {
-            tsbShowThisScreenOnStartup.Checked = ((MainForm)Owner).Options.DisplayPluginsStoreOnStartup;
+            var options = ((MainForm)Owner).Options;
+
+            tsbShowThisScreenOnStartup.Checked = options.DisplayPluginsStoreOnStartup;
+            tsmiShowInstalledPlugins.Checked = options.PluginsStoreShowInstalled.HasValue ? options.PluginsStoreShowInstalled.Value : true;
+            tsmiShowNewPlugins.Checked = options.PluginsStoreShowNew.HasValue ? options.PluginsStoreShowNew.Value : true;
+            tsmiShowPluginsNotCompatible.Checked = options.PluginsStoreShowIncompatible.HasValue ? options.PluginsStoreShowIncompatible.Value : true;
+            tsmiShowPluginsUpdate.Checked = options.PluginsStoreShowUpdates.HasValue ? options.PluginsStoreShowUpdates.Value : true;
 
             RefreshPluginsList();
         }
@@ -237,7 +279,19 @@ namespace XrmToolBox.Forms
                 foreach (var fi in xtbPackage.Package.GetFiles())
                 {
                     var destinationFile = Path.Combine(applicationFolder, fi.EffectivePath);
-                    if (xtbPackage.Action == PackageInstallAction.Install)
+
+                    // XrmToolBox restart is required when a plugin has to be 
+                    // updated or when a new plugin shares files with other 
+                    // plugin(s) already installed
+                    if (xtbPackage.RequiresXtbRestart)
+                    {
+                        pus.Plugins.Add(new PluginUpdate
+                        {
+                            Source = Path.Combine(packageFolder, fi.Path),
+                            Destination = destinationFile
+                        });
+                    }
+                    else if (xtbPackage.Action == PackageInstallAction.Install)
                     {
                         try
                         {
@@ -257,14 +311,6 @@ namespace XrmToolBox.Forms
                             return;
                         }
                     }
-                    else if (xtbPackage.Action == PackageInstallAction.Update)
-                    {
-                        pus.Plugins.Add(new PluginUpdate
-                        {
-                            Source = Path.Combine(packageFolder, fi.Path),
-                            Destination = destinationFile
-                        });
-                    }
                 }
             }
 
@@ -273,7 +319,7 @@ namespace XrmToolBox.Forms
                 XmlSerializerHelper.SerializeToFile(pus, Path.Combine(applicationFolder, "Update.xml"));
 
                 if (DialogResult.Yes == MessageBox.Show(
-                    "This application needs to restart to install updated plugins. Click Yes to restart this application now",
+                    "This application needs to restart to install updated plugins (or new plugins that share some files with already installed plugins). Click Yes to restart this application now",
                     "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
                 {
                     Application.Restart();
@@ -297,8 +343,9 @@ namespace XrmToolBox.Forms
 
         private void tsbShowThisScreenOnStartup_Click(object sender, EventArgs e)
         {
-            ((ToolStripButton)sender).Checked = !((ToolStripButton)sender).Checked;
-            ((MainForm)Owner).Options.DisplayPluginsStoreOnStartup = ((ToolStripButton)sender).Checked;
+            ToolStripButton ctrl = (ToolStripButton)sender;
+
+            ((MainForm)Owner).Options.DisplayPluginsStoreOnStartup = ctrl.Checked;
             ((MainForm)Owner).Options.Save();
         }
 
@@ -345,11 +392,39 @@ namespace XrmToolBox.Forms
             }
 
         }
+
+        private void tsmiPluginDisplayOption_Click(object sender, EventArgs e)
+        {
+            var options = ((MainForm)Owner).Options;
+            ToolStripMenuItem item = (ToolStripMenuItem)sender;
+
+            if(item == tsmiShowInstalledPlugins)
+            {
+                options.PluginsStoreShowInstalled = item.Checked;
+            }
+            else if (item == tsmiShowNewPlugins)
+            {
+                options.PluginsStoreShowNew = item.Checked;
+            }
+            else if (item == tsmiShowPluginsNotCompatible)
+            {
+                options.PluginsStoreShowIncompatible = item.Checked;
+            }
+            else if (item == tsmiShowPluginsUpdate)
+            {
+                options.PluginsStoreShowUpdates = item.Checked;
+            }
+
+            options.Save();
+
+            RefreshPluginsList();
+        }
     }
 
     internal class XtbNuGetPackage
     {
         public PackageInstallAction Action;
+        public bool RequiresXtbRestart { get; set; }
         public IPackage Package;
         public Version CurrentVersion { get; set; }
 

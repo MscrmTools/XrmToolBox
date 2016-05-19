@@ -69,6 +69,11 @@ namespace XrmToolBox
             DisplayPluginsStoreOnStartup = true;
         }
 
+        public bool? PluginsStoreShowIncompatible { get; set; }
+        public bool? PluginsStoreShowUpdates { get; set; }
+        public bool? PluginsStoreShowNew { get; set; }
+        public bool? PluginsStoreShowInstalled { get; set; }
+
         public bool? AllowLogUsage { get; set; }
         public bool CheckUpdateOnStartup { get; set; }
         public bool CloseOpenedPluginsSilently { get; set; }

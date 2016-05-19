@@ -35,6 +35,12 @@
             this.tsbInstall = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbShowThisScreenOnStartup = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsddbOptions = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsmiShowPluginsNotCompatible = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowNewPlugins = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowPluginsUpdate = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShowInstalledPlugins = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tssProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.tssLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -66,10 +72,13 @@
             this.toolStripSeparator1,
             this.tsbInstall,
             this.toolStripSeparator2,
-            this.tsbShowThisScreenOnStartup});
+            this.tsbShowThisScreenOnStartup,
+            this.toolStripSeparator3,
+            this.tsddbOptions});
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
             this.tsMain.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.tsMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.tsMain.Size = new System.Drawing.Size(1497, 32);
             this.tsMain.TabIndex = 0;
             this.tsMain.Text = "toolStrip1";
@@ -104,6 +113,7 @@
             // 
             // tsbShowThisScreenOnStartup
             // 
+            this.tsbShowThisScreenOnStartup.CheckOnClick = true;
             this.tsbShowThisScreenOnStartup.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tsbShowThisScreenOnStartup.Image = ((System.Drawing.Image)(resources.GetObject("tsbShowThisScreenOnStartup.Image")));
             this.tsbShowThisScreenOnStartup.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -111,6 +121,65 @@
             this.tsbShowThisScreenOnStartup.Size = new System.Drawing.Size(335, 29);
             this.tsbShowThisScreenOnStartup.Text = "Show this screen on XrmToolBox startup";
             this.tsbShowThisScreenOnStartup.Click += new System.EventHandler(this.tsbShowThisScreenOnStartup_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 32);
+            // 
+            // tsddbOptions
+            // 
+            this.tsddbOptions.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsddbOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiShowPluginsNotCompatible,
+            this.tsmiShowNewPlugins,
+            this.tsmiShowPluginsUpdate,
+            this.tsmiShowInstalledPlugins});
+            this.tsddbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tsddbOptions.Image")));
+            this.tsddbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsddbOptions.Name = "tsddbOptions";
+            this.tsddbOptions.Size = new System.Drawing.Size(214, 29);
+            this.tsddbOptions.Text = "Plugins display options";
+            // 
+            // tsmiShowPluginsNotCompatible
+            // 
+            this.tsmiShowPluginsNotCompatible.Checked = true;
+            this.tsmiShowPluginsNotCompatible.CheckOnClick = true;
+            this.tsmiShowPluginsNotCompatible.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiShowPluginsNotCompatible.Name = "tsmiShowPluginsNotCompatible";
+            this.tsmiShowPluginsNotCompatible.Size = new System.Drawing.Size(330, 30);
+            this.tsmiShowPluginsNotCompatible.Text = "Show plugins not compatible";
+            this.tsmiShowPluginsNotCompatible.Click += new System.EventHandler(this.tsmiPluginDisplayOption_Click);
+            // 
+            // tsmiShowNewPlugins
+            // 
+            this.tsmiShowNewPlugins.Checked = true;
+            this.tsmiShowNewPlugins.CheckOnClick = true;
+            this.tsmiShowNewPlugins.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiShowNewPlugins.Name = "tsmiShowNewPlugins";
+            this.tsmiShowNewPlugins.Size = new System.Drawing.Size(330, 30);
+            this.tsmiShowNewPlugins.Text = "Show new plugins";
+            this.tsmiShowNewPlugins.Click += new System.EventHandler(this.tsmiPluginDisplayOption_Click);
+            // 
+            // tsmiShowPluginsUpdate
+            // 
+            this.tsmiShowPluginsUpdate.Checked = true;
+            this.tsmiShowPluginsUpdate.CheckOnClick = true;
+            this.tsmiShowPluginsUpdate.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiShowPluginsUpdate.Name = "tsmiShowPluginsUpdate";
+            this.tsmiShowPluginsUpdate.Size = new System.Drawing.Size(330, 30);
+            this.tsmiShowPluginsUpdate.Text = "Show plugins update";
+            this.tsmiShowPluginsUpdate.Click += new System.EventHandler(this.tsmiPluginDisplayOption_Click);
+            // 
+            // tsmiShowInstalledPlugins
+            // 
+            this.tsmiShowInstalledPlugins.Checked = true;
+            this.tsmiShowInstalledPlugins.CheckOnClick = true;
+            this.tsmiShowInstalledPlugins.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tsmiShowInstalledPlugins.Name = "tsmiShowInstalledPlugins";
+            this.tsmiShowInstalledPlugins.Size = new System.Drawing.Size(330, 30);
+            this.tsmiShowInstalledPlugins.Text = "Show installed plugins";
+            this.tsmiShowInstalledPlugins.Click += new System.EventHandler(this.tsmiPluginDisplayOption_Click);
             // 
             // statusStrip1
             // 
@@ -293,5 +362,11 @@
         private System.Windows.Forms.ColumnHeader colDownloadCount;
         private System.Windows.Forms.ListView lvPlugins;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripDropDownButton tsddbOptions;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowPluginsNotCompatible;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowNewPlugins;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowPluginsUpdate;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowInstalledPlugins;
     }
 }
