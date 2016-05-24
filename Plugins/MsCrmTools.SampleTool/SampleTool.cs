@@ -3,9 +3,9 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
-using Microsoft.Crm.Sdk.Messages;
 using System;
 using System.Windows.Forms;
+using Microsoft.Crm.Sdk.Messages;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
@@ -25,14 +25,17 @@ namespace MsCrmTools.SampleTool
 
         public void ProcessWhoAmI()
         {
+            bool isMultipleCallChecked = cbMultipleCalls.Checked;
+
             WorkAsync(new WorkAsyncInfo
             {
                 Message = "Retrieving your user id...",
                 Work = (w, e) =>
                 {
-                    // The while loop is just here to illustrate the possibility to cancel
+                    // If option multiple calls is selected,
+                    // the while loop is just here to illustrate the possibility to cancel
                     // a long running process made of multiple calls
-                    while (e.Cancel == false)
+                    do
                     {
                         if (w.CancellationPending)
                         {
@@ -42,7 +45,7 @@ namespace MsCrmTools.SampleTool
                         var response = (WhoAmIResponse)Service.Execute(request);
 
                         e.Result = response.UserId;
-                    }
+                    } while ((e.Cancel == false) && (isMultipleCallChecked));
                 },
                 ProgressChanged = e =>
                 {
