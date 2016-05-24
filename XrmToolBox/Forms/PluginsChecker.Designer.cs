@@ -139,7 +139,7 @@
             this.tsddbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbOptions.Name = "tsddbOptions";
             this.tsddbOptions.Size = new System.Drawing.Size(214, 29);
-            this.tsddbOptions.Text = "Plugins display options";
+            this.tsddbOptions.Text = "Display options";
             // 
             // tsmiShowPluginsNotCompatible
             // 
@@ -183,7 +183,7 @@
             // 
             // statusStrip1
             // 
-            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(16, 16);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tssProgress,
             this.tssLabel});
@@ -197,7 +197,7 @@
             // tssProgress
             // 
             this.tssProgress.Name = "tssProgress";
-            this.tssProgress.Size = new System.Drawing.Size(200, 25);
+            this.tssProgress.Size = new System.Drawing.Size(200, 17);
             this.tssProgress.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.tssProgress.Visible = false;
             // 
@@ -205,7 +205,7 @@
             // 
             this.tssLabel.Name = "tssLabel";
             this.tssLabel.Size = new System.Drawing.Size(1481, 17);
-            this.tssLabel.Spring = true;
+            this.tssLabel.Spring = false;
             this.tssLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // pnlReleaseNotes

@@ -238,20 +238,27 @@ namespace XrmToolBox
         {
             return new Task(() => this.Invoke(new Action(() =>
             {
-                var pc = new PluginsChecker();
-                var packages = pc.RetrieveNugetPackages();
-
-                if(packages.Any(p=>p.Action == PackageInstallAction.Update))
+                try
                 {
-                    tsbPlugins.Image = pluginsCheckerImageList.Images[1];
+                    var pc = new PluginsChecker();
+                    var packages = pc.RetrieveNugetPackages();
 
-                    tsbPlugins.ToolTipText = string.Format("{0} new plugins\r\n{1} plugins updates",
-                        packages.Count(p => p.Action == PackageInstallAction.Install),
-                        packages.Count(p => p.Action == PackageInstallAction.Update));
+                    if (packages.Any(p => p.Action == PackageInstallAction.Update))
+                    {
+                        tsbPlugins.Image = pluginsCheckerImageList.Images[1];
+
+                        tsbPlugins.ToolTipText = string.Format("{0} new plugins\r\n{1} plugins updates",
+                            packages.Count(p => p.Action == PackageInstallAction.Install),
+                            packages.Count(p => p.Action == PackageInstallAction.Update));
+                    }
+                    else
+                    {
+                        tsbPlugins.Image = pluginsCheckerImageList.Images[0];
+                    }
                 }
-                else
+                catch (Exception error)
                 {
-                    tsbPlugins.Image = pluginsCheckerImageList.Images[0];
+                    tsbPlugins.ToolTipText = "Failed to retrieve plugins updates: " + error.Message;
                 }
             })));
         }
