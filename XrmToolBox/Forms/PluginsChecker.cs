@@ -135,6 +135,16 @@ namespace XrmToolBox.Forms
             bw.RunWorkerAsync();
         }
 
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            if (ModifierKeys == Keys.None && keyData == Keys.Escape)
+            {
+                Close();
+                return true;
+            }
+            return base.ProcessDialogKey(keyData);
+        }
+
         private XtbNuGetPackage GetXtbPackage(IPackage package)
         {
             var xtbPackage = new XtbNuGetPackage(package, PackageInstallAction.None);
