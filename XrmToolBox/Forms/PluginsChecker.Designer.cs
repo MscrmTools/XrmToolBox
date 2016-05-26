@@ -45,6 +45,8 @@
             this.tssProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.tssLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlReleaseNotes = new System.Windows.Forms.Panel();
+            this.scProperties = new System.Windows.Forms.SplitContainer();
+            this.lblProperties = new System.Windows.Forms.Label();
             this.pnlReleaseNotesDetails = new System.Windows.Forms.Panel();
             this.lblReleaseNotes = new System.Windows.Forms.Label();
             this.lvPlugins = new System.Windows.Forms.ListView();
@@ -59,6 +61,10 @@
             this.tsMain.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.pnlReleaseNotes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.scProperties)).BeginInit();
+            this.scProperties.Panel1.SuspendLayout();
+            this.scProperties.Panel2.SuspendLayout();
+            this.scProperties.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -138,7 +144,7 @@
             this.tsddbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tsddbOptions.Image")));
             this.tsddbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbOptions.Name = "tsddbOptions";
-            this.tsddbOptions.Size = new System.Drawing.Size(214, 29);
+            this.tsddbOptions.Size = new System.Drawing.Size(154, 29);
             this.tsddbOptions.Text = "Display options";
             // 
             // tsmiShowPluginsNotCompatible
@@ -183,11 +189,11 @@
             // 
             // statusStrip1
             // 
-            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(16, 16);
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tssProgress,
             this.tssLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 524);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 865);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 14, 0);
             this.statusStrip1.Size = new System.Drawing.Size(1497, 22);
@@ -204,27 +210,57 @@
             // tssLabel
             // 
             this.tssLabel.Name = "tssLabel";
-            this.tssLabel.Size = new System.Drawing.Size(1481, 17);
-            this.tssLabel.Spring = false;
+            this.tssLabel.Size = new System.Drawing.Size(0, 17);
             this.tssLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // pnlReleaseNotes
             // 
-            this.pnlReleaseNotes.Controls.Add(this.pnlReleaseNotesDetails);
-            this.pnlReleaseNotes.Controls.Add(this.lblReleaseNotes);
+            this.pnlReleaseNotes.Controls.Add(this.scProperties);
             this.pnlReleaseNotes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlReleaseNotes.Location = new System.Drawing.Point(0, 0);
             this.pnlReleaseNotes.Name = "pnlReleaseNotes";
-            this.pnlReleaseNotes.Size = new System.Drawing.Size(1497, 113);
+            this.pnlReleaseNotes.Size = new System.Drawing.Size(1497, 386);
             this.pnlReleaseNotes.TabIndex = 4;
+            // 
+            // scProperties
+            // 
+            this.scProperties.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.scProperties.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.scProperties.Location = new System.Drawing.Point(0, 0);
+            this.scProperties.Name = "scProperties";
+            // 
+            // scProperties.Panel1
+            // 
+            this.scProperties.Panel1.AutoScroll = true;
+            this.scProperties.Panel1.Controls.Add(this.lblProperties);
+            // 
+            // scProperties.Panel2
+            // 
+            this.scProperties.Panel2.Controls.Add(this.pnlReleaseNotesDetails);
+            this.scProperties.Panel2.Controls.Add(this.lblReleaseNotes);
+            this.scProperties.Size = new System.Drawing.Size(1497, 386);
+            this.scProperties.SplitterDistance = 502;
+            this.scProperties.TabIndex = 2;
+            // 
+            // lblProperties
+            // 
+            this.lblProperties.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblProperties.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProperties.Location = new System.Drawing.Point(0, 0);
+            this.lblProperties.Name = "lblProperties";
+            this.lblProperties.Size = new System.Drawing.Size(502, 25);
+            this.lblProperties.TabIndex = 1;
+            this.lblProperties.Text = "Plugin properties";
             // 
             // pnlReleaseNotesDetails
             // 
+            this.pnlReleaseNotesDetails.AutoScroll = true;
+            this.pnlReleaseNotesDetails.AutoScrollMinSize = new System.Drawing.Size(0, 1000);
             this.pnlReleaseNotesDetails.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlReleaseNotesDetails.Location = new System.Drawing.Point(0, 20);
+            this.pnlReleaseNotesDetails.Location = new System.Drawing.Point(0, 25);
             this.pnlReleaseNotesDetails.Name = "pnlReleaseNotesDetails";
-            this.pnlReleaseNotesDetails.Size = new System.Drawing.Size(1497, 93);
-            this.pnlReleaseNotesDetails.TabIndex = 1;
+            this.pnlReleaseNotesDetails.Size = new System.Drawing.Size(991, 361);
+            this.pnlReleaseNotesDetails.TabIndex = 2;
             // 
             // lblReleaseNotes
             // 
@@ -232,7 +268,7 @@
             this.lblReleaseNotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblReleaseNotes.Location = new System.Drawing.Point(0, 0);
             this.lblReleaseNotes.Name = "lblReleaseNotes";
-            this.lblReleaseNotes.Size = new System.Drawing.Size(1497, 20);
+            this.lblReleaseNotes.Size = new System.Drawing.Size(991, 25);
             this.lblReleaseNotes.TabIndex = 0;
             this.lblReleaseNotes.Text = "Release notes";
             // 
@@ -252,7 +288,7 @@
             this.lvPlugins.GridLines = true;
             this.lvPlugins.Location = new System.Drawing.Point(0, 0);
             this.lvPlugins.Name = "lvPlugins";
-            this.lvPlugins.Size = new System.Drawing.Size(1497, 375);
+            this.lvPlugins.Size = new System.Drawing.Size(1497, 443);
             this.lvPlugins.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvPlugins.TabIndex = 5;
             this.lvPlugins.UseCompatibleStateImageBehavior = false;
@@ -308,15 +344,15 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.pnlReleaseNotes);
-            this.splitContainer1.Size = new System.Drawing.Size(1497, 492);
-            this.splitContainer1.SplitterDistance = 375;
+            this.splitContainer1.Size = new System.Drawing.Size(1497, 833);
+            this.splitContainer1.SplitterDistance = 443;
             this.splitContainer1.TabIndex = 6;
             // 
             // PluginsChecker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1497, 546);
+            this.ClientSize = new System.Drawing.Size(1497, 887);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tsMain);
@@ -330,6 +366,10 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.pnlReleaseNotes.ResumeLayout(false);
+            this.scProperties.Panel1.ResumeLayout(false);
+            this.scProperties.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.scProperties)).EndInit();
+            this.scProperties.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -351,7 +391,6 @@
         private System.Windows.Forms.ToolStripButton tsbShowThisScreenOnStartup;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.Panel pnlReleaseNotes;
-        private System.Windows.Forms.Panel pnlReleaseNotesDetails;
         private System.Windows.Forms.Label lblReleaseNotes;
         private System.Windows.Forms.ColumnHeader colTitle;
         private System.Windows.Forms.ColumnHeader colVersion;
@@ -368,5 +407,8 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiShowNewPlugins;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowPluginsUpdate;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowInstalledPlugins;
+        private System.Windows.Forms.SplitContainer scProperties;
+        private System.Windows.Forms.Label lblProperties;
+        private System.Windows.Forms.Panel pnlReleaseNotesDetails;
     }
 }

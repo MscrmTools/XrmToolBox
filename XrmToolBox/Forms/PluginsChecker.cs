@@ -52,6 +52,16 @@ namespace XrmToolBox.Forms
             manager = new PackageManager(repository, nugetPluginsFolder);
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Escape)
+            {
+                Close();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         internal List<XtbNuGetPackage> RetrieveNugetPackages()
         {
             var packages = manager.SourceRepository.GetPackages()
@@ -361,6 +371,8 @@ namespace XrmToolBox.Forms
             var item = lvPlugins.SelectedItems[0];
             var releaseNotes = ((XtbNuGetPackage)item.Tag).Package.ReleaseNotes;
 
+            BuildPropertiesPanel(((XtbNuGetPackage)item.Tag).Package);
+
             if (!string.IsNullOrEmpty(releaseNotes))
             {
                 Uri releaseNotesUri;
@@ -391,6 +403,105 @@ namespace XrmToolBox.Forms
                 pnlReleaseNotesDetails.Controls.Add(lbl);
             }
 
+        }
+
+        private void BuildPropertiesPanel(IPackage package)
+        {
+            scProperties.Panel1.Controls.Clear();
+
+            var bitmap = new PictureBox
+            {
+                Size = new Size(48, 48),
+                Dock = DockStyle.Left,
+                SizeMode = PictureBoxSizeMode.StretchImage
+            };
+            if (package.IconUrl != null)
+                bitmap.Load(package.IconUrl.AbsoluteUri);
+            else
+                bitmap.Load("https://raw.githubusercontent.com/wiki/MscrmTools/XrmToolBox/Images/unknown.png");
+           
+            var lblTitle = new Label
+            {
+                Dock = DockStyle.Top,
+                Text = package.Title.Replace(" for XrmToolBox", ""),
+                Font = new Font("Microsoft Sans Serif", 20F),
+                Height = 32
+            };
+
+            var lblDescription = new Label
+            {
+                Dock = DockStyle.Fill,
+                Text = package.Description,
+                Height = 16
+            };
+
+            var pnlTitle = new Panel
+            {
+                Height = 48,
+                Dock = DockStyle.Top
+            };
+
+            pnlTitle.Controls.AddRange(new Control[] { lblDescription, lblTitle, bitmap });
+            
+            scProperties.Panel1.Controls.AddRange(new Control[] {
+                GetPropertiesPanelInformation("Project Url", package.ProjectUrl),
+                GetPropertiesPanelInformation("Downloads count", package.DownloadCount.ToString()),
+                GetPropertiesPanelInformation("Authors", string.Join(", ", package.Authors)),
+                GetPropertiesPanelInformation("Version", package.Version.ToString()),
+                pnlTitle });
+        }
+        private Panel GetPropertiesPanelInformation(string label, object value)
+        {
+            var lblLabel = new Label
+            {
+                Dock = DockStyle.Left,
+                Text = label.ToString(),
+                Width = 100,
+                Height = 20
+            };
+
+            Control rightControl = null;
+            var stringValue = value as string;
+            if(stringValue != null)
+            {
+                rightControl = new Label
+                {
+                    Dock = DockStyle.Fill,
+                    Text = stringValue,
+                };
+            }
+
+            var uriValue = value as Uri;
+            if (uriValue != null)
+            {
+                rightControl = new LinkLabel
+                {
+                    Dock = DockStyle.Fill,
+                    Text = uriValue.AbsoluteUri,
+                };
+                rightControl.Click += (sender, e) => {
+                    Process.Start(((LinkLabel)sender).Text);
+                };
+            }
+
+            if(rightControl == null)
+            {
+                rightControl = new Label
+                {
+                    Dock = DockStyle.Fill,
+                    Text = "N/A",
+                };
+            }
+
+            var pnl = new Panel
+            {
+                Height = 20,
+                Dock = DockStyle.Top
+            };
+
+            pnl.Controls.AddRange(new Control[] { rightControl, lblLabel });
+
+            return pnl;
         }
 
         private void tsmiPluginDisplayOption_Click(object sender, EventArgs e)

@@ -116,15 +116,6 @@ namespace XrmToolBox
             {
                 var pluginControl = (UserControl)plugin.Value.GetControl();
 
-                if (service != null)
-                {
-                    //var clonedService = (OrganizationService)currentConnectionDetail.GetOrganizationService();
-                    //((OrganizationServiceProxy)clonedService.InnerService).SdkClientVersion = currentConnectionDetail.OrganizationVersion;
-
-                    var clonedService = currentConnectionDetail.GetCrmServiceClient().OrganizationServiceProxy;
-                    ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
-                }
-
                 // ReSharper disable once SuspiciousTypeConversion.Global
                 var host = pluginControl as IMessageBusHost;
                 if (host != null)
@@ -142,6 +133,12 @@ namespace XrmToolBox
                 if (statusBarMessager != null)
                 {
                     statusBarMessager.SendMessageToStatusBar += StatusBarMessager_SendMessageToStatusBar;
+                }
+
+                if (service != null)
+                {
+                    var clonedService = currentConnectionDetail.GetCrmServiceClient().OrganizationServiceProxy;
+                    ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
                 }
 
                 ((IXrmToolBoxPluginControl)pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
