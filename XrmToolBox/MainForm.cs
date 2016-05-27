@@ -8,6 +8,7 @@ using McTools.Xrm.Connection.WinForms;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -245,7 +246,19 @@ namespace XrmToolBox
 
                     if (packages.Any(p => p.Action == PackageInstallAction.Update))
                     {
-                        tsbPlugins.Image = pluginsCheckerImageList.Images[1];
+                        var image = pluginsCheckerImageList.Images[1];
+                        var text = packages.Count(p => p.Action == PackageInstallAction.Update).ToString();
+
+                        using (Graphics graphics = Graphics.FromImage(image))
+                        {
+                            using (Font arialFont = new Font("Monaco", 6, FontStyle.Bold))
+                            {
+                                var location = new Point(16 - (text.Length * 7), 7);
+                                graphics.DrawString(text, arialFont, Brushes.Black, location);
+                            }
+                        }
+                        
+                        tsbPlugins.Image = image;
 
                         tsbPlugins.ToolTipText = string.Format("{0} new plugins\r\n{1} plugins updates",
                             packages.Count(p => p.Action == PackageInstallAction.Install),
