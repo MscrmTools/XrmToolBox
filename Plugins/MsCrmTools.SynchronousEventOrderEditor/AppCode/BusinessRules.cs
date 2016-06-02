@@ -1,42 +1,23 @@
 ﻿using Microsoft.Crm.Sdk.Messages;
 using Microsoft.Xrm.Sdk;
 using Microsoft.Xrm.Sdk.Query;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
 {
-    internal class SynchronousWorkflow : ISynchronousEvent
+    internal class BusinessRules : ISynchronousEvent
     {
         private readonly Entity workflow;
 
         private int initialRank;
 
-        public SynchronousWorkflow(Entity workflow)
+        public BusinessRules(Entity workflow)
         {
             this.workflow = workflow;
             initialRank = Rank;
-
-            // Stage
-            Message = "Manual";
-            if (workflow.GetAttributeValue<bool>("triggeroncreate"))
-            {
-                var stageCode = workflow.GetAttributeValue<OptionSetValue>("createstage");
-                Stage = stageCode != null ? stageCode.Value : 40;
-                Message = "Create";
-            }
-            else if (workflow.GetAttributeValue<bool>("triggeronupdate"))
-            {
-                var stageCode = workflow.GetAttributeValue<OptionSetValue>("updatestage");
-                Stage = stageCode != null ? stageCode.Value : 40;
-                Message = "Update";
-            }
-            else if (workflow.GetAttributeValue<bool>("triggerondelete"))
-            {
-                var stageCode = workflow.GetAttributeValue<OptionSetValue>("deletestage");
-                Stage = stageCode != null ? stageCode.Value : 20;
-                Message = "Delete";
-            }
+            Message = "Create/Update";
         }
 
         public string Description
@@ -68,20 +49,22 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
         }
 
         public int Stage { get; private set; }
-        public string Type { get { return "Workflow"; } }
+        public string Type { get { return "Business Rule"; } }
 
-        public static IEnumerable<SynchronousWorkflow> RetrievePluginSteps(IOrganizationService service)
+        public static IEnumerable<BusinessRules> RetrieveBusinessRules(IOrganizationService service)
         {
             var qba = new QueryByAttribute("workflow")
             {
                 Attributes = { "mode", "type", "category" },
-                Values = { 1, 1, 0 },
+                Values = { 1, 1, 2 },
                 ColumnSet = new ColumnSet(true)
             };
 
             var steps = service.RetrieveMultiple(qba);
-
-            return steps.Entities.Select(e => new SynchronousWorkflow(e));
+            var q = from e in steps.Entities
+                    orderby e.LogicalName, e.GetAttributeValue<DateTime>("modifiedon") descending
+                    select new BusinessRules(e);
+            return q;
         }
 
         public void UpdateRank(IOrganizationService service)

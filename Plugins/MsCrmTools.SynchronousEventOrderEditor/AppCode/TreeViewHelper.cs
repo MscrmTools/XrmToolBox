@@ -34,7 +34,7 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
             var stageNode = messageNode.Nodes.Find(sEvent.Stage.ToString(CultureInfo.InvariantCulture), false).ToList().SingleOrDefault();
             if (stageNode == null)
             {
-                var stageName = string.Empty;
+                string stageName;
                 switch (sEvent.Stage)
                 {
                     case 10:
@@ -48,8 +48,10 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
                     case 40:
                         stageName = "PostOperation";
                         break;
+                    default:
+                        stageName = sEvent.Type;
+                        break;
                 }
-
                 stageNode = new TreeNode(stageName)
                 {
                     ImageIndex = 2,

@@ -69,6 +69,10 @@ namespace MsCrmTools.SynchronousEventOrderEditor
                     bw.ReportProgress(0, "Loading Synchronous workflows...");
 
                     events.AddRange(SynchronousWorkflow.RetrievePluginSteps(Service));
+
+                    bw.ReportProgress(0, "Loading Business Rules...");
+
+                    events.AddRange(BusinessRules.RetrieveBusinessRules(Service));
                 },
                 PostWorkCallBack = e =>
                 {
@@ -144,9 +148,10 @@ namespace MsCrmTools.SynchronousEventOrderEditor
             }
 
             var localEvents = (List<ISynchronousEvent>)e.Node.Tag;
-
+            var order = 0;
             foreach (var sEvent in localEvents)
             {
+                if (sEvent.Type == "Business Rule") sEvent.Rank = ++order;
                 dgvSynchronousEvent.Rows.Add(new DataGridViewRow
                 {
                     Cells =
