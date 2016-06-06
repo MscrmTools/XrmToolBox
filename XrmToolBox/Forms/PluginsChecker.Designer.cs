@@ -41,6 +41,7 @@
             this.tsmiShowNewPlugins = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowPluginsUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowInstalledPlugins = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsbProxySettings = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tssProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.tssLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -73,6 +74,7 @@
             // 
             // tsMain
             // 
+            this.tsMain.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.tsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbLoadPlugins,
             this.toolStripSeparator1,
@@ -80,12 +82,13 @@
             this.toolStripSeparator2,
             this.tsbShowThisScreenOnStartup,
             this.toolStripSeparator3,
-            this.tsddbOptions});
+            this.tsddbOptions,
+            this.tsbProxySettings});
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
             this.tsMain.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
             this.tsMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.tsMain.Size = new System.Drawing.Size(1497, 32);
+            this.tsMain.Size = new System.Drawing.Size(1331, 27);
             this.tsMain.TabIndex = 0;
             this.tsMain.Text = "toolStrip1";
             // 
@@ -94,28 +97,28 @@
             this.tsbLoadPlugins.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadPlugins.Image")));
             this.tsbLoadPlugins.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbLoadPlugins.Name = "tsbLoadPlugins";
-            this.tsbLoadPlugins.Size = new System.Drawing.Size(256, 29);
+            this.tsbLoadPlugins.Size = new System.Drawing.Size(214, 24);
             this.tsbLoadPlugins.Text = "Reload plugins from NuGet";
             this.tsbLoadPlugins.Click += new System.EventHandler(this.tsbLoadPlugins_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
             // 
             // tsbInstall
             // 
             this.tsbInstall.Image = ((System.Drawing.Image)(resources.GetObject("tsbInstall.Image")));
             this.tsbInstall.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbInstall.Name = "tsbInstall";
-            this.tsbInstall.Size = new System.Drawing.Size(244, 29);
+            this.tsbInstall.Size = new System.Drawing.Size(207, 24);
             this.tsbInstall.Text = "Install selected package(s)";
             this.tsbInstall.Click += new System.EventHandler(this.tsbInstall_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
             // 
             // tsbShowThisScreenOnStartup
             // 
@@ -124,14 +127,14 @@
             this.tsbShowThisScreenOnStartup.Image = ((System.Drawing.Image)(resources.GetObject("tsbShowThisScreenOnStartup.Image")));
             this.tsbShowThisScreenOnStartup.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbShowThisScreenOnStartup.Name = "tsbShowThisScreenOnStartup";
-            this.tsbShowThisScreenOnStartup.Size = new System.Drawing.Size(335, 29);
+            this.tsbShowThisScreenOnStartup.Size = new System.Drawing.Size(278, 24);
             this.tsbShowThisScreenOnStartup.Text = "Show this screen on XrmToolBox startup";
             this.tsbShowThisScreenOnStartup.Click += new System.EventHandler(this.tsbShowThisScreenOnStartup_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 27);
             // 
             // tsddbOptions
             // 
@@ -144,7 +147,7 @@
             this.tsddbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tsddbOptions.Image")));
             this.tsddbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbOptions.Name = "tsddbOptions";
-            this.tsddbOptions.Size = new System.Drawing.Size(154, 29);
+            this.tsddbOptions.Size = new System.Drawing.Size(126, 24);
             this.tsddbOptions.Text = "Display options";
             // 
             // tsmiShowPluginsNotCompatible
@@ -153,7 +156,7 @@
             this.tsmiShowPluginsNotCompatible.CheckOnClick = true;
             this.tsmiShowPluginsNotCompatible.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tsmiShowPluginsNotCompatible.Name = "tsmiShowPluginsNotCompatible";
-            this.tsmiShowPluginsNotCompatible.Size = new System.Drawing.Size(330, 30);
+            this.tsmiShowPluginsNotCompatible.Size = new System.Drawing.Size(278, 26);
             this.tsmiShowPluginsNotCompatible.Text = "Show plugins not compatible";
             this.tsmiShowPluginsNotCompatible.Click += new System.EventHandler(this.tsmiPluginDisplayOption_Click);
             // 
@@ -163,7 +166,7 @@
             this.tsmiShowNewPlugins.CheckOnClick = true;
             this.tsmiShowNewPlugins.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tsmiShowNewPlugins.Name = "tsmiShowNewPlugins";
-            this.tsmiShowNewPlugins.Size = new System.Drawing.Size(330, 30);
+            this.tsmiShowNewPlugins.Size = new System.Drawing.Size(278, 26);
             this.tsmiShowNewPlugins.Text = "Show new plugins";
             this.tsmiShowNewPlugins.Click += new System.EventHandler(this.tsmiPluginDisplayOption_Click);
             // 
@@ -173,7 +176,7 @@
             this.tsmiShowPluginsUpdate.CheckOnClick = true;
             this.tsmiShowPluginsUpdate.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tsmiShowPluginsUpdate.Name = "tsmiShowPluginsUpdate";
-            this.tsmiShowPluginsUpdate.Size = new System.Drawing.Size(330, 30);
+            this.tsmiShowPluginsUpdate.Size = new System.Drawing.Size(278, 26);
             this.tsmiShowPluginsUpdate.Text = "Show plugins update";
             this.tsmiShowPluginsUpdate.Click += new System.EventHandler(this.tsmiPluginDisplayOption_Click);
             // 
@@ -183,9 +186,18 @@
             this.tsmiShowInstalledPlugins.CheckOnClick = true;
             this.tsmiShowInstalledPlugins.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tsmiShowInstalledPlugins.Name = "tsmiShowInstalledPlugins";
-            this.tsmiShowInstalledPlugins.Size = new System.Drawing.Size(330, 30);
+            this.tsmiShowInstalledPlugins.Size = new System.Drawing.Size(278, 26);
             this.tsmiShowInstalledPlugins.Text = "Show installed plugins";
             this.tsmiShowInstalledPlugins.Click += new System.EventHandler(this.tsmiPluginDisplayOption_Click);
+            // 
+            // tsbProxySettings
+            // 
+            this.tsbProxySettings.Image = ((System.Drawing.Image)(resources.GetObject("tsbProxySettings.Image")));
+            this.tsbProxySettings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbProxySettings.Name = "tsbProxySettings";
+            this.tsbProxySettings.Size = new System.Drawing.Size(124, 24);
+            this.tsbProxySettings.Text = "Proxy settings";
+            this.tsbProxySettings.Click += new System.EventHandler(this.tsbProxySettings_Click);
             // 
             // statusStrip1
             // 
@@ -193,17 +205,17 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tssProgress,
             this.tssLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 865);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 688);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 14, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(1497, 22);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 12, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(1331, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // tssProgress
             // 
             this.tssProgress.Name = "tssProgress";
-            this.tssProgress.Size = new System.Drawing.Size(200, 17);
+            this.tssProgress.Size = new System.Drawing.Size(178, 16);
             this.tssProgress.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.tssProgress.Visible = false;
             // 
@@ -218,8 +230,9 @@
             this.pnlReleaseNotes.Controls.Add(this.scProperties);
             this.pnlReleaseNotes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlReleaseNotes.Location = new System.Drawing.Point(0, 0);
+            this.pnlReleaseNotes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlReleaseNotes.Name = "pnlReleaseNotes";
-            this.pnlReleaseNotes.Size = new System.Drawing.Size(1497, 386);
+            this.pnlReleaseNotes.Size = new System.Drawing.Size(1331, 307);
             this.pnlReleaseNotes.TabIndex = 4;
             // 
             // scProperties
@@ -227,6 +240,7 @@
             this.scProperties.Dock = System.Windows.Forms.DockStyle.Fill;
             this.scProperties.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.scProperties.Location = new System.Drawing.Point(0, 0);
+            this.scProperties.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.scProperties.Name = "scProperties";
             // 
             // scProperties.Panel1
@@ -238,7 +252,7 @@
             // 
             this.scProperties.Panel2.Controls.Add(this.pnlReleaseNotesDetails);
             this.scProperties.Panel2.Controls.Add(this.lblReleaseNotes);
-            this.scProperties.Size = new System.Drawing.Size(1497, 386);
+            this.scProperties.Size = new System.Drawing.Size(1331, 307);
             this.scProperties.SplitterDistance = 502;
             this.scProperties.TabIndex = 2;
             // 
@@ -248,7 +262,7 @@
             this.lblProperties.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblProperties.Location = new System.Drawing.Point(0, 0);
             this.lblProperties.Name = "lblProperties";
-            this.lblProperties.Size = new System.Drawing.Size(502, 25);
+            this.lblProperties.Size = new System.Drawing.Size(502, 20);
             this.lblProperties.TabIndex = 1;
             this.lblProperties.Text = "Plugin properties";
             // 
@@ -257,9 +271,10 @@
             this.pnlReleaseNotesDetails.AutoScroll = true;
             this.pnlReleaseNotesDetails.AutoScrollMinSize = new System.Drawing.Size(0, 1000);
             this.pnlReleaseNotesDetails.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlReleaseNotesDetails.Location = new System.Drawing.Point(0, 25);
+            this.pnlReleaseNotesDetails.Location = new System.Drawing.Point(0, 20);
+            this.pnlReleaseNotesDetails.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlReleaseNotesDetails.Name = "pnlReleaseNotesDetails";
-            this.pnlReleaseNotesDetails.Size = new System.Drawing.Size(991, 361);
+            this.pnlReleaseNotesDetails.Size = new System.Drawing.Size(825, 287);
             this.pnlReleaseNotesDetails.TabIndex = 2;
             // 
             // lblReleaseNotes
@@ -268,7 +283,7 @@
             this.lblReleaseNotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblReleaseNotes.Location = new System.Drawing.Point(0, 0);
             this.lblReleaseNotes.Name = "lblReleaseNotes";
-            this.lblReleaseNotes.Size = new System.Drawing.Size(991, 25);
+            this.lblReleaseNotes.Size = new System.Drawing.Size(825, 20);
             this.lblReleaseNotes.TabIndex = 0;
             this.lblReleaseNotes.Text = "Release notes";
             // 
@@ -287,8 +302,9 @@
             this.lvPlugins.FullRowSelect = true;
             this.lvPlugins.GridLines = true;
             this.lvPlugins.Location = new System.Drawing.Point(0, 0);
+            this.lvPlugins.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lvPlugins.Name = "lvPlugins";
-            this.lvPlugins.Size = new System.Drawing.Size(1497, 443);
+            this.lvPlugins.Size = new System.Drawing.Size(1331, 351);
             this.lvPlugins.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvPlugins.TabIndex = 5;
             this.lvPlugins.UseCompatibleStateImageBehavior = false;
@@ -333,7 +349,8 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 32);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 27);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -344,18 +361,20 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.pnlReleaseNotes);
-            this.splitContainer1.Size = new System.Drawing.Size(1497, 833);
-            this.splitContainer1.SplitterDistance = 443;
+            this.splitContainer1.Size = new System.Drawing.Size(1331, 661);
+            this.splitContainer1.SplitterDistance = 351;
+            this.splitContainer1.SplitterWidth = 3;
             this.splitContainer1.TabIndex = 6;
             // 
             // PluginsChecker
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1497, 887);
+            this.ClientSize = new System.Drawing.Size(1331, 710);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tsMain);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "PluginsChecker";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -410,5 +429,6 @@
         private System.Windows.Forms.SplitContainer scProperties;
         private System.Windows.Forms.Label lblProperties;
         private System.Windows.Forms.Panel pnlReleaseNotesDetails;
+        private System.Windows.Forms.ToolStripButton tsbProxySettings;
     }
 }
