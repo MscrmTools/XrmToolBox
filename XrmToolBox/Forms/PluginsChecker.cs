@@ -1,5 +1,4 @@
-﻿using NuGet;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using NuGet;
 using XrmToolBox.AppCode;
 
 namespace XrmToolBox.Forms
@@ -148,7 +148,7 @@ namespace XrmToolBox.Forms
         private XtbNuGetPackage GetXtbPackage(IPackage package)
         {
             var xtbPackage = new XtbNuGetPackage(package, PackageInstallAction.None);
-           
+
             var files = package.GetFiles();
 
             bool install = false, update = false, compatible = false, otherFilesFound = false;
@@ -376,7 +376,7 @@ namespace XrmToolBox.Forms
             if (!string.IsNullOrEmpty(releaseNotes))
             {
                 Uri releaseNotesUri;
-                if(Uri.TryCreate(releaseNotes, UriKind.Absolute, out releaseNotesUri))
+                if (Uri.TryCreate(releaseNotes, UriKind.Absolute, out releaseNotesUri))
                 {
                     var llbl = new LinkLabel { Text = releaseNotes };
                     llbl.Click += (s, evt) => { Process.Start(((LinkLabel)s).Text); };
@@ -419,7 +419,7 @@ namespace XrmToolBox.Forms
                 bitmap.Load(package.IconUrl.AbsoluteUri);
             else
                 bitmap.Load("https://raw.githubusercontent.com/wiki/MscrmTools/XrmToolBox/Images/unknown.png");
-           
+
             var lblTitle = new Label
             {
                 Dock = DockStyle.Top,
@@ -442,7 +442,7 @@ namespace XrmToolBox.Forms
             };
 
             pnlTitle.Controls.AddRange(new Control[] { lblDescription, lblTitle, bitmap });
-            
+
             scProperties.Panel1.Controls.AddRange(new Control[] {
                 GetPropertiesPanelInformation("Project Url", package.ProjectUrl),
                 GetPropertiesPanelInformation("Downloads count", package.DownloadCount.ToString()),
@@ -462,7 +462,7 @@ namespace XrmToolBox.Forms
 
             Control rightControl = null;
             var stringValue = value as string;
-            if(stringValue != null)
+            if (stringValue != null)
             {
                 rightControl = new Label
                 {
@@ -479,12 +479,13 @@ namespace XrmToolBox.Forms
                     Dock = DockStyle.Fill,
                     Text = uriValue.AbsoluteUri,
                 };
-                rightControl.Click += (sender, e) => {
+                rightControl.Click += (sender, e) =>
+                {
                     Process.Start(((LinkLabel)sender).Text);
                 };
             }
 
-            if(rightControl == null)
+            if (rightControl == null)
             {
                 rightControl = new Label
                 {
@@ -509,7 +510,7 @@ namespace XrmToolBox.Forms
             var options = ((MainForm)Owner).Options;
             ToolStripMenuItem item = (ToolStripMenuItem)sender;
 
-            if(item == tsmiShowInstalledPlugins)
+            if (item == tsmiShowInstalledPlugins)
             {
                 options.PluginsStoreShowInstalled = item.Checked;
             }
@@ -529,6 +530,11 @@ namespace XrmToolBox.Forms
             options.Save();
 
             RefreshPluginsList();
+        }
+
+        private void tsbProxySettings_Click(object sender, EventArgs e)
+        {
+            ProxySettingsHelper.registerSettings();
         }
     }
 
@@ -550,7 +556,7 @@ namespace XrmToolBox.Forms
             var item = new ListViewItem(this.ToString());
             item.Tag = this;
             item.SubItems.Add(Package.Version.ToString());
-            item.SubItems.Add(CurrentVersion?.ToString()); 
+            item.SubItems.Add(CurrentVersion?.ToString());
             item.SubItems.Add(Package.Description);
             item.SubItems.Add(string.Join(", ", Package.Authors));
             var actionItem = item.SubItems.Add("None");
