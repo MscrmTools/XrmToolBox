@@ -121,23 +121,8 @@ namespace MscrmTools.SyncFilterManager.AppCode
                 rule["isdefault"] = false;
                 rule["layoutxml"] = systemView.GetAttributeValue<string>("layoutxml");
 
-                if (templateType == 256 || templateType == 131072)
-                {
-                    // Remove Order nodes if Outlook template
-                    var fetchDoc = new XmlDocument();
-                    fetchDoc.LoadXml(systemView.GetAttributeValue<string>("fetchxml"));
-                    var orderNodes = fetchDoc.SelectNodes("//order");
-                    foreach (XmlNode orderNode in orderNodes)
-                    {
-                        orderNode.ParentNode.RemoveChild(orderNode);
-                    }
-
-                    rule["fetchxml"] = fetchDoc.OuterXml;
-                }
-                else
-                {
-                    rule["fetchxml"] = systemView.GetAttributeValue<string>("fetchxml");
-                }
+                // Remove Order nodes if Outlook template and Offline Template
+                rule["fetchxml"] = RemoveFetchOrderNodes(systemView.GetAttributeValue<string>("fetchxml"));
 
                 rulesIds.Add(service.Create(rule));
             }
@@ -303,23 +288,8 @@ namespace MscrmTools.SyncFilterManager.AppCode
         {
             var ruleToUpdate = new Entity("savedquery") { Id = rule.Id };
 
-            if (rule.GetAttributeValue<int>("querytype") == 256 || rule.GetAttributeValue<int>("querytype") == 131072)
-            {
-                // Remove Order nodes if Outlook template
-                var fetchDoc = new XmlDocument();
-                fetchDoc.LoadXml(systemView.GetAttributeValue<string>("fetchxml"));
-                var orderNodes = fetchDoc.SelectNodes("//order");
-                foreach (XmlNode orderNode in orderNodes)
-                {
-                    orderNode.ParentNode.RemoveChild(orderNode);
-                }
-
-                rule["fetchxml"] = fetchDoc.OuterXml;
-            }
-            else
-            {
-                ruleToUpdate["fetchxml"] = systemView.GetAttributeValue<string>("fetchxml");
-            }
+            // Remove Order nodes if Outlook template and Offline template
+            ruleToUpdate["fetchxml"] = RemoveFetchOrderNodes(systemView.GetAttributeValue<string>("fetchxml"));
 
             service.Update(ruleToUpdate);
 
@@ -330,6 +300,19 @@ namespace MscrmTools.SyncFilterManager.AppCode
 
             var request = new PublishXmlRequest { ParameterXml = String.Format("<importexportxml><entities><entity>{0}</entity></entities></importexportxml>", rule.GetAttributeValue<string>("returnedtypecode")) };
             service.Execute(request);
+        }
+
+        private string RemoveFetchOrderNodes(string fetch)
+        {
+            var fetchDoc = new XmlDocument();
+            fetchDoc.LoadXml(fetch);
+            var orderNodes = fetchDoc.SelectNodes("//order");
+            foreach (XmlNode orderNode in orderNodes)
+            {
+                orderNode.ParentNode.RemoveChild(orderNode);
+            }
+            return fetchDoc.OuterXml;
+
         }
 
         private void RemoveAllRulesForUser(Guid userId)
