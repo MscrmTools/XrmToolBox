@@ -295,6 +295,11 @@ namespace GapConsulting.PowerBIOptionSetAssistant
                 },
                 PostWorkCallBack = evt =>
                 {
+                    if(evt.Error != null)
+                    {
+                        MessageBox.Show(this, "An error ocurred while creating record(s): " + evt.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
                     tsbCreateRecords.Enabled = true;
                     tsbDeleteEntity.Enabled = true;
                     tsbLoadEntities.Enabled = true;

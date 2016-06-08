@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.Messages;
 using Microsoft.Xrm.Sdk.Metadata;
 using Microsoft.Xrm.Sdk.Metadata.Query;
@@ -121,7 +122,7 @@ namespace GapConsulting.PowerBIOptionSetAssistant.AppCode
                     DisplayName = new Label("Power BI Option-Set Xref", lcid),
                     DisplayCollectionName = new Label("Power BI Option-Set Xrefs", lcid),
                     Description = new Label("Created automatically by Power BI Option-Set Xref XrmToolBox plugin", lcid),
-                    OwnershipType = OwnershipTypes.OrganizationOwned,
+                    OwnershipType = OwnershipTypes.OrganizationOwned,                    
                 };
 
                 var pamd = new StringAttributeMetadata
@@ -139,7 +140,8 @@ namespace GapConsulting.PowerBIOptionSetAssistant.AppCode
                     Entity = emd,
                     PrimaryAttribute = pamd,
                     HasActivities = false,
-                    HasNotes = false
+                    HasNotes = false,
+                    HasFeedback = false
                 });
 
                 entityCreated = true;

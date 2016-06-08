@@ -19,8 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Referenced Assemblies", "Re
 		Referenced Assemblies\Microsoft.Xrm.Tooling.CrmConnectControl.dll = Referenced Assemblies\Microsoft.Xrm.Tooling.CrmConnectControl.dll
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DamSim.ViewTransferTool", "Plugins\DamSim.ViewTransferTool\DamSim.ViewTransferTool.csproj", "{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.AttributeBulkUpdater", "Plugins\MsCrmTools.AttributeBulkUpdater\MsCrmTools.AttributeBulkUpdater.csproj", "{693DDB30-8E8E-43E9-AE13-EE2010F46C96}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.AuditCenter", "Plugins\MsCrmTools.AuditCenter\MsCrmTools.AuditCenter.csproj", "{B5C2C54B-804E-403E-80B1-97A1564CAE84}"
@@ -84,16 +82,6 @@ Global
 		{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}.Release|x86.ActiveCfg = Release|Any CPU
-		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Release|Any CPU.Build.0 = Release|Any CPU
-		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91}.Release|x86.ActiveCfg = Release|Any CPU
 		{693DDB30-8E8E-43E9-AE13-EE2010F46C96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{693DDB30-8E8E-43E9-AE13-EE2010F46C96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{693DDB30-8E8E-43E9-AE13-EE2010F46C96}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -325,7 +313,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{09F88D1C-F1E1-484A-BDA9-B76FEB0B6B91} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{693DDB30-8E8E-43E9-AE13-EE2010F46C96} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{B5C2C54B-804E-403E-80B1-97A1564CAE84} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{1DB58FD6-CCF8-458F-9941-312CDFB45EFA} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}

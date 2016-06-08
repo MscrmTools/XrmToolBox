@@ -138,6 +138,9 @@ namespace XrmToolBox
                 if (service != null)
                 {
                     var clonedService = currentConnectionDetail.GetCrmServiceClient().OrganizationServiceProxy;
+
+                    clonedService.SdkClientVersion = currentConnectionDetail.OrganizationVersion.ToString();
+
                     ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
                 }
 
