@@ -6,6 +6,7 @@ namespace XrmToolBox.AppCode
     {
         public string Destination { get; set; }
         public string Source { get; set; }
+        public bool RequireRestart { get; set; }
     }
 
     public class PluginUpdates

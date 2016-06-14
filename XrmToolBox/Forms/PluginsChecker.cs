@@ -13,7 +13,7 @@ using XrmToolBox.AppCode;
 
 namespace XrmToolBox.Forms
 {
-    internal enum PackageInstallAction
+    public enum PackageInstallAction
     {
         None,
         Install,
@@ -62,7 +62,7 @@ namespace XrmToolBox.Forms
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        internal List<XtbNuGetPackage> RetrieveNugetPackages()
+        public List<XtbNuGetPackage> RetrieveNugetPackages()
         {
             var packages = manager.SourceRepository.GetPackages()
                       .Where(p => p.Tags.ToLower().StartsWith("xrmtoolbox")
@@ -170,7 +170,7 @@ namespace XrmToolBox.Forms
                 if (Path.GetDirectoryName(file.EffectivePath).ToLower() == "plugins")
                 {
                     // Only check version of files in the Plugins folder
-                    var existingPluginFile = plugins.FirstOrDefault(p => file.EffectivePath.EndsWith(p.Name));
+                    var existingPluginFile = plugins.FirstOrDefault(p => file.EffectivePath.ToLower().EndsWith(p.Name.ToLower()));
                     if (existingPluginFile == null)
                     {
                         install = true;
@@ -254,19 +254,13 @@ namespace XrmToolBox.Forms
             RefreshPluginsList();
         }
 
-        private void tsbInstall_Click(object sender, EventArgs e)
+        public PluginUpdates PrepareInstallationPackages(List<XtbNuGetPackage> xtbPackages)
         {
-            if (lvPlugins.CheckedItems.Count == 0)
-                return;
-
-            ((MainForm)Owner).EnableNewPluginsWatching(false);
-
             var pus = new PluginUpdates { PreviousProcessId = Process.GetCurrentProcess().Id };
 
-            foreach (ListViewItem item in lvPlugins.CheckedItems.Cast<ListViewItem>().Where(l => l.Tag is XtbNuGetPackage))
+            foreach(var xtbPackage in xtbPackages)
             {
-                var xtbPackage = (XtbNuGetPackage)item.Tag;
-
+                
                 if (xtbPackage.Action == PackageInstallAction.Unavailable)
                 {
                     if (xtbPackage.Package.ProjectUrl != null && !string.IsNullOrEmpty(xtbPackage.Package.ProjectUrl.ToString()))
@@ -298,35 +292,30 @@ namespace XrmToolBox.Forms
                         pus.Plugins.Add(new PluginUpdate
                         {
                             Source = Path.Combine(packageFolder, fi.Path),
-                            Destination = destinationFile
+                            Destination = destinationFile,
+                            RequireRestart = true
                         });
                     }
                     else if (xtbPackage.Action == PackageInstallAction.Install)
                     {
-                        try
+                        pus.Plugins.Add(new PluginUpdate
                         {
-                            // Can install plugin directly
-                            var destinationDirectory = Path.GetDirectoryName(destinationFile);
-                            if (!Directory.Exists(destinationDirectory))
-                            {
-                                Directory.CreateDirectory(destinationDirectory);
-                            }
-                            File.Copy(Path.Combine(packageFolder, fi.Path), destinationFile, true);
-                        }
-                        catch (Exception error)
-                        {
-                            MessageBox.Show(this,
-                                "An error occured while copying files: " + error.Message +
-                                "\r\n\r\nCopy has been aborted", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
+                            Source = Path.Combine(packageFolder, fi.Path),
+                            Destination = destinationFile,
+                            RequireRestart = false
+                        });
                     }
                 }
             }
 
-            if (pus.Plugins.Count > 0)
+            return pus;
+        }
+
+        public void PerformInstallation(PluginUpdates updates, MainForm XrmToolBoxAppForm)
+        {
+            if (updates.Plugins.Any(p => p.RequireRestart))
             {
-                XmlSerializerHelper.SerializeToFile(pus, Path.Combine(applicationFolder, "Update.xml"));
+                XmlSerializerHelper.SerializeToFile(updates, Path.Combine(applicationFolder, "Update.xml"));
 
                 if (DialogResult.Yes == MessageBox.Show(
                     "This application needs to restart to install updated plugins (or new plugins that share some files with already installed plugins). Click Yes to restart this application now",
@@ -337,13 +326,47 @@ namespace XrmToolBox.Forms
             }
             else
             {
+                XrmToolBoxAppForm.EnableNewPluginsWatching(false);
+
+                foreach (var pu in updates.Plugins)
+                {
+                    try
+                    {
+                        // Can install plugin directly
+                        var destinationDirectory = Path.GetDirectoryName(pu.Destination);
+                        if (!Directory.Exists(destinationDirectory))
+                        {
+                            Directory.CreateDirectory(destinationDirectory);
+                        }
+                        File.Copy(pu.Source, pu.Destination, true);
+                    }
+                    catch (Exception error)
+                    {
+                        MessageBox.Show(this,
+                            "An error occured while copying files: " + error.Message +
+                            "\r\n\r\nCopy has been aborted", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+
                 // Refresh plugins list when installation is done
-                ((MainForm)Owner).ReloadPluginsList();
+                XrmToolBoxAppForm.ReloadPluginsList();
                 RefreshPluginsList();
                 MessageBox.Show("Installation done!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
 
-             ((MainForm)Owner).EnableNewPluginsWatching(true);
+                XrmToolBoxAppForm.EnableNewPluginsWatching(true);
+            }
+        }
+
+        private void tsbInstall_Click(object sender, EventArgs e)
+        {
+            if (lvPlugins.CheckedItems.Count == 0)
+                return;
+
+            var packages = lvPlugins.CheckedItems.Cast<ListViewItem>().Where(l => l.Tag is XtbNuGetPackage).Select(l => (XtbNuGetPackage)l.Tag).ToList();
+            var updates = PrepareInstallationPackages(packages);
+
+            PerformInstallation(updates, (MainForm)Owner);
         }
 
         private void tsbLoadPlugins_Click(object sender, EventArgs e)
@@ -538,7 +561,7 @@ namespace XrmToolBox.Forms
         }
     }
 
-    internal class XtbNuGetPackage
+    public class XtbNuGetPackage
     {
         public PackageInstallAction Action;
         public bool RequiresXtbRestart { get; set; }
