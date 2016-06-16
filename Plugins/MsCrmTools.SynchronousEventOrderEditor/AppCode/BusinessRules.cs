@@ -20,27 +20,15 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
             Message = "Create/Update";
         }
 
-        public string Description
-        {
-            get { return workflow.GetAttributeValue<string>("description"); }
-        }
+        public string Description => workflow.GetAttributeValue<string>("description");
 
-        public string EntityLogicalName
-        {
-            get { return workflow.GetAttributeValue<string>("primaryentity"); }
-        }
+        public string EntityLogicalName => workflow.GetAttributeValue<string>("primaryentity");
 
-        public bool HasChanged
-        {
-            get { return initialRank != Rank; }
-        }
+        public bool HasChanged => initialRank != Rank;
 
         public string Message { get; private set; }
 
-        public string Name
-        {
-            get { return workflow.GetAttributeValue<string>("name"); }
-        }
+        public string Name => workflow.GetAttributeValue<string>("name");
 
         public int Rank
         {
@@ -49,7 +37,8 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
         }
 
         public int Stage { get; private set; }
-        public string Type { get { return "Business Rule"; } }
+
+        public string Type => "Business Rule";
 
         public static IEnumerable<BusinessRules> RetrieveBusinessRules(IOrganizationService service)
         {
@@ -62,7 +51,7 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
 
             var steps = service.RetrieveMultiple(qba);
             var q = from e in steps.Entities
-                    orderby e.LogicalName, e.GetAttributeValue<DateTime>("modifiedon") descending
+                    orderby e.GetAttributeValue<string>("primaryentity"), e.GetAttributeValue<DateTime>("modifiedon") descending
                     select new BusinessRules(e);
             return q;
         }
@@ -71,31 +60,7 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
         {
             if (HasChanged)
             {
-                var wf = service.Retrieve("workflow", workflow.Id, new ColumnSet("statecode"));
-                if (wf.GetAttributeValue<OptionSetValue>("statecode").Value != 0)
-                {
-                    service.Execute(new SetStateRequest
-                    {
-                        EntityMoniker = wf.ToEntityReference(),
-                        State = new OptionSetValue(0),
-                        Status = new OptionSetValue(-1)
-                    });
-                }
-
-                workflow.Attributes.Remove("statecode");
-                workflow.Attributes.Remove("statuscode");
-                service.Update(workflow);
-
-                if (wf.GetAttributeValue<OptionSetValue>("statecode").Value != 0)
-                {
-                    service.Execute(new SetStateRequest
-                    {
-                        EntityMoniker = wf.ToEntityReference(),
-                        State = new OptionSetValue(1),
-                        Status = new OptionSetValue(-1)
-                    });
-                }
-                initialRank = workflow.GetAttributeValue<int>("rank");
+                initialRank = WorkflowHelper.UpdateRank(service, workflow);
             }
         }
     }

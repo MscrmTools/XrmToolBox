@@ -88,31 +88,7 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
         {
             if (HasChanged)
             {
-                var wf = service.Retrieve("workflow", workflow.Id, new ColumnSet("statecode"));
-                if (wf.GetAttributeValue<OptionSetValue>("statecode").Value != 0)
-                {
-                    service.Execute(new SetStateRequest
-                    {
-                        EntityMoniker = wf.ToEntityReference(),
-                        State = new OptionSetValue(0),
-                        Status = new OptionSetValue(-1)
-                    });
-                }
-
-                workflow.Attributes.Remove("statecode");
-                workflow.Attributes.Remove("statuscode");
-                service.Update(workflow);
-
-                if (wf.GetAttributeValue<OptionSetValue>("statecode").Value != 0)
-                {
-                    service.Execute(new SetStateRequest
-                    {
-                        EntityMoniker = wf.ToEntityReference(),
-                        State = new OptionSetValue(1),
-                        Status = new OptionSetValue(-1)
-                    });
-                }
-                initialRank = workflow.GetAttributeValue<int>("rank");
+                initialRank = WorkflowHelper.UpdateRank(service, workflow);
             }
         }
     }
