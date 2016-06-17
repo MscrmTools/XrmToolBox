@@ -25,7 +25,8 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
                 Stage = stageCode != null ? stageCode.Value : 40;
                 Message = "Create";
             }
-            else if (workflow.GetAttributeValue<bool>("triggeronupdate"))
+            else if (workflow.GetAttributeValue<bool>("triggeronupdate") || 
+                !string.IsNullOrEmpty(workflow.GetAttributeValue<string>("triggeronupdateattributelist")))
             {
                 var stageCode = workflow.GetAttributeValue<OptionSetValue>("updatestage");
                 Stage = stageCode != null ? stageCode.Value : 40;
