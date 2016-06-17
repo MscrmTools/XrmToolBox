@@ -26,6 +26,7 @@ namespace MsCrmTools.SampleTool
         public void ProcessWhoAmI()
         {
             bool isMultipleCallChecked = cbMultipleCalls.Checked;
+            tsbCancel.Enabled = true;
 
             WorkAsync(new WorkAsyncInfo
             {
@@ -59,6 +60,7 @@ namespace MsCrmTools.SampleTool
                 },
                 PostWorkCallBack = e =>
                 {
+                    tsbCancel.Enabled = false;
                     if (!e.Cancelled)
                     {
                         MessageBox.Show(string.Format("You are {0}", (Guid)e.Result));
@@ -69,16 +71,25 @@ namespace MsCrmTools.SampleTool
                 MessageWidth = 340,
                 MessageHeight = 150
             });
+
         }
 
-        private void BtnCloseClick(object sender, EventArgs e)
+        private void tsbClose_Click(object sender, EventArgs e)
         {
             CloseTool();
         }
 
-        private void BtnWhoAmIClick(object sender, EventArgs e)
+
+        private void tsbWhoAmI_Click(object sender, EventArgs e)
         {
             ExecuteMethod(ProcessWhoAmI);
+        }
+
+        private void tsbCancel_Click(object sender, EventArgs e)
+        {
+            CancelWorker();
+            tsbCancel.Enabled = false;
+            MessageBox.Show("Cancelled");
         }
 
         #endregion Base tool implementation
@@ -129,11 +140,5 @@ namespace MsCrmTools.SampleTool
 
         #endregion Help implementation
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            CancelWorker();
-
-            MessageBox.Show("Cancelled");
-        }
     }
 }
