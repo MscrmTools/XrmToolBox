@@ -4,26 +4,58 @@ var XRMTOOLBOX_NUGET_API_QUERY = 'https://api-v2v3search-0.nuget.org/query?q=tag
 var plugins = new Array();
 var currentSortingProperty = "title";
 var sortOrder = 1;
+var totalCount = 0;
+var totalHits;
+NugetGetDetails = function () {
+	var url = XRMTOOLBOX_NUGET_API_QUERY + (totalCount === 0 ? "" : "&skip=" + totalCount);
+	getData(url);
+};
 
-NugetGetDetails = function (successCallback, errorCallback) {
-    $.ajax({
-        url: XRMTOOLBOX_NUGET_API_QUERY,
+function getData(url){
+	 $.ajax({
+        url: url,
         crossDomain: true,
         dataType: 'jsonp',
         success: function (data) {
-            if (data && data.data && data.data.length > 0) {
-				successCallback(data.data);
+			totalCount += data.data.length;
+			totalHits = data.totalHits;
+			
+			success(data.data)
+			
+			if(totalCount < totalHits){
+				NugetGetDetails();
+			}
+			else{
+				plugins.sort(dynamicSort(currentSortingProperty,sortOrder));
+				displayPlugins();
 			}
         },
-        error: function (xhr, options, error) {
-            console.dir(xhr);
-            console.log("XHR: " + xhr.toString());
-            console.log("OPT: " + options);
-            console.log("ERR: " + error);
-            errorCallback(xhr, options, error);
-        }
+        error: error
     });
-};
+}
+
+function success(results){
+	for(var i=0; i< results.length; i++){
+		var nugetPackage = results[i];
+		if(nugetPackage.id === "XrmToolBoxPackage"){
+			continue;
+		}
+		
+		if(nugetPackage.title.endsWith(" for XrmToolBox")){
+			nugetPackage.title = nugetPackage.title.slice(0, -15);
+		}
+		
+		plugins.push(nugetPackage);
+	}
+}
+
+function error(xhr, options, error){
+	console.dir(xhr);
+	console.log("XHR: " + xhr.toString());
+	console.log("OPT: " + options);
+	console.log("ERR: " + error);
+	errorCallback(xhr, options, error);
+}
 
 function dynamicSort(property, sortOrder) {
     if(property[0] === "-") {
@@ -75,26 +107,5 @@ $(document).ready(function() {
 		})
 		.css("cursor","pointer");
 
-		NugetGetDetails(
-		function(results){
-			for(var i=0; i< results.length; i++){
-				var nugetPackage = results[i];
-				if(nugetPackage.id === "XrmToolBoxPackage"){
-					continue;
-				}
-				
-				if(nugetPackage.title.endsWith(" for XrmToolBox")){
-					nugetPackage.title = nugetPackage.title.slice(0, -15);
-				}
-				
-				plugins.push(nugetPackage);
-			}
-			
-			plugins.sort(dynamicSort(currentSortingProperty,sortOrder));
-			displayPlugins();
-		},
-		function(error){
-			alert("Erreur");
-		});
-	
+		NugetGetDetails();	
 });
