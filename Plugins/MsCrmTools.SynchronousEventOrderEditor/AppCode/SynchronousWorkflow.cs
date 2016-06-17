@@ -18,7 +18,6 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
             initialRank = Rank;
 
             // Stage
-            Message = "Manual";
             if (workflow.GetAttributeValue<bool>("triggeroncreate"))
             {
                 var stageCode = workflow.GetAttributeValue<OptionSetValue>("createstage");
@@ -71,18 +70,33 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
         public int Stage { get; private set; }
         public string Type { get { return "Workflow"; } }
 
-        public static IEnumerable<SynchronousWorkflow> RetrievePluginSteps(IOrganizationService service)
+        public static IEnumerable<SynchronousWorkflow> RetrieveTriggeredWorkflows(IOrganizationService service)
         {
-            var qba = new QueryByAttribute("workflow")
-            {
-                Attributes = { "mode", "type", "category" },
-                Values = { 1, 1, 0 },
-                ColumnSet = new ColumnSet(true)
-            };
+            var workflows = service.RetrieveMultiple(new FetchExpression(@"
+            <fetch>
+                <entity name='workflow' >
+                <attribute name='triggeroncreate' />
+                <attribute name='createdon' />
+                <attribute name='primaryentity' />
+                <attribute name='triggerondelete' />
+                <attribute name='triggeronupdateattributelist' />
+                <attribute name='processorder' />
+                <attribute name='modifiedon' />
+                <attribute name='name' />
+                <filter>
+                    <condition attribute='mode' operator='eq' value='1' />
+                    <condition attribute='type' operator='eq' value='1' />
+                    <condition attribute='category' operator='eq' value='0' />
+                    <filter type='or' >
+                    <condition attribute='triggeroncreate' operator='eq' value='1' />
+                    <condition attribute='triggerondelete' operator='eq' value='1' />
+                    <condition attribute='triggeronupdateattributelist' operator='not-null' />
+                    </filter>
+                </filter>
+                </entity>
+            </fetch>"));
 
-            var steps = service.RetrieveMultiple(qba);
-
-            return steps.Entities.Select(e => new SynchronousWorkflow(e));
+            return workflows.Entities.Select(e => new SynchronousWorkflow(e));
         }
 
         public void UpdateRank(IOrganizationService service)

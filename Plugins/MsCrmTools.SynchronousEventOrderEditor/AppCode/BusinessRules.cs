@@ -18,6 +18,7 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
             this.workflow = workflow;
             initialRank = Rank;
             Message = "Create/Update";
+            Stage = 40;
         }
 
         public string Description => workflow.GetAttributeValue<string>("description");
@@ -42,16 +43,26 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
 
         public static IEnumerable<BusinessRules> RetrieveBusinessRules(IOrganizationService service)
         {
-            var qba = new QueryByAttribute("workflow")
-            {
-                Attributes = { "mode", "type", "category" },
-                Values = { 1, 1, 2 },
-                ColumnSet = new ColumnSet(true)
-            };
+            var businessRules = service.RetrieveMultiple(new FetchExpression(@"
+            <fetch>
+                <entity name='workflow' >
+                <attribute name='triggeroncreate' />
+                <attribute name='createdon' />
+                <attribute name='primaryentity' />
+                <attribute name='triggerondelete' />
+                <attribute name='triggeronupdateattributelist' />
+                <attribute name='processorder' />
+                <attribute name='modifiedon' />
+                <attribute name='name' />
+                <filter>
+                    <condition attribute='type' operator='eq' value='1' />
+                    <condition attribute='category' operator='eq' value='2' />
+                </filter>
+                </entity>
+            </fetch>"));
 
-            var steps = service.RetrieveMultiple(qba);
-            var q = from e in steps.Entities
-                    orderby e.GetAttributeValue<string>("primaryentity"), e.GetAttributeValue<DateTime>("modifiedon") descending
+            var q = from e in businessRules.Entities
+                    orderby e.GetAttributeValue<string>("primaryentity"), e.GetAttributeValue<DateTime>("modifiedon")
                     select new BusinessRules(e);
             return q;
         }

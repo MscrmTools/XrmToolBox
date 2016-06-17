@@ -68,7 +68,7 @@ namespace MsCrmTools.SynchronousEventOrderEditor
 
                     bw.ReportProgress(0, "Loading Synchronous workflows...");
 
-                    events.AddRange(SynchronousWorkflow.RetrievePluginSteps(Service));
+                    events.AddRange(SynchronousWorkflow.RetrieveTriggeredWorkflows(Service));
 
                     bw.ReportProgress(0, "Loading Business Rules...");
 
