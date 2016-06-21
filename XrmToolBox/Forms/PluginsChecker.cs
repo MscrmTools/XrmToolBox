@@ -38,8 +38,9 @@ namespace XrmToolBox.Forms
             InitializeComponent();
 
             // Initializing folders variables
-            applicationDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-             "XrmToolBox");
+            applicationDataFolder =
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                    "XrmToolBox");
             nugetPluginsFolder = Path.Combine(applicationDataFolder, "Plugins");
             applicationFolder = new FileInfo(Assembly.GetExecutingAssembly().FullName).DirectoryName;
             applicationPluginsFolder = Path.Combine(applicationFolder, "Plugins");
@@ -50,6 +51,9 @@ namespace XrmToolBox.Forms
             // Repository initialization
             var repository = PackageRepositoryFactory.Default.CreateRepository("https://packages.nuget.org/api/v2");
             manager = new PackageManager(repository, nugetPluginsFolder);
+
+            // Display cache folder size
+            CalculateCacheFolderSize();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -143,6 +147,17 @@ namespace XrmToolBox.Forms
                 lvPlugins.Items.AddRange(((List<ListViewItem>)e.Result).ToArray());
             };
             bw.RunWorkerAsync();
+        }
+
+        private void CalculateCacheFolderSize()
+        {
+            if (Directory.Exists(applicationDataFolder))
+            {
+                var size = GetDirectorySize(applicationDataFolder);
+                tsbCleanCacheFolder.ToolTipText = string.Format(
+                        "Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {0}MB",
+                        size / 1024 / 1024);
+            }
         }
 
         private XtbNuGetPackage GetXtbPackage(IPackage package)
@@ -352,6 +367,7 @@ namespace XrmToolBox.Forms
                 // Refresh plugins list when installation is done
                 XrmToolBoxAppForm.ReloadPluginsList();
                 RefreshPluginsList();
+                CalculateCacheFolderSize();
                 MessageBox.Show("Installation done!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 XrmToolBoxAppForm.EnableNewPluginsWatching(true);
@@ -558,6 +574,46 @@ namespace XrmToolBox.Forms
         private void tsbProxySettings_Click(object sender, EventArgs e)
         {
             ProxySettingsHelper.registerSettings();
+        }
+
+        private void tsbCleanCacheFolder_Click(object sender, EventArgs e)
+        {
+            if (DialogResult.No ==
+                MessageBox.Show(this, "Are you sure you want to delete XrmToolBox Plugins Store cache?", "Question",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            {
+                return;
+            }
+
+            if (Directory.Exists(applicationDataFolder))
+            {
+                foreach (var item in new DirectoryInfo(applicationDataFolder).GetFileSystemInfos())
+                {
+                    if ((item.Attributes & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        Directory.Delete(item.FullName, true);
+                    }
+                    else
+                    {
+                        File.Delete(item.FullName);
+                    }
+                }
+
+                CalculateCacheFolderSize();
+                MessageBox.Show(this, "Cache folder has been cleaned");
+            }
+        }
+
+        private long GetDirectorySize(string path)
+        {
+            string[] files = Directory.GetFiles(path);
+            string[] subdirectories = Directory.GetDirectories(path);
+
+            long size = files.Sum(x => new FileInfo(x).Length);
+            foreach (string s in subdirectories)
+                size += GetDirectorySize(s);
+
+            return size;
         }
     }
 
