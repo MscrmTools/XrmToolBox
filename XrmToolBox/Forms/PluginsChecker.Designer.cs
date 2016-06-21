@@ -34,6 +34,9 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbInstall = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tslSearch = new System.Windows.Forms.ToolStripLabel();
+            this.tstSearch = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbShowThisScreenOnStartup = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsddbOptions = new System.Windows.Forms.ToolStripDropDownButton();
@@ -80,6 +83,9 @@
             this.toolStripSeparator1,
             this.tsbInstall,
             this.toolStripSeparator2,
+            this.tslSearch,
+            this.tstSearch,
+            this.toolStripSeparator4,
             this.tsbShowThisScreenOnStartup,
             this.toolStripSeparator3,
             this.tsddbOptions,
@@ -98,8 +104,8 @@
             this.tsbLoadPlugins.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadPlugins.Image")));
             this.tsbLoadPlugins.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbLoadPlugins.Name = "tsbLoadPlugins";
-            this.tsbLoadPlugins.Size = new System.Drawing.Size(252, 29);
-            this.tsbLoadPlugins.Text = "Reload plugins from NuGet";
+            this.tsbLoadPlugins.Size = new System.Drawing.Size(98, 29);
+            this.tsbLoadPlugins.Text = "Refresh";
             this.tsbLoadPlugins.Click += new System.EventHandler(this.tsbLoadPlugins_Click);
             // 
             // toolStripSeparator1
@@ -112,14 +118,35 @@
             this.tsbInstall.Image = ((System.Drawing.Image)(resources.GetObject("tsbInstall.Image")));
             this.tsbInstall.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbInstall.Name = "tsbInstall";
-            this.tsbInstall.Size = new System.Drawing.Size(240, 29);
-            this.tsbInstall.Text = "Install selected package(s)";
+            this.tsbInstall.Size = new System.Drawing.Size(86, 29);
+            this.tsbInstall.Text = "Install";
             this.tsbInstall.Click += new System.EventHandler(this.tsbInstall_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 32);
+            // 
+            // tslSearch
+            // 
+            this.tslSearch.Name = "tslSearch";
+            this.tslSearch.Size = new System.Drawing.Size(62, 29);
+            this.tslSearch.Text = "search";
+            // 
+            // tstSearch
+            // 
+            this.tstSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.tstSearch.ForeColor = System.Drawing.SystemColors.InactiveCaption;
+            this.tstSearch.Name = "tstSearch";
+            this.tstSearch.Size = new System.Drawing.Size(250, 32);
+            this.tstSearch.Text = "Search by Title or Authors";
+            this.tstSearch.Enter += new System.EventHandler(this.tstSearch_Enter);
+            this.tstSearch.TextChanged += new System.EventHandler(this.tstSearch_TextChanged);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 32);
             // 
             // tsbShowThisScreenOnStartup
             // 
@@ -128,8 +155,8 @@
             this.tsbShowThisScreenOnStartup.Image = ((System.Drawing.Image)(resources.GetObject("tsbShowThisScreenOnStartup.Image")));
             this.tsbShowThisScreenOnStartup.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbShowThisScreenOnStartup.Name = "tsbShowThisScreenOnStartup";
-            this.tsbShowThisScreenOnStartup.Size = new System.Drawing.Size(335, 29);
-            this.tsbShowThisScreenOnStartup.Text = "Show this screen on XrmToolBox startup";
+            this.tsbShowThisScreenOnStartup.Size = new System.Drawing.Size(247, 29);
+            this.tsbShowThisScreenOnStartup.Text = "Show on XrmToolBox startup";
             this.tsbShowThisScreenOnStartup.Click += new System.EventHandler(this.tsbShowThisScreenOnStartup_Click);
             // 
             // toolStripSeparator3
@@ -197,7 +224,7 @@
             this.tsbProxySettings.Image = ((System.Drawing.Image)(resources.GetObject("tsbProxySettings.Image")));
             this.tsbProxySettings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbProxySettings.Name = "tsbProxySettings";
-            this.tsbProxySettings.Size = new System.Drawing.Size(24, 29);
+            this.tsbProxySettings.Size = new System.Drawing.Size(28, 29);
             this.tsbProxySettings.Text = "Proxy settings";
             this.tsbProxySettings.Click += new System.EventHandler(this.tsbProxySettings_Click);
             // 
@@ -207,7 +234,7 @@
             this.tsbCleanCacheFolder.Image = ((System.Drawing.Image)(resources.GetObject("tsbCleanCacheFolder.Image")));
             this.tsbCleanCacheFolder.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCleanCacheFolder.Name = "tsbCleanCacheFolder";
-            this.tsbCleanCacheFolder.Size = new System.Drawing.Size(24, 29);
+            this.tsbCleanCacheFolder.Size = new System.Drawing.Size(28, 29);
             this.tsbCleanCacheFolder.Text = "Clean cache folder";
             this.tsbCleanCacheFolder.Click += new System.EventHandler(this.tsbCleanCacheFolder_Click);
             // 
@@ -442,5 +469,8 @@
         private System.Windows.Forms.Panel pnlReleaseNotesDetails;
         private System.Windows.Forms.ToolStripButton tsbProxySettings;
         private System.Windows.Forms.ToolStripButton tsbCleanCacheFolder;
+        private System.Windows.Forms.ToolStripLabel tslSearch;
+        private System.Windows.Forms.ToolStripTextBox tstSearch;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
     }
 }
