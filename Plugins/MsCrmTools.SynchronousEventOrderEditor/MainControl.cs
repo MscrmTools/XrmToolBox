@@ -68,7 +68,11 @@ namespace MsCrmTools.SynchronousEventOrderEditor
 
                     bw.ReportProgress(0, "Loading Synchronous workflows...");
 
-                    events.AddRange(SynchronousWorkflow.RetrievePluginSteps(Service));
+                    events.AddRange(SynchronousWorkflow.RetrieveTriggeredWorkflows(Service));
+
+                    bw.ReportProgress(0, "Loading Business Rules...");
+
+                    events.AddRange(BusinessRules.RetrieveBusinessRules(Service));
                 },
                 PostWorkCallBack = e =>
                 {
@@ -105,18 +109,19 @@ namespace MsCrmTools.SynchronousEventOrderEditor
         {
             var updatedEvents = events.Where(ev => ev.HasChanged);
 
-            if (updatedEvents.Any(ev => ev.Type == "Workflow") && DialogResult.No ==
-                MessageBox.Show(ParentForm, "Workflows will be deactivated, updated, then activated back. Are you sure you want to continue?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            if (updatedEvents.Any(ev => ev.Type == "Workflow" || ev.Type == "Business Rule") && DialogResult.No ==
+                MessageBox.Show(ParentForm, $"Workflows/Business Rules will be deactivated, updated, then activated back. Are you sure you want to continue?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
             {
                 return;
             }
+
 
             WorkAsync(new WorkAsyncInfo
             {
                 Message = "Updating...",
                 Work = (bw, evt) =>
                 {
-                    foreach (var sEvent in events.Where(ev => ev.HasChanged))
+                    foreach (var sEvent in events.Where(ev => ev.HasChanged).OrderBy(ev=>ev.Rank))
                     {
                         bw.ReportProgress(0, string.Format("Updating {0} {1}", sEvent.Type, sEvent.Name));
                         sEvent.UpdateRank(Service);
@@ -144,9 +149,10 @@ namespace MsCrmTools.SynchronousEventOrderEditor
             }
 
             var localEvents = (List<ISynchronousEvent>)e.Node.Tag;
-
+            var order = 0;
             foreach (var sEvent in localEvents)
             {
+                if (sEvent.Type == "Business Rule") sEvent.Rank = ++order;
                 dgvSynchronousEvent.Rows.Add(new DataGridViewRow
                 {
                     Cells =

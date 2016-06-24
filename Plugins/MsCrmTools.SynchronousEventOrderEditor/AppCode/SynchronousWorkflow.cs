@@ -24,7 +24,8 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
                 Stage = stageCode != null ? stageCode.Value : 40;
                 Message = "Create";
             }
-            else if (workflow.GetAttributeValue<bool>("triggeronupdate"))
+            else if (workflow.GetAttributeValue<bool>("triggeronupdate") || 
+                !string.IsNullOrEmpty(workflow.GetAttributeValue<string>("triggeronupdateattributelist")))
             {
                 var stageCode = workflow.GetAttributeValue<OptionSetValue>("updatestage");
                 Stage = stageCode != null ? stageCode.Value : 40;
@@ -35,10 +36,6 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
                 var stageCode = workflow.GetAttributeValue<OptionSetValue>("deletestage");
                 Stage = stageCode != null ? stageCode.Value : 20;
                 Message = "Delete";
-            }
-            else
-            {
-                // throw new Exception("Unexpected stage data");
             }
         }
 
@@ -73,49 +70,40 @@ namespace MsCrmTools.SynchronousEventOrderEditor.AppCode
         public int Stage { get; private set; }
         public string Type { get { return "Workflow"; } }
 
-        public static IEnumerable<SynchronousWorkflow> RetrievePluginSteps(IOrganizationService service)
+        public static IEnumerable<SynchronousWorkflow> RetrieveTriggeredWorkflows(IOrganizationService service)
         {
-            var qba = new QueryByAttribute("workflow")
-            {
-                Attributes = { "mode", "type", "category" },
-                Values = { 1, 1, 0 },
-                ColumnSet = new ColumnSet(true)
-            };
+            var workflows = service.RetrieveMultiple(new FetchExpression(@"
+            <fetch>
+                <entity name='workflow' >
+                <attribute name='triggeroncreate' />
+                <attribute name='createdon' />
+                <attribute name='primaryentity' />
+                <attribute name='triggerondelete' />
+                <attribute name='triggeronupdateattributelist' />
+                <attribute name='processorder' />
+                <attribute name='modifiedon' />
+                <attribute name='name' />
+                <filter>
+                    <condition attribute='mode' operator='eq' value='1' />
+                    <condition attribute='type' operator='eq' value='1' />
+                    <condition attribute='category' operator='eq' value='0' />
+                    <filter type='or' >
+                    <condition attribute='triggeroncreate' operator='eq' value='1' />
+                    <condition attribute='triggerondelete' operator='eq' value='1' />
+                    <condition attribute='triggeronupdateattributelist' operator='not-null' />
+                    </filter>
+                </filter>
+                </entity>
+            </fetch>"));
 
-            var steps = service.RetrieveMultiple(qba);
-
-            return steps.Entities.Select(e => new SynchronousWorkflow(e));
+            return workflows.Entities.Select(e => new SynchronousWorkflow(e));
         }
 
         public void UpdateRank(IOrganizationService service)
         {
             if (HasChanged)
             {
-                var wf = service.Retrieve("workflow", workflow.Id, new ColumnSet("statecode"));
-                if (wf.GetAttributeValue<OptionSetValue>("statecode").Value != 0)
-                {
-                    service.Execute(new SetStateRequest
-                    {
-                        EntityMoniker = wf.ToEntityReference(),
-                        State = new OptionSetValue(0),
-                        Status = new OptionSetValue(-1)
-                    });
-                }
-
-                workflow.Attributes.Remove("statecode");
-                workflow.Attributes.Remove("statuscode");
-                service.Update(workflow);
-
-                if (wf.GetAttributeValue<OptionSetValue>("statecode").Value != 0)
-                {
-                    service.Execute(new SetStateRequest
-                    {
-                        EntityMoniker = wf.ToEntityReference(),
-                        State = new OptionSetValue(1),
-                        Status = new OptionSetValue(-1)
-                    });
-                }
-                initialRank = workflow.GetAttributeValue<int>("rank");
+                initialRank = WorkflowHelper.UpdateRank(service, workflow);
             }
         }
     }

@@ -121,10 +121,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppCode\BusinessRules.cs" />
     <Compile Include="AppCode\ISynchronousEvent.cs" />
     <Compile Include="AppCode\PluginStep.cs" />
     <Compile Include="AppCode\SynchronousWorkflow.cs" />
     <Compile Include="AppCode\TreeViewHelper.cs" />
+    <Compile Include="AppCode\WorkflowHelper.cs" />
     <Compile Include="MainControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
