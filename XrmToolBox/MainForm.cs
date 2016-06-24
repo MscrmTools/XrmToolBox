@@ -251,9 +251,9 @@ namespace XrmToolBox
 
                         using (Graphics graphics = Graphics.FromImage(image))
                         {
-                            using (Font arialFont = new Font("Monaco", 6, FontStyle.Bold))
+                            using (Font arialFont = new Font("Courrier MS", 8, FontStyle.Bold))
                             {
-                                var location = new Point(16 - (text.Length * 7), 7);
+                                var location = new Point(16 - (text.Length * 9), 5);
                                 graphics.DrawString(text, arialFont, Brushes.Black, location);
                             }
                         }
