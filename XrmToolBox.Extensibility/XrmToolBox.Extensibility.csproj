@@ -128,6 +128,7 @@
     <Compile Include="ExternalMethodCallerInfo.cs" />
     <Compile Include="InformationPanel.cs" />
     <Compile Include="Interfaces\ICodePlexPlugin.cs" />
+    <Compile Include="Interfaces\IEarlyBoundProxy.cs" />
     <Compile Include="Interfaces\IGitHubPlugin.cs" />
     <Compile Include="Interfaces\IHelpPlugin.cs" />
     <Compile Include="Interfaces\IMessageBusHost.cs" />
