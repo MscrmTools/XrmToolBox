@@ -36,7 +36,7 @@ namespace XrmToolBox
         private List<PluginControlStatus> pluginControlStatuses;
         private PluginManagerExtended pManager;
         private IOrganizationService service;
-
+        private Point scrollPosition;
         protected internal Options Options { get { return currentOptions; } }
 
         #endregion Variables
@@ -458,7 +458,13 @@ namespace XrmToolBox
 
         private void MainForm_OnCloseTool(object sender, EventArgs e)
         {
+            //Issue 443: Restore scroll position after tool has been closed, if scroll bar has moved. Ref: https://support.microsoft.com/en-us/kb/829417
+            scrollPosition = HomePageTab.AutoScrollPosition;
             RequestCloseTab((TabPage)((UserControl)sender).Parent, new PluginCloseInfo(ToolBoxCloseReason.PluginRequest));
+            if (scrollPosition.Y != 0)
+            {
+                HomePageTab.AutoScrollPosition = new Point(Math.Abs(HomePageTab.AutoScrollPosition.X), Math.Abs(scrollPosition.Y));
+            }
         }
 
         private void MainForm_OnRequestConnection(object sender, EventArgs e)
