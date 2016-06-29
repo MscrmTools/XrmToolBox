@@ -135,14 +135,12 @@ namespace XrmToolBox
                     statusBarMessager.SendMessageToStatusBar += StatusBarMessager_SendMessageToStatusBar;
                 }
 
-                
-
                 if (service != null)
                 {
                     var clonedService = currentConnectionDetail.GetCrmServiceClient().OrganizationServiceProxy;
 
                     clonedService.SdkClientVersion = currentConnectionDetail.OrganizationVersion.ToString();
-
+                    
                     var earlyBoundProxiedControl = pluginControl as IEarlyBoundProxy;
                     if (earlyBoundProxiedControl != null)
                     {
