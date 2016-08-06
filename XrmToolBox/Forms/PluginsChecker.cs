@@ -714,8 +714,11 @@ namespace XrmToolBox.Forms
                 lvic.Add(xtbPackage.GetPluginsStoreItem());
             }
 
-            lvPlugins.Items.Clear();
-            lvPlugins.Items.AddRange(lvic.ToArray());
+            Invoke(new Action(() =>
+            {
+                lvPlugins.Items.Clear();
+                lvPlugins.Items.AddRange(lvic.ToArray());
+            }));
         }
     }
 
