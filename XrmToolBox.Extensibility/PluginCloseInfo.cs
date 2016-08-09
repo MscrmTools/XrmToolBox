@@ -20,31 +20,29 @@ namespace XrmToolBox.Extensibility
         {
             FormReason = CloseReason.None;
             ToolBoxReason = ToolBoxCloseReason.None;
+            Silent = false;
             Cancel = false;
         }
 
-        public PluginCloseInfo(CloseReason reason)
+        public PluginCloseInfo(CloseReason reason) : this()
         {
             if (reason == CloseReason.None)
             {
                 throw new ArgumentException("None is not a valid CloseReason");
             }
             FormReason = reason;
-            ToolBoxReason = ToolBoxCloseReason.None;
-            Cancel = false;
         }
 
-        public PluginCloseInfo(ToolBoxCloseReason reason)
+        public PluginCloseInfo(ToolBoxCloseReason reason) : this()
         {
             if (reason == ToolBoxCloseReason.None)
             {
                 throw new ArgumentException("None is not a valid ToolBoxCloseReason");
             }
-            FormReason = CloseReason.None;
             ToolBoxReason = reason;
-            Cancel = false;
         }
 
+        public bool Silent { get; set; }
         public bool Cancel { get; set; }
         public CloseReason FormReason { get; set; }
         public ToolBoxCloseReason ToolBoxReason { get; set; }
