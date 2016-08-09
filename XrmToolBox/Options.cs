@@ -76,6 +76,7 @@ namespace XrmToolBox
 
         public bool? AllowLogUsage { get; set; }
         public bool CheckUpdateOnStartup { get; set; }
+        public bool CloseEachPluginSilently { get; set; }
         public bool CloseOpenedPluginsSilently { get; set; }
         public bool DisplayLargeIcons { get; set; }
         public bool DisplayMostUsedFirst { get; set; }
