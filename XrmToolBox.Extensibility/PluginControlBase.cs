@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Reflection;
 using System.Windows.Forms;
+using Microsoft.Xrm.Sdk.Client;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace XrmToolBox.Extensibility
@@ -19,9 +20,10 @@ namespace XrmToolBox.Extensibility
     /// Fully Implements IMsCrmToolsPluginUserControl
     /// Defines an Event for when the Connection is Updated, useful if needing to know when to refresh a connection specific cache
     /// Fully Implements the IWorkerHost which provides a much nicer api for requesting a connection then calling a method
+    /// Allows for Specifying EarlyBound Proxy Types
     /// </summary>
     [PartNotDiscoverable]
-    public class PluginControlBase : UserControl, IXrmToolBoxPluginControl, IWorkerHost
+    public class PluginControlBase : UserControl, IXrmToolBoxPluginControl, IWorkerHost, IEarlyBoundProxy
     {
         public ConnectionDetail ConnectionDetail { get; set; }
 
@@ -338,5 +340,26 @@ namespace XrmToolBox.Extensibility
         }
 
         #endregion Connection Updated
+
+        #region EarlyBoundProxy
+
+        public Assembly GetEarlyBoundProxyAssembly() { return EarlyBoundTypeAssembly; }
+        protected Assembly EarlyBoundTypeAssembly { get; set; }
+        /// <summary>
+        /// Sets the type of the early bound assembly to be the assembly of the Context.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        protected void SetEarlyBoundAssemblyToContextAssembly<T>() where T : OrganizationServiceContext
+        {
+            var contextAssembly = typeof(T).Assembly;
+            if (contextAssembly == typeof(OrganizationServiceContext).Assembly)
+            {
+                throw new ArgumentException("The type of T inherit from OrganizationServiceContext");
+            }
+            EarlyBoundTypeAssembly = contextAssembly;
+        }
+
+
+        #endregion EarlyBoundProxy
     }
 }
