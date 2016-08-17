@@ -58,6 +58,7 @@ namespace XrmToolBox.Forms
             this.pnlReleaseNotesDetails = new System.Windows.Forms.Panel();
             this.lblReleaseNotes = new System.Windows.Forms.Label();
             this.lvPlugins = new System.Windows.Forms.ListView();
+            this.colCheckBox = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colTitle = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colCurrent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -333,6 +334,7 @@ namespace XrmToolBox.Forms
             // 
             this.lvPlugins.CheckBoxes = true;
             this.lvPlugins.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colCheckBox,
             this.colTitle,
             this.colVersion,
             this.colCurrent,
@@ -346,6 +348,7 @@ namespace XrmToolBox.Forms
             this.lvPlugins.Location = new System.Drawing.Point(0, 0);
             this.lvPlugins.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lvPlugins.Name = "lvPlugins";
+            this.lvPlugins.OwnerDraw = true;
             this.lvPlugins.Size = new System.Drawing.Size(1497, 442);
             this.lvPlugins.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvPlugins.TabIndex = 5;
@@ -354,7 +357,14 @@ namespace XrmToolBox.Forms
             this.lvPlugins.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvPlugins_ColumnClick);
             this.lvPlugins.SelectedIndexChanged += new System.EventHandler(this.lvPlugins_SelectedIndexChanged);
             this.lvPlugins.ItemChecked += new ItemCheckedEventHandler(this.lvPlugins_ItemChecked);
+            this.lvPlugins.DrawColumnHeader += lvPlugins_DrawColumnHeader;
+            this.lvPlugins.DrawItem += lvPlugins_DrawItem;
+            this.lvPlugins.DrawSubItem += lvPlugins_DrawSubItem;
             // 
+            // colCheckBox
+            // 
+            this.colCheckBox.Text = "";
+            this.colCheckBox.Width = 26; // 
             // colTitle
             // 
             this.colTitle.Text = "Title";
@@ -453,6 +463,7 @@ namespace XrmToolBox.Forms
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.Panel pnlReleaseNotes;
         private System.Windows.Forms.Label lblReleaseNotes;
+        private System.Windows.Forms.ColumnHeader colCheckBox;
         private System.Windows.Forms.ColumnHeader colTitle;
         private System.Windows.Forms.ColumnHeader colVersion;
         private System.Windows.Forms.ColumnHeader colCurrent;

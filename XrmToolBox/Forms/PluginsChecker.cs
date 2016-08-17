@@ -265,8 +265,63 @@ namespace XrmToolBox.Forms
 
         private void lvPlugins_ColumnClick(object sender, ColumnClickEventArgs e)
         {
-            lvPlugins.Sorting = lvPlugins.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
-            lvPlugins.ListViewItemSorter = new ListViewItemComparer(e.Column, lvPlugins.Sorting);
+            if (e.Column == 0)
+            {
+                bool value = false;
+                try
+                {
+                    value = Convert.ToBoolean(this.lvPlugins.Columns[e.Column].Tag);
+                }
+                catch (Exception)
+                {
+                }
+                this.lvPlugins.Columns[e.Column].Tag = !value;
+                foreach (ListViewItem item in this.lvPlugins.Items)
+                    item.Checked = !value;
+
+                this.lvPlugins.Invalidate();
+            }
+            else
+            {
+                lvPlugins.Sorting = lvPlugins.Sorting == SortOrder.Ascending
+                    ? SortOrder.Descending
+                    : SortOrder.Ascending;
+                lvPlugins.ListViewItemSorter = new ListViewItemComparer(e.Column, lvPlugins.Sorting);
+            }
+        }
+
+        private void lvPlugins_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                e.DrawBackground();
+                bool value = false;
+                try
+                {
+                    value = Convert.ToBoolean(e.Header.Tag);
+                }
+                catch (Exception)
+                {
+                }
+                CheckBoxRenderer.DrawCheckBox(e.Graphics,
+                    new Point(e.Bounds.Left + 4, e.Bounds.Top + 4),
+                    value ? System.Windows.Forms.VisualStyles.CheckBoxState.CheckedNormal :
+                    System.Windows.Forms.VisualStyles.CheckBoxState.UncheckedNormal);
+            }
+            else
+            {
+                e.DrawDefault = true;
+            }
+        }
+
+        private void lvPlugins_DrawItem(object sender, DrawListViewItemEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
+        private void lvPlugins_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            e.DrawDefault = true;
         }
 
         private void PluginsChecker_Load(object sender, EventArgs e)
@@ -757,8 +812,9 @@ namespace XrmToolBox.Forms
 
         public ListViewItem GetPluginsStoreItem()
         {
-            var item = new ListViewItem(this.ToString());
+            var item = new ListViewItem(string.Empty);
             item.Tag = this;
+            item.SubItems.Add(this.ToString());
             item.SubItems.Add(Package.Version.ToString());
             item.SubItems.Add(CurrentVersion?.ToString());
             item.SubItems.Add(Package.Description);
