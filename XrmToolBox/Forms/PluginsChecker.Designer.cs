@@ -131,7 +131,7 @@
             // 
             this.tslSearch.Name = "tslSearch";
             this.tslSearch.Size = new System.Drawing.Size(62, 29);
-            this.tslSearch.Text = "search";
+            this.tslSearch.Text = "Search";
             // 
             // tstSearch
             // 
