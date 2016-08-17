@@ -113,16 +113,6 @@ namespace MsCrmTools.SolutionImport
 
         private void ImportArchive(ImportSettings iSettings)
         {
-            if (ConnectionDetail.OrganizationMajorVersion == 8)
-            {
-                if (DialogResult.No == MessageBox.Show(ParentForm,
-                        "This plugin has not been tested with CRM 2016 yet, especially regarding new solution framework\r\n\r\nAre you sure you want to continue?",
-                        "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning))
-                {
-                    return;
-                }
-            }
-
             sManager = new SolutionManager(Service);
             iSettings.MajorVersion = ConnectionDetail.OrganizationMajorVersion;
 
