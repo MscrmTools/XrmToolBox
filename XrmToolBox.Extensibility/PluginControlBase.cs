@@ -54,7 +54,8 @@ namespace XrmToolBox.Extensibility
         /// <param name="info"></param>
         public virtual void ClosingPlugin(PluginCloseInfo info)
         {
-            if (info.FormReason != CloseReason.None ||
+            if (info.Silent ||
+                info.FormReason != CloseReason.None ||
                 info.ToolBoxReason == ToolBoxCloseReason.CloseAll ||
                 info.ToolBoxReason == ToolBoxCloseReason.CloseAllExceptActive)
             {
@@ -174,7 +175,7 @@ namespace XrmToolBox.Extensibility
                 MessageHeight = messageHeight,
                 PostWorkCallBack = callback,
                 ProgressChanged = progressChanged
-                
+
             };
             _worker.WorkAsync(info);
         }

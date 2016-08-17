@@ -658,6 +658,7 @@ namespace XrmToolBox
 
         private void RequestCloseTab(TabPage page, PluginCloseInfo info)
         {
+            info.Silent = currentOptions.CloseEachPluginSilently;
             var plugin = page.GetPlugin();
             plugin.ClosingPlugin(info);
             if (info.Cancel)
