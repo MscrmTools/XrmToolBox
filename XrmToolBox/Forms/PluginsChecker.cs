@@ -34,6 +34,7 @@ namespace XrmToolBox.Forms
         private readonly string nugetPluginsFolder;
         private FileInfo[] plugins;
         private List<XtbNuGetPackage> xtbPackages;
+        private readonly List<string> selectedPackagesId;
 
         public PluginsChecker()
         {
@@ -56,6 +57,8 @@ namespace XrmToolBox.Forms
 
             // Display cache folder size
             CalculateCacheFolderSize();
+
+            selectedPackagesId = new List<string>();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -87,6 +90,8 @@ namespace XrmToolBox.Forms
 
         public void RefreshPluginsList()
         {
+            selectedPackagesId.Clear();
+
             tstSearch.TextChanged -= tstSearch_TextChanged;
             tstSearch.Text = "Search by Title or Authors";
             tstSearch.ForeColor = SystemColors.InactiveCaption;
@@ -436,6 +441,18 @@ namespace XrmToolBox.Forms
             ((MainForm) Owner).Options.Save();
         }
 
+        private void lvPlugins_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            if (e.Item.Checked)
+            {
+                selectedPackagesId.Add(((XtbNuGetPackage) e.Item.Tag).Package.Id);
+            }
+            else
+            {
+                selectedPackagesId.Remove(((XtbNuGetPackage)e.Item.Tag).Package.Id);
+            }
+        }
+
         private void lvPlugins_SelectedIndexChanged(object sender, EventArgs e)
         {
             pnlReleaseNotesDetails.Controls.Clear();
@@ -712,6 +729,9 @@ namespace XrmToolBox.Forms
                 }
 
                 lvic.Add(xtbPackage.GetPluginsStoreItem());
+
+                // Check item if it was checked
+                lvic.Last().Checked = selectedPackagesId.Contains(xtbPackage.Package.Id);
             }
 
             Invoke(new Action(() =>

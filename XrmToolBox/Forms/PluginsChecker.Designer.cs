@@ -1,4 +1,7 @@
-﻿namespace XrmToolBox.Forms
+﻿using System;
+using System.Windows.Forms;
+
+namespace XrmToolBox.Forms
 {
     partial class PluginsChecker
     {
@@ -350,6 +353,7 @@
             this.lvPlugins.View = System.Windows.Forms.View.Details;
             this.lvPlugins.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvPlugins_ColumnClick);
             this.lvPlugins.SelectedIndexChanged += new System.EventHandler(this.lvPlugins_SelectedIndexChanged);
+            this.lvPlugins.ItemChecked += new ItemCheckedEventHandler(this.lvPlugins_ItemChecked);
             // 
             // colTitle
             // 
