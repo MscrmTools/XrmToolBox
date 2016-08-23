@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox", "XrmToolBox\XrmToolBox.csproj", "{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}"
 EndProject
@@ -46,8 +46,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.FlsBulkUpdater", "Plugins\MsCrmTools.FlsBulkUpdater\MsCrmTools.FlsBulkUpdater.csproj", "{5244E9BE-820A-4613-8ACC-ADC858B83C26}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox.Extensibility", "XrmToolBox.Extensibility\XrmToolBox.Extensibility.csproj", "{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.FormRelated", "Plugins\MsCrmTools.FormRelated\MsCrmTools.FormRelated.csproj", "{28F6D950-BC28-4067-98AF-5D6AE70E90A7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.SecurityRelated", "Plugins\MsCrmTools.SecurityRelated\MsCrmTools.SecurityRelated.csproj", "{ACC1243E-912B-45E7-A8B0-E312EE9141DD}"
 EndProject
@@ -214,16 +212,6 @@ Global
 		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Release|x86.ActiveCfg = Release|Any CPU
-		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{28F6D950-BC28-4067-98AF-5D6AE70E90A7}.Release|x86.ActiveCfg = Release|Any CPU
 		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -276,7 +264,6 @@ Global
 		{4C976A6C-F6A2-4E58-B52C-5CF701C97E50} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{A217441C-677F-43C3-8BD8-FD27586E82AC} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{5244E9BE-820A-4613-8ACC-ADC858B83C26} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
-		{28F6D950-BC28-4067-98AF-5D6AE70E90A7} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{ACC1243E-912B-45E7-A8B0-E312EE9141DD} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{DE964006-6E7B-4FA8-9D04-07B2E1819774} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 	EndGlobalSection
