@@ -251,7 +251,7 @@ namespace XrmToolBox
             }
 
             var top = 4;
-            int lastWidth = HomePageTab.Width - 28;
+            int lastWidth = pnlPlugins.Width - 28;
 
             // Search with filter defined
             var filteredPlugins = (filter != null && filter.ToString().Length > 0
@@ -293,13 +293,29 @@ namespace XrmToolBox
 
             Invoke(new Action(() =>
             {
-                HomePageTab.Controls.Clear();
+                pnlPlugins.Controls.Clear();
 
-                foreach (PluginModel ctrl in pluginsModels.Where(p => filteredPlugins.Contains((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)p.Tag)))
+                var pluginsToDisplay = pluginsModels.Where(p => filteredPlugins.Contains((Lazy<IXrmToolBoxPlugin, IPluginMetadata>) p.Tag));
+
+
+                foreach (PluginModel ctrl in pluginsToDisplay)
                 //foreach (PluginModel ctrl in pluginsModels)
                 {
                     ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-                    HomePageTab.Controls.Add(ctrl);
+                    pnlPlugins.Controls.Add(ctrl);
+                }
+
+                if (!pluginsToDisplay.Any())
+                {
+                    lblPluginsNotFoundText.Text = string.Format(lblPluginsNotFoundText.Tag.ToString(), filter);
+
+                    pnlNoPluginFound.Visible = true;
+                    pnlPlugins.Visible = false;
+                }
+                else
+                {
+                    pnlNoPluginFound.Visible = false;
+                    pnlPlugins.Visible = true;
                 }
 
                 AdaptPluginControlSize();

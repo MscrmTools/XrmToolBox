@@ -59,7 +59,7 @@ namespace XrmToolBox
             pluginsModels = new List<PluginModel>();
             pluginControlStatuses = new List<PluginControlStatus>();
             ProcessMenuItemsForPlugin();
-            MouseWheel += (sender, e) => HomePageTab.Focus();
+            MouseWheel += (sender, e) => pnlPlugins.Focus();
 
             currentOptions = Options.Load();
 
@@ -246,7 +246,7 @@ namespace XrmToolBox
 
                     if (packages.Any(p => p.Action == PackageInstallAction.Update))
                     {
-                        var image = pluginsCheckerImageList.Images[1];
+                        var image = pluginsCheckerImageList.Images[3];
                         var text = packages.Count(p => p.Action == PackageInstallAction.Update).ToString();
 
                         using (Graphics graphics = Graphics.FromImage(image))
@@ -266,7 +266,7 @@ namespace XrmToolBox
                     }
                     else
                     {
-                        tsbPlugins.Image = pluginsCheckerImageList.Images[0];
+                        tsbPlugins.Image = pluginsCheckerImageList.Images[2];
                     }
                 }
                 catch (Exception error)
@@ -459,11 +459,11 @@ namespace XrmToolBox
         private void MainForm_OnCloseTool(object sender, EventArgs e)
         {
             //Issue 443: Restore scroll position after tool has been closed, if scroll bar has moved. Ref: https://support.microsoft.com/en-us/kb/829417
-            scrollPosition = HomePageTab.AutoScrollPosition;
+            scrollPosition = pnlPlugins.AutoScrollPosition;
             RequestCloseTab((TabPage)((UserControl)sender).Parent, new PluginCloseInfo(ToolBoxCloseReason.PluginRequest));
             if (scrollPosition.Y != 0)
             {
-                HomePageTab.AutoScrollPosition = new Point(Math.Abs(HomePageTab.AutoScrollPosition.X), Math.Abs(scrollPosition.Y));
+                pnlPlugins.AutoScrollPosition = new Point(Math.Abs(pnlPlugins.AutoScrollPosition.X), Math.Abs(scrollPosition.Y));
             }
         }
 
@@ -748,23 +748,23 @@ namespace XrmToolBox
 
         private void AdaptPluginControlSize()
         {
-            if (GetVisibleScrollbars(HomePageTab) == ScrollBars.Vertical)
+            if (GetVisibleScrollbars(pnlPlugins) == ScrollBars.Vertical)
             {
-                foreach (var ctrl in HomePageTab.Controls)
+                foreach (var ctrl in pnlPlugins.Controls)
                 {
                     if (ctrl is UserControl)
                     {
-                        ((UserControl)ctrl).Width = HomePageTab.Width - 28;
+                        ((UserControl)ctrl).Width = pnlPlugins.Width - 28;
                     }
                 }
             }
             else
             {
-                foreach (var ctrl in HomePageTab.Controls)
+                foreach (var ctrl in pnlPlugins.Controls)
                 {
                     if (ctrl is UserControl)
                     {
-                        ((UserControl)ctrl).Width = HomePageTab.Width - 10;
+                        ((UserControl)ctrl).Width = pnlPlugins.Width - 10;
                     }
                 }
             }
@@ -825,6 +825,23 @@ namespace XrmToolBox
         {
             var dialog = new PluginsChecker();
             dialog.ShowDialog(this);
+        }
+
+        private void pbOpenPluginsStore_Click(object sender, EventArgs e)
+        {
+            var pc = new PluginsChecker();
+            pc.ShowDialog(this);
+        }
+
+        private void pnlNoPluginFound_Resize(object sender, EventArgs e)
+        {
+            pbOpenPluginsStore.Location = new Point((HomePageTab.Width - pbOpenPluginsStore.Width)/2, pbOpenPluginsStore.Location.Y);
+            llResetSearchFilter.Location = new Point((HomePageTab.Width - llResetSearchFilter.Width)/2, llResetSearchFilter.Location.Y);
+        }
+
+        private void llResetSearchFilter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            tstxtFilterPlugin.Text = string.Empty;
         }
     }
 }
