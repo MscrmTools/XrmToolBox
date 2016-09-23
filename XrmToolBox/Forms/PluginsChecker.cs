@@ -592,16 +592,50 @@ namespace XrmToolBox.Forms
                 Dock = DockStyle.Top
             };
 
-            pnlTitle.Controls.AddRange(new Control[] {lblDescription, lblTitle, bitmap});
-
-            scProperties.Panel1.Controls.AddRange(new Control[]
+            if (lblDescription.Text.Contains("\n"))
             {
+                pnlTitle.Controls.AddRange(new Control[] { lblTitle, bitmap });
+
+                var pnlDescription = new Panel
+                {
+                    AutoScroll = true,
+                    AutoScrollMinSize = new Size(0, 1000),
+                    Dock = DockStyle.Fill
+                };
+                pnlDescription.Controls.Add(lblDescription);
+
+                var lblDescriptionHeader = new Label
+                {
+                    Dock = DockStyle.Top,
+                    Text = "Description",
+                    Font = new Font("Microsoft Sans Serif", 8, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point),
+                    Height = 16
+                };
+
+                scProperties.Panel1.Controls.AddRange(new Control[]
+                {
+                pnlDescription,
+                lblDescriptionHeader,
                 GetPropertiesPanelInformation("Project Url", package.ProjectUrl),
                 GetPropertiesPanelInformation("Downloads count", package.DownloadCount.ToString()),
                 GetPropertiesPanelInformation("Authors", string.Join(", ", package.Authors)),
                 GetPropertiesPanelInformation("Version", package.Version.ToString()),
                 pnlTitle
-            });
+                });
+            }
+            else
+            {
+                pnlTitle.Controls.AddRange(new Control[] { lblDescription, lblTitle, bitmap });
+
+                scProperties.Panel1.Controls.AddRange(new Control[]
+                {
+                GetPropertiesPanelInformation("Project Url", package.ProjectUrl),
+                GetPropertiesPanelInformation("Downloads count", package.DownloadCount.ToString()),
+                GetPropertiesPanelInformation("Authors", string.Join(", ", package.Authors)),
+                GetPropertiesPanelInformation("Version", package.Version.ToString()),
+                pnlTitle
+                });
+            }
         }
 
         private Panel GetPropertiesPanelInformation(string label, object value)
@@ -609,7 +643,7 @@ namespace XrmToolBox.Forms
             var lblLabel = new Label
             {
                 Dock = DockStyle.Left,
-                Text = label.ToString(),
+                Text = label,
                 Width = 100,
                 Height = 20
             };
@@ -654,7 +688,7 @@ namespace XrmToolBox.Forms
                 Dock = DockStyle.Top
             };
 
-            pnl.Controls.AddRange(new Control[] {rightControl, lblLabel});
+            pnl.Controls.AddRange(new [] {rightControl, lblLabel});
 
             return pnl;
         }
