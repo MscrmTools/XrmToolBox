@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Sdk.WebServiceClient;
 using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
@@ -137,17 +139,33 @@ namespace XrmToolBox
 
                 if (service != null)
                 {
-                    var clonedService = currentConnectionDetail.GetCrmServiceClient().OrganizationServiceProxy;
+                    var crmSvcClient = currentConnectionDetail.GetCrmServiceClient();
 
-                    clonedService.SdkClientVersion = currentConnectionDetail.OrganizationVersion.ToString();
-                    
+                    OrganizationServiceProxy clonedService = crmSvcClient.OrganizationServiceProxy;
+                    OrganizationWebProxyClient clonedWebClientService = crmSvcClient.OrganizationWebProxyClient;
+                    if (clonedService != null)
+                    {
+                        clonedService.SdkClientVersion = currentConnectionDetail.OrganizationVersion;
+                    }
+                    if (clonedWebClientService != null)
+                    {
+                        clonedWebClientService.SdkClientVersion = currentConnectionDetail.OrganizationVersion;
+                    }
+
                     var earlyBoundProxiedControl = pluginControl as IEarlyBoundProxy;
                     if (earlyBoundProxiedControl != null)
                     {
-                        clonedService.EnableProxyTypes(earlyBoundProxiedControl.GetEarlyBoundProxyAssembly());
+                        clonedService?.EnableProxyTypes(earlyBoundProxiedControl.GetEarlyBoundProxyAssembly());
                     }
 
-                    ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
+                    if (clonedService != null)
+                    {
+                        ((IXrmToolBoxPluginControl) pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
+                    }
+                    else
+                    {
+                        ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedWebClientService, currentConnectionDetail);
+                    }
                 }
 
                 ((IXrmToolBoxPluginControl)pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
