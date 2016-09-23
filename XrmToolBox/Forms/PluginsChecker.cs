@@ -96,6 +96,7 @@ namespace XrmToolBox.Forms
             tstSearch.Text = "Search by Title or Authors";
             tstSearch.ForeColor = SystemColors.InactiveCaption;
             tstSearch.TextChanged += tstSearch_TextChanged;
+            tstSearch.Enabled = false;
 
             plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
 
@@ -149,6 +150,7 @@ namespace XrmToolBox.Forms
             {
                 tssProgress.Visible = false;
                 tssLabel.Text = string.Empty;
+                tstSearch.Enabled = true;
 
                 if (e.Error != null)
                 {
