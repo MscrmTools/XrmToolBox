@@ -97,6 +97,9 @@ countReleasesDownloadByPage = function(link, totalcount){
                 if(parsedHeaderLink.next){
                     countReleasesDownloadByPage(parsedHeaderLink.next, totalcount);
                 }
+                else{
+                    $("#" + totalcount).text(totalCountDownload);
+               }
                }
                else{
                     $("#" + totalcount).text(totalCountDownload);
