@@ -115,7 +115,7 @@ namespace XrmToolBox
                 }
 
                 SearchAndDestroyPluginsInRootFolder();
-                AppDomainProxyTypeHack.OverrideAppDomainKnownTypeInitialization();
+
                 CopyUpdatedPlugins();
 
                 Application.EnableVisualStyles();
