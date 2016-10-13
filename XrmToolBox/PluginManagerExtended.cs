@@ -21,6 +21,11 @@ namespace XrmToolBox
         {
             lastPluginsUpdate = DateTime.Now;
 
+            if (!Directory.Exists(PluginPath))
+            {
+                Directory.CreateDirectory(PluginPath);
+            }
+
             var watcher = new FileSystemWatcher(PluginPath)
             {
                 EnableRaisingEvents = true,

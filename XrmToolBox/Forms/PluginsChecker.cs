@@ -34,6 +34,7 @@ namespace XrmToolBox.Forms
         private readonly string nugetPluginsFolder;
         private FileInfo[] plugins;
         private List<XtbNuGetPackage> xtbPackages;
+        private readonly List<string> selectedPackagesId;
 
         public PluginsChecker()
         {
@@ -56,6 +57,8 @@ namespace XrmToolBox.Forms
 
             // Display cache folder size
             CalculateCacheFolderSize();
+
+            selectedPackagesId = new List<string>();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -87,10 +90,13 @@ namespace XrmToolBox.Forms
 
         public void RefreshPluginsList()
         {
+            selectedPackagesId.Clear();
+
             tstSearch.TextChanged -= tstSearch_TextChanged;
             tstSearch.Text = "Search by Title or Authors";
             tstSearch.ForeColor = SystemColors.InactiveCaption;
             tstSearch.TextChanged += tstSearch_TextChanged;
+            tstSearch.Enabled = false;
 
             plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
 
@@ -144,6 +150,7 @@ namespace XrmToolBox.Forms
             {
                 tssProgress.Visible = false;
                 tssLabel.Text = string.Empty;
+                tstSearch.Enabled = true;
 
                 if (e.Error != null)
                 {
@@ -260,8 +267,63 @@ namespace XrmToolBox.Forms
 
         private void lvPlugins_ColumnClick(object sender, ColumnClickEventArgs e)
         {
-            lvPlugins.Sorting = lvPlugins.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
-            lvPlugins.ListViewItemSorter = new ListViewItemComparer(e.Column, lvPlugins.Sorting);
+            if (e.Column == 0)
+            {
+                bool value = false;
+                try
+                {
+                    value = Convert.ToBoolean(this.lvPlugins.Columns[e.Column].Tag);
+                }
+                catch (Exception)
+                {
+                }
+                this.lvPlugins.Columns[e.Column].Tag = !value;
+                foreach (ListViewItem item in this.lvPlugins.Items)
+                    item.Checked = !value;
+
+                this.lvPlugins.Invalidate();
+            }
+            else
+            {
+                lvPlugins.Sorting = lvPlugins.Sorting == SortOrder.Ascending
+                    ? SortOrder.Descending
+                    : SortOrder.Ascending;
+                lvPlugins.ListViewItemSorter = new ListViewItemComparer(e.Column, lvPlugins.Sorting);
+            }
+        }
+
+        private void lvPlugins_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                e.DrawBackground();
+                bool value = false;
+                try
+                {
+                    value = Convert.ToBoolean(e.Header.Tag);
+                }
+                catch (Exception)
+                {
+                }
+                CheckBoxRenderer.DrawCheckBox(e.Graphics,
+                    new Point(e.Bounds.Left + 4, e.Bounds.Top + 4),
+                    value ? System.Windows.Forms.VisualStyles.CheckBoxState.CheckedNormal :
+                    System.Windows.Forms.VisualStyles.CheckBoxState.UncheckedNormal);
+            }
+            else
+            {
+                e.DrawDefault = true;
+            }
+        }
+
+        private void lvPlugins_DrawItem(object sender, DrawListViewItemEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
+        private void lvPlugins_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            e.DrawDefault = true;
         }
 
         private void PluginsChecker_Load(object sender, EventArgs e)
@@ -436,6 +498,18 @@ namespace XrmToolBox.Forms
             ((MainForm) Owner).Options.Save();
         }
 
+        private void lvPlugins_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            if (e.Item.Checked)
+            {
+                selectedPackagesId.Add(((XtbNuGetPackage) e.Item.Tag).Package.Id);
+            }
+            else
+            {
+                selectedPackagesId.Remove(((XtbNuGetPackage)e.Item.Tag).Package.Id);
+            }
+        }
+
         private void lvPlugins_SelectedIndexChanged(object sender, EventArgs e)
         {
             pnlReleaseNotesDetails.Controls.Clear();
@@ -518,16 +592,50 @@ namespace XrmToolBox.Forms
                 Dock = DockStyle.Top
             };
 
-            pnlTitle.Controls.AddRange(new Control[] {lblDescription, lblTitle, bitmap});
-
-            scProperties.Panel1.Controls.AddRange(new Control[]
+            if (lblDescription.Text.Contains("\n"))
             {
+                pnlTitle.Controls.AddRange(new Control[] { lblTitle, bitmap });
+
+                var pnlDescription = new Panel
+                {
+                    AutoScroll = true,
+                    AutoScrollMinSize = new Size(0, 1000),
+                    Dock = DockStyle.Fill
+                };
+                pnlDescription.Controls.Add(lblDescription);
+
+                var lblDescriptionHeader = new Label
+                {
+                    Dock = DockStyle.Top,
+                    Text = "Description",
+                    Font = new Font("Microsoft Sans Serif", 8, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point),
+                    Height = 16
+                };
+
+                scProperties.Panel1.Controls.AddRange(new Control[]
+                {
+                pnlDescription,
+                lblDescriptionHeader,
                 GetPropertiesPanelInformation("Project Url", package.ProjectUrl),
                 GetPropertiesPanelInformation("Downloads count", package.DownloadCount.ToString()),
                 GetPropertiesPanelInformation("Authors", string.Join(", ", package.Authors)),
                 GetPropertiesPanelInformation("Version", package.Version.ToString()),
                 pnlTitle
-            });
+                });
+            }
+            else
+            {
+                pnlTitle.Controls.AddRange(new Control[] { lblDescription, lblTitle, bitmap });
+
+                scProperties.Panel1.Controls.AddRange(new Control[]
+                {
+                GetPropertiesPanelInformation("Project Url", package.ProjectUrl),
+                GetPropertiesPanelInformation("Downloads count", package.DownloadCount.ToString()),
+                GetPropertiesPanelInformation("Authors", string.Join(", ", package.Authors)),
+                GetPropertiesPanelInformation("Version", package.Version.ToString()),
+                pnlTitle
+                });
+            }
         }
 
         private Panel GetPropertiesPanelInformation(string label, object value)
@@ -535,7 +643,7 @@ namespace XrmToolBox.Forms
             var lblLabel = new Label
             {
                 Dock = DockStyle.Left,
-                Text = label.ToString(),
+                Text = label,
                 Width = 100,
                 Height = 20
             };
@@ -580,7 +688,7 @@ namespace XrmToolBox.Forms
                 Dock = DockStyle.Top
             };
 
-            pnl.Controls.AddRange(new Control[] {rightControl, lblLabel});
+            pnl.Controls.AddRange(new [] {rightControl, lblLabel});
 
             return pnl;
         }
@@ -712,10 +820,16 @@ namespace XrmToolBox.Forms
                 }
 
                 lvic.Add(xtbPackage.GetPluginsStoreItem());
+
+                // Check item if it was checked
+                lvic.Last().Checked = selectedPackagesId.Contains(xtbPackage.Package.Id);
             }
 
-            lvPlugins.Items.Clear();
-            lvPlugins.Items.AddRange(lvic.ToArray());
+            Invoke(new Action(() =>
+            {
+                lvPlugins.Items.Clear();
+                lvPlugins.Items.AddRange(lvic.ToArray());
+            }));
         }
     }
 
@@ -734,8 +848,9 @@ namespace XrmToolBox.Forms
 
         public ListViewItem GetPluginsStoreItem()
         {
-            var item = new ListViewItem(this.ToString());
+            var item = new ListViewItem(string.Empty);
             item.Tag = this;
+            item.SubItems.Add(this.ToString());
             item.SubItems.Add(Package.Version.ToString());
             item.SubItems.Add(CurrentVersion?.ToString());
             item.SubItems.Add(Package.Description);

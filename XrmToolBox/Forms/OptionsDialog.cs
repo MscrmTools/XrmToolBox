@@ -25,6 +25,7 @@ namespace XrmToolBox.Forms
             rdbToolsListSmall.Checked = !option.DisplayLargeIcons;
             chkDisplayMuFirst.Checked = option.DisplayMostUsedFirst;
             chkAllowUsageStatistics.Checked = option.AllowLogUsage.HasValue && option.AllowLogUsage.Value;
+            chkCloseEachPluginSilently.Checked = option.CloseEachPluginSilently;
             chkClosePluginsSilently.Checked = option.CloseOpenedPluginsSilently;
             chkDisplayPluginsStoreOnStartup.Checked = option.DisplayPluginsStoreOnStartup;
         }
@@ -42,6 +43,7 @@ namespace XrmToolBox.Forms
             option.AllowLogUsage = chkAllowUsageStatistics.Checked;
             option.DisplayLargeIcons = rdbToolsListLarge.Checked;
             option.DisplayMostUsedFirst = chkDisplayMuFirst.Checked;
+            option.CloseEachPluginSilently = chkCloseEachPluginSilently.Checked;
             option.CloseOpenedPluginsSilently = chkClosePluginsSilently.Checked;
             option.DisplayPluginsStoreOnStartup = chkDisplayPluginsStoreOnStartup.Checked;
 
@@ -139,6 +141,20 @@ namespace XrmToolBox.Forms
         {
             txtProxyPassword.Enabled = rbCustomAuthYes.Checked;
             txtProxyUser.Enabled = rbCustomAuthYes.Checked;
+        }
+
+        private void chkCloseEachPluginSilently_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkCloseEachPluginSilently.Checked)
+            {
+                chkClosePluginsSilently.Enabled = false;
+                chkClosePluginsSilently.Checked = true;
+            }
+            else
+            {
+                chkClosePluginsSilently.Enabled = true;
+                chkClosePluginsSilently.Checked = option.CloseOpenedPluginsSilently;
+            }
         }
     }
 }

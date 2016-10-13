@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Microsoft.Xrm.Sdk.Client;
+using Microsoft.Xrm.Sdk.WebServiceClient;
 using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
@@ -137,17 +139,33 @@ namespace XrmToolBox
 
                 if (service != null)
                 {
-                    var clonedService = currentConnectionDetail.GetCrmServiceClient().OrganizationServiceProxy;
+                    var crmSvcClient = currentConnectionDetail.GetCrmServiceClient();
 
-                    clonedService.SdkClientVersion = currentConnectionDetail.OrganizationVersion.ToString();
-                    
+                    OrganizationServiceProxy clonedService = crmSvcClient.OrganizationServiceProxy;
+                    OrganizationWebProxyClient clonedWebClientService = crmSvcClient.OrganizationWebProxyClient;
+                    if (clonedService != null)
+                    {
+                        clonedService.SdkClientVersion = currentConnectionDetail.OrganizationVersion;
+                    }
+                    if (clonedWebClientService != null)
+                    {
+                        clonedWebClientService.SdkClientVersion = currentConnectionDetail.OrganizationVersion;
+                    }
+
                     var earlyBoundProxiedControl = pluginControl as IEarlyBoundProxy;
                     if (earlyBoundProxiedControl != null)
                     {
-                        clonedService.EnableProxyTypes(earlyBoundProxiedControl.GetEarlyBoundProxyAssembly());
+                        clonedService?.EnableProxyTypes(earlyBoundProxiedControl.GetEarlyBoundProxyAssembly());
                     }
 
-                    ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
+                    if (clonedService != null)
+                    {
+                        ((IXrmToolBoxPluginControl) pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
+                    }
+                    else
+                    {
+                        ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedWebClientService, currentConnectionDetail);
+                    }
                 }
 
                 ((IXrmToolBoxPluginControl)pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
@@ -251,7 +269,7 @@ namespace XrmToolBox
             }
 
             var top = 4;
-            int lastWidth = HomePageTab.Width - 28;
+            int lastWidth = pnlPlugins.Width - 28;
 
             // Search with filter defined
             var filteredPlugins = (filter != null && filter.ToString().Length > 0
@@ -293,13 +311,29 @@ namespace XrmToolBox
 
             Invoke(new Action(() =>
             {
-                HomePageTab.Controls.Clear();
+                pnlPlugins.Controls.Clear();
 
-                foreach (PluginModel ctrl in pluginsModels.Where(p => filteredPlugins.Contains((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)p.Tag)))
+                var pluginsToDisplay = pluginsModels.Where(p => filteredPlugins.Contains((Lazy<IXrmToolBoxPlugin, IPluginMetadata>) p.Tag));
+
+
+                foreach (PluginModel ctrl in pluginsToDisplay)
                 //foreach (PluginModel ctrl in pluginsModels)
                 {
                     ctrl.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-                    HomePageTab.Controls.Add(ctrl);
+                    pnlPlugins.Controls.Add(ctrl);
+                }
+
+                if (!pluginsToDisplay.Any())
+                {
+                    lblPluginsNotFoundText.Text = string.Format(lblPluginsNotFoundText.Tag.ToString(), filter);
+
+                    pnlNoPluginFound.Visible = true;
+                    pnlPlugins.Visible = false;
+                }
+                else
+                {
+                    pnlNoPluginFound.Visible = false;
+                    pnlPlugins.Visible = true;
                 }
 
                 AdaptPluginControlSize();
