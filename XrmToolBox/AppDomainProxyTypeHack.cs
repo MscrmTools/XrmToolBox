@@ -12,12 +12,11 @@ namespace XrmToolBox
     {
         public static void OverrideAppDomainKnownTypeInitialization()
         {
-            //Invoke Adding Of Assembly Load Event Handler
-            GetKnownProxyTypesProviderInstance();
+            InvokeAddingOfAssemblyLoadEventHandler();
             RemoveAssemblyLoadEventHandler();
         }
 
-        private static object GetKnownProxyTypesProviderInstance()
+        private static void InvokeAddingOfAssemblyLoadEventHandler()
         {
             var proxyTypesProvider = typeof(Microsoft.Xrm.Sdk.IOrganizationService).Assembly.GetType("Microsoft.Xrm.Sdk.KnownProxyTypesProvider");
             if (proxyTypesProvider == null)
@@ -29,7 +28,7 @@ namespace XrmToolBox
             {
                 throw new Exception("AppDomainProxyTypeHack expected Microsoft.Xrm.Sdk.KnownProxyTypesProvider to contain a GetInstance(bool) method, but it wasn't found!");
             }
-            return getInstance.Invoke(null, BindingFlags.Static, null, new object[] { false }, null);
+            getInstance.Invoke(null, BindingFlags.Static, null, new object[] { false }, null);
         }
 
         private static void RemoveAssemblyLoadEventHandler()
@@ -52,13 +51,6 @@ namespace XrmToolBox
             }
             // Remove Event Handler
             AppDomain.CurrentDomain.AssemblyLoad -= (AssemblyLoadEventHandler) first;
-        }
-
-        public static void RegisterAssembly(Assembly assembly)
-        {
-            var instance = GetKnownProxyTypesProviderInstance();
-            var registerAssembly = instance.GetType().GetMethod("RegisterAssembly", BindingFlags.Instance | BindingFlags.Public, null,new Type[] { typeof(Assembly)}, null);
-            registerAssembly.Invoke(instance, new object[] { assembly});
         }
     }
 }

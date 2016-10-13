@@ -144,12 +144,7 @@ namespace XrmToolBox
                     var earlyBoundProxiedControl = pluginControl as IEarlyBoundProxy;
                     if (earlyBoundProxiedControl != null)
                     {
-                        var assembly = earlyBoundProxiedControl.GetEarlyBoundProxyAssembly();
-                        if (assembly != null)
-                        {
-                            clonedService.EnableProxyTypes(assembly);
-                            AppDomainProxyTypeHack.RegisterAssembly(assembly);
-                        }
+                        clonedService.EnableProxyTypes(earlyBoundProxiedControl.GetEarlyBoundProxyAssembly());
                     }
 
                     ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
