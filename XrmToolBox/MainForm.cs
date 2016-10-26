@@ -9,6 +9,7 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -355,7 +356,10 @@ namespace XrmToolBox
 
             //if (!Debugger.IsAttached)
             //{
-            tasks.Add(this.LaunchVersionCheck());
+            if (Options.DoNotCheckForUpdates ==  false)
+            {
+                tasks.Add(this.LaunchVersionCheck());
+            }
             //}
 
             if (!string.IsNullOrEmpty(this.initialConnectionName))

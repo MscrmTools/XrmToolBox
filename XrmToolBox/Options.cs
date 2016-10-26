@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
+using XrmToolBox.Extensibility;
 
 namespace XrmToolBox
 {
@@ -88,13 +89,16 @@ namespace XrmToolBox
 
         [XmlElement("FormSize")]
         public FormSize Size { get; set; }
+        public bool DoNotCheckForUpdates { get; set; }
 
         public static Options Load()
         {
-            if (File.Exists("XrmToolBox.Settings.xml"))
+            var settingsFile ="XrmToolBox.Settings.xml";
+
+            if (File.Exists(settingsFile))
             {
                 var document = new XmlDocument();
-                document.Load("XrmToolBox.Settings.xml");
+                document.Load(settingsFile);
 
                 return (Options)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(Options));
             }
@@ -115,13 +119,16 @@ namespace XrmToolBox
                 LastUpdateCheck = LastUpdateCheck,
                 AllowLogUsage = AllowLogUsage,
                 CloseOpenedPluginsSilently = CloseOpenedPluginsSilently,
-                DisplayPluginsStoreOnStartup = DisplayPluginsStoreOnStartup
+                DisplayPluginsStoreOnStartup = DisplayPluginsStoreOnStartup,
+                DoNotCheckForUpdates = DoNotCheckForUpdates
             };
         }
 
         public void Save()
         {
-            XmlSerializerHelper.SerializeToFile(this, "XrmToolBox.Settings.xml");
+            var settingsFile = "XrmToolBox.Settings.xml";
+
+            XmlSerializerHelper.SerializeToFile(this, settingsFile);
         }
     }
 }

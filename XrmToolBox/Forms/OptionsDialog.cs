@@ -28,6 +28,7 @@ namespace XrmToolBox.Forms
             chkCloseEachPluginSilently.Checked = option.CloseEachPluginSilently;
             chkClosePluginsSilently.Checked = option.CloseOpenedPluginsSilently;
             chkDisplayPluginsStoreOnStartup.Checked = option.DisplayPluginsStoreOnStartup;
+            chkDoNotCheckForUpdate.Checked = option.DoNotCheckForUpdates;
         }
 
         public Options Option { get { return option; } }
@@ -46,6 +47,7 @@ namespace XrmToolBox.Forms
             option.CloseEachPluginSilently = chkCloseEachPluginSilently.Checked;
             option.CloseOpenedPluginsSilently = chkClosePluginsSilently.Checked;
             option.DisplayPluginsStoreOnStartup = chkDisplayPluginsStoreOnStartup.Checked;
+            option.DoNotCheckForUpdates = chkDoNotCheckForUpdate.Checked;
 
             option.HiddenPlugins =
                 lvPlugins.Items.Cast<ListViewItem>().Where(i => i.Checked == false).Select(i => i.Text).ToList();
