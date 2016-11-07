@@ -91,19 +91,32 @@ namespace XrmToolBox
         public FormSize Size { get; set; }
         public bool DoNotCheckForUpdates { get; set; }
 
-        public static Options Load()
+        public static bool Load(out Options options, out string errorMessage)
         {
+            errorMessage = string.Empty;
+
             var settingsFile ="XrmToolBox.Settings.xml";
 
             if (File.Exists(settingsFile))
             {
-                var document = new XmlDocument();
-                document.Load(settingsFile);
+                try
+                {
+                    var document = new XmlDocument();
+                    document.Load(settingsFile);
 
-                return (Options)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(Options));
+                    options = (Options) XmlSerializerHelper.Deserialize(document.OuterXml, typeof(Options));
+                    return true;
+                }
+                catch (Exception error)
+                {
+                    errorMessage = error.Message;
+                    options = new Options();
+                    return false;
+                }
             }
 
-            return new Options();
+            options = new Options();
+            return true;
         }
 
         public object Clone()

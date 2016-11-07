@@ -62,7 +62,11 @@ namespace XrmToolBox
             ProcessMenuItemsForPlugin();
             MouseWheel += (sender, e) => pnlPlugins.Focus();
 
-            currentOptions = Options.Load();
+            string errorMessage;
+            if (!Options.Load(out currentOptions, out errorMessage))
+            {
+                MessageBox.Show(this, "An error occured when loading your XrmToolBox settings. Settings have been reset.\r\n\r\nError details:\r\n\r\n" + errorMessage,"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);    
+            }
 
             Text = string.Format("{0} (v{1})", Text, Assembly.GetExecutingAssembly().GetName().Version);
 
@@ -200,6 +204,9 @@ namespace XrmToolBox
         {
             return new Task(() =>
             {
+                currentOptions.LastUpdateCheck = DateTime.Now;
+                currentOptions.Save();
+
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 var cvc = new GithubVersionChecker(currentVersion, "MsCrmTools", "XrmToolBox");
 
@@ -220,9 +227,6 @@ namespace XrmToolBox
                         }));
                     }
                 }
-
-                currentOptions.LastUpdateCheck = DateTime.Now;
-                currentOptions.Save();
             });
         }
 

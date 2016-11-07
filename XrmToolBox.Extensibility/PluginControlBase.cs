@@ -126,7 +126,7 @@ namespace XrmToolBox.Extensibility
 
         public void SetWorkingMessage(string message, int width = 340, int height = 150)
         {
-            _worker = new Worker();
+            //_worker = new Worker();
             _worker.SetWorkingMessage(this, message);
         }
 
