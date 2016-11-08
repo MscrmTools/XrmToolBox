@@ -26,8 +26,7 @@ function getData(url){
 				NugetGetDetails();
 			}
 			else{
-				plugins.sort(dynamicSort(currentSortingProperty,sortOrder));
-				displayPlugins();
+				getLatestVersionDownloads();
 			}
         },
         error: error
@@ -72,18 +71,46 @@ String.prototype.endsWith = function(suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
 };
 
+function getLatestVersionDownloads(){
+	for(var i=0; i< plugins.length; i++){
+		nugetPackage = plugins[i];
+
+		 $.ajax({
+			url: "https://api-v2v3search-0.nuget.org/query?q=id:" + nugetPackage.id,
+			crossDomain: true,
+			dataType: 'jsonp',
+			success: function (data) {
+				var package = data.data[0];
+				var latestVersion = package.versions[package.versions.length - 1];
+
+				for(var j=0;j<plugins.length;j++){
+					if(plugins[j].id === package.id){
+						plugins[j].downloads = latestVersion.downloads;
+						$("#" + plugins[j].id.split(".").join("") + "downloads").text(latestVersion.downloads);
+						break;
+					}
+				}
+
+			},
+			error: error
+		});
+	}
+	
+	plugins.sort(dynamicSort(currentSortingProperty,sortOrder));
+	displayPlugins();
+}
+
 function displayPlugins(){
 	for(var i=0; i< plugins.length; i++){
-		var nugetPackage = plugins[i];
-
 		$('#PluginsTable').append('<tr class="data-row">'+
-		'<td>'+nugetPackage.title+'</td>' +
-		'<td>'+nugetPackage.version+'</td>' +
-		'<td>'+nugetPackage.authors+'</td>' +
-		'<td>'+nugetPackage.description+'</td>' +
-		'<td style="text-align:center;"><a href="'+nugetPackage.projectUrl+'" target="_blank"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span></a></td>' +
-		'<td>'+nugetPackage.totalDownloads+'</td>' +
-		'</tr>');
+				'<td>'+plugins[i].title+'</td>' +
+				'<td>'+plugins[i].version+'</td>' +
+				'<td>'+plugins[i].authors+'</td>' +
+				'<td>'+plugins[i].description+'</td>' +
+				'<td style="text-align:center;"><a href="'+plugins[i].projectUrl+'" target="_blank"><span class="glyphicon glyphicon-globe" aria-hidden="true"></span></a></td>' +
+				'<td id="'+plugins[i].id.split(".").join("")+'downloads">'+(plugins[i].downloads ? plugins[i].downloads : 'Loading...')+'</td>' +
+				'<td>'+plugins[i].totalDownloads+'</td>' +
+				'</tr>');
 	}
 }
 
@@ -102,8 +129,9 @@ $(document).ready(function() {
 			}
 			$(this).append(' <span class="glyphicon glyphicon-chevron-' + (sortOrder === 1 ? 'up' : 'down') + '" aria-hidden="true"></span>');
 			currentSortingProperty = $(this).attr("id");
-			plugins.sort(dynamicSort(currentSortingProperty,sortOrder));
-			displayPlugins();
+			getLatestVersionDownloads();
+			// plugins.sort(dynamicSort(currentSortingProperty,sortOrder));
+			// displayPlugins();
 		})
 		.css("cursor","pointer");
 
