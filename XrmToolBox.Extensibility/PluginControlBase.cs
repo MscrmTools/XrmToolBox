@@ -54,7 +54,8 @@ namespace XrmToolBox.Extensibility
         /// <param name="info"></param>
         public virtual void ClosingPlugin(PluginCloseInfo info)
         {
-            if (info.FormReason != CloseReason.None ||
+            if (info.Silent ||
+                info.FormReason != CloseReason.None ||
                 info.ToolBoxReason == ToolBoxCloseReason.CloseAll ||
                 info.ToolBoxReason == ToolBoxCloseReason.CloseAllExceptActive)
             {
@@ -107,7 +108,8 @@ namespace XrmToolBox.Extensibility
 
         #region IWorkerHost
 
-        private readonly Worker _worker = new Worker();
+        [ThreadStatic]
+        private static Worker _worker;
 
         public void CancelWorker()
         {
@@ -124,18 +126,20 @@ namespace XrmToolBox.Extensibility
 
         public void SetWorkingMessage(string message, int width = 340, int height = 150)
         {
+            //_worker = new Worker();
             _worker.SetWorkingMessage(this, message);
         }
 
         public void WorkAsync(WorkAsyncInfo info)
         {
             info.Host = this;
+            _worker = new Worker();
             _worker.WorkAsync(info);
         }
 
         #region Obsolete WorkAsync Calls
 
-        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method")]
+        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method", true)]
         public void WorkAsync(string message, Action<DoWorkEventArgs> work, object argument = null, int messageWidth = 340, int messageHeight = 150)
         {
             var info = new WorkAsyncInfo(message, work)
@@ -145,10 +149,10 @@ namespace XrmToolBox.Extensibility
                 MessageWidth = messageWidth,
                 MessageHeight = messageHeight
             };
-            _worker.WorkAsync(info);
+            WorkAsync(info);
         }
 
-        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method")]
+        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method", true)]
         public void WorkAsync(string message, Action<DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, object argument = null, int messageWidth = 340, int messageHeight = 150)
         {
             var info = new WorkAsyncInfo(message, work)
@@ -159,10 +163,10 @@ namespace XrmToolBox.Extensibility
                 MessageHeight = messageHeight,
                 PostWorkCallBack = callback
             };
-            _worker.WorkAsync(info);
+            WorkAsync(info);
         }
 
-        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method")]
+        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method", true)]
         public void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback,
                               Action<ProgressChangedEventArgs> progressChanged, object argument = null, int messageWidth = 340, int messageHeight = 150)
         {
@@ -174,12 +178,12 @@ namespace XrmToolBox.Extensibility
                 MessageHeight = messageHeight,
                 PostWorkCallBack = callback,
                 ProgressChanged = progressChanged
-                
+
             };
-            _worker.WorkAsync(info);
+            WorkAsync(info);
         }
 
-        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method")]
+        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method", true)]
         public void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, object argument, bool enableCancellation, int messageWidth, int messageHeight)
         {
             var info = new WorkAsyncInfo(message, work)
@@ -191,10 +195,10 @@ namespace XrmToolBox.Extensibility
                 MessageHeight = messageHeight
 
             };
-            _worker.WorkAsync(info);
+            WorkAsync(info);
         }
 
-        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method")]
+        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method", true)]
         public void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, object argument, bool enableCancellation, int messageWidth, int messageHeight)
         {
             var info = new WorkAsyncInfo(message, work)
@@ -206,10 +210,10 @@ namespace XrmToolBox.Extensibility
                 MessageHeight = messageHeight,
                 PostWorkCallBack = callback
             };
-            _worker.WorkAsync(info);
+            WorkAsync(info);
         }
 
-        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method")]
+        [Obsolete("Use IWorkerHost Interface WorkAsync(WorkAsynInfo) method", true)]
         public void WorkAsync(string message, Action<BackgroundWorker, DoWorkEventArgs> work, Action<RunWorkerCompletedEventArgs> callback, Action<ProgressChangedEventArgs> progressChanged, object argument, bool enableCancellation, int messageWidth, int messageHeight)
         {
             var info = new WorkAsyncInfo(message, work)
@@ -223,7 +227,7 @@ namespace XrmToolBox.Extensibility
                 ProgressChanged = progressChanged
 
             };
-            _worker.WorkAsync(info);
+            WorkAsync(info);
         }
 
         #endregion Obsolete WorkAsync Calls

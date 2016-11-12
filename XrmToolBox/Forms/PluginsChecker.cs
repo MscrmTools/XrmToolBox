@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using NuGet;
 using XrmToolBox.AppCode;
@@ -32,14 +33,17 @@ namespace XrmToolBox.Forms
         private readonly PackageManager manager;
         private readonly string nugetPluginsFolder;
         private FileInfo[] plugins;
+        private List<XtbNuGetPackage> xtbPackages;
+        private readonly List<string> selectedPackagesId;
 
         public PluginsChecker()
         {
             InitializeComponent();
 
             // Initializing folders variables
-            applicationDataFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-             "XrmToolBox");
+            applicationDataFolder =
+                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+                    "XrmToolBox");
             nugetPluginsFolder = Path.Combine(applicationDataFolder, "Plugins");
             applicationFolder = new FileInfo(Assembly.GetExecutingAssembly().FullName).DirectoryName;
             applicationPluginsFolder = Path.Combine(applicationFolder, "Plugins");
@@ -50,6 +54,11 @@ namespace XrmToolBox.Forms
             // Repository initialization
             var repository = PackageRepositoryFactory.Default.CreateRepository("https://packages.nuget.org/api/v2");
             manager = new PackageManager(repository, nugetPluginsFolder);
+
+            // Display cache folder size
+            CalculateCacheFolderSize();
+
+            selectedPackagesId = new List<string>();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -65,10 +74,10 @@ namespace XrmToolBox.Forms
         public List<XtbNuGetPackage> RetrieveNugetPackages()
         {
             var packages = manager.SourceRepository.GetPackages()
-                      .Where(p => p.Tags.ToLower().StartsWith("xrmtoolbox")
-                                  && p.Tags.ToLower() != "xrmtoolbox"
-                                  && p.IsLatestVersion)
-                      .ToList();
+                .Where(p => p.Tags.ToLower().StartsWith("xrmtoolbox")
+                            && p.Tags.ToLower() != "xrmtoolbox"
+                            && p.IsLatestVersion)
+                .ToList();
 
             var list = new List<XtbNuGetPackage>();
             foreach (var package in packages)
@@ -81,6 +90,14 @@ namespace XrmToolBox.Forms
 
         public void RefreshPluginsList()
         {
+            selectedPackagesId.Clear();
+
+            tstSearch.TextChanged -= tstSearch_TextChanged;
+            tstSearch.Text = "Search by Title or Authors";
+            tstSearch.ForeColor = SystemColors.InactiveCaption;
+            tstSearch.TextChanged += tstSearch_TextChanged;
+            tstSearch.Enabled = false;
+
             plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
 
             lvPlugins.Items.Clear();
@@ -90,9 +107,9 @@ namespace XrmToolBox.Forms
             var bw = new BackgroundWorker();
             bw.DoWork += (sender, e) =>
             {
-                var options = ((MainForm)Owner).Options;
+                var options = ((MainForm) Owner).Options;
 
-                var xtbPackages = RetrieveNugetPackages();
+                xtbPackages = RetrieveNugetPackages();
 
                 var lvic = new List<ListViewItem>();
                 foreach (var xtbPackage in xtbPackages)
@@ -105,22 +122,22 @@ namespace XrmToolBox.Forms
                     }
 
                     if (xtbPackage.Action == PackageInstallAction.Install
-                       && options.PluginsStoreShowNew.HasValue
-                       && options.PluginsStoreShowNew.Value == false)
+                        && options.PluginsStoreShowNew.HasValue
+                        && options.PluginsStoreShowNew.Value == false)
                     {
                         continue;
                     }
 
                     if (xtbPackage.Action == PackageInstallAction.Update
-                       && options.PluginsStoreShowUpdates.HasValue
-                       && options.PluginsStoreShowUpdates.Value == false)
+                        && options.PluginsStoreShowUpdates.HasValue
+                        && options.PluginsStoreShowUpdates.Value == false)
                     {
                         continue;
                     }
 
                     if (xtbPackage.Action == PackageInstallAction.None
-                      && options.PluginsStoreShowInstalled.HasValue
-                      && options.PluginsStoreShowInstalled.Value == false)
+                        && options.PluginsStoreShowInstalled.HasValue
+                        && options.PluginsStoreShowInstalled.Value == false)
                     {
                         continue;
                     }
@@ -133,6 +150,7 @@ namespace XrmToolBox.Forms
             {
                 tssProgress.Visible = false;
                 tssLabel.Text = string.Empty;
+                tstSearch.Enabled = true;
 
                 if (e.Error != null)
                 {
@@ -140,9 +158,20 @@ namespace XrmToolBox.Forms
                     return;
                 }
 
-                lvPlugins.Items.AddRange(((List<ListViewItem>)e.Result).ToArray());
+                lvPlugins.Items.AddRange(((List<ListViewItem>) e.Result).ToArray());
             };
             bw.RunWorkerAsync();
+        }
+
+        private void CalculateCacheFolderSize()
+        {
+            if (Directory.Exists(applicationDataFolder))
+            {
+                var size = GetDirectorySize(applicationDataFolder);
+                tsbCleanCacheFolder.ToolTipText = string.Format(
+                    "Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {0}MB",
+                    size/1024/1024);
+            }
         }
 
         private XtbNuGetPackage GetXtbPackage(IPackage package)
@@ -170,7 +199,8 @@ namespace XrmToolBox.Forms
                 if (Path.GetDirectoryName(file.EffectivePath).ToLower() == "plugins")
                 {
                     // Only check version of files in the Plugins folder
-                    var existingPluginFile = plugins.FirstOrDefault(p => file.EffectivePath.ToLower().EndsWith(p.Name.ToLower()));
+                    var existingPluginFile =
+                        plugins.FirstOrDefault(p => file.EffectivePath.ToLower().EndsWith(p.Name.ToLower()));
                     if (existingPluginFile == null)
                     {
                         install = true;
@@ -237,48 +267,118 @@ namespace XrmToolBox.Forms
 
         private void lvPlugins_ColumnClick(object sender, ColumnClickEventArgs e)
         {
-            lvPlugins.Sorting = lvPlugins.Sorting == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
-            lvPlugins.ListViewItemSorter = new ListViewItemComparer(e.Column, lvPlugins.Sorting);
+            if (e.Column == 0)
+            {
+                bool value = false;
+                try
+                {
+                    value = Convert.ToBoolean(this.lvPlugins.Columns[e.Column].Tag);
+                }
+                catch (Exception)
+                {
+                }
+                this.lvPlugins.Columns[e.Column].Tag = !value;
+                foreach (ListViewItem item in this.lvPlugins.Items)
+                    item.Checked = !value;
+
+                this.lvPlugins.Invalidate();
+            }
+            else
+            {
+                lvPlugins.Sorting = lvPlugins.Sorting == SortOrder.Ascending
+                    ? SortOrder.Descending
+                    : SortOrder.Ascending;
+                lvPlugins.ListViewItemSorter = new ListViewItemComparer(e.Column, lvPlugins.Sorting);
+            }
+        }
+
+        private void lvPlugins_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                e.DrawBackground();
+                bool value = false;
+                try
+                {
+                    value = Convert.ToBoolean(e.Header.Tag);
+                }
+                catch (Exception)
+                {
+                }
+                CheckBoxRenderer.DrawCheckBox(e.Graphics,
+                    new Point(e.Bounds.Left + 4, e.Bounds.Top + 4),
+                    value ? System.Windows.Forms.VisualStyles.CheckBoxState.CheckedNormal :
+                    System.Windows.Forms.VisualStyles.CheckBoxState.UncheckedNormal);
+            }
+            else
+            {
+                e.DrawDefault = true;
+            }
+        }
+
+        private void lvPlugins_DrawItem(object sender, DrawListViewItemEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
+        private void lvPlugins_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
+        {
+            e.DrawDefault = true;
         }
 
         private void PluginsChecker_Load(object sender, EventArgs e)
         {
-            var options = ((MainForm)Owner).Options;
+            var options = ((MainForm) Owner).Options;
 
             tsbShowThisScreenOnStartup.Checked = options.DisplayPluginsStoreOnStartup;
-            tsmiShowInstalledPlugins.Checked = options.PluginsStoreShowInstalled.HasValue ? options.PluginsStoreShowInstalled.Value : true;
+            tsmiShowInstalledPlugins.Checked = options.PluginsStoreShowInstalled.HasValue
+                ? options.PluginsStoreShowInstalled.Value
+                : true;
             tsmiShowNewPlugins.Checked = options.PluginsStoreShowNew.HasValue ? options.PluginsStoreShowNew.Value : true;
-            tsmiShowPluginsNotCompatible.Checked = options.PluginsStoreShowIncompatible.HasValue ? options.PluginsStoreShowIncompatible.Value : true;
-            tsmiShowPluginsUpdate.Checked = options.PluginsStoreShowUpdates.HasValue ? options.PluginsStoreShowUpdates.Value : true;
+            tsmiShowPluginsNotCompatible.Checked = options.PluginsStoreShowIncompatible.HasValue
+                ? options.PluginsStoreShowIncompatible.Value
+                : true;
+            tsmiShowPluginsUpdate.Checked = options.PluginsStoreShowUpdates.HasValue
+                ? options.PluginsStoreShowUpdates.Value
+                : true;
 
             RefreshPluginsList();
+
+            tstSearch.Focus();
         }
 
         public PluginUpdates PrepareInstallationPackages(List<XtbNuGetPackage> xtbPackages)
         {
-            var pus = new PluginUpdates { PreviousProcessId = Process.GetCurrentProcess().Id };
+            var pus = new PluginUpdates {PreviousProcessId = Process.GetCurrentProcess().Id};
 
-            foreach(var xtbPackage in xtbPackages)
+            foreach (var xtbPackage in xtbPackages)
             {
-                
+
                 if (xtbPackage.Action == PackageInstallAction.Unavailable)
                 {
-                    if (xtbPackage.Package.ProjectUrl != null && !string.IsNullOrEmpty(xtbPackage.Package.ProjectUrl.ToString()))
+                    if (xtbPackage.Package.ProjectUrl != null &&
+                        !string.IsNullOrEmpty(xtbPackage.Package.ProjectUrl.ToString()))
                     {
-                        if (DialogResult.Yes == MessageBox.Show($"{xtbPackage.Package.Title}\nis incompatible with this version of XrmToolBox.\nOpen project URL?", "Incompatible plugin", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
+                        if (DialogResult.Yes ==
+                            MessageBox.Show(
+                                $"{xtbPackage.Package.Title}\nis incompatible with this version of XrmToolBox.\nOpen project URL?",
+                                "Incompatible plugin", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
                         {
                             Process.Start(xtbPackage.Package.ProjectUrl.ToString());
                         }
                     }
                     else
                     {
-                        MessageBox.Show($"{xtbPackage.Package.Title}\nis incompatible with this version of XrmToolBox.", "Incompatible plugin", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        MessageBox.Show(
+                            $"{xtbPackage.Package.Title}\nis incompatible with this version of XrmToolBox.",
+                            "Incompatible plugin", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                     continue;
                 }
                 manager.InstallPackage(xtbPackage.Package, true, false);
 
-                var packageFolder = Path.Combine(nugetPluginsFolder, xtbPackage.Package.Id + "." + xtbPackage.Package.Version);
+                var packageFolder = Path.Combine(nugetPluginsFolder,
+                    xtbPackage.Package.Id + "." + xtbPackage.Package.Version);
 
                 foreach (var fi in xtbPackage.Package.GetFiles())
                 {
@@ -352,6 +452,7 @@ namespace XrmToolBox.Forms
                 // Refresh plugins list when installation is done
                 XrmToolBoxAppForm.ReloadPluginsList();
                 RefreshPluginsList();
+                CalculateCacheFolderSize();
                 MessageBox.Show("Installation done!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 XrmToolBoxAppForm.EnableNewPluginsWatching(true);
@@ -360,13 +461,28 @@ namespace XrmToolBox.Forms
 
         private void tsbInstall_Click(object sender, EventArgs e)
         {
-            if (lvPlugins.CheckedItems.Count == 0)
-                return;
+            var packages =
+                lvPlugins.CheckedItems.Cast<ListViewItem>()
+                    .Where(l => l.Tag is XtbNuGetPackage)
+                    .Select(l => (XtbNuGetPackage) l.Tag)
+                    .ToList();
+            if (packages.Count == 0)
+            {
+                packages =
+                    lvPlugins.SelectedItems.Cast<ListViewItem>()
+                        .Where(l => l.Tag is XtbNuGetPackage)
+                        .Select(l => (XtbNuGetPackage) l.Tag)
+                        .ToList();
+            }
 
-            var packages = lvPlugins.CheckedItems.Cast<ListViewItem>().Where(l => l.Tag is XtbNuGetPackage).Select(l => (XtbNuGetPackage)l.Tag).ToList();
+            if (packages.Count == 0)
+            {
+                return;
+            }
+
             var updates = PrepareInstallationPackages(packages);
 
-            PerformInstallation(updates, (MainForm)Owner);
+            PerformInstallation(updates, (MainForm) Owner);
         }
 
         private void tsbLoadPlugins_Click(object sender, EventArgs e)
@@ -376,10 +492,22 @@ namespace XrmToolBox.Forms
 
         private void tsbShowThisScreenOnStartup_Click(object sender, EventArgs e)
         {
-            ToolStripButton ctrl = (ToolStripButton)sender;
+            ToolStripButton ctrl = (ToolStripButton) sender;
 
-            ((MainForm)Owner).Options.DisplayPluginsStoreOnStartup = ctrl.Checked;
-            ((MainForm)Owner).Options.Save();
+            ((MainForm) Owner).Options.DisplayPluginsStoreOnStartup = ctrl.Checked;
+            ((MainForm) Owner).Options.Save();
+        }
+
+        private void lvPlugins_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            if (e.Item.Checked)
+            {
+                selectedPackagesId.Add(((XtbNuGetPackage) e.Item.Tag).Package.Id);
+            }
+            else
+            {
+                selectedPackagesId.Remove(((XtbNuGetPackage)e.Item.Tag).Package.Id);
+            }
         }
 
         private void lvPlugins_SelectedIndexChanged(object sender, EventArgs e)
@@ -392,17 +520,17 @@ namespace XrmToolBox.Forms
             }
 
             var item = lvPlugins.SelectedItems[0];
-            var releaseNotes = ((XtbNuGetPackage)item.Tag).Package.ReleaseNotes;
+            var releaseNotes = ((XtbNuGetPackage) item.Tag).Package.ReleaseNotes;
 
-            BuildPropertiesPanel(((XtbNuGetPackage)item.Tag).Package);
+            BuildPropertiesPanel(((XtbNuGetPackage) item.Tag).Package);
 
             if (!string.IsNullOrEmpty(releaseNotes))
             {
                 Uri releaseNotesUri;
                 if (Uri.TryCreate(releaseNotes, UriKind.Absolute, out releaseNotesUri))
                 {
-                    var llbl = new LinkLabel { Text = releaseNotes };
-                    llbl.Click += (s, evt) => { Process.Start(((LinkLabel)s).Text); };
+                    var llbl = new LinkLabel {Text = releaseNotes};
+                    llbl.Click += (s, evt) => { Process.Start(((LinkLabel) s).Text); };
                     llbl.AutoSize = false;
                     llbl.Dock = DockStyle.Fill;
 
@@ -410,7 +538,7 @@ namespace XrmToolBox.Forms
                 }
                 else
                 {
-                    var lbl = new Label { Text = releaseNotes };
+                    var lbl = new Label {Text = releaseNotes};
                     lbl.Dock = DockStyle.Fill;
                     lbl.AutoSize = false;
 
@@ -419,7 +547,7 @@ namespace XrmToolBox.Forms
             }
             else
             {
-                var lbl = new Label { Text = "N/A" };
+                var lbl = new Label {Text = "N/A"};
                 lbl.Dock = DockStyle.Fill;
                 lbl.AutoSize = false;
 
@@ -464,21 +592,58 @@ namespace XrmToolBox.Forms
                 Dock = DockStyle.Top
             };
 
-            pnlTitle.Controls.AddRange(new Control[] { lblDescription, lblTitle, bitmap });
+            if (lblDescription.Text.Contains("\n"))
+            {
+                pnlTitle.Controls.AddRange(new Control[] { lblTitle, bitmap });
 
-            scProperties.Panel1.Controls.AddRange(new Control[] {
+                var pnlDescription = new Panel
+                {
+                    AutoScroll = true,
+                    AutoScrollMinSize = new Size(0, 1000),
+                    Dock = DockStyle.Fill
+                };
+                pnlDescription.Controls.Add(lblDescription);
+
+                var lblDescriptionHeader = new Label
+                {
+                    Dock = DockStyle.Top,
+                    Text = "Description",
+                    Font = new Font("Microsoft Sans Serif", 8, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point),
+                    Height = 16
+                };
+
+                scProperties.Panel1.Controls.AddRange(new Control[]
+                {
+                pnlDescription,
+                lblDescriptionHeader,
                 GetPropertiesPanelInformation("Project Url", package.ProjectUrl),
                 GetPropertiesPanelInformation("Downloads count", package.DownloadCount.ToString()),
                 GetPropertiesPanelInformation("Authors", string.Join(", ", package.Authors)),
                 GetPropertiesPanelInformation("Version", package.Version.ToString()),
-                pnlTitle });
+                pnlTitle
+                });
+            }
+            else
+            {
+                pnlTitle.Controls.AddRange(new Control[] { lblDescription, lblTitle, bitmap });
+
+                scProperties.Panel1.Controls.AddRange(new Control[]
+                {
+                GetPropertiesPanelInformation("Project Url", package.ProjectUrl),
+                GetPropertiesPanelInformation("Downloads count", package.DownloadCount.ToString()),
+                GetPropertiesPanelInformation("Authors", string.Join(", ", package.Authors)),
+                GetPropertiesPanelInformation("Version", package.Version.ToString()),
+                pnlTitle
+                });
+            }
         }
+
         private Panel GetPropertiesPanelInformation(string label, object value)
         {
             var lblLabel = new Label
             {
                 Dock = DockStyle.Left,
-                Text = label.ToString(),
+                Text = label,
                 Width = 100,
                 Height = 20
             };
@@ -504,7 +669,7 @@ namespace XrmToolBox.Forms
                 };
                 rightControl.Click += (sender, e) =>
                 {
-                    Process.Start(((LinkLabel)sender).Text);
+                    Process.Start(((LinkLabel) sender).Text);
                 };
             }
 
@@ -523,15 +688,15 @@ namespace XrmToolBox.Forms
                 Dock = DockStyle.Top
             };
 
-            pnl.Controls.AddRange(new Control[] { rightControl, lblLabel });
+            pnl.Controls.AddRange(new [] {rightControl, lblLabel});
 
             return pnl;
         }
 
         private void tsmiPluginDisplayOption_Click(object sender, EventArgs e)
         {
-            var options = ((MainForm)Owner).Options;
-            ToolStripMenuItem item = (ToolStripMenuItem)sender;
+            var options = ((MainForm) Owner).Options;
+            ToolStripMenuItem item = (ToolStripMenuItem) sender;
 
             if (item == tsmiShowInstalledPlugins)
             {
@@ -557,7 +722,114 @@ namespace XrmToolBox.Forms
 
         private void tsbProxySettings_Click(object sender, EventArgs e)
         {
-            ProxySettingsHelper.registerSettings();
+            ProxySettingsHelper.registerSettings(this);
+        }
+
+        private void tsbCleanCacheFolder_Click(object sender, EventArgs e)
+        {
+            if (DialogResult.No ==
+                MessageBox.Show(this, "Are you sure you want to delete XrmToolBox Plugins Store cache?", "Question",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            {
+                return;
+            }
+
+            if (Directory.Exists(applicationDataFolder))
+            {
+                foreach (var item in new DirectoryInfo(applicationDataFolder).GetFileSystemInfos())
+                {
+                    if ((item.Attributes & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        Directory.Delete(item.FullName, true);
+                    }
+                    else
+                    {
+                        File.Delete(item.FullName);
+                    }
+                }
+
+                CalculateCacheFolderSize();
+                MessageBox.Show(this, "Cache folder has been cleaned");
+            }
+        }
+
+        private long GetDirectorySize(string path)
+        {
+            string[] files = Directory.GetFiles(path);
+            string[] subdirectories = Directory.GetDirectories(path);
+
+            long size = files.Sum(x => new FileInfo(x).Length);
+            foreach (string s in subdirectories)
+                size += GetDirectorySize(s);
+
+            return size;
+        }
+
+        private Thread searchThread;
+
+        private void tstSearch_TextChanged(object sender, EventArgs e)
+        {
+            searchThread?.Abort();
+            searchThread = new Thread(FilterPlugins);
+            searchThread.Start(tstSearch.Text);
+        }
+
+        private void tstSearch_Enter(object sender, EventArgs e)
+        {
+            tstSearch.Text = string.Empty;
+            tstSearch.ForeColor = SystemColors.WindowText;
+        }
+
+        private void FilterPlugins(object text)
+        {
+            var filter = text.ToString().ToLower();
+            var options = ((MainForm) Owner).Options;
+            var lvic = new List<ListViewItem>();
+            foreach (var xtbPackage in xtbPackages.Where(p => filter.Length > 0 &&
+                                                              (p.Package.Title.ToLower().Replace(" for xrmtoolbox","").Contains(filter) ||
+                                                               p.Package.Authors.Any(a => a.ToLower().Contains(filter)))
+                                                               || filter.Length == 0)
+                )
+            {
+                if (xtbPackage.Action == PackageInstallAction.Unavailable
+                    && options.PluginsStoreShowIncompatible.HasValue
+                    && options.PluginsStoreShowIncompatible.Value == false)
+                {
+                    continue;
+                }
+
+                if (xtbPackage.Action == PackageInstallAction.Install
+                    && options.PluginsStoreShowNew.HasValue
+                    && options.PluginsStoreShowNew.Value == false)
+                {
+                    continue;
+                }
+
+                if (xtbPackage.Action == PackageInstallAction.Update
+                    && options.PluginsStoreShowUpdates.HasValue
+                    && options.PluginsStoreShowUpdates.Value == false)
+                {
+                    continue;
+                }
+
+                if (xtbPackage.Action == PackageInstallAction.None
+                    && options.PluginsStoreShowInstalled.HasValue
+                    && options.PluginsStoreShowInstalled.Value == false)
+                {
+                    continue;
+                }
+
+                lvic.Add(xtbPackage.GetPluginsStoreItem());
+
+                // Check item if it was checked
+                lvic.Last().Checked = selectedPackagesId.Contains(xtbPackage.Package.Id);
+            }
+
+            Invoke(new Action(() =>
+            {
+                lvPlugins.Items.Clear();
+                lvPlugins.Items.AddRange(lvic.ToArray());
+            }));
         }
     }
 
@@ -576,8 +848,9 @@ namespace XrmToolBox.Forms
 
         public ListViewItem GetPluginsStoreItem()
         {
-            var item = new ListViewItem(this.ToString());
+            var item = new ListViewItem(string.Empty);
             item.Tag = this;
+            item.SubItems.Add(this.ToString());
             item.SubItems.Add(Package.Version.ToString());
             item.SubItems.Add(CurrentVersion?.ToString());
             item.SubItems.Add(Package.Description);
@@ -615,7 +888,7 @@ namespace XrmToolBox.Forms
             {
                 if (!string.IsNullOrWhiteSpace(Package.Title))
                 {
-                    return Package.Title;
+                    return Package.Title.Replace(" for XrmToolBox","");
                 }
                 else
                 {

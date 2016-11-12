@@ -12,9 +12,12 @@ namespace XrmToolBox
         private const string KEY_HTTP_PROXY_USER = "http_proxy.user";
         private const string KEY_HTTP_PROXY_PASSWORD = "http_proxy.password";
 
-        public static void registerSettings()
+        public static void registerSettings(Form parentForm)
         {
-            ProxySettingsForm frmProxy = new ProxySettingsForm();
+            ProxySettingsForm frmProxy = new ProxySettingsForm
+            {
+                StartPosition = FormStartPosition.CenterParent
+            };
 
             var settings = NuGet.Settings.LoadDefaultSettings(null, null, null);
 
@@ -49,7 +52,7 @@ namespace XrmToolBox
                 frmProxy.proxyPort = "";
             }
 
-            if (frmProxy.ShowDialog() == DialogResult.OK)
+            if (frmProxy.ShowDialog(parentForm) == DialogResult.OK)
             {
 
                 if (frmProxy.UseCustomProxy)

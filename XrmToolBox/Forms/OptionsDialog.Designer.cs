@@ -65,9 +65,11 @@
             this.label5 = new System.Windows.Forms.Label();
             this.cbbProxyUsage = new System.Windows.Forms.ComboBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.chkCloseEachPluginSilently = new System.Windows.Forms.CheckBox();
+            this.chkDisplayPluginsStoreOnStartup = new System.Windows.Forms.CheckBox();
             this.chkClosePluginsSilently = new System.Windows.Forms.CheckBox();
             this.chkAllowUsageStatistics = new System.Windows.Forms.CheckBox();
-            this.chkDisplayPluginsStoreOnStartup = new System.Windows.Forms.CheckBox();
+            this.chkDoNotCheckForUpdate = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -391,7 +393,7 @@
             this.txtProxyAddress.Enabled = false;
             this.txtProxyAddress.Location = new System.Drawing.Point(194, 25);
             this.txtProxyAddress.Name = "txtProxyAddress";
-            this.txtProxyAddress.Size = new System.Drawing.Size(586, 26);
+            this.txtProxyAddress.Size = new System.Drawing.Size(587, 26);
             this.txtProxyAddress.TabIndex = 4;
             // 
             // label4
@@ -483,6 +485,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.chkDoNotCheckForUpdate);
+            this.tabPage1.Controls.Add(this.chkCloseEachPluginSilently);
             this.tabPage1.Controls.Add(this.chkDisplayPluginsStoreOnStartup);
             this.tabPage1.Controls.Add(this.chkClosePluginsSilently);
             this.tabPage1.Controls.Add(this.chkAllowUsageStatistics);
@@ -494,13 +498,34 @@
             this.tabPage1.Text = "Miscellaneous";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // chkCloseEachPluginSilently
+            // 
+            this.chkCloseEachPluginSilently.AutoSize = true;
+            this.chkCloseEachPluginSilently.Location = new System.Drawing.Point(15, 52);
+            this.chkCloseEachPluginSilently.Name = "chkCloseEachPluginSilently";
+            this.chkCloseEachPluginSilently.Size = new System.Drawing.Size(286, 24);
+            this.chkCloseEachPluginSilently.TabIndex = 2;
+            this.chkCloseEachPluginSilently.Text = "Do not prompt when closing plugins";
+            this.chkCloseEachPluginSilently.UseVisualStyleBackColor = true;
+            this.chkCloseEachPluginSilently.CheckedChanged += new System.EventHandler(this.chkCloseEachPluginSilently_CheckedChanged);
+            // 
+            // chkDisplayPluginsStoreOnStartup
+            // 
+            this.chkDisplayPluginsStoreOnStartup.AutoSize = true;
+            this.chkDisplayPluginsStoreOnStartup.Location = new System.Drawing.Point(15, 114);
+            this.chkDisplayPluginsStoreOnStartup.Name = "chkDisplayPluginsStoreOnStartup";
+            this.chkDisplayPluginsStoreOnStartup.Size = new System.Drawing.Size(346, 24);
+            this.chkDisplayPluginsStoreOnStartup.TabIndex = 4;
+            this.chkDisplayPluginsStoreOnStartup.Text = "Display plugins store on XrmToolBox startup";
+            this.chkDisplayPluginsStoreOnStartup.UseVisualStyleBackColor = true;
+            // 
             // chkClosePluginsSilently
             // 
             this.chkClosePluginsSilently.AutoSize = true;
-            this.chkClosePluginsSilently.Location = new System.Drawing.Point(15, 52);
+            this.chkClosePluginsSilently.Location = new System.Drawing.Point(15, 83);
             this.chkClosePluginsSilently.Name = "chkClosePluginsSilently";
             this.chkClosePluginsSilently.Size = new System.Drawing.Size(518, 24);
-            this.chkClosePluginsSilently.TabIndex = 2;
+            this.chkClosePluginsSilently.TabIndex = 3;
             this.chkClosePluginsSilently.Text = "Do not prompt on exit when plugins are opened, close plugins silently";
             this.chkClosePluginsSilently.UseVisualStyleBackColor = true;
             // 
@@ -514,15 +539,15 @@
             this.chkAllowUsageStatistics.Text = "Allow to send usage statistics (only anonymous data : plugin usage count)";
             this.chkAllowUsageStatistics.UseVisualStyleBackColor = true;
             // 
-            // chkDisplayPluginsStoreOnStartup
+            // chkDoNotCheckForUpdate
             // 
-            this.chkDisplayPluginsStoreOnStartup.AutoSize = true;
-            this.chkDisplayPluginsStoreOnStartup.Location = new System.Drawing.Point(15, 82);
-            this.chkDisplayPluginsStoreOnStartup.Name = "chkDisplayPluginsStoreOnStartup";
-            this.chkDisplayPluginsStoreOnStartup.Size = new System.Drawing.Size(346, 24);
-            this.chkDisplayPluginsStoreOnStartup.TabIndex = 3;
-            this.chkDisplayPluginsStoreOnStartup.Text = "Display plugins store on XrmToolBox startup";
-            this.chkDisplayPluginsStoreOnStartup.UseVisualStyleBackColor = true;
+            this.chkDoNotCheckForUpdate.AutoSize = true;
+            this.chkDoNotCheckForUpdate.Location = new System.Drawing.Point(16, 144);
+            this.chkDoNotCheckForUpdate.Name = "chkDoNotCheckForUpdate";
+            this.chkDoNotCheckForUpdate.Size = new System.Drawing.Size(214, 24);
+            this.chkDoNotCheckForUpdate.TabIndex = 5;
+            this.chkDoNotCheckForUpdate.Text = "Do not check for updates";
+            this.chkDoNotCheckForUpdate.UseVisualStyleBackColor = true;
             // 
             // OptionsDialog
             // 
@@ -606,5 +631,7 @@
         private System.Windows.Forms.CheckBox chkAllowUsageStatistics;
         private System.Windows.Forms.CheckBox chkClosePluginsSilently;
         private System.Windows.Forms.CheckBox chkDisplayPluginsStoreOnStartup;
+        private System.Windows.Forms.CheckBox chkCloseEachPluginSilently;
+        private System.Windows.Forms.CheckBox chkDoNotCheckForUpdate;
     }
 }

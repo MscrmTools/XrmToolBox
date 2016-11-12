@@ -25,8 +25,10 @@ namespace XrmToolBox.Forms
             rdbToolsListSmall.Checked = !option.DisplayLargeIcons;
             chkDisplayMuFirst.Checked = option.DisplayMostUsedFirst;
             chkAllowUsageStatistics.Checked = option.AllowLogUsage.HasValue && option.AllowLogUsage.Value;
+            chkCloseEachPluginSilently.Checked = option.CloseEachPluginSilently;
             chkClosePluginsSilently.Checked = option.CloseOpenedPluginsSilently;
             chkDisplayPluginsStoreOnStartup.Checked = option.DisplayPluginsStoreOnStartup;
+            chkDoNotCheckForUpdate.Checked = option.DoNotCheckForUpdates;
         }
 
         public Options Option { get { return option; } }
@@ -42,8 +44,10 @@ namespace XrmToolBox.Forms
             option.AllowLogUsage = chkAllowUsageStatistics.Checked;
             option.DisplayLargeIcons = rdbToolsListLarge.Checked;
             option.DisplayMostUsedFirst = chkDisplayMuFirst.Checked;
+            option.CloseEachPluginSilently = chkCloseEachPluginSilently.Checked;
             option.CloseOpenedPluginsSilently = chkClosePluginsSilently.Checked;
             option.DisplayPluginsStoreOnStartup = chkDisplayPluginsStoreOnStartup.Checked;
+            option.DoNotCheckForUpdates = chkDoNotCheckForUpdate.Checked;
 
             option.HiddenPlugins =
                 lvPlugins.Items.Cast<ListViewItem>().Where(i => i.Checked == false).Select(i => i.Text).ToList();
@@ -139,6 +143,20 @@ namespace XrmToolBox.Forms
         {
             txtProxyPassword.Enabled = rbCustomAuthYes.Checked;
             txtProxyUser.Enabled = rbCustomAuthYes.Checked;
+        }
+
+        private void chkCloseEachPluginSilently_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkCloseEachPluginSilently.Checked)
+            {
+                chkClosePluginsSilently.Enabled = false;
+                chkClosePluginsSilently.Checked = true;
+            }
+            else
+            {
+                chkClosePluginsSilently.Enabled = true;
+                chkClosePluginsSilently.Checked = option.CloseOpenedPluginsSilently;
+            }
         }
     }
 }

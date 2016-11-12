@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
+using XrmToolBox.Extensibility;
 
 namespace XrmToolBox
 {
@@ -76,6 +77,7 @@ namespace XrmToolBox
 
         public bool? AllowLogUsage { get; set; }
         public bool CheckUpdateOnStartup { get; set; }
+        public bool CloseEachPluginSilently { get; set; }
         public bool CloseOpenedPluginsSilently { get; set; }
         public bool DisplayLargeIcons { get; set; }
         public bool DisplayMostUsedFirst { get; set; }
@@ -87,18 +89,34 @@ namespace XrmToolBox
 
         [XmlElement("FormSize")]
         public FormSize Size { get; set; }
+        public bool DoNotCheckForUpdates { get; set; }
 
-        public static Options Load()
+        public static bool Load(out Options options, out string errorMessage)
         {
-            if (File.Exists("XrmToolBox.Settings.xml"))
-            {
-                var document = new XmlDocument();
-                document.Load("XrmToolBox.Settings.xml");
+            errorMessage = string.Empty;
 
-                return (Options)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(Options));
+            var settingsFile ="XrmToolBox.Settings.xml";
+
+            if (File.Exists(settingsFile))
+            {
+                try
+                {
+                    var document = new XmlDocument();
+                    document.Load(settingsFile);
+
+                    options = (Options) XmlSerializerHelper.Deserialize(document.OuterXml, typeof(Options));
+                    return true;
+                }
+                catch (Exception error)
+                {
+                    errorMessage = error.Message;
+                    options = new Options();
+                    return false;
+                }
             }
 
-            return new Options();
+            options = new Options();
+            return true;
         }
 
         public object Clone()
@@ -114,13 +132,16 @@ namespace XrmToolBox
                 LastUpdateCheck = LastUpdateCheck,
                 AllowLogUsage = AllowLogUsage,
                 CloseOpenedPluginsSilently = CloseOpenedPluginsSilently,
-                DisplayPluginsStoreOnStartup = DisplayPluginsStoreOnStartup
+                DisplayPluginsStoreOnStartup = DisplayPluginsStoreOnStartup,
+                DoNotCheckForUpdates = DoNotCheckForUpdates
             };
         }
 
         public void Save()
         {
-            XmlSerializerHelper.SerializeToFile(this, "XrmToolBox.Settings.xml");
+            var settingsFile = "XrmToolBox.Settings.xml";
+
+            XmlSerializerHelper.SerializeToFile(this, settingsFile);
         }
     }
 }

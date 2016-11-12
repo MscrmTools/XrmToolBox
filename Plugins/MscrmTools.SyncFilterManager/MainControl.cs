@@ -63,23 +63,27 @@ namespace MscrmTools.SyncFilterManager
             {
                 tabCtrl.Enabled = false;
 
-                WorkAsync("Reseting users local data rules...",
-                   (bw, e) =>
-                   {
-                       var rm = new RuleManager("userquery", Service, ConnectionDetail);
-                       rm.ResetUsersRulesFromDefault((List<Entity>)e.Argument, bw);
-                   },
-                   e =>
-                   {
-                       if (e.Error != null)
-                       {
-                           MessageBox.Show(this, "Error while updating users Local Data Rules: " + e.Error.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                       }
+                WorkAsync(new WorkAsyncInfo
+                {
+                    Message = "Reseting users local data rules...",
+                    Work = (bw, e) =>
+                    {
+                        var rm = new RuleManager("userquery", Service, ConnectionDetail);
+                        rm.ResetUsersRulesFromDefault((List<Entity>) e.Argument, bw);
+                    },
+                    PostWorkCallBack = e =>
+                    {
+                        if (e.Error != null)
+                        {
+                            MessageBox.Show(this, "Error while updating users Local Data Rules: " + e.Error.Message,
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
 
-                       tabCtrl.Enabled = true;
-                   },
-                   e => SetWorkingMessage(e.UserState.ToString()),
-                   selectedUsers);
+                        tabCtrl.Enabled = true;
+                    },
+                    ProgressChanged = e => SetWorkingMessage(e.UserState.ToString()),
+                    AsyncArgument = selectedUsers
+                });
             }
         }
 
