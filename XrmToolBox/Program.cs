@@ -110,9 +110,9 @@ namespace XrmToolBox
 
                 foreach (var pu in pus.Plugins)
                 {
-                    if (!Directory.Exists(pu.Destination))
+                    if (!Directory.Exists(Path.GetDirectoryName(pu.Destination)))
                     {
-                        Directory.CreateDirectory(pu.Destination);
+                        Directory.CreateDirectory(Path.GetDirectoryName(pu.Destination));
                     }
 
                     File.Copy(pu.Source, pu.Destination, true);
