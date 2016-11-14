@@ -45,15 +45,7 @@ namespace XrmToolBox.Extensibility
         {
             CloseTool();
         }
-
-        void IXrmToolBoxPluginControl.ClosingPlugin(PluginCloseInfo info)
-        {
-            MessageBox.Show("Custom logic here");
-           
-
-            ClosingPlugin(info);
-        }
-       
+        
         #region IMsCrmToolsPluginUserControl Members
 
         public event EventHandler OnCloseTool;

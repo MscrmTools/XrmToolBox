@@ -101,6 +101,12 @@ namespace MsCrmTools.SampleTool
             CloseTool();
         }
 
+        public override void ClosingPlugin(PluginCloseInfo info)
+        {
+            MessageBox.Show("Custom logic here");
+
+            base.ClosingPlugin(info);
+        }
 
         private void tsbWhoAmI_Click(object sender, EventArgs e)
         {
