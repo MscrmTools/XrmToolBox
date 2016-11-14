@@ -194,6 +194,11 @@ namespace XrmToolBox
             // Then updates plugins with latest version of plugins (zipped)
             var pluginsZipFilePath = Path.Combine(currentDirectory, "Plugins.zip");
 
+            if (!File.Exists(pluginsZipFilePath))
+            {
+                return;
+            }
+
             // Extract content of plugins archive to a temporary folder
             var tempPath = string.Format("{0}_Temp", Paths.PluginsPath);
 
