@@ -145,6 +145,8 @@ namespace XrmToolBox
                     }
                 }
             }
+
+            File.Delete(updateFile);
         }
 
         /// <summary>

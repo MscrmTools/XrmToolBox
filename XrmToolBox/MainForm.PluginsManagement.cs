@@ -79,7 +79,7 @@ namespace XrmToolBox
                 pm = (T)ctor.Invoke(vals);
 
                 pm.Tag = plugin;
-                pm.ContextMenuStrip = cmsOnePlugin; 
+                //pm.ContextMenuStrip = cmsOnePlugin; 
                 pm.Clicked += PluginClicked;
 
                 pluginsModels.Add(pm);

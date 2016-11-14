@@ -524,7 +524,12 @@ namespace XrmToolBox
             }
             else if (e.Button == MouseButtons.Right)
             {
-                selectedPluginModel = (PluginModel)sender;
+                var ctrl = sender as PluginModel;
+                if (ctrl != null)
+                {
+                    selectedPluginModel = ctrl;
+                    cmsOnePlugin.Show(Cursor.Position);
+                }
             }
         }
 
@@ -674,6 +679,8 @@ namespace XrmToolBox
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            PluginCloseInfo info;
+
             // Save current form size for future usage
             currentOptions.Size.CurrentSize = Size;
             currentOptions.Size.IsMaximized = (WindowState == FormWindowState.Maximized);
@@ -681,9 +688,17 @@ namespace XrmToolBox
 
             // Warn to close opened plugins
             if (currentOptions.CloseOpenedPluginsSilently)
+            {
+                foreach (var page in GetPluginPages())
+                {
+                    info = new PluginCloseInfo(ToolBoxCloseReason.CloseAll);
+                    RequestCloseTab(page, info);
+                    if (info.Cancel) return;
+                }
                 return;
+            }
 
-            var info = new PluginCloseInfo(e.CloseReason);
+            info = new PluginCloseInfo(e.CloseReason);
             RequestCloseTabs(GetPluginPages(), info);
             e.Cancel = info.Cancel;
         }
@@ -921,7 +936,7 @@ namespace XrmToolBox
                 else
                 {
                     MessageBox.Show(this,
-                        "Ths plugin is not on the Plugins Store or its Project Url is not defined. Therefore, we cannot lead you to the project page",
+                        "This plugin is not on the Plugins Store or its Project Url is not defined. Therefore, we cannot lead you to the project page",
                         "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -936,6 +951,13 @@ namespace XrmToolBox
 
         private void tsmiUninstallPlugin_Click(object sender, EventArgs e)
         {
+            if (DialogResult.No == MessageBox.Show(this,
+                "Are you sure you want to uninstall this plugin?",
+                "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            {
+                return;
+            }
+
             var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
 
             var filePath = Assembly.GetAssembly(plugin.Value.GetType()).Location;

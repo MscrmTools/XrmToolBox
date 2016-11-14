@@ -56,12 +56,7 @@ namespace XrmToolBox.Extensibility.UserControls
             lblCount.Text = count.ToString();
             Refresh();
         }
-
-        private void LblTitleClick(object sender, EventArgs e)
-        {
-            MouseClick(null, null);
-        }
-
+        
         private new void MouseClick(object sender, MouseEventArgs e)
         {
             if (Clicked != null)
