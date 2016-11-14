@@ -6,13 +6,15 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace XrmToolBox
 {
     public class PluginManagerExtended : MarshalByRefObject
     {
-        private static readonly string PluginPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "Plugins");
+        //private static readonly string PluginPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "Plugins");
+        private static readonly string PluginPath = Paths.PluginsPath;
         private CompositionContainer container;
         private DirectoryCatalog directoryCatalog;
         private DateTime lastPluginsUpdate;

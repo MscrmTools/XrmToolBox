@@ -8,6 +8,7 @@ using McTools.Xrm.Connection.WinForms;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -20,6 +21,9 @@ using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.UserControls;
 using XrmToolBox.Forms;
+using XrmToolBox.PluginsStore;
+using PackageInstallAction = XrmToolBox.Forms.PackageInstallAction;
+using XtbNuGetPackage = XrmToolBox.PluginsStore.XtbNuGetPackage;
 
 namespace XrmToolBox
 {
@@ -39,6 +43,8 @@ namespace XrmToolBox
         private IOrganizationService service;
         private Point scrollPosition;
         protected internal Options Options { get { return currentOptions; } }
+        private PluginModel selectedPluginModel;
+        private Store store;
 
         #endregion Variables
 
@@ -65,7 +71,9 @@ namespace XrmToolBox
             string errorMessage;
             if (!Options.Load(out currentOptions, out errorMessage))
             {
-                MessageBox.Show(this, "An error occured when loading your XrmToolBox settings. Settings have been reset.\r\n\r\nError details:\r\n\r\n" + errorMessage,"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);    
+                MessageBox.Show(this,
+                    "An error ocurred when loading XrmToolBox options. A new options file has been created.\n\n" + errorMessage);
+
             }
 
             Text = string.Format("{0} (v{1})", Text, Assembly.GetExecutingAssembly().GetName().Version);
@@ -79,6 +87,12 @@ namespace XrmToolBox
 
         private void ManageConnectionControl()
         {
+            if (!Directory.Exists(Paths.ConnectionsPath))
+            {
+                Directory.CreateDirectory(Paths.ConnectionsPath);
+            }
+
+            ConnectionsList.ConnectionsListFilePath = Path.Combine(Paths.ConnectionsPath, "MscrmTools.ConnectionsList.xml");
             cManager = ConnectionManager.Instance;
             cManager.RequestPassword += (sender, e) => fHelper.RequestPassword(e.ConnectionDetail);
             cManager.StepChanged += (sender, e) => ccsb.SetMessage(e.CurrentStep);
@@ -204,9 +218,6 @@ namespace XrmToolBox
         {
             return new Task(() =>
             {
-                currentOptions.LastUpdateCheck = DateTime.Now;
-                currentOptions.Save();
-
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 var cvc = new GithubVersionChecker(currentVersion, "MsCrmTools", "XrmToolBox");
 
@@ -227,6 +238,9 @@ namespace XrmToolBox
                         }));
                     }
                 }
+
+                currentOptions.LastUpdateCheck = DateTime.Now;
+                currentOptions.Save();
             });
         }
 
@@ -246,13 +260,14 @@ namespace XrmToolBox
             {
                 try
                 {
-                    var pc = new PluginsChecker();
-                    var packages = pc.RetrieveNugetPackages();
+                    store = new Store();
+                    store.LoadNugetPackages();
+                    var packages = store.Packages;
 
-                    if (packages.Any(p => p.Action == PackageInstallAction.Update))
+                    if (packages.Any(p => p.Action == PluginsStore.PackageInstallAction.Update))
                     {
                         var image = pluginsCheckerImageList.Images[3];
-                        var text = packages.Count(p => p.Action == PackageInstallAction.Update).ToString();
+                        var text = packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Update).ToString();
 
                         using (Graphics graphics = Graphics.FromImage(image))
                         {
@@ -266,8 +281,8 @@ namespace XrmToolBox
                         tsbPlugins.Image = image;
 
                         tsbPlugins.ToolTipText = string.Format("{0} new plugins\r\n{1} plugins updates",
-                            packages.Count(p => p.Action == PackageInstallAction.Install),
-                            packages.Count(p => p.Action == PackageInstallAction.Update));
+                            packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Install),
+                            packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Update));
                     }
                     else
                     {
@@ -420,8 +435,7 @@ namespace XrmToolBox
 
             if (currentOptions.DisplayPluginsStoreOnStartup)
             {
-                var dlg = new PluginsChecker();
-                dlg.ShowDialog(this);
+                pbOpenPluginsStore_Click(sender, e);
             }
         }
 
@@ -487,20 +501,30 @@ namespace XrmToolBox
             }
         }
 
-        private void PluginClicked(object sender, EventArgs e)
+        private void PluginClicked(object sender, MouseEventArgs e)
         {
-            if (service == null && MessageBox.Show(this, "Do you want to connect to an organization first?", "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (e.Button == MouseButtons.Left)
             {
-                ConnectUponApproval(sender);
-            }
-            else
-            {
-                var plugin = ((UserControl)sender).Tag as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
-
-                if (plugin != null)
+                if (service == null &&
+                    MessageBox.Show(this, "Do you want to connect to an organization first?", "Question",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    DisplayPluginControl(plugin);
+                    ConnectUponApproval(sender);
                 }
+                else
+                {
+                    var plugin = ((UserControl) sender).Tag as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
+
+                    if (plugin != null)
+                    {
+
+                        DisplayPluginControl(plugin);
+                    }
+                }
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                selectedPluginModel = (PluginModel)sender;
             }
         }
 
@@ -578,7 +602,7 @@ namespace XrmToolBox
 
                 if (plugin != null)
                 {
-                    this.PluginClicked(new UserControl { Tag = plugin }, new EventArgs());
+                    this.PluginClicked(new UserControl { Tag = plugin }, new MouseEventArgs(MouseButtons.Left,1,0,0,0));
 
                     // Clear the textbox
                     // ReSharper disable once PossibleNullReferenceException
@@ -831,14 +855,40 @@ namespace XrmToolBox
 
         private void tsbPlugins_Click(object sender, EventArgs e)
         {
-            var dialog = new PluginsChecker();
-            dialog.ShowDialog(this);
+            pbOpenPluginsStore_Click(sender, e);
         }
 
         private void pbOpenPluginsStore_Click(object sender, EventArgs e)
         {
-            var pc = new PluginsChecker();
+            // If the options were not initialized, it means we are using the
+            // new plugins store for the first time. Copy values from main
+            // options file
+            if (!PluginsStore.Options.Instance.IsInitialized)
+            {
+                PluginsStore.Options.Instance.PluginsStoreShowInstalled = Options.PluginsStoreShowInstalled;
+                PluginsStore.Options.Instance.PluginsStoreShowIncompatible = Options.PluginsStoreShowIncompatible;
+                PluginsStore.Options.Instance.PluginsStoreShowNew = Options.PluginsStoreShowNew;
+                PluginsStore.Options.Instance.PluginsStoreShowUpdates = Options.PluginsStoreShowUpdates;
+                PluginsStore.Options.Instance.IsInitialized = true;
+            }
+
+            var pc = new StoreForm();
+            pc.PluginsUpdated += (storeForm, evt) =>
+            {
+                // If plugins list gets updated, refresh the list
+                ReloadPluginsList();
+            }; 
+
+            // Avoid scanning for new files during Plugins Store usage.
+            EnableNewPluginsWatching(false);
             pc.ShowDialog(this);
+            EnableNewPluginsWatching(true);
+
+            // Apply option to show Plugins Store on startup on main options
+            if (Options.DisplayPluginsStoreOnStartup != PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup)
+            {
+                Options.DisplayPluginsStoreOnStartup = PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup.HasValue && PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup.Value;
+            }
         }
 
         private void pnlNoPluginFound_Resize(object sender, EventArgs e)
@@ -850,6 +900,57 @@ namespace XrmToolBox
         private void llResetSearchFilter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             tstxtFilterPlugin.Text = string.Empty;
+        }
+
+
+
+        private void tsmiOpenProjectHomePage_Click(object sender, EventArgs e)
+        {
+            var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>) selectedPluginModel.Tag;
+
+            var filePath = Assembly.GetAssembly(plugin.Value.GetType()).Location;
+            if (File.Exists(filePath))
+            {
+                var fileName = Path.GetFileName(filePath);
+
+                var package = store.GetPackageByFileName(fileName.ToLower());
+                if (package != null && package.Package.ProjectUrl != null)
+                {
+                    Process.Start(package.Package.ProjectUrl.AbsoluteUri);
+                }
+                else
+                {
+                    MessageBox.Show(this,
+                        "Ths plugin is not on the Plugins Store or its Project Url is not defined. Therefore, we cannot lead you to the project page",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void tsmiHidePlugin_Click(object sender, EventArgs e)
+        {
+            var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
+            Options.HiddenPlugins.Add(plugin.Metadata.Name);
+            ReloadPluginsList();
+        }
+
+        private void tsmiUninstallPlugin_Click(object sender, EventArgs e)
+        {
+            var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
+
+            var filePath = Assembly.GetAssembly(plugin.Value.GetType()).Location;
+            if (File.Exists(filePath))
+            {
+                var fileName = Path.GetFileName(filePath);
+
+                var package = store.GetPackageByFileName(fileName.ToLower());
+
+                if (package != null)
+                {
+                    var pds = store.PrepareUninstallPlugins(new List<XtbNuGetPackage> {package});
+                    store.PerformUninstallation(pds);
+                }
+            }
         }
     }
 }

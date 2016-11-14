@@ -19,6 +19,24 @@ namespace MsCrmTools.SampleTool
         public SampleTool()
         {
             InitializeComponent();
+
+            var settings = new Settings
+            {
+                Var1 = "settings string",
+                Var2 = true
+            };
+            SettingsManager.Instance.Save(typeof(SampleTool), settings);
+
+            Settings settings2;
+
+            if (SettingsManager.Instance.TryLoad(typeof(SampleTool), out settings2))
+            {
+                MessageBox.Show("Settings found!");
+            }
+
+            LogInfo("An information message");
+            LogWarning("A warning message");
+            LogError("An error message");
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
@@ -63,6 +81,10 @@ namespace MsCrmTools.SampleTool
                     tsbCancel.Enabled = false;
                     if (!e.Cancelled)
                     {
+                        var logger = new LogManager(typeof(SampleTool), ConnectionDetail);
+                        logger.LogInfo("You are {0}", (Guid)e.Result);
+
+
                         MessageBox.Show(string.Format("You are {0}", (Guid)e.Result));
                     }
                 },

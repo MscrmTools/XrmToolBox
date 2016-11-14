@@ -23,6 +23,13 @@ namespace XrmToolBox.Extensibility
     [PartNotDiscoverable]
     public class PluginControlBase : UserControl, IXrmToolBoxPluginControl, IWorkerHost
     {
+        private readonly LogManager logManager;
+
+        public PluginControlBase()
+        {
+            logManager = new LogManager(GetType());    
+        }
+
         public ConnectionDetail ConnectionDetail { get; set; }
 
         public void CloseTool()
@@ -325,6 +332,8 @@ namespace XrmToolBox.Extensibility
 
         protected virtual void OnConnectionUpdated(ConnectionUpdatedEventArgs e)
         {
+            logManager.SetConnection(e.ConnectionDetail);
+
             var handler = ConnectionUpdated;
             if (handler != null) { handler(this, e); }
         }
@@ -342,5 +351,40 @@ namespace XrmToolBox.Extensibility
         }
 
         #endregion Connection Updated
+
+        #region Logs
+
+        /// <summary>
+        /// Writes an information message in the log
+        /// </summary>
+        /// <param name="message">Message</param>
+        /// <param name="args">Message parameters</param>
+        public void LogInfo(string message, params object[] args)
+        {
+           logManager.LogInfo(message, args);
+        }
+
+        /// <summary>
+        /// Writes a warning message in the log
+        /// </summary>
+        /// <param name="message">Message</param>
+        /// <param name="args">Message parameters</param>
+        public void LogWarning(string message, params object[] args)
+        {
+            logManager.LogWarning(message, args);
+        }
+
+        /// <summary>
+        /// Writes an error message in the log
+        /// </summary>
+        /// <param name="message">Message</param>
+        /// <param name="args">Message parameters</param>
+        public void LogError(string message, params object[] args)
+        {
+            logManager.LogError(message, args);
+        }
+
+        #endregion
+
     }
 }

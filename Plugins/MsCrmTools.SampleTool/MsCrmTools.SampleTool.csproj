@@ -129,6 +129,7 @@
     <Compile Include="SampleTool.Designer.cs">
       <DependentUpon>SampleTool.cs</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SampleTool.resx">

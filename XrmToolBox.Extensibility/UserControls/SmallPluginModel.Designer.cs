@@ -42,7 +42,7 @@
             this.picture.Size = new System.Drawing.Size(50, 50);
             this.picture.TabIndex = 0;
             this.picture.TabStop = false;
-            this.picture.Click += new System.EventHandler(this.MouseClick);
+            this.picture.MouseClick += this.MouseClick;
             // 
             // lblTitle
             // 
@@ -83,7 +83,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "SmallPluginModel";
             this.Size = new System.Drawing.Size(801, 75);
-            this.Click += new System.EventHandler(this.MouseClick);
+            this.MouseDown += this.MouseClick;
             ((System.ComponentModel.ISupportInitialize)(this.picture)).EndInit();
             this.ResumeLayout(false);
 

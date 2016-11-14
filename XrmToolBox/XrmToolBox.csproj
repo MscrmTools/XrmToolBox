@@ -139,8 +139,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Tooling.CrmConnectControl.dll</HintPath>
     </Reference>
-    <Reference Include="NuGet.Core, Version=2.11.1.812, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\NuGet.Core.2.11.1\lib\net40-Client\NuGet.Core.dll</HintPath>
+    <Reference Include="NuGet.Core, Version=2.12.0.817, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\NuGet.Core.2.12.0\lib\net40-Client\NuGet.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
@@ -315,6 +315,10 @@
       <Project>{df77aea3-43f7-403c-91af-3023a3bb06ec}</Project>
       <Name>XrmToolBox.Extensibility</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XrmToolBox.PluginsStore\XrmToolBox.PluginsStore.csproj">
+      <Project>{ebcb3d22-03f2-40d2-b949-05cae575f2ea}</Project>
+      <Name>XrmToolBox.PluginsStore</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -341,7 +345,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

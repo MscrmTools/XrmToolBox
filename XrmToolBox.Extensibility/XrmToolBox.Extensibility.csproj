@@ -93,6 +93,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Tooling.CrmConnectControl.dll</HintPath>
     </Reference>
+    <Reference Include="NuGet.Core, Version=2.12.0.817, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\NuGet.Core.2.12.0\lib\net40-Client\NuGet.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Activities" />
@@ -140,6 +144,8 @@
     <Compile Include="Interfaces\IWorkerHost.cs" />
     <Compile Include="Interfaces\IXrmToolBoxPlugin.cs" />
     <Compile Include="Args\MessageBusEventArgs.cs" />
+    <Compile Include="LogManager.cs" />
+    <Compile Include="Paths.cs" />
     <Compile Include="PluginBase.cs" />
     <Compile Include="PluginControlBase.cs">
       <SubType>UserControl</SubType>
@@ -148,6 +154,7 @@
     <Compile Include="PluginNotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Args\RequestConnectionEventArgs.cs" />
+    <Compile Include="SettingsManager.cs" />
     <Compile Include="UserControls\LargePluginModel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -172,6 +179,9 @@
   <ItemGroup>
     <EmbeddedResource Include="UserControls\LargePluginModel.resx">
       <DependentUpon>LargePluginModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\PluginModel.resx">
+      <DependentUpon>PluginModel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\SmallPluginModel.resx">
       <DependentUpon>SmallPluginModel.cs</DependentUpon>

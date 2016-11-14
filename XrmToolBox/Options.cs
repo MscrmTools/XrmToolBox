@@ -95,7 +95,12 @@ namespace XrmToolBox
         {
             errorMessage = string.Empty;
 
-            var settingsFile ="XrmToolBox.Settings.xml";
+            if (!Directory.Exists(Paths.SettingsPath))
+            {
+                Directory.CreateDirectory(Paths.SettingsPath);
+            }
+
+            var settingsFile = Path.Combine(Paths.SettingsPath, "XrmToolBox.Settings.xml");
 
             if (File.Exists(settingsFile))
             {
@@ -139,7 +144,12 @@ namespace XrmToolBox
 
         public void Save()
         {
-            var settingsFile = "XrmToolBox.Settings.xml";
+            if (!Directory.Exists(Paths.SettingsPath))
+            {
+                Directory.CreateDirectory(Paths.SettingsPath);
+            }
+
+            var settingsFile = Path.Combine(Paths.SettingsPath, "XrmToolBox.Settings.xml");
 
             XmlSerializerHelper.SerializeToFile(this, settingsFile);
         }

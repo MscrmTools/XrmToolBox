@@ -13,7 +13,7 @@ namespace XrmToolBox.Extensibility.UserControls
     {
         #region Event Handlers
 
-        public override event ClickedEventHandler Clicked;
+        public override event EventHandler<MouseEventArgs> Clicked;
 
         #endregion Event Handlers
 
@@ -62,10 +62,10 @@ namespace XrmToolBox.Extensibility.UserControls
             MouseClick(null, null);
         }
 
-        private new void MouseClick(object sender, EventArgs e)
+        private new void MouseClick(object sender, MouseEventArgs e)
         {
             if (Clicked != null)
-                Clicked(this, new EventArgs());
+                Clicked(this, e);
         }
     }
 }

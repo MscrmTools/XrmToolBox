@@ -64,7 +64,7 @@
             // 
             // toolStripMenu
             // 
-            this.toolStripMenu.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStripMenu.ImageScalingSize = new System.Drawing.Size(16, 16);
             this.toolStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbClose,
             this.toolStripSeparator2,
@@ -85,7 +85,7 @@
             this.tsbClose.Image = ((System.Drawing.Image)(resources.GetObject("tsbClose.Image")));
             this.tsbClose.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(24, 24);
+            this.tsbClose.Size = new System.Drawing.Size(16,16);
             this.tsbClose.Text = "Close this tool";
             this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             // 

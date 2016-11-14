@@ -11,6 +11,7 @@ using System.Threading;
 using System.Windows.Forms;
 using NuGet;
 using XrmToolBox.AppCode;
+using XrmToolBox.Extensibility;
 
 namespace XrmToolBox.Forms
 {
@@ -28,7 +29,6 @@ namespace XrmToolBox.Forms
         private static Version MinCompatibleVersion = new Version(1, 2015, 12, 20);
 
         private readonly string applicationDataFolder;
-        private readonly string applicationFolder;
         private readonly string applicationPluginsFolder;
         private readonly PackageManager manager;
         private readonly string nugetPluginsFolder;
@@ -41,12 +41,10 @@ namespace XrmToolBox.Forms
             InitializeComponent();
 
             // Initializing folders variables
-            applicationDataFolder =
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
-                    "XrmToolBox");
-            nugetPluginsFolder = Path.Combine(applicationDataFolder, "Plugins");
-            applicationFolder = new FileInfo(Assembly.GetExecutingAssembly().FullName).DirectoryName;
-            applicationPluginsFolder = Path.Combine(applicationFolder, "Plugins");
+            var userApplicationDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            applicationDataFolder = Path.Combine(userApplicationDataPath, "XrmToolBox");
+            nugetPluginsFolder = Path.Combine(applicationDataFolder, "NugetPlugins");
+            applicationPluginsFolder = Paths.PluginsPath;
 
             // Reading existing plugins files
             plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
@@ -165,9 +163,9 @@ namespace XrmToolBox.Forms
 
         private void CalculateCacheFolderSize()
         {
-            if (Directory.Exists(applicationDataFolder))
+            if (Directory.Exists(nugetPluginsFolder))
             {
-                var size = GetDirectorySize(applicationDataFolder);
+                var size = GetDirectorySize(nugetPluginsFolder);
                 tsbCleanCacheFolder.ToolTipText = string.Format(
                     "Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {0}MB",
                     size/1024/1024);
@@ -215,7 +213,7 @@ namespace XrmToolBox.Forms
                             continue;
                         }
 
-                        var existingFileVersion = existingPluginFile.GetAssemblyVersion();
+                        var existingFileVersion = new Version(FileVersionInfo.GetVersionInfo(existingPluginFile.FullName).FileVersion);
                         if (existingFileVersion < currentVersion)
                         {
                             currentVersion = existingFileVersion;
@@ -382,7 +380,7 @@ namespace XrmToolBox.Forms
 
                 foreach (var fi in xtbPackage.Package.GetFiles())
                 {
-                    var destinationFile = Path.Combine(applicationFolder, fi.EffectivePath);
+                    var destinationFile = Path.Combine(applicationDataFolder, fi.EffectivePath);
 
                     // XrmToolBox restart is required when a plugin has to be 
                     // updated or when a new plugin shares files with other 
@@ -415,7 +413,7 @@ namespace XrmToolBox.Forms
         {
             if (updates.Plugins.Any(p => p.RequireRestart))
             {
-                XmlSerializerHelper.SerializeToFile(updates, Path.Combine(applicationFolder, "Update.xml"));
+                XmlSerializerHelper.SerializeToFile(updates, Path.Combine(applicationDataFolder, "Update.xml"));
 
                 if (DialogResult.Yes == MessageBox.Show(
                     "This application needs to restart to install updated plugins (or new plugins that share some files with already installed plugins). Click Yes to restart this application now",
@@ -734,9 +732,9 @@ namespace XrmToolBox.Forms
                 return;
             }
 
-            if (Directory.Exists(applicationDataFolder))
+            if (Directory.Exists(nugetPluginsFolder))
             {
-                foreach (var item in new DirectoryInfo(applicationDataFolder).GetFileSystemInfos())
+                foreach (var item in new DirectoryInfo(nugetPluginsFolder).GetFileSystemInfos())
                 {
                     if ((item.Attributes & FileAttributes.Directory) == FileAttributes.Directory)
                     {
