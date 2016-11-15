@@ -85,7 +85,10 @@ namespace XrmToolBox.PluginsStore
                             continue;
                         }
 
-                        var existingFileVersion = new Version(FileVersionInfo.GetVersionInfo(existingPluginFile.FullName).FileVersion);
+                        var fileVersionInfo = FileVersionInfo.GetVersionInfo(existingPluginFile.FullName);
+                        var fileVersion = new Version(fileVersionInfo.FileMajorPart, fileVersionInfo.FileMinorPart, fileVersionInfo.FileBuildPart, fileVersionInfo.FilePrivatePart);
+
+                        var existingFileVersion = fileVersion;
                         if (existingFileVersion < currentVersion)
                         {
                             currentVersion = existingFileVersion;

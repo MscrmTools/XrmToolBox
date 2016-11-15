@@ -26,10 +26,15 @@ namespace XrmToolBox.PluginsStore
 
         public ListViewItem GetPluginsStoreItem()
         {
+            var packageVersion = new Version(Package.Version.Version.Major,
+                Package.Version.Version.Minor,
+                Package.Version.Version.MajorRevision,
+                Package.Version.Version.MinorRevision);
+
             var item = new ListViewItem(string.Empty);
             item.Tag = this;
             item.SubItems.Add(this.ToString());
-            item.SubItems.Add(Package.Version.ToString());
+            item.SubItems.Add(packageVersion.ToString());
             item.SubItems.Add(CurrentVersion?.ToString());
             item.SubItems.Add(Package.Description);
             item.SubItems.Add(string.Join(", ", Package.Authors));
