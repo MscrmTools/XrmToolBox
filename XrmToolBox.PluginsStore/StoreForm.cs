@@ -25,6 +25,8 @@ namespace XrmToolBox.PluginsStore
 
     public partial class StoreForm : Form
     {
+        private int newPlugin, updatePlugin, allPlugins;
+
         private readonly List<string> selectedPackagesId;
 
         private readonly Store store;
@@ -86,6 +88,10 @@ namespace XrmToolBox.PluginsStore
             var bw = new BackgroundWorker();
             bw.DoWork += (sender, e) =>
             {
+                allPlugins = 0;
+                newPlugin = 0;
+                updatePlugin = 0;
+
                 var options = Options.Instance;
 
                 store.LoadNugetPackages();
@@ -94,6 +100,8 @@ namespace XrmToolBox.PluginsStore
                 var lvic = new List<ListViewItem>();
                 foreach (var xtbPackage in xtbPackages)
                 {
+                    allPlugins++;
+
                     if (xtbPackage.Action == PackageInstallAction.Unavailable
                         && options.PluginsStoreShowIncompatible.HasValue
                         && options.PluginsStoreShowIncompatible.Value == false)
@@ -101,18 +109,26 @@ namespace XrmToolBox.PluginsStore
                         continue;
                     }
 
-                    if (xtbPackage.Action == PackageInstallAction.Install
-                        && options.PluginsStoreShowNew.HasValue
-                        && options.PluginsStoreShowNew.Value == false)
+                    if (xtbPackage.Action == PackageInstallAction.Install)
                     {
-                        continue;
+                        newPlugin++;
+
+                        if (options.PluginsStoreShowNew.HasValue
+                            && options.PluginsStoreShowNew.Value == false)
+                        {
+                            continue;
+                        }
                     }
 
-                    if (xtbPackage.Action == PackageInstallAction.Update
-                        && options.PluginsStoreShowUpdates.HasValue
-                        && options.PluginsStoreShowUpdates.Value == false)
+                    if (xtbPackage.Action == PackageInstallAction.Update)
                     {
-                        continue;
+                        updatePlugin++;
+
+                        if (options.PluginsStoreShowUpdates.HasValue
+                            && options.PluginsStoreShowUpdates.Value == false)
+                        {
+                            continue;
+                        }
                     }
 
                     if (xtbPackage.Action == PackageInstallAction.None
@@ -138,7 +154,14 @@ namespace XrmToolBox.PluginsStore
                     return;
                 }
 
-                lvPlugins.Items.AddRange(((List<ListViewItem>) e.Result).ToArray());
+                var items = (List<ListViewItem>) e.Result;
+
+                tssPluginsCount.Text = string.Format("Plugins: {0} / New: {1} / Updates: {2}",
+                    allPlugins,
+                    newPlugin,
+                    updatePlugin);
+
+                lvPlugins.Items.AddRange(items.ToArray());
             };
             bw.RunWorkerAsync();
         }

@@ -67,8 +67,9 @@ namespace XrmToolBox.PluginsStore
             this.colAuthor = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAction = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colDownloadCount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.colLastDownloadCoun = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.tssPluginsCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.tsMain.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.pnlReleaseNotes.SuspendLayout();
@@ -258,7 +259,8 @@ namespace XrmToolBox.PluginsStore
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tssProgress,
-            this.tssLabel});
+            this.tssLabel,
+            this.tssPluginsCount});
             this.statusStrip1.Location = new System.Drawing.Point(0, 555);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 9, 0);
@@ -415,6 +417,11 @@ namespace XrmToolBox.PluginsStore
             this.colDownloadCount.Text = "All Downloads";
             this.colDownloadCount.Width = 100;
             // 
+            // colLastDownloadCoun
+            // 
+            this.colLastDownloadCoun.Text = "Latest version Downloads";
+            this.colLastDownloadCoun.Width = 100;
+            // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -435,10 +442,12 @@ namespace XrmToolBox.PluginsStore
             this.splitContainer1.SplitterWidth = 3;
             this.splitContainer1.TabIndex = 6;
             // 
-            // colLastDownloadCoun
+            // tssPluginsCount
             // 
-            this.colLastDownloadCoun.Text = "Latest version Downloads";
-            this.colLastDownloadCoun.Width = 100;
+            this.tssPluginsCount.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tssPluginsCount.Name = "tssPluginsCount";
+            this.tssPluginsCount.Size = new System.Drawing.Size(0, 17);
+            this.tssPluginsCount.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // StoreForm
             // 
@@ -511,5 +520,6 @@ namespace XrmToolBox.PluginsStore
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private ToolStripButton tsbUninstall;
         private ColumnHeader colLastDownloadCoun;
+        private ToolStripStatusLabel tssPluginsCount;
     }
 }
