@@ -7,8 +7,6 @@ using System.Net;
 using System.Reflection;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
-using System.Xml;
-using McTools.Xrm.Connection;
 using XrmToolBox.Extensibility;
 using XrmToolBox.PluginsStore;
 using PluginUpdates = XrmToolBox.AppCode.PluginUpdates;
@@ -42,7 +40,6 @@ namespace XrmToolBox
                 InitializePluginsFolder();
                 CopyUpdatedPlugins();
                 RemovePlugins();
-                MoveSettingsFile();
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -56,7 +53,7 @@ namespace XrmToolBox
             }
         }
 
-        /// <summary>
+       /// <summary>
         /// Performs checks to ensure that Windows Identity Foundation is available
         /// </summary>
         /// <returns></returns>
@@ -123,47 +120,6 @@ namespace XrmToolBox
             }
 
             File.Delete(updateFile);
-        }
-
-        private static void MoveSettingsFile()
-        {
-            // Settings file
-            if (File.Exists("XrmToolBox.Settings.xml"))
-            {
-                if (!Directory.Exists(Paths.SettingsPath))
-                {
-                    Directory.CreateDirectory(Paths.SettingsPath);
-                }
-
-                File.Copy("XrmToolBox.Settings.xml", Path.Combine(Paths.SettingsPath, "XrmToolBox.Settings.xml"), true);
-                File.Delete("XrmToolBox.Settings.xml");
-            }
-
-            // Connections Files
-            if (File.Exists("MscrmTools.ConnectionsList.xml"))
-            {
-                if (!Directory.Exists(Paths.ConnectionsPath))
-                {
-                    Directory.CreateDirectory(Paths.ConnectionsPath);
-                }
-
-                var document = new XmlDocument();
-                document.Load("MscrmTools.ConnectionsList.xml");
-
-                foreach (XmlNode node in document.SelectNodes("//ConnectionFile"))
-                {
-                    var path = node.SelectSingleNode("Path").InnerText;
-                    var newPath = Path.Combine(Paths.ConnectionsPath, Path.GetFileName(path));
-
-                    File.Copy(path, newPath, true);
-                    File.Delete(path);
-                    node.SelectSingleNode("Path").InnerText = newPath;
-                }
-
-                document.Save(Path.Combine(Paths.ConnectionsPath, "MscrmTools.ConnectionsList.xml"));
-
-                File.Delete("MscrmTools.ConnectionsList.xml");
-            }
         }
 
         private static void RemovePlugins()
