@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using NuGet;
 using XrmToolBox.Extensibility;
 
@@ -18,6 +20,7 @@ namespace XrmToolBox.PluginsStore
         private readonly PackageManager manager;
         private readonly string nugetPluginsFolder;
         private FileInfo[] plugins;
+        private Dictionary<string, int> currentVersionDownloadsCount;
 
         public Store()
         {
@@ -39,7 +42,7 @@ namespace XrmToolBox.PluginsStore
 
         private XtbNuGetPackage GetXtbPackage(IPackage package)
         {
-            var xtbPackage = new XtbNuGetPackage(package, PackageInstallAction.None);
+            var xtbPackage = new XtbNuGetPackage(package, PackageInstallAction.None, currentVersionDownloadsCount);
 
             var files = package.GetFiles();
 
@@ -146,6 +149,35 @@ namespace XrmToolBox.PluginsStore
 
         public void LoadNugetPackages()
         {
+            currentVersionDownloadsCount = new Dictionary<string, int>();
+
+            // Retrieving last version download count for each plugin
+            var request = WebRequest.CreateHttp("https://api-v2v3search-0.nuget.org/query?q=tags:XrmToolBox");
+            dynamic nugetPackages;
+
+            do
+            {
+                var response = request.GetResponse();
+                string responseFromServer;
+                using (Stream dataStream = response.GetResponseStream())
+                {
+                    if (dataStream == null) break;
+
+                    using (StreamReader reader = new StreamReader(dataStream))
+                    {
+                        responseFromServer = reader.ReadToEnd();
+                    }
+                }
+                nugetPackages = JsonConvert.DeserializeObject(responseFromServer);
+
+                foreach (var plugin in nugetPackages.data)
+                {
+                    currentVersionDownloadsCount.Add(plugin.id.Value, (int) plugin.versions.Last.downloads.Value);
+                }
+
+                request = WebRequest.CreateHttp("https://api-v2v3search-0.nuget.org/query?q=tags:XrmToolBox&skip=" + currentVersionDownloadsCount.Count);
+            } while (nugetPackages.data.Count == 20);
+
             // Reading existing plugins files
             plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
 

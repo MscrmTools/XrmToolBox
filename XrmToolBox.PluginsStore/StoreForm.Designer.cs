@@ -68,6 +68,7 @@ namespace XrmToolBox.PluginsStore
             this.colAction = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colDownloadCount = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.colLastDownloadCoun = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tsMain.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.pnlReleaseNotes.SuspendLayout();
@@ -354,7 +355,8 @@ namespace XrmToolBox.PluginsStore
             this.colDescription,
             this.colAuthor,
             this.colAction,
-            this.colDownloadCount});
+            this.colDownloadCount,
+            this.colLastDownloadCoun});
             this.lvPlugins.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvPlugins.FullRowSelect = true;
             this.lvPlugins.GridLines = true;
@@ -410,7 +412,7 @@ namespace XrmToolBox.PluginsStore
             // 
             // colDownloadCount
             // 
-            this.colDownloadCount.Text = "Downloads";
+            this.colDownloadCount.Text = "All Downloads";
             this.colDownloadCount.Width = 100;
             // 
             // splitContainer1
@@ -432,6 +434,11 @@ namespace XrmToolBox.PluginsStore
             this.splitContainer1.SplitterDistance = 278;
             this.splitContainer1.SplitterWidth = 3;
             this.splitContainer1.TabIndex = 6;
+            // 
+            // colLastDownloadCoun
+            // 
+            this.colLastDownloadCoun.Text = "Latest version Downloads";
+            this.colLastDownloadCoun.Width = 100;
             // 
             // StoreForm
             // 
@@ -503,5 +510,6 @@ namespace XrmToolBox.PluginsStore
         private System.Windows.Forms.ToolStripTextBox tstSearch;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private ToolStripButton tsbUninstall;
+        private ColumnHeader colLastDownloadCoun;
     }
 }

@@ -15,11 +15,13 @@ namespace XrmToolBox.PluginsStore
         public bool RequiresXtbRestart { get; set; }
         public IPackage Package;
         public Version CurrentVersion { get; set; }
+        private Dictionary<string, int> currentVersionDownloadsCount;
 
-        public XtbNuGetPackage(IPackage package, PackageInstallAction action)
+        public XtbNuGetPackage(IPackage package, PackageInstallAction action, Dictionary<string, int> currentVersionDownloadsCount)
         {
             Action = action;
             Package = package;
+            this.currentVersionDownloadsCount = currentVersionDownloadsCount;
         }
 
         public ListViewItem GetPluginsStoreItem()
@@ -33,6 +35,11 @@ namespace XrmToolBox.PluginsStore
             item.SubItems.Add(string.Join(", ", Package.Authors));
             var actionItem = item.SubItems.Add("None");
             item.SubItems.Add(Package.DownloadCount.ToString());
+
+            if(currentVersionDownloadsCount.ContainsKey(Package.Id))
+                item.SubItems.Add(currentVersionDownloadsCount[Package.Id].ToString());
+            else
+                item.SubItems.Add("N/A");
 
             switch (Action)
             {

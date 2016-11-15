@@ -151,18 +151,18 @@
   <data name="tsbUninstall.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         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
-        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
+        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
 </value>
   </data>
   <data name="tsbShowThisScreenOnStartup.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
