@@ -7,6 +7,8 @@ namespace XrmToolBox.Forms
 {
     public partial class WelcomeDialog : Form
     {
+        private readonly bool closeWindow;
+
         public WelcomeDialog(string version, bool closeWindow = true)
         {
             InitializeComponent();
@@ -15,17 +17,21 @@ namespace XrmToolBox.Forms
 
             ManageLicense();
 
-            if (closeWindow)
-            {
-                var timer = new Timer();
-                timer.Tick += TimerTick;
-                timer.Interval = 3000;
-                timer.Start();
-            }
-            else
+            this.closeWindow = closeWindow;
+
+            if (!closeWindow)
             {
                 linkClose.Visible = true;
             }
+        }
+
+        public void SetWorkingMessage(string message)
+        {
+            Invoke(new Action(() =>
+            {
+                Console.WriteLine(message);
+                lblWorkingState.Text = message;
+            }));
         }
 
         private void linkClose_Click(object sender, EventArgs e)
@@ -84,6 +90,17 @@ namespace XrmToolBox.Forms
         {
             ((Timer)sender).Stop();
             Close();
+        }
+
+        private void WelcomeDialog_Load(object sender, EventArgs e)
+        {
+            if (closeWindow)
+            {
+                var timer = new Timer();
+                timer.Tick += TimerTick;
+                timer.Interval = 3000;
+                timer.Start();
+            }
         }
     }
 }
