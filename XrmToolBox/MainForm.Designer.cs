@@ -75,6 +75,7 @@ namespace XrmToolBox
             this.donateGbpPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.HomePageTab = new System.Windows.Forms.TabPage();
+            this.pnlPlugins = new System.Windows.Forms.Panel();
             this.pnlNoPluginFound = new System.Windows.Forms.Panel();
             this.llResetSearchFilter = new System.Windows.Forms.LinkLabel();
             this.pbOpenPluginsStore = new System.Windows.Forms.PictureBox();
@@ -83,7 +84,6 @@ namespace XrmToolBox
             this.pnlHelp = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.pnlPlugins = new System.Windows.Forms.Panel();
             this.pluginsCheckerImageList = new System.Windows.Forms.ImageList(this.components);
             this.cmsOnePlugin = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiOpenProjectHomePage = new System.Windows.Forms.ToolStripMenuItem();
@@ -465,11 +465,21 @@ namespace XrmToolBox
             this.HomePageTab.Controls.Add(this.pnlHelp);
             this.HomePageTab.Location = new System.Drawing.Point(4, 22);
             this.HomePageTab.Name = "HomePageTab";
-            this.HomePageTab.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.HomePageTab.Padding = new System.Windows.Forms.Padding(3);
             this.HomePageTab.Size = new System.Drawing.Size(876, 546);
             this.HomePageTab.TabIndex = 0;
             this.HomePageTab.Text = "Home";
             this.HomePageTab.UseVisualStyleBackColor = true;
+            // 
+            // pnlPlugins
+            // 
+            this.pnlPlugins.AutoScroll = true;
+            this.pnlPlugins.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlPlugins.Location = new System.Drawing.Point(3, 3);
+            this.pnlPlugins.Margin = new System.Windows.Forms.Padding(2);
+            this.pnlPlugins.Name = "pnlPlugins";
+            this.pnlPlugins.Size = new System.Drawing.Size(870, 540);
+            this.pnlPlugins.TabIndex = 3;
             // 
             // pnlNoPluginFound
             // 
@@ -504,7 +514,7 @@ namespace XrmToolBox
             this.pbOpenPluginsStore.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbOpenPluginsStore.Image = ((System.Drawing.Image)(resources.GetObject("pbOpenPluginsStore.Image")));
             this.pbOpenPluginsStore.Location = new System.Drawing.Point(233, 156);
-            this.pbOpenPluginsStore.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pbOpenPluginsStore.Margin = new System.Windows.Forms.Padding(2);
             this.pbOpenPluginsStore.Name = "pbOpenPluginsStore";
             this.pbOpenPluginsStore.Size = new System.Drawing.Size(400, 83);
             this.pbOpenPluginsStore.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -573,16 +583,6 @@ namespace XrmToolBox
             this.label1.TabIndex = 0;
             this.label1.Text = "Oups... no plugin found!";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // pnlPlugins
-            // 
-            this.pnlPlugins.AutoScroll = true;
-            this.pnlPlugins.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlPlugins.Location = new System.Drawing.Point(3, 3);
-            this.pnlPlugins.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.pnlPlugins.Name = "pnlPlugins";
-            this.pnlPlugins.Size = new System.Drawing.Size(870, 540);
-            this.pnlPlugins.TabIndex = 3;
             // 
             // pluginsCheckerImageList
             // 

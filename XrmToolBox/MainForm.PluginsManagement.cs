@@ -341,6 +341,38 @@ namespace XrmToolBox
             }));
         }
 
+        private void PluginClicked(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (service == null &&
+                    MessageBox.Show(this, "Do you want to connect to an organization first?", "Question",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    ConnectUponApproval(sender);
+                }
+                else
+                {
+                    var plugin = ((UserControl)sender).Tag as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
+
+                    if (plugin != null)
+                    {
+
+                        DisplayPluginControl(plugin);
+                    }
+                }
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                var ctrl = sender as PluginModel;
+                if (ctrl != null)
+                {
+                    selectedPluginModel = ctrl;
+                    cmsOnePlugin.Show(Cursor.Position);
+                }
+            }
+        }
+
         /// <summary>
         /// Retrieves the logo to display in plugins list
         /// </summary>
