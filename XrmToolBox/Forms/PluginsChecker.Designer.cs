@@ -158,8 +158,8 @@ namespace XrmToolBox.Forms
             this.tsbShowThisScreenOnStartup.Image = ((System.Drawing.Image)(resources.GetObject("tsbShowThisScreenOnStartup.Image")));
             this.tsbShowThisScreenOnStartup.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbShowThisScreenOnStartup.Name = "tsbShowThisScreenOnStartup";
-            this.tsbShowThisScreenOnStartup.Size = new System.Drawing.Size(164, 22);
-            this.tsbShowThisScreenOnStartup.Text = "Show on XrmToolBox startup";
+            this.tsbShowThisScreenOnStartup.Size = new System.Drawing.Size(268, 22);
+            this.tsbShowThisScreenOnStartup.Text = "Show on XrmToolBox startup if updates available";
             this.tsbShowThisScreenOnStartup.Click += new System.EventHandler(this.tsbShowThisScreenOnStartup_Click);
             // 
             // toolStripSeparator3

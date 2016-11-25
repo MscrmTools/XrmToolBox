@@ -65,7 +65,7 @@ namespace XrmToolBox
             string errorMessage;
             if (!Options.Load(out currentOptions, out errorMessage))
             {
-                MessageBox.Show(this, "An error occured when loading your XrmToolBox settings. Settings have been reset.\r\n\r\nError details:\r\n\r\n" + errorMessage,"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);    
+                MessageBox.Show(this, "An error occured when loading your XrmToolBox settings. Settings have been reset.\r\n\r\nError details:\r\n\r\n" + errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             Text = string.Format("{0} (v{1})", Text, Assembly.GetExecutingAssembly().GetName().Version);
@@ -262,7 +262,7 @@ namespace XrmToolBox
                                 graphics.DrawString(text, arialFont, Brushes.Black, location);
                             }
                         }
-                        
+
                         tsbPlugins.Image = image;
 
                         tsbPlugins.ToolTipText = string.Format("{0} new plugins\r\n{1} plugins updates",
@@ -360,7 +360,7 @@ namespace XrmToolBox
 
             //if (!Debugger.IsAttached)
             //{
-            if (Options.DoNotCheckForUpdates ==  false)
+            if (Options.DoNotCheckForUpdates == false)
             {
                 tasks.Add(this.LaunchVersionCheck());
             }
@@ -420,7 +420,10 @@ namespace XrmToolBox
 
             if (currentOptions.DisplayPluginsStoreOnStartup)
             {
-                var dlg = new PluginsChecker();
+                var dlg = new PluginsChecker()
+                {
+                    HideIfNoUpdatesAvailable = true
+                };
                 dlg.ShowDialog(this);
             }
         }
@@ -843,8 +846,8 @@ namespace XrmToolBox
 
         private void pnlNoPluginFound_Resize(object sender, EventArgs e)
         {
-            pbOpenPluginsStore.Location = new Point((HomePageTab.Width - pbOpenPluginsStore.Width)/2, pbOpenPluginsStore.Location.Y);
-            llResetSearchFilter.Location = new Point((HomePageTab.Width - llResetSearchFilter.Width)/2, llResetSearchFilter.Location.Y);
+            pbOpenPluginsStore.Location = new Point((HomePageTab.Width - pbOpenPluginsStore.Width) / 2, pbOpenPluginsStore.Location.Y);
+            llResetSearchFilter.Location = new Point((HomePageTab.Width - llResetSearchFilter.Width) / 2, llResetSearchFilter.Location.Y);
         }
 
         private void llResetSearchFilter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
