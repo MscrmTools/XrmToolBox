@@ -82,6 +82,7 @@ namespace XrmToolBox
         public bool DisplayLargeIcons { get; set; }
         public bool DisplayMostUsedFirst { get; set; }
         public bool DisplayPluginsStoreOnStartup { get; set; }
+
         public List<string> HiddenPlugins { get; set; }
         public DateTime LastAdvertisementDisplay { get; set; }
         public DateTime LastUpdateCheck { get; set; }
@@ -89,13 +90,14 @@ namespace XrmToolBox
 
         [XmlElement("FormSize")]
         public FormSize Size { get; set; }
+
         public bool DoNotCheckForUpdates { get; set; }
 
         public static bool Load(out Options options, out string errorMessage)
         {
             errorMessage = string.Empty;
 
-            var settingsFile ="XrmToolBox.Settings.xml";
+            var settingsFile = "XrmToolBox.Settings.xml";
 
             if (File.Exists(settingsFile))
             {
@@ -104,7 +106,7 @@ namespace XrmToolBox
                     var document = new XmlDocument();
                     document.Load(settingsFile);
 
-                    options = (Options) XmlSerializerHelper.Deserialize(document.OuterXml, typeof(Options));
+                    options = (Options)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(Options));
                     return true;
                 }
                 catch (Exception error)
