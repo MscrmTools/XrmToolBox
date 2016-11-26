@@ -28,8 +28,8 @@ namespace XrmToolBox.PluginsStore
         {
             var packageVersion = new Version(Package.Version.Version.Major,
                 Package.Version.Version.Minor,
-                Package.Version.Version.MajorRevision,
-                Package.Version.Version.MinorRevision);
+                Package.Version.Version.Build,
+                Package.Version.Version.Revision);
 
             var item = new ListViewItem(string.Empty);
             item.Tag = this;
