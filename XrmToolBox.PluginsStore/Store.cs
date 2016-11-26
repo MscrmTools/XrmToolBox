@@ -173,13 +173,13 @@ namespace XrmToolBox.PluginsStore
                 }
                 nugetPackages = JsonConvert.DeserializeObject(responseFromServer);
 
-                foreach (var plugin in nugetPackages.data)
+                foreach (var plugin in nugetPackages["data"])
                 {
-                    currentVersionDownloadsCount.Add(plugin.id.Value, (int) plugin.versions.Last.downloads.Value);
+                    currentVersionDownloadsCount.Add(plugin["id"].Value, (int)plugin["versions"].Last["downloads"].Value);
                 }
 
                 request = WebRequest.CreateHttp("https://api-v2v3search-0.nuget.org/query?q=tags:XrmToolBox&skip=" + currentVersionDownloadsCount.Count);
-            } while (nugetPackages.data.Count == 20);
+            } while (nugetPackages["data"].Count == 20);
 
             // Reading existing plugins files
             plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
