@@ -190,7 +190,6 @@ namespace XrmToolBox
                 }
 
                 Directory.Delete(currentPluginsPath, true);
-                //Directory.Move(currentPluginsPath, Paths.PluginsPath);
             }
 
             // Then updates plugins with latest version of plugins (zipped)
@@ -242,6 +241,9 @@ namespace XrmToolBox
 
             // Delete temporary folder
             Directory.Delete(tempPath, true);
+
+            // Delete zip file
+            File.Delete(pluginsZipFilePath);
         }
     }
 }
