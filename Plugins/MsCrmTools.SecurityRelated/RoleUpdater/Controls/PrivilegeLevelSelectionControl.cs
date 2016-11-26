@@ -204,15 +204,27 @@ namespace MsCrmTools.RoleUpdater.Controls
 
             foreach (var privilege in privileges)
             {
+                string entitySchemaName = null;
                 var groupName = string.Empty;
-                var group = (from entity in entities
-                             where entity.Privileges.Any(p => p.PrivilegeId == privilege.Id)
-                             select new { entity.LogicalName, entity.DisplayName.UserLocalizedLabel.Label }).FirstOrDefault();
-                var entitySchemaName = (from entity in entities
-                                        where entity.Privileges.Any(p => p.Name == privilege["name"].ToString())
-                                        select entity.SchemaName).FirstOrDefault();
+                var entitiesWithPrivilege = (from emd in entities
+                             where emd.Privileges.Any(p => p.PrivilegeId == privilege.Id)
+                             select emd).ToList();
+                EntityMetadata entity;
+                if (entitiesWithPrivilege.Count > 0 && entitiesWithPrivilege.Any(g => g.IsActivity.Value))
+                {
+                    entity = entitiesWithPrivilege.FirstOrDefault(g => g.LogicalName == "activitypointer");
+                    entitySchemaName = "Activity";
+                }
+                else
+                {
+                    entity = entitiesWithPrivilege.FirstOrDefault();
+                    if (entity != null)
+                    {
+                        entitySchemaName = entity.SchemaName;
+                    }
+                }
 
-                if (group == null)
+                if (entity == null)
                 {
                     if (privilege["name"].ToString().EndsWith("Entity"))
                         groupName = "Entity";
@@ -227,17 +239,17 @@ namespace MsCrmTools.RoleUpdater.Controls
                 }
                 else
                 {
-                    if (group.LogicalName == "customeraddress")
+                    
+                    if (entity.LogicalName == "customeraddress")
                         groupName =
                             entities.First(x => x.LogicalName == "account").DisplayName.UserLocalizedLabel.Label;
-                    else if (group.LogicalName == "email" || group.LogicalName == "task"
-                        || group.LogicalName == "letter" || group.LogicalName == "phonecall"
-                        || group.LogicalName == "appointment" || group.LogicalName == "serviceappointment"
-                        || group.LogicalName == "campaignresponse" || group.LogicalName == "fax")
+                    else if(entity.IsActivity.Value || entity.LogicalName == "bulkoperation")
+                    {
                         groupName =
                             entities.First(x => x.LogicalName == "activitypointer").DisplayName.UserLocalizedLabel.Label;
+                    }
                     else
-                        groupName = group.Label;
+                        groupName = entity.DisplayName.UserLocalizedLabel.Label;
                 }
 
                 if (ListViewDelegates.GetGroup(lvPrivileges, groupName) == null)
@@ -255,6 +267,7 @@ namespace MsCrmTools.RoleUpdater.Controls
 
                 if (entitySchemaName != null)
                     item.Text = item.Text.Replace(entitySchemaName, "");
+
 
                 items.Add(item);
             }
