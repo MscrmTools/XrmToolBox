@@ -391,7 +391,21 @@ namespace XrmToolBox
 
             if (currentOptions.DisplayPluginsStoreOnStartup)
             {
-                pbOpenPluginsStore_Click(sender, e);
+                if (currentOptions.DisplayPluginsStoreOnlyIfUpdates)
+                {
+                    if (store.Packages == null)
+                    {
+                        store.LoadNugetPackages();
+                    }
+                    if (store.Packages.Any(p => p.Action == PluginsStore.PackageInstallAction.Update))
+                    {
+                        pbOpenPluginsStore_Click(sender, e);
+                    }
+                }
+                else
+                {
+                        pbOpenPluginsStore_Click(sender, e);
+                }
             }
         }
 

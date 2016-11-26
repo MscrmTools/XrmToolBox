@@ -28,6 +28,7 @@ namespace XrmToolBox.Forms
             chkCloseEachPluginSilently.Checked = option.CloseEachPluginSilently;
             chkClosePluginsSilently.Checked = option.CloseOpenedPluginsSilently;
             chkDisplayPluginsStoreOnStartup.Checked = option.DisplayPluginsStoreOnStartup;
+            chkDisplayPluginsStoreOnlyIfUpdates.Checked = option.DisplayPluginsStoreOnlyIfUpdates;
             chkDoNotCheckForUpdate.Checked = option.DoNotCheckForUpdates;
         }
 
@@ -47,6 +48,7 @@ namespace XrmToolBox.Forms
             option.CloseEachPluginSilently = chkCloseEachPluginSilently.Checked;
             option.CloseOpenedPluginsSilently = chkClosePluginsSilently.Checked;
             option.DisplayPluginsStoreOnStartup = chkDisplayPluginsStoreOnStartup.Checked;
+            option.DisplayPluginsStoreOnlyIfUpdates = chkDisplayPluginsStoreOnlyIfUpdates.Checked;
             option.DoNotCheckForUpdates = chkDoNotCheckForUpdate.Checked;
 
             option.HiddenPlugins =
@@ -156,6 +158,16 @@ namespace XrmToolBox.Forms
             {
                 chkClosePluginsSilently.Enabled = true;
                 chkClosePluginsSilently.Checked = option.CloseOpenedPluginsSilently;
+            }
+        }
+
+        private void chkDisplayPluginsStoreOnStartup_CheckedChanged(object sender, EventArgs e)
+        {
+            chkDisplayPluginsStoreOnlyIfUpdates.Enabled = chkDisplayPluginsStoreOnStartup.Checked;
+
+            if (chkDisplayPluginsStoreOnStartup.Checked == false)
+            {
+                chkDisplayPluginsStoreOnlyIfUpdates.Checked = false;
             }
         }
     }

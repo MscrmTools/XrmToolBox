@@ -82,6 +82,7 @@ namespace XrmToolBox
         public bool DisplayLargeIcons { get; set; }
         public bool DisplayMostUsedFirst { get; set; }
         public bool DisplayPluginsStoreOnStartup { get; set; }
+        public bool DisplayPluginsStoreOnlyIfUpdates { get; set; }
         public List<string> HiddenPlugins { get; set; }
         public DateTime LastAdvertisementDisplay { get; set; }
         public DateTime LastUpdateCheck { get; set; }
@@ -138,6 +139,7 @@ namespace XrmToolBox
                 AllowLogUsage = AllowLogUsage,
                 CloseOpenedPluginsSilently = CloseOpenedPluginsSilently,
                 DisplayPluginsStoreOnStartup = DisplayPluginsStoreOnStartup,
+                DisplayPluginsStoreOnlyIfUpdates = DisplayPluginsStoreOnlyIfUpdates,
                 DoNotCheckForUpdates = DoNotCheckForUpdates
             };
         }
