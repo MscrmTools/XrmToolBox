@@ -8,6 +8,7 @@ using McTools.Xrm.Connection.WinForms;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -598,6 +599,48 @@ namespace XrmToolBox
             tstxtFilterPlugin.Text = string.Empty;
         }
 
+        private void tsbCheckForUpdate_Click(object sender, EventArgs e)
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (s, evt) =>
+            {
+                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                var cvc = new GithubVersionChecker(currentVersion, "MsCrmTools", "XrmToolBox");
+                cvc.Run();
+
+                evt.Result = cvc;
+            };
+            worker.RunWorkerCompleted += (s, evt) =>
+            {
+                GithubVersionChecker cvc = (GithubVersionChecker)evt.Result;
+                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                if (!string.IsNullOrEmpty(cvc.Cpi?.Version))
+                {
+                    if (currentOptions.LastUpdateCheck.Date != DateTime.Now.Date)
+                    {
+                        Invoke(new Action(() =>
+                        {
+                            var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description,
+                                "MsCrmTools", "XrmToolBox", new Uri(cvc.Cpi.PackageUrl));
+                            var result = nvForm.ShowDialog(this);
+                            if (result == DialogResult.OK)
+                            {
+                                Close();
+                            }
+                        }));
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(this, "No update available!", "Information", MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+
+                currentOptions.LastUpdateCheck = DateTime.Now;
+                currentOptions.Save();
+            };
+            worker.RunWorkerAsync();
+        }
 
         #endregion
 
@@ -962,5 +1005,7 @@ namespace XrmToolBox
         }
 
         #endregion
+
+        
     }
 }
