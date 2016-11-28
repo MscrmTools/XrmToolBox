@@ -239,7 +239,7 @@ namespace XrmToolBox
         {
             return new Task(() =>
             {
-                if (Options.DoNotCheckForUpdates == false)
+                if (Options.DoNotCheckForUpdates == true)
                 {
                     return;
                 }
