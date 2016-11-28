@@ -68,6 +68,7 @@ namespace XrmToolBox
             MostUsedList = new List<PluginUseCount>();
             AllowLogUsage = null;
             DisplayPluginsStoreOnStartup = true;
+            HiddenPlugins = new List<string>();
         }
 
         public bool? PluginsStoreShowIncompatible { get; set; }
