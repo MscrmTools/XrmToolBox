@@ -12,7 +12,8 @@ namespace XrmToolBox.Extensibility
             get
             {
                 var userApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                return Path.Combine(rootPath??userApplicationDataFolder, "MscrmTools", "XrmToolBox", "Plugins");
+
+                return Path.Combine(rootPath?? Path.Combine(userApplicationDataFolder, "MscrmTools", "XrmToolBox"), "Plugins");
             }
         }
         public static string LogsPath
@@ -20,7 +21,7 @@ namespace XrmToolBox.Extensibility
             get
             {
                 var userApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                return Path.Combine(rootPath ?? userApplicationDataFolder, "MscrmTools", "XrmToolBox", "Logs");
+                return Path.Combine(rootPath ?? Path.Combine(userApplicationDataFolder, "MscrmTools", "XrmToolBox"), "Logs");
             }
         }
         public static string SettingsPath
@@ -28,7 +29,7 @@ namespace XrmToolBox.Extensibility
             get
             {
                 var userApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                return Path.Combine(rootPath ?? userApplicationDataFolder, "MscrmTools", "XrmToolBox", "Settings");
+                return Path.Combine(rootPath ?? Path.Combine(userApplicationDataFolder, "MscrmTools", "XrmToolBox"), "Settings");
             }
         }
         public static string ConnectionsPath
@@ -36,7 +37,7 @@ namespace XrmToolBox.Extensibility
             get
             {
                 var userApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                return Path.Combine(rootPath ?? userApplicationDataFolder, "MscrmTools", "XrmToolBox", "Connections");
+                return Path.Combine(rootPath ?? Path.Combine(userApplicationDataFolder, "MscrmTools", "XrmToolBox"), "Connections");
             }
         }
 
@@ -45,7 +46,7 @@ namespace XrmToolBox.Extensibility
             get
             {
                 var userApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                return Path.Combine(rootPath ?? userApplicationDataFolder, "MscrmTools", "XrmToolBox");
+                return Path.Combine(rootPath ?? Path.Combine(userApplicationDataFolder, "MscrmTools", "XrmToolBox"));
             }
         }
 
