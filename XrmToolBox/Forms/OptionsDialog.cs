@@ -1,10 +1,12 @@
 ﻿using McTools.Xrm.Connection;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
+using XrmToolBox.Extensibility;
 
 namespace XrmToolBox.Forms
 {
@@ -17,6 +19,8 @@ namespace XrmToolBox.Forms
         public OptionsDialog(Options option, PluginManagerExtended pManager)
         {
             InitializeComponent();
+
+            lblChangePathDescription.Text = string.Format(lblChangePathDescription.Text, Paths.XrmToolBoxPath);
 
             this.option = (Options)option.Clone();
             this.pManager = pManager;
@@ -169,6 +173,11 @@ namespace XrmToolBox.Forms
             {
                 chkDisplayPluginsStoreOnlyIfUpdates.Checked = false;
             }
+        }
+
+        private void llOpenRootFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(Paths.XrmToolBoxPath);
         }
     }
 }
