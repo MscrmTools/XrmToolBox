@@ -120,7 +120,7 @@
   <data name="lblChangePathDescription.Text" xml:space="preserve">
     <value>The current root path is '{0}'
 
-To change the root path of XrmToolBox, create a shortcut to XrmToolBox.exe application and add the following argument:
+To change the storage path of XrmToolBox, create a shortcut to XrmToolBox.exe application and add the following argument:
 
 XrmToolBox.exe /overridepath:&lt;Your_new_path&gt;
 

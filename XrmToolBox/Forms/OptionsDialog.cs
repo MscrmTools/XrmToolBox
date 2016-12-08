@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -114,11 +115,6 @@ namespace XrmToolBox.Forms
             rbCustomAuthNo.Enabled = useCustomProxy;
         }
 
-        private object GetAssemblyAttribute(Assembly assembly, Type attributeType)
-        {
-            return assembly.GetCustomAttributes(attributeType, true)[0];
-        }
-
         private void OptionsDialog_Load(object sender, EventArgs e)
         {
             foreach (var plugin in pManager.Plugins)
@@ -175,9 +171,14 @@ namespace XrmToolBox.Forms
             }
         }
 
-        private void llOpenRootFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void llOpenStorageFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start(Paths.XrmToolBoxPath);
+        }
+
+        private void llOpenRootFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName);
         }
     }
 }
