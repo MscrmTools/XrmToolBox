@@ -39,8 +39,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.FlsBulkUpdater",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox.Extensibility", "XrmToolBox.Extensibility\XrmToolBox.Extensibility.csproj", "{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.SecurityRelated", "Plugins\MsCrmTools.SecurityRelated\MsCrmTools.SecurityRelated.csproj", "{ACC1243E-912B-45E7-A8B0-E312EE9141DD}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsCrmTools.ChartManager", "Plugins\MsCrmTools.ChartManager\MsCrmTools.ChartManager.csproj", "{DE964006-6E7B-4FA8-9D04-07B2E1819774}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox.AutoUpdater", "XrmToolBox.AutoUpdater\XrmToolBox.AutoUpdater.csproj", "{564C72C8-586E-4218-B6B3-F464F7C3903A}"
@@ -166,16 +164,6 @@ Global
 		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DF77AEA3-43F7-403C-91AF-3023A3BB06EC}.Release|x86.ActiveCfg = Release|Any CPU
-		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{ACC1243E-912B-45E7-A8B0-E312EE9141DD}.Release|x86.ActiveCfg = Release|Any CPU
 		{DE964006-6E7B-4FA8-9D04-07B2E1819774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DE964006-6E7B-4FA8-9D04-07B2E1819774}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE964006-6E7B-4FA8-9D04-07B2E1819774}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -226,7 +214,6 @@ Global
 		{E8A13109-B078-407A-9F6C-3711672770E2} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{A217441C-677F-43C3-8BD8-FD27586E82AC} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{5244E9BE-820A-4613-8ACC-ADC858B83C26} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
-		{ACC1243E-912B-45E7-A8B0-E312EE9141DD} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 		{DE964006-6E7B-4FA8-9D04-07B2E1819774} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
