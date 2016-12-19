@@ -345,21 +345,27 @@ namespace XrmToolBox
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (service == null &&
-                    MessageBox.Show(this, "Do you want to connect to an organization first?", "Question",
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (service == null)
                 {
-                    ConnectUponApproval(sender);
-                }
-                else
-                {
-                    var plugin = ((UserControl)sender).Tag as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
+                    var result = MessageBox.Show(this, "Do you want to connect to an organization first?", "Question",
+                        MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
-                    if (plugin != null)
+                    if (result == DialogResult.Yes)
                     {
-
-                        DisplayPluginControl(plugin);
+                        ConnectUponApproval(sender);
                     }
+                    else if (result == DialogResult.Cancel)
+                    {
+                        return;
+                    }
+                }
+
+                var plugin = ((UserControl) sender).Tag as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
+
+                if (plugin != null)
+                {
+
+                    DisplayPluginControl(plugin);
                 }
             }
             else if (e.Button == MouseButtons.Right)
