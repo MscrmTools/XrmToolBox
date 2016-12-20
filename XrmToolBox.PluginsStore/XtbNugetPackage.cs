@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using NuGet;
 
 namespace XrmToolBox.PluginsStore
 {
+    public enum CompatibleState
+    {
+        Compatible,
+        RequireNewVersionOfXtb,
+        DoesntFitMinimumVersion,
+        Other
+    }
+
     public class XtbNuGetPackage
     {
-        public PackageInstallAction Action;
+        public PackageInstallAction Action { get; set; }
+        public CompatibleState Compatibilty { get; set; }
         public bool RequiresXtbRestart { get; set; }
-        public IPackage Package;
+        public IPackage Package { get; set; }
         public Version CurrentVersion { get; set; }
         private Dictionary<string, int> currentVersionDownloadsCount;
 
@@ -42,7 +48,7 @@ namespace XrmToolBox.PluginsStore
             item.SubItems.Add(Package.DownloadCount.ToString());
 
             if(currentVersionDownloadsCount.ContainsKey(Package.Id))
-                item.SubItems.Add(currentVersionDownloadsCount[Package.Id].ToString());
+                item.SubItems.Add(currentVersionDownloadsCount[Package.Id.ToLowerInvariant()].ToString());
             else
                 item.SubItems.Add("N/A");
 

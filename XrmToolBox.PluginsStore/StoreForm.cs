@@ -84,6 +84,8 @@ namespace XrmToolBox.PluginsStore
             lvPlugins.Items.Clear();
             tssLabel.Text = "Retrieving plugins from Nuget feed...";
             tssProgress.Visible = true;
+            tssPluginsCount.Visible = false;
+            splitContainer1.Panel2Collapsed = true;
 
             var bw = new BackgroundWorker();
             bw.DoWork += (sender, e) =>
@@ -160,6 +162,7 @@ namespace XrmToolBox.PluginsStore
                     allPlugins,
                     newPlugin,
                     updatePlugin);
+                tssPluginsCount.Visible = true;
 
                 lvPlugins.Items.AddRange(items.ToArray());
             };
@@ -294,13 +297,17 @@ namespace XrmToolBox.PluginsStore
 
             if (lvPlugins.SelectedItems.Count == 0)
             {
+                splitContainer1.Panel2Collapsed = true;
                 return;
             }
+            splitContainer1.Panel2Collapsed = false;
 
             var item = lvPlugins.SelectedItems[0];
-            var releaseNotes = ((XtbNuGetPackage) item.Tag).Package.ReleaseNotes;
+            var packageItem = (XtbNuGetPackage) item.Tag;
+            var releaseNotes = packageItem.Package.ReleaseNotes;
 
-            BuildPropertiesPanel(((XtbNuGetPackage) item.Tag).Package);
+            BuildPropertiesPanel(packageItem.Package);
+
 
             if (!string.IsNullOrEmpty(releaseNotes))
             {
@@ -330,6 +337,36 @@ namespace XrmToolBox.PluginsStore
                 lbl.AutoSize = false;
 
                 pnlReleaseNotesDetails.Controls.Add(lbl);
+            }
+
+            switch (packageItem.Compatibilty)
+            {
+                case CompatibleState.DoesntFitMinimumVersion:
+                {
+                    lblNotif.Text = $"This plugin has not been developed specificaly to support latest breaking change version of XrmToolBox. Contact plugin author to make him support at least version {Store.MinCompatibleVersion}";
+                    pbNotifIcon.Image = iiNotif.Images[2];
+                    pnlNotif.Visible = true;
+                }
+                    break;
+                case CompatibleState.RequireNewVersionOfXtb:
+                {
+                    lblNotif.Text = "This plugin implements features from latest version of XrmToolBox. Please update your XrmToolBox to latest version to be able to install this plugin version";
+                    pbNotifIcon.Image = iiNotif.Images[1];
+                    pnlNotif.Visible = true;
+                }
+                    break;
+                case CompatibleState.Other:
+                {
+                    lblNotif.Text = "Something is wrong with this plugin package and we can't validate it is compatible with this version of XrmToolBox. Please contact the author to make him review his package";
+                    pbNotifIcon.Image = iiNotif.Images[2];
+                    pnlNotif.Visible = true;
+                }
+                    break;
+                default:
+                {
+                    pnlNotif.Visible = false;
+                }
+                    break;
             }
 
         }

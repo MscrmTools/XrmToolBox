@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using Newtonsoft.Json;
@@ -14,7 +15,7 @@ namespace XrmToolBox.PluginsStore
 {
     public class Store
     {
-        private static readonly Version MinCompatibleVersion = new Version(1, 2015, 12, 20);
+        public static readonly Version MinCompatibleVersion = new Version(1, 2015, 12, 20);
 
         private readonly string applicationPluginsFolder;
         private readonly PackageManager manager;
@@ -46,13 +47,17 @@ namespace XrmToolBox.PluginsStore
 
             var files = package.GetFiles();
 
-            bool install = false, update = false, compatible = false, otherFilesFound = false;
+            bool install = false, update = false, otherFilesFound = false;
 
             var xtbDependency = package.FindDependency("XrmToolBox", null);
             if (xtbDependency != null)
             {
                 var xtbDependencyVersion = xtbDependency.VersionSpec.MinVersion.Version;
-                compatible = IsPluginDependencyCompatible(xtbDependencyVersion);
+                xtbPackage.Compatibilty = IsPluginDependencyCompatible(xtbDependencyVersion);
+            }
+            else
+            {
+                xtbPackage.Compatibilty = CompatibleState.Other;
             }
 
             var currentVersion = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);
@@ -112,7 +117,7 @@ namespace XrmToolBox.PluginsStore
                 xtbPackage.RequiresXtbRestart = true;
             }
 
-            if (!compatible)
+            if (xtbPackage.Compatibilty != CompatibleState.Compatible )
             {
                 xtbPackage.Action = PackageInstallAction.Unavailable;
             }
@@ -132,10 +137,30 @@ namespace XrmToolBox.PluginsStore
             return xtbPackage;
         }
 
-        private bool IsPluginDependencyCompatible(Version xtbDependencyVersion)
+        /// <summary>
+        /// Verify version plugin is built for with current XTB version and a compatibility list
+        /// </summary>
+        /// <param name="xtbDependencyVersion"></param>
+        /// <returns></returns>
+        private CompatibleState IsPluginDependencyCompatible(Version xtbDependencyVersion)
         {
-            // Verify version plugin is built for with current XTB version and a compatibility list
-            return xtbDependencyVersion >= MinCompatibleVersion;
+            if (xtbDependencyVersion >= MinCompatibleVersion
+                && xtbDependencyVersion <= Assembly.GetEntryAssembly().GetName().Version)
+            {
+                return CompatibleState.Compatible;
+            }
+
+            if (xtbDependencyVersion < MinCompatibleVersion)
+            {
+                return CompatibleState.DoesntFitMinimumVersion;
+            }
+
+            if (xtbDependencyVersion > Assembly.GetEntryAssembly().GetName().Version)
+            {
+                return CompatibleState.RequireNewVersionOfXtb;
+            }
+
+            return CompatibleState.Other;
         }
 
         private long GetDirectorySize(string path)
@@ -175,7 +200,7 @@ namespace XrmToolBox.PluginsStore
 
                 foreach (var plugin in nugetPackages["data"])
                 {
-                    currentVersionDownloadsCount.Add(plugin["id"].Value, (int)plugin["versions"].Last["downloads"].Value);
+                    currentVersionDownloadsCount.Add(plugin["id"].Value.ToString().ToLowerInvariant(), (int)plugin["versions"].Last["downloads"].Value);
                 }
 
                 request = WebRequest.CreateHttp("https://api-v2v3search-0.nuget.org/query?q=tags:XrmToolBox&skip=" + currentVersionDownloadsCount.Count);
