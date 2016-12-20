@@ -11,6 +11,7 @@ using System.ComponentModel.Composition;
 using System.Reflection;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility.Interfaces;
+using XrmToolBox.Extensibility.UserControls;
 
 namespace XrmToolBox.Extensibility
 {
@@ -359,7 +360,7 @@ namespace XrmToolBox.Extensibility
         /// </summary>
         /// <param name="message">Message</param>
         /// <param name="args">Message parameters</param>
-        public void LogInfo(string message, params object[] args)
+        protected void LogInfo(string message, params object[] args)
         {
            logManager.LogInfo(message, args);
         }
@@ -369,7 +370,7 @@ namespace XrmToolBox.Extensibility
         /// </summary>
         /// <param name="message">Message</param>
         /// <param name="args">Message parameters</param>
-        public void LogWarning(string message, params object[] args)
+        protected void LogWarning(string message, params object[] args)
         {
             logManager.LogWarning(message, args);
         }
@@ -379,12 +380,63 @@ namespace XrmToolBox.Extensibility
         /// </summary>
         /// <param name="message">Message</param>
         /// <param name="args">Message parameters</param>
-        public void LogError(string message, params object[] args)
+        protected void LogError(string message, params object[] args)
         {
             logManager.LogError(message, args);
         }
 
         #endregion
 
+        #region Noticiation zone
+
+        protected void ShowInfoNotification(string message, Uri moreInfoUri, int height = 32)
+        {
+            var ctrls = Parent.Controls.Find("NotifPanel", false);
+            if (ctrls.Length == 1)
+            {
+                ((NotificationArea) ctrls[0]).ShowInfoNotification(message, moreInfoUri, height);
+            }
+            else
+            {
+                throw new Exception("Unable to find Notification Area control");
+            }
+        }
+
+        protected void ShowWarningNotification(string message, Uri moreInfoUri, int height = 32)
+        {
+            var ctrls = Parent.Controls.Find("NotifPanel", false);
+            if (ctrls.Length == 1)
+            {
+                ((NotificationArea)ctrls[0]).ShowWarningNotification(message, moreInfoUri, height);
+            }
+            else
+            {
+                throw new Exception("Unable to find Notification Area control");
+            }
+        }
+
+        protected void ShowErrorNotification(string message, Uri moreInfoUri, int height = 32)
+        {
+            var ctrls = Parent.Controls.Find("NotifPanel", false);
+            if (ctrls.Length == 1)
+            {
+                ((NotificationArea)ctrls[0]).ShowErrorNotification(message, moreInfoUri, height);
+            }
+            else
+            {
+                throw new Exception("Unable to find Notification Area control");
+            }
+        }
+
+        protected void HideNotification()
+        {
+            var ctrls = Parent.Controls.Find("NotifPanel", false);
+            if (ctrls.Length == 1)
+            {
+                ctrls[0].Visible = false;
+            }
+        }
+
+        #endregion
     }
 }

@@ -130,6 +130,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ExternalMethodCallerInfo.cs" />
+    <Compile Include="Icons.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Icons.resx</DependentUpon>
+    </Compile>
     <Compile Include="InformationPanel.cs" />
     <Compile Include="Interfaces\ICodePlexPlugin.cs" />
     <Compile Include="Interfaces\IEarlyBoundProxy.cs" />
@@ -161,6 +166,12 @@
     <Compile Include="UserControls\LargePluginModel.Designer.cs">
       <DependentUpon>LargePluginModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\NotificationArea.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\NotificationArea.Designer.cs">
+      <DependentUpon>NotificationArea.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PluginModel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -177,8 +188,15 @@
     <Compile Include="WorkAsyncInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Icons.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Icons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\LargePluginModel.resx">
       <DependentUpon>LargePluginModel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\NotificationArea.resx">
+      <DependentUpon>NotificationArea.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\PluginModel.resx">
       <DependentUpon>PluginModel.cs</DependentUpon>
@@ -193,6 +211,15 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\notif_icn_alert16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\notif_icn_crit16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\notif_icn_info16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
