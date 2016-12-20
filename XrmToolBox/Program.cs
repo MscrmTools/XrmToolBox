@@ -176,6 +176,11 @@ namespace XrmToolBox
             var currentPluginsPath = Path.Combine(currentDirectory, "Plugins");
             if (Directory.Exists(currentPluginsPath))
             {
+                if (Path.GetFullPath(currentPluginsPath) == Path.GetFullPath(Paths.PluginsPath))
+                {
+                    return;
+                }
+
                 foreach (FileInfo fi in new DirectoryInfo(currentPluginsPath).GetFiles())
                 {
                     using (FileStream sourceStream = new FileStream(fi.FullName, FileMode.Open))
@@ -214,15 +219,16 @@ namespace XrmToolBox
             // to the version in place
             foreach (var fi in new DirectoryInfo(tempPath).GetFiles())
             {
-                if (fi.Extension.ToLower() != ".dll")
-                {
-                    continue;
-                }
-
                 var targetFile = Path.Combine(Paths.PluginsPath, fi.Name);
 
                 if (File.Exists(targetFile))
                 {
+                    if (fi.Extension.ToLower() != ".dll")
+                    {
+                        File.Copy(fi.FullName, targetFile, true);
+                        continue;
+                    }
+
                     var fiSourceVersion = new Version(FileVersionInfo.GetVersionInfo(fi.FullName).FileVersion);
                     var fiTargetVersion = new Version(FileVersionInfo.GetVersionInfo(targetFile).FileVersion);
 
