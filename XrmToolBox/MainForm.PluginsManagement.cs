@@ -184,8 +184,10 @@ namespace XrmToolBox
                 pluginControl.Width = newTab.Width;
                 pluginControl.Height = newTab.Height;
                 pluginControl.Tag = pluginControlInstanceId;
+                pluginControl.Parent = newTab;
 
                 newTab.Controls.Add(pluginControl);
+                newTab.Controls.Add(new NotificationArea { Name = "NotifPanel", Visible = false, Dock = DockStyle.Top, Parent = newTab });
 
                 tabIndex = tabControl1.TabPages.Count - 1;
 
@@ -444,7 +446,7 @@ namespace XrmToolBox
             {
                 if (tabControl1.SelectedIndex != 0)
                 {
-                    var currentVisibleControl = (IXrmToolBoxPluginControl)tabControl1.SelectedTab.Controls[0];
+                    var currentVisibleControl = tabControl1.SelectedTab.GetPlugin();
                     if (currentVisibleControl == sender)
                     {
                         ccsb.SetMessage(e.Message);

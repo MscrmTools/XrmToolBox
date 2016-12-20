@@ -457,7 +457,7 @@ namespace XrmToolBox
             }
             else
             {
-                var control = (IXrmToolBoxPluginControl)tabControl1.SelectedTab.Controls[0];
+                var control = tabControl1.SelectedTab.GetPlugin();
                 ((UserControl)control).Focus();
                 var currentPluginStatus = pluginControlStatuses.FirstOrDefault(pcs => pcs.Control == control);
                 if (currentPluginStatus == null)
@@ -654,7 +654,7 @@ namespace XrmToolBox
             }
 
             // Trying to find the tab where plugin is located
-            var tab = tabControl1.TabPages.Cast<TabPage>().FirstOrDefault(x => x.Controls[0].GetType().GetTitle() == message.TargetPlugin);
+            var tab = tabControl1.TabPages.Cast<TabPage>().FirstOrDefault(x => x.GetPlugin().GetType().GetTitle() == message.TargetPlugin);
 
             if (tab != null && !message.NewInstance)
             {
@@ -677,7 +677,7 @@ namespace XrmToolBox
                 message.NewInstance = true;
             }
 
-            var targetControl = (UserControl)tab.Controls[0];
+            var targetControl = (UserControl)tab.GetPlugin();
 
             if (targetControl is IMessageBusHost)
             {
@@ -746,13 +746,9 @@ namespace XrmToolBox
             {
                 return;
             }
-            var plugin = page.Controls[0] as UserControl;
-            if (plugin == null)
-            {
-                return;
-            }
 
-            plugin.Dispose();
+            var plugin = page.GetPlugin() as UserControl;
+            plugin?.Dispose();
         }
 
         private IEnumerable<TabPage> GetPluginPages()
@@ -1005,7 +1001,5 @@ namespace XrmToolBox
         }
 
         #endregion
-
-        
     }
 }

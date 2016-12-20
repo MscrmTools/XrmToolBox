@@ -73,6 +73,8 @@ namespace XrmToolBox
             this.donateDollarPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateEuroPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.donateGbpPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbCheckForUpdate = new System.Windows.Forms.ToolStripButton();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.HomePageTab = new System.Windows.Forms.TabPage();
             this.pnlPlugins = new System.Windows.Forms.Panel();
@@ -90,8 +92,6 @@ namespace XrmToolBox
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiHidePlugin = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiUninstallPlugin = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbCheckForUpdate = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.HomePageTab.SuspendLayout();
@@ -449,6 +449,21 @@ namespace XrmToolBox
             this.donateGbpPluginMenuItem.Text = "Donate in GBP";
             this.donateGbpPluginMenuItem.Click += new System.EventHandler(this.donateGbpPluginMenuItem_Click);
             // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 32);
+            // 
+            // tsbCheckForUpdate
+            // 
+            this.tsbCheckForUpdate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbCheckForUpdate.Image = ((System.Drawing.Image)(resources.GetObject("tsbCheckForUpdate.Image")));
+            this.tsbCheckForUpdate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbCheckForUpdate.Name = "tsbCheckForUpdate";
+            this.tsbCheckForUpdate.Size = new System.Drawing.Size(28, 29);
+            this.tsbCheckForUpdate.Text = "Check for update";
+            this.tsbCheckForUpdate.Click += new System.EventHandler(this.tsbCheckForUpdate_Click);
+            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.HomePageTab);
@@ -613,7 +628,7 @@ namespace XrmToolBox
             this.tsmiHidePlugin,
             this.tsmiUninstallPlugin});
             this.cmsOnePlugin.Name = "cmsOnePlugin";
-            this.cmsOnePlugin.Size = new System.Drawing.Size(298, 100);
+            this.cmsOnePlugin.Size = new System.Drawing.Size(298, 133);
             // 
             // tsmiOpenProjectHomePage
             // 
@@ -640,21 +655,6 @@ namespace XrmToolBox
             this.tsmiUninstallPlugin.Size = new System.Drawing.Size(297, 30);
             this.tsmiUninstallPlugin.Text = "Uninstall";
             this.tsmiUninstallPlugin.Click += new System.EventHandler(this.tsmiUninstallPlugin_Click);
-            // 
-            // toolStripSeparator8
-            // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 32);
-            // 
-            // tsbCheckForUpdate
-            // 
-            this.tsbCheckForUpdate.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbCheckForUpdate.Image = ((System.Drawing.Image)(resources.GetObject("tsbCheckForUpdate.Image")));
-            this.tsbCheckForUpdate.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbCheckForUpdate.Name = "tsbCheckForUpdate";
-            this.tsbCheckForUpdate.Size = new System.Drawing.Size(23, 29);
-            this.tsbCheckForUpdate.Text = "Check for update";
-            this.tsbCheckForUpdate.Click += new System.EventHandler(this.tsbCheckForUpdate_Click);
             // 
             // MainForm
             // 
