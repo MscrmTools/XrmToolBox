@@ -37,6 +37,8 @@ namespace MsCrmTools.SampleTool
             LogInfo("An information message");
             LogWarning("A warning message");
             LogError("An error message");
+
+      
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
@@ -103,13 +105,15 @@ namespace MsCrmTools.SampleTool
 
         public override void ClosingPlugin(PluginCloseInfo info)
         {
-            MessageBox.Show("Custom logic here");
+            //MessageBox.Show("Custom logic here");
 
             base.ClosingPlugin(info);
         }
 
         private void tsbWhoAmI_Click(object sender, EventArgs e)
         {
+            HideNotification();
+          
             ExecuteMethod(ProcessWhoAmI);
         }
 
@@ -168,5 +172,9 @@ namespace MsCrmTools.SampleTool
 
         #endregion Help implementation
 
+        private void SampleTool_Load(object sender, EventArgs e)
+        {
+            ShowInfoNotification("This is a notification that can lead to XrmToolBox reposiotry", new Uri("http://github.com/MscrmTools/XrmToolBox"));
+        }
     }
 }
