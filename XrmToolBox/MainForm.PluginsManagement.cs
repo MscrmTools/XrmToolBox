@@ -361,13 +361,15 @@ namespace XrmToolBox
                         return;
                     }
                 }
-
-                var plugin = ((UserControl) sender).Tag as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
-
-                if (plugin != null)
+                else
                 {
+                    var plugin = ((UserControl) sender).Tag as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
 
-                    DisplayPluginControl(plugin);
+                    if (plugin != null)
+                    {
+
+                        DisplayPluginControl(plugin);
+                    }
                 }
             }
             else if (e.Button == MouseButtons.Right)
