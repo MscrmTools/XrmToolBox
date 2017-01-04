@@ -439,12 +439,12 @@ namespace XrmToolBox.PluginsStore
             // 
             // colVersion
             // 
-            this.colVersion.Text = "Version";
+            this.colVersion.Text = "Latest Version";
             this.colVersion.Width = 100;
             // 
             // colCurrent
             // 
-            this.colCurrent.Text = "Current Version";
+            this.colCurrent.Text = "Installed Version";
             this.colCurrent.Width = 100;
             // 
             // colDescription
