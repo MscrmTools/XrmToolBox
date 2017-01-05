@@ -25,6 +25,7 @@ namespace XrmToolBox.PluginsStore
 
     public partial class StoreForm : Form
     {
+        private int sortedColumnIndex = -1;
         private int newPlugin, updatePlugin, allPlugins;
 
         private readonly List<string> selectedPackagesId;
@@ -189,10 +190,19 @@ namespace XrmToolBox.PluginsStore
             }
             else
             {
-                lvPlugins.Sorting = lvPlugins.Sorting == SortOrder.Ascending
-                    ? SortOrder.Descending
-                    : SortOrder.Ascending;
+                if (sortedColumnIndex == -1 || e.Column != sortedColumnIndex)
+                {
+                    lvPlugins.Sorting = SortOrder.Ascending;
+                }
+                else
+                {
+                    lvPlugins.Sorting = lvPlugins.Sorting == SortOrder.Ascending
+                        ? SortOrder.Descending
+                        : SortOrder.Ascending;
+                }
+
                 lvPlugins.ListViewItemSorter = new ListViewItemComparer(e.Column, lvPlugins.Sorting);
+                sortedColumnIndex = e.Column;
             }
         }
 

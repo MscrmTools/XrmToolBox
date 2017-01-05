@@ -269,10 +269,10 @@ namespace XrmToolBox.PluginsStore
             this.tssProgress,
             this.tssLabel,
             this.tssPluginsCount});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 860);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 866);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 14, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(1497, 28);
+            this.statusStrip1.Size = new System.Drawing.Size(1497, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -304,7 +304,7 @@ namespace XrmToolBox.PluginsStore
             this.pnlReleaseNotes.Location = new System.Drawing.Point(0, 0);
             this.pnlReleaseNotes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlReleaseNotes.Name = "pnlReleaseNotes";
-            this.pnlReleaseNotes.Size = new System.Drawing.Size(150, 46);
+            this.pnlReleaseNotes.Size = new System.Drawing.Size(1497, 394);
             this.pnlReleaseNotes.TabIndex = 4;
             // 
             // scProperties
@@ -319,13 +319,14 @@ namespace XrmToolBox.PluginsStore
             // 
             this.scProperties.Panel1.AutoScroll = true;
             this.scProperties.Panel1.Controls.Add(this.lblProperties);
+            this.scProperties.Panel1MinSize = 500;
             // 
             // scProperties.Panel2
             // 
             this.scProperties.Panel2.Controls.Add(this.pnlReleaseNotesDetails);
             this.scProperties.Panel2.Controls.Add(this.lblReleaseNotes);
-            this.scProperties.Size = new System.Drawing.Size(150, 14);
-            this.scProperties.SplitterDistance = 121;
+            this.scProperties.Size = new System.Drawing.Size(1497, 362);
+            this.scProperties.SplitterDistance = 500;
             this.scProperties.TabIndex = 7;
             // 
             // lblProperties
@@ -334,7 +335,7 @@ namespace XrmToolBox.PluginsStore
             this.lblProperties.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblProperties.Location = new System.Drawing.Point(0, 0);
             this.lblProperties.Name = "lblProperties";
-            this.lblProperties.Size = new System.Drawing.Size(95, 25);
+            this.lblProperties.Size = new System.Drawing.Size(500, 25);
             this.lblProperties.TabIndex = 1;
             this.lblProperties.Text = "Plugin properties";
             // 
@@ -346,7 +347,7 @@ namespace XrmToolBox.PluginsStore
             this.pnlReleaseNotesDetails.Location = new System.Drawing.Point(0, 25);
             this.pnlReleaseNotesDetails.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlReleaseNotesDetails.Name = "pnlReleaseNotesDetails";
-            this.pnlReleaseNotesDetails.Size = new System.Drawing.Size(25, -11);
+            this.pnlReleaseNotesDetails.Size = new System.Drawing.Size(993, 337);
             this.pnlReleaseNotesDetails.TabIndex = 2;
             // 
             // lblReleaseNotes
@@ -355,7 +356,7 @@ namespace XrmToolBox.PluginsStore
             this.lblReleaseNotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblReleaseNotes.Location = new System.Drawing.Point(0, 0);
             this.lblReleaseNotes.Name = "lblReleaseNotes";
-            this.lblReleaseNotes.Size = new System.Drawing.Size(25, 25);
+            this.lblReleaseNotes.Size = new System.Drawing.Size(993, 25);
             this.lblReleaseNotes.TabIndex = 0;
             this.lblReleaseNotes.Text = "Release notes";
             // 
@@ -368,7 +369,7 @@ namespace XrmToolBox.PluginsStore
             this.pnlNotif.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlNotif.Location = new System.Drawing.Point(0, 0);
             this.pnlNotif.Name = "pnlNotif";
-            this.pnlNotif.Size = new System.Drawing.Size(150, 32);
+            this.pnlNotif.Size = new System.Drawing.Size(1497, 32);
             this.pnlNotif.TabIndex = 3;
             this.pnlNotif.Visible = false;
             // 
@@ -415,7 +416,7 @@ namespace XrmToolBox.PluginsStore
             this.lvPlugins.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lvPlugins.Name = "lvPlugins";
             this.lvPlugins.OwnerDraw = true;
-            this.lvPlugins.Size = new System.Drawing.Size(1497, 828);
+            this.lvPlugins.Size = new System.Drawing.Size(1497, 435);
             this.lvPlugins.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvPlugins.TabIndex = 5;
             this.lvPlugins.UseCompatibleStateImageBehavior = false;
@@ -486,9 +487,8 @@ namespace XrmToolBox.PluginsStore
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.pnlReleaseNotes);
-            this.splitContainer1.Panel2Collapsed = true;
-            this.splitContainer1.Size = new System.Drawing.Size(1497, 828);
-            this.splitContainer1.SplitterDistance = 432;
+            this.splitContainer1.Size = new System.Drawing.Size(1497, 834);
+            this.splitContainer1.SplitterDistance = 435;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 6;
             // 
