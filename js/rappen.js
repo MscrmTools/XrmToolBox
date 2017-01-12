@@ -7,6 +7,9 @@ UpdateDownloads = function (version, published, currentcount, releaselink) {
     $("#" + currentcount).text("Loading...");
     $.ajax({
         url: 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/releases/latest',
+        beforeSend: function(request) {
+            request.setRequestHeader("Access-Control-Allow-Origin", "http://www.xrmtoolbox.com/");
+        },
         success: function (data) {
             if (data && data.assets && data.assets.length > 0) {
                 var count = data.assets[0].download_count;
@@ -81,6 +84,9 @@ UpdateTotalDownloads = function (totalcount) {
 countReleasesDownloadByPage = function(link, totalcount){
         $.ajax({
         url: link,
+        beforeSend: function(request) {
+            request.setRequestHeader("Access-Control-Allow-Origin", "http://www.xrmtoolbox.com/");
+        },
         success: function (data, textStatus, request) {
             if (data && data.length > 0) {
                 var count = 0;
@@ -138,6 +144,9 @@ GetLatestDownloadLink = function () {
     $.ajax({
         async: false,
         url: 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/releases/latest',
+        beforeSend: function(request) {
+            request.setRequestHeader("Access-Control-Allow-Origin", "http://www.xrmtoolbox.com/");
+        },
         success: function (data) {
             if (data && data.assets && data.assets.length > 0) {
                 url = data.assets[0].browser_download_url;
@@ -156,6 +165,9 @@ GetLatestVersion = function () {
     $.ajax({
         async: false,
         url: 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/releases/latest',
+        beforeSend: function(request) {
+            request.setRequestHeader("Access-Control-Allow-Origin", "http://www.xrmtoolbox.com/");
+        },
         success: function (data) {
             if (data) {
                 version = data.tag_name;
@@ -171,6 +183,9 @@ UpdateReleaseNotes = function (releasenotes, callback) {
     $("#" + releasenotes).text("Loading...");
     $.ajax({
         url: 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/releases/latest',
+        beforeSend: function(request) {
+            request.setRequestHeader("Access-Control-Allow-Origin", "http://www.xrmtoolbox.com/");
+        },
         success: function (data) {
             if (data && data.assets && data.assets.length > 0) {
                 
@@ -208,7 +223,10 @@ LoadIssues = function (open, total) {
     $("#" + total).text("?");
     $.ajax({
         url: 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/issues?state=open&per_page=' + RAPPEN_GH_PAGE_SIZE,
-        success: function (data) {
+       beforeSend: function(request) {
+            request.setRequestHeader("Access-Control-Allow-Origin", "http://www.xrmtoolbox.com/");
+        },
+         success: function (data) {
             var count = 0;
             if (data) {
                 if (data.length >= RAPPEN_GH_PAGE_SIZE) {
@@ -222,6 +240,9 @@ LoadIssues = function (open, total) {
     });
     $.ajax({
         url: 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/issues?state=all&per_page=' + RAPPEN_GH_PAGE_SIZE,
+        beforeSend: function(request) {
+            request.setRequestHeader("Access-Control-Allow-Origin", "http://www.xrmtoolbox.com/");
+        },
         success: function (data) {
             var count = 0;
             if (data) {
