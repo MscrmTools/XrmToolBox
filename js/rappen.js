@@ -144,9 +144,6 @@ GetLatestDownloadLink = function () {
     $.ajax({
         async: false,
         url: 'https://api.github.com/repos/' + GH_USER + '/' + GH_REPO + '/releases/latest',
-        beforeSend: function(request) {
-            request.setRequestHeader("Access-Control-Allow-Origin", "http://www.xrmtoolbox.com/");
-        },
         success: function (data) {
             if (data && data.assets && data.assets.length > 0) {
                 url = data.assets[0].browser_download_url;
