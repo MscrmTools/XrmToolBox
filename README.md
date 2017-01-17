@@ -5,7 +5,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/dp6r9n9vhcprpur6?svg=true)](https://ci.appveyor.com/project/MscrmTools/xrmtoolbox)
 
 
-XrmToolBox is an application that can connect to Microsoft Dynamics CRM 2011, 2013, 2015 and 2016 (Online, OnPremise of IFD). It is shipped with more than 20 plugins to handle several administration, customization or configuration tasks.
+XrmToolBox is an application that can connect to Microsoft Dynamics CRM 2011, 2013, 2015 and 2016 (Online, OnPremise or IFD). It is shipped with more than 20 plugins to handle several administration, customization or configuration tasks.
 
 One of the great point about XrmToolBox is its capability to welcome external plugins written by other developers, just by implementing specific part of XrmToolBox code.
 
