@@ -47,7 +47,7 @@ namespace XrmToolBox.PluginsStore
             var actionItem = item.SubItems.Add("None");
             item.SubItems.Add(Package.DownloadCount.ToString());
 
-            if(currentVersionDownloadsCount.ContainsKey(Package.Id))
+            if(currentVersionDownloadsCount.ContainsKey(Package.Id.ToLower()))
                 item.SubItems.Add(currentVersionDownloadsCount[Package.Id.ToLowerInvariant()].ToString());
             else
                 item.SubItems.Add("N/A");
