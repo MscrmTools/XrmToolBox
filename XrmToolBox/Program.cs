@@ -176,25 +176,25 @@ namespace XrmToolBox
             var currentPluginsPath = Path.Combine(currentDirectory, "Plugins");
             if (Directory.Exists(currentPluginsPath))
             {
-                if (Path.GetFullPath(currentPluginsPath) == Path.GetFullPath(Paths.PluginsPath))
+                if (Path.GetFullPath(currentPluginsPath) != Path.GetFullPath(Paths.PluginsPath))
                 {
-                    return;
-                }
-
-                foreach (FileInfo fi in new DirectoryInfo(currentPluginsPath).GetFiles())
-                {
-                    using (FileStream sourceStream = new FileStream(fi.FullName, FileMode.Open))
+                    foreach (FileInfo fi in new DirectoryInfo(currentPluginsPath).GetFiles())
                     {
-                        using (FileStream destStream = new FileStream(Path.Combine(Paths.PluginsPath, fi.Name), FileMode.Create))
+                        using (FileStream sourceStream = new FileStream(fi.FullName, FileMode.Open))
                         {
-                            destStream.Lock(0, sourceStream.Length);
-                            sourceStream.CopyTo(destStream);
-                            destStream.Unlock(0, sourceStream.Length);
+                            using (
+                                FileStream destStream = new FileStream(Path.Combine(Paths.PluginsPath, fi.Name),
+                                    FileMode.Create))
+                            {
+                                destStream.Lock(0, sourceStream.Length);
+                                sourceStream.CopyTo(destStream);
+                                destStream.Unlock(0, sourceStream.Length);
+                            }
                         }
                     }
-                }
 
-                Directory.Delete(currentPluginsPath, true);
+                    Directory.Delete(currentPluginsPath, true);
+                }
             }
 
             // Then updates plugins with latest version of plugins (zipped)
