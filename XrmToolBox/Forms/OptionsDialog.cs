@@ -35,6 +35,7 @@ namespace XrmToolBox.Forms
             chkDisplayPluginsStoreOnStartup.Checked = option.DisplayPluginsStoreOnStartup;
             chkDisplayPluginsStoreOnlyIfUpdates.Checked = option.DisplayPluginsStoreOnlyIfUpdates;
             chkDoNotCheckForUpdate.Checked = option.DoNotCheckForUpdates;
+            chkMergeConnectionFiles.Checked = option.MergeConnectionFiles;
         }
 
         public Options Option { get { return option; } }
@@ -55,6 +56,7 @@ namespace XrmToolBox.Forms
             option.DisplayPluginsStoreOnStartup = chkDisplayPluginsStoreOnStartup.Checked;
             option.DisplayPluginsStoreOnlyIfUpdates = chkDisplayPluginsStoreOnlyIfUpdates.Checked;
             option.DoNotCheckForUpdates = chkDoNotCheckForUpdate.Checked;
+            option.MergeConnectionFiles = chkMergeConnectionFiles.Checked;
 
             option.HiddenPlugins =
                 lvPlugins.Items.Cast<ListViewItem>().Where(i => i.Checked == false).Select(i => i.Text).ToList();
@@ -87,7 +89,7 @@ namespace XrmToolBox.Forms
                 WebProxyHelper.ApplyProxy();
 
                 ConnectionManager.Instance.SaveConnectionsFile();
-
+                
                 DialogResult = DialogResult.OK;
                 Close();
             }

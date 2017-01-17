@@ -62,7 +62,7 @@ namespace XrmToolBox
 
             // Displaying Welcome screen
             var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
+            blackScreen = new WelcomeDialog(version) {StartPosition = FormStartPosition.CenterScreen};
             blackScreen.Show(this);
             blackScreen.SetWorkingMessage("Loading...");
 
@@ -71,9 +71,10 @@ namespace XrmToolBox
             if (!Options.Load(out currentOptions, out errorMessage))
             {
                 MessageBox.Show(this,
-                    "An error ocurred when loading XrmToolBox options. A new options file has been created.\n\n" + errorMessage);
+                    "An error ocurred when loading XrmToolBox options. A new options file has been created.\n\n" +
+                    errorMessage);
             }
-            
+
             // Read arguments to detect if a plugin should be displayed automatically
             if (args.Length > 0)
             {
@@ -82,7 +83,7 @@ namespace XrmToolBox
             }
 
             InitializeComponent();
-            
+
             ProcessMenuItemsForPlugin();
             MouseWheel += (sender, e) => pnlPlugins.Focus();
 
@@ -91,6 +92,7 @@ namespace XrmToolBox
             // Loading connection controls
             blackScreen.SetWorkingMessage("Loading connection controls...");
             ManageConnectionControl();
+            ccsb.MergeConnectionsFiles = currentOptions.MergeConnectionFiles;
         }
 
         #endregion Constructor

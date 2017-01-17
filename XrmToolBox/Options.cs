@@ -51,8 +51,8 @@ namespace XrmToolBox
             if (size.Height != 0)
             {
                 form.Size = size;
-                form.Top = (Screen.PrimaryScreen.WorkingArea.Height - size.Height) / 2;
-                form.Left = (Screen.PrimaryScreen.WorkingArea.Width - size.Width) / 2;
+                form.Top = (Screen.PrimaryScreen.WorkingArea.Height - size.Height)/2;
+                form.Left = (Screen.PrimaryScreen.WorkingArea.Width - size.Width)/2;
             }
         }
     }
@@ -91,7 +91,9 @@ namespace XrmToolBox
 
         [XmlElement("FormSize")]
         public FormSize Size { get; set; }
+
         public bool DoNotCheckForUpdates { get; set; }
+        public bool MergeConnectionFiles { get; set; }
 
         public static bool Load(out Options options, out string errorMessage)
         {
@@ -141,7 +143,8 @@ namespace XrmToolBox
                 CloseOpenedPluginsSilently = CloseOpenedPluginsSilently,
                 DisplayPluginsStoreOnStartup = DisplayPluginsStoreOnStartup,
                 DisplayPluginsStoreOnlyIfUpdates = DisplayPluginsStoreOnlyIfUpdates,
-                DoNotCheckForUpdates = DoNotCheckForUpdates
+                DoNotCheckForUpdates = DoNotCheckForUpdates,
+                MergeConnectionFiles = MergeConnectionFiles,
             };
         }
 
