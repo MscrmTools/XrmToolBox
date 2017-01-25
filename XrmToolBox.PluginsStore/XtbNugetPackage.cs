@@ -22,6 +22,8 @@ namespace XrmToolBox.PluginsStore
         public IPackage Package { get; set; }
         public Version CurrentVersion { get; set; }
         private Dictionary<string, int> currentVersionDownloadsCount;
+        public DateTime FirstReleaseDate { get; set; }
+        public DateTime LatestReleaseDate { get; set; }
 
         public XtbNuGetPackage(IPackage package, PackageInstallAction action, Dictionary<string, int> currentVersionDownloadsCount)
         {

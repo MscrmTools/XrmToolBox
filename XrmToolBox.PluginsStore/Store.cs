@@ -218,7 +218,16 @@ namespace XrmToolBox.PluginsStore
             Packages = new List<XtbNuGetPackage>();
             foreach (var package in packages)
             {
-                Packages.Add(GetXtbPackage(package));
+                var allPackages = manager.SourceRepository.GetPackages()
+                    .Where(p => p.Id == package.Id).ToList();
+
+                var first = allPackages.Select(p => (DataServicePackage) p).OrderBy(p => p.LastUpdated).First();
+                   
+                var xtbPackage = GetXtbPackage(package);
+                xtbPackage.FirstReleaseDate = first.LastUpdated.Date;
+                xtbPackage.LatestReleaseDate = ((DataServicePackage)package).LastUpdated.Date;
+
+                Packages.Add(xtbPackage);
             }
         }
 

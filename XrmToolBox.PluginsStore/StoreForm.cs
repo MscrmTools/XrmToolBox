@@ -316,7 +316,7 @@ namespace XrmToolBox.PluginsStore
             var packageItem = (XtbNuGetPackage) item.Tag;
             var releaseNotes = packageItem.Package.ReleaseNotes;
 
-            BuildPropertiesPanel(packageItem.Package);
+            BuildPropertiesPanel(packageItem);
 
 
             if (!string.IsNullOrEmpty(releaseNotes))
@@ -404,7 +404,7 @@ namespace XrmToolBox.PluginsStore
             tsbUninstall.Visible = packages.Count != 0;
         }
 
-        private void BuildPropertiesPanel(IPackage package)
+        private void BuildPropertiesPanel(XtbNuGetPackage package)
         {
             scProperties.Panel1.Controls.Clear();
 
@@ -417,7 +417,7 @@ namespace XrmToolBox.PluginsStore
 
             try
             {
-                bitmap.Load(package.IconUrl?.AbsoluteUri ?? "https://raw.githubusercontent.com/wiki/MscrmTools/XrmToolBox/Images/unknown.png");
+                bitmap.Load(package.Package.IconUrl?.AbsoluteUri ?? "https://raw.githubusercontent.com/wiki/MscrmTools/XrmToolBox/Images/unknown.png");
             }
             catch
             {
@@ -434,7 +434,7 @@ namespace XrmToolBox.PluginsStore
             var lblTitle = new Label
             {
                 Dock = DockStyle.Top,
-                Text = package.Title.Replace(" for XrmToolBox", ""),
+                Text = package.Package.Title.Replace(" for XrmToolBox", ""),
                 Font = new Font("Microsoft Sans Serif", 20F),
                 Height = 32
             };
@@ -442,7 +442,7 @@ namespace XrmToolBox.PluginsStore
             var lblDescription = new Label
             {
                 Dock = DockStyle.Fill,
-                Text = package.Description,
+                Text = package.Package.Description,
                 Height = 16
             };
 
@@ -476,10 +476,12 @@ namespace XrmToolBox.PluginsStore
                 {
                 pnlDescription,
                 lblDescriptionHeader,
-                GetPropertiesPanelInformation("Project Url", package.ProjectUrl),
-                GetPropertiesPanelInformation("Downloads count", package.DownloadCount.ToString()),
-                GetPropertiesPanelInformation("Authors", string.Join(", ", package.Authors)),
-                GetPropertiesPanelInformation("Version", package.Version.ToString()),
+                GetPropertiesPanelInformation("Project Url", package.Package.ProjectUrl),
+                GetPropertiesPanelInformation("Downloads count", package.Package.DownloadCount.ToString()),
+                GetPropertiesPanelInformation("Latest release", package.LatestReleaseDate.ToString("yyyy/MM/dd")),
+                GetPropertiesPanelInformation("First release", package.FirstReleaseDate.ToString("yyyy/MM/dd")),
+                GetPropertiesPanelInformation("Authors", string.Join(", ", package.Package.Authors)),
+                GetPropertiesPanelInformation("Version", package.Package.Version.ToString()),
                 pnlTitle
                 });
             }
@@ -489,10 +491,12 @@ namespace XrmToolBox.PluginsStore
 
                 scProperties.Panel1.Controls.AddRange(new Control[]
                 {
-                GetPropertiesPanelInformation("Project Url", package.ProjectUrl),
-                GetPropertiesPanelInformation("Downloads count", package.DownloadCount.ToString()),
-                GetPropertiesPanelInformation("Authors", string.Join(", ", package.Authors)),
-                GetPropertiesPanelInformation("Version", package.Version.ToString()),
+                GetPropertiesPanelInformation("Project Url", package.Package.ProjectUrl),
+                GetPropertiesPanelInformation("Downloads count", package.Package.DownloadCount.ToString()),
+                GetPropertiesPanelInformation("Latest release", package.LatestReleaseDate.ToString("yyyy/MM/dd")),
+                GetPropertiesPanelInformation("First release", package.FirstReleaseDate.ToString("yyyy/MM/dd")),
+                GetPropertiesPanelInformation("Authors", string.Join(", ", package.Package.Authors)),
+                GetPropertiesPanelInformation("Version", package.Package.Version.ToString()),
                 pnlTitle
                 });
             }
