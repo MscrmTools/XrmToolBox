@@ -13,7 +13,7 @@ UpdateDownloads = function (version, published, currentcount, releaselink) {
                 
                 var date = new Date(data.published_at);
                 $("#" + version).text(data.tag_name);
-                $("#" + currentcount).text(count);
+                $("#" + currentcount).text(count.toLocaleString());
                 //$("#latest-download span").text("Download " + tag);
                 $("#latest-download").attr('href', data.assets[0].browser_download_url);
                 //$("#" + releaselink).attr('href', data.html_url);
@@ -98,11 +98,11 @@ countReleasesDownloadByPage = function(link, totalcount){
                     countReleasesDownloadByPage(parsedHeaderLink.next, totalcount);
                 }
                 else{
-                    $("#" + totalcount).text(totalCountDownload);
+                    $("#" + totalcount).text(totalCountDownload.toLocaleString());
                }
                }
                else{
-                    $("#" + totalcount).text(totalCountDownload);
+                    $("#" + totalcount).text(totalCountDownload.toLocaleString());
                }
             }
         }
