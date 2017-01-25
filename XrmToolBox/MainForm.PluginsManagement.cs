@@ -287,7 +287,7 @@ namespace XrmToolBox
                 foreach (var item in currentOptions.MostUsedList.OrderByDescending(i => i.Count).ThenBy(i => i.Name))
                 {
                     var plugin = filteredPlugins.FirstOrDefault(x => x.Value.GetType().FullName == item.Name);
-                    if (plugin != null && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.GetType().GetTitle())))
+                    if (plugin != null && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.Metadata.Name)))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth, item.Count);
                     }
@@ -295,7 +295,7 @@ namespace XrmToolBox
 
                 foreach (var plugin in filteredPlugins.OrderBy(p => p.Metadata.Name))
                 {
-                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.Value.GetType().FullName) && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.Value.GetType().GetTitle())))
+                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.Value.GetType().FullName) && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.Metadata.Name)))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth);
                     }
