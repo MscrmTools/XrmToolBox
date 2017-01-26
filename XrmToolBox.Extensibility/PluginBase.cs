@@ -1,4 +1,5 @@
-﻿using XrmToolBox.Extensibility.Interfaces;
+﻿using System;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace XrmToolBox.Extensibility
 {
@@ -14,6 +15,11 @@ namespace XrmToolBox.Extensibility
         public string GetMyType()
         {
             return GetType().FullName;
+        }
+
+        public Guid GetId()
+        {
+            return GetType().GUID;
         }
 
         public string GetVersion()
