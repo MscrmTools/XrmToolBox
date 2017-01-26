@@ -12,16 +12,11 @@ namespace XrmToolBox.Extensibility
 
         public abstract IXrmToolBoxPluginControl GetControl();
 
-        public string GetMyType()
+        public string GetAssemblyQualifiedName()
         {
-            return GetType().FullName;
+            return GetType().AssemblyQualifiedName;
         }
-
-        public Guid GetId()
-        {
-            return GetType().GUID;
-        }
-
+        
         public string GetVersion()
         {
             return GetType().Assembly.GetName().Version.ToString();

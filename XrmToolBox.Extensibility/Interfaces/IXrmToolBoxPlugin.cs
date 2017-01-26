@@ -8,10 +8,8 @@ namespace XrmToolBox.Extensibility.Interfaces
 
         IXrmToolBoxPluginControl GetControl();
 
-        string GetMyType();
-
-        Guid GetId();
-
+        string GetAssemblyQualifiedName();
+        
         string GetVersion();
     }
 }
