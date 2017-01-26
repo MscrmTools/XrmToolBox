@@ -618,19 +618,16 @@ namespace XrmToolBox
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 if (!string.IsNullOrEmpty(cvc.Cpi?.Version))
                 {
-                    if (currentOptions.LastUpdateCheck.Date != DateTime.Now.Date)
+                    Invoke(new Action(() =>
                     {
-                        Invoke(new Action(() =>
+                        var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description,
+                            "MsCrmTools", "XrmToolBox", new Uri(cvc.Cpi.PackageUrl));
+                        var result = nvForm.ShowDialog(this);
+                        if (result == DialogResult.OK)
                         {
-                            var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description,
-                                "MsCrmTools", "XrmToolBox", new Uri(cvc.Cpi.PackageUrl));
-                            var result = nvForm.ShowDialog(this);
-                            if (result == DialogResult.OK)
-                            {
-                                Close();
-                            }
-                        }));
-                    }
+                            Close();
+                        }
+                    }));
                 }
                 else
                 {
