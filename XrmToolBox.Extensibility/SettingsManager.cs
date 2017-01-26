@@ -48,9 +48,18 @@ namespace XrmToolBox.Extensibility
             }
 
             var filePath = Path.Combine(Paths.SettingsPath,
-                string.Format("{0}{1}{2}.xml", pluginType.Name, string.IsNullOrEmpty(name) ? "" : "_", name));
+                string.Format("{0}{1}{2}.xml", pluginType.Assembly.FullName.Split(',')[0], string.IsNullOrEmpty(name) ? "" : "_", name));
 
             XmlSerializerHelper.SerializeToFile(settings, filePath);
+
+            // Fix file created before using Assembly name
+            filePath = Path.Combine(Paths.SettingsPath,
+               string.Format("{0}{1}{2}.xml", pluginType.Name, string.IsNullOrEmpty(name) ? "" : "_", name));
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
         }
 
         /// <summary>
@@ -73,6 +82,21 @@ namespace XrmToolBox.Extensibility
             }
 
             var filePath = Path.Combine(Paths.SettingsPath,
+                string.Format("{0}{1}{2}.xml", pluginType.Assembly.FullName.Split(',')[0],
+                    string.IsNullOrEmpty(name) ? "" : "_", name));
+
+            if (File.Exists(filePath))
+            {
+                var document = new XmlDocument();
+                document.Load(filePath);
+
+                settingsObject = (T) XmlSerializerHelper.Deserialize(document.OuterXml, typeof(T));
+                return true;
+            }
+
+            // Check again with a different name to handle settings files 
+            // created before fixing the name used
+            filePath = Path.Combine(Paths.SettingsPath,
                 string.Format("{0}{1}{2}.xml", pluginType.Name, string.IsNullOrEmpty(name) ? "" : "_", name));
 
             if (File.Exists(filePath))
@@ -80,9 +104,10 @@ namespace XrmToolBox.Extensibility
                 var document = new XmlDocument();
                 document.Load(filePath);
 
-                settingsObject = (T)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(T));
+                settingsObject = (T) XmlSerializerHelper.Deserialize(document.OuterXml, typeof(T));
                 return true;
             }
+
 
             settingsObject = default(T);
             return false;
