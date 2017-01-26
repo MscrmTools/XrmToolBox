@@ -273,46 +273,43 @@ namespace XrmToolBox
             });
         }
 
-        private Task CheckForPluginsUpdate()
+        private void CheckForPluginsUpdate()
         {
-            return new Task(() => Invoke(new Action(() =>
+            try
             {
-                try
+                store = new Store();
+                store.LoadNugetPackages();
+                var packages = store.Packages;
+
+                if (packages.Any(p => p.Action == PluginsStore.PackageInstallAction.Update))
                 {
-                    store = new Store();
-                    store.LoadNugetPackages();
-                    var packages = store.Packages;
+                    var image = pluginsCheckerImageList.Images[3];
+                    var text = packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Update).ToString();
 
-                    if (packages.Any(p => p.Action == PluginsStore.PackageInstallAction.Update))
+                    using (Graphics graphics = Graphics.FromImage(image))
                     {
-                        var image = pluginsCheckerImageList.Images[3];
-                        var text = packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Update).ToString();
-
-                        using (Graphics graphics = Graphics.FromImage(image))
+                        using (Font arialFont = new Font("Courrier MS", 8, FontStyle.Bold))
                         {
-                            using (Font arialFont = new Font("Courrier MS", 8, FontStyle.Bold))
-                            {
-                                var location = new Point(16 - (text.Length * 9), 5);
-                                graphics.DrawString(text, arialFont, Brushes.Black, location);
-                            }
+                            var location = new Point(16 - (text.Length*9), 5);
+                            graphics.DrawString(text, arialFont, Brushes.Black, location);
                         }
-                        
-                        tsbPlugins.Image = image;
+                    }
 
-                        tsbPlugins.ToolTipText = string.Format("{0} new plugins\r\n{1} plugins updates",
-                            packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Install),
-                            packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Update));
-                    }
-                    else
-                    {
-                        tsbPlugins.Image = pluginsCheckerImageList.Images[2];
-                    }
+                    tsbPlugins.Image = image;
+
+                    tsbPlugins.ToolTipText = string.Format("{0} new plugins\r\n{1} plugins updates",
+                        packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Install),
+                        packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Update));
                 }
-                catch (Exception error)
+                else
                 {
-                    tsbPlugins.ToolTipText = "Failed to retrieve plugins updates: " + error.Message;
+                    tsbPlugins.Image = pluginsCheckerImageList.Images[2];
                 }
-            })));
+            }
+            catch (Exception error)
+            {
+                tsbPlugins.ToolTipText = "Failed to retrieve plugins updates: " + error.Message;
+            }
         }
 
         #endregion Tasks to launch during startup
@@ -335,7 +332,7 @@ namespace XrmToolBox
             var tasks = new List<Task>
             {
                 LaunchVersionCheck(),
-                CheckForPluginsUpdate()
+                
             };
 
             if (!string.IsNullOrEmpty(initialConnectionName))
@@ -410,6 +407,9 @@ namespace XrmToolBox
                         pbOpenPluginsStore_Click(sender, e);
                 }
             }
+
+            Action action = CheckForPluginsUpdate;
+            action.BeginInvoke(ar => action.EndInvoke(ar), null);
         }
 
         private void MainForm_OnCloseTool(object sender, EventArgs e)
