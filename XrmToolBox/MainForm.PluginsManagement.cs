@@ -142,8 +142,8 @@ namespace XrmToolBox
                 {
                     var crmSvcClient = currentConnectionDetail.GetCrmServiceClient();
 
-                    OrganizationServiceProxy clonedService = crmSvcClient.OrganizationServiceProxy;
-                    OrganizationWebProxyClient clonedWebClientService = crmSvcClient.OrganizationWebProxyClient;
+                    var clonedService = crmSvcClient.OrganizationServiceProxy;
+                    var clonedWebClientService = crmSvcClient.OrganizationWebProxyClient;
                     if (clonedService != null)
                     {
                         clonedService.SdkClientVersion = currentConnectionDetail.OrganizationVersion;
