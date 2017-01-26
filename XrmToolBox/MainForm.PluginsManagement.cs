@@ -364,7 +364,10 @@ namespace XrmToolBox
                     }
                     else
                     {
-                        DisplayPluginControl(plugin);
+                        if (plugin != null)
+                        {
+                            DisplayPluginControl(plugin);
+                        }
                     }
                 }
                 else
