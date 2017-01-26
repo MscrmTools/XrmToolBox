@@ -205,8 +205,8 @@ namespace XrmToolBox
             this.tsbPlugins.Image = ((System.Drawing.Image)(resources.GetObject("tsbPlugins.Image")));
             this.tsbPlugins.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbPlugins.Name = "tsbPlugins";
-            this.tsbPlugins.Size = new System.Drawing.Size(142, 29);
-            this.tsbPlugins.Text = "Plugins store";
+            this.tsbPlugins.Size = new System.Drawing.Size(135, 29);
+            this.tsbPlugins.Text = "Plugins Store";
             this.tsbPlugins.Click += new System.EventHandler(this.tsbPlugins_Click);
             // 
             // toolStripSeparator1
@@ -628,7 +628,7 @@ namespace XrmToolBox
             this.tsmiHidePlugin,
             this.tsmiUninstallPlugin});
             this.cmsOnePlugin.Name = "cmsOnePlugin";
-            this.cmsOnePlugin.Size = new System.Drawing.Size(298, 133);
+            this.cmsOnePlugin.Size = new System.Drawing.Size(298, 100);
             // 
             // tsmiOpenProjectHomePage
             // 
