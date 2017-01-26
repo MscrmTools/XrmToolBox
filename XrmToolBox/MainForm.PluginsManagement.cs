@@ -347,6 +347,8 @@ namespace XrmToolBox
         {
             if (e.Button == MouseButtons.Left)
             {
+                var plugin = ((UserControl)sender).Tag as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
+
                 if (service == null)
                 {
                     var result = MessageBox.Show(this, "Do you want to connect to an organization first?", "Question",
@@ -360,14 +362,15 @@ namespace XrmToolBox
                     {
                         return;
                     }
+                    else
+                    {
+                        DisplayPluginControl(plugin);
+                    }
                 }
                 else
                 {
-                    var plugin = ((UserControl) sender).Tag as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
-
                     if (plugin != null)
                     {
-
                         DisplayPluginControl(plugin);
                     }
                 }
