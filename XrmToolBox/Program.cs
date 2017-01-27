@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Web.Script.Serialization;
@@ -33,7 +34,7 @@ namespace XrmToolBox
                     if (arg.ToLower().StartsWith("/overridepath:"))
                     {
                         var parts = arg.Split(':');
-                        Paths.OverrideRootPath(parts[1]);
+                        Paths.OverrideRootPath(string.Join(":", parts.Skip(1)));
                     }
                 }
 
