@@ -84,7 +84,7 @@ namespace XrmToolBox.Extensibility
                 }
             }
 
-            throw new Exception("Unable to find XrmToolBox plugin control in this tab");
+            return null;
         }
 
         public static string GetPluginName(this TabPage page)

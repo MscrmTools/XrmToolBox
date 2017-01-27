@@ -460,6 +460,8 @@ namespace XrmToolBox
             else
             {
                 var control = tabControl1.SelectedTab.GetPlugin();
+                if (control == null) return;
+
                 ((UserControl)control).Focus();
                 var currentPluginStatus = pluginControlStatuses.FirstOrDefault(pcs => pcs.Control == control);
                 if (currentPluginStatus == null)
@@ -653,7 +655,7 @@ namespace XrmToolBox
             }
 
             // Trying to find the tab where plugin is located
-            var tab = tabControl1.TabPages.Cast<TabPage>().FirstOrDefault(x => x.GetPlugin().GetType().GetTitle() == message.TargetPlugin);
+            var tab = tabControl1.TabPages.Cast<TabPage>().FirstOrDefault(x => x.GetPlugin()?.GetType().GetTitle() == message.TargetPlugin);
 
             if (tab != null && !message.NewInstance)
             {
@@ -788,7 +790,7 @@ namespace XrmToolBox
         {
             info.Silent = currentOptions.CloseEachPluginSilently;
             var plugin = page.GetPlugin();
-            plugin.ClosingPlugin(info);
+            plugin?.ClosingPlugin(info);
             if (info.Cancel)
             {
                 return;
@@ -930,7 +932,7 @@ namespace XrmToolBox
 
         private void UpdateTabConnection(TabPage tab)
         {
-            tab.GetPlugin().UpdateConnection(service, currentConnectionDetail);
+            tab.GetPlugin()?.UpdateConnection(service, currentConnectionDetail);
 
             tab.Text = string.Format("{0} ({1})",
                 ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)tab.Tag).Metadata.Name,
