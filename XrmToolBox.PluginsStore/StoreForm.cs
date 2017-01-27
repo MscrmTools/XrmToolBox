@@ -72,7 +72,7 @@ namespace XrmToolBox.PluginsStore
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        public void RefreshPluginsList()
+        public void RefreshPluginsList(bool reload = true)
         {
             selectedPackagesId.Clear();
 
@@ -97,8 +97,11 @@ namespace XrmToolBox.PluginsStore
 
                 var options = Options.Instance;
 
-                store.LoadNugetPackages();
-                var xtbPackages = store.Packages;
+                if (reload)
+                {
+                    store.LoadNugetPackages();
+                }
+                var xtbPackages = store.Packages.OrderBy(p => p.Package.Title);
 
                 var lvic = new List<ListViewItem>();
                 foreach (var xtbPackage in xtbPackages)
@@ -581,7 +584,7 @@ namespace XrmToolBox.PluginsStore
 
             options.Save();
 
-            RefreshPluginsList();
+            RefreshPluginsList(false);
         }
 
         private void tsbProxySettings_Click(object sender, EventArgs e)
