@@ -22,7 +22,7 @@ namespace XrmToolBox.PluginsStore
         private readonly string nugetPluginsFolder;
         private FileInfo[] plugins;
         private Dictionary<string, int> currentVersionDownloadsCount;
-
+       
         public Store()
         {
             // Initializing folders variables
@@ -218,16 +218,25 @@ namespace XrmToolBox.PluginsStore
             Packages = new List<XtbNuGetPackage>();
             foreach (var package in packages)
             {
+                var xtbPackage = GetXtbPackage(package);
+                Packages.Add(xtbPackage);
+            }
+
+            Action action = UpdateReleaseDates;
+            action.BeginInvoke(ar => action.EndInvoke(ar), null);
+        }
+
+        private void UpdateReleaseDates()
+        {
+            foreach (var package in Packages)
+            {
                 var allPackages = manager.SourceRepository.GetPackages()
-                    .Where(p => p.Id == package.Id).ToList();
+                    .Where(p => p.Id == package.Package.Id).ToList();
 
                 var first = allPackages.Select(p => (DataServicePackage) p).OrderBy(p => p.LastUpdated).First();
-                   
-                var xtbPackage = GetXtbPackage(package);
-                xtbPackage.FirstReleaseDate = first.LastUpdated.Date;
-                xtbPackage.LatestReleaseDate = ((DataServicePackage)package).LastUpdated.Date;
 
-                Packages.Add(xtbPackage);
+                package.FirstReleaseDate = first.LastUpdated.Date;
+                package.LatestReleaseDate = ((DataServicePackage) package.Package).LastUpdated.Date;
             }
         }
 
