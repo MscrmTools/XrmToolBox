@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -42,6 +43,14 @@ namespace XrmToolBox
                 CopyUpdatedPlugins();
                 RemovePlugins();
 
+                RedirectAssembly("McTools.Xrm.Connection");
+                RedirectAssembly("McTools.Xrm.Connection.WinForms");
+                RedirectAssembly("XrmToolBox.Extensibility");
+                RedirectAssembly("XrmToolBox.PluginsStore");
+                RedirectAssembly("Microsoft.Xrm.Tooling.Connector");
+                RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory");
+                RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms");
+
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new MainForm(args));
@@ -54,7 +63,40 @@ namespace XrmToolBox
             }
         }
 
-       /// <summary>
+        public static void RedirectAssembly(string shortName)
+        {
+            var targetAssemblyName = Assembly.Load(shortName).GetName();
+            var targetVersion = targetAssemblyName.Version;
+            var targetPublicKeyToken = targetAssemblyName.GetPublicKeyToken();
+
+            ResolveEventHandler handler = (sender, args) =>
+            {
+                var requestedAssembly = new AssemblyName(args.Name);
+                if (requestedAssembly.Name != shortName)
+                {
+                    return null;
+                }
+
+                var alreadyLoadedAssembly = AppDomain.CurrentDomain.GetAssemblies()
+                    .FirstOrDefault(a => a.GetName().Name == requestedAssembly.Name);
+
+                if (alreadyLoadedAssembly != null)
+                {
+                    return alreadyLoadedAssembly;
+                }
+
+                requestedAssembly.Version = targetVersion;
+                requestedAssembly.SetPublicKeyToken(targetPublicKeyToken);
+                requestedAssembly.CultureInfo = CultureInfo.InvariantCulture;
+
+
+                return Assembly.Load(requestedAssembly);
+            };
+
+            AppDomain.CurrentDomain.AssemblyResolve += handler;
+        }
+
+        /// <summary>
         /// Performs checks to ensure that Windows Identity Foundation is available
         /// </summary>
         /// <returns></returns>
