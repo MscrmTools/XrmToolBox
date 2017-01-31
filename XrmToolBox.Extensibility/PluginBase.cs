@@ -1,4 +1,5 @@
-﻿using XrmToolBox.Extensibility.Interfaces;
+﻿using System;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace XrmToolBox.Extensibility
 {
@@ -11,11 +12,11 @@ namespace XrmToolBox.Extensibility
 
         public abstract IXrmToolBoxPluginControl GetControl();
 
-        public string GetMyType()
+        public string GetAssemblyQualifiedName()
         {
-            return GetType().FullName;
+            return GetType().AssemblyQualifiedName;
         }
-
+        
         public string GetVersion()
         {
             return GetType().Assembly.GetName().Version.ToString();
