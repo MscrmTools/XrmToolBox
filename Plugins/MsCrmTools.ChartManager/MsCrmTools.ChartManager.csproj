@@ -189,12 +189,12 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>"$(SolutionDir)packages\LibZ.Tool.1.2.0.0\tools\libz.exe" inject-dll --assembly "$(TargetPath)" --include MsCrmTools.ChartManager.dll --include ICSharpCode.TextEditor.dll
-      copy /y $(TargetPath) "$(SolutionDir)XrmToolBox\$(OutDir)Plugins\$(TargetFileName)"
+      copy /y "$(TargetPath)" "$(SolutionDir)XrmToolBox\$(OutDir)Plugins\$(TargetFileName)"
 </PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

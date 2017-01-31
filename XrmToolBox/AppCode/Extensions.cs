@@ -32,17 +32,5 @@ namespace XrmToolBox.AppCode
 
             return false;
         }
-
-        /// <summary>
-        /// Return the assembly version from a file
-        /// </summary>
-        /// <param name="fi">Current file info</param>
-        /// <returns>Assembly version</returns>
-        public static Version GetAssemblyVersion(this FileInfo fi)
-        {
-            var assembly = Assembly.LoadFile(fi.FullName);
-
-           return assembly.GetName().Version;
-        }
     }
 }

@@ -117,4 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="lblChangePathDescription.Text" xml:space="preserve">
+    <value>The current root path is '{0}'
+
+To change the storage path of XrmToolBox, create a shortcut to XrmToolBox.exe application and add the following argument:
+
+XrmToolBox.exe /overridepath:&lt;Your_new_path&gt;
+
+When using overridepath argument, all folder and files for XrmToolBox applications (plugins, settings, logs, etc.) are stored in sub folders for the specified path</value>
+  </data>
 </root>

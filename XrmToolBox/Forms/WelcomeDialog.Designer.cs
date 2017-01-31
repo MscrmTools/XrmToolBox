@@ -34,6 +34,7 @@
             this.pnlSupport = new System.Windows.Forms.Panel();
             this.lblSupport = new System.Windows.Forms.Label();
             this.linkClose = new System.Windows.Forms.LinkLabel();
+            this.lblWorkingState = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbThanks)).BeginInit();
             this.pnlSupport.SuspendLayout();
             this.SuspendLayout();
@@ -107,6 +108,18 @@
             this.linkClose.VisitedLinkColor = System.Drawing.Color.White;
             this.linkClose.Click += new System.EventHandler(this.linkClose_Click);
             // 
+            // lblWorkingState
+            // 
+            this.lblWorkingState.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblWorkingState.BackColor = System.Drawing.Color.Transparent;
+            this.lblWorkingState.Font = new System.Drawing.Font("Segoe UI Light", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWorkingState.ForeColor = System.Drawing.Color.White;
+            this.lblWorkingState.Location = new System.Drawing.Point(11, 277);
+            this.lblWorkingState.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblWorkingState.Name = "lblWorkingState";
+            this.lblWorkingState.Size = new System.Drawing.Size(377, 18);
+            this.lblWorkingState.TabIndex = 9;
+            // 
             // WelcomeDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -116,6 +129,7 @@
             this.CancelButton = this.linkClose;
             this.ClientSize = new System.Drawing.Size(600, 300);
             this.ControlBox = false;
+            this.Controls.Add(this.lblWorkingState);
             this.Controls.Add(this.linkClose);
             this.Controls.Add(this.pnlSupport);
             this.Controls.Add(this.lblVersion);
@@ -125,6 +139,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "WelcomeDialog";
+            this.Load += new System.EventHandler(this.WelcomeDialog_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbThanks)).EndInit();
             this.pnlSupport.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -139,5 +154,6 @@
         private System.Windows.Forms.Panel pnlSupport;
         private System.Windows.Forms.Label lblSupport;
         private System.Windows.Forms.LinkLabel linkClose;
+        private System.Windows.Forms.Label lblWorkingState;
     }
 }

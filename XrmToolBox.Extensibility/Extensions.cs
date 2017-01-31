@@ -9,8 +9,16 @@ namespace XrmToolBox.Extensibility
     {
         public static ICodePlexPlugin GetCodePlexPlugin(this TabPage page)
         {
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            return page.Controls[0] as ICodePlexPlugin;
+            for (var i = 0; i < page.Controls.Count; i++)
+            {
+                var ctrl = page.Controls[i] as ICodePlexPlugin;
+                if (ctrl != null)
+                {
+                    return ctrl;
+                }
+            }
+
+            return null;
         }
 
         public static string GetCompany(this Type pluginType)
@@ -25,25 +33,58 @@ namespace XrmToolBox.Extensibility
 
         public static IGitHubPlugin GetGithubPlugin(this TabPage page)
         {
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            return page.Controls[0] as IGitHubPlugin;
+            for (var i = 0; i < page.Controls.Count; i++)
+            {
+                var ctrl = page.Controls[i] as IGitHubPlugin;
+                if (ctrl != null)
+                {
+                    return ctrl;
+                }
+            }
+
+            return null;
         }
 
         public static IHelpPlugin GetHelpEnabledPlugin(this TabPage page)
         {
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            return page.Controls[0] as IHelpPlugin;
+            for (var i = 0; i < page.Controls.Count; i++)
+            {
+                var ctrl = page.Controls[i] as IHelpPlugin;
+                if (ctrl != null)
+                {
+                    return ctrl;
+                }
+            }
+
+            return null;
         }
 
         public static IPayPalPlugin GetPaypalPlugin(this TabPage page)
         {
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            return page.Controls[0] as IPayPalPlugin;
+            for (var i = 0; i < page.Controls.Count; i++)
+            {
+                var ctrl = page.Controls[i] as IPayPalPlugin;
+                if (ctrl != null)
+                {
+                    return ctrl;
+                }
+            }
+
+            return null;
         }
 
         public static IXrmToolBoxPluginControl GetPlugin(this TabPage page)
         {
-            return (IXrmToolBoxPluginControl)page.Controls[0];
+            for (var i = 0; i < page.Controls.Count; i++)
+            {
+                var ctrl = page.Controls[i] as IXrmToolBoxPluginControl;
+                if (ctrl != null)
+                {
+                    return ctrl;
+                }
+            }
+
+            return null;
         }
 
         public static string GetPluginName(this TabPage page)

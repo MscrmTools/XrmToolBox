@@ -19,6 +19,26 @@ namespace MsCrmTools.SampleTool
         public SampleTool()
         {
             InitializeComponent();
+
+            var settings = new Settings
+            {
+                Var1 = "settings string",
+                Var2 = true
+            };
+            SettingsManager.Instance.Save(typeof(SampleTool), settings);
+
+            Settings settings2;
+
+            if (SettingsManager.Instance.TryLoad(typeof(SampleTool), out settings2))
+            {
+                MessageBox.Show("Settings found!");
+            }
+
+            LogInfo("An information message");
+            LogWarning("A warning message");
+            LogError("An error message");
+
+      
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
@@ -63,6 +83,10 @@ namespace MsCrmTools.SampleTool
                     tsbCancel.Enabled = false;
                     if (!e.Cancelled)
                     {
+                        var logger = new LogManager(typeof(SampleTool), ConnectionDetail);
+                        logger.LogInfo("You are {0}", (Guid)e.Result);
+
+
                         MessageBox.Show(string.Format("You are {0}", (Guid)e.Result));
                     }
                 },
@@ -79,9 +103,17 @@ namespace MsCrmTools.SampleTool
             CloseTool();
         }
 
+        public override void ClosingPlugin(PluginCloseInfo info)
+        {
+            //MessageBox.Show("Custom logic here");
+
+            base.ClosingPlugin(info);
+        }
 
         private void tsbWhoAmI_Click(object sender, EventArgs e)
         {
+            HideNotification();
+          
             ExecuteMethod(ProcessWhoAmI);
         }
 
@@ -140,5 +172,9 @@ namespace MsCrmTools.SampleTool
 
         #endregion Help implementation
 
+        private void SampleTool_Load(object sender, EventArgs e)
+        {
+            ShowInfoNotification("This is a notification that can lead to XrmToolBox reposiotry", new Uri("http://github.com/MscrmTools/XrmToolBox"));
+        }
     }
 }

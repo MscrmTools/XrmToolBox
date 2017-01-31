@@ -26,10 +26,10 @@ namespace XrmToolBox
         private void CreateModel<T>(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count)
              where T : PluginModel
         {
-            var type = plugin.Value.GetMyType();
+            var name = plugin.Value.GetAssemblyQualifiedName();
             //var pm = (T)pManager.PluginsControls.FirstOrDefault(t => ((Type)t.Tag).FullName == type && t is T);
 
-            var pm = (T)pluginsModels.FirstOrDefault(t => ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)t.Tag).Value.GetType().FullName == type && t is T);
+            var pm = (T)pluginsModels.FirstOrDefault(t => ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)t.Tag).Value.GetType().AssemblyQualifiedName == name && t is T);
             var small = (typeof(T) == typeof(SmallPluginModel));
 
             if (pm == null)
@@ -79,6 +79,7 @@ namespace XrmToolBox
                 pm = (T)ctor.Invoke(vals);
 
                 pm.Tag = plugin;
+                //pm.ContextMenuStrip = cmsOnePlugin; 
                 pm.Clicked += PluginClicked;
 
                 pluginsModels.Add(pm);
@@ -141,8 +142,8 @@ namespace XrmToolBox
                 {
                     var crmSvcClient = currentConnectionDetail.GetCrmServiceClient();
 
-                    OrganizationServiceProxy clonedService = crmSvcClient.OrganizationServiceProxy;
-                    OrganizationWebProxyClient clonedWebClientService = crmSvcClient.OrganizationWebProxyClient;
+                    var clonedService = crmSvcClient.OrganizationServiceProxy;
+                    var clonedWebClientService = crmSvcClient.OrganizationWebProxyClient;
                     if (clonedService != null)
                     {
                         clonedService.SdkClientVersion = currentConnectionDetail.OrganizationVersion;
@@ -183,8 +184,10 @@ namespace XrmToolBox
                 pluginControl.Width = newTab.Width;
                 pluginControl.Height = newTab.Height;
                 pluginControl.Tag = pluginControlInstanceId;
+                pluginControl.Parent = newTab;
 
                 newTab.Controls.Add(pluginControl);
+                newTab.Controls.Add(new NotificationArea { Name = "NotifPanel", Visible = false, Dock = DockStyle.Top, Parent = newTab });
 
                 tabIndex = tabControl1.TabPages.Count - 1;
 
@@ -284,7 +287,7 @@ namespace XrmToolBox
                 foreach (var item in currentOptions.MostUsedList.OrderByDescending(i => i.Count).ThenBy(i => i.Name))
                 {
                     var plugin = filteredPlugins.FirstOrDefault(x => x.Value.GetType().FullName == item.Name);
-                    if (plugin != null && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.GetType().GetTitle())))
+                    if (plugin != null && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.Metadata.Name)))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth, item.Count);
                     }
@@ -292,7 +295,7 @@ namespace XrmToolBox
 
                 foreach (var plugin in filteredPlugins.OrderBy(p => p.Metadata.Name))
                 {
-                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.Value.GetType().FullName) && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.Value.GetType().GetTitle())))
+                    if (currentOptions.MostUsedList.All(i => i.Name != plugin.Value.GetType().FullName) && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.Metadata.Name)))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth);
                     }
@@ -338,6 +341,52 @@ namespace XrmToolBox
 
                 AdaptPluginControlSize();
             }));
+        }
+
+        private void PluginClicked(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                var plugin = ((UserControl)sender).Tag as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
+
+                if (service == null)
+                {
+                    var result = MessageBox.Show(this, "Do you want to connect to an organization first?", "Question",
+                        MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        ConnectUponApproval(sender);
+                    }
+                    else if (result == DialogResult.Cancel)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        if (plugin != null)
+                        {
+                            DisplayPluginControl(plugin);
+                        }
+                    }
+                }
+                else
+                {
+                    if (plugin != null)
+                    {
+                        DisplayPluginControl(plugin);
+                    }
+                }
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                var ctrl = sender as PluginModel;
+                if (ctrl != null)
+                {
+                    selectedPluginModel = ctrl;
+                    cmsOnePlugin.Show(Cursor.Position);
+                }
+            }
         }
 
         /// <summary>
@@ -405,7 +454,7 @@ namespace XrmToolBox
             {
                 if (tabControl1.SelectedIndex != 0)
                 {
-                    var currentVisibleControl = (IXrmToolBoxPluginControl)tabControl1.SelectedTab.Controls[0];
+                    var currentVisibleControl = tabControl1.SelectedTab.GetPlugin();
                     if (currentVisibleControl == sender)
                     {
                         ccsb.SetMessage(e.Message);

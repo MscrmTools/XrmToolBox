@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
+using XrmToolBox.Extensibility;
+using XrmToolBox.PluginsStore;
 
 namespace XrmToolBox.AppCode
 {
@@ -112,8 +114,10 @@ namespace XrmToolBox.AppCode
                     }
                 }
             }
-            catch
+            catch(Exception error)
             {
+                var lm = new LogManager(GetType());
+                lm.LogError("Error while checking update for XrmToolBox: {0}", error.Message);
                 // Do nothing as we don't want to throw exception if something goes wrong with checking update
             }
         }

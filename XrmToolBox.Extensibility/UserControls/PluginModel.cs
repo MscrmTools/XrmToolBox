@@ -10,6 +10,7 @@ namespace XrmToolBox.Extensibility.UserControls
 {
     public class PluginModel : UserControl
     {
+        private System.ComponentModel.IContainer components;
         #region Delegates
 
         public delegate void ClickedEventHandler(object sender, EventArgs e);
@@ -18,8 +19,19 @@ namespace XrmToolBox.Extensibility.UserControls
 
         #region Event Handlers
 
-        public virtual event ClickedEventHandler Clicked;
+        public virtual event EventHandler<MouseEventArgs> Clicked;
 
         #endregion Event Handlers
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // PluginModel
+            // 
+            this.Name = "PluginModel";
+            this.ResumeLayout(false);
+
+        }
     }
 }

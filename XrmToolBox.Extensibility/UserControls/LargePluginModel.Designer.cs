@@ -45,7 +45,7 @@
             this.picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picture.TabIndex = 0;
             this.picture.TabStop = false;
-            this.picture.Click += new System.EventHandler(this.MouseClick);
+            this.picture.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MouseClick);
             // 
             // lblTitle
             // 
@@ -59,7 +59,7 @@
             this.lblTitle.Size = new System.Drawing.Size(69, 25);
             this.lblTitle.TabIndex = 1;
             this.lblTitle.Text = "[Label]";
-            this.lblTitle.Click += new System.EventHandler(this.MouseClick);
+            this.lblTitle.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MouseClick);
             // 
             // lblVersion
             // 
@@ -71,10 +71,10 @@
             this.lblVersion.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblVersion.Location = new System.Drawing.Point(113, 33);
             this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(63, 19);
+            this.lblVersion.Size = new System.Drawing.Size(62, 19);
             this.lblVersion.TabIndex = 3;
             this.lblVersion.Text = "[Version]";
-            this.lblVersion.Click += new System.EventHandler(this.MouseClick);
+            this.lblVersion.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MouseClick);
             // 
             // lblAuthor
             // 
@@ -89,7 +89,7 @@
             this.lblAuthor.Size = new System.Drawing.Size(60, 19);
             this.lblAuthor.TabIndex = 4;
             this.lblAuthor.Text = "[Author]";
-            this.lblAuthor.Click += new System.EventHandler(this.MouseClick);
+            this.lblAuthor.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MouseClick);
             // 
             // lblCount
             // 
@@ -102,7 +102,7 @@
             this.lblCount.TabIndex = 5;
             this.lblCount.Text = "[NB]";
             this.lblCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.lblCount.Click += new System.EventHandler(this.MouseClick);
+            this.lblCount.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MouseClick);
             // 
             // lblDescription
             // 
@@ -117,7 +117,7 @@
             this.lblDescription.Size = new System.Drawing.Size(86, 19);
             this.lblDescription.TabIndex = 2;
             this.lblDescription.Text = "[Description]";
-            this.lblDescription.Click += new System.EventHandler(this.MouseClick);
+            this.lblDescription.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MouseClick);
             // 
             // LargePluginModel
             // 
@@ -134,7 +134,7 @@
             this.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Name = "LargePluginModel";
             this.Size = new System.Drawing.Size(534, 100);
-            this.Click += new System.EventHandler(this.MouseClick);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseClick);
             ((System.ComponentModel.ISupportInitialize)(this.picture)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

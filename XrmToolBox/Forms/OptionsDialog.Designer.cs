@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OptionsDialog));
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnOk = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -36,12 +37,9 @@
             this.lblTitle = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tbDisplay = new System.Windows.Forms.TabPage();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.rdbToolsListSmall = new System.Windows.Forms.RadioButton();
             this.rdbToolsListLarge = new System.Windows.Forms.RadioButton();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.btnResetMuList = new System.Windows.Forms.Button();
             this.chkDisplayMuFirst = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.lvPlugins = new System.Windows.Forms.ListView();
@@ -65,23 +63,31 @@
             this.label5 = new System.Windows.Forms.Label();
             this.cbbProxyUsage = new System.Windows.Forms.ComboBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.chkDisplayPluginsStoreOnlyIfUpdates = new System.Windows.Forms.CheckBox();
+            this.chkDoNotCheckForUpdate = new System.Windows.Forms.CheckBox();
             this.chkCloseEachPluginSilently = new System.Windows.Forms.CheckBox();
             this.chkDisplayPluginsStoreOnStartup = new System.Windows.Forms.CheckBox();
             this.chkClosePluginsSilently = new System.Windows.Forms.CheckBox();
             this.chkAllowUsageStatistics = new System.Windows.Forms.CheckBox();
-            this.chkDoNotCheckForUpdate = new System.Windows.Forms.CheckBox();
+            this.tpPaths = new System.Windows.Forms.TabPage();
+            this.lblChangePathDescription = new System.Windows.Forms.Label();
+            this.lblChangePathTitle = new System.Windows.Forms.Label();
+            this.llOpenStorageFolder = new System.Windows.Forms.LinkLabel();
+            this.llOpenRootFolder = new System.Windows.Forms.LinkLabel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.chkMergeConnectionFiles = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tbDisplay.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.tbProxy.SuspendLayout();
             this.gbCustomProxy.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tpPaths.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -154,6 +160,7 @@
             this.tabControl1.Controls.Add(this.tbDisplay);
             this.tabControl1.Controls.Add(this.tbProxy);
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tpPaths);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 117);
             this.tabControl1.Name = "tabControl1";
@@ -163,37 +170,22 @@
             // 
             // tbDisplay
             // 
-            this.tbDisplay.Controls.Add(this.groupBox1);
-            this.tbDisplay.Controls.Add(this.groupBox2);
+            this.tbDisplay.Controls.Add(this.chkMergeConnectionFiles);
+            this.tbDisplay.Controls.Add(this.panel4);
+            this.tbDisplay.Controls.Add(this.chkDisplayMuFirst);
             this.tbDisplay.Controls.Add(this.groupBox3);
             this.tbDisplay.Location = new System.Drawing.Point(4, 29);
             this.tbDisplay.Name = "tbDisplay";
-            this.tbDisplay.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tbDisplay.Padding = new System.Windows.Forms.Padding(3);
             this.tbDisplay.Size = new System.Drawing.Size(788, 484);
             this.tbDisplay.TabIndex = 0;
             this.tbDisplay.Text = "Display";
             this.tbDisplay.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.rdbToolsListSmall);
-            this.groupBox1.Controls.Add(this.rdbToolsListLarge);
-            this.groupBox1.Location = new System.Drawing.Point(8, 8);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox1.Size = new System.Drawing.Size(1174, 80);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Display";
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 31);
+            this.label1.Location = new System.Drawing.Point(8, 9);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(70, 20);
@@ -203,7 +195,7 @@
             // rdbToolsListSmall
             // 
             this.rdbToolsListSmall.AutoSize = true;
-            this.rdbToolsListSmall.Location = new System.Drawing.Point(222, 28);
+            this.rdbToolsListSmall.Location = new System.Drawing.Point(220, 6);
             this.rdbToolsListSmall.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.rdbToolsListSmall.Name = "rdbToolsListSmall";
             this.rdbToolsListSmall.Size = new System.Drawing.Size(114, 24);
@@ -215,7 +207,7 @@
             // 
             this.rdbToolsListLarge.AutoSize = true;
             this.rdbToolsListLarge.Checked = true;
-            this.rdbToolsListLarge.Location = new System.Drawing.Point(92, 28);
+            this.rdbToolsListLarge.Location = new System.Drawing.Point(90, 6);
             this.rdbToolsListLarge.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.rdbToolsListLarge.Name = "rdbToolsListLarge";
             this.rdbToolsListLarge.Size = new System.Drawing.Size(116, 24);
@@ -224,38 +216,11 @@
             this.rdbToolsListLarge.Text = "Large icons";
             this.rdbToolsListLarge.UseVisualStyleBackColor = true;
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.btnResetMuList);
-            this.groupBox2.Controls.Add(this.chkDisplayMuFirst);
-            this.groupBox2.Location = new System.Drawing.Point(6, 98);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.groupBox2.Size = new System.Drawing.Size(1176, 75);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Most used tools";
-            // 
-            // btnResetMuList
-            // 
-            this.btnResetMuList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnResetMuList.Location = new System.Drawing.Point(932, 23);
-            this.btnResetMuList.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnResetMuList.Name = "btnResetMuList";
-            this.btnResetMuList.Size = new System.Drawing.Size(232, 35);
-            this.btnResetMuList.TabIndex = 1;
-            this.btnResetMuList.Text = "Reset Most used tools list";
-            this.btnResetMuList.UseVisualStyleBackColor = true;
-            this.btnResetMuList.Click += new System.EventHandler(this.BtnResetMuListClick);
-            // 
             // chkDisplayMuFirst
             // 
             this.chkDisplayMuFirst.AutoSize = true;
             this.chkDisplayMuFirst.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkDisplayMuFirst.Location = new System.Drawing.Point(15, 29);
+            this.chkDisplayMuFirst.Location = new System.Drawing.Point(6, 40);
             this.chkDisplayMuFirst.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkDisplayMuFirst.Name = "chkDisplayMuFirst";
             this.chkDisplayMuFirst.Size = new System.Drawing.Size(232, 24);
@@ -314,7 +279,7 @@
             this.tbProxy.Controls.Add(this.cbbProxyUsage);
             this.tbProxy.Location = new System.Drawing.Point(4, 29);
             this.tbProxy.Name = "tbProxy";
-            this.tbProxy.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tbProxy.Padding = new System.Windows.Forms.Padding(3);
             this.tbProxy.Size = new System.Drawing.Size(788, 484);
             this.tbProxy.TabIndex = 1;
             this.tbProxy.Text = "Proxy";
@@ -393,7 +358,7 @@
             this.txtProxyAddress.Enabled = false;
             this.txtProxyAddress.Location = new System.Drawing.Point(194, 25);
             this.txtProxyAddress.Name = "txtProxyAddress";
-            this.txtProxyAddress.Size = new System.Drawing.Size(587, 26);
+            this.txtProxyAddress.Size = new System.Drawing.Size(588, 26);
             this.txtProxyAddress.TabIndex = 4;
             // 
             // label4
@@ -485,6 +450,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.chkDisplayPluginsStoreOnlyIfUpdates);
             this.tabPage1.Controls.Add(this.chkDoNotCheckForUpdate);
             this.tabPage1.Controls.Add(this.chkCloseEachPluginSilently);
             this.tabPage1.Controls.Add(this.chkDisplayPluginsStoreOnStartup);
@@ -492,11 +458,32 @@
             this.tabPage1.Controls.Add(this.chkAllowUsageStatistics);
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(788, 484);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Miscellaneous";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // chkDisplayPluginsStoreOnlyIfUpdates
+            // 
+            this.chkDisplayPluginsStoreOnlyIfUpdates.AutoSize = true;
+            this.chkDisplayPluginsStoreOnlyIfUpdates.Enabled = false;
+            this.chkDisplayPluginsStoreOnlyIfUpdates.Location = new System.Drawing.Point(42, 145);
+            this.chkDisplayPluginsStoreOnlyIfUpdates.Name = "chkDisplayPluginsStoreOnlyIfUpdates";
+            this.chkDisplayPluginsStoreOnlyIfUpdates.Size = new System.Drawing.Size(278, 24);
+            this.chkDisplayPluginsStoreOnlyIfUpdates.TabIndex = 6;
+            this.chkDisplayPluginsStoreOnlyIfUpdates.Text = "Only if plugin updates are available";
+            this.chkDisplayPluginsStoreOnlyIfUpdates.UseVisualStyleBackColor = true;
+            // 
+            // chkDoNotCheckForUpdate
+            // 
+            this.chkDoNotCheckForUpdate.AutoSize = true;
+            this.chkDoNotCheckForUpdate.Location = new System.Drawing.Point(16, 174);
+            this.chkDoNotCheckForUpdate.Name = "chkDoNotCheckForUpdate";
+            this.chkDoNotCheckForUpdate.Size = new System.Drawing.Size(214, 24);
+            this.chkDoNotCheckForUpdate.TabIndex = 5;
+            this.chkDoNotCheckForUpdate.Text = "Do not check for updates";
+            this.chkDoNotCheckForUpdate.UseVisualStyleBackColor = true;
             // 
             // chkCloseEachPluginSilently
             // 
@@ -518,6 +505,7 @@
             this.chkDisplayPluginsStoreOnStartup.TabIndex = 4;
             this.chkDisplayPluginsStoreOnStartup.Text = "Display plugins store on XrmToolBox startup";
             this.chkDisplayPluginsStoreOnStartup.UseVisualStyleBackColor = true;
+            this.chkDisplayPluginsStoreOnStartup.CheckedChanged += new System.EventHandler(this.chkDisplayPluginsStoreOnStartup_CheckedChanged);
             // 
             // chkClosePluginsSilently
             // 
@@ -539,15 +527,90 @@
             this.chkAllowUsageStatistics.Text = "Allow to send usage statistics (only anonymous data : plugin usage count)";
             this.chkAllowUsageStatistics.UseVisualStyleBackColor = true;
             // 
-            // chkDoNotCheckForUpdate
+            // tpPaths
             // 
-            this.chkDoNotCheckForUpdate.AutoSize = true;
-            this.chkDoNotCheckForUpdate.Location = new System.Drawing.Point(16, 144);
-            this.chkDoNotCheckForUpdate.Name = "chkDoNotCheckForUpdate";
-            this.chkDoNotCheckForUpdate.Size = new System.Drawing.Size(214, 24);
-            this.chkDoNotCheckForUpdate.TabIndex = 5;
-            this.chkDoNotCheckForUpdate.Text = "Do not check for updates";
-            this.chkDoNotCheckForUpdate.UseVisualStyleBackColor = true;
+            this.tpPaths.Controls.Add(this.lblChangePathDescription);
+            this.tpPaths.Controls.Add(this.lblChangePathTitle);
+            this.tpPaths.Controls.Add(this.llOpenStorageFolder);
+            this.tpPaths.Controls.Add(this.llOpenRootFolder);
+            this.tpPaths.Location = new System.Drawing.Point(4, 29);
+            this.tpPaths.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tpPaths.Name = "tpPaths";
+            this.tpPaths.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tpPaths.Size = new System.Drawing.Size(788, 484);
+            this.tpPaths.TabIndex = 3;
+            this.tpPaths.Text = "Paths";
+            this.tpPaths.UseVisualStyleBackColor = true;
+            // 
+            // lblChangePathDescription
+            // 
+            this.lblChangePathDescription.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblChangePathDescription.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblChangePathDescription.Location = new System.Drawing.Point(4, 127);
+            this.lblChangePathDescription.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblChangePathDescription.Name = "lblChangePathDescription";
+            this.lblChangePathDescription.Size = new System.Drawing.Size(780, 352);
+            this.lblChangePathDescription.TabIndex = 4;
+            this.lblChangePathDescription.Text = resources.GetString("lblChangePathDescription.Text");
+            // 
+            // lblChangePathTitle
+            // 
+            this.lblChangePathTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblChangePathTitle.Font = new System.Drawing.Font("Segoe UI Light", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblChangePathTitle.Location = new System.Drawing.Point(4, 85);
+            this.lblChangePathTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblChangePathTitle.Name = "lblChangePathTitle";
+            this.lblChangePathTitle.Size = new System.Drawing.Size(780, 42);
+            this.lblChangePathTitle.TabIndex = 3;
+            this.lblChangePathTitle.Text = "How to change XrmToolBox storage folder";
+            // 
+            // llOpenStorageFolder
+            // 
+            this.llOpenStorageFolder.Dock = System.Windows.Forms.DockStyle.Top;
+            this.llOpenStorageFolder.Location = new System.Drawing.Point(4, 45);
+            this.llOpenStorageFolder.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.llOpenStorageFolder.Name = "llOpenStorageFolder";
+            this.llOpenStorageFolder.Size = new System.Drawing.Size(780, 40);
+            this.llOpenStorageFolder.TabIndex = 1;
+            this.llOpenStorageFolder.TabStop = true;
+            this.llOpenStorageFolder.Text = "Open XrmToolBox storage folder";
+            this.llOpenStorageFolder.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llOpenStorageFolder_LinkClicked);
+            // 
+            // llOpenRootFolder
+            // 
+            this.llOpenRootFolder.Dock = System.Windows.Forms.DockStyle.Top;
+            this.llOpenRootFolder.Location = new System.Drawing.Point(4, 5);
+            this.llOpenRootFolder.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.llOpenRootFolder.Name = "llOpenRootFolder";
+            this.llOpenRootFolder.Size = new System.Drawing.Size(780, 40);
+            this.llOpenRootFolder.TabIndex = 0;
+            this.llOpenRootFolder.TabStop = true;
+            this.llOpenRootFolder.Text = "Open XrmToolBox folder";
+            this.llOpenRootFolder.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llOpenRootFolder_LinkClicked);
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.label1);
+            this.panel4.Controls.Add(this.rdbToolsListSmall);
+            this.panel4.Controls.Add(this.rdbToolsListLarge);
+            this.panel4.Location = new System.Drawing.Point(0, 0);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(773, 35);
+            this.panel4.TabIndex = 5;
+            // 
+            // chkMergeConnectionFiles
+            // 
+            this.chkMergeConnectionFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkMergeConnectionFiles.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkMergeConnectionFiles.Location = new System.Drawing.Point(6, 74);
+            this.chkMergeConnectionFiles.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkMergeConnectionFiles.Name = "chkMergeConnectionFiles";
+            this.chkMergeConnectionFiles.Size = new System.Drawing.Size(767, 47);
+            this.chkMergeConnectionFiles.TabIndex = 6;
+            this.chkMergeConnectionFiles.Text = "Do not display connections files in the bottom left connection control, show me o" +
+    "nly connections (requires to restart XrmToolBox)";
+            this.chkMergeConnectionFiles.UseVisualStyleBackColor = true;
             // 
             // OptionsDialog
             // 
@@ -571,10 +634,7 @@
             this.pnlHeader.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tbDisplay.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.tbDisplay.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.tbProxy.ResumeLayout(false);
             this.gbCustomProxy.ResumeLayout(false);
@@ -585,6 +645,9 @@
             this.panel2.PerformLayout();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tpPaths.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -599,12 +662,9 @@
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tbDisplay;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.RadioButton rdbToolsListSmall;
         private System.Windows.Forms.RadioButton rdbToolsListLarge;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.Button btnResetMuList;
         private System.Windows.Forms.CheckBox chkDisplayMuFirst;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.ListView lvPlugins;
@@ -633,5 +693,13 @@
         private System.Windows.Forms.CheckBox chkDisplayPluginsStoreOnStartup;
         private System.Windows.Forms.CheckBox chkCloseEachPluginSilently;
         private System.Windows.Forms.CheckBox chkDoNotCheckForUpdate;
+        private System.Windows.Forms.CheckBox chkDisplayPluginsStoreOnlyIfUpdates;
+        private System.Windows.Forms.TabPage tpPaths;
+        private System.Windows.Forms.LinkLabel llOpenRootFolder;
+        private System.Windows.Forms.Label lblChangePathDescription;
+        private System.Windows.Forms.Label lblChangePathTitle;
+        private System.Windows.Forms.LinkLabel llOpenStorageFolder;
+        private System.Windows.Forms.CheckBox chkMergeConnectionFiles;
+        private System.Windows.Forms.Panel panel4;
     }
 }

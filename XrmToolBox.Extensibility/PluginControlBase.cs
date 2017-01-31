@@ -11,6 +11,7 @@ using System.ComponentModel.Composition;
 using System.Reflection;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility.Interfaces;
+using XrmToolBox.Extensibility.UserControls;
 
 namespace XrmToolBox.Extensibility
 {
@@ -23,6 +24,13 @@ namespace XrmToolBox.Extensibility
     [PartNotDiscoverable]
     public class PluginControlBase : UserControl, IXrmToolBoxPluginControl, IWorkerHost
     {
+        private readonly LogManager logManager;
+
+        public PluginControlBase()
+        {
+            logManager = new LogManager(GetType());    
+        }
+
         public ConnectionDetail ConnectionDetail { get; set; }
 
         public void CloseTool()
@@ -38,7 +46,7 @@ namespace XrmToolBox.Extensibility
         {
             CloseTool();
         }
-
+        
         #region IMsCrmToolsPluginUserControl Members
 
         public event EventHandler OnCloseTool;
@@ -325,6 +333,8 @@ namespace XrmToolBox.Extensibility
 
         protected virtual void OnConnectionUpdated(ConnectionUpdatedEventArgs e)
         {
+            logManager.SetConnection(e.ConnectionDetail);
+
             var handler = ConnectionUpdated;
             if (handler != null) { handler(this, e); }
         }
@@ -342,5 +352,91 @@ namespace XrmToolBox.Extensibility
         }
 
         #endregion Connection Updated
+
+        #region Logs
+
+        /// <summary>
+        /// Writes an information message in the log
+        /// </summary>
+        /// <param name="message">Message</param>
+        /// <param name="args">Message parameters</param>
+        protected void LogInfo(string message, params object[] args)
+        {
+           logManager.LogInfo(message, args);
+        }
+
+        /// <summary>
+        /// Writes a warning message in the log
+        /// </summary>
+        /// <param name="message">Message</param>
+        /// <param name="args">Message parameters</param>
+        protected void LogWarning(string message, params object[] args)
+        {
+            logManager.LogWarning(message, args);
+        }
+
+        /// <summary>
+        /// Writes an error message in the log
+        /// </summary>
+        /// <param name="message">Message</param>
+        /// <param name="args">Message parameters</param>
+        protected void LogError(string message, params object[] args)
+        {
+            logManager.LogError(message, args);
+        }
+
+        #endregion
+
+        #region Noticiation zone
+
+        protected void ShowInfoNotification(string message, Uri moreInfoUri, int height = 32)
+        {
+            var ctrls = Parent.Controls.Find("NotifPanel", false);
+            if (ctrls.Length == 1)
+            {
+                ((NotificationArea) ctrls[0]).ShowInfoNotification(message, moreInfoUri, height);
+            }
+            else
+            {
+                throw new Exception("Unable to find Notification Area control");
+            }
+        }
+
+        protected void ShowWarningNotification(string message, Uri moreInfoUri, int height = 32)
+        {
+            var ctrls = Parent.Controls.Find("NotifPanel", false);
+            if (ctrls.Length == 1)
+            {
+                ((NotificationArea)ctrls[0]).ShowWarningNotification(message, moreInfoUri, height);
+            }
+            else
+            {
+                throw new Exception("Unable to find Notification Area control");
+            }
+        }
+
+        protected void ShowErrorNotification(string message, Uri moreInfoUri, int height = 32)
+        {
+            var ctrls = Parent.Controls.Find("NotifPanel", false);
+            if (ctrls.Length == 1)
+            {
+                ((NotificationArea)ctrls[0]).ShowErrorNotification(message, moreInfoUri, height);
+            }
+            else
+            {
+                throw new Exception("Unable to find Notification Area control");
+            }
+        }
+
+        protected void HideNotification()
+        {
+            var ctrls = Parent.Controls.Find("NotifPanel", false);
+            if (ctrls.Length == 1)
+            {
+                ctrls[0].Visible = false;
+            }
+        }
+
+        #endregion
     }
 }
