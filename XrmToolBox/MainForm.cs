@@ -14,6 +14,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -1001,6 +1002,56 @@ namespace XrmToolBox
             }
         }
 
+        private void tsmiShortcutTool_Click(object sender, EventArgs e)
+        {
+            var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
+            CreateShortcut(plugin.Metadata.Name);
+        }
+
+        private void tsmiShortcutToolConnection_Click(object sender, EventArgs e)
+        {
+            var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
+            CreateShortcut(plugin.Metadata.Name, currentConnectionDetail?.ConnectionName);
+        }
+
+        //https://stackoverflow.com/questions/234231/creating-application-shortcut-in-a-directory
+        private void CreateShortcut(string toolName, string connectionName = "")
+        {
+            Type t = Type.GetTypeFromCLSID(new Guid("72C24DD5-D70A-438B-8A42-98424B88AFB8"));//Windows Script Host Shell Object
+            dynamic shell = Activator.CreateInstance(t);
+            var xrmToolBoxArgs = string.Empty;
+            var shortcutName = string.Empty;
+            if (!string.IsNullOrEmpty(toolName))
+            {
+                xrmToolBoxArgs += $@" /plugin:""{toolName}""";
+                shortcutName = toolName;
+            }
+            if (!string.IsNullOrEmpty(connectionName))
+            {
+                xrmToolBoxArgs += $@" /connection:""{connectionName}""";
+                shortcutName = $"{toolName} ({connectionName})";
+            }
+            try
+            {
+                var lnk = shell.CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{shortcutName}.lnk"));
+                try
+                {
+                    lnk.TargetPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "XrmToolBox.exe");
+                    lnk.Arguments = xrmToolBoxArgs;
+                    lnk.Save();
+                    MessageBox.Show(this, $"Shortcut {shortcutName} has been created in the Desktop", 
+                        "Success", MessageBoxButtons.OK);
+                }
+                finally
+                {
+                    Marshal.FinalReleaseComObject(lnk);
+                }
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(shell);
+            }
+        }
         #endregion
     }
 }
