@@ -488,6 +488,15 @@ namespace XrmToolBox
             }
         }
 
+        private void llDismiss_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            pnlSupport.Visible = false;
+        }
+
+        private void llDonate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("http://mscrmtools.blogspot.fr/p/xrmtoolbox-sponsoring.html");
+        }
 
         #endregion Form events
 
