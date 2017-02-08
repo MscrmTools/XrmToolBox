@@ -75,7 +75,17 @@ namespace XrmToolBox
                     "An error ocurred when loading XrmToolBox options. A new options file has been created.\n\n" +
                     errorMessage);
             }
-
+            if (currentOptions.RememberSession)
+            {
+                if (!string.IsNullOrEmpty(currentOptions.LastConnection))
+                {
+                    initialConnectionName = currentOptions.LastConnection;
+                }
+                if (!string.IsNullOrEmpty(currentOptions.LastPlugin))
+                {
+                    initialPluginName = currentOptions.LastPlugin;
+                } 
+            }
             // Read arguments to detect if a plugin should be displayed automatically
             if (args.Length > 0)
             {
@@ -768,6 +778,14 @@ namespace XrmToolBox
             // Save current form size for future usage
             currentOptions.Size.CurrentSize = Size;
             currentOptions.Size.IsMaximized = (WindowState == FormWindowState.Maximized);
+            currentOptions.LastConnection = this.currentConnectionDetail?.ConnectionName;
+            var currentPluginASMName = (this.ActiveControl as IXrmToolBoxPluginControl)?.GetType().FullName;
+            var currentPlugin =
+                pManager.Plugins.SingleOrDefault(
+                    x => x.Metadata.Name != "A Sample Tool" &&
+                        x.Value.GetControl().GetType().FullName == currentPluginASMName
+                        );
+            currentOptions.LastPlugin = currentPlugin?.Metadata.Name;
             currentOptions.Save();
 
             // Warn to close opened plugins
@@ -879,6 +897,8 @@ namespace XrmToolBox
 
         private void AdaptPluginControlSize()
         {
+            if (pnlPlugins == null) return;
+
             if (GetVisibleScrollbars(pnlPlugins) == ScrollBars.Vertical)
             {
                 foreach (var ctrl in pnlPlugins.Controls)

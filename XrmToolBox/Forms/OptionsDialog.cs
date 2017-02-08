@@ -36,6 +36,7 @@ namespace XrmToolBox.Forms
             chkDisplayPluginsStoreOnlyIfUpdates.Checked = option.DisplayPluginsStoreOnlyIfUpdates;
             chkDoNotCheckForUpdate.Checked = option.DoNotCheckForUpdates;
             chkMergeConnectionFiles.Checked = option.MergeConnectionFiles;
+            chkRememberSession.Checked = option.RememberSession;
         }
 
         public Options Option { get { return option; } }
@@ -57,6 +58,7 @@ namespace XrmToolBox.Forms
             option.DisplayPluginsStoreOnlyIfUpdates = chkDisplayPluginsStoreOnlyIfUpdates.Checked;
             option.DoNotCheckForUpdates = chkDoNotCheckForUpdate.Checked;
             option.MergeConnectionFiles = chkMergeConnectionFiles.Checked;
+            option.RememberSession = chkRememberSession.Checked;
 
             option.HiddenPlugins =
                 lvPlugins.Items.Cast<ListViewItem>().Where(i => i.Checked == false).Select(i => i.Text).ToList();

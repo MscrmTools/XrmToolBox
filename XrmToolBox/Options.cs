@@ -95,6 +95,10 @@ namespace XrmToolBox
         public bool DoNotCheckForUpdates { get; set; }
         public bool MergeConnectionFiles { get; set; }
 
+        public string LastConnection { get; set; }
+        public string LastPlugin { get; set; }
+        public bool RememberSession { get; set; }
+
         public static bool Load(out Options options, out string errorMessage)
         {
             errorMessage = string.Empty;
