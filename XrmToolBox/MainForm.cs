@@ -168,9 +168,12 @@ namespace XrmToolBox
             {
                 this.Invoke(new Action(() =>
                 {
-                    var infoPanel = ((ConnectionParameterInfo)e.Parameter).InfoPanel;
-                    Controls.Remove(infoPanel);
-                    if (infoPanel != null) infoPanel.Dispose();
+                    var parameter = e.Parameter as ConnectionParameterInfo;
+                    if (parameter != null)
+                    {
+                        Controls.Remove(parameter.InfoPanel);
+                        parameter.InfoPanel.Dispose();
+                    }
 
                     MessageBox.Show(this, e.FailureReason, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
