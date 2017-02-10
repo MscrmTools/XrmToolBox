@@ -385,6 +385,14 @@ namespace XrmToolBox.Extensibility
             logManager.LogError(message, args);
         }
 
+        /// <summary>
+        /// Opens the log file associated with the current plugin 
+        /// </summary>
+        protected void OpenLogFile()
+        {
+            logManager.OpenLog();
+        }
+
         #endregion
 
         #region Noticiation zone
