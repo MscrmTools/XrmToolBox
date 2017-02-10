@@ -26,6 +26,11 @@ namespace XrmToolBox.Extensibility
 
         public void SetWorkingMessage(Control host, string message, int width = 340, int height = 150)
         {
+            if (string.IsNullOrEmpty(message))
+            {
+                return;
+            }
+
             if (host.Controls.Contains(_infoPanel))
             {
                 if (_infoPanel.Width != width || _infoPanel.Height != height)
@@ -52,7 +57,11 @@ namespace XrmToolBox.Extensibility
                 throw new NullReferenceException("WorkAsyncInfo Host property is null!");
             }
 
-            _infoPanel = InformationPanel.GetInformationPanel(info.Host, info.Message, info.MessageWidth, info.MessageHeight);
+            if (!string.IsNullOrEmpty(info.Message))
+            {
+                _infoPanel = InformationPanel.GetInformationPanel(info.Host, info.Message, info.MessageWidth,
+                    info.MessageHeight);
+            }
             _worker = new BackgroundWorker
             {
                 WorkerReportsProgress = info.ProgressChanged != null,
