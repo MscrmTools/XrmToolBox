@@ -26,7 +26,7 @@ namespace XrmToolBox.Extensibility
         {
             _connection = connection;
 
-            _filePath = Path.Combine(Paths.LogsPath, string.Format("{0}.log", pluginType.Name));
+            _filePath = Path.Combine(Paths.LogsPath, $"{pluginType.Assembly.FullName.Split(',')[0]}.log");
         }
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace XrmToolBox.Extensibility
                 throw new Exception("Unable to write log for the following reason: " + error.Message, error);
             }
         }
-
+        
         /// <summary>
         /// Writes an information message in the log
         /// </summary>
