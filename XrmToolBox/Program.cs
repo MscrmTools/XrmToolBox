@@ -43,6 +43,7 @@ namespace XrmToolBox
                 CopyUpdatedPlugins();
                 RemovePlugins();
 
+                RedirectAssembly("Nuget.Core");
                 RedirectAssembly("McTools.Xrm.Connection");
                 RedirectAssembly("McTools.Xrm.Connection.WinForms");
                 RedirectAssembly("XrmToolBox.Extensibility");
