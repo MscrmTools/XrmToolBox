@@ -48,6 +48,9 @@ namespace XrmToolBox
                 RedirectAssembly("McTools.Xrm.Connection.WinForms");
                 RedirectAssembly("XrmToolBox.Extensibility");
                 RedirectAssembly("XrmToolBox.PluginsStore");
+                RedirectAssembly("Microsoft.Xrm.Sdk");
+                RedirectAssembly("Microsoft.Xrm.Sdk.Workflow");
+                RedirectAssembly("Microsoft.Crm.Sdk.Proxy");
                 RedirectAssembly("Microsoft.Xrm.Tooling.Connector");
                 RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory");
                 RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms");
