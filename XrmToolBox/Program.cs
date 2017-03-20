@@ -61,7 +61,7 @@ namespace XrmToolBox
             }
             catch (Exception error)
             {
-                const string lockedMessage = "One reason can be that at least one file is locked by Windows. Please unlock each locked files or unlock XrmToolBox.zip before extracting its content";
+                const string lockedMessage = "One reason can be that at least one file is locked by Windows. Please unblock each locked files or unlock XrmToolBox.zip before extracting its content";
                 MessageBox.Show("An unexpected error occured: " + error + "\r\n\r\n" + lockedMessage, "Error", MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
             }
