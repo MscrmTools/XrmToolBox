@@ -228,14 +228,15 @@ namespace XrmToolBox.PluginsStore
 
         private void UpdateReleaseDates()
         {
+           
             foreach (var package in Packages)
             {
                 var allPackages = manager.SourceRepository.GetPackages()
                     .Where(p => p.Id == package.Package.Id).ToList();
 
-                var first = allPackages.Select(p => (DataServicePackage) p).OrderBy(p => p.LastUpdated).First();
+                var first = allPackages.Select(p => (DataServicePackage) p).OrderBy(p => p.LastUpdated).FirstOrDefault();
 
-                package.FirstReleaseDate = first.LastUpdated.Date;
+                package.FirstReleaseDate = first?.LastUpdated.Date??new DateTime();
                 package.LatestReleaseDate = ((DataServicePackage) package.Package).LastUpdated.Date;
             }
         }
@@ -247,7 +248,7 @@ namespace XrmToolBox.PluginsStore
                 LoadNugetPackages();
             }
 
-            return Packages.FirstOrDefault(p => p.Package.GetFiles().Any(f => f.EffectivePath.ToLower().IndexOf(fileName) >= 0));
+            return Packages?.FirstOrDefault(p => p.Package.GetFiles().Any(f => f.EffectivePath.ToLower().IndexOf(fileName) >= 0));
         }
 
         public PluginUpdates PrepareInstallationPackages(List<XtbNuGetPackage> packages)
