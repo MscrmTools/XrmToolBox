@@ -19,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
+using XrmToolBox.Controls;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.UserControls;
@@ -47,13 +48,14 @@ namespace XrmToolBox
         private Store store;
         private readonly WelcomeDialog blackScreen;
         internal Options Options { get { return currentOptions; } }
-
         #endregion Variables
 
         #region Constructor
 
         public MainForm(string[] args)
         {
+            InitializeComponent();
+
             pluginsModels = new List<PluginModel>();
             pluginControlStatuses = new List<PluginControlStatus>();
 
@@ -91,10 +93,17 @@ namespace XrmToolBox
             {
                 initialConnectionName = ExtractSwitchValue("/connection:", ref args);
                 initialPluginName = ExtractSwitchValue("/plugin:", ref args);
+
+                if (!string.IsNullOrEmpty(initialConnectionName))
+                {
+                    pnlConnectLoading.BringToFront();
+                    
+                    pnlConnectLoading.Visible = true;
+                    lblConnecting.Text = string.Format(lblConnecting.Tag.ToString(), initialConnectionName);
+                }
             }
 
-            InitializeComponent();
-
+            
             ProcessMenuItemsForPlugin();
             MouseWheel += (sender, e) => pnlPlugins.Focus();
 
@@ -126,8 +135,11 @@ namespace XrmToolBox
                 var parameter = e.Parameter as ConnectionParameterInfo;
                 if (parameter != null)
                 {
-                    Controls.Remove(parameter.InfoPanel);
-                    parameter.InfoPanel.Dispose();
+                    Controls.Remove(parameter.ConnControl);
+                    parameter.ConnControl.Dispose();
+
+                    //Controls.Remove(parameter.InfoPanel);
+                    //parameter.InfoPanel.Dispose();
                 }
 
                 currentConnectionDetail = e.ConnectionDetail;
@@ -181,9 +193,13 @@ namespace XrmToolBox
             {
                 this.Invoke(new Action(() =>
                 {
-                    var infoPanel = ((ConnectionParameterInfo)e.Parameter).InfoPanel;
-                    Controls.Remove(infoPanel);
-                    if (infoPanel != null) infoPanel.Dispose();
+                    var param = ((ConnectionParameterInfo)e.Parameter);
+
+                    Controls.Remove(param.ConnControl);
+                    if (param.ConnControl != null) param.ConnControl.Dispose();
+
+                    //Controls.Remove(param.InfoPanel);
+                    //if (param.InfoPanel != null) param.InfoPanel.Dispose();
 
                     MessageBox.Show(this, e.FailureReason, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -236,7 +252,17 @@ namespace XrmToolBox
             {
                 ConnectionParmater = connectionParameter
             };
-            fHelper.AskForConnection(info, () => info.InfoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120));
+            // fHelper.AskForConnection(info, () => info.InfoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120));
+            fHelper.AskForConnection(info, () =>
+            {
+                var connectingControl = new ConnectingControl {Anchor = AnchorStyles.None};
+                connectingControl.Left = Width/2 - connectingControl.Width/2;
+                connectingControl.Top = Height/2 - connectingControl.Height/2;
+                Controls.Add(connectingControl);
+                connectingControl.BringToFront();
+
+                info.ConnControl = connectingControl;
+            });
         }
 
         #endregion Connection methods

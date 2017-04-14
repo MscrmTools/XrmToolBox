@@ -248,6 +248,12 @@ namespace XrmToolBox
                 }
 
                 currentOptions.Save();
+
+                if (pnlConnectLoading.Visible)
+                {
+                    pnlConnectLoading.SendToBack();
+                    pnlConnectLoading.Visible = false;
+                }
             }
             catch (Exception error)
             {

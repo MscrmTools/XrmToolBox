@@ -195,6 +195,12 @@
     <Compile Include="AppCode\PluginUpdates.cs" />
     <Compile Include="AppCode\WebProxyHelper.cs" />
     <Compile Include="ConnectionParameterInfo.cs" />
+    <Compile Include="Controls\ConnectingControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ConnectingControl.Designer.cs">
+      <DependentUpon>ConnectingControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\NewVersionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -250,6 +256,9 @@
     </Compile>
     <Compile Include="ProxySettingsHelper.cs" />
     <Compile Include="XmlSerializerHelper.cs" />
+    <EmbeddedResource Include="Controls\ConnectingControl.resx">
+      <DependentUpon>ConnectingControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -335,7 +344,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
