@@ -107,7 +107,7 @@ namespace XrmToolBox.AutoUpdater
                 lblProgress.Text = "Operation completed";
 
                 lblEndInstructions.Text = string.Format(lblEndInstructions.Text, backupFolder);
-                Size = new Size(Size.Width, 150);
+                Size = new Size(Size.Width, 180);
             };
             bw.RunWorkerAsync();
         }
