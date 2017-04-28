@@ -720,7 +720,10 @@ namespace XrmToolBox
                 var target = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == message.TargetPlugin);
                 if (target == null)
                 {
-                    throw new PluginNotFoundException("Plugin {0} was not found", message.TargetPlugin);
+                    MessageBox.Show(this,
+                        $"Plugin '{message.TargetPlugin}' was not found.\n\nYou can install it from the Plugins Store", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
                 // Displaying plugin and keeping number of the tab where it was opened
                 var tabIndex = DisplayPluginControl(target);
