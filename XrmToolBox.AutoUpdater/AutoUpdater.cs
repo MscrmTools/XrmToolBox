@@ -61,12 +61,22 @@ namespace XrmToolBox.AutoUpdater
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Process.Start(xrmtoolboxExecutablePath);
+            if (xrmtoolboxExecutablePath != null)
+            {
+                Process.Start(xrmtoolboxExecutablePath);
+            }
             Close();
         }
 
         private void Client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
+            if (e.Error != null)
+            {
+                pbDownloadFile.Value = 100;
+                pbDownloadFile.Style = ProgressBarStyle.Continuous;
+                lblProgress.Text = e.Error.Message.ToString();
+                return;
+            }
             pbDownloadFile.Value = 100;
             pbDownloadFile.Style = ProgressBarStyle.Marquee;
 
