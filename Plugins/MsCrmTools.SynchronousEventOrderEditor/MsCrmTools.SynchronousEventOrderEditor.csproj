@@ -54,11 +54,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="McTools.Xrm.Connection, Version=1.2017.2.11, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
+    <Reference Include="McTools.Xrm.Connection, Version=1.2017.2.12, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MscrmTools.Xrm.Connection.1.2017.2.12\lib\net452\McTools.Xrm.Connection.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2017.2.11, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
+    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2017.2.12, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
       <HintPath>..\..\packages\MscrmTools.Xrm.Connection.1.2017.2.12\lib\net452\McTools.Xrm.Connection.WinForms.dll</HintPath>
       <Private>True</Private>
     </Reference>

@@ -63,7 +63,7 @@ namespace XrmToolBox
 
             // Displaying Welcome screen
             var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            blackScreen = new WelcomeDialog(version) {StartPosition = FormStartPosition.CenterScreen};
+            blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
             blackScreen.Show(this);
             blackScreen.SetWorkingMessage("Loading...");
 
@@ -84,7 +84,7 @@ namespace XrmToolBox
                 if (!string.IsNullOrEmpty(currentOptions.LastPlugin))
                 {
                     initialPluginName = currentOptions.LastPlugin;
-                } 
+                }
             }
             // Read arguments to detect if a plugin should be displayed automatically
             if (args.Length > 0)
@@ -304,25 +304,26 @@ namespace XrmToolBox
                     {
                         using (Font arialFont = new Font("Courrier MS", 8, FontStyle.Bold))
                         {
-                            var location = new Point(16 - (text.Length*9), 5);
+                            var location = new Point(16 - (text.Length * 9), 5);
                             graphics.DrawString(text, arialFont, Brushes.Black, location);
                         }
                     }
 
-                    tsbPlugins.Image = image;
+                    UI.InvokeToolStripButton(this, tsbPlugins, tsb => tsb.Image = image);
 
-                    tsbPlugins.ToolTipText = string.Format("{0} new plugins\r\n{1} plugins updates",
-                        packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Install),
-                        packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Update));
+                    UI.InvokeToolStripButton(this, tsbPlugins, tsb => tsb.ToolTipText =
+                        string.Format("{0} new plugins\r\n{1} plugins updates", 
+                        packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Install), 
+                        packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Update)));
                 }
                 else
                 {
-                    tsbPlugins.Image = pluginsCheckerImageList.Images[2];
+                    UI.InvokeToolStripButton(this, tsbPlugins, tsb => tsb.Image = pluginsCheckerImageList.Images[2]);
                 }
             }
             catch (Exception error)
             {
-                tsbPlugins.ToolTipText = "Failed to retrieve plugins updates: " + error.Message;
+                UI.InvokeToolStripButton(this, tsbPlugins, tsb => tsb.ToolTipText = "Failed to retrieve plugins updates: " + error.Message);
             }
         }
 
@@ -346,7 +347,7 @@ namespace XrmToolBox
             var tasks = new List<Task>
             {
                 LaunchVersionCheck(),
-                
+
             };
 
             if (!string.IsNullOrEmpty(initialConnectionName))
@@ -418,7 +419,7 @@ namespace XrmToolBox
                 }
                 else
                 {
-                        pbOpenPluginsStore_Click(sender, e);
+                    pbOpenPluginsStore_Click(sender, e);
                 }
             }
 
@@ -450,7 +451,7 @@ namespace XrmToolBox
             var aForm = new WelcomeDialog(version, false) { StartPosition = FormStartPosition.CenterParent };
             aForm.ShowDialog(this);
         }
-      
+
         private void MainForm_OnRequestConnection(object sender, EventArgs e)
         {
             if (e is RequestConnectionEventArgs)
@@ -980,7 +981,7 @@ namespace XrmToolBox
 
         private void tsmiOpenProjectHomePage_Click(object sender, EventArgs e)
         {
-            var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>) selectedPluginModel.Tag;
+            var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
 
             var filePath = Assembly.GetAssembly(plugin.Value.GetType()).Location;
             if (File.Exists(filePath))
@@ -1028,7 +1029,7 @@ namespace XrmToolBox
 
                 if (package != null)
                 {
-                    var pds = store.PrepareUninstallPlugins(new List<XtbNuGetPackage> {package});
+                    var pds = store.PrepareUninstallPlugins(new List<XtbNuGetPackage> { package });
                     store.PerformUninstallation(pds);
                 }
             }
@@ -1071,7 +1072,7 @@ namespace XrmToolBox
                     lnk.TargetPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "XrmToolBox.exe");
                     lnk.Arguments = xrmToolBoxArgs;
                     lnk.Save();
-                    MessageBox.Show(this, $"Shortcut {shortcutName} has been created in the Desktop", 
+                    MessageBox.Show(this, $"Shortcut {shortcutName} has been created in the Desktop",
                         "Success", MessageBoxButtons.OK);
                 }
                 finally

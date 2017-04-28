@@ -31,10 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="McTools.Xrm.Connection">
-      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2016.9.1\lib\net452\McTools.Xrm.Connection.dll</HintPath>
+      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.2.12\lib\net452\McTools.Xrm.Connection.dll</HintPath>
     </Reference>
     <Reference Include="McTools.Xrm.Connection.WinForms">
-      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2016.9.1\lib\net452\McTools.Xrm.Connection.WinForms.dll</HintPath>
+      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.2.12\lib\net452\McTools.Xrm.Connection.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.XmlTransform, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Xdt.2.1.1\lib\net40\Microsoft.Web.XmlTransform.dll</HintPath>
