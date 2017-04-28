@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XrmToolBox.Controls;
 
 namespace XrmToolBox
 {
@@ -13,5 +14,6 @@ namespace XrmToolBox
     {
         public object ConnectionParmater { get; set; }
         public System.Windows.Forms.Panel InfoPanel { get; set; }
+        public ConnectingControl ConnControl { get; set; }
     }
 }

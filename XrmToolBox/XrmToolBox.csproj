@@ -82,12 +82,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="McTools.Xrm.Connection, Version=1.2017.2.12, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
-      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.2.12\lib\net452\McTools.Xrm.Connection.dll</HintPath>
+    <Reference Include="McTools.Xrm.Connection, Version=1.2017.4.13, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
+      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.4.13\lib\net452\McTools.Xrm.Connection.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2017.2.12, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
-      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.2.12\lib\net452\McTools.Xrm.Connection.WinForms.dll</HintPath>
+    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2017.4.13, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
+      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2017.4.13\lib\net452\McTools.Xrm.Connection.WinForms.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -119,11 +119,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Xrm.Sdk.Workflow, Version=8.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.Workflow.8.2.0\lib\net45\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
+      <HintPath>..\packages\Microsoft.CrmSdk.Workflow.8.2.0.2\lib\net452\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Xrm.Tooling.Connector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.8.2.0.2\lib\net452\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.8.2.0.5\lib\net452\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Xrm.Tooling.CrmConnectControl">
@@ -195,6 +196,12 @@
     <Compile Include="AppCode\PluginUpdates.cs" />
     <Compile Include="AppCode\WebProxyHelper.cs" />
     <Compile Include="ConnectionParameterInfo.cs" />
+    <Compile Include="Controls\ConnectingControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ConnectingControl.Designer.cs">
+      <DependentUpon>ConnectingControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\NewVersionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -251,6 +258,9 @@
     <Compile Include="ProxySettingsHelper.cs" />
     <Compile Include="UI.cs" />
     <Compile Include="XmlSerializerHelper.cs" />
+    <EmbeddedResource Include="Controls\ConnectingControl.resx">
+      <DependentUpon>ConnectingControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
