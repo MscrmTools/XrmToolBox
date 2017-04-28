@@ -152,4 +152,7 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		BuildVersion_ConfigurationName = Release
 	EndGlobalSection
+	GlobalSection(CodealikeProperties) = postSolution
+		SolutionGuid = 2bf66b53-ea6f-433b-b455-00e70ee33cd0
+	EndGlobalSection
 EndGlobal
