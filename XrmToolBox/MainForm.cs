@@ -137,9 +137,6 @@ namespace XrmToolBox
                 {
                     Controls.Remove(parameter.ConnControl);
                     parameter.ConnControl.Dispose();
-
-                    //Controls.Remove(parameter.InfoPanel);
-                    //parameter.InfoPanel.Dispose();
                 }
 
                 currentConnectionDetail = e.ConnectionDetail;
@@ -193,14 +190,13 @@ namespace XrmToolBox
             {
                 this.Invoke(new Action(() =>
                 {
-                    var param = ((ConnectionParameterInfo)e.Parameter);
-
-                    Controls.Remove(param.ConnControl);
-                    if (param.ConnControl != null) param.ConnControl.Dispose();
-
-                    //Controls.Remove(param.InfoPanel);
-                    //if (param.InfoPanel != null) param.InfoPanel.Dispose();
-
+                    var param = e.Parameter as ConnectionParameterInfo;
+                    if (param != null && param.ConnControl != null)
+                    {
+                        Controls.Remove(param.ConnControl);
+                        param.ConnControl.Dispose();
+                    }
+                   
                     MessageBox.Show(this, e.FailureReason, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                     currentConnectionDetail = null;
@@ -252,7 +248,7 @@ namespace XrmToolBox
             {
                 ConnectionParmater = connectionParameter
             };
-            // fHelper.AskForConnection(info, () => info.InfoPanel = InformationPanel.GetInformationPanel(this, "Connecting...", 340, 120));
+            
             fHelper.AskForConnection(info, () =>
             {
                 var connectingControl = new ConnectingControl {Anchor = AnchorStyles.None};
