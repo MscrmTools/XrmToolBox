@@ -562,6 +562,8 @@ namespace XrmToolBox
                     DisplayPlugins(tstxtFilterPlugin.Text);
                     AdaptPluginControlSize();
                 }
+
+                cManager.ReuseConnections = currentOptions.ReuseConnections;
             }
         }
 
