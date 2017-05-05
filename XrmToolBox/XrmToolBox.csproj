@@ -256,6 +256,7 @@
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </Compile>
     <Compile Include="ProxySettingsHelper.cs" />
+    <Compile Include="UI.cs" />
     <Compile Include="XmlSerializerHelper.cs" />
     <EmbeddedResource Include="Controls\ConnectingControl.resx">
       <DependentUpon>ConnectingControl.cs</DependentUpon>
@@ -345,7 +346,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
