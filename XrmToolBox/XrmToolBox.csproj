@@ -256,6 +256,7 @@
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </Compile>
     <Compile Include="ProxySettingsHelper.cs" />
+    <Compile Include="UI.cs" />
     <Compile Include="XmlSerializerHelper.cs" />
     <EmbeddedResource Include="Controls\ConnectingControl.resx">
       <DependentUpon>ConnectingControl.cs</DependentUpon>
