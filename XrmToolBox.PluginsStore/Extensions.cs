@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace XrmToolBox.PluginsStore
@@ -20,17 +19,25 @@ namespace XrmToolBox.PluginsStore
         /// IXrmToolBoxPlugin interface</returns>
         public static bool ImplementsXrmToolBoxPlugin(this FileInfo fi)
         {
-            var assembly = Assembly.LoadFile(fi.FullName);
-
-            foreach (var type in assembly.GetTypes())
+            try
             {
-                if (type.GetInterfaces().Contains(typeof(IXrmToolBoxPlugin)))
-                {
-                    return true;
-                }
-            }
+                var assembly = Assembly.LoadFile(fi.FullName);
 
-            return false;
+                foreach (var type in assembly.GetTypes())
+                {
+                    if (type.GetInterfaces().Contains(typeof(IXrmToolBoxPlugin)))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception error)
+            {
+                var lm = new LogManager(typeof(Store));
+                lm.LogError($"Unable to check if {fi.Name} is implementing interface IXrmToolBoxPlugin: {error.Message}");
+                return false;
+            }
         }
     }
 }
