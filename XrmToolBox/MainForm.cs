@@ -352,6 +352,8 @@ namespace XrmToolBox
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
+            WebProxyHelper.ApplyProxy();
+
             tstxtFilterPlugin.Focus();
 
             pManager = new PluginManagerExtended(this) { IsWatchingForNewPlugins = true };
@@ -410,8 +412,7 @@ namespace XrmToolBox
 
             AdaptPluginControlSize();
 
-            WebProxyHelper.ApplyProxy();
-
+            
             // Hide & remove Welcome screen
             Opacity = 100;
             blackScreen.Hide();
