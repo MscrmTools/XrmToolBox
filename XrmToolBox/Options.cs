@@ -98,6 +98,7 @@ namespace XrmToolBox
         public string LastConnection { get; set; }
         public string LastPlugin { get; set; }
         public bool RememberSession { get; set; }
+        public bool ReuseConnections { get; set; }
 
         public static bool Load(out Options options, out string errorMessage)
         {

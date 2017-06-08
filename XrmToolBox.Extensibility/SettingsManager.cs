@@ -54,7 +54,7 @@ namespace XrmToolBox.Extensibility
 
             // Fix file created before using Assembly name
             filePath = Path.Combine(Paths.SettingsPath,
-               string.Format("{0}{1}{2}.xml", pluginType.Name, string.IsNullOrEmpty(name) ? "" : "_", name));
+               GetSafeFilename(string.Format("{0}{1}{2}.xml", pluginType.Name, string.IsNullOrEmpty(name) ? "" : "_", name)));
 
             if (File.Exists(filePath))
             {
@@ -82,8 +82,8 @@ namespace XrmToolBox.Extensibility
             }
 
             var filePath = Path.Combine(Paths.SettingsPath,
-                string.Format("{0}{1}{2}.xml", pluginType.Assembly.FullName.Split(',')[0],
-                    string.IsNullOrEmpty(name) ? "" : "_", name));
+               GetSafeFilename(string.Format("{0}{1}{2}.xml", pluginType.Assembly.FullName.Split(',')[0],
+                    string.IsNullOrEmpty(name) ? "" : "_", name)));
 
             if (File.Exists(filePath))
             {
@@ -111,6 +111,11 @@ namespace XrmToolBox.Extensibility
 
             settingsObject = default(T);
             return false;
+        }
+
+        private string GetSafeFilename(string filename)
+        {
+            return string.Join("_", filename.Split(Path.GetInvalidFileNameChars()));
         }
     }
 }

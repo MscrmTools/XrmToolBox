@@ -37,6 +37,7 @@ namespace XrmToolBox.Forms
             chkDoNotCheckForUpdate.Checked = option.DoNotCheckForUpdates;
             chkMergeConnectionFiles.Checked = option.MergeConnectionFiles;
             chkRememberSession.Checked = option.RememberSession;
+            chkReuseConnections.Checked = option.ReuseConnections;
         }
 
         public Options Option { get { return option; } }
@@ -59,6 +60,7 @@ namespace XrmToolBox.Forms
             option.DoNotCheckForUpdates = chkDoNotCheckForUpdate.Checked;
             option.MergeConnectionFiles = chkMergeConnectionFiles.Checked;
             option.RememberSession = chkRememberSession.Checked;
+            option.ReuseConnections = chkReuseConnections.Checked;
 
             option.HiddenPlugins =
                 lvPlugins.Items.Cast<ListViewItem>().Where(i => i.Checked == false).Select(i => i.Text).ToList();
