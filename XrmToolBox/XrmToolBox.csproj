@@ -208,12 +208,6 @@
     <Compile Include="Forms\NewVersionForm.Designer.cs">
       <DependentUpon>NewVersionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\PluginsChecker.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\PluginsChecker.Designer.cs">
-      <DependentUpon>PluginsChecker.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\WelcomeDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -266,9 +260,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NewVersionForm.resx">
       <DependentUpon>NewVersionForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\PluginsChecker.resx">
-      <DependentUpon>PluginsChecker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\OptionsDialog.resx">
       <DependentUpon>OptionsDialog.cs</DependentUpon>
@@ -346,7 +337,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
