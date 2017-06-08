@@ -6,6 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XrmToolBox</RootNamespace>
     <AssemblyName>XrmToolBox</AssemblyName>
@@ -122,18 +123,13 @@
       <HintPath>..\packages\Microsoft.CrmSdk.Workflow.8.2.0.2\lib\net452\Microsoft.Xrm.Sdk.Workflow.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Xrm.Tooling.Connector, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.8.2.0.5\lib\net452\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.Xrm.Tooling.CrmConnectControl">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Tooling.CrmConnectControl.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Xrm.Tooling.Connector">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Referenced Assemblies\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Tooling.Connector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.8.2.0.5\lib\net452\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Xrm.Tooling.CrmConnectControl">
       <SpecificVersion>False</SpecificVersion>
@@ -346,7 +342,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
