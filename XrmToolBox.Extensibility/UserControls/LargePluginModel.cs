@@ -34,6 +34,7 @@ namespace XrmToolBox.Extensibility.UserControls
             lblAuthor.Text = "Author: " + company;
             lblVersion.Text = "Version: " + version;
 
+            lblCount.ForeColor = primaryColor;
             lblTitle.ForeColor = primaryColor;
             lblDescription.ForeColor = primaryColor;
             lblAuthor.ForeColor = primaryColor;

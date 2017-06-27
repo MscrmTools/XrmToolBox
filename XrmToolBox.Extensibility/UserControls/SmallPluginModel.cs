@@ -36,7 +36,7 @@ namespace XrmToolBox.Extensibility.UserControls
             if (count > 0)
             {
                 lblCount.Text = count.ToString();
-                lblCount.ForeColor = secondaryColor;
+                lblCount.ForeColor = primaryColor;
             }
             else
             {
@@ -56,7 +56,7 @@ namespace XrmToolBox.Extensibility.UserControls
             lblCount.Text = count.ToString();
             Refresh();
         }
-        
+
         private new void MouseClick(object sender, MouseEventArgs e)
         {
             if (Clicked != null)
