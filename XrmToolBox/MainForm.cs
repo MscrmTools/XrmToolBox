@@ -48,6 +48,7 @@ namespace XrmToolBox
         private Store store;
         private readonly WelcomeDialog blackScreen;
         internal Options Options { get { return currentOptions; } }
+
         #endregion Variables
 
         #region Constructor
@@ -97,13 +98,12 @@ namespace XrmToolBox
                 if (!string.IsNullOrEmpty(initialConnectionName))
                 {
                     pnlConnectLoading.BringToFront();
-                    
+
                     pnlConnectLoading.Visible = true;
                     lblConnecting.Text = string.Format(lblConnecting.Tag.ToString(), initialConnectionName);
                 }
             }
 
-            
             ProcessMenuItemsForPlugin();
             MouseWheel += (sender, e) => pnlPlugins.Focus();
 
@@ -196,7 +196,7 @@ namespace XrmToolBox
                         Controls.Remove(param.ConnControl);
                         param.ConnControl.Dispose();
                     }
-                   
+
                     MessageBox.Show(this, e.FailureReason, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                     currentConnectionDetail = null;
@@ -248,12 +248,12 @@ namespace XrmToolBox
             {
                 ConnectionParmater = connectionParameter
             };
-            
+
             fHelper.AskForConnection(info, () =>
             {
-                var connectingControl = new ConnectingControl {Anchor = AnchorStyles.None};
-                connectingControl.Left = Width/2 - connectingControl.Width/2;
-                connectingControl.Top = Height/2 - connectingControl.Height/2;
+                var connectingControl = new ConnectingControl { Anchor = AnchorStyles.None };
+                connectingControl.Left = Width / 2 - connectingControl.Width / 2;
+                connectingControl.Top = Height / 2 - connectingControl.Height / 2;
                 Controls.Add(connectingControl);
                 connectingControl.BringToFront();
 
@@ -308,42 +308,42 @@ namespace XrmToolBox
 
         private void CheckForPluginsUpdate()
         {
-            try
-            {
-                store = new Store();
-                store.LoadNugetPackages();
-                var packages = store.Packages;
+            //try
+            //{
+            //    store = new Store();
+            //    store.LoadNugetPackages();
+            //    var packages = store.Packages;
 
-                if (packages.Any(p => p.Action == PluginsStore.PackageInstallAction.Update))
-                {
-                    var image = pluginsCheckerImageList.Images[3];
-                    var text = packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Update).ToString();
+            //    if (packages.Any(p => p.Action == PluginsStore.PackageInstallAction.Update))
+            //    {
+            //        var image = pluginsCheckerImageList.Images[3];
+            //        var text = packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Update).ToString();
 
-                    using (Graphics graphics = Graphics.FromImage(image))
-                    {
-                        using (Font arialFont = new Font("Courrier MS", 8, FontStyle.Bold))
-                        {
-                            var location = new Point(16 - (text.Length * 9), 5);
-                            graphics.DrawString(text, arialFont, Brushes.Black, location);
-                        }
-                    }
+            //        using (Graphics graphics = Graphics.FromImage(image))
+            //        {
+            //            using (Font arialFont = new Font("Courrier MS", 8, FontStyle.Bold))
+            //            {
+            //                var location = new Point(16 - (text.Length * 9), 5);
+            //                graphics.DrawString(text, arialFont, Brushes.Black, location);
+            //            }
+            //        }
 
-                    UI.InvokeToolStripButton(this, tsbPlugins, tsb => tsb.Image = image);
+            //        UI.InvokeToolStripButton(this, tsbPlugins, tsb => tsb.Image = image);
 
-                    UI.InvokeToolStripButton(this, tsbPlugins, tsb => tsb.ToolTipText =
-                        string.Format("{0} new plugins\r\n{1} plugins updates", 
-                        packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Install), 
-                        packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Update)));
-                }
-                else
-                {
-                    UI.InvokeToolStripButton(this, tsbPlugins, tsb => tsb.Image = pluginsCheckerImageList.Images[2]);
-                }
-            }
-            catch (Exception error)
-            {
-                UI.InvokeToolStripButton(this, tsbPlugins, tsb => tsb.ToolTipText = "Failed to retrieve plugins updates: " + error.Message);
-            }
+            //        UI.InvokeToolStripButton(this, tsbPlugins, tsb => tsText =
+            //            string.Format("{0} new plugins\r\n{1} plugins updates",
+            //            packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Install),
+            //            packages.Count(p => p.Action == PluginsStore.PackageInstallAction.Update)));
+            //    }
+            //    else
+            //    {
+            //        UI.InvokeToolStripButton(this, tsbPlugins, tsb => tsb.Image = pluginsCheckerImageList.Images[2]);
+            //    }
+            //}
+            //catch (Exception error)
+            //{
+            //    UI.InvokeToolStripButton(this, tsbPlugins, tsb => tsb.ToolTipText = "Failed to retrieve plugins updates: " + error.Message);
+            //}
         }
 
         #endregion Tasks to launch during startup
@@ -353,8 +353,6 @@ namespace XrmToolBox
         private async void MainForm_Load(object sender, EventArgs e)
         {
             WebProxyHelper.ApplyProxy();
-
-            tstxtFilterPlugin.Focus();
 
             pManager = new PluginManagerExtended(this) { IsWatchingForNewPlugins = true };
             pManager.Initialize();
@@ -368,7 +366,6 @@ namespace XrmToolBox
             var tasks = new List<Task>
             {
                 LaunchVersionCheck(),
-
             };
 
             if (!string.IsNullOrEmpty(initialConnectionName))
@@ -412,7 +409,6 @@ namespace XrmToolBox
 
             AdaptPluginControlSize();
 
-            
             // Hide & remove Welcome screen
             Opacity = 100;
             blackScreen.Hide();
@@ -451,6 +447,8 @@ namespace XrmToolBox
 
             Action action = CheckForPluginsUpdate;
             action.BeginInvoke(ar => action.EndInvoke(ar), null);
+
+            tstxtFilterPlugin.Focus();
         }
 
         private void MainForm_OnCloseTool(object sender, EventArgs e)
@@ -539,36 +537,6 @@ namespace XrmToolBox
             ConnectUponApproval("ApplyConnectionToTabs");
         }
 
-        private void tsbManageConnections_Click(object sender, EventArgs e)
-        {
-            fHelper.DisplayConnectionsList(this);
-        }
-
-        private void TsbOptionsClick(object sender, EventArgs e)
-        {
-            var oDialog = new OptionsDialog(currentOptions, pManager);
-            if (oDialog.ShowDialog(this) == DialogResult.OK)
-            {
-                bool reinitDisplay = currentOptions.DisplayMostUsedFirst != oDialog.Option.DisplayMostUsedFirst
-                                     || currentOptions.MostUsedList.Count != oDialog.Option.MostUsedList.Count
-                                     || currentOptions.DisplayLargeIcons != oDialog.Option.DisplayLargeIcons
-                                     || !oDialog.Option.HiddenPlugins.SequenceEqual(currentOptions.HiddenPlugins);
-
-                currentOptions = oDialog.Option;
-
-                if (reinitDisplay)
-                {
-                    //pManager.PluginsControls.Clear();
-                    pluginsModels.Clear();
-                    tabControl1.SelectedIndex = 0;
-                    DisplayPlugins(tstxtFilterPlugin.Text);
-                    AdaptPluginControlSize();
-                }
-
-                cManager.ReuseConnections = currentOptions.ReuseConnections;
-            }
-        }
-
         private void tstxtFilterPlugin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
@@ -598,11 +566,6 @@ namespace XrmToolBox
             searchThread.Start(tstxtFilterPlugin.Text);
         }
 
-        private void tsbPlugins_Click(object sender, EventArgs e)
-        {
-            pbOpenPluginsStore_Click(sender, e);
-        }
-
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.Shift && e.KeyCode == Keys.C)
@@ -613,35 +576,6 @@ namespace XrmToolBox
 
         private void pbOpenPluginsStore_Click(object sender, EventArgs e)
         {
-            // If the options were not initialized, it means we are using the
-            // new plugins store for the first time. Copy values from main
-            // options file
-            if (!PluginsStore.Options.Instance.IsInitialized)
-            {
-                PluginsStore.Options.Instance.PluginsStoreShowInstalled = Options.PluginsStoreShowInstalled;
-                PluginsStore.Options.Instance.PluginsStoreShowIncompatible = Options.PluginsStoreShowIncompatible;
-                PluginsStore.Options.Instance.PluginsStoreShowNew = Options.PluginsStoreShowNew;
-                PluginsStore.Options.Instance.PluginsStoreShowUpdates = Options.PluginsStoreShowUpdates;
-                PluginsStore.Options.Instance.IsInitialized = true;
-            }
-
-            var pc = new StoreForm();
-            pc.PluginsUpdated += (storeForm, evt) =>
-            {
-                // If plugins list gets updated, refresh the list
-                ReloadPluginsList();
-            };
-
-            // Avoid scanning for new files during Plugins Store usage.
-            EnableNewPluginsWatching(false);
-            pc.ShowDialog(this);
-            EnableNewPluginsWatching(true);
-
-            // Apply option to show Plugins Store on startup on main options
-            if (Options.DisplayPluginsStoreOnStartup != PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup)
-            {
-                Options.DisplayPluginsStoreOnStartup = PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup.HasValue && PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup.Value;
-            }
         }
 
         private void pnlNoPluginFound_Resize(object sender, EventArgs e)
@@ -655,47 +589,7 @@ namespace XrmToolBox
             tstxtFilterPlugin.Text = string.Empty;
         }
 
-        private void tsbCheckForUpdate_Click(object sender, EventArgs e)
-        {
-            var worker = new BackgroundWorker();
-            worker.DoWork += (s, evt) =>
-            {
-                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                var cvc = new GithubVersionChecker(currentVersion, "MsCrmTools", "XrmToolBox");
-                cvc.Run();
-
-                evt.Result = cvc;
-            };
-            worker.RunWorkerCompleted += (s, evt) =>
-            {
-                GithubVersionChecker cvc = (GithubVersionChecker)evt.Result;
-                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                if (!string.IsNullOrEmpty(cvc.Cpi?.Version))
-                {
-                    Invoke(new Action(() =>
-                    {
-                        var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description,
-                            "MsCrmTools", "XrmToolBox", new Uri(cvc.Cpi.PackageUrl));
-                        var result = nvForm.ShowDialog(this);
-                        if (result == DialogResult.OK)
-                        {
-                            Close();
-                        }
-                    }));
-                }
-                else
-                {
-                    MessageBox.Show(this, "No update available!", "Information", MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-                }
-
-                currentOptions.LastUpdateCheck = DateTime.Now;
-                currentOptions.Save();
-            };
-            worker.RunWorkerAsync();
-        }
-
-        #endregion
+        #endregion Main menu events
 
         #region Message broker
 
@@ -769,7 +663,7 @@ namespace XrmToolBox
             return true;
         }
 
-        #endregion
+        #endregion Message broker
 
         #region Close Tabs/Plugins
 
@@ -1116,6 +1010,110 @@ namespace XrmToolBox
                 Marshal.FinalReleaseComObject(shell);
             }
         }
-        #endregion
+
+        #endregion Plugins list context menu events
+
+        private void manageConnectionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fHelper.DisplayConnectionsList(this);
+        }
+
+        private void pluginsStoreToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // If the options were not initialized, it means we are using the
+            // new plugins store for the first time. Copy values from main
+            // options file
+            if (!PluginsStore.Options.Instance.IsInitialized)
+            {
+                PluginsStore.Options.Instance.PluginsStoreShowInstalled = Options.PluginsStoreShowInstalled;
+                PluginsStore.Options.Instance.PluginsStoreShowIncompatible = Options.PluginsStoreShowIncompatible;
+                PluginsStore.Options.Instance.PluginsStoreShowNew = Options.PluginsStoreShowNew;
+                PluginsStore.Options.Instance.PluginsStoreShowUpdates = Options.PluginsStoreShowUpdates;
+                PluginsStore.Options.Instance.IsInitialized = true;
+            }
+
+            var pc = new StoreForm();
+            pc.PluginsUpdated += (storeForm, evt) =>
+            {
+                // If plugins list gets updated, refresh the list
+                ReloadPluginsList();
+            };
+
+            // Avoid scanning for new files during Plugins Store usage.
+            EnableNewPluginsWatching(false);
+            pc.ShowDialog(this);
+            EnableNewPluginsWatching(true);
+
+            // Apply option to show Plugins Store on startup on main options
+            if (Options.DisplayPluginsStoreOnStartup != PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup)
+            {
+                Options.DisplayPluginsStoreOnStartup = PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup.HasValue && PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup.Value;
+            }
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var oDialog = new OptionsDialog(currentOptions, pManager);
+            if (oDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                bool reinitDisplay = currentOptions.DisplayMostUsedFirst != oDialog.Option.DisplayMostUsedFirst
+                                     || currentOptions.MostUsedList.Count != oDialog.Option.MostUsedList.Count
+                                     || currentOptions.DisplayLargeIcons != oDialog.Option.DisplayLargeIcons
+                                     || !oDialog.Option.HiddenPlugins.SequenceEqual(currentOptions.HiddenPlugins);
+
+                currentOptions = oDialog.Option;
+
+                if (reinitDisplay)
+                {
+                    //pManager.PluginsControls.Clear();
+                    pluginsModels.Clear();
+                    tabControl1.SelectedIndex = 0;
+                    DisplayPlugins(tstxtFilterPlugin.Text);
+                    AdaptPluginControlSize();
+                }
+
+                cManager.ReuseConnections = currentOptions.ReuseConnections;
+            }
+        }
+
+        private void checkForUpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (s, evt) =>
+            {
+                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                var cvc = new GithubVersionChecker(currentVersion, "MsCrmTools", "XrmToolBox");
+                cvc.Run();
+
+                evt.Result = cvc;
+            };
+            worker.RunWorkerCompleted += (s, evt) =>
+            {
+                GithubVersionChecker cvc = (GithubVersionChecker)evt.Result;
+                var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                if (!string.IsNullOrEmpty(cvc.Cpi?.Version))
+                {
+                    Invoke(new Action(() =>
+                    {
+                        var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description,
+                            "MsCrmTools", "XrmToolBox", new Uri(cvc.Cpi.PackageUrl));
+                        var result = nvForm.ShowDialog(this);
+                        if (result == DialogResult.OK)
+                        {
+                            Close();
+                        }
+                    }));
+                }
+                else
+                {
+                    MessageBox.Show(this, "No update available!", "Information", MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+
+                currentOptions.LastUpdateCheck = DateTime.Now;
+                currentOptions.Save();
+            };
+            worker.RunWorkerAsync();
+        }
     }
 }
