@@ -550,6 +550,7 @@ namespace XrmToolBox
             if (oDialog.ShowDialog(this) == DialogResult.OK)
             {
                 bool reinitDisplay = currentOptions.DisplayMostUsedFirst != oDialog.Option.DisplayMostUsedFirst
+                                     || currentOptions.DisplayRecentlyUpdatedFirst != oDialog.Option.DisplayRecentlyUpdatedFirst
                                      || currentOptions.MostUsedList.Count != oDialog.Option.MostUsedList.Count
                                      || currentOptions.DisplayLargeIcons != oDialog.Option.DisplayLargeIcons
                                      || !oDialog.Option.HiddenPlugins.SequenceEqual(currentOptions.HiddenPlugins);

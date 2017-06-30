@@ -64,12 +64,15 @@ namespace XrmToolBox
             CheckUpdateOnStartup = true;
             DisplayLargeIcons = true;
             DisplayMostUsedFirst = false;
+            DisplayRecentlyUpdatedFirst = false;
             Size = new FormSize();
             MostUsedList = new List<PluginUseCount>();
             AllowLogUsage = null;
             DisplayPluginsStoreOnStartup = true;
             HiddenPlugins = new List<string>();
         }
+
+        public bool DisplayRecentlyUpdatedFirst { get; set; }
 
         public bool? PluginsStoreShowIncompatible { get; set; }
         public bool? PluginsStoreShowUpdates { get; set; }
@@ -140,6 +143,7 @@ namespace XrmToolBox
                 CheckUpdateOnStartup = CheckUpdateOnStartup,
                 DisplayLargeIcons = DisplayLargeIcons,
                 DisplayMostUsedFirst = DisplayMostUsedFirst,
+                DisplayRecentlyUpdatedFirst = DisplayRecentlyUpdatedFirst,
                 MostUsedList = MostUsedList,
                 LastAdvertisementDisplay = LastAdvertisementDisplay,
                 HiddenPlugins = HiddenPlugins,

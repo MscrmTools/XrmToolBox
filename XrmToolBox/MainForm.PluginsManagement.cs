@@ -306,6 +306,32 @@ namespace XrmToolBox
                     }
                 }
             }
+            else if (currentOptions.DisplayRecentlyUpdatedFirst)
+            {
+                var pluginAssemblies = Directory.EnumerateFiles(Paths.PluginsPath, "*.dll")
+                    .Select(d => new
+                    {
+                        UpdatedOn = File.GetLastAccessTime(d),
+                        FileName = d.Substring(d.LastIndexOf('\\') + 1)
+                    })
+                    .OrderByDescending(x => x.UpdatedOn);
+                foreach (var pluginAssembly in pluginAssemblies)
+                {
+                    var plugins =
+                        filteredPlugins.Where(
+                                x => $"{x.Value.GetAssemblyQualifiedName().Split(',')[1]}.dll".Trim()
+                                    .Equals(pluginAssembly.FileName, StringComparison.CurrentCultureIgnoreCase))
+                            .ToList();
+                    foreach (var plugin in plugins)
+                    {
+                        if (currentOptions.HiddenPlugins == null
+                            || !currentOptions.HiddenPlugins.Contains(plugin.Metadata.Name))
+                        {
+                            DisplayOnePlugin(plugin, ref top, lastWidth);
+                        }
+                    }
+                }
+            }
             else
             {
                 foreach (var plugin in filteredPlugins.OrderBy(p => p.Metadata.Name))
