@@ -580,14 +580,14 @@ namespace XrmToolBox
 
         private void MainForm_KeyPress(object sender, KeyPressEventArgs e)
         {
-            (tabControl1.SelectedTab.Controls[0] as IShortcutReceiver)?.ReceiveKeyDownShortcut(e);
+            (tabControl1.SelectedTab.Controls[0] as IShortcutReceiver)?.ReceiveKeyPressShortcut(e);
         }
 
         private void MainForm_KeyUp(object sender, KeyEventArgs e)
         {
             if (!(e.Control && e.Shift && e.KeyCode == Keys.C))
             {
-                (tabControl1.SelectedTab.Controls[0] as IShortcutReceiver)?.ReceiveKeyDownShortcut(e);
+                (tabControl1.SelectedTab.Controls[0] as IShortcutReceiver)?.ReceiveKeyUpShortcut(e);
             }
         }
 
@@ -595,7 +595,7 @@ namespace XrmToolBox
         {
             if (!(e.Control && e.Shift && e.KeyCode == Keys.C))
             {
-                (tabControl1.SelectedTab.Controls[0] as IShortcutReceiver)?.ReceiveKeyDownShortcut(e);
+                (tabControl1.SelectedTab.Controls[0] as IShortcutReceiver)?.ReceivePreviewKeyDownShortcut(e);
             }
         }
 
