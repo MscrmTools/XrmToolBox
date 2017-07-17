@@ -12,7 +12,7 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SampleTool
 {
-    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin, IStatusBarMessenger
+    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver
     {
         #region Base tool implementation
 
@@ -37,8 +37,6 @@ namespace MsCrmTools.SampleTool
             LogInfo("An information message");
             LogWarning("A warning message");
             LogError("An error message");
-
-      
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
@@ -86,7 +84,6 @@ namespace MsCrmTools.SampleTool
                         var logger = new LogManager(typeof(SampleTool), ConnectionDetail);
                         logger.LogInfo("You are {0}", (Guid)e.Result);
 
-
                         MessageBox.Show(string.Format("You are {0}", (Guid)e.Result));
                     }
                 },
@@ -95,7 +92,6 @@ namespace MsCrmTools.SampleTool
                 MessageWidth = 340,
                 MessageHeight = 150
             });
-
         }
 
         private void tsbClose_Click(object sender, EventArgs e)
@@ -113,7 +109,7 @@ namespace MsCrmTools.SampleTool
         private void tsbWhoAmI_Click(object sender, EventArgs e)
         {
             HideNotification();
-          
+
             ExecuteMethod(ProcessWhoAmI);
         }
 
@@ -172,9 +168,38 @@ namespace MsCrmTools.SampleTool
 
         #endregion Help implementation
 
+        #region Shortcut Receiver implementation
+
+        public void ReceiveShortcut(KeyEventArgs e)
+        {
+            MessageBox.Show(e.ToString());
+        }
+
+        public void ReceiveKeyDownShortcut(KeyEventArgs e)
+        {
+            MessageBox.Show("A KeyDown event was received!");
+        }
+
+        public void ReceiveKeyPressShortcut(KeyPressEventArgs e)
+        {
+            MessageBox.Show("A KeyPress event was received!");
+        }
+
+        public void ReceiveKeyUpShortcut(KeyEventArgs e)
+        {
+            MessageBox.Show("A KeyUp event was received!");
+        }
+
+        public void ReceivePreviewKeyDownShortcut(PreviewKeyDownEventArgs e)
+        {
+            MessageBox.Show("A PreviewKeyDown event was received!");
+        }
+
+        #endregion Shortcut Receiver implementation
+
         private void SampleTool_Load(object sender, EventArgs e)
         {
-            ShowInfoNotification("This is a notification that can lead to XrmToolBox reposiotry", new Uri("http://github.com/MscrmTools/XrmToolBox"));
+            ShowInfoNotification("This is a notification that can lead to XrmToolBox repository", new Uri("http://github.com/MscrmTools/XrmToolBox"));
         }
     }
 }

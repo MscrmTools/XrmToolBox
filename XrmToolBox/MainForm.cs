@@ -572,6 +572,31 @@ namespace XrmToolBox
             {
                 TsbConnectClick(null, null);
             }
+            else
+            {
+                (tabControl1.SelectedTab.Controls[0] as IShortcutReceiver)?.ReceiveKeyDownShortcut(e);
+            }
+        }
+
+        private void MainForm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            (tabControl1.SelectedTab.Controls[0] as IShortcutReceiver)?.ReceiveKeyDownShortcut(e);
+        }
+
+        private void MainForm_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (!(e.Control && e.Shift && e.KeyCode == Keys.C))
+            {
+                (tabControl1.SelectedTab.Controls[0] as IShortcutReceiver)?.ReceiveKeyDownShortcut(e);
+            }
+        }
+
+        private void MainForm_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (!(e.Control && e.Shift && e.KeyCode == Keys.C))
+            {
+                (tabControl1.SelectedTab.Controls[0] as IShortcutReceiver)?.ReceiveKeyDownShortcut(e);
+            }
         }
 
         private void pbOpenPluginsStore_Click(object sender, EventArgs e)
