@@ -110,13 +110,15 @@ namespace XrmToolBox
             {
                 tstxtFilterPlugin.Enabled = true;
                 CodePlexPluginMenuItem.Visible = false;
+                githubPluginMenuItem.Visible = false;
                 GithubXrmToolBoxMenuItem.Visible = false;
                 PaypalXrmToolBoxToolStripMenuItem.Visible = false;
                 PayPalSelectedPluginToolStripMenuItem.Visible = false;
                 HelpSelectedPluginToolStripMenuItem.Visible = false;
                 xrmToolBoxHelpToolStripMenuItem.Visible = false;
-                AssignCodePlexMenuItems(tsbCodePlex.DropDownItems);
-                AssignPayPalMenuItems(tsbDonate.DropDownItems);
+                AssignHelpMenuItems(helpToolStripMenuItem.DropDownItems);
+                AssignCodePlexMenuItems(feedbackToolStripMenuItem.DropDownItems);
+                AssignPayPalMenuItems(donateToolStripMenuItem.DropDownItems);
                 return;
             }
 
@@ -129,7 +131,7 @@ namespace XrmToolBox
             {
                 HelpSelectedPluginToolStripMenuItem.Visible = false;
                 xrmToolBoxHelpToolStripMenuItem.Visible = false;
-                AssignHelpMenuItems(tsbHelp.DropDownItems);
+                AssignHelpMenuItems(helpToolStripMenuItem.DropDownItems);
             }
             else
             {
@@ -144,7 +146,7 @@ namespace XrmToolBox
             {
                 PaypalXrmToolBoxToolStripMenuItem.Visible = false;
                 PayPalSelectedPluginToolStripMenuItem.Visible = false;
-                AssignPayPalMenuItems(tsbDonate.DropDownItems);
+                AssignPayPalMenuItems(donateToolStripMenuItem.DropDownItems);
             }
             else
             {
@@ -164,7 +166,7 @@ namespace XrmToolBox
                     CodePlexPluginMenuItem.Visible = false;
                     GithubXrmToolBoxMenuItem.Visible = false;
                     githubPluginMenuItem.Visible = false;
-                    AssignCodePlexMenuItems(tsbCodePlex.DropDownItems);
+                    AssignCodePlexMenuItems(CodePlexPluginMenuItem.DropDownItems);
                 }
                 else
                 {
