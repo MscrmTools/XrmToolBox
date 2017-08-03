@@ -54,5 +54,14 @@ namespace XrmToolBox.Forms
                 lvTabs.Items.Add(item);
             }
         }
+
+        private void btnAll_Click(object sender, EventArgs e)
+        {
+            foreach (ListViewItem item in lvTabs.Items)
+            {
+                item.Checked = true;
+            }
+            btnOK.PerformClick();
+        }
     }
 }
