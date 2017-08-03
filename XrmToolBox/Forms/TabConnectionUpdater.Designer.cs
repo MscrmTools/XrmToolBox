@@ -55,6 +55,7 @@
             this.lvTabs.TabIndex = 0;
             this.lvTabs.UseCompatibleStateImageBehavior = false;
             this.lvTabs.View = System.Windows.Forms.View.Details;
+            this.lvTabs.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.lvTabs_ItemChecked);
             // 
             // columnHeader1
             // 
