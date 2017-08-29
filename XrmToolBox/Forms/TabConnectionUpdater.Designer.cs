@@ -36,6 +36,7 @@
             this.lblHeaderTitle = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.btnAll = new System.Windows.Forms.Button();
             this.pnlHeader.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,6 +55,7 @@
             this.lvTabs.TabIndex = 0;
             this.lvTabs.UseCompatibleStateImageBehavior = false;
             this.lvTabs.View = System.Windows.Forms.View.Details;
+            this.lvTabs.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.lvTabs_ItemChecked);
             // 
             // columnHeader1
             // 
@@ -100,11 +102,11 @@
             // btnOK
             // 
             this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOK.Location = new System.Drawing.Point(497, 232);
+            this.btnOK.Location = new System.Drawing.Point(483, 232);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 2;
-            this.btnOK.Text = "OK";
+            this.btnOK.Size = new System.Drawing.Size(89, 23);
+            this.btnOK.TabIndex = 3;
+            this.btnOK.Text = "&Checked tabs";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.BtnOkClick);
             // 
@@ -112,13 +114,23 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(269, 232);
+            this.btnCancel.Location = new System.Drawing.Point(388, 232);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(222, 23);
-            this.btnCancel.TabIndex = 3;
-            this.btnCancel.Text = "I don\'t need to update tabs connection";
+            this.btnCancel.Size = new System.Drawing.Size(89, 23);
+            this.btnCancel.TabIndex = 2;
+            this.btnCancel.Text = "&No tabs";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // btnAll
+            // 
+            this.btnAll.Location = new System.Drawing.Point(293, 232);
+            this.btnAll.Name = "btnAll";
+            this.btnAll.Size = new System.Drawing.Size(89, 23);
+            this.btnAll.TabIndex = 1;
+            this.btnAll.Text = "&All tabs";
+            this.btnAll.UseVisualStyleBackColor = true;
+            this.btnAll.Click += new System.EventHandler(this.btnAll_Click);
             // 
             // TabConnectionUpdater
             // 
@@ -127,6 +139,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(584, 261);
+            this.Controls.Add(this.btnAll);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.pnlHeader);
@@ -151,5 +164,6 @@
         private System.Windows.Forms.Label lblHeaderDesc;
         private System.Windows.Forms.Label lblHeaderTitle;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnAll;
     }
 }
