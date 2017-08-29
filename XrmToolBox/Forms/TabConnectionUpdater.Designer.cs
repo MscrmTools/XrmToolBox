@@ -124,6 +124,7 @@
             // 
             // btnAll
             // 
+            this.btnAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAll.Location = new System.Drawing.Point(293, 232);
             this.btnAll.Name = "btnAll";
             this.btnAll.Size = new System.Drawing.Size(89, 23);
