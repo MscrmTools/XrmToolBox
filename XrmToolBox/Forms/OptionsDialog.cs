@@ -29,6 +29,7 @@ namespace XrmToolBox.Forms
             rdbToolsListLarge.Checked = option.DisplayLargeIcons;
             rdbToolsListSmall.Checked = !option.DisplayLargeIcons;
             chkDisplayMuFirst.Checked = option.DisplayMostUsedFirst;
+            chkRecentlyUpdatedFirst.Checked = option.DisplayRecentlyUpdatedFirst;
             chkAllowUsageStatistics.Checked = option.AllowLogUsage.HasValue && option.AllowLogUsage.Value;
             chkCloseEachPluginSilently.Checked = option.CloseEachPluginSilently;
             chkClosePluginsSilently.Checked = option.CloseOpenedPluginsSilently;
@@ -53,6 +54,7 @@ namespace XrmToolBox.Forms
             option.AllowLogUsage = chkAllowUsageStatistics.Checked;
             option.DisplayLargeIcons = rdbToolsListLarge.Checked;
             option.DisplayMostUsedFirst = chkDisplayMuFirst.Checked;
+            option.DisplayRecentlyUpdatedFirst = chkRecentlyUpdatedFirst.Checked;
             option.CloseEachPluginSilently = chkCloseEachPluginSilently.Checked;
             option.CloseOpenedPluginsSilently = chkClosePluginsSilently.Checked;
             option.DisplayPluginsStoreOnStartup = chkDisplayPluginsStoreOnStartup.Checked;
