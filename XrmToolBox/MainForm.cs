@@ -768,18 +768,20 @@ namespace XrmToolBox
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             PluginCloseInfo info;
-
             // Save current form size for future usage
             currentOptions.Size.CurrentSize = Size;
             currentOptions.Size.IsMaximized = (WindowState == FormWindowState.Maximized);
             currentOptions.LastConnection = this.currentConnectionDetail?.ConnectionName;
-            var currentPluginASMName = (this.ActiveControl as IXrmToolBoxPluginControl)?.GetType().FullName;
-            var currentPlugin =
-                pManager.Plugins.SingleOrDefault(
-                    x => x.Metadata.Name != "A Sample Tool" &&
-                        x.Value.GetControl().GetType().FullName == currentPluginASMName
-                        );
-            currentOptions.LastPlugin = currentPlugin?.Metadata.Name;
+            var currentTab = tabControl1.TabPages[tabControl1.SelectedTab.TabIndex];
+            if (currentTab != null && currentTab.Name != "HomePageTab")
+            {
+                var currentPlugin = currentTab.GetPluginName();
+                currentOptions.LastPlugin = currentPlugin;
+            }
+            else
+            {
+                currentOptions.LastPlugin = "";
+            }
             currentOptions.Save();
 
             // Warn to close opened plugins
