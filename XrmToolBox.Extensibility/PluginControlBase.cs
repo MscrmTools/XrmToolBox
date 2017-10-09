@@ -48,7 +48,7 @@ namespace XrmToolBox.Extensibility
             CloseTool();
         }
 
-        public Image Icon { get; set; }
+        public Image TabIcon { get; set; }
         
         #region IMsCrmToolsPluginUserControl Members
 

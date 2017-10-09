@@ -179,7 +179,7 @@ namespace XrmToolBox
 
                 var newTab = new TabPage(name) { Tag = plugin };
                 tabControl1.TabPages.Add(newTab);
-                var icon = ((PluginControlBase)pluginControl).Icon;
+                var icon = ((PluginControlBase)pluginControl).TabIcon;
                 if (icon != null)
                 {
                     pluginTabsImagesList.Images.Add(icon);
