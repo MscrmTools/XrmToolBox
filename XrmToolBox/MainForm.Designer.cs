@@ -108,6 +108,7 @@ namespace XrmToolBox
             this.pnlConnectLoading = new System.Windows.Forms.Panel();
             this.lblConnecting = new System.Windows.Forms.Label();
             this.pbConnectionLoading = new System.Windows.Forms.PictureBox();
+            this.pluginTabsImagesList = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip1.SuspendLayout();
             this.cmsOnePlugin.SuspendLayout();
             this.pnlSupport.SuspendLayout();
@@ -675,6 +676,7 @@ namespace XrmToolBox
             this.tabControl1.Controls.Add(this.HomePageTab);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tabControl1.ImageList = this.pluginTabsImagesList;
             this.tabControl1.Location = new System.Drawing.Point(0, 25);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tabControl1.Name = "tabControl1";
@@ -704,7 +706,7 @@ namespace XrmToolBox
             this.pnlPlugins.AutoScroll = true;
             this.pnlPlugins.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlPlugins.Location = new System.Drawing.Point(2, 3);
-            this.pnlPlugins.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlPlugins.Margin = new System.Windows.Forms.Padding(2);
             this.pnlPlugins.Name = "pnlPlugins";
             this.pnlPlugins.Size = new System.Drawing.Size(872, 375);
             this.pnlPlugins.TabIndex = 3;
@@ -744,7 +746,7 @@ namespace XrmToolBox
             this.pbOpenPluginsStore.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbOpenPluginsStore.Image = ((System.Drawing.Image)(resources.GetObject("pbOpenPluginsStore.Image")));
             this.pbOpenPluginsStore.Location = new System.Drawing.Point(234, 156);
-            this.pbOpenPluginsStore.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pbOpenPluginsStore.Margin = new System.Windows.Forms.Padding(2);
             this.pbOpenPluginsStore.Name = "pbOpenPluginsStore";
             this.pbOpenPluginsStore.Size = new System.Drawing.Size(400, 83);
             this.pbOpenPluginsStore.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -859,6 +861,12 @@ namespace XrmToolBox
             this.pbConnectionLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pbConnectionLoading.TabIndex = 0;
             this.pbConnectionLoading.TabStop = false;
+            // 
+            // pluginTabsImagesList
+            // 
+            this.pluginTabsImagesList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.pluginTabsImagesList.ImageSize = new System.Drawing.Size(16, 16);
+            this.pluginTabsImagesList.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // MainForm
             // 
@@ -979,6 +987,7 @@ namespace XrmToolBox
         private System.Windows.Forms.ToolStripMenuItem checkForUpdateToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
         private System.Windows.Forms.ToolStripMenuItem aboutXrmToolBoxToolStripMenuItem1;
+        private System.Windows.Forms.ImageList pluginTabsImagesList;
     }
 }
 
