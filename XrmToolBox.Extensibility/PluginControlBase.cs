@@ -8,6 +8,7 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
+using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility.Interfaces;
@@ -46,6 +47,8 @@ namespace XrmToolBox.Extensibility
         {
             CloseTool();
         }
+
+        public Image TabIcon { get; set; }
         
         #region IMsCrmToolsPluginUserControl Members
 
