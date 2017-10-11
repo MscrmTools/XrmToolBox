@@ -179,6 +179,12 @@ namespace XrmToolBox
 
                 var newTab = new TabPage(name) { Tag = plugin };
                 tabControl1.TabPages.Add(newTab);
+                var icon = ((PluginControlBase)pluginControl).TabIcon;
+                if (icon != null)
+                {
+                    pluginTabsImagesList.Images.Add(icon);
+                    newTab.ImageIndex = pluginTabsImagesList.Images.Count - 1;
+                }
 
                 pluginControl.Dock = DockStyle.Fill;
                 pluginControl.Width = newTab.Width;
@@ -303,6 +309,32 @@ namespace XrmToolBox
                     if (currentOptions.MostUsedList.All(i => i.Name != plugin.Value.GetType().FullName) && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.Metadata.Name)))
                     {
                         DisplayOnePlugin(plugin, ref top, lastWidth);
+                    }
+                }
+            }
+            else if (currentOptions.DisplayRecentlyUpdatedFirst)
+            {
+                var pluginAssemblies = Directory.EnumerateFiles(Paths.PluginsPath, "*.dll")
+                    .Select(d => new
+                    {
+                        UpdatedOn = File.GetLastAccessTime(d),
+                        FileName = d.Substring(d.LastIndexOf('\\') + 1)
+                    })
+                    .OrderByDescending(x => x.UpdatedOn);
+                foreach (var pluginAssembly in pluginAssemblies)
+                {
+                    var plugins =
+                        filteredPlugins.Where(
+                                x => $"{x.Value.GetAssemblyQualifiedName().Split(',')[1]}.dll".Trim()
+                                    .Equals(pluginAssembly.FileName, StringComparison.CurrentCultureIgnoreCase))
+                            .ToList();
+                    foreach (var plugin in plugins)
+                    {
+                        if (currentOptions.HiddenPlugins == null
+                            || !currentOptions.HiddenPlugins.Contains(plugin.Metadata.Name))
+                        {
+                            DisplayOnePlugin(plugin, ref top, lastWidth);
+                        }
                     }
                 }
             }

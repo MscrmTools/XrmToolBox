@@ -537,6 +537,37 @@ namespace XrmToolBox
             ConnectUponApproval("ApplyConnectionToTabs");
         }
 
+        private void tsbManageConnections_Click(object sender, EventArgs e)
+        {
+            fHelper.DisplayConnectionsList(this);
+        }
+
+        private void TsbOptionsClick(object sender, EventArgs e)
+        {
+            var oDialog = new OptionsDialog(currentOptions, pManager);
+            if (oDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                bool reinitDisplay = currentOptions.DisplayMostUsedFirst != oDialog.Option.DisplayMostUsedFirst
+                                     || currentOptions.DisplayRecentlyUpdatedFirst != oDialog.Option.DisplayRecentlyUpdatedFirst
+                                     || currentOptions.MostUsedList.Count != oDialog.Option.MostUsedList.Count
+                                     || currentOptions.DisplayLargeIcons != oDialog.Option.DisplayLargeIcons
+                                     || !oDialog.Option.HiddenPlugins.SequenceEqual(currentOptions.HiddenPlugins);
+
+                currentOptions = oDialog.Option;
+
+                if (reinitDisplay)
+                {
+                    //pManager.PluginsControls.Clear();
+                    pluginsModels.Clear();
+                    tabControl1.SelectedIndex = 0;
+                    DisplayPlugins(tstxtFilterPlugin.Text);
+                    AdaptPluginControlSize();
+                }
+
+                cManager.ReuseConnections = currentOptions.ReuseConnections;
+            }
+        }
+
         private void tstxtFilterPlugin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
@@ -766,18 +797,20 @@ namespace XrmToolBox
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             PluginCloseInfo info;
-
             // Save current form size for future usage
             currentOptions.Size.CurrentSize = Size;
             currentOptions.Size.IsMaximized = (WindowState == FormWindowState.Maximized);
             currentOptions.LastConnection = this.currentConnectionDetail?.ConnectionName;
-            var currentPluginASMName = (this.ActiveControl as IXrmToolBoxPluginControl)?.GetType().FullName;
-            var currentPlugin =
-                pManager.Plugins.SingleOrDefault(
-                    x => x.Metadata.Name != "A Sample Tool" &&
-                        x.Value.GetControl().GetType().FullName == currentPluginASMName
-                        );
-            currentOptions.LastPlugin = currentPlugin?.Metadata.Name;
+            var currentTab = tabControl1.TabPages[tabControl1.SelectedTab.TabIndex];
+            if (currentTab != null && currentTab.Name != "HomePageTab")
+            {
+                var currentPlugin = currentTab.GetPluginName();
+                currentOptions.LastPlugin = currentPlugin;
+            }
+            else
+            {
+                currentOptions.LastPlugin = "";
+            }
             currentOptions.Save();
 
             // Warn to close opened plugins
