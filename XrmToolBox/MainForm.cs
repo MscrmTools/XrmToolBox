@@ -632,35 +632,7 @@ namespace XrmToolBox
 
         private void pbOpenPluginsStore_Click(object sender, EventArgs e)
         {
-            // If the options were not initialized, it means we are using the
-            // new plugins store for the first time. Copy values from main
-            // options file
-            if (!PluginsStore.Options.Instance.IsInitialized)
-            {
-                PluginsStore.Options.Instance.PluginsStoreShowInstalled = Options.PluginsStoreShowInstalled;
-                PluginsStore.Options.Instance.PluginsStoreShowIncompatible = Options.PluginsStoreShowIncompatible;
-                PluginsStore.Options.Instance.PluginsStoreShowNew = Options.PluginsStoreShowNew;
-                PluginsStore.Options.Instance.PluginsStoreShowUpdates = Options.PluginsStoreShowUpdates;
-                PluginsStore.Options.Instance.IsInitialized = true;
-            }
-
-            var pc = new StoreForm();
-            pc.PluginsUpdated += (storeForm, evt) =>
-            {
-                // If plugins list gets updated, refresh the list
-                ReloadPluginsList();
-            };
-
-            // Avoid scanning for new files during Plugins Store usage.
-            EnableNewPluginsWatching(false);
-            pc.ShowDialog(this);
-            EnableNewPluginsWatching(true);
-
-            // Apply option to show Plugins Store on startup on main options
-            if (Options.DisplayPluginsStoreOnStartup != PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup)
-            {
-                Options.DisplayPluginsStoreOnStartup = PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup.HasValue && PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup.Value;
-            }
+            pluginsStoreToolStripMenuItem_Click(sender, e);
         }
 
         private void pnlNoPluginFound_Resize(object sender, EventArgs e)
@@ -1119,8 +1091,18 @@ namespace XrmToolBox
                 PluginsStore.Options.Instance.IsInitialized = true;
             }
 
-            var pc = new StoreForm();
-            pc.PluginsUpdated += (storeForm, evt) =>
+            IStoreForm form;
+
+            if (PluginsStore.Options.Instance.UseLegacy ?? true)
+            {
+                form = new StoreForm();
+            }
+            else
+            {
+                form = new StoreFormFromPortal();
+            }
+
+            form.PluginsUpdated += (storeForm, evt) =>
             {
                 // If plugins list gets updated, refresh the list
                 ReloadPluginsList();
@@ -1128,7 +1110,7 @@ namespace XrmToolBox
 
             // Avoid scanning for new files during Plugins Store usage.
             EnableNewPluginsWatching(false);
-            pc.ShowDialog(this);
+            ((Form)form).ShowDialog(this);
             EnableNewPluginsWatching(true);
 
             // Apply option to show Plugins Store on startup on main options

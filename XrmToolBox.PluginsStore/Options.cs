@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using System.Xml;
@@ -15,6 +16,7 @@ namespace XrmToolBox.PluginsStore
         private Options()
         {
             DisplayPluginsStoreOnStartup = true;
+            UseLegacy = true;
         }
 
         public bool? PluginsStoreShowIncompatible { get; set; }
@@ -23,6 +25,8 @@ namespace XrmToolBox.PluginsStore
         public bool? PluginsStoreShowInstalled { get; set; }
         public bool? DisplayPluginsStoreOnStartup { get; set; }
         public bool IsInitialized { get; set; }
+
+        public bool? UseLegacy { get; set; }
 
         public static Options Instance
         {
@@ -65,7 +69,7 @@ namespace XrmToolBox.PluginsStore
                     var document = new XmlDocument();
                     document.Load(settingsFile);
 
-                    options = (Options) XmlSerializerHelper.Deserialize(document.OuterXml, typeof(Options));
+                    options = (Options)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(Options));
                     options.IsInitialized = true;
                     return true;
                 }

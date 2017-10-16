@@ -93,7 +93,6 @@ namespace XrmToolBox
                 requestedAssembly.SetPublicKeyToken(targetPublicKeyToken);
                 requestedAssembly.CultureInfo = CultureInfo.InvariantCulture;
 
-
                 return Assembly.Load(requestedAssembly);
             };
 
@@ -178,7 +177,7 @@ namespace XrmToolBox
 
             using (StreamReader reader = new StreamReader(updateFile))
             {
-                var pds = (PluginDeletions) XmlSerializerHelper.Deserialize(reader.ReadToEnd(), typeof(PluginDeletions));
+                var pds = (PluginDeletions)XmlSerializerHelper.Deserialize(reader.ReadToEnd(), typeof(PluginDeletions));
                 foreach (var pd in pds.Plugins)
                 {
                     foreach (var filePath in pd.Files)
@@ -188,6 +187,14 @@ namespace XrmToolBox
                         if (File.Exists(pathToDelete))
                         {
                             File.Delete(pathToDelete);
+                        }
+                        else
+                        {
+                            pathToDelete = Path.Combine(Paths.PluginsPath, filePath);
+                            if (File.Exists(pathToDelete))
+                            {
+                                File.Delete(pathToDelete);
+                            }
                         }
                     }
                 }
