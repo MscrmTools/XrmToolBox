@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -55,7 +56,10 @@ namespace XrmToolBox.Forms
 
                 File.Copy(updaterFile, destinationFile, true);
 
-                Process.Start(destinationFile, downloadUrl.ToString());
+                var args = Environment.GetCommandLineArgs().ToList();
+
+                Process.Start(destinationFile, $"{downloadUrl} {string.Join(" ", args)}");
+
                 DialogResult = DialogResult.OK;
                 Close();
             }

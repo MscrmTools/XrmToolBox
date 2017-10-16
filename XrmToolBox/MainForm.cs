@@ -537,37 +537,6 @@ namespace XrmToolBox
             ConnectUponApproval("ApplyConnectionToTabs");
         }
 
-        private void tsbManageConnections_Click(object sender, EventArgs e)
-        {
-            fHelper.DisplayConnectionsList(this);
-        }
-
-        private void TsbOptionsClick(object sender, EventArgs e)
-        {
-            var oDialog = new OptionsDialog(currentOptions, pManager);
-            if (oDialog.ShowDialog(this) == DialogResult.OK)
-            {
-                bool reinitDisplay = currentOptions.DisplayMostUsedFirst != oDialog.Option.DisplayMostUsedFirst
-                                     || currentOptions.DisplayRecentlyUpdatedFirst != oDialog.Option.DisplayRecentlyUpdatedFirst
-                                     || currentOptions.MostUsedList.Count != oDialog.Option.MostUsedList.Count
-                                     || currentOptions.DisplayLargeIcons != oDialog.Option.DisplayLargeIcons
-                                     || !oDialog.Option.HiddenPlugins.SequenceEqual(currentOptions.HiddenPlugins);
-
-                currentOptions = oDialog.Option;
-
-                if (reinitDisplay)
-                {
-                    //pManager.PluginsControls.Clear();
-                    pluginsModels.Clear();
-                    tabControl1.SelectedIndex = 0;
-                    DisplayPlugins(tstxtFilterPlugin.Text);
-                    AdaptPluginControlSize();
-                }
-
-                cManager.ReuseConnections = currentOptions.ReuseConnections;
-            }
-        }
-
         private void tstxtFilterPlugin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
@@ -577,7 +546,7 @@ namespace XrmToolBox
 
                 if (plugin != null)
                 {
-                    this.PluginClicked(new UserControl { Tag = plugin }, new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
+                    PluginClicked(new UserControl { Tag = plugin }, new MouseEventArgs(MouseButtons.Left, 1, 0, 0, 0));
 
                     // Clear the textbox
                     // ReSharper disable once PossibleNullReferenceException
@@ -588,11 +557,7 @@ namespace XrmToolBox
 
         private void tstxtFilterPlugin_TextChanged(object sender, EventArgs e)
         {
-            if (searchThread != null)
-            {
-                searchThread.Abort();
-            }
-
+            searchThread?.Abort();
             searchThread = new Thread(DisplayPlugins);
             searchThread.Start(tstxtFilterPlugin.Text);
         }

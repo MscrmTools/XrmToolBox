@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Windows.Forms;
@@ -17,7 +18,6 @@ namespace XrmToolBox.AutoUpdater
         private readonly string packageFilePath;
         private readonly string packageFolder;
         private readonly string packageUrl;
-        private string xrmtoolboxExecutablePath;
 
         public AutoUpdater(string packageUrl)
         {
@@ -59,12 +59,15 @@ namespace XrmToolBox.AutoUpdater
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnLaunchXrmToolBox_Click(object sender, EventArgs e)
         {
-            if (xrmtoolboxExecutablePath != null)
-            {
-                Process.Start(xrmtoolboxExecutablePath);
-            }
+            var args = Environment.GetCommandLineArgs().ToList();
+
+            args.RemoveAt(0);
+            args.RemoveAt(0);
+
+            Process.Start(args.First(), string.Join(" ", args.Skip(1)));
+
             Close();
         }
 
@@ -74,7 +77,7 @@ namespace XrmToolBox.AutoUpdater
             {
                 pbDownloadFile.Value = 100;
                 pbDownloadFile.Style = ProgressBarStyle.Continuous;
-                lblProgress.Text = e.Error.Message.ToString();
+                lblProgress.Text = e.Error.Message;
                 return;
             }
             pbDownloadFile.Value = 100;
@@ -125,7 +128,7 @@ namespace XrmToolBox.AutoUpdater
         private void Client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             pbDownloadFile.Value = e.ProgressPercentage;
-            lblProgress.Text = string.Format("Downloading new version of XrmToolBox... ({0}/{1})", e.BytesReceived, e.TotalBytesToReceive);
+            lblProgress.Text = $"Downloading new version of XrmToolBox... ({e.BytesReceived}/{e.TotalBytesToReceive})";
         }
 
         private void CopyDirectoryContent(string directoryPath, string destinationDirectoryPath, BackgroundWorker worker, string action)
@@ -136,11 +139,6 @@ namespace XrmToolBox.AutoUpdater
                 worker.ReportProgress(0, action + " " + fi.Name);
 
                 fi.CopyTo(Path.Combine(destinationDirectoryPath, fi.Name), true);
-
-                if (fi.Name.ToLower() == "xrmtoolbox.exe")
-                {
-                    xrmtoolboxExecutablePath = fi.FullName;
-                }
             }
 
             foreach (var di in directory.GetDirectories())
