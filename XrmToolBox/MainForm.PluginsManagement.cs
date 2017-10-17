@@ -79,7 +79,7 @@ namespace XrmToolBox
                 pm = (T)ctor.Invoke(vals);
 
                 pm.Tag = plugin;
-                //pm.ContextMenuStrip = cmsOnePlugin; 
+                //pm.ContextMenuStrip = cmsOnePlugin;
                 pm.Clicked += PluginClicked;
 
                 pluginsModels.Add(pm);
@@ -161,7 +161,7 @@ namespace XrmToolBox
 
                     if (clonedService != null)
                     {
-                        ((IXrmToolBoxPluginControl) pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
+                        ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService, currentConnectionDetail);
                     }
                     else
                     {
@@ -179,10 +179,11 @@ namespace XrmToolBox
 
                 var newTab = new TabPage(name) { Tag = plugin };
                 tabControl1.TabPages.Add(newTab);
-                var icon = ((PluginControlBase)pluginControl).TabIcon;
-                if (icon != null)
+
+                var pcb = pluginControl as PluginControlBase;
+                if (pcb != null && pcb.TabIcon != null)
                 {
-                    pluginTabsImagesList.Images.Add(icon);
+                    pluginTabsImagesList.Images.Add(pcb.TabIcon);
                     newTab.ImageIndex = pluginTabsImagesList.Images.Count - 1;
                 }
 
@@ -242,7 +243,7 @@ namespace XrmToolBox
                     if (displayAdvertisement)
                     {
                         pnlSupport.Visible = true;
-                       currentOptions.LastAdvertisementDisplay = DateTime.Now;
+                        currentOptions.LastAdvertisementDisplay = DateTime.Now;
                     }
                 }
 
@@ -353,8 +354,7 @@ namespace XrmToolBox
             {
                 pnlPlugins.Controls.Clear();
 
-                var pluginsToDisplay = pluginsModels.Where(p => filteredPlugins.Contains((Lazy<IXrmToolBoxPlugin, IPluginMetadata>) p.Tag));
-
+                var pluginsToDisplay = pluginsModels.Where(p => filteredPlugins.Contains((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)p.Tag));
 
                 foreach (PluginModel ctrl in pluginsToDisplay)
                 //foreach (PluginModel ctrl in pluginsModels)
