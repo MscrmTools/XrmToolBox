@@ -138,6 +138,7 @@ namespace XrmToolBox
                 HelpSelectedPluginToolStripMenuItem.Visible = true;
                 xrmToolBoxHelpToolStripMenuItem.Visible = true;
                 HelpSelectedPluginToolStripMenuItem.Text = pluginName;
+                HelpSelectedPluginToolStripMenuItem.Image = (helpedPlugin as PluginControlBase)?.TabIcon;
                 AssignHelpMenuItems(xrmToolBoxHelpToolStripMenuItem.DropDownItems);
             }
 
@@ -153,6 +154,7 @@ namespace XrmToolBox
                 PaypalXrmToolBoxToolStripMenuItem.Visible = true;
                 PayPalSelectedPluginToolStripMenuItem.Visible = true;
                 PayPalSelectedPluginToolStripMenuItem.Text = pluginName;
+                PayPalSelectedPluginToolStripMenuItem.Image = (paypalPlugin as PluginControlBase)?.TabIcon;
                 AssignPayPalMenuItems(PaypalXrmToolBoxToolStripMenuItem.DropDownItems);
             }
 
@@ -174,6 +176,7 @@ namespace XrmToolBox
                     GithubXrmToolBoxMenuItem.Visible = true;
                     githubPluginMenuItem.Visible = true;
                     githubPluginMenuItem.Text = pluginName;
+                    githubPluginMenuItem.Image = (githubPlugin as PluginControlBase)?.TabIcon;
                     AssignCodePlexMenuItems(GithubXrmToolBoxMenuItem.DropDownItems);
                 }
             }
