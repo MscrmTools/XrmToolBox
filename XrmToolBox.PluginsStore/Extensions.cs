@@ -11,11 +11,11 @@ namespace XrmToolBox.PluginsStore
     public static class FileInfoExtensions
     {
         /// <summary>
-        /// Checks if the current file contains types that implement 
+        /// Checks if the current file contains types that implement
         /// IXrmToolBoxPlugin interface
         /// </summary>
         /// <param name="fi">Current file info</param>
-        /// <returns>Value that indicates if the current file contains types that implement 
+        /// <returns>Value that indicates if the current file contains types that implement
         /// IXrmToolBoxPlugin interface</returns>
         public static bool ImplementsXrmToolBoxPlugin(this FileInfo fi)
         {
