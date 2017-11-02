@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Web;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
@@ -9,16 +10,6 @@ namespace XrmToolBox
     partial class MainForm
     {
         #region Events
-
-        private void discussionPluginToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start(GetGithubBaseUrl("issues/new"));
-        }
-
-        private void displayHelpPluginToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Process.Start(GetHelpUrl());
-        }
 
         private void displayXrmToolBoxHelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -58,11 +49,6 @@ namespace XrmToolBox
             Donate("EN", "USD", "tanguy92@hotmail.com", "Donation for MSCRM Tools - XrmToolBox");
         }
 
-        private void TsbDiscussClick(object sender, EventArgs e)
-        {
-            Process.Start("https://github.com/MscrmTools/XrmToolBox/issues/new");
-        }
-
         private void TsbDiscussPluginClick(object sender, EventArgs e)
         {
             Process.Start(GetCodePlexUrl("Discussions"));
@@ -81,12 +67,6 @@ namespace XrmToolBox
         #endregion Events
 
         #region Prepare Community items
-
-        private void AssignCodePlexMenuItems(ToolStripItemCollection dropDownItems)
-        {
-            dropDownItems.AddRange(new ToolStripItem[] {
-                startADiscussionToolStripMenuItem});
-        }
 
         private void AssignHelpMenuItems(ToolStripItemCollection dropDownItems)
         {
@@ -109,14 +89,12 @@ namespace XrmToolBox
             if (tabControl1.SelectedIndex == 0) // Home Screen
             {
                 tstxtFilterPlugin.Enabled = true;
-                CodePlexPluginMenuItem.Visible = false;
                 githubPluginMenuItem.Visible = false;
                 GithubXrmToolBoxMenuItem.Visible = false;
                 PaypalXrmToolBoxToolStripMenuItem.Visible = false;
                 PayPalSelectedPluginToolStripMenuItem.Visible = false;
                 HelpSelectedPluginToolStripMenuItem.Visible = false;
-                AssignHelpMenuItems(helpToolStripMenuItem.DropDownItems);
-                AssignCodePlexMenuItems(feedbackToolStripMenuItem.DropDownItems);
+                displayXrmToolBoxHelpToolStripMenuItem.Visible = false;
                 AssignPayPalMenuItems(donateToolStripMenuItem.DropDownItems);
                 return;
             }
@@ -129,12 +107,14 @@ namespace XrmToolBox
             if (helpedPlugin == null)
             {
                 HelpSelectedPluginToolStripMenuItem.Visible = false;
-                AssignHelpMenuItems(helpToolStripMenuItem.DropDownItems);
+                displayXrmToolBoxHelpToolStripMenuItem.Visible = false;
             }
             else
             {
+                displayXrmToolBoxHelpToolStripMenuItem.Visible = true;
                 HelpSelectedPluginToolStripMenuItem.Visible = true;
-                HelpSelectedPluginToolStripMenuItem.Text = pluginName;
+                HelpSelectedPluginToolStripMenuItem.Text =
+                    string.Format(HelpSelectedPluginToolStripMenuItem.Tag.ToString(), pluginName);
                 HelpSelectedPluginToolStripMenuItem.Image = (helpedPlugin as PluginControlBase)?.TabIcon;
             }
 
@@ -154,36 +134,47 @@ namespace XrmToolBox
                 AssignPayPalMenuItems(PaypalXrmToolBoxToolStripMenuItem.DropDownItems);
             }
 
-            var plugin = tabControl1.SelectedTab.GetCodePlexPlugin();
-            if (plugin == null)
-            {
-                var githubPlugin = tabControl1.SelectedTab.GetGithubPlugin();
+            var githubPlugin = tabControl1.SelectedTab.GetGithubPlugin();
 
-                if (githubPlugin == null)
-                {
-                    CodePlexPluginMenuItem.Visible = false;
-                    GithubXrmToolBoxMenuItem.Visible = false;
-                    githubPluginMenuItem.Visible = false;
-                    AssignCodePlexMenuItems(CodePlexPluginMenuItem.DropDownItems);
-                }
-                else
-                {
-                    CodePlexPluginMenuItem.Visible = false;
-                    GithubXrmToolBoxMenuItem.Visible = true;
-                    githubPluginMenuItem.Visible = true;
-                    githubPluginMenuItem.Text = pluginName;
-                    githubPluginMenuItem.Image = (githubPlugin as PluginControlBase)?.TabIcon;
-                    AssignCodePlexMenuItems(GithubXrmToolBoxMenuItem.DropDownItems);
-                }
+            if (githubPlugin == null)
+            {
+                GithubXrmToolBoxMenuItem.Visible = false;
+                githubPluginMenuItem.Visible = false;
             }
             else
             {
-                CodePlexPluginMenuItem.Visible = true;
                 GithubXrmToolBoxMenuItem.Visible = true;
-                githubPluginMenuItem.Visible = false;
-                CodePlexPluginMenuItem.Text = pluginName;
-                AssignCodePlexMenuItems(GithubXrmToolBoxMenuItem.DropDownItems);
+                githubPluginMenuItem.Visible = true;
+                githubPluginMenuItem.Text = pluginName;
+                githubPluginMenuItem.Image = (githubPlugin as PluginControlBase)?.TabIcon;
             }
+        }
+
+        private void HelpSelectedPluginToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(GetHelpUrl());
+        }
+
+        private void GithubXrmToolBoxMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/MscrmTools/XrmToolBox/issues/new");
+        }
+
+        private void githubPluginMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(GetGithubBaseUrl("issues/new"));
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedIndex == 0)
+                displayXrmToolBoxHelpToolStripMenuItem_Click(sender, e);
+        }
+
+        private void feedbackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedIndex == 0)
+                GithubXrmToolBoxMenuItem_Click(sender, e);
         }
 
         #endregion Prepare Community items
