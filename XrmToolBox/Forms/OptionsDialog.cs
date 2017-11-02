@@ -28,8 +28,6 @@ namespace XrmToolBox.Forms
 
             rdbToolsListLarge.Checked = option.DisplayLargeIcons;
             rdbToolsListSmall.Checked = !option.DisplayLargeIcons;
-            chkDisplayMuFirst.Checked = option.DisplayMostUsedFirst;
-            chkRecentlyUpdatedFirst.Checked = option.DisplayRecentlyUpdatedFirst;
             chkAllowUsageStatistics.Checked = option.AllowLogUsage.HasValue && option.AllowLogUsage.Value;
             chkCloseEachPluginSilently.Checked = option.CloseEachPluginSilently;
             chkClosePluginsSilently.Checked = option.CloseOpenedPluginsSilently;
@@ -39,6 +37,7 @@ namespace XrmToolBox.Forms
             chkMergeConnectionFiles.Checked = option.MergeConnectionFiles;
             chkRememberSession.Checked = option.RememberSession;
             chkReuseConnections.Checked = option.ReuseConnections;
+            cbbDisplayOrder.SelectedItem = string.IsNullOrEmpty(option.DisplayOrder) ? "Alphabetically" : option.DisplayOrder;
         }
 
         public Options Option { get { return option; } }
@@ -53,8 +52,6 @@ namespace XrmToolBox.Forms
         {
             option.AllowLogUsage = chkAllowUsageStatistics.Checked;
             option.DisplayLargeIcons = rdbToolsListLarge.Checked;
-            option.DisplayMostUsedFirst = chkDisplayMuFirst.Checked;
-            option.DisplayRecentlyUpdatedFirst = chkRecentlyUpdatedFirst.Checked;
             option.CloseEachPluginSilently = chkCloseEachPluginSilently.Checked;
             option.CloseOpenedPluginsSilently = chkClosePluginsSilently.Checked;
             option.DisplayPluginsStoreOnStartup = chkDisplayPluginsStoreOnStartup.Checked;
@@ -63,6 +60,7 @@ namespace XrmToolBox.Forms
             option.MergeConnectionFiles = chkMergeConnectionFiles.Checked;
             option.RememberSession = chkRememberSession.Checked;
             option.ReuseConnections = chkReuseConnections.Checked;
+            option.DisplayOrder = cbbDisplayOrder.SelectedItem.ToString();
 
             option.HiddenPlugins =
                 lvPlugins.Items.Cast<ListViewItem>().Where(i => i.Checked == false).Select(i => i.Text).ToList();
@@ -95,7 +93,7 @@ namespace XrmToolBox.Forms
                 WebProxyHelper.ApplyProxy();
 
                 ConnectionManager.Instance.SaveConnectionsFile();
-                
+
                 DialogResult = DialogResult.OK;
                 Close();
             }

@@ -373,7 +373,7 @@ namespace XrmToolBox
 
             var tasks = new List<Task>
             {
-                LaunchVersionCheck(),
+                LaunchVersionCheck()
             };
 
             if (!string.IsNullOrEmpty(initialConnectionName))
@@ -1125,7 +1125,8 @@ namespace XrmToolBox
                 bool reinitDisplay = currentOptions.DisplayMostUsedFirst != oDialog.Option.DisplayMostUsedFirst
                                      || currentOptions.MostUsedList.Count != oDialog.Option.MostUsedList.Count
                                      || currentOptions.DisplayLargeIcons != oDialog.Option.DisplayLargeIcons
-                                     || !oDialog.Option.HiddenPlugins.SequenceEqual(currentOptions.HiddenPlugins);
+                                     || !oDialog.Option.HiddenPlugins.SequenceEqual(currentOptions.HiddenPlugins)
+                                     || currentOptions.DisplayOrder != oDialog.Option.DisplayOrder;
 
                 currentOptions = oDialog.Option;
 

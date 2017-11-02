@@ -304,7 +304,7 @@ namespace XrmToolBox
                     || p.Value.GetType().GetCompany().ToLower().Contains(filter.ToString().ToLower()))
                 : pManager.Plugins).OrderBy(p => p.Metadata.Name).ToList();
 
-            if (currentOptions.DisplayMostUsedFirst)
+            if (currentOptions.DisplayOrder == "Most used")
             {
                 foreach (var item in currentOptions.MostUsedList.OrderByDescending(i => i.Count).ThenBy(i => i.Name))
                 {
@@ -323,7 +323,7 @@ namespace XrmToolBox
                     }
                 }
             }
-            else if (currentOptions.DisplayRecentlyUpdatedFirst)
+            else if (currentOptions.DisplayOrder == "Recently updated")
             {
                 var pluginAssemblies = Directory.EnumerateFiles(Paths.PluginsPath, "*.dll")
                     .Select(d => new

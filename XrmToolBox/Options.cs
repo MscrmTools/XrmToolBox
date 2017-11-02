@@ -51,8 +51,8 @@ namespace XrmToolBox
             if (size.Height != 0)
             {
                 form.Size = size;
-                form.Top = (Screen.PrimaryScreen.WorkingArea.Height - size.Height)/2;
-                form.Left = (Screen.PrimaryScreen.WorkingArea.Width - size.Width)/2;
+                form.Top = (Screen.PrimaryScreen.WorkingArea.Height - size.Height) / 2;
+                form.Left = (Screen.PrimaryScreen.WorkingArea.Width - size.Width) / 2;
             }
         }
     }
@@ -102,6 +102,7 @@ namespace XrmToolBox
         public string LastPlugin { get; set; }
         public bool RememberSession { get; set; }
         public bool ReuseConnections { get; set; }
+        public string DisplayOrder { get; set; }
 
         public static bool Load(out Options options, out string errorMessage)
         {
@@ -121,7 +122,24 @@ namespace XrmToolBox
                     var document = new XmlDocument();
                     document.Load(settingsFile);
 
-                    options = (Options) XmlSerializerHelper.Deserialize(document.OuterXml, typeof(Options));
+                    options = (Options)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(Options));
+
+                    if (options.DisplayOrder == null)
+                    {
+                        if (options.DisplayMostUsedFirst)
+                        {
+                            options.DisplayOrder = "Most used";
+                        }
+                        else if (options.DisplayRecentlyUpdatedFirst)
+                        {
+                            options.DisplayOrder = "Recently updated";
+                        }
+                        else
+                        {
+                            options.DisplayOrder = "Alphabetically";
+                        }
+                    }
+
                     return true;
                 }
                 catch (Exception error)
@@ -154,6 +172,7 @@ namespace XrmToolBox
                 DisplayPluginsStoreOnlyIfUpdates = DisplayPluginsStoreOnlyIfUpdates,
                 DoNotCheckForUpdates = DoNotCheckForUpdates,
                 MergeConnectionFiles = MergeConnectionFiles,
+                DisplayOrder = DisplayOrder
             };
         }
 
