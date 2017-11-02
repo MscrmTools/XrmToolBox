@@ -187,6 +187,9 @@ namespace XrmToolBox
                 }
 
                 StartPluginWithConnection();
+
+                tssOpenOrg.Visible = true;
+                tsbOpenOrg.Visible = true;
             };
             cManager.ConnectionFailed += (sender, e) =>
             {
@@ -518,6 +521,11 @@ namespace XrmToolBox
                     ccsb.SetMessage(currentPluginStatus.Message);
                     ccsb.SetProgress(currentPluginStatus.Percentage);
                 }
+
+                var openOrgVisible = pluginConnections.ContainsKey(tabControl1.SelectedIndex) &&
+                                     pluginConnections[tabControl1.SelectedIndex] != null;
+                tssOpenOrg.Visible = openOrgVisible;
+                tsbOpenOrg.Visible = openOrgVisible;
             }
         }
 
@@ -920,6 +928,9 @@ namespace XrmToolBox
 
         private void UpdateTabConnection(TabPage tab)
         {
+            if (pluginConnections.ContainsKey(tab.TabIndex))
+                pluginConnections[tab.TabIndex] = currentConnectionDetail;
+
             tab.GetPlugin()?.UpdateConnection(service, currentConnectionDetail);
 
             tab.Text = string.Format("{0} ({1})",
@@ -1169,6 +1180,25 @@ namespace XrmToolBox
                 currentOptions.Save();
             };
             worker.RunWorkerAsync();
+        }
+
+        private void tsbOpenOrg_Click(object sender, EventArgs e)
+        {
+            var tabIndex = tabControl1.SelectedIndex;
+            var url = string.Empty;
+            if (tabIndex == 0)
+            {
+                url = currentConnectionDetail.WebApplicationUrl;
+            }
+            else if (pluginConnections.ContainsKey(tabIndex) && pluginConnections[tabIndex] != null)
+            {
+                url = pluginConnections[tabIndex].WebApplicationUrl;
+            }
+
+            if (url.Length > 0)
+            {
+                Process.Start(url);
+            }
         }
     }
 }

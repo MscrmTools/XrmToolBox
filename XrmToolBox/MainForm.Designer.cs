@@ -76,6 +76,8 @@ namespace XrmToolBox
             this.checkForUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutXrmToolBoxToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssOpenOrg = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbOpenOrg = new System.Windows.Forms.ToolStripButton();
             this.pluginsCheckerImageList = new System.Windows.Forms.ImageList(this.components);
             this.cmsOnePlugin = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiOpenProjectHomePage = new System.Windows.Forms.ToolStripMenuItem();
@@ -131,7 +133,9 @@ namespace XrmToolBox
             this.tsbManageTabs,
             this.toolStripSeparator1,
             this.tsddbTools,
-            this.toolStripDropDownButton2});
+            this.toolStripDropDownButton2,
+            this.tssOpenOrg,
+            this.tsbOpenOrg});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
@@ -486,6 +490,23 @@ namespace XrmToolBox
             this.aboutXrmToolBoxToolStripMenuItem1.Size = new System.Drawing.Size(246, 30);
             this.aboutXrmToolBoxToolStripMenuItem1.Text = "About XrmToolBox";
             this.aboutXrmToolBoxToolStripMenuItem1.Click += new System.EventHandler(this.aboutXrmToolBoxToolStripMenuItem_Click);
+            // 
+            // tssOpenOrg
+            // 
+            this.tssOpenOrg.Name = "tssOpenOrg";
+            this.tssOpenOrg.Size = new System.Drawing.Size(6, 32);
+            this.tssOpenOrg.Visible = false;
+            // 
+            // tsbOpenOrg
+            // 
+            this.tsbOpenOrg.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpenOrg.Image")));
+            this.tsbOpenOrg.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbOpenOrg.Name = "tsbOpenOrg";
+            this.tsbOpenOrg.Size = new System.Drawing.Size(180, 29);
+            this.tsbOpenOrg.Text = "Open organization";
+            this.tsbOpenOrg.ToolTipText = "Opens the connected organization in your web browser";
+            this.tsbOpenOrg.Visible = false;
+            this.tsbOpenOrg.Click += new System.EventHandler(this.tsbOpenOrg_Click);
             // 
             // pluginsCheckerImageList
             // 
@@ -956,6 +977,8 @@ namespace XrmToolBox
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
         private System.Windows.Forms.ToolStripMenuItem aboutXrmToolBoxToolStripMenuItem1;
         private System.Windows.Forms.ImageList pluginTabsImagesList;
+        private System.Windows.Forms.ToolStripSeparator tssOpenOrg;
+        private System.Windows.Forms.ToolStripButton tsbOpenOrg;
     }
 }
 

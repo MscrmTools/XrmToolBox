@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk.Client;
 using Microsoft.Xrm.Sdk.WebServiceClient;
 using XrmToolBox.AppCode;
@@ -22,6 +23,8 @@ namespace XrmToolBox
         /// List of plugins tiles
         /// </summary>
         private readonly List<PluginModel> pluginsModels;
+
+        private Dictionary<int, ConnectionDetail> pluginConnections = new Dictionary<int, ConnectionDetail>();
 
         private void CreateModel<T>(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count)
              where T : PluginModel
@@ -179,6 +182,13 @@ namespace XrmToolBox
 
                 var newTab = new TabPage(name) { Tag = plugin };
                 tabControl1.TabPages.Add(newTab);
+
+                pluginConnections.Add(newTab.TabIndex, currentConnectionDetail);
+                if (currentConnectionDetail == null)
+                {
+                    tssOpenOrg.Visible = false;
+                    tsbOpenOrg.Visible = false;
+                }
 
                 var pcb = pluginControl as PluginControlBase;
                 if (pcb != null && pcb.TabIcon != null)
