@@ -110,21 +110,16 @@ namespace XrmToolBox.PluginsStore
 
             XrmToolBoxPlugins = GetContent<XtbPlugins>("https://www.xrmtoolbox.com/_odata/plugins");
 
-            //using (StreamReader reader = new StreamReader(@"C:\Users\ttouzard.JAVISTA\Desktop\xtbjson.txt"))
-            //{
-            //    var serializer = new DataContractJsonSerializer(typeof(XtbPlugins), new DataContractJsonSerializerSettings()
-            //    {
-            //        UseSimpleDictionaryFormat = true
-            //    });
-
-            //    XrmToolBoxPlugins = (XtbPlugins)serializer.ReadObject(reader.BaseStream);
-            //}
-
             foreach (var plugin in XrmToolBoxPlugins.Plugins)
             {
                 AnalyzePackage(plugin);
                 plugin.Compatibilty = IsPluginDependencyCompatible(new Version(plugin.MinimalXrmToolBoxVersion));
             }
+        }
+
+        public XtbPlugin GetPluginByFileName(string filename)
+        {
+            return XrmToolBoxPlugins.Plugins.FirstOrDefault(p => p.Files.Any(f => f.ToLower().IndexOf(filename.ToLower(), StringComparison.Ordinal) >= 0));
         }
 
         public PluginUpdates PrepareInstallationPackages(List<XtbPlugin> pluginsToInstall)

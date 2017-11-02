@@ -25,6 +25,7 @@ using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.UserControls;
 using XrmToolBox.Forms;
 using XrmToolBox.PluginsStore;
+using XrmToolBox.PluginsStore.DTO;
 using XtbNuGetPackage = XrmToolBox.PluginsStore.XtbNuGetPackage;
 
 namespace XrmToolBox
@@ -46,6 +47,7 @@ namespace XrmToolBox
         private Point scrollPosition;
         private PluginModel selectedPluginModel;
         private Store store;
+        private StoreFromPortal storeFromPortal;
         private readonly WelcomeDialog blackScreen;
         internal Options Options { get { return currentOptions; } }
 
@@ -308,6 +310,9 @@ namespace XrmToolBox
 
         private void CheckForPluginsUpdate()
         {
+            storeFromPortal = new StoreFromPortal();
+            storeFromPortal.LoadNugetPackages();
+
             //try
             //{
             //    store = new Store();
@@ -937,10 +942,18 @@ namespace XrmToolBox
             {
                 var fileName = Path.GetFileName(filePath);
 
-                var package = store.GetPackageByFileName(fileName.ToLower());
-                if (package != null && package.Package.ProjectUrl != null)
+                if (storeFromPortal == null)
                 {
-                    Process.Start(package.Package.ProjectUrl.AbsoluteUri);
+                    MessageBox.Show(this,
+                        "The Plugins Store is not initialized so we cannot find the project url",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                var xtbPlugin = storeFromPortal.GetPluginByFileName(fileName.ToLower());
+                if (xtbPlugin?.ProjectUrl != null)
+                {
+                    Process.Start(xtbPlugin.ProjectUrl);
                 }
                 else
                 {
@@ -974,12 +987,20 @@ namespace XrmToolBox
             {
                 var fileName = Path.GetFileName(filePath);
 
-                var package = store.GetPackageByFileName(fileName.ToLower());
-
-                if (package != null)
+                if (storeFromPortal == null)
                 {
-                    var pds = store.PrepareUninstallPlugins(new List<XtbNuGetPackage> { package });
-                    store.PerformUninstallation(pds);
+                    MessageBox.Show(this,
+                        "The Plugins Store is not initialized so we cannot find the project url",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                var xtbPlugin = storeFromPortal.GetPluginByFileName(fileName.ToLower());
+
+                if (xtbPlugin != null)
+                {
+                    var pds = storeFromPortal.PrepareUninstallPlugins(new List<XtbPlugin> { xtbPlugin });
+                    storeFromPortal.PerformUninstallation(pds);
                 }
             }
         }
