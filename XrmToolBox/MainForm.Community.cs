@@ -115,7 +115,6 @@ namespace XrmToolBox
                 PaypalXrmToolBoxToolStripMenuItem.Visible = false;
                 PayPalSelectedPluginToolStripMenuItem.Visible = false;
                 HelpSelectedPluginToolStripMenuItem.Visible = false;
-                xrmToolBoxHelpToolStripMenuItem.Visible = false;
                 AssignHelpMenuItems(helpToolStripMenuItem.DropDownItems);
                 AssignCodePlexMenuItems(feedbackToolStripMenuItem.DropDownItems);
                 AssignPayPalMenuItems(donateToolStripMenuItem.DropDownItems);
@@ -130,16 +129,13 @@ namespace XrmToolBox
             if (helpedPlugin == null)
             {
                 HelpSelectedPluginToolStripMenuItem.Visible = false;
-                xrmToolBoxHelpToolStripMenuItem.Visible = false;
                 AssignHelpMenuItems(helpToolStripMenuItem.DropDownItems);
             }
             else
             {
                 HelpSelectedPluginToolStripMenuItem.Visible = true;
-                xrmToolBoxHelpToolStripMenuItem.Visible = true;
                 HelpSelectedPluginToolStripMenuItem.Text = pluginName;
                 HelpSelectedPluginToolStripMenuItem.Image = (helpedPlugin as PluginControlBase)?.TabIcon;
-                AssignHelpMenuItems(xrmToolBoxHelpToolStripMenuItem.DropDownItems);
             }
 
             var paypalPlugin = tabControl1.SelectedTab.GetPaypalPlugin();

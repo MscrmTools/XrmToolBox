@@ -51,7 +51,6 @@ namespace XrmToolBox
             this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.displayXrmToolBoxHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.xrmToolBoxHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpSelectedPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.displayHelpPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.feedbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -276,7 +275,6 @@ namespace XrmToolBox
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.displayXrmToolBoxHelpToolStripMenuItem,
-            this.xrmToolBoxHelpToolStripMenuItem,
             this.HelpSelectedPluginToolStripMenuItem});
             this.helpToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("helpToolStripMenuItem.Image")));
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
@@ -289,12 +287,6 @@ namespace XrmToolBox
             this.displayXrmToolBoxHelpToolStripMenuItem.Size = new System.Drawing.Size(293, 30);
             this.displayXrmToolBoxHelpToolStripMenuItem.Text = "Display XrmToolBox help";
             this.displayXrmToolBoxHelpToolStripMenuItem.Click += new System.EventHandler(this.displayXrmToolBoxHelpToolStripMenuItem_Click);
-            // 
-            // xrmToolBoxHelpToolStripMenuItem
-            // 
-            this.xrmToolBoxHelpToolStripMenuItem.Name = "xrmToolBoxHelpToolStripMenuItem";
-            this.xrmToolBoxHelpToolStripMenuItem.Size = new System.Drawing.Size(293, 30);
-            this.xrmToolBoxHelpToolStripMenuItem.Text = "XrmToolBox";
             // 
             // HelpSelectedPluginToolStripMenuItem
             // 
@@ -515,7 +507,7 @@ namespace XrmToolBox
             this.tsmiHidePlugin,
             this.tsmiUninstallPlugin});
             this.cmsOnePlugin.Name = "cmsOnePlugin";
-            this.cmsOnePlugin.Size = new System.Drawing.Size(383, 199);
+            this.cmsOnePlugin.Size = new System.Drawing.Size(383, 166);
             // 
             // tsmiOpenProjectHomePage
             // 
@@ -916,7 +908,6 @@ namespace XrmToolBox
         private System.Windows.Forms.ToolStripLabel tslFilterPlugin;
         private System.Windows.Forms.ToolStripTextBox tstxtFilterPlugin;
         private System.Windows.Forms.ToolStripMenuItem displayXrmToolBoxHelpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem xrmToolBoxHelpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem HelpSelectedPluginToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem displayHelpPluginToolStripMenuItem;
         private System.Windows.Forms.ImageList pluginsCheckerImageList;
