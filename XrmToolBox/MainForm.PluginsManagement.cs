@@ -14,6 +14,7 @@ using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.UserControls;
 using XrmToolBox.Forms;
+using System.Threading.Tasks;
 
 namespace XrmToolBox
 {
@@ -467,17 +468,18 @@ namespace XrmToolBox
             return logo;
         }
 
-        private void pManager_PluginsListUpdated(object sender, EventArgs e)
+        private async void pManager_PluginsListUpdated(object sender, EventArgs e)
         {
-            if (DialogResult.Yes ==
-                MessageBox.Show(this,
-                    "A plugin has been added in Plugins directory, would you like to refresh the plugins list?",
-                    "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-            {
-                pManager.Recompose();
-                pluginsModels.Clear();
-                DisplayPlugins(tstxtFilterPlugin.Text);
-            }
+            await WaitFileIsCopied();
+
+            pManager.Recompose();
+            pluginsModels.Clear();
+            DisplayPlugins(tstxtFilterPlugin.Text);
+        }
+
+        private async Task WaitFileIsCopied()
+        {
+            await Task.Delay(1000);
         }
 
         private void StatusBarMessager_SendMessageToStatusBar(object sender, StatusBarMessageEventArgs e)
