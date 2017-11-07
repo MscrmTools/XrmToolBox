@@ -184,7 +184,7 @@ namespace XrmToolBox
                 var newTab = new TabPage(name) { Tag = plugin };
                 tabControl1.TabPages.Add(newTab);
 
-                pluginConnections.Add(newTab.TabIndex, currentConnectionDetail);
+                pluginConnections.Add(tabControl1.TabPages.IndexOf(newTab), currentConnectionDetail);
                 if (currentConnectionDetail == null)
                 {
                     tssOpenOrg.Visible = false;

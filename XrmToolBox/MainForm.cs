@@ -751,7 +751,7 @@ namespace XrmToolBox
             currentOptions.Size.CurrentSize = Size;
             currentOptions.Size.IsMaximized = (WindowState == FormWindowState.Maximized);
             currentOptions.LastConnection = this.currentConnectionDetail?.ConnectionName;
-            var currentTab = tabControl1.TabPages[tabControl1.SelectedTab.TabIndex];
+            var currentTab = tabControl1.SelectedTab;
             if (currentTab != null && currentTab.Name != "HomePageTab")
             {
                 var currentPlugin = currentTab.GetPluginName();
@@ -789,8 +789,16 @@ namespace XrmToolBox
             {
                 return;
             }
+
+            int index = tabControl1.TabPages.IndexOf(page);
             CloseTab(page);
-            pluginConnections.Remove(page.TabIndex);
+
+            pluginConnections.Remove(index);
+            for (var i = index; i <= pluginConnections.Count; i++)
+            {
+                pluginConnections.Add(i, pluginConnections[i + 1]);
+                pluginConnections.Remove(i + 1);
+            }
         }
 
         private void RequestCloseTabs(IEnumerable<TabPage> pages, PluginCloseInfo info)
