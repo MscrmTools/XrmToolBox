@@ -790,6 +790,7 @@ namespace XrmToolBox
                 return;
             }
             CloseTab(page);
+            pluginConnections.Remove(page.TabIndex);
         }
 
         private void RequestCloseTabs(IEnumerable<TabPage> pages, PluginCloseInfo info)
