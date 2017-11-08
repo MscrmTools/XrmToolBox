@@ -148,6 +148,7 @@
     <Compile Include="LogManager.cs" />
     <Compile Include="Paths.cs" />
     <Compile Include="PluginBase.cs" />
+    <Compile Include="MultipleConnectionsPluginControlBase.cs" />
     <Compile Include="PluginControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -156,6 +157,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Args\RequestConnectionEventArgs.cs" />
     <Compile Include="SettingsManager.cs" />
+    <Compile Include="AdditionalConnections.cs" />
     <Compile Include="UserControls\LargePluginModel.cs">
       <SubType>UserControl</SubType>
     </Compile>

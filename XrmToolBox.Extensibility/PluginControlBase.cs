@@ -29,7 +29,7 @@ namespace XrmToolBox.Extensibility
 
         public PluginControlBase()
         {
-            logManager = new LogManager(GetType());    
+            logManager = new LogManager(GetType());
         }
 
         public ConnectionDetail ConnectionDetail { get; set; }
@@ -49,12 +49,17 @@ namespace XrmToolBox.Extensibility
         }
 
         public Image TabIcon { get; set; }
-        
+
         #region IMsCrmToolsPluginUserControl Members
 
         public event EventHandler OnCloseTool;
 
         public event EventHandler OnRequestConnection;
+
+        protected virtual void OnConnectionRequested(object sender, RequestConnectionEventArgs e)
+        {
+            OnRequestConnection?.Invoke(sender, e);
+        }
 
         public IOrganizationService Service { get; private set; }
 
@@ -189,7 +194,6 @@ namespace XrmToolBox.Extensibility
                 MessageHeight = messageHeight,
                 PostWorkCallBack = callback,
                 ProgressChanged = progressChanged
-
             };
             WorkAsync(info);
         }
@@ -204,7 +208,6 @@ namespace XrmToolBox.Extensibility
                 IsCancelable = enableCancellation,
                 MessageWidth = messageWidth,
                 MessageHeight = messageHeight
-
             };
             WorkAsync(info);
         }
@@ -236,7 +239,6 @@ namespace XrmToolBox.Extensibility
                 MessageHeight = messageHeight,
                 PostWorkCallBack = callback,
                 ProgressChanged = progressChanged
-
             };
             WorkAsync(info);
         }
@@ -365,7 +367,7 @@ namespace XrmToolBox.Extensibility
         /// <param name="args">Message parameters</param>
         protected void LogInfo(string message, params object[] args)
         {
-           logManager.LogInfo(message, args);
+            logManager.LogInfo(message, args);
         }
 
         /// <summary>
@@ -389,14 +391,14 @@ namespace XrmToolBox.Extensibility
         }
 
         /// <summary>
-        /// Opens the log file associated with the current plugin 
+        /// Opens the log file associated with the current plugin
         /// </summary>
         protected void OpenLogFile()
         {
             logManager.OpenLog();
         }
 
-        #endregion
+        #endregion Logs
 
         #region Noticiation zone
 
@@ -405,7 +407,7 @@ namespace XrmToolBox.Extensibility
             var ctrls = Parent.Controls.Find("NotifPanel", false);
             if (ctrls.Length == 1)
             {
-                ((NotificationArea) ctrls[0]).ShowInfoNotification(message, moreInfoUri, height);
+                ((NotificationArea)ctrls[0]).ShowInfoNotification(message, moreInfoUri, height);
             }
             else
             {
@@ -448,6 +450,6 @@ namespace XrmToolBox.Extensibility
             }
         }
 
-        #endregion
+        #endregion Noticiation zone
     }
 }

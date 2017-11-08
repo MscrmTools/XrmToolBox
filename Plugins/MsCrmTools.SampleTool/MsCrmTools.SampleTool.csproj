@@ -112,6 +112,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PluginMulti.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SampleTool.cs">
@@ -120,11 +121,20 @@
     <Compile Include="SampleTool.Designer.cs">
       <DependentUpon>SampleTool.cs</DependentUpon>
     </Compile>
+    <Compile Include="SampleToolMulti.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SampleToolMulti.Designer.cs">
+      <DependentUpon>SampleToolMulti.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SampleTool.resx">
       <DependentUpon>SampleTool.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SampleToolMulti.resx">
+      <DependentUpon>SampleToolMulti.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
