@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Forms;
 using McTools.Xrm.Connection;
@@ -63,7 +64,7 @@ namespace MsCrmTools.SampleTool
                     list.Add(ConnectionDetail, response.UserId);
 
                     // Process additional connections
-                    foreach (var detail in AdditionalConnectionDetails.Connections)
+                    foreach (var detail in AdditionalConnectionDetails)
                     {
                         if (w.CancellationPending)
                         {
@@ -120,12 +121,17 @@ namespace MsCrmTools.SampleTool
 
         public override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
+            // Let base class handle update of connection
+            base.UpdateConnection(newService, detail, actionName, parameter);
+
+            // Change of primary connection
             if (string.IsNullOrEmpty(actionName))
             {
-                OrganizationAdded(detail);
             }
-
-            base.UpdateConnection(newService, detail, actionName, parameter);
+            else
+            {
+                // or change of secondary connection
+            }
         }
 
         private void tsbWhoAmI_Click(object sender, EventArgs e)
@@ -229,15 +235,21 @@ namespace MsCrmTools.SampleTool
             AddAdditionalOrganization();
         }
 
-        protected override void OrganizationAdded(ConnectionDetail detail)
+        protected override void ConnectionDetailsUpdated(NotifyCollectionChangedEventArgs e)
         {
-            if (listView1.Items.Cast<ListViewItem>().Any(i => i.Tag == detail))
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                return;
-            }
+                foreach (var detail in e.NewItems.Cast<ConnectionDetail>())
+                {
+                    if (listView1.Items.Cast<ListViewItem>().Any(i => i.Tag == detail))
+                    {
+                        continue;
+                    }
 
-            var item = new ListViewItem(detail.OrganizationFriendlyName) { Tag = detail };
-            listView1.Items.Add(item);
+                    var item = new ListViewItem(detail.OrganizationFriendlyName) { Tag = detail };
+                    listView1.Items.Add(item);
+                }
+            }
         }
     }
 }

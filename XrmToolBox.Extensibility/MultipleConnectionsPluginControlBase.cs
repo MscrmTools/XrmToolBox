@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using System.ComponentModel;
@@ -37,11 +39,11 @@ namespace XrmToolBox.Extensibility
     {
         protected MultipleConnectionsPluginControlBase()
         {
-            AdditionalConnectionDetails = new AdditionalConnections();
-            AdditionalConnectionDetails.AdditionalConnectionAdded += (sender, e) => { OrganizationAdded(e.Detail); };
+            AdditionalConnectionDetails = new ObservableCollection<ConnectionDetail>();
+            AdditionalConnectionDetails.CollectionChanged += (sender, e) => { ConnectionDetailsUpdated(e); };
         }
 
-        public AdditionalConnections AdditionalConnectionDetails { get; set; }
+        public ObservableCollection<ConnectionDetail> AdditionalConnectionDetails { get; set; }
 
         public override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail,
             string actionName, object parameter)
@@ -65,7 +67,7 @@ namespace XrmToolBox.Extensibility
             OnConnectionRequested(this, args);
         }
 
-        protected abstract void OrganizationAdded(ConnectionDetail detail);
+        protected abstract void ConnectionDetailsUpdated(NotifyCollectionChangedEventArgs e);
 
         protected void RemoveAdditionalOrganization(ConnectionDetail detail)
         {
