@@ -29,6 +29,8 @@ namespace XrmToolBox.Extensibility
             _filePath = Path.Combine(Paths.LogsPath, $"{pluginType.Assembly.FullName.Split(',')[0]}.log");
         }
 
+        public string FilePath => _filePath;
+
         /// <summary>
         /// Set the new connection details
         /// </summary>
@@ -63,7 +65,7 @@ namespace XrmToolBox.Extensibility
                 throw new Exception("Unable to write log for the following reason: " + error.Message, error);
             }
         }
-        
+
         /// <summary>
         /// Writes an information message in the log
         /// </summary>
@@ -99,7 +101,10 @@ namespace XrmToolBox.Extensibility
         /// </summary>
         public void OpenLog()
         {
-            Process.Start(_filePath);
+            if (File.Exists(_filePath))
+            {
+                Process.Start(_filePath);
+            }
         }
 
         /// <summary>

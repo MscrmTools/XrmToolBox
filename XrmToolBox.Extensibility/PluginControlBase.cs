@@ -361,6 +361,11 @@ namespace XrmToolBox.Extensibility
         #region Logs
 
         /// <summary>
+        /// Path for the log file
+        /// </summary>
+        protected string LogFilePath => logManager?.FilePath;
+
+        /// <summary>
         /// Writes an information message in the log
         /// </summary>
         /// <param name="message">Message</param>
