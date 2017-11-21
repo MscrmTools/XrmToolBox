@@ -313,9 +313,12 @@ namespace XrmToolBox
 
         private void CheckForPluginsUpdate()
         {
-            storeFromPortal = new StoreFromPortal();
-            storeFromPortal.LoadNugetPackages();
-
+            try
+            {
+                storeFromPortal = new StoreFromPortal();
+                storeFromPortal.LoadNugetPackages();
+            }
+            catch { }
             //try
             //{
             //    store = new Store();
