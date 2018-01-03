@@ -620,7 +620,7 @@ namespace XrmToolBox.PluginsStore
             }
 
             Uri parsedUri;
-            if (Uri.TryCreate(value.ToString(), UriKind.Absolute, out parsedUri))
+            if (Uri.TryCreate(value?.ToString(), UriKind.Absolute, out parsedUri))
             {
                 rightControl = new LinkLabel
                 {
