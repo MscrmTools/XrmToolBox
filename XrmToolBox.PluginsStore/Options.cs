@@ -16,7 +16,7 @@ namespace XrmToolBox.PluginsStore
         private Options()
         {
             DisplayPluginsStoreOnStartup = true;
-            UseLegacy = true;
+            UseLegacy = false;
         }
 
         public bool? PluginsStoreShowIncompatible { get; set; }
@@ -93,7 +93,8 @@ namespace XrmToolBox.PluginsStore
                 PluginsStoreShowIncompatible = PluginsStoreShowIncompatible,
                 PluginsStoreShowInstalled = PluginsStoreShowInstalled,
                 PluginsStoreShowNew = PluginsStoreShowNew,
-                PluginsStoreShowUpdates = PluginsStoreShowUpdates
+                PluginsStoreShowUpdates = PluginsStoreShowUpdates,
+                UseLegacy = UseLegacy
             };
         }
 

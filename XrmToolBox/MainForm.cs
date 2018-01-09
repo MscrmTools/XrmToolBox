@@ -1097,6 +1097,7 @@ namespace XrmToolBox
                 PluginsStore.Options.Instance.PluginsStoreShowIncompatible = Options.PluginsStoreShowIncompatible;
                 PluginsStore.Options.Instance.PluginsStoreShowNew = Options.PluginsStoreShowNew;
                 PluginsStore.Options.Instance.PluginsStoreShowUpdates = Options.PluginsStoreShowUpdates;
+                PluginsStore.Options.Instance.UseLegacy = false;
                 PluginsStore.Options.Instance.IsInitialized = true;
             }
 
