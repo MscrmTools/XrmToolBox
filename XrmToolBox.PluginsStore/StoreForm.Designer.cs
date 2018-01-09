@@ -49,6 +49,8 @@ namespace XrmToolBox.PluginsStore
             this.tsmiShowNewPlugins = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowPluginsUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowInstalledPlugins = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiUseLegacyPluginsStore = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbProxySettings = new System.Windows.Forms.ToolStripButton();
             this.tsbCleanCacheFolder = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -75,8 +77,6 @@ namespace XrmToolBox.PluginsStore
             this.colLastDownloadCoun = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.iiNotif = new System.Windows.Forms.ImageList(this.components);
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiUseLegacyPluginsStore = new System.Windows.Forms.ToolStripMenuItem();
             this.tsMain.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.pnlReleaseNotes.SuspendLayout();
@@ -111,7 +111,7 @@ namespace XrmToolBox.PluginsStore
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
             this.tsMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.tsMain.Size = new System.Drawing.Size(998, 31);
+            this.tsMain.Size = new System.Drawing.Size(998, 25);
             this.tsMain.TabIndex = 0;
             this.tsMain.Text = "toolStrip1";
             // 
@@ -120,21 +120,21 @@ namespace XrmToolBox.PluginsStore
             this.tsbLoadPlugins.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadPlugins.Image")));
             this.tsbLoadPlugins.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbLoadPlugins.Name = "tsbLoadPlugins";
-            this.tsbLoadPlugins.Size = new System.Drawing.Size(74, 28);
+            this.tsbLoadPlugins.Size = new System.Drawing.Size(66, 22);
             this.tsbLoadPlugins.Text = "Refresh";
             this.tsbLoadPlugins.Click += new System.EventHandler(this.tsbLoadPlugins_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbInstall
             // 
             this.tsbInstall.Image = ((System.Drawing.Image)(resources.GetObject("tsbInstall.Image")));
             this.tsbInstall.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbInstall.Name = "tsbInstall";
-            this.tsbInstall.Size = new System.Drawing.Size(66, 28);
+            this.tsbInstall.Size = new System.Drawing.Size(58, 22);
             this.tsbInstall.Text = "Install";
             this.tsbInstall.Click += new System.EventHandler(this.tsbInstall_Click);
             // 
@@ -143,7 +143,7 @@ namespace XrmToolBox.PluginsStore
             this.tsbUninstall.Image = ((System.Drawing.Image)(resources.GetObject("tsbUninstall.Image")));
             this.tsbUninstall.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbUninstall.Name = "tsbUninstall";
-            this.tsbUninstall.Size = new System.Drawing.Size(81, 28);
+            this.tsbUninstall.Size = new System.Drawing.Size(73, 22);
             this.tsbUninstall.Text = "Uninstall";
             this.tsbUninstall.Visible = false;
             this.tsbUninstall.Click += new System.EventHandler(this.tsbUninstall_Click);
@@ -151,12 +151,12 @@ namespace XrmToolBox.PluginsStore
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 31);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // tslSearch
             // 
             this.tslSearch.Name = "tslSearch";
-            this.tslSearch.Size = new System.Drawing.Size(42, 28);
+            this.tslSearch.Size = new System.Drawing.Size(42, 22);
             this.tslSearch.Text = "Search";
             // 
             // tstSearch
@@ -164,7 +164,7 @@ namespace XrmToolBox.PluginsStore
             this.tstSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tstSearch.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.tstSearch.Name = "tstSearch";
-            this.tstSearch.Size = new System.Drawing.Size(167, 31);
+            this.tstSearch.Size = new System.Drawing.Size(167, 25);
             this.tstSearch.Text = "Search by Title or Authors";
             this.tstSearch.Enter += new System.EventHandler(this.tstSearch_Enter);
             this.tstSearch.TextChanged += new System.EventHandler(this.tstSearch_TextChanged);
@@ -172,7 +172,7 @@ namespace XrmToolBox.PluginsStore
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 31);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbShowThisScreenOnStartup
             // 
@@ -181,14 +181,14 @@ namespace XrmToolBox.PluginsStore
             this.tsbShowThisScreenOnStartup.Image = ((System.Drawing.Image)(resources.GetObject("tsbShowThisScreenOnStartup.Image")));
             this.tsbShowThisScreenOnStartup.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbShowThisScreenOnStartup.Name = "tsbShowThisScreenOnStartup";
-            this.tsbShowThisScreenOnStartup.Size = new System.Drawing.Size(164, 28);
+            this.tsbShowThisScreenOnStartup.Size = new System.Drawing.Size(164, 22);
             this.tsbShowThisScreenOnStartup.Text = "Show on XrmToolBox startup";
             this.tsbShowThisScreenOnStartup.Click += new System.EventHandler(this.tsbShowThisScreenOnStartup_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 31);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
             // tsddbOptions
             // 
@@ -203,7 +203,7 @@ namespace XrmToolBox.PluginsStore
             this.tsddbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tsddbOptions.Image")));
             this.tsddbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbOptions.Name = "tsddbOptions";
-            this.tsddbOptions.Size = new System.Drawing.Size(101, 28);
+            this.tsddbOptions.Size = new System.Drawing.Size(101, 22);
             this.tsddbOptions.Text = "Display options";
             // 
             // tsmiShowPluginsNotCompatible
@@ -246,13 +246,26 @@ namespace XrmToolBox.PluginsStore
             this.tsmiShowInstalledPlugins.Text = "Show installed plugins";
             this.tsmiShowInstalledPlugins.Click += new System.EventHandler(this.tsmiPluginDisplayOption_Click);
             // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(226, 6);
+            // 
+            // tsmiUseLegacyPluginsStore
+            // 
+            this.tsmiUseLegacyPluginsStore.CheckOnClick = true;
+            this.tsmiUseLegacyPluginsStore.Name = "tsmiUseLegacyPluginsStore";
+            this.tsmiUseLegacyPluginsStore.Size = new System.Drawing.Size(229, 22);
+            this.tsmiUseLegacyPluginsStore.Text = "Use Legacy Plugins Store";
+            this.tsmiUseLegacyPluginsStore.Click += new System.EventHandler(this.tsmiUseLegacyPluginsStore_Click);
+            // 
             // tsbProxySettings
             // 
             this.tsbProxySettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsbProxySettings.Image = ((System.Drawing.Image)(resources.GetObject("tsbProxySettings.Image")));
             this.tsbProxySettings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbProxySettings.Name = "tsbProxySettings";
-            this.tsbProxySettings.Size = new System.Drawing.Size(23, 28);
+            this.tsbProxySettings.Size = new System.Drawing.Size(23, 22);
             this.tsbProxySettings.Text = "Proxy settings";
             this.tsbProxySettings.Click += new System.EventHandler(this.tsbProxySettings_Click);
             // 
@@ -262,7 +275,7 @@ namespace XrmToolBox.PluginsStore
             this.tsbCleanCacheFolder.Image = ((System.Drawing.Image)(resources.GetObject("tsbCleanCacheFolder.Image")));
             this.tsbCleanCacheFolder.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCleanCacheFolder.Name = "tsbCleanCacheFolder";
-            this.tsbCleanCacheFolder.Size = new System.Drawing.Size(23, 28);
+            this.tsbCleanCacheFolder.Size = new System.Drawing.Size(23, 22);
             this.tsbCleanCacheFolder.Text = "Clean cache folder";
             this.tsbCleanCacheFolder.Click += new System.EventHandler(this.tsbCleanCacheFolder_Click);
             // 
@@ -307,7 +320,7 @@ namespace XrmToolBox.PluginsStore
             this.pnlReleaseNotes.Location = new System.Drawing.Point(0, 0);
             this.pnlReleaseNotes.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.pnlReleaseNotes.Name = "pnlReleaseNotes";
-            this.pnlReleaseNotes.Size = new System.Drawing.Size(998, 250);
+            this.pnlReleaseNotes.Size = new System.Drawing.Size(998, 253);
             this.pnlReleaseNotes.TabIndex = 4;
             // 
             // scProperties
@@ -328,7 +341,7 @@ namespace XrmToolBox.PluginsStore
             // 
             this.scProperties.Panel2.Controls.Add(this.pnlReleaseNotesDetails);
             this.scProperties.Panel2.Controls.Add(this.lblReleaseNotes);
-            this.scProperties.Size = new System.Drawing.Size(998, 229);
+            this.scProperties.Size = new System.Drawing.Size(998, 232);
             this.scProperties.SplitterDistance = 500;
             this.scProperties.SplitterWidth = 3;
             this.scProperties.TabIndex = 7;
@@ -352,7 +365,7 @@ namespace XrmToolBox.PluginsStore
             this.pnlReleaseNotesDetails.Location = new System.Drawing.Point(0, 16);
             this.pnlReleaseNotesDetails.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.pnlReleaseNotesDetails.Name = "pnlReleaseNotesDetails";
-            this.pnlReleaseNotesDetails.Size = new System.Drawing.Size(495, 213);
+            this.pnlReleaseNotesDetails.Size = new System.Drawing.Size(495, 216);
             this.pnlReleaseNotesDetails.TabIndex = 2;
             // 
             // lblReleaseNotes
@@ -374,7 +387,7 @@ namespace XrmToolBox.PluginsStore
             this.pnlNotif.Controls.Add(this.pbNotifIcon);
             this.pnlNotif.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlNotif.Location = new System.Drawing.Point(0, 0);
-            this.pnlNotif.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlNotif.Margin = new System.Windows.Forms.Padding(2);
             this.pnlNotif.Name = "pnlNotif";
             this.pnlNotif.Size = new System.Drawing.Size(998, 21);
             this.pnlNotif.TabIndex = 3;
@@ -398,7 +411,7 @@ namespace XrmToolBox.PluginsStore
             this.pbNotifIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pbNotifIcon.Dock = System.Windows.Forms.DockStyle.Left;
             this.pbNotifIcon.Location = new System.Drawing.Point(0, 0);
-            this.pbNotifIcon.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pbNotifIcon.Margin = new System.Windows.Forms.Padding(2);
             this.pbNotifIcon.Name = "pbNotifIcon";
             this.pbNotifIcon.Size = new System.Drawing.Size(21, 19);
             this.pbNotifIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -425,7 +438,7 @@ namespace XrmToolBox.PluginsStore
             this.lvPlugins.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.lvPlugins.Name = "lvPlugins";
             this.lvPlugins.OwnerDraw = true;
-            this.lvPlugins.Size = new System.Drawing.Size(998, 271);
+            this.lvPlugins.Size = new System.Drawing.Size(998, 274);
             this.lvPlugins.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvPlugins.TabIndex = 5;
             this.lvPlugins.UseCompatibleStateImageBehavior = false;
@@ -484,7 +497,7 @@ namespace XrmToolBox.PluginsStore
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 31);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 25);
             this.splitContainer1.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -496,8 +509,8 @@ namespace XrmToolBox.PluginsStore
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.pnlReleaseNotes);
-            this.splitContainer1.Size = new System.Drawing.Size(998, 524);
-            this.splitContainer1.SplitterDistance = 271;
+            this.splitContainer1.Size = new System.Drawing.Size(998, 530);
+            this.splitContainer1.SplitterDistance = 274;
             this.splitContainer1.SplitterWidth = 3;
             this.splitContainer1.TabIndex = 6;
             // 
@@ -508,21 +521,6 @@ namespace XrmToolBox.PluginsStore
             this.iiNotif.Images.SetKeyName(0, "notif_icn_info16.png");
             this.iiNotif.Images.SetKeyName(1, "notif_icn_alert16.png");
             this.iiNotif.Images.SetKeyName(2, "notif_icn_crit16.png");
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(226, 6);
-            // 
-            // tsmiUseLegacyPluginsStore
-            // 
-            this.tsmiUseLegacyPluginsStore.Checked = true;
-            this.tsmiUseLegacyPluginsStore.CheckOnClick = true;
-            this.tsmiUseLegacyPluginsStore.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.tsmiUseLegacyPluginsStore.Name = "tsmiUseLegacyPluginsStore";
-            this.tsmiUseLegacyPluginsStore.Size = new System.Drawing.Size(229, 22);
-            this.tsmiUseLegacyPluginsStore.Text = "Use Legacy Plugins Store";
-            this.tsmiUseLegacyPluginsStore.Click += new System.EventHandler(this.tsmiUseLegacyPluginsStore_Click);
             // 
             // StoreForm
             // 

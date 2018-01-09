@@ -49,6 +49,8 @@ namespace XrmToolBox.PluginsStore
             this.tsmiShowNewPlugins = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowPluginsUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowInstalledPlugins = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiUseLegacyPluginsStore = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbProxySettings = new System.Windows.Forms.ToolStripButton();
             this.tsbCleanCacheFolder = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -83,8 +85,6 @@ namespace XrmToolBox.PluginsStore
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.ilImages = new System.Windows.Forms.ImageList(this.components);
             this.ilImages24 = new System.Windows.Forms.ImageList(this.components);
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiUseLegacyPluginsStore = new System.Windows.Forms.ToolStripMenuItem();
             this.tsMain.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.pnlReleaseNotes.SuspendLayout();
@@ -255,6 +255,19 @@ namespace XrmToolBox.PluginsStore
             this.tsmiShowInstalledPlugins.Size = new System.Drawing.Size(229, 22);
             this.tsmiShowInstalledPlugins.Text = "Show installed plugins";
             this.tsmiShowInstalledPlugins.Click += new System.EventHandler(this.tsmiPluginDisplayOption_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(226, 6);
+            // 
+            // tsmiUseLegacyPluginsStore
+            // 
+            this.tsmiUseLegacyPluginsStore.CheckOnClick = true;
+            this.tsmiUseLegacyPluginsStore.Name = "tsmiUseLegacyPluginsStore";
+            this.tsmiUseLegacyPluginsStore.Size = new System.Drawing.Size(229, 22);
+            this.tsmiUseLegacyPluginsStore.Text = "Use Legacy Plugins Store";
+            this.tsmiUseLegacyPluginsStore.Click += new System.EventHandler(this.tsmiUseLegacyPluginsStore_Click);
             // 
             // tsbProxySettings
             // 
@@ -600,21 +613,6 @@ namespace XrmToolBox.PluginsStore
             this.ilImages24.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ilImages24.ImageStream")));
             this.ilImages24.TransparentColor = System.Drawing.Color.Transparent;
             this.ilImages24.Images.SetKeyName(0, "star24_5.png");
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(226, 6);
-            // 
-            // tsmiUseLegacyPluginsStore
-            // 
-            this.tsmiUseLegacyPluginsStore.Checked = true;
-            this.tsmiUseLegacyPluginsStore.CheckOnClick = true;
-            this.tsmiUseLegacyPluginsStore.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.tsmiUseLegacyPluginsStore.Name = "tsmiUseLegacyPluginsStore";
-            this.tsmiUseLegacyPluginsStore.Size = new System.Drawing.Size(229, 22);
-            this.tsmiUseLegacyPluginsStore.Text = "Use Legacy Plugins Store";
-            this.tsmiUseLegacyPluginsStore.Click += new System.EventHandler(this.tsmiUseLegacyPluginsStore_Click);
             // 
             // StoreFormFromPortal
             // 

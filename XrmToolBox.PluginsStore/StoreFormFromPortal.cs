@@ -682,6 +682,7 @@ namespace XrmToolBox.PluginsStore
         private void tsmiUseLegacyPluginsStore_Click(object sender, EventArgs e)
         {
             Options.Instance.UseLegacy = ((ToolStripMenuItem)sender).Checked;
+            Options.Instance.Save();
         }
 
         private void tsbProxySettings_Click(object sender, EventArgs e)
