@@ -574,8 +574,8 @@ namespace XrmToolBox.PluginsStore
                 lblDescriptionHeader,
                 GetPropertiesPanelInformation("Project Url", package.ProjectUrl),
                 GetPropertiesPanelInformation("Downloads count", package.TotalDownloadCount.ToString()),
-                GetPropertiesPanelInformation("Latest release",package.LatestReleaseDate.ToString("yyyy/MM/dd")),
-                GetPropertiesPanelInformation("First release", package.FirstReleaseDate.ToString("yyyy/MM/dd")),
+                GetPropertiesPanelInformation("Latest release",package.LatestReleaseDate?.ToString("yyyy/MM/dd")??"N/A"),
+                GetPropertiesPanelInformation("First release", package.FirstReleaseDate?.ToString("yyyy/MM/dd")??"N/A"),
                 GetPropertiesPanelInformation("Authors", string.Join(", ", package.Authors)),
                 GetPropertiesPanelInformation("Version", package.Version),
                 pnlTitle
@@ -589,8 +589,8 @@ namespace XrmToolBox.PluginsStore
                 {
                 GetPropertiesPanelInformation("Project Url", package.ProjectUrl),
                 GetPropertiesPanelInformation("Downloads count", package.TotalDownloadCount.ToString()),
-                GetPropertiesPanelInformation("Latest release", package.LatestReleaseDate.ToString("yyyy/MM/dd")),
-                GetPropertiesPanelInformation("First release", package.FirstReleaseDate.ToString("yyyy/MM/dd")),
+                GetPropertiesPanelInformation("Latest release", package.LatestReleaseDate?.ToString("yyyy/MM/dd")??"N/A"),
+                GetPropertiesPanelInformation("First release", package.FirstReleaseDate?.ToString("yyyy/MM/dd")??"N/A"),
                 GetPropertiesPanelInformation("Authors", package.Authors),
                 GetPropertiesPanelInformation("Version", package.Version),
                 pnlTitle
@@ -732,7 +732,7 @@ namespace XrmToolBox.PluginsStore
             var lvic = new List<ListViewItem>();
             foreach (var xtbPackage in store.XrmToolBoxPlugins.Plugins.Where(p => filter.Length > 0 &&
                                                               (p.Name.ToLower().Replace(" for xrmtoolbox", "").Contains(filter) ||
-                                                               p.Authors.IndexOf(filter, StringComparison.Ordinal) >= 0)
+                                                               p.Authors.ToLower().IndexOf(filter, StringComparison.Ordinal) >= 0)
                                                                || filter.Length == 0)
                 )
             {

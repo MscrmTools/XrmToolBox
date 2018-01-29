@@ -43,13 +43,13 @@ namespace XrmToolBox.PluginsStore.DTO
         public string FilesList { get; set; }
 
         [DataMember(Name = "mctools_firstreleasedate")]
-        public DateTime FirstReleaseDate { get; internal set; }
+        public DateTime? FirstReleaseDate { get; internal set; }
 
         [DataMember(Name = "mctools_pluginid")]
         public string Id { get; set; }
 
         [DataMember(Name = "mctools_latestreleasedate")]
-        public DateTime LatestReleaseDate { get; internal set; }
+        public DateTime? LatestReleaseDate { get; internal set; }
 
         [DataMember(Name = "mctools_latestversionid")]
         public string LatestReleaseId { get; internal set; }
