@@ -284,6 +284,10 @@ namespace XrmToolBox
 
         private void DisplayPlugins(object filter = null)
         {
+            var isc = new ItSecurityChecker();
+            isc.LoadAllowedPlugins();
+            pnlSecurityInfo.Visible = isc.HasPluginsRestriction;
+
             if (!pManager.Plugins.Any())
             {
                 Invoke(new Action(() =>
@@ -312,7 +316,8 @@ namespace XrmToolBox
                     var plugin = filteredPlugins.FirstOrDefault(x => x.Value.GetType().FullName == item.Name);
                     if (plugin != null && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.Metadata.Name)))
                     {
-                        DisplayOnePlugin(plugin, ref top, lastWidth, item.Count);
+                        if (isc.IsPluginAllowed(plugin.Value.GetType().FullName))
+                            DisplayOnePlugin(plugin, ref top, lastWidth, item.Count);
                     }
                 }
 
@@ -320,7 +325,8 @@ namespace XrmToolBox
                 {
                     if (currentOptions.MostUsedList.All(i => i.Name != plugin.Value.GetType().FullName) && (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.Metadata.Name)))
                     {
-                        DisplayOnePlugin(plugin, ref top, lastWidth);
+                        if (isc.IsPluginAllowed(plugin.Value.GetType().FullName))
+                            DisplayOnePlugin(plugin, ref top, lastWidth);
                     }
                 }
             }
@@ -345,7 +351,8 @@ namespace XrmToolBox
                         if (currentOptions.HiddenPlugins == null
                             || !currentOptions.HiddenPlugins.Contains(plugin.Metadata.Name))
                         {
-                            DisplayOnePlugin(plugin, ref top, lastWidth);
+                            if (isc.IsPluginAllowed(plugin.Value.GetType().FullName))
+                                DisplayOnePlugin(plugin, ref top, lastWidth);
                         }
                     }
                 }
@@ -356,7 +363,8 @@ namespace XrmToolBox
                 {
                     if (currentOptions.HiddenPlugins == null || !currentOptions.HiddenPlugins.Contains(plugin.Metadata.Name))
                     {
-                        DisplayOnePlugin(plugin, ref top, lastWidth);
+                        if (isc.IsPluginAllowed(plugin.Value.GetType().FullName))
+                            DisplayOnePlugin(plugin, ref top, lastWidth);
                     }
                 }
             }

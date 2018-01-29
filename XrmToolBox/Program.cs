@@ -9,6 +9,7 @@ using System.Net;
 using System.Reflection;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
+using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
 using XrmToolBox.PluginsStore;
 using PluginUpdates = XrmToolBox.AppCode.PluginUpdates;
@@ -25,6 +26,15 @@ namespace XrmToolBox
         {
             try
             {
+                var isc = new ItSecurityChecker();
+                if (isc.IsDisabled())
+                {
+                    var message =
+                        "IT department restricted the access to XrmToolBox.\r\n\r\nPlease contact your administrators if you need access to XrmToolBox";
+                    MessageBox.Show(message, "XrmToolBox restriction detected!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 if (!CheckRequiredAssemblies())
                 {
                     return;
