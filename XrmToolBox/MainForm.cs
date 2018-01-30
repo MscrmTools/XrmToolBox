@@ -719,7 +719,7 @@ namespace XrmToolBox
         {
             if (tabControl1.SelectedTab.TabIndex != 0)
             {
-                RequestCloseTab(tabControl1.TabPages[tabControl1.SelectedTab.TabIndex], new PluginCloseInfo(ToolBoxCloseReason.CloseCurrent));
+                RequestCloseTab(tabControl1.SelectedTab, new PluginCloseInfo(ToolBoxCloseReason.CloseCurrent));
             }
         }
 
