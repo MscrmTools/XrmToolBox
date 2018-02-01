@@ -184,8 +184,4 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
-/.vs/XrmToolBox/v15/sqlite3
-/.vs/XrmToolBox/v15/Server/sqlite3/storage.ide
-/.vs/XrmToolBox/v15/Server/sqlite3/db.lock
-/.vs/XrmToolBox/v15/Server/sqlite3/storage.ide-wal
-/.vs/XrmToolBox/v15/Server/sqlite3/storage.ide-shm
+/.vs/*
