@@ -26,6 +26,7 @@ using XrmToolBox.Extensibility.UserControls;
 using XrmToolBox.Forms;
 using XrmToolBox.PluginsStore;
 using XrmToolBox.PluginsStore.DTO;
+using XrmToolBox.TempNew;
 using XtbNuGetPackage = XrmToolBox.PluginsStore.XtbNuGetPackage;
 
 namespace XrmToolBox
@@ -58,6 +59,10 @@ namespace XrmToolBox
         public MainForm(string[] args)
         {
             InitializeComponent();
+
+            var newForm = new NewForm(args);
+            newForm.Show();
+            return;
 
             pluginsModels = new List<PluginModel>();
             pluginControlStatuses = new List<PluginControlStatus>();
@@ -296,12 +301,12 @@ namespace XrmToolBox
                     {
                         Invoke(new Action(() =>
                         {
-                            var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description, "MsCrmTools", "XrmToolBox", new Uri(cvc.Cpi.PackageUrl));
-                            var result = nvForm.ShowDialog(this);
-                            if (result == DialogResult.OK)
-                            {
-                                Close();
-                            }
+                            //var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description, "MsCrmTools", "XrmToolBox", new Uri(cvc.Cpi.PackageUrl));
+                            //var result = nvForm.ShowDialog(this);
+                            //if (result == DialogResult.OK)
+                            //{
+                            //    Close();
+                            //}
                         }));
                     }
                 }
@@ -363,6 +368,7 @@ namespace XrmToolBox
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
+            return;
             WebProxyHelper.ApplyProxy();
 
             pManager = new PluginManagerExtended(this) { IsWatchingForNewPlugins = true };
@@ -1175,13 +1181,13 @@ namespace XrmToolBox
                 {
                     Invoke(new Action(() =>
                     {
-                        var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description,
-                            "MsCrmTools", "XrmToolBox", new Uri(cvc.Cpi.PackageUrl));
-                        var result = nvForm.ShowDialog(this);
-                        if (result == DialogResult.OK)
-                        {
-                            Close();
-                        }
+                        //var nvForm = new NewVersionForm(currentVersion, cvc.Cpi.Version, cvc.Cpi.Description,
+                        //    "MsCrmTools", "XrmToolBox", new Uri(cvc.Cpi.PackageUrl));
+                        //var result = nvForm.ShowDialog(this);
+                        //if (result == DialogResult.OK)
+                        //{
+                        //    Close();
+                        //}
                     }));
                 }
                 else

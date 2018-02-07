@@ -13,7 +13,7 @@ using XrmToolBox.Extensibility;
 
 namespace XrmToolBox.PluginsStore
 {
-    public class Store
+    public class Store : IStore
     {
         public static readonly Version MinCompatibleVersion = new Version(1, 2015, 12, 20);
 
@@ -22,7 +22,7 @@ namespace XrmToolBox.PluginsStore
         private readonly string nugetPluginsFolder;
         private FileInfo[] plugins;
         private Dictionary<string, int> currentVersionDownloadsCount;
-       
+
         public Store()
         {
             // Initializing folders variables
@@ -38,6 +38,8 @@ namespace XrmToolBox.PluginsStore
         }
 
         public List<XtbNuGetPackage> Packages { get; private set; }
+        public int PluginsCount => Packages?.Count ?? 0;
+        public bool HasUpdates => Packages?.Any(p => p.Action == PackageInstallAction.Update) ?? false;
 
         public event EventHandler PluginsUpdated;
 
@@ -117,7 +119,7 @@ namespace XrmToolBox.PluginsStore
                 xtbPackage.RequiresXtbRestart = true;
             }
 
-            if (xtbPackage.Compatibilty != CompatibleState.Compatible )
+            if (xtbPackage.Compatibilty != CompatibleState.Compatible)
             {
                 xtbPackage.Action = PackageInstallAction.Unavailable;
             }
@@ -228,16 +230,15 @@ namespace XrmToolBox.PluginsStore
 
         private void UpdateReleaseDates()
         {
-           
             foreach (var package in Packages)
             {
                 var allPackages = manager.SourceRepository.GetPackages()
                     .Where(p => p.Id == package.Package.Id).ToList();
 
-                var first = allPackages.Select(p => (DataServicePackage) p).OrderBy(p => p.LastUpdated).FirstOrDefault();
+                var first = allPackages.Select(p => (DataServicePackage)p).OrderBy(p => p.LastUpdated).FirstOrDefault();
 
-                package.FirstReleaseDate = first?.LastUpdated.Date??new DateTime();
-                package.LatestReleaseDate = ((DataServicePackage) package.Package).LastUpdated.Date;
+                package.FirstReleaseDate = first?.LastUpdated.Date ?? new DateTime();
+                package.LatestReleaseDate = ((DataServicePackage)package.Package).LastUpdated.Date;
             }
         }
 
@@ -251,13 +252,18 @@ namespace XrmToolBox.PluginsStore
             return Packages?.FirstOrDefault(p => p.Package.GetFiles().Any(f => f.EffectivePath.ToLower().IndexOf(fileName) >= 0));
         }
 
+        public string GetPluginProjectUrlByFileName(string fileName)
+        {
+            XtbNuGetPackage package = GetPackageByFileName(fileName);
+            return package?.Package?.ProjectUrl?.ToString();
+        }
+
         public PluginUpdates PrepareInstallationPackages(List<XtbNuGetPackage> packages)
         {
             var pus = new PluginUpdates { PreviousProcessId = Process.GetCurrentProcess().Id };
 
             foreach (var xtbPackage in packages)
             {
-
                 if (xtbPackage.Action == PackageInstallAction.Unavailable)
                 {
                     if (xtbPackage.Package.ProjectUrl != null &&
@@ -288,8 +294,8 @@ namespace XrmToolBox.PluginsStore
                 {
                     var destinationFile = Path.Combine(Paths.XrmToolBoxPath, fi.EffectivePath);
 
-                    // XrmToolBox restart is required when a plugin has to be 
-                    // updated or when a new plugin shares files with other 
+                    // XrmToolBox restart is required when a plugin has to be
+                    // updated or when a new plugin shares files with other
                     // plugin(s) already installed
                     if (xtbPackage.RequiresXtbRestart)
                     {
@@ -384,7 +390,6 @@ namespace XrmToolBox.PluginsStore
                 {
                     var conflictedFiles = conflicts.SelectMany(c => c.Package.GetFiles()).Select(f => f.EffectivePath);
 
-
                     pds.Plugins.Add(new PluginDeletion
                     {
                         Conflict = true,
@@ -411,11 +416,11 @@ namespace XrmToolBox.PluginsStore
             {
                 using (StreamReader reader = new StreamReader(filePath))
                 {
-                    var existingPds = (PluginDeletions) XmlSerializerHelper.Deserialize(reader.ReadToEnd(), typeof(PluginDeletions));
+                    var existingPds = (PluginDeletions)XmlSerializerHelper.Deserialize(reader.ReadToEnd(), typeof(PluginDeletions));
                     deletions.Plugins.AddRange(existingPds.Plugins);
                 }
             }
-            
+
             XmlSerializerHelper.SerializeToFile(deletions, filePath);
 
             if (DialogResult.Yes == MessageBox.Show(
@@ -423,6 +428,17 @@ namespace XrmToolBox.PluginsStore
                 "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
             {
                 Application.Restart();
+            }
+        }
+
+        public void UninstallByFileName(string fileName)
+        {
+            var package = GetPackageByFileName(fileName.ToLower());
+
+            if (package != null)
+            {
+                var pds = PrepareUninstallPlugins(new List<XtbNuGetPackage> { package });
+                PerformUninstallation(pds);
             }
         }
 
@@ -453,8 +469,7 @@ namespace XrmToolBox.PluginsStore
             if (Directory.Exists(nugetPluginsFolder))
             {
                 var size = GetDirectorySize(nugetPluginsFolder);
-                return size/1024/1024;
-
+                return size / 1024 / 1024;
             }
 
             return 0;

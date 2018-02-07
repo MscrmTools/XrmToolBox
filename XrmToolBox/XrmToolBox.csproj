@@ -174,6 +174,12 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Serialization" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=3.0.4.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>..\packages\DockPanelSuite.3.0.4\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=3.0.4.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>..\packages\DockPanelSuite.ThemeVS2015.3.0.4\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +191,7 @@
     <Compile Include="AppCode\Markdown.cs" />
     <Compile Include="AppCode\PluginControlStatus.cs" />
     <Compile Include="AppCode\PluginUpdates.cs" />
+    <Compile Include="AppCode\ReleasesDTO.cs" />
     <Compile Include="AppCode\WebProxyHelper.cs" />
     <Compile Include="ConnectionParameterInfo.cs" />
     <Compile Include="Controls\ConnectingControl.cs">
@@ -242,6 +249,36 @@
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </Compile>
     <Compile Include="ProxySettingsHelper.cs" />
+    <Compile Include="TempNew\EventArgs\OpenPluginEventArgs.cs" />
+    <Compile Include="TempNew\EventArgs\PluginEventArgs.cs" />
+    <Compile Include="TempNew\EventArgs\PluginsListEventArgs.cs" />
+    <Compile Include="TempNew\NewForm.Community.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TempNew\NewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TempNew\NewForm.Designer.cs">
+      <DependentUpon>NewForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TempNew\NewVersionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TempNew\NewVersionForm.Designer.cs">
+      <DependentUpon>NewVersionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TempNew\PluginForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TempNew\PluginForm.Designer.cs">
+      <DependentUpon>PluginForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TempNew\PluginsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TempNew\PluginsForm.Designer.cs">
+      <DependentUpon>PluginsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI.cs" />
     <Compile Include="XmlSerializerHelper.cs" />
     <EmbeddedResource Include="Controls\ConnectingControl.resx">
@@ -274,6 +311,18 @@
     </Compile>
     <EmbeddedResource Include="Forms\TabConnectionUpdater.resx">
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TempNew\NewForm.resx">
+      <DependentUpon>NewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TempNew\NewVersionForm.resx">
+      <DependentUpon>NewVersionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TempNew\PluginForm.resx">
+      <DependentUpon>PluginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TempNew\PluginsForm.resx">
+      <DependentUpon>PluginsForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config">
       <SubType>Designer</SubType>

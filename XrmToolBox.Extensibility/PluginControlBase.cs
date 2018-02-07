@@ -50,6 +50,10 @@ namespace XrmToolBox.Extensibility
 
         public Image TabIcon { get; set; }
 
+        [Category("Plugin Control Properties")]
+        [Description("Icon")]
+        public Icon PluginIcon { get; set; }
+
         #region IMsCrmToolsPluginUserControl Members
 
         public event EventHandler OnCloseTool;

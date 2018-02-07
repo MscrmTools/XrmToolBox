@@ -59,6 +59,8 @@ namespace XrmToolBox
 
     public class Options : ICloneable
     {
+        private static Options innerOptions;
+
         public Options()
         {
             CheckUpdateOnStartup = true;
@@ -70,6 +72,22 @@ namespace XrmToolBox
             AllowLogUsage = null;
             DisplayPluginsStoreOnStartup = true;
             HiddenPlugins = new List<string>();
+        }
+
+        public static Options Instance
+        {
+            get
+            {
+                if (innerOptions == null)
+                {
+                    if (!Load(out innerOptions, out var message))
+                    {
+                        throw new Exception(message);
+                    }
+                }
+
+                return innerOptions;
+            }
         }
 
         public bool DisplayRecentlyUpdatedFirst { get; set; }
@@ -103,6 +121,7 @@ namespace XrmToolBox
         public bool RememberSession { get; set; }
         public bool ReuseConnections { get; set; }
         public string DisplayOrder { get; set; }
+        public bool? PluginsStoreUseLegacy { get; set; }
 
         public static bool Load(out Options options, out string errorMessage)
         {
@@ -172,7 +191,12 @@ namespace XrmToolBox
                 DisplayPluginsStoreOnlyIfUpdates = DisplayPluginsStoreOnlyIfUpdates,
                 DoNotCheckForUpdates = DoNotCheckForUpdates,
                 MergeConnectionFiles = MergeConnectionFiles,
-                DisplayOrder = DisplayOrder
+                DisplayOrder = DisplayOrder,
+                PluginsStoreUseLegacy = PluginsStoreUseLegacy,
+                PluginsStoreShowIncompatible = PluginsStoreShowIncompatible,
+                PluginsStoreShowInstalled = PluginsStoreShowInstalled,
+                PluginsStoreShowNew = PluginsStoreShowNew,
+                PluginsStoreShowUpdates = PluginsStoreShowUpdates
             };
         }
 
@@ -186,6 +210,11 @@ namespace XrmToolBox
             var settingsFile = Path.Combine(Paths.SettingsPath, "XrmToolBox.Settings.xml");
 
             XmlSerializerHelper.SerializeToFile(this, settingsFile);
+        }
+
+        public void Replace(Options newOption)
+        {
+            innerOptions = newOption;
         }
     }
 }

@@ -17,7 +17,8 @@ using System.Runtime.Serialization;
 
 namespace XrmToolBox.PluginsStore
 {
-    public class StoreFromPortal
+    public class StoreFromPortal : IStore
+
     {
         public static readonly Version MinCompatibleVersion = new Version(1, 2015, 12, 20);
 
@@ -26,6 +27,8 @@ namespace XrmToolBox.PluginsStore
         private FileInfo[] plugins;
         private Dictionary<string, int> currentVersionDownloadsCount;
         public XtbPlugins XrmToolBoxPlugins { get; set; }
+        public int PluginsCount => XrmToolBoxPlugins?.Plugins.Count ?? 0;
+        public bool HasUpdates => XrmToolBoxPlugins?.Plugins.Any(p => p.Action == PackageInstallAction.Update) ?? false;
         private PackageManager manager;
 
         public StoreFromPortal()
@@ -120,6 +123,12 @@ namespace XrmToolBox.PluginsStore
         public XtbPlugin GetPluginByFileName(string filename)
         {
             return XrmToolBoxPlugins.Plugins.FirstOrDefault(p => p.Files.Any(f => f.ToLower().IndexOf(filename.ToLower(), StringComparison.Ordinal) >= 0));
+        }
+
+        public string GetPluginProjectUrlByFileName(string fileName)
+        {
+            XtbPlugin plugin = GetPluginByFileName(fileName);
+            return plugin?.ProjectUrl;
         }
 
         public PluginUpdates PrepareInstallationPackages(List<XtbPlugin> pluginsToInstall)
@@ -380,6 +389,17 @@ namespace XrmToolBox.PluginsStore
                 "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
             {
                 Application.Restart();
+            }
+        }
+
+        public void UninstallByFileName(string fileName)
+        {
+            var plugin = GetPluginByFileName(fileName.ToLower());
+
+            if (plugin != null)
+            {
+                var pds = PrepareUninstallPlugins(new List<XtbPlugin> { plugin });
+                PerformUninstallation(pds);
             }
         }
 

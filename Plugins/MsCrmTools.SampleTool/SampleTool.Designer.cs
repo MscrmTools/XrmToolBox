@@ -67,6 +67,7 @@
             // 
             // toolStripMenu
             // 
+            this.toolStripMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbClose,
             this.toolStripSeparator2,
@@ -87,7 +88,7 @@
             this.tsbClose.Image = ((System.Drawing.Image)(resources.GetObject("tsbClose.Image")));
             this.tsbClose.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(23, 29);
+            this.tsbClose.Size = new System.Drawing.Size(28, 29);
             this.tsbClose.Text = "Close this tool";
             this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             // 
@@ -101,7 +102,7 @@
             this.tsbWhoAmI.Image = ((System.Drawing.Image)(resources.GetObject("tsbWhoAmI.Image")));
             this.tsbWhoAmI.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbWhoAmI.Name = "tsbWhoAmI";
-            this.tsbWhoAmI.Size = new System.Drawing.Size(110, 29);
+            this.tsbWhoAmI.Size = new System.Drawing.Size(118, 29);
             this.tsbWhoAmI.Text = "Who am I";
             this.tsbWhoAmI.ToolTipText = "Perfomrs a Who I Am request";
             this.tsbWhoAmI.Click += new System.EventHandler(this.tsbWhoAmI_Click);
@@ -117,7 +118,7 @@
             this.tsbCancel.Image = ((System.Drawing.Image)(resources.GetObject("tsbCancel.Image")));
             this.tsbCancel.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCancel.Name = "tsbCancel";
-            this.tsbCancel.Size = new System.Drawing.Size(83, 29);
+            this.tsbCancel.Size = new System.Drawing.Size(91, 29);
             this.tsbCancel.Text = "Cancel";
             this.tsbCancel.ToolTipText = "Cancel the current request";
             this.tsbCancel.Click += new System.EventHandler(this.tsbCancel_Click);
@@ -135,6 +136,7 @@
             this.Controls.Add(this.gbOptions);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "SampleTool";
+            this.PluginIcon = ((System.Drawing.Icon)(resources.GetObject("$this.PluginIcon")));
             this.Size = new System.Drawing.Size(450, 462);
             this.Load += new System.EventHandler(this.SampleTool_Load);
             this.gbOptions.ResumeLayout(false);

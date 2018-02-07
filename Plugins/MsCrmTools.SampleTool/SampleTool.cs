@@ -56,6 +56,7 @@ namespace MsCrmTools.SampleTool
                     // a long running process made of multiple calls
                     do
                     {
+                        w.ReportProgress(10, "Un message...");
                         if (w.CancellationPending)
                         {
                             e.Cancel = true;
@@ -74,7 +75,7 @@ namespace MsCrmTools.SampleTool
                     // If progress has to be notified to user, through the
                     // status bar, use the following method
                     if (SendMessageToStatusBar != null)
-                        SendMessageToStatusBar(this, new StatusBarMessageEventArgs(50, "progress at 50%"));
+                        SendMessageToStatusBar(this, new StatusBarMessageEventArgs(e.ProgressPercentage, e.UserState.ToString()));
                 },
                 PostWorkCallBack = e =>
                 {

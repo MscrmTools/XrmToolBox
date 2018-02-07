@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="DTO\XtbPlugin.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="IStore.cs" />
     <Compile Include="IStoreForm.cs" />
     <Compile Include="ListViewItemComparer.cs" />
     <Compile Include="Options.cs" />
