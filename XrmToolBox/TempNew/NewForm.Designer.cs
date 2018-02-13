@@ -533,6 +533,7 @@
             // dpMain
             // 
             this.dpMain.BackColor = System.Drawing.Color.White;
+            this.dpMain.DefaultFloatWindowSize = new System.Drawing.Size(800, 600);
             this.dpMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dpMain.Location = new System.Drawing.Point(0, 0);
             this.dpMain.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
