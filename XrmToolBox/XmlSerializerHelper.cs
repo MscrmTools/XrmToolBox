@@ -25,6 +25,13 @@ namespace XrmToolBox
             return s.Deserialize(reader);
         }
 
+        public static object Deserialize(string xmlContent, Type objectType, string rootElement)
+        {
+            StringReader reader = new StringReader(xmlContent);
+            XmlSerializer s = new XmlSerializer(objectType, new XmlRootAttribute(rootElement));
+            return s.Deserialize(reader);
+        }
+
         /// <summary>
         /// Sérialise un objet sous forme de chaine de caractère Xml
         /// </summary>

@@ -68,7 +68,12 @@ namespace XrmToolBox.TempNew
             pluginsForm.OpenPluginProjectUrlRequested += PluginsForm_OpenPluginProjectUrlRequested;
             pluginsForm.UninstallPluginRequested += PluginsForm_UninstallPluginRequested;
             pluginsForm.ActionRequested += PluginsForm_ActionRequested;
-            pluginsForm.Show(dpMain, DockState.Document);
+            pluginsForm.Show(dpMain, Options.Instance.PluginsListDocking);
+            pluginsForm.IsHidden = Options.Instance.PluginsListIsHidden;
+
+            var startPage = new StartPage(pluginsForm.PluginManager);
+            startPage.OpenMruPluginRequested += StartPage_OpenMruPluginRequested;
+            startPage.Show(dpMain, DockState.Document);
 
             // Connection Management
             blackScreen.SetWorkingMessage("Loading connection controls...");
@@ -102,6 +107,41 @@ namespace XrmToolBox.TempNew
 
                     pnlConnectLoading.Visible = true;
                     lblConnecting.Text = string.Format(lblConnecting.Tag.ToString(), initialConnectionName);
+                }
+            }
+        }
+
+        private void StartPage_OpenMruPluginRequested(object sender, OpenMruPluginEventArgs e)
+        {
+            var cid = e.Item.ConnectionId;
+
+            foreach (var file in ConnectionsList.Instance.Files)
+            {
+                var cList = CrmConnections.LoadFromFile(file.Path);
+                var connection = cList.Connections.FirstOrDefault(c => c.ConnectionId == cid);
+                if (connection != null)
+                {
+                    initialPluginName = e.Item.PluginName;
+                    initialConnectionName = e.Item.ConnectionName;
+
+                    if (e.Item.ConnectionName != connectionDetail?.ConnectionName)
+                    {
+                        var info = new ConnectionParameterInfo();
+
+                        var connectingControl = new ConnectingControl { Anchor = AnchorStyles.None };
+                        connectingControl.Left = Width / 2 - connectingControl.Width / 2;
+                        connectingControl.Top = Height / 2 - connectingControl.Height / 2;
+                        Controls.Add(connectingControl);
+                        connectingControl.BringToFront();
+
+                        info.ConnControl = connectingControl;
+
+                        ConnectionManager.Instance.ConnectToServer(connection, info);
+                    }
+                    else
+                    {
+                        StartPluginWithConnection();
+                    }
                 }
             }
         }
@@ -328,6 +368,10 @@ namespace XrmToolBox.TempNew
 
             try
             {
+                var mruItem = new MostRecentlyUsedItem();
+                mruItem.PluginName = plugin.Metadata.Name;
+                mruItem.Date = DateTime.Now;
+
                 var pluginControl = (UserControl)plugin.Value.GetControl();
                 pluginControl.Tag = pluginControlInstanceId;
 
@@ -339,6 +383,9 @@ namespace XrmToolBox.TempNew
 
                 if (service != null)
                 {
+                    mruItem.ConnectionId = connectionDetail.ConnectionId ?? Guid.Empty;
+                    mruItem.ConnectionName = connectionDetail.ConnectionName;
+
                     var crmSvcClient = connectionDetail.GetCrmServiceClient();
 
                     var clonedService = crmSvcClient.OrganizationServiceProxy;
@@ -368,9 +415,8 @@ namespace XrmToolBox.TempNew
                     }
                 }
 
-                // TODO
-                //((IXrmToolBoxPluginControl)pluginControl).OnRequestConnection += MainForm_OnRequestConnection;
-
+                ((IXrmToolBoxPluginControl)pluginControl).OnRequestConnection += NewForm_OnRequestConnection;
+                ((IXrmToolBoxPluginControl)pluginControl).OnCloseTool += NewForm_OnCloseTool;
                 string name = $"{plugin.Metadata.Name} ({connectionDetail?.ConnectionName ?? "Not connected"})";
 
                 var pluginForm = new PluginForm(pluginControl, name);
@@ -431,6 +477,19 @@ namespace XrmToolBox.TempNew
                     }
                 }
 
+                var existingItem = MostRecentlyUsedItems.Instance.Items.FirstOrDefault(i
+                => i.PluginName == mruItem.PluginName && i.ConnectionId == mruItem.ConnectionId);
+                if (existingItem == null)
+                {
+                    MostRecentlyUsedItems.Instance.Items.Add(mruItem);
+                    MostRecentlyUsedItems.Instance.Save();
+                }
+                else
+                {
+                    existingItem.Date = DateTime.Now;
+                    MostRecentlyUsedItems.Instance.Save();
+                }
+
                 if (Options.Instance.AllowLogUsage.HasValue && Options.Instance.AllowLogUsage.Value)
                 {
 #pragma warning disable CS4014
@@ -451,6 +510,19 @@ namespace XrmToolBox.TempNew
                 MessageBox.Show(this, $@"An error occured when trying to display this plugin: {error.Message}", @"Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void NewForm_OnCloseTool(object sender, System.EventArgs e)
+        {
+            if (dpMain.ActiveContent is PluginForm pluginForm)
+            {
+                RequestCloseTab(pluginForm, new PluginCloseInfo(), Options.Instance.CloseEachPluginSilently);
+            }
+        }
+
+        private void NewForm_OnRequestConnection(object sender, System.EventArgs e)
+        {
+            ConnectUponApproval(e is RequestConnectionEventArgs ? e : sender);
         }
 
         private void tstSearch_TextChanged(object sender, System.EventArgs e)
@@ -489,6 +561,7 @@ namespace XrmToolBox.TempNew
                 {
                     var us = parameter.ConnectionParmater as UserControl;
                     var p = parameter.ConnectionParmater as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
+                    var rcea = parameter.ConnectionParmater as RequestConnectionEventArgs;
 
                     if (us != null)
                     {
@@ -506,26 +579,23 @@ namespace XrmToolBox.TempNew
                     {
                         DisplayPluginControl(p);
                     }
-                    else if (parameter.ConnectionParmater.ToString() == "ApplyConnectionToTabs" && dpMain.Contents.Count > 1)
+                    else if (parameter.ConnectionParmater?.ToString() == "ApplyConnectionToTabs" && dpMain.Contents.OfType<PluginForm>().Count() > 0)
                     {
                         ApplyConnectionToTabs();
                     }
-                    else
+                    else if (rcea != null)
                     {
-                        if (parameter.ConnectionParmater is RequestConnectionEventArgs args)
-                        {
-                            var userControl = (UserControl)args.Control;
+                        var userControl = (UserControl)rcea.Control;
 
-                            args.Control.UpdateConnection(e.OrganizationService, connectionDetail, args.ActionName, args.Parameter);
+                        rcea.Control.UpdateConnection(e.OrganizationService, connectionDetail, rcea.ActionName, rcea.Parameter);
 
-                            var indexOfParenthesis = userControl.Parent.Text?.IndexOf("(") ?? -1;
-                            var pluginName = userControl.Parent.Text?.Substring(0, indexOfParenthesis - 1) ?? "N/A";
+                        var indexOfParenthesis = userControl.Parent.Text?.IndexOf("(") ?? -1;
+                        var pluginName = userControl.Parent.Text?.Substring(0, indexOfParenthesis - 1) ?? "N/A";
 
-                            userControl.Parent.Text = $@"{pluginName} ({e.ConnectionDetail.ConnectionName})";
-                        }
+                        userControl.Parent.Text = $@"{pluginName} ({e.ConnectionDetail.ConnectionName})";
                     }
                 }
-                else if (dpMain.Contents.Count > 1)
+                else if (dpMain.Contents.OfType<PluginForm>().Count() > 1)
                 {
                     ApplyConnectionToTabs();
                 }
@@ -709,44 +779,51 @@ namespace XrmToolBox.TempNew
                 blackScreen.SetWorkingMessage("Checking for XrmToolBox update...");
 
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-
-                var request = WebRequest.CreateHttp("https://www.xrmtoolbox.com/_odata/releases");
-                var response = request.GetResponse();
-                Releases releases = null;
-                using (Stream dataStream = response.GetResponseStream())
+                try
                 {
-                    if (dataStream != null)
+                    var request = WebRequest.CreateHttp("https://www.xrmtoolbox.com/_odata/releases");
+                    var response = request.GetResponse();
+                    Releases releases = null;
+                    using (Stream dataStream = response.GetResponseStream())
                     {
-                        var serializer = new DataContractJsonSerializer(typeof(Releases),
-                            new DataContractJsonSerializerSettings
-                            {
-                                UseSimpleDictionaryFormat = true,
-                                DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ss", new DateTimeFormatInfo { FullDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss" })
-                            });
-
-                        releases = (Releases)serializer.ReadObject(dataStream);
-                    }
-                }
-
-                if (releases != null)
-                {
-                    var lastReleaseVersion = releases.Items.Max(i => new Version(i.Version));
-                    // TODO remove for release
-                    //if (lastReleaseVersion > currentVersion &&
-                    //    Options.Instance.LastUpdateCheck.Date != DateTime.Now.Date)
-                    {
-                        var release = releases.Items.FirstOrDefault(r => r.Version == lastReleaseVersion.ToString());
-
-                        Invoke(new Action(() =>
+                        if (dataStream != null)
                         {
-                            var nvForm = new TempNew.NewVersionForm(release.Version, new Uri(release.DownloadUrl));
-                            nvForm.Show(dpMain, DockState.Document);
-                        }));
-                    }
-                }
+                            var serializer = new DataContractJsonSerializer(typeof(Releases),
+                                new DataContractJsonSerializerSettings
+                                {
+                                    UseSimpleDictionaryFormat = true,
+                                    DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ss",
+                                        new DateTimeFormatInfo { FullDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss" })
+                                });
 
-                Options.Instance.LastUpdateCheck = DateTime.Now;
-                Options.Instance.Save();
+                            releases = (Releases)serializer.ReadObject(dataStream);
+                        }
+                    }
+
+                    if (releases != null)
+                    {
+                        var lastReleaseVersion = releases.Items.Max(i => new Version(i.Version));
+                        // TODO remove for release
+                        //if (lastReleaseVersion > currentVersion &&
+                        //    Options.Instance.LastUpdateCheck.Date != DateTime.Now.Date)
+                        {
+                            var release =
+                                releases.Items.FirstOrDefault(r => r.Version == lastReleaseVersion.ToString());
+
+                            Invoke(new Action(() =>
+                            {
+                                var nvForm = new TempNew.NewVersionForm(release.Version, new Uri(release.DownloadUrl));
+                                nvForm.Show(dpMain, DockState.Document);
+                            }));
+                        }
+                    }
+
+                    Options.Instance.LastUpdateCheck = DateTime.Now;
+                    Options.Instance.Save();
+                }
+                catch
+                {
+                }
             });
         }
 
@@ -1010,6 +1087,8 @@ namespace XrmToolBox.TempNew
             Options.Instance.Size.CurrentSize = Size;
             Options.Instance.Size.IsMaximized = WindowState == FormWindowState.Maximized;
             Options.Instance.LastConnection = connectionDetail?.ConnectionName;
+            Options.Instance.PluginsListDocking = pluginsForm.DockState;
+            Options.Instance.PluginsListIsHidden = pluginsForm.IsHidden;
 
             if (dpMain.ActiveContent is PluginForm pf)
             {

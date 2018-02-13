@@ -13,6 +13,10 @@ namespace XrmToolBox.Forms
         {
             InitializeComponent();
 
+            // Set drawing optimizations
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+
             lblVersion.Text = string.Format("version: {0}", version);
 
             ManageLicense();

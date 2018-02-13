@@ -189,6 +189,7 @@
     <Compile Include="AppCode\ListViewItemComparer.cs" />
     <Compile Include="AppCode\LogUsage.cs" />
     <Compile Include="AppCode\Markdown.cs" />
+    <Compile Include="AppCode\MostRecentlyUsedItems.cs" />
     <Compile Include="AppCode\PluginControlStatus.cs" />
     <Compile Include="AppCode\PluginUpdates.cs" />
     <Compile Include="AppCode\ReleasesDTO.cs" />
@@ -249,9 +250,16 @@
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </Compile>
     <Compile Include="ProxySettingsHelper.cs" />
+    <Compile Include="TempNew\EventArgs\OpenMruPluginEventArgs.cs" />
     <Compile Include="TempNew\EventArgs\OpenPluginEventArgs.cs" />
     <Compile Include="TempNew\EventArgs\PluginEventArgs.cs" />
     <Compile Include="TempNew\EventArgs\PluginsListEventArgs.cs" />
+    <Compile Include="TempNew\MostRecentlyUsedItemControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TempNew\MostRecentlyUsedItemControl.Designer.cs">
+      <DependentUpon>MostRecentlyUsedItemControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="TempNew\NewForm.Community.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -278,6 +286,12 @@
     </Compile>
     <Compile Include="TempNew\PluginsForm.Designer.cs">
       <DependentUpon>PluginsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TempNew\StartPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TempNew\StartPage.Designer.cs">
+      <DependentUpon>StartPage.cs</DependentUpon>
     </Compile>
     <Compile Include="UI.cs" />
     <Compile Include="XmlSerializerHelper.cs" />
@@ -312,6 +326,9 @@
     <EmbeddedResource Include="Forms\TabConnectionUpdater.resx">
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TempNew\MostRecentlyUsedItemControl.resx">
+      <DependentUpon>MostRecentlyUsedItemControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TempNew\NewForm.resx">
       <DependentUpon>NewForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -323,6 +340,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TempNew\PluginsForm.resx">
       <DependentUpon>PluginsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TempNew\StartPage.resx">
+      <DependentUpon>StartPage.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config">
       <SubType>Designer</SubType>
@@ -337,6 +357,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon3Fr.ico" />
+    <None Include="Resources\logo_0032.png" />
+    <None Include="Resources\twitter.png" />
+    <None Include="Resources\Gitter32.png" />
+    <None Include="Resources\paypal.png" />
     <Content Include="XrmToolBox.ico" />
     <Content Include="XrmToolBox201512.ico" />
     <EmbeddedResource Include="Images\nologo32.png" />
@@ -378,7 +402,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

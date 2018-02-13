@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -19,6 +20,8 @@ namespace XrmToolBox.TempNew
 
             this.version = version;
             this.downloadUrl = downloadUrl;
+
+            pictureBox1.BackColor = Color.Transparent;
         }
 
         private void NewVersionForm_Load(object sender, System.EventArgs e)

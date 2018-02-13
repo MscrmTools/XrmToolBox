@@ -5,6 +5,7 @@ using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
+using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.Extensibility;
 
 namespace XrmToolBox
@@ -122,6 +123,8 @@ namespace XrmToolBox
         public bool ReuseConnections { get; set; }
         public string DisplayOrder { get; set; }
         public bool? PluginsStoreUseLegacy { get; set; }
+        public DockState PluginsListDocking { get; set; } = DockState.Document;
+        public bool PluginsListIsHidden { get; set; } = false;
 
         public static bool Load(out Options options, out string errorMessage)
         {

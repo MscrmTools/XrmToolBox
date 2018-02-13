@@ -117,17 +117,66 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="Gitter32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Gitter32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="lblWelcomeDescription.Text" xml:space="preserve">
+    <value>This application will improve your productivity when customizing, developing and administering Microsoft Dynamics 365 Customer Engagement.
+
+XrmToolBox is provided with all MscrmTools plugins included. You can browse Plugins Store to find additional plugins.
+
+Connect to your organization and enjoy the power of the XrmToolBox plugins.</value>
   </data>
-  <data name="twitter" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\twitter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="lblManageConnections.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+</value>
   </data>
-  <data name="logo_0032" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\logo_0032.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="paypal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\paypal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="lblOpenPluginsStore.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC45bDN+TgAABLtJREFUWEe1V2ts
+        FFUUribGQIwxvpLandmyFgmYYIwaJRiCMRL1hwg+ApGAMdofQoPtzGyLrdkgAaKiYNAYxKYxosjDNNS2
+        2r0z3S19CKW2XVsobWMrJS1t6YOlL3bb7fGc2+1m2l6207J8yZe9j3PP+e6ZM3fnxllFgqovl1R9l6yx
+        o7KqZ0sq25yUUnh3ePr2IT45byEGzsagv0pO/SVbqp4gafp2FHJc0lg5MhXF7JMzmCO8JHZ4KrnqLnRe
+        KCv6m9SPT/M8aNfc+Sjmq0TNWJKguRfj/F+SaqyRncxr1/TX+cJYwaaxLJuqb6X2MpfnHll1l0rp7Hk+
+        GYaksC2ywjRbasUCWWVeFPNoeOrWEO+qWigpekWcy3Un9XGnB+2qvo5PmmBLPbYA54p5WylahSIO8Alc
+        R1lKVIqe5f25wq4Zr+JzzqL2IxnsAXzWBp8QwKay0xRMVos2Yb104CPCTOh+WdOBiAIL7E730rC5NVCh
+        2Z3Gemrjrt6wqyyNT+DOFmWwx2yasREd70M7DwoNTga7KVU2SoUsa8Z+yenO5L6iARekSIrxtkPzYqHp
+        hzDIn7Lm9mD7mjDAnMj84TAmANzhwKq2K/oGTPcXaFiDwcZmLo4FBQKokMTGM7ncVSIct06RAE2vMBs5
+        Mgx4bncZ/zWPP72rFNYerJwyNndaELD9aD2MjwP0DwVh65G6yPi2n+tg/bfnIv35MYqAxz/xwpM7T3PD
+        9JMXIIQqgmPjsAKzQWMnznXAW99VRZwt3lEMrxw4G+lbYxQBtPPmrkGeauqfqrkChG2YBUe6AX2YkQ2H
+        /o44c55ogM0/1ET61hhFwDuHq3nAtt5h2J3fBN3XA7yf8ksdbMmu4e1NaEO2Sbh7snsvpzbi/AlLBRpF
+        QKLTAM/FHh7IDKqFyXESQrZ7Cpp5P/lHH++/hsV5rLLdFOhmnKUIF2GqP0Cnn+Y1weGSS1gDIR5oODAG
+        bX0TO171WQXvEz78qQ5e+LwC+gaDUFTfPS2YiLMImE56xoM3JoKNBEOgHr8Avst+3ieQ0Mt9I7ztaegR
+        +phKywIY58q9ZdDaMwwDI6M8CGWk9eoQbxPOtvSHWwBlzb3TfIg4xwwU/NPFnXf5b8C14SBvj4XGoaV7
+        CDpxjJ3v5mOEShQj8jGVcxBAz9uMqwMBzkmQEDon6BH0Dgagts0/w8dMWhTwDJ4F5mCT+N3XxQuOQDUx
+        aUOv5Pn261N8iGlBwJJMD1Rfmii0wGgIShp7Ia+2E77HtyKnrA0aOwf5nBdfzdzqK9CCNTGK2ShtilEN
+        FGM1D+Fr9rXeCmu+PAPv5/jgXXz/P8KT8uPfGqAAs0Bo7x+BfF8nNHQM8BO0PlYZ+KOuG1bsmTj/RVy5
+        tzySetr1siwvLMWsrfvGyh+VBQF2p3mBmPSntfNUI+x3t8BqPIhENmJaLMLbR4EA+qLFXR/Bb8GL+PEY
+        Ei+MFQUCzEhyFd6boLDVNkVX0BjvgqwZf8fFzubDWQSIYHd57sOv4hcxO050gPdC/V90Ni9RtDbs9taA
+        17H76cKK17Md6PQkZuo/UcAJ4t3ByXLx43ct3TnDLmIPvLI/hJeYl1FYJgrKxcBnMGiaQyl/OGxiQlzc
+        /9SGJvqD2XHFAAAAAElFTkSuQmCC
+</value>
   </data>
 </root>
