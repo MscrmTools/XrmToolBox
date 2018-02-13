@@ -41,7 +41,7 @@ namespace XrmToolBox.AppCode
             return isDisabled;
         }
 
-        public bool HasPluginsRestriction => plugins.Count > 0 && plugins.All(p => p != "*");
+        public bool HasPluginsRestriction => plugins?.Count > 0 && plugins.All(p => p != "*");
 
         public void LoadAllowedPlugins()
         {
