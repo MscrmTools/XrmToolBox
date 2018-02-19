@@ -42,8 +42,9 @@
             this.NotifPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.NotifPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.NotifPanel.Location = new System.Drawing.Point(0, 0);
+            this.NotifPanel.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.NotifPanel.Name = "NotifPanel";
-            this.NotifPanel.Size = new System.Drawing.Size(937, 47);
+            this.NotifPanel.Size = new System.Drawing.Size(625, 31);
             this.NotifPanel.TabIndex = 0;
             this.NotifPanel.Visible = false;
             // 
@@ -53,9 +54,10 @@
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel,
             this.toolStripProgressBar});
-            this.statusStrip.Location = new System.Drawing.Point(0, 489);
+            this.statusStrip.Location = new System.Drawing.Point(0, 318);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(937, 28);
+            this.statusStrip.Padding = new System.Windows.Forms.Padding(1, 0, 9, 0);
+            this.statusStrip.Size = new System.Drawing.Size(625, 18);
             this.statusStrip.TabIndex = 1;
             this.statusStrip.Text = "statusStrip1";
             this.statusStrip.Visible = false;
@@ -63,25 +65,26 @@
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(720, 23);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(480, 13);
             this.toolStripStatusLabel.Spring = true;
             this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // toolStripProgressBar
             // 
             this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(200, 22);
+            this.toolStripProgressBar.Size = new System.Drawing.Size(133, 12);
             this.toolStripProgressBar.Step = 1;
             this.toolStripProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             // 
             // PluginForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(937, 517);
+            this.ClientSize = new System.Drawing.Size(625, 336);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.NotifPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "PluginForm";
             this.Text = "Plugin Form";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PluginForm_FormClosing);

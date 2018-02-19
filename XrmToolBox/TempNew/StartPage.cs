@@ -21,6 +21,10 @@ namespace XrmToolBox.TempNew
 
         public event EventHandler<OpenMruPluginEventArgs> OpenMruPluginRequested;
 
+        public event EventHandler OpenPluginsStoreRequested;
+
+        public event EventHandler OpenConnectionsManagementRequested;
+
         private void LoadMru(PluginManagerExtended pManager)
         {
             foreach (var mru in MostRecentlyUsedItems.Instance.Items.OrderByDescending(i => i.Date))
@@ -59,11 +63,11 @@ namespace XrmToolBox.TempNew
         {
             if (sender == lblOpenPluginsStore)
             {
-                MessageBox.Show("Not implemented yet!");
+                OpenPluginsStoreRequested?.Invoke(this, new System.EventArgs());
             }
             else if (sender == lblManageConnections)
             {
-                MessageBox.Show("Not implemented yet!");
+                OpenConnectionsManagementRequested?.Invoke(this, new System.EventArgs());
             }
             else if (sender == lblVisitXrmToolBoxPortal)
             {
@@ -131,6 +135,19 @@ namespace XrmToolBox.TempNew
 
                 pnlMain.Controls.AddRange(controls.ToArray());
             }
+        }
+
+        private void lblWelcomeDescription_Resize(object sender, System.EventArgs e)
+        {
+            Size sz = new Size(lblWelcomeDescription.Width, Int32.MaxValue);
+            sz = TextRenderer.MeasureText(lblWelcomeDescription.Text, lblWelcomeDescription.Font, sz, TextFormatFlags.WordBreak);
+            lblWelcomeDescription.Height = sz.Height + Padding.Bottom + Padding.Top + 20;
+        }
+
+        private void chkDoNotShowAtStartup_CheckedChanged(object sender, System.EventArgs e)
+        {
+            Options.Instance.DoNotShowStartPage = chkDoNotShowAtStartup.Checked;
+            Options.Instance.Save();
         }
     }
 }

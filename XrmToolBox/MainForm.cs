@@ -60,8 +60,8 @@ namespace XrmToolBox
         {
             InitializeComponent();
 
-            var newForm = new NewForm(args);
-            newForm.Show();
+            //var newForm = new NewForm(args);
+            //newForm.Show();
             return;
 
             pluginsModels = new List<PluginModel>();
@@ -72,10 +72,10 @@ namespace XrmToolBox
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 
             // Displaying Welcome screen
-            var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
-            blackScreen.Show(this);
-            blackScreen.SetWorkingMessage("Loading...");
+            //var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            //blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
+            //blackScreen.Show(this);
+            //blackScreen.SetWorkingMessage("Loading...");
 
             // Loading XrmToolBox options
             string errorMessage;
@@ -117,7 +117,7 @@ namespace XrmToolBox
             Text = string.Format("{0} (v{1})", Text, Assembly.GetExecutingAssembly().GetName().Version);
 
             // Loading connection controls
-            blackScreen.SetWorkingMessage("Loading connection controls...");
+            // blackScreen.SetWorkingMessage("Loading connection controls...");
             ManageConnectionControl();
             ccsb.MergeConnectionsFiles = currentOptions.MergeConnectionFiles;
         }
@@ -289,7 +289,7 @@ namespace XrmToolBox
                     return;
                 }
 
-                blackScreen.SetWorkingMessage("Checking for XrmToolBox update...");
+                //blackScreen.SetWorkingMessage("Checking for XrmToolBox update...");
 
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
                 var cvc = new GithubVersionChecker(currentVersion, "MsCrmTools", "XrmToolBox");
@@ -377,7 +377,7 @@ namespace XrmToolBox
 
             tstxtFilterPlugin.AutoCompleteCustomSource.AddRange(pManager.Plugins.Select(p => p.Metadata.Name).ToArray());
 
-            blackScreen.SetWorkingMessage("Loading plugins...");
+            //blackScreen.SetWorkingMessage("Loading plugins...");
             DisplayPlugins();
 
             var tasks = new List<Task>
@@ -488,8 +488,7 @@ namespace XrmToolBox
 
         private void aboutXrmToolBoxToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            var aForm = new WelcomeDialog(version, false) { StartPosition = FormStartPosition.CenterParent };
+            var aForm = new WelcomeDialog(false) { StartPosition = FormStartPosition.CenterParent };
             aForm.ShowDialog(this);
         }
 

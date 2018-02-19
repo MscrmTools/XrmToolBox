@@ -38,9 +38,11 @@ namespace XrmToolBox.AppCode
 
         public void Save()
         {
-            if (Items.Count > 10)
+            int count = Options.Instance.MruItemsToDisplay;
+
+            if (Items.Count > count)
             {
-                Items.RemoveRange(0, Items.Count - 10);
+                Items.RemoveRange(0, Items.Count - count);
             }
 
             if (!Directory.Exists(Paths.SettingsPath))
@@ -85,6 +87,17 @@ namespace XrmToolBox.AppCode
 
             mrus = new MostRecentlyUsedItems();
             return true;
+        }
+
+        public void RemovePluginsWithNoConnection()
+        {
+            for (var i = Items.Count - 1; i >= 0; i--)
+            {
+                if (Items[i].ConnectionId == Guid.Empty)
+                {
+                    Items.Remove(Items[i]);
+                }
+            }
         }
     }
 

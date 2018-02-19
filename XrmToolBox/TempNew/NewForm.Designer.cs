@@ -77,10 +77,10 @@
             this.lblTitle = new System.Windows.Forms.Label();
             this.llDismiss = new System.Windows.Forms.LinkLabel();
             this.pnlBottom = new System.Windows.Forms.Panel();
-            this.dpMain = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.pnlConnectLoading = new System.Windows.Forms.Panel();
             this.lblConnecting = new System.Windows.Forms.Label();
             this.pbConnectionLoading = new System.Windows.Forms.PictureBox();
+            this.dpMain = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.tsMain.SuspendLayout();
             this.pnlSupport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -415,7 +415,7 @@
             this.pnlTop.BackColor = System.Drawing.SystemColors.Info;
             this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTop.Location = new System.Drawing.Point(0, 25);
-            this.pnlTop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlTop.Margin = new System.Windows.Forms.Padding(2);
             this.pnlTop.Name = "pnlTop";
             this.pnlTop.Size = new System.Drawing.Size(705, 39);
             this.pnlTop.TabIndex = 4;
@@ -524,26 +524,11 @@
             this.pnlBottom.BackColor = System.Drawing.SystemColors.Info;
             this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnlBottom.Location = new System.Drawing.Point(0, 306);
-            this.pnlBottom.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlBottom.Margin = new System.Windows.Forms.Padding(2);
             this.pnlBottom.Name = "pnlBottom";
             this.pnlBottom.Size = new System.Drawing.Size(705, 39);
             this.pnlBottom.TabIndex = 12;
             this.pnlBottom.Visible = false;
-            // 
-            // dpMain
-            // 
-            this.dpMain.BackColor = System.Drawing.Color.White;
-            this.dpMain.DefaultFloatWindowSize = new System.Drawing.Size(800, 600);
-            this.dpMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dpMain.Location = new System.Drawing.Point(0, 0);
-            this.dpMain.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.dpMain.Name = "dpMain";
-            this.dpMain.Size = new System.Drawing.Size(705, 412);
-            this.dpMain.TabIndex = 14;
-            this.dpMain.ActiveDocumentChanged += new System.EventHandler(this.dpMain_ActiveDocumentChanged);
-            this.dpMain.ActiveContentChanged += new System.EventHandler(this.dpMain_ActiveContentChanged);
-            this.dpMain.DocumentDragged += new System.EventHandler(this.dpMain_DocumentDragged);
-            this.dpMain.ActivePaneChanged += new System.EventHandler(this.dpMain_ActivePaneChanged);
             // 
             // pnlConnectLoading
             // 
@@ -586,20 +571,36 @@
             this.pbConnectionLoading.TabIndex = 0;
             this.pbConnectionLoading.TabStop = false;
             // 
+            // dpMain
+            // 
+            this.dpMain.BackColor = System.Drawing.Color.White;
+            this.dpMain.DefaultFloatWindowSize = new System.Drawing.Size(800, 600);
+            this.dpMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dpMain.Location = new System.Drawing.Point(0, 64);
+            this.dpMain.Margin = new System.Windows.Forms.Padding(2);
+            this.dpMain.Name = "dpMain";
+            this.dpMain.Size = new System.Drawing.Size(705, 242);
+            this.dpMain.TabIndex = 21;
+            this.dpMain.ActiveDocumentChanged += new System.EventHandler(this.dpMain_ActiveDocumentChanged);
+            this.dpMain.ActiveContentChanged += new System.EventHandler(this.dpMain_ActiveContentChanged);
+            this.dpMain.DocumentDragged += new System.EventHandler(this.dpMain_DocumentDragged);
+            this.dpMain.ActivePaneChanged += new System.EventHandler(this.dpMain_ActivePaneChanged);
+            // 
             // NewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(705, 412);
+            this.Controls.Add(this.dpMain);
             this.Controls.Add(this.pnlBottom);
             this.Controls.Add(this.pnlSupport);
             this.Controls.Add(this.pnlTop);
             this.Controls.Add(this.tsMain);
             this.Controls.Add(this.pnlConnectLoading);
-            this.Controls.Add(this.dpMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "NewForm";
             this.Opacity = 0D;
             this.Text = "XrmToolBox for Microsoft Dynamics CRM/365 CE";
@@ -634,7 +635,6 @@
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.LinkLabel llDismiss;
         private System.Windows.Forms.Panel pnlBottom;
-        private WeifenLuo.WinFormsUI.Docking.DockPanel dpMain;
         private System.Windows.Forms.Panel pnlConnectLoading;
         private System.Windows.Forms.Label lblConnecting;
         private System.Windows.Forms.PictureBox pbConnectionLoading;
@@ -671,5 +671,6 @@
         private System.Windows.Forms.ToolStripMenuItem checkForUpdateToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
         private System.Windows.Forms.ToolStripMenuItem aboutXrmToolBoxToolStripMenuItem1;
+        private WeifenLuo.WinFormsUI.Docking.DockPanel dpMain;
     }
 }

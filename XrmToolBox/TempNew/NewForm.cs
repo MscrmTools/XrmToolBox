@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -41,44 +40,52 @@ namespace XrmToolBox.TempNew
         private string initialPluginName;
 
         private IStore store;
-        private readonly WelcomeDialog blackScreen;
 
         public NewForm(string[] args)
         {
             InitializeComponent();
-
             Text = $@"{Text} (v{Assembly.GetExecutingAssembly().GetName().Version})";
 
             // Set drawing optimizations
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 
-            // Displaying Welcome screen
-            var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
-            blackScreen.Show(this);
-            blackScreen.SetWorkingMessage("Loading...");
+            WelcomeDialog.ShowSplashScreen();
 
-            //var theme = new VS2015LightTheme();
-            var theme = new VS2015BlueTheme();
+            var theme = new VS2015LightTheme();
+            //var theme = new VS2015BlueTheme();
             dpMain.Theme = theme;
 
+            // Connection Management
+            WelcomeDialog.SetStatus("Loading connection controls...");
+            ManageConnectionControl();
+            ccsb.MergeConnectionsFiles = Options.Instance.MergeConnectionFiles;
+
+            WelcomeDialog.SetStatus("Loading plugins...");
             pluginsForm = new PluginsForm();
             pluginsForm.OpenPluginRequested += PluginsForm_OpenPluginRequested;
             pluginsForm.OpenPluginProjectUrlRequested += PluginsForm_OpenPluginProjectUrlRequested;
             pluginsForm.UninstallPluginRequested += PluginsForm_UninstallPluginRequested;
             pluginsForm.ActionRequested += PluginsForm_ActionRequested;
+
+            if (!Options.Instance.DoNotShowStartPage)
+            {
+                var startPage = new StartPage(pluginsForm.PluginManager);
+                startPage.OpenMruPluginRequested += StartPage_OpenMruPluginRequested;
+                startPage.OpenConnectionsManagementRequested += (s, evt) =>
+                {
+                    fHelper.DisplayConnectionsList(this);
+                };
+                startPage.OpenPluginsStoreRequested += (s, evt) =>
+                {
+                    tsddbTools_DropDownItemClicked(s, new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
+                };
+                startPage.Show(dpMain, DockState.Document);
+                startPage.EnsureVisible(dpMain, DockState.Document);
+            }
+
             pluginsForm.Show(dpMain, Options.Instance.PluginsListDocking);
             pluginsForm.IsHidden = Options.Instance.PluginsListIsHidden;
-
-            var startPage = new StartPage(pluginsForm.PluginManager);
-            startPage.OpenMruPluginRequested += StartPage_OpenMruPluginRequested;
-            startPage.Show(dpMain, DockState.Document);
-
-            // Connection Management
-            blackScreen.SetWorkingMessage("Loading connection controls...");
-            ManageConnectionControl();
-            ccsb.MergeConnectionsFiles = Options.Instance.MergeConnectionFiles;
 
             ProcessMenuItemsForPlugin();
 
@@ -114,6 +121,13 @@ namespace XrmToolBox.TempNew
         private void StartPage_OpenMruPluginRequested(object sender, OpenMruPluginEventArgs e)
         {
             var cid = e.Item.ConnectionId;
+
+            if (cid == Guid.Empty)
+            {
+                initialPluginName = e.Item.PluginName;
+                StartPluginWithoutConnection();
+                return;
+            }
 
             foreach (var file in ConnectionsList.Instance.Files)
             {
@@ -157,8 +171,6 @@ namespace XrmToolBox.TempNew
             WebProxyHelper.ApplyProxy();
 
             tstSearch.AutoCompleteCustomSource.AddRange(pluginsForm.PluginManager.Plugins.Select(p => p.Metadata.Name).ToArray());
-
-            blackScreen.SetWorkingMessage("Loading plugins...");
 
             var tasks = new List<Task>
             {
@@ -204,11 +216,6 @@ namespace XrmToolBox.TempNew
                 Options.Instance.Size.ApplyFormSize(this);
             }
 
-            // Hide & remove Welcome screen
-            Opacity = 100;
-            blackScreen.Hide();
-            blackScreen.Dispose();
-
             if (!Options.Instance.AllowLogUsage.HasValue)
             {
                 Options.Instance.AllowLogUsage = LogUsage.PromptToLog();
@@ -248,6 +255,33 @@ namespace XrmToolBox.TempNew
             }
 
             tstSearch.Focus();
+
+            // Hide & remove Welcome screen
+            Opacity = 100;
+            WelcomeDialog.CloseForm();
+            BringToTop();
+        }
+
+        private void BringToTop()
+        {
+            //Checks if the method is called from UI thread or not
+            if (InvokeRequired)
+            {
+                Invoke(new Action(BringToTop));
+            }
+            else
+            {
+                if (WindowState == FormWindowState.Minimized)
+                {
+                    WindowState = FormWindowState.Normal;
+                }
+                //Keeps the current topmost status of form
+                bool top = TopMost;
+                //Brings the form to top
+                TopMost = true;
+                //Set form's topmost status back to whatever it was
+                TopMost = top;
+            }
         }
 
         private string ExtractSwitchValue(string key, ref string[] args)
@@ -368,9 +402,11 @@ namespace XrmToolBox.TempNew
 
             try
             {
-                var mruItem = new MostRecentlyUsedItem();
-                mruItem.PluginName = plugin.Metadata.Name;
-                mruItem.Date = DateTime.Now;
+                var mruItem = new MostRecentlyUsedItem
+                {
+                    PluginName = plugin.Metadata.Name,
+                    Date = DateTime.Now
+                };
 
                 var pluginControl = (UserControl)plugin.Value.GetControl();
                 pluginControl.Tag = pluginControlInstanceId;
@@ -579,7 +615,7 @@ namespace XrmToolBox.TempNew
                     {
                         DisplayPluginControl(p);
                     }
-                    else if (parameter.ConnectionParmater?.ToString() == "ApplyConnectionToTabs" && dpMain.Contents.OfType<PluginForm>().Count() > 0)
+                    else if (parameter.ConnectionParmater?.ToString() == "ApplyConnectionToTabs" && dpMain.Contents.OfType<PluginForm>().Any())
                     {
                         ApplyConnectionToTabs();
                     }
@@ -737,7 +773,7 @@ namespace XrmToolBox.TempNew
 
         private bool IsMessageValid(object sender, MessageBusEventArgs message)
         {
-            if (message == null || sender == null || !(sender is UserControl) || !(sender is IXrmToolBoxPluginControl))
+            if (message == null || !(sender is UserControl) || !(sender is IXrmToolBoxPluginControl))
             {
                 // Error. Possible reasons are:
                 // * empty sender
@@ -776,7 +812,8 @@ namespace XrmToolBox.TempNew
                     return;
                 }
 
-                blackScreen.SetWorkingMessage("Checking for XrmToolBox update...");
+                WelcomeDialog.SetStatus("Checking for XrmToolBox update...");
+                // blackScreen.SetWorkingMessage("Checking for XrmToolBox update...");
 
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
                 try
@@ -803,16 +840,15 @@ namespace XrmToolBox.TempNew
                     if (releases != null)
                     {
                         var lastReleaseVersion = releases.Items.Max(i => new Version(i.Version));
-                        // TODO remove for release
-                        //if (lastReleaseVersion > currentVersion &&
-                        //    Options.Instance.LastUpdateCheck.Date != DateTime.Now.Date)
+                        if (lastReleaseVersion > currentVersion &&
+                            Options.Instance.LastUpdateCheck.Date != DateTime.Now.Date)
                         {
                             var release =
                                 releases.Items.FirstOrDefault(r => r.Version == lastReleaseVersion.ToString());
 
                             Invoke(new Action(() =>
                             {
-                                var nvForm = new TempNew.NewVersionForm(release.Version, new Uri(release.DownloadUrl));
+                                var nvForm = new NewVersionForm(release?.Version, new Uri(release?.DownloadUrl ?? "https://www.xrmtoolbox.com"));
                                 nvForm.Show(dpMain, DockState.Document);
                             }));
                         }
@@ -821,6 +857,7 @@ namespace XrmToolBox.TempNew
                     Options.Instance.LastUpdateCheck = DateTime.Now;
                     Options.Instance.Save();
                 }
+                // ReSharper disable once EmptyGeneralCatchClause
                 catch
                 {
                 }
@@ -833,34 +870,22 @@ namespace XrmToolBox.TempNew
 
         private void dpMain_ActiveContentChanged(object sender, System.EventArgs e)
         {
-            //if (dpMain.ActiveContent is PluginForm)
-            //{
             ApplyActiveContentDisplay();
-            //}
         }
 
         private void dpMain_ActiveDocumentChanged(object sender, System.EventArgs e)
         {
-            //if (dpMain.ActiveContent is PluginForm)
-            //{
             ApplyActiveContentDisplay();
-            //}
         }
 
         private void dpMain_ActivePaneChanged(object sender, System.EventArgs e)
         {
-            //if (dpMain.ActiveContent is PluginForm)
-            //{
             ApplyActiveContentDisplay();
-            //}
         }
 
         private void dpMain_DocumentDragged(object sender, System.EventArgs e)
         {
-            //if (dpMain.ActiveContent is PluginForm)
-            //{
             ApplyActiveContentDisplay();
-            //}
         }
 
         private void ApplyActiveContentDisplay()
@@ -930,6 +955,18 @@ namespace XrmToolBox.TempNew
                                          || !oDialog.Option.HiddenPlugins.SequenceEqual(Options.Instance.HiddenPlugins)
                                          || Options.Instance.DisplayOrder != oDialog.Option.DisplayOrder;
 
+                    if (Options.Instance.DoNotRememberPluginsWithoutConnection != oDialog.Option.DoNotRememberPluginsWithoutConnection
+                        && oDialog.Option.DoNotRememberPluginsWithoutConnection)
+                    {
+                        MostRecentlyUsedItems.Instance.RemovePluginsWithNoConnection();
+                        MostRecentlyUsedItems.Instance.Save();
+                    }
+
+                    if (Options.Instance.MruItemsToDisplay != oDialog.Option.MruItemsToDisplay)
+                    {
+                        MostRecentlyUsedItems.Instance.Save();
+                    }
+
                     Options.Instance.Replace(oDialog.Option);
 
                     if (reinitDisplay)
@@ -969,7 +1006,6 @@ namespace XrmToolBox.TempNew
                 if (evt.Result is Releases releases)
                 {
                     var lastReleaseVersion = releases.Items.Max(i => new Version(i.Version));
-                    // TODO remove >= for release
                     var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
                     if (lastReleaseVersion >= currentVersion)
                     {
@@ -977,7 +1013,7 @@ namespace XrmToolBox.TempNew
 
                         Invoke(new Action(() =>
                         {
-                            var nvForm = new TempNew.NewVersionForm(release?.Version, new Uri(release?.DownloadUrl ?? "about:_blank"));
+                            var nvForm = new NewVersionForm(release?.Version, new Uri(release?.DownloadUrl ?? "about:_blank"));
                             nvForm.Show(dpMain, DockState.Document);
                         }));
                     }
@@ -1001,8 +1037,7 @@ namespace XrmToolBox.TempNew
 
         private void aboutXrmToolBoxToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            var aForm = new WelcomeDialog(version, false) { StartPosition = FormStartPosition.CenterParent };
+            var aForm = new WelcomeDialog(false) { StartPosition = FormStartPosition.CenterParent };
             aForm.ShowDialog(this);
         }
 
@@ -1100,10 +1135,6 @@ namespace XrmToolBox.TempNew
             }
 
             Options.Instance.Save();
-        }
-
-        private void NewForm_SizeChanged(object sender, System.EventArgs e)
-        {
         }
     }
 }

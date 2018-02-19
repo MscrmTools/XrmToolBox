@@ -126,6 +126,11 @@ namespace XrmToolBox
         public DockState PluginsListDocking { get; set; } = DockState.Document;
         public bool PluginsListIsHidden { get; set; } = false;
 
+        public int MruItemsToDisplay { get; set; } = 10;
+
+        public bool DoNotRememberPluginsWithoutConnection { get; set; }
+        public bool DoNotShowStartPage { get; set; }
+
         public static bool Load(out Options options, out string errorMessage)
         {
             errorMessage = string.Empty;
@@ -199,7 +204,10 @@ namespace XrmToolBox
                 PluginsStoreShowIncompatible = PluginsStoreShowIncompatible,
                 PluginsStoreShowInstalled = PluginsStoreShowInstalled,
                 PluginsStoreShowNew = PluginsStoreShowNew,
-                PluginsStoreShowUpdates = PluginsStoreShowUpdates
+                PluginsStoreShowUpdates = PluginsStoreShowUpdates,
+                MruItemsToDisplay = MruItemsToDisplay,
+                DoNotRememberPluginsWithoutConnection = DoNotRememberPluginsWithoutConnection,
+                DoNotShowStartPage = DoNotShowStartPage
             };
         }
 

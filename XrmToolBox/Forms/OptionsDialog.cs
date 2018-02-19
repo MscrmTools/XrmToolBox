@@ -38,6 +38,9 @@ namespace XrmToolBox.Forms
             chkRememberSession.Checked = option.RememberSession;
             chkReuseConnections.Checked = option.ReuseConnections;
             cbbDisplayOrder.SelectedItem = string.IsNullOrEmpty(option.DisplayOrder) ? "Alphabetically" : option.DisplayOrder;
+            nudMruItemsToDisplay.Value = option.MruItemsToDisplay;
+            chkDoNotRememberPluginsNotConnected.Checked = option.DoNotRememberPluginsWithoutConnection;
+            chkDoNotShowAtStartup.Checked = option.DoNotShowStartPage;
         }
 
         public Options Option { get { return option; } }
@@ -61,6 +64,9 @@ namespace XrmToolBox.Forms
             option.RememberSession = chkRememberSession.Checked;
             option.ReuseConnections = chkReuseConnections.Checked;
             option.DisplayOrder = cbbDisplayOrder.SelectedItem.ToString();
+            option.MruItemsToDisplay = Convert.ToInt32(nudMruItemsToDisplay.Value);
+            option.DoNotRememberPluginsWithoutConnection = chkDoNotRememberPluginsNotConnected.Checked;
+            option.DoNotShowStartPage = chkDoNotShowAtStartup.Checked;
 
             option.HiddenPlugins =
                 lvPlugins.Items.Cast<ListViewItem>().Where(i => i.Checked == false).Select(i => i.Text).ToList();
