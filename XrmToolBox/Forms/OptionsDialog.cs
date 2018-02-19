@@ -23,6 +23,14 @@ namespace XrmToolBox.Forms
 
             lblChangePathDescription.Text = string.Format(lblChangePathDescription.Text, Paths.XrmToolBoxPath);
 
+            cbbTheme.Items.AddRange(new object[]
+            {
+                "Classic theme",
+                "Blue theme",
+                "Light theme",
+                "Dark theme"
+            });
+
             this.option = (Options)option.Clone();
             this.pManager = pManager;
 
@@ -41,6 +49,8 @@ namespace XrmToolBox.Forms
             nudMruItemsToDisplay.Value = option.MruItemsToDisplay;
             chkDoNotRememberPluginsNotConnected.Checked = option.DoNotRememberPluginsWithoutConnection;
             chkDoNotShowAtStartup.Checked = option.DoNotShowStartPage;
+
+            cbbTheme.SelectedItem = option.Theme ?? "Light theme";
         }
 
         public Options Option { get { return option; } }
@@ -67,6 +77,7 @@ namespace XrmToolBox.Forms
             option.MruItemsToDisplay = Convert.ToInt32(nudMruItemsToDisplay.Value);
             option.DoNotRememberPluginsWithoutConnection = chkDoNotRememberPluginsNotConnected.Checked;
             option.DoNotShowStartPage = chkDoNotShowAtStartup.Checked;
+            option.Theme = cbbTheme.SelectedItem?.ToString() ?? "Default theme";
 
             option.HiddenPlugins =
                 lvPlugins.Items.Cast<ListViewItem>().Where(i => i.Checked == false).Select(i => i.Text).ToList();

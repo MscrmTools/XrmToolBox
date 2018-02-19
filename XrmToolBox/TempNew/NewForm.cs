@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -15,6 +16,7 @@ using McTools.Xrm.Connection;
 using McTools.Xrm.Connection.WinForms;
 using Microsoft.Xrm.Sdk;
 using WeifenLuo.WinFormsUI.Docking;
+using WeifenLuo.WinFormsUI.ThemeVS2015;
 using XrmToolBox.AppCode;
 using XrmToolBox.Controls;
 using XrmToolBox.Extensibility;
@@ -29,6 +31,7 @@ namespace XrmToolBox.TempNew
     {
         private readonly PluginsForm pluginsForm;
         private readonly Dictionary<PluginForm, ConnectionDetail> pluginConnections = new Dictionary<PluginForm, ConnectionDetail>();
+        private readonly StartPage startPage;
 
         private CrmConnectionStatusBar ccsb;
         private ConnectionManager cManager;
@@ -52,9 +55,7 @@ namespace XrmToolBox.TempNew
 
             WelcomeDialog.ShowSplashScreen();
 
-            var theme = new VS2015LightTheme();
-            //var theme = new VS2015BlueTheme();
-            dpMain.Theme = theme;
+            SetTheme();
 
             // Connection Management
             WelcomeDialog.SetStatus("Loading connection controls...");
@@ -70,7 +71,7 @@ namespace XrmToolBox.TempNew
 
             if (!Options.Instance.DoNotShowStartPage)
             {
-                var startPage = new StartPage(pluginsForm.PluginManager);
+                startPage = new StartPage(pluginsForm.PluginManager);
                 startPage.OpenMruPluginRequested += StartPage_OpenMruPluginRequested;
                 startPage.OpenConnectionsManagementRequested += (s, evt) =>
                 {
@@ -81,7 +82,6 @@ namespace XrmToolBox.TempNew
                     tsddbTools_DropDownItemClicked(s, new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
                 };
                 startPage.Show(dpMain, DockState.Document);
-                startPage.EnsureVisible(dpMain, DockState.Document);
             }
 
             pluginsForm.Show(dpMain, Options.Instance.PluginsListDocking);
@@ -114,6 +114,36 @@ namespace XrmToolBox.TempNew
 
                     pnlConnectLoading.Visible = true;
                     lblConnecting.Text = string.Format(lblConnecting.Tag.ToString(), initialConnectionName);
+                }
+            }
+        }
+
+        private void SetTheme()
+        {
+            if (Options.Instance.Theme != null)
+            {
+                switch (Options.Instance.Theme)
+                {
+                    case "Blue theme":
+                        {
+                            var theme = new VS2015BlueTheme();
+                            dpMain.Theme = theme;
+                        }
+                        break;
+
+                    case "Light theme":
+                        {
+                            var theme = new VS2015LightTheme();
+                            dpMain.Theme = theme;
+                        }
+                        break;
+
+                    case "Dark theme":
+                        {
+                            var theme = new VS2015DarkTheme();
+                            dpMain.Theme = theme;
+                        }
+                        break;
                 }
             }
         }
@@ -168,6 +198,11 @@ namespace XrmToolBox.TempNew
 
         private async void NewForm_Load(object sender, System.EventArgs e)
         {
+            if (!Options.Instance.DoNotShowStartPage)
+            {
+                startPage.EnsureVisible(dpMain, DockState.Document);
+            }
+
             WebProxyHelper.ApplyProxy();
 
             tstSearch.AutoCompleteCustomSource.AddRange(pluginsForm.PluginManager.Plugins.Select(p => p.Metadata.Name).ToArray());
@@ -965,6 +1000,11 @@ namespace XrmToolBox.TempNew
                     if (Options.Instance.MruItemsToDisplay != oDialog.Option.MruItemsToDisplay)
                     {
                         MostRecentlyUsedItems.Instance.Save();
+                    }
+
+                    if (Options.Instance.Theme != oDialog.Option.Theme)
+                    {
+                        SetTheme();
                     }
 
                     Options.Instance.Replace(oDialog.Option);

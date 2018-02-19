@@ -130,6 +130,7 @@ namespace XrmToolBox
 
         public bool DoNotRememberPluginsWithoutConnection { get; set; }
         public bool DoNotShowStartPage { get; set; }
+        public string Theme { get; set; } = "Light theme";
 
         public static bool Load(out Options options, out string errorMessage)
         {
@@ -207,7 +208,8 @@ namespace XrmToolBox
                 PluginsStoreShowUpdates = PluginsStoreShowUpdates,
                 MruItemsToDisplay = MruItemsToDisplay,
                 DoNotRememberPluginsWithoutConnection = DoNotRememberPluginsWithoutConnection,
-                DoNotShowStartPage = DoNotShowStartPage
+                DoNotShowStartPage = DoNotShowStartPage,
+                Theme = Theme
             };
         }
 

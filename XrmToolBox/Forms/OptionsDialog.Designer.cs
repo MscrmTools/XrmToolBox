@@ -80,11 +80,14 @@
             this.llOpenStorageFolder = new System.Windows.Forms.LinkLabel();
             this.llOpenRootFolder = new System.Windows.Forms.LinkLabel();
             this.tpStartPage = new System.Windows.Forms.TabPage();
+            this.chkDoNotShowAtStartup = new System.Windows.Forms.CheckBox();
             this.chkDoNotRememberPluginsNotConnected = new System.Windows.Forms.CheckBox();
             this.lblDoNotRememberNotConnected = new System.Windows.Forms.Label();
             this.nudMruItemsToDisplay = new System.Windows.Forms.NumericUpDown();
             this.lblNumberOfMruToDisplay = new System.Windows.Forms.Label();
-            this.chkDoNotShowAtStartup = new System.Windows.Forms.CheckBox();
+            this.lblTheme = new System.Windows.Forms.Label();
+            this.cbbTheme = new System.Windows.Forms.ComboBox();
+            this.lblRestartRequired = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -106,7 +109,7 @@
             this.panel1.Controls.Add(this.btnOk);
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 412);
+            this.panel1.Location = new System.Drawing.Point(0, 497);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(531, 34);
@@ -180,11 +183,14 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(531, 336);
+            this.tabControl1.Size = new System.Drawing.Size(531, 421);
             this.tabControl1.TabIndex = 7;
             // 
             // tbDisplay
             // 
+            this.tbDisplay.Controls.Add(this.lblRestartRequired);
+            this.tbDisplay.Controls.Add(this.lblTheme);
+            this.tbDisplay.Controls.Add(this.cbbTheme);
             this.tbDisplay.Controls.Add(this.label3);
             this.tbDisplay.Controls.Add(this.cbbDisplayOrder);
             this.tbDisplay.Controls.Add(this.chkMergeConnectionFiles);
@@ -194,7 +200,7 @@
             this.tbDisplay.Margin = new System.Windows.Forms.Padding(2);
             this.tbDisplay.Name = "tbDisplay";
             this.tbDisplay.Padding = new System.Windows.Forms.Padding(2);
-            this.tbDisplay.Size = new System.Drawing.Size(523, 310);
+            this.tbDisplay.Size = new System.Drawing.Size(523, 395);
             this.tbDisplay.TabIndex = 0;
             this.tbDisplay.Text = "Display";
             this.tbDisplay.UseVisualStyleBackColor = true;
@@ -202,7 +208,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(7, 33);
+            this.label3.Location = new System.Drawing.Point(7, 59);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(103, 13);
@@ -217,7 +223,7 @@
             "Alphabetically",
             "Most used",
             "Recently updated"});
-            this.cbbDisplayOrder.Location = new System.Drawing.Point(113, 31);
+            this.cbbDisplayOrder.Location = new System.Drawing.Point(113, 57);
             this.cbbDisplayOrder.Margin = new System.Windows.Forms.Padding(2);
             this.cbbDisplayOrder.Name = "cbbDisplayOrder";
             this.cbbDisplayOrder.Size = new System.Drawing.Size(191, 21);
@@ -228,7 +234,7 @@
             this.chkMergeConnectionFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chkMergeConnectionFiles.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkMergeConnectionFiles.Location = new System.Drawing.Point(6, 56);
+            this.chkMergeConnectionFiles.Location = new System.Drawing.Point(6, 82);
             this.chkMergeConnectionFiles.Margin = new System.Windows.Forms.Padding(0, 3, 3, 3);
             this.chkMergeConnectionFiles.Name = "chkMergeConnectionFiles";
             this.chkMergeConnectionFiles.Size = new System.Drawing.Size(511, 31);
@@ -285,11 +291,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.lvPlugins);
-            this.groupBox3.Location = new System.Drawing.Point(4, 99);
+            this.groupBox3.Location = new System.Drawing.Point(4, 127);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox3.Size = new System.Drawing.Size(516, 198);
+            this.groupBox3.Size = new System.Drawing.Size(516, 255);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Tools list (Unchecked plugins are not displayed in XrmToolBox application)";
@@ -306,7 +312,7 @@
             this.lvPlugins.Location = new System.Drawing.Point(2, 15);
             this.lvPlugins.Margin = new System.Windows.Forms.Padding(2);
             this.lvPlugins.Name = "lvPlugins";
-            this.lvPlugins.Size = new System.Drawing.Size(512, 181);
+            this.lvPlugins.Size = new System.Drawing.Size(512, 238);
             this.lvPlugins.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvPlugins.TabIndex = 0;
             this.lvPlugins.UseCompatibleStateImageBehavior = false;
@@ -700,6 +706,19 @@
             this.tpStartPage.Text = "Start page";
             this.tpStartPage.UseVisualStyleBackColor = true;
             // 
+            // chkDoNotShowAtStartup
+            // 
+            this.chkDoNotShowAtStartup.AutoSize = true;
+            this.chkDoNotShowAtStartup.BackColor = System.Drawing.Color.White;
+            this.chkDoNotShowAtStartup.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkDoNotShowAtStartup.Location = new System.Drawing.Point(8, 6);
+            this.chkDoNotShowAtStartup.Name = "chkDoNotShowAtStartup";
+            this.chkDoNotShowAtStartup.Size = new System.Drawing.Size(249, 17);
+            this.chkDoNotShowAtStartup.TabIndex = 6;
+            this.chkDoNotShowAtStartup.Text = "Do not show this page when XrmToolBox starts";
+            this.chkDoNotShowAtStartup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkDoNotShowAtStartup.UseVisualStyleBackColor = false;
+            // 
             // chkDoNotRememberPluginsNotConnected
             // 
             this.chkDoNotRememberPluginsNotConnected.AutoSize = true;
@@ -744,18 +763,35 @@
             this.lblNumberOfMruToDisplay.TabIndex = 0;
             this.lblNumberOfMruToDisplay.Text = "Number of recently used plugins to display";
             // 
-            // chkDoNotShowAtStartup
+            // lblTheme
             // 
-            this.chkDoNotShowAtStartup.AutoSize = true;
-            this.chkDoNotShowAtStartup.BackColor = System.Drawing.Color.White;
-            this.chkDoNotShowAtStartup.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkDoNotShowAtStartup.Location = new System.Drawing.Point(8, 6);
-            this.chkDoNotShowAtStartup.Name = "chkDoNotShowAtStartup";
-            this.chkDoNotShowAtStartup.Size = new System.Drawing.Size(249, 17);
-            this.chkDoNotShowAtStartup.TabIndex = 6;
-            this.chkDoNotShowAtStartup.Text = "Do not show this page when XrmToolBox starts";
-            this.chkDoNotShowAtStartup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkDoNotShowAtStartup.UseVisualStyleBackColor = false;
+            this.lblTheme.AutoSize = true;
+            this.lblTheme.Location = new System.Drawing.Point(7, 28);
+            this.lblTheme.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTheme.Name = "lblTheme";
+            this.lblTheme.Size = new System.Drawing.Size(40, 13);
+            this.lblTheme.TabIndex = 11;
+            this.lblTheme.Text = "Theme";
+            // 
+            // cbbTheme
+            // 
+            this.cbbTheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbTheme.FormattingEnabled = true;
+            this.cbbTheme.Location = new System.Drawing.Point(113, 26);
+            this.cbbTheme.Margin = new System.Windows.Forms.Padding(2);
+            this.cbbTheme.Name = "cbbTheme";
+            this.cbbTheme.Size = new System.Drawing.Size(191, 21);
+            this.cbbTheme.TabIndex = 10;
+            // 
+            // lblRestartRequired
+            // 
+            this.lblRestartRequired.AutoSize = true;
+            this.lblRestartRequired.Location = new System.Drawing.Point(308, 29);
+            this.lblRestartRequired.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblRestartRequired.Name = "lblRestartRequired";
+            this.lblRestartRequired.Size = new System.Drawing.Size(83, 13);
+            this.lblRestartRequired.TabIndex = 12;
+            this.lblRestartRequired.Text = "(restart required)";
             // 
             // OptionsDialog
             // 
@@ -763,7 +799,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(531, 446);
+            this.ClientSize = new System.Drawing.Size(531, 531);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.pnlHeader);
             this.Controls.Add(this.panel1);
@@ -857,5 +893,8 @@
         private System.Windows.Forms.CheckBox chkDoNotRememberPluginsNotConnected;
         private System.Windows.Forms.Label lblDoNotRememberNotConnected;
         private System.Windows.Forms.CheckBox chkDoNotShowAtStartup;
+        private System.Windows.Forms.Label lblTheme;
+        private System.Windows.Forms.ComboBox cbbTheme;
+        private System.Windows.Forms.Label lblRestartRequired;
     }
 }
