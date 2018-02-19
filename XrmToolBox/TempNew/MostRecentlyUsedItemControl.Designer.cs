@@ -36,6 +36,7 @@
             // 
             // pbLogo
             // 
+            this.pbLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.pbLogo.Dock = System.Windows.Forms.DockStyle.Left;
             this.pbLogo.Location = new System.Drawing.Point(10, 10);
             this.pbLogo.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
@@ -74,7 +75,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Transparent;
+            this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.lblConnectionName);
             this.Controls.Add(this.lblPlugin);
             this.Controls.Add(this.pbLogo);
@@ -82,6 +83,7 @@
             this.Name = "MostRecentlyUsedItemControl";
             this.Padding = new System.Windows.Forms.Padding(10, 10, 0, 0);
             this.Size = new System.Drawing.Size(481, 70);
+            this.Load += new System.EventHandler(this.MostRecentlyUsedItemControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).EndInit();
             this.ResumeLayout(false);
 

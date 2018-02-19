@@ -1,40 +1,29 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
 using XrmToolBox.TempNew.EventArgs;
+using Timer = System.Timers.Timer;
 
 namespace XrmToolBox.TempNew
 {
     public partial class MostRecentlyUsedItemControl : UserControl
     {
         private readonly MostRecentlyUsedItem item;
+        private readonly string base64Image;
+        private Thread clickThread;
 
         public MostRecentlyUsedItemControl(string base64Image, MostRecentlyUsedItem item)
         {
             InitializeComponent();
 
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+
             this.item = item;
-
-            lblPlugin.Text = item.PluginName;
-            lblConnectionName.Text = item.ConnectionName;
-
-            if (!string.IsNullOrEmpty(base64Image))
-            {
-                var bytes = Convert.FromBase64String(base64Image);
-                var ms = new MemoryStream(bytes, 0, bytes.Length);
-                ms.Write(bytes, 0, bytes.Length);
-                pbLogo.Image = Image.FromStream(ms);
-                ms.Close();
-            }
-
-            foreach (Control control in Controls)
-            {
-                control.MouseEnter += OnMouseEnter;
-                control.MouseLeave += OnMouseLeave;
-                control.Click += OnClick;
-            }
+            this.base64Image = base64Image;
         }
 
         public event EventHandler<OpenMruPluginEventArgs> OpenMruPluginRequested;
@@ -56,6 +45,39 @@ namespace XrmToolBox.TempNew
         private void OnClick(object sender, System.EventArgs e)
         {
             OpenMruPluginRequested?.Invoke(this, new OpenMruPluginEventArgs(item));
+        }
+
+        private void MostRecentlyUsedItemControl_Load(object sender, System.EventArgs e)
+        {
+            lblPlugin.Text = item.PluginName;
+            lblConnectionName.Text = item.ConnectionName;
+
+            if (!string.IsNullOrEmpty(base64Image))
+            {
+                var bytes = Convert.FromBase64String(base64Image);
+                var ms = new MemoryStream(bytes, 0, bytes.Length);
+                ms.Write(bytes, 0, bytes.Length);
+                pbLogo.Image = Image.FromStream(ms);
+                ms.Close();
+            }
+
+            var timer = new Timer { Interval = 500 };
+            timer.Elapsed += (s, evt) =>
+            {
+                ((Timer)s).Stop();
+
+                MouseEnter += OnMouseEnter;
+                MouseLeave += OnMouseLeave;
+                Click += OnClick;
+
+                foreach (Control ctrl in Controls)
+                {
+                    ctrl.MouseEnter += OnMouseEnter;
+                    ctrl.MouseLeave += OnMouseLeave;
+                    ctrl.Click += OnClick;
+                }
+            };
+            timer.Start();
         }
     }
 }

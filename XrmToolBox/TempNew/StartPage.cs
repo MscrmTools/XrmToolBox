@@ -12,11 +12,19 @@ namespace XrmToolBox.TempNew
 {
     public partial class StartPage : DockContent
     {
+        private readonly PluginManagerExtended pManager;
+
         public StartPage(PluginManagerExtended pManager)
         {
             InitializeComponent();
 
-            LoadMru(pManager);
+            // Set drawing optimizations
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+
+            this.pManager = pManager;
+
+            // LoadMru();
         }
 
         public event EventHandler<OpenMruPluginEventArgs> OpenMruPluginRequested;
@@ -25,10 +33,20 @@ namespace XrmToolBox.TempNew
 
         public event EventHandler OpenConnectionsManagementRequested;
 
-        private void LoadMru(PluginManagerExtended pManager)
+        public void LoadMru()
         {
-            foreach (var mru in MostRecentlyUsedItems.Instance.Items.OrderByDescending(i => i.Date))
+            var sw = new Stopwatch();
+            sw.Start();
+
+            pnlMru.Controls.Clear();
+
+            var list = new List<Control>();
+
+            foreach (var mru in MostRecentlyUsedItems.Instance.Items)
             {
+                sw.Stop();
+                Console.WriteLine($@"{mru.PluginName}: {sw.ElapsedMilliseconds}");
+                sw.Start();
                 var plugin = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == mru.PluginName);
                 if (plugin != null)
                 {
@@ -36,10 +54,17 @@ namespace XrmToolBox.TempNew
                     ctrl.OpenMruPluginRequested += Ctrl_OpenMruPluginRequested;
                     ctrl.Dock = DockStyle.Top;
 
-                    pnlMru.Controls.Add(ctrl);
-                    pnlMru.Controls.SetChildIndex(ctrl, 0);
+                    list.Add(ctrl);
                 }
             }
+
+            sw.Stop();
+            Console.WriteLine($@"{sw.ElapsedMilliseconds}");
+            sw.Start();
+            pnlMru.Controls.AddRange(list.ToArray());
+
+            sw.Stop();
+            Console.WriteLine($@"{sw.ElapsedMilliseconds}");
         }
 
         private void Ctrl_OpenMruPluginRequested(object sender, OpenMruPluginEventArgs e)

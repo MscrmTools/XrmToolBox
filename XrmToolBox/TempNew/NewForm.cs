@@ -38,6 +38,7 @@ namespace XrmToolBox.TempNew
         private FormHelper fHelper;
         private IOrganizationService service;
         private ConnectionDetail connectionDetail;
+        private IDockContent currentContent;
 
         private string initialConnectionName;
         private string initialPluginName;
@@ -71,6 +72,8 @@ namespace XrmToolBox.TempNew
 
             if (!Options.Instance.DoNotShowStartPage)
             {
+                WelcomeDialog.SetStatus("Preparing Start page...");
+
                 startPage = new StartPage(pluginsForm.PluginManager);
                 startPage.OpenMruPluginRequested += StartPage_OpenMruPluginRequested;
                 startPage.OpenConnectionsManagementRequested += (s, evt) =>
@@ -925,7 +928,17 @@ namespace XrmToolBox.TempNew
 
         private void ApplyActiveContentDisplay()
         {
-            ProcessMenuItemsForPlugin();
+            if (dpMain.ActiveContent != null && currentContent != dpMain.ActiveContent)
+            {
+                currentContent = dpMain.ActiveContent;
+
+                ProcessMenuItemsForPlugin();
+
+                if (dpMain.ActiveContent is StartPage sp)
+                {
+                    sp.LoadMru();
+                }
+            }
         }
 
         #endregion Change of active content
