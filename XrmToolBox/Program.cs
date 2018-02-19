@@ -66,6 +66,8 @@ namespace XrmToolBox
                 RedirectAssembly("Microsoft.Xrm.Tooling.Connector");
                 RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory");
                 RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms");
+                RedirectAssembly("WeifenLuo.WinFormsUI.Docking");
+                RedirectAssembly("WeifenLuo.WinFormsUI.Docking.ThemeVS2015");
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
