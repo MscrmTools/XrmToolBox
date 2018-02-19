@@ -35,10 +35,10 @@
             this.tslSearch = new System.Windows.Forms.ToolStripLabel();
             this.tstSearch = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbManageTabs = new System.Windows.Forms.ToolStripDropDownButton();
-            this.closeCurrentTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.closeAllTabsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.closeAllTabsExceptActiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsbManageWindows = new System.Windows.Forms.ToolStripDropDownButton();
+            this.closeCurrentWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeAllWindowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeAllWindowsExceptActiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsddbTools = new System.Windows.Forms.ToolStripDropDownButton();
             this.manageConnectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,6 +81,8 @@
             this.lblConnecting = new System.Windows.Forms.Label();
             this.pbConnectionLoading = new System.Windows.Forms.PictureBox();
             this.dpMain = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+            this.tssWindows = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiShowStartPage = new System.Windows.Forms.ToolStripMenuItem();
             this.tsMain.SuspendLayout();
             this.pnlSupport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -96,7 +98,7 @@
             this.tslSearch,
             this.tstSearch,
             this.toolStripSeparator8,
-            this.tsbManageTabs,
+            this.tsbManageWindows,
             this.toolStripSeparator1,
             this.tsddbTools,
             this.toolStripDropDownButton2,
@@ -139,36 +141,38 @@
             this.toolStripSeparator8.Name = "toolStripSeparator8";
             this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
             // 
-            // tsbManageTabs
+            // tsbManageWindows
             // 
-            this.tsbManageTabs.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.closeCurrentTabToolStripMenuItem,
-            this.closeAllTabsToolStripMenuItem,
-            this.closeAllTabsExceptActiveToolStripMenuItem});
-            this.tsbManageTabs.Image = ((System.Drawing.Image)(resources.GetObject("tsbManageTabs.Image")));
-            this.tsbManageTabs.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbManageTabs.Name = "tsbManageTabs";
-            this.tsbManageTabs.Size = new System.Drawing.Size(60, 22);
-            this.tsbManageTabs.Text = "Tabs";
-            this.tsbManageTabs.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsbManageTabs_DropDownItemClicked);
+            this.tsbManageWindows.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.closeCurrentWindowToolStripMenuItem,
+            this.closeAllWindowsToolStripMenuItem,
+            this.closeAllWindowsExceptActiveToolStripMenuItem,
+            this.tssWindows,
+            this.tsmiShowStartPage});
+            this.tsbManageWindows.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbManageWindows.Name = "tsbManageWindows";
+            this.tsbManageWindows.Size = new System.Drawing.Size(69, 22);
+            this.tsbManageWindows.Text = "Windows";
+            this.tsbManageWindows.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsbManageWindows_DropDownItemClicked);
             // 
-            // closeCurrentTabToolStripMenuItem
+            // closeCurrentWindowToolStripMenuItem
             // 
-            this.closeCurrentTabToolStripMenuItem.Name = "closeCurrentTabToolStripMenuItem";
-            this.closeCurrentTabToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.closeCurrentTabToolStripMenuItem.Text = "Close current tab";
+            this.closeCurrentWindowToolStripMenuItem.Name = "closeCurrentWindowToolStripMenuItem";
+            this.closeCurrentWindowToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.closeCurrentWindowToolStripMenuItem.Text = "Close current window";
             // 
-            // closeAllTabsToolStripMenuItem
+            // closeAllWindowsToolStripMenuItem
             // 
-            this.closeAllTabsToolStripMenuItem.Name = "closeAllTabsToolStripMenuItem";
-            this.closeAllTabsToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.closeAllTabsToolStripMenuItem.Text = "Close all";
+            this.closeAllWindowsToolStripMenuItem.Name = "closeAllWindowsToolStripMenuItem";
+            this.closeAllWindowsToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.closeAllWindowsToolStripMenuItem.Text = "Close all";
             // 
-            // closeAllTabsExceptActiveToolStripMenuItem
+            // closeAllWindowsExceptActiveToolStripMenuItem
             // 
-            this.closeAllTabsExceptActiveToolStripMenuItem.Name = "closeAllTabsExceptActiveToolStripMenuItem";
-            this.closeAllTabsExceptActiveToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
-            this.closeAllTabsExceptActiveToolStripMenuItem.Text = "Close all except active tab";
+            this.closeAllWindowsExceptActiveToolStripMenuItem.Name = "closeAllWindowsExceptActiveToolStripMenuItem";
+            this.closeAllWindowsExceptActiveToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.closeAllWindowsExceptActiveToolStripMenuItem.Text = "Close all except active window";
+            this.closeAllWindowsExceptActiveToolStripMenuItem.ToolTipText = "Only applies to Plugin pages";
             // 
             // toolStripSeparator1
             // 
@@ -586,6 +590,17 @@
             this.dpMain.DocumentDragged += new System.EventHandler(this.dpMain_DocumentDragged);
             this.dpMain.ActivePaneChanged += new System.EventHandler(this.dpMain_ActivePaneChanged);
             // 
+            // tssWindows
+            // 
+            this.tssWindows.Name = "tssWindows";
+            this.tssWindows.Size = new System.Drawing.Size(231, 6);
+            // 
+            // tsmiShowStartPage
+            // 
+            this.tsmiShowStartPage.Name = "tsmiShowStartPage";
+            this.tsmiShowStartPage.Size = new System.Drawing.Size(234, 22);
+            this.tsmiShowStartPage.Text = "Show Start Page";
+            // 
             // NewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -640,10 +655,10 @@
         private System.Windows.Forms.PictureBox pbConnectionLoading;
         private System.Windows.Forms.ToolStripButton tsbConnect;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
-        private System.Windows.Forms.ToolStripDropDownButton tsbManageTabs;
-        private System.Windows.Forms.ToolStripMenuItem closeCurrentTabToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem closeAllTabsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem closeAllTabsExceptActiveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripDropDownButton tsbManageWindows;
+        private System.Windows.Forms.ToolStripMenuItem closeCurrentWindowToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem closeAllWindowsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem closeAllWindowsExceptActiveToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripDropDownButton tsddbTools;
         private System.Windows.Forms.ToolStripMenuItem manageConnectionsToolStripMenuItem;
@@ -672,5 +687,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
         private System.Windows.Forms.ToolStripMenuItem aboutXrmToolBoxToolStripMenuItem1;
         private WeifenLuo.WinFormsUI.Docking.DockPanel dpMain;
+        private System.Windows.Forms.ToolStripSeparator tssWindows;
+        private System.Windows.Forms.ToolStripMenuItem tsmiShowStartPage;
     }
 }

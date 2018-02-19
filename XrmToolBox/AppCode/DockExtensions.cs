@@ -28,6 +28,10 @@ namespace XrmToolBox.AppCode
                 case DockState.DockRightAutoHide:
                     form.DockState = DockState.DockRight;
                     break;
+
+                case DockState.Float:
+                    form.DockState = DockState.Float;
+                    break;
             }
             form.Activate();
         }

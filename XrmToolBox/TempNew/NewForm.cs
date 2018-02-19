@@ -31,7 +31,7 @@ namespace XrmToolBox.TempNew
     {
         private readonly PluginsForm pluginsForm;
         private readonly Dictionary<PluginForm, ConnectionDetail> pluginConnections = new Dictionary<PluginForm, ConnectionDetail>();
-        private readonly StartPage startPage;
+        private StartPage startPage;
 
         private CrmConnectionStatusBar ccsb;
         private ConnectionManager cManager;
@@ -74,17 +74,7 @@ namespace XrmToolBox.TempNew
             {
                 WelcomeDialog.SetStatus("Preparing Start page...");
 
-                startPage = new StartPage(pluginsForm.PluginManager);
-                startPage.OpenMruPluginRequested += StartPage_OpenMruPluginRequested;
-                startPage.OpenConnectionsManagementRequested += (s, evt) =>
-                {
-                    fHelper.DisplayConnectionsList(this);
-                };
-                startPage.OpenPluginsStoreRequested += (s, evt) =>
-                {
-                    tsddbTools_DropDownItemClicked(s, new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
-                };
-                startPage.Show(dpMain, DockState.Document);
+                ShowStartPage();
             }
 
             pluginsForm.Show(dpMain, Options.Instance.PluginsListDocking);
@@ -119,6 +109,21 @@ namespace XrmToolBox.TempNew
                     lblConnecting.Text = string.Format(lblConnecting.Tag.ToString(), initialConnectionName);
                 }
             }
+        }
+
+        private void ShowStartPage()
+        {
+            if (startPage == null || startPage.IsDisposed)
+            {
+                startPage = new StartPage(pluginsForm.PluginManager);
+                startPage.OpenMruPluginRequested += StartPage_OpenMruPluginRequested;
+                startPage.OpenConnectionsManagementRequested += (s, evt) => { fHelper.DisplayConnectionsList(this); };
+                startPage.OpenPluginsStoreRequested += (s, evt) =>
+                {
+                    tsddbTools_DropDownItemClicked(s, new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
+                };
+            }
+            startPage.Show(dpMain, DockState.Document);
         }
 
         private void SetTheme()
@@ -432,6 +437,33 @@ namespace XrmToolBox.TempNew
                     DisplayPluginControl(e.Plugin);
                 }
             }
+
+            FillPluginsListMenuDisplay();
+        }
+
+        private void FillPluginsListMenuDisplay()
+        {
+            var staticItems = tsbManageWindows.DropDownItems.Cast<ToolStripItem>().Take(5).ToList();
+
+            tsbManageWindows.DropDownItems.Clear();
+
+            var pluginsPages = dpMain.Contents.OfType<PluginForm>().ToList().OrderBy(pf => pf.Text).ToList();
+
+            tsbManageWindows.DropDownItems.AddRange(staticItems.ToArray());
+
+            if (pluginsPages.Any())
+            {
+                tsbManageWindows.DropDownItems.Add(new ToolStripSeparator());
+            }
+
+            foreach (var pluginPage in pluginsPages)
+            {
+                tsbManageWindows.DropDownItems.Add(new ToolStripMenuItem
+                {
+                    Text = pluginPage.Text,
+                    Tag = pluginPage
+                });
+            }
         }
 
         private void DisplayPluginControl(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin)
@@ -494,9 +526,18 @@ namespace XrmToolBox.TempNew
                 string name = $"{plugin.Metadata.Name} ({connectionDetail?.ConnectionName ?? "Not connected"})";
 
                 var pluginForm = new PluginForm(pluginControl, name);
-                pluginForm.FormClosed += (sender, e) => { pluginConnections.Remove((PluginForm)sender); };
                 pluginForm.Show(dpMain, DockState.Document);
                 pluginForm.CloseRequested += PluginForm_CloseRequested;
+                pluginForm.FormClosed += (sender, e) =>
+                {
+                    var pf = (PluginForm)sender;
+                    pluginConnections.Remove(pf);
+
+                    if (!pf.IsDisposed && !pf.Disposing)
+                        pf.Dispose();
+
+                    FillPluginsListMenuDisplay();
+                };
 
                 pluginConnections.Add(pluginForm, connectionDetail);
                 if (connectionDetail == null)
@@ -738,6 +779,11 @@ namespace XrmToolBox.TempNew
                 foreach (PluginForm form in tcu.SelectedPluginForms)
                 {
                     UpdateTabConnection(form);
+                }
+
+                if (tcu.SelectedPluginForms.Any())
+                {
+                    FillPluginsListMenuDisplay();
                 }
             }
         }
@@ -1096,22 +1142,37 @@ namespace XrmToolBox.TempNew
 
         #region Document management
 
-        private void tsbManageTabs_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void tsbManageWindows_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (e.ClickedItem == closeAllTabsToolStripMenuItem)
+            if (e.ClickedItem == closeAllWindowsToolStripMenuItem)
             {
                 RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
             }
-            else if (e.ClickedItem == closeAllTabsExceptActiveToolStripMenuItem)
+            else if (e.ClickedItem == closeAllWindowsExceptActiveToolStripMenuItem)
             {
                 RequestCloseTabs(dpMain.Contents.OfType<PluginForm>().Where(p => dpMain.ActiveContent != p), new PluginCloseInfo(ToolBoxCloseReason.CloseAllExceptActive));
             }
-            else if (e.ClickedItem == closeCurrentTabToolStripMenuItem)
+            else if (e.ClickedItem == closeCurrentWindowToolStripMenuItem)
             {
                 if (dpMain.ActiveContent is PluginForm p)
                 {
                     RequestCloseTab(p, new PluginCloseInfo(ToolBoxCloseReason.CloseCurrent));
                 }
+            }
+            else if (e.ClickedItem == tsmiShowStartPage)
+            {
+                if (dpMain.Contents.OfType<StartPage>().Any())
+                {
+                    startPage.EnsureVisible(dpMain, DockState.Document);
+                }
+                else
+                {
+                    ShowStartPage();
+                }
+            }
+            else if (e.ClickedItem.Tag is PluginForm pf)
+            {
+                pf.EnsureVisible(dpMain, DockState.Document);
             }
         }
 
