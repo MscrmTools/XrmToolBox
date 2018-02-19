@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.pbLogo = new System.Windows.Forms.PictureBox();
             this.lblPlugin = new System.Windows.Forms.Label();
             this.lblConnectionName = new System.Windows.Forms.Label();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,6 +73,11 @@
             this.lblConnectionName.TabIndex = 2;
             this.lblConnectionName.Text = "[Connection Name]";
             // 
+            // toolTip
+            // 
+            this.toolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTip.ToolTipTitle = "Plugin used";
+            // 
             // MostRecentlyUsedItemControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -94,5 +101,6 @@
         private System.Windows.Forms.PictureBox pbLogo;
         private System.Windows.Forms.Label lblPlugin;
         private System.Windows.Forms.Label lblConnectionName;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

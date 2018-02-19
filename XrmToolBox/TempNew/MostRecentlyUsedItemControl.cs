@@ -61,6 +61,11 @@ namespace XrmToolBox.TempNew
                 ms.Close();
             }
 
+            var tooltiptext = item.Date.ToString();
+            toolTip.SetToolTip(lblPlugin, tooltiptext);
+            toolTip.SetToolTip(lblConnectionName, tooltiptext);
+            toolTip.SetToolTip(pbLogo, tooltiptext);
+
             var timer = new Timer { Interval = 500 };
             timer.Elapsed += (s, evt) =>
             {
