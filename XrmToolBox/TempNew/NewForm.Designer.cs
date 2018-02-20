@@ -32,13 +32,12 @@
             this.tsMain = new System.Windows.Forms.ToolStrip();
             this.tsbConnect = new System.Windows.Forms.ToolStripButton();
             this.tssSearch = new System.Windows.Forms.ToolStripSeparator();
-            this.tslSearch = new System.Windows.Forms.ToolStripLabel();
-            this.tstSearch = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbManageWindows = new System.Windows.Forms.ToolStripDropDownButton();
             this.closeCurrentWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeAllWindowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeAllWindowsExceptActiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssWindows = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiShowStartPage = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsddbTools = new System.Windows.Forms.ToolStripDropDownButton();
             this.manageConnectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,8 +80,6 @@
             this.lblConnecting = new System.Windows.Forms.Label();
             this.pbConnectionLoading = new System.Windows.Forms.PictureBox();
             this.dpMain = new WeifenLuo.WinFormsUI.Docking.DockPanel();
-            this.tssWindows = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiShowStartPage = new System.Windows.Forms.ToolStripMenuItem();
             this.tsMain.SuspendLayout();
             this.pnlSupport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -95,9 +92,6 @@
             this.tsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbConnect,
             this.tssSearch,
-            this.tslSearch,
-            this.tstSearch,
-            this.toolStripSeparator8,
             this.tsbManageWindows,
             this.toolStripSeparator1,
             this.tsddbTools,
@@ -123,23 +117,6 @@
             // 
             this.tssSearch.Name = "tssSearch";
             this.tssSearch.Size = new System.Drawing.Size(6, 25);
-            // 
-            // tslSearch
-            // 
-            this.tslSearch.Name = "tslSearch";
-            this.tslSearch.Size = new System.Drawing.Size(42, 22);
-            this.tslSearch.Text = "Search";
-            // 
-            // tstSearch
-            // 
-            this.tstSearch.Name = "tstSearch";
-            this.tstSearch.Size = new System.Drawing.Size(135, 25);
-            this.tstSearch.TextChanged += new System.EventHandler(this.tstSearch_TextChanged);
-            // 
-            // toolStripSeparator8
-            // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
             // 
             // tsbManageWindows
             // 
@@ -173,6 +150,17 @@
             this.closeAllWindowsExceptActiveToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
             this.closeAllWindowsExceptActiveToolStripMenuItem.Text = "Close all except active window";
             this.closeAllWindowsExceptActiveToolStripMenuItem.ToolTipText = "Only applies to Plugin pages";
+            // 
+            // tssWindows
+            // 
+            this.tssWindows.Name = "tssWindows";
+            this.tssWindows.Size = new System.Drawing.Size(231, 6);
+            // 
+            // tsmiShowStartPage
+            // 
+            this.tsmiShowStartPage.Name = "tsmiShowStartPage";
+            this.tsmiShowStartPage.Size = new System.Drawing.Size(234, 22);
+            this.tsmiShowStartPage.Text = "Show Start Page";
             // 
             // toolStripSeparator1
             // 
@@ -471,6 +459,7 @@
             this.llDonate.Text = "Click here to donate";
             this.llDonate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.llDonate.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.llDonate.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llDonate_LinkClicked);
             // 
             // label5
             // 
@@ -522,6 +511,7 @@
             this.llDismiss.TabIndex = 0;
             this.llDismiss.TabStop = true;
             this.llDismiss.Text = "Dismiss";
+            this.llDismiss.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llDismiss_LinkClicked);
             // 
             // pnlBottom
             // 
@@ -590,17 +580,6 @@
             this.dpMain.DocumentDragged += new System.EventHandler(this.dpMain_DocumentDragged);
             this.dpMain.ActivePaneChanged += new System.EventHandler(this.dpMain_ActivePaneChanged);
             // 
-            // tssWindows
-            // 
-            this.tssWindows.Name = "tssWindows";
-            this.tssWindows.Size = new System.Drawing.Size(231, 6);
-            // 
-            // tsmiShowStartPage
-            // 
-            this.tsmiShowStartPage.Name = "tsmiShowStartPage";
-            this.tsmiShowStartPage.Size = new System.Drawing.Size(234, 22);
-            this.tsmiShowStartPage.Text = "Show Start Page";
-            // 
             // NewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -638,8 +617,6 @@
         private System.Windows.Forms.ToolStrip tsMain;
         private System.Windows.Forms.Panel pnlTop;
         private System.Windows.Forms.ToolStripSeparator tssSearch;
-        private System.Windows.Forms.ToolStripLabel tslSearch;
-        private System.Windows.Forms.ToolStripTextBox tstSearch;
         private System.Windows.Forms.ToolStripSeparator tssOpenOrg;
         private System.Windows.Forms.ToolStripButton tsbOpenOrg;
         private System.Windows.Forms.Panel pnlSupport;
@@ -654,7 +631,6 @@
         private System.Windows.Forms.Label lblConnecting;
         private System.Windows.Forms.PictureBox pbConnectionLoading;
         private System.Windows.Forms.ToolStripButton tsbConnect;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
         private System.Windows.Forms.ToolStripDropDownButton tsbManageWindows;
         private System.Windows.Forms.ToolStripMenuItem closeCurrentWindowToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeAllWindowsToolStripMenuItem;

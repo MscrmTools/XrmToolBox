@@ -35,18 +35,12 @@ namespace XrmToolBox.TempNew
 
         public void LoadMru()
         {
-            var sw = new Stopwatch();
-            sw.Start();
-
             pnlMru.Controls.Clear();
 
             var list = new List<Control>();
 
             foreach (var mru in MostRecentlyUsedItems.Instance.Items)
             {
-                sw.Stop();
-                Console.WriteLine($@"{mru.PluginName}: {sw.ElapsedMilliseconds}");
-                sw.Start();
                 var plugin = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == mru.PluginName);
                 if (plugin != null)
                 {
@@ -58,13 +52,7 @@ namespace XrmToolBox.TempNew
                 }
             }
 
-            sw.Stop();
-            Console.WriteLine($@"{sw.ElapsedMilliseconds}");
-            sw.Start();
             pnlMru.Controls.AddRange(list.ToArray());
-
-            sw.Stop();
-            Console.WriteLine($@"{sw.ElapsedMilliseconds}");
         }
 
         private void Ctrl_OpenMruPluginRequested(object sender, OpenMruPluginEventArgs e)

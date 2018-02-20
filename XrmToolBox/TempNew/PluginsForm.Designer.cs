@@ -30,8 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PluginsForm));
-            this.pnlTop = new System.Windows.Forms.Panel();
-            this.pnlPlugins = new System.Windows.Forms.Panel();
             this.cmsOnePlugin = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiOpenProjectHomePage = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -40,39 +38,27 @@
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiHidePlugin = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiUninstallPlugin = new System.Windows.Forms.ToolStripMenuItem();
-            this.pnlHelp = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
+            this.pnlSearch = new System.Windows.Forms.Panel();
+            this.lblSearch = new System.Windows.Forms.Label();
+            this.txtSearch = new System.Windows.Forms.TextBox();
+            this.pnlTop = new System.Windows.Forms.Panel();
+            this.pnlMain = new System.Windows.Forms.Panel();
+            this.pnlPlugins = new System.Windows.Forms.Panel();
             this.pnlNoPluginFound = new System.Windows.Forms.Panel();
             this.llResetSearchFilter = new System.Windows.Forms.LinkLabel();
             this.pbOpenPluginsStore = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
             this.lblPluginsNotFoundText = new System.Windows.Forms.Label();
+            this.pnlHelp = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.cmsOnePlugin.SuspendLayout();
-            this.pnlHelp.SuspendLayout();
+            this.pnlSearch.SuspendLayout();
+            this.pnlMain.SuspendLayout();
             this.pnlNoPluginFound.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbOpenPluginsStore)).BeginInit();
+            this.pnlHelp.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // pnlTop
-            // 
-            this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlTop.Location = new System.Drawing.Point(0, 0);
-            this.pnlTop.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.pnlTop.Name = "pnlTop";
-            this.pnlTop.Size = new System.Drawing.Size(691, 39);
-            this.pnlTop.TabIndex = 0;
-            // 
-            // pnlPlugins
-            // 
-            this.pnlPlugins.AutoScroll = true;
-            this.pnlPlugins.BackColor = System.Drawing.Color.White;
-            this.pnlPlugins.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlPlugins.Location = new System.Drawing.Point(0, 39);
-            this.pnlPlugins.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.pnlPlugins.Name = "pnlPlugins";
-            this.pnlPlugins.Size = new System.Drawing.Size(691, 456);
-            this.pnlPlugins.TabIndex = 1;
             // 
             // cmsOnePlugin
             // 
@@ -129,43 +115,67 @@
             this.tsmiUninstallPlugin.Size = new System.Drawing.Size(277, 22);
             this.tsmiUninstallPlugin.Text = "Uninstall";
             // 
-            // pnlHelp
+            // pnlSearch
             // 
-            this.pnlHelp.BackColor = System.Drawing.Color.White;
-            this.pnlHelp.Controls.Add(this.label2);
-            this.pnlHelp.Controls.Add(this.label1);
-            this.pnlHelp.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlHelp.Location = new System.Drawing.Point(0, 0);
-            this.pnlHelp.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.pnlHelp.Name = "pnlHelp";
-            this.pnlHelp.Size = new System.Drawing.Size(691, 495);
-            this.pnlHelp.TabIndex = 9;
-            this.pnlHelp.Visible = false;
+            this.pnlSearch.BackColor = System.Drawing.Color.White;
+            this.pnlSearch.Controls.Add(this.txtSearch);
+            this.pnlSearch.Controls.Add(this.lblSearch);
+            this.pnlSearch.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlSearch.Location = new System.Drawing.Point(0, 0);
+            this.pnlSearch.Name = "pnlSearch";
+            this.pnlSearch.Size = new System.Drawing.Size(691, 30);
+            this.pnlSearch.TabIndex = 11;
             // 
-            // label2
+            // lblSearch
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblSearch.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblSearch.Location = new System.Drawing.Point(0, 0);
+            this.lblSearch.Name = "lblSearch";
+            this.lblSearch.Size = new System.Drawing.Size(50, 30);
+            this.lblSearch.TabIndex = 0;
+            this.lblSearch.Text = "Filter";
+            this.lblSearch.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(0, 42);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(683, 113);
-            this.label2.TabIndex = 1;
-            this.label2.Text = resources.GetString("label2.Text");
+            this.txtSearch.Location = new System.Drawing.Point(50, 5);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(638, 20);
+            this.txtSearch.TabIndex = 1;
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
-            // label1
+            // pnlTop
             // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(691, 33);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Oups... no plugin found!";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTop.Location = new System.Drawing.Point(0, 30);
+            this.pnlTop.Margin = new System.Windows.Forms.Padding(2);
+            this.pnlTop.Name = "pnlTop";
+            this.pnlTop.Size = new System.Drawing.Size(691, 39);
+            this.pnlTop.TabIndex = 16;
+            // 
+            // pnlMain
+            // 
+            this.pnlMain.Controls.Add(this.pnlNoPluginFound);
+            this.pnlMain.Controls.Add(this.pnlPlugins);
+            this.pnlMain.Controls.Add(this.pnlHelp);
+            this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlMain.Location = new System.Drawing.Point(0, 69);
+            this.pnlMain.Name = "pnlMain";
+            this.pnlMain.Size = new System.Drawing.Size(691, 426);
+            this.pnlMain.TabIndex = 20;
+            // 
+            // pnlPlugins
+            // 
+            this.pnlPlugins.AutoScroll = true;
+            this.pnlPlugins.BackColor = System.Drawing.Color.White;
+            this.pnlPlugins.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlPlugins.Location = new System.Drawing.Point(0, 0);
+            this.pnlPlugins.Margin = new System.Windows.Forms.Padding(2);
+            this.pnlPlugins.Name = "pnlPlugins";
+            this.pnlPlugins.Size = new System.Drawing.Size(691, 426);
+            this.pnlPlugins.TabIndex = 20;
             // 
             // pnlNoPluginFound
             // 
@@ -178,8 +188,8 @@
             this.pnlNoPluginFound.Location = new System.Drawing.Point(0, 0);
             this.pnlNoPluginFound.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.pnlNoPluginFound.Name = "pnlNoPluginFound";
-            this.pnlNoPluginFound.Size = new System.Drawing.Size(691, 495);
-            this.pnlNoPluginFound.TabIndex = 10;
+            this.pnlNoPluginFound.Size = new System.Drawing.Size(691, 426);
+            this.pnlNoPluginFound.TabIndex = 21;
             this.pnlNoPluginFound.Visible = false;
             this.pnlNoPluginFound.Resize += new System.EventHandler(this.pnlNoPluginFound_Resize);
             // 
@@ -202,7 +212,7 @@
             this.pbOpenPluginsStore.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbOpenPluginsStore.Image = ((System.Drawing.Image)(resources.GetObject("pbOpenPluginsStore.Image")));
             this.pbOpenPluginsStore.Location = new System.Drawing.Point(145, 156);
-            this.pbOpenPluginsStore.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pbOpenPluginsStore.Margin = new System.Windows.Forms.Padding(2);
             this.pbOpenPluginsStore.Name = "pbOpenPluginsStore";
             this.pbOpenPluginsStore.Size = new System.Drawing.Size(400, 83);
             this.pbOpenPluginsStore.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -239,6 +249,44 @@
             this.lblPluginsNotFoundText.Text = "Searching for \"{0}\" did not match any plugins installed";
             this.lblPluginsNotFoundText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // pnlHelp
+            // 
+            this.pnlHelp.BackColor = System.Drawing.Color.White;
+            this.pnlHelp.Controls.Add(this.label2);
+            this.pnlHelp.Controls.Add(this.label1);
+            this.pnlHelp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlHelp.Location = new System.Drawing.Point(0, 0);
+            this.pnlHelp.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.pnlHelp.Name = "pnlHelp";
+            this.pnlHelp.Size = new System.Drawing.Size(691, 426);
+            this.pnlHelp.TabIndex = 22;
+            this.pnlHelp.Visible = false;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(0, 42);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(683, 113);
+            this.label2.TabIndex = 1;
+            this.label2.Text = resources.GetString("label2.Text");
+            // 
+            // label1
+            // 
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.Red;
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(691, 33);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Oups... no plugin found!";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // PluginsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -246,29 +294,28 @@
             this.ClientSize = new System.Drawing.Size(691, 495);
             this.CloseButton = false;
             this.CloseButtonVisible = false;
-            this.Controls.Add(this.pnlPlugins);
+            this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlTop);
-            this.Controls.Add(this.pnlNoPluginFound);
-            this.Controls.Add(this.pnlHelp);
+            this.Controls.Add(this.pnlSearch);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "PluginsForm";
             this.Text = "Plugins";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PluginsForm_FormClosing);
             this.Load += new System.EventHandler(this.PluginsForm_Load);
             this.cmsOnePlugin.ResumeLayout(false);
-            this.pnlHelp.ResumeLayout(false);
+            this.pnlSearch.ResumeLayout(false);
+            this.pnlSearch.PerformLayout();
+            this.pnlMain.ResumeLayout(false);
             this.pnlNoPluginFound.ResumeLayout(false);
             this.pnlNoPluginFound.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbOpenPluginsStore)).EndInit();
+            this.pnlHelp.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Panel pnlTop;
-        private System.Windows.Forms.Panel pnlPlugins;
         private System.Windows.Forms.ContextMenuStrip cmsOnePlugin;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenProjectHomePage;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
@@ -277,6 +324,11 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripMenuItem tsmiHidePlugin;
         private System.Windows.Forms.ToolStripMenuItem tsmiUninstallPlugin;
+        private System.Windows.Forms.Panel pnlSearch;
+        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.Label lblSearch;
+        private System.Windows.Forms.Panel pnlTop;
+        private System.Windows.Forms.Panel pnlMain;
         private System.Windows.Forms.Panel pnlHelp;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
@@ -285,5 +337,6 @@
         private System.Windows.Forms.PictureBox pbOpenPluginsStore;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lblPluginsNotFoundText;
+        private System.Windows.Forms.Panel pnlPlugins;
     }
 }

@@ -74,7 +74,6 @@ namespace XrmToolBox.TempNew
         {
             if (!(dpMain.ActiveContent is PluginForm)) // Home Screen
             {
-                tstSearch.Enabled = true;
                 githubPluginMenuItem.Visible = false;
                 GithubXrmToolBoxMenuItem.Visible = false;
                 PaypalXrmToolBoxToolStripMenuItem.Visible = false;
@@ -85,8 +84,6 @@ namespace XrmToolBox.TempNew
                 return;
             }
 
-            // Disabling plugin search if not a home screen
-            tstSearch.Enabled = false;
             var pluginName = ((PluginForm)dpMain.ActiveContent).PluginTitle;
 
             if (((PluginForm)dpMain.ActiveContent).Control is IHelpPlugin help)

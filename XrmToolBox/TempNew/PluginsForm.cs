@@ -48,18 +48,6 @@ namespace XrmToolBox.TempNew
 
         #region Properties
 
-        public string FilterText
-        {
-            set
-            {
-                filterText = value;
-
-                searchThread?.Abort();
-                searchThread = new Thread(DisplayPlugins);
-                searchThread.Start(filterText);
-            }
-        }
-
         public ConnectionDetail ConnectionDetail { get; set; }
 
         public PluginManagerExtended PluginManager => pluginsManager;
@@ -94,6 +82,8 @@ namespace XrmToolBox.TempNew
         private void PluginsForm_Load(object sender, System.EventArgs e)
         {
             DisplayPlugins();
+
+            txtSearch.AutoCompleteCustomSource.AddRange(PluginManager.Plugins.Select(p => p.Metadata.Name).ToArray());
         }
 
         private void DisplayPlugins(object filter = null)
@@ -471,7 +461,7 @@ namespace XrmToolBox.TempNew
 
         private void llResetSearchFilter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            ActionRequested?.Invoke(this, new PluginsListEventArgs(PluginsListAction.ResetSearchFilter));
+            txtSearch.Text = string.Empty;
         }
 
         private void PluginsForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -486,6 +476,15 @@ namespace XrmToolBox.TempNew
             }
 
             e.Cancel = true;
+        }
+
+        private void txtSearch_TextChanged(object sender, System.EventArgs e)
+        {
+            filterText = txtSearch.Text;
+
+            searchThread?.Abort();
+            searchThread = new Thread(DisplayPlugins);
+            searchThread.Start(filterText);
         }
     }
 }

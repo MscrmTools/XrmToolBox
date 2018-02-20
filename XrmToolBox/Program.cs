@@ -71,12 +71,6 @@ namespace XrmToolBox
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-
-                //var version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                //var blackScreen = new WelcomeDialog(version) { StartPosition = FormStartPosition.CenterScreen };
-                //blackScreen.ShowDialog();
-                //blackScreen.SetWorkingMessage("Loading...");
-
                 Application.Run(new NewForm(args));
             }
             catch (Exception error)

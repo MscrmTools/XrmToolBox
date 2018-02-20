@@ -213,8 +213,6 @@ namespace XrmToolBox.TempNew
 
             WebProxyHelper.ApplyProxy();
 
-            tstSearch.AutoCompleteCustomSource.AddRange(pluginsForm.PluginManager.Plugins.Select(p => p.Metadata.Name).ToArray());
-
             var tasks = new List<Task>
             {
                 LaunchVersionCheck()
@@ -297,8 +295,6 @@ namespace XrmToolBox.TempNew
                 }
             }
 
-            tstSearch.Focus();
-
             // Hide & remove Welcome screen
             Opacity = 100;
             WelcomeDialog.CloseForm();
@@ -348,10 +344,6 @@ namespace XrmToolBox.TempNew
             {
                 case PluginsListAction.OpenPluginsStore:
                     tsddbTools_DropDownItemClicked(sender, new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
-                    break;
-
-                case PluginsListAction.ResetSearchFilter:
-                    tstSearch.Text = string.Empty;
                     break;
             }
         }
@@ -538,6 +530,7 @@ namespace XrmToolBox.TempNew
 
                     FillPluginsListMenuDisplay();
                 };
+                dpMain.Refresh();
 
                 pluginConnections.Add(pluginForm, connectionDetail);
                 if (connectionDetail == null)
@@ -642,7 +635,7 @@ namespace XrmToolBox.TempNew
 
         private void tstSearch_TextChanged(object sender, System.EventArgs e)
         {
-            pluginsForm.FilterText = tstSearch.Text;
+            // pluginsForm.FilterText = tstSearch.Text;
         }
 
         #region Connection methods
@@ -744,6 +737,7 @@ namespace XrmToolBox.TempNew
             fHelper = new FormHelper(this);
             ccsb = new CrmConnectionStatusBar(fHelper) { Dock = DockStyle.Bottom };
             Controls.Add(ccsb);
+            Controls.SetChildIndex(ccsb, Controls.Count - 1);
         }
 
         private void StartPluginWithConnection()
@@ -1197,7 +1191,8 @@ namespace XrmToolBox.TempNew
             if ((info.FormReason != CloseReason.None ||
                  info.ToolBoxReason == ToolBoxCloseReason.CloseAll ||
                  info.ToolBoxReason == ToolBoxCloseReason.CloseAllExceptActive)
-                && pagesList.Count > 0)
+                && pagesList.Count > 0
+                && !Options.Instance.CloseEachPluginSilently)
             {
                 info.Cancel = MessageBox.Show(@"Are you sure you want to close " + pagesList.Count + @" tab(s)?", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes;
                 if (info.Cancel)
@@ -1249,6 +1244,16 @@ namespace XrmToolBox.TempNew
             }
 
             Options.Instance.Save();
+        }
+
+        private void llDismiss_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            pnlSupport.Visible = false;
+        }
+
+        private void llDonate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("http://mscrmtools.blogspot.fr/p/xrmtoolbox-sponsoring.html");
         }
     }
 }

@@ -42,7 +42,7 @@
             this.NotifPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.NotifPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.NotifPanel.Location = new System.Drawing.Point(0, 0);
-            this.NotifPanel.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.NotifPanel.Margin = new System.Windows.Forms.Padding(1);
             this.NotifPanel.Name = "NotifPanel";
             this.NotifPanel.Size = new System.Drawing.Size(625, 31);
             this.NotifPanel.TabIndex = 0;
@@ -84,7 +84,7 @@
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.NotifPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "PluginForm";
             this.Text = "Plugin Form";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PluginForm_FormClosing);

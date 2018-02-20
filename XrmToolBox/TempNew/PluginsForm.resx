@@ -120,13 +120,6 @@
   <metadata name="cmsOnePlugin.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <data name="label2.Text" xml:space="preserve">
-    <value>This problem is probably due to the fact that the library files are locked by Windows. To resolve this issue, close the application, right-click on each of the files in the directory of the toolbox and click the "Unblock" button. Then rerun this application.
-
-This is also not supported to run this application from a network share.
-
-Or, there is no plugin file in 'Plugins' application subfolder.</value>
-  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="pbOpenPluginsStore.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -364,6 +357,13 @@ Or, there is no plugin file in 'Plugins' application subfolder.</value>
         bYPiCfcnlnCvs0Tqurho+bS/teJGXXMKMpFhGIZhmOJg69lGXfNsVJ//B8E8JwTTcasnAAAAAElFTkSu
         QmCC
 </value>
+  </data>
+  <data name="label2.Text" xml:space="preserve">
+    <value>This problem is probably due to the fact that the library files are locked by Windows. To resolve this issue, close the application, right-click on each of the files in the directory of the toolbox and click the "Unblock" button. Then rerun this application.
+
+This is also not supported to run this application from a network share.
+
+Or, there is no plugin file in 'Plugins' application subfolder.</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
