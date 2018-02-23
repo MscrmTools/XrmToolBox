@@ -47,19 +47,19 @@ namespace XrmToolBox.TempNew
 
         private void StatusBarMessager_SendMessageToStatusBar(object sender, StatusBarMessageEventArgs e)
         {
-            lastStatusEventArgs = e;
-
-            if (DockState != DockState.Float)
-            {
-                statusStrip1.Visible = false;
-                SendMessageToStatusBar?.Invoke(sender, e);
-                return;
-            }
-
-            SendMessageToStatusBar?.Invoke(sender, new StatusBarMessageEventArgs(null, null));
-
             void Mi()
             {
+                lastStatusEventArgs = e;
+
+                if (DockState != DockState.Float)
+                {
+                    statusStrip1.Visible = false;
+                    SendMessageToStatusBar?.Invoke(sender, e);
+                    return;
+                }
+
+                SendMessageToStatusBar?.Invoke(sender, new StatusBarMessageEventArgs(null, null));
+
                 statusStrip1.Visible = true;
 
                 if (string.IsNullOrEmpty(e.Message) && e.Progress == null)
