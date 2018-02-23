@@ -39,16 +39,16 @@
             this.tsmiHidePlugin = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiUninstallPlugin = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlSearch = new System.Windows.Forms.Panel();
-            this.lblSearch = new System.Windows.Forms.Label();
             this.txtSearch = new System.Windows.Forms.TextBox();
+            this.lblSearch = new System.Windows.Forms.Label();
             this.pnlTop = new System.Windows.Forms.Panel();
             this.pnlMain = new System.Windows.Forms.Panel();
-            this.pnlPlugins = new System.Windows.Forms.Panel();
             this.pnlNoPluginFound = new System.Windows.Forms.Panel();
             this.llResetSearchFilter = new System.Windows.Forms.LinkLabel();
             this.pbOpenPluginsStore = new System.Windows.Forms.PictureBox();
             this.label3 = new System.Windows.Forms.Label();
             this.lblPluginsNotFoundText = new System.Windows.Forms.Label();
+            this.pnlPlugins = new System.Windows.Forms.Panel();
             this.pnlHelp = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -126,6 +126,19 @@
             this.pnlSearch.Size = new System.Drawing.Size(691, 30);
             this.pnlSearch.TabIndex = 11;
             // 
+            // txtSearch
+            // 
+            this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSearch.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.txtSearch.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.txtSearch.Location = new System.Drawing.Point(50, 5);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(638, 20);
+            this.txtSearch.TabIndex = 1;
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            this.txtSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSearch_KeyDown);
+            // 
             // lblSearch
             // 
             this.lblSearch.Dock = System.Windows.Forms.DockStyle.Left;
@@ -135,16 +148,6 @@
             this.lblSearch.TabIndex = 0;
             this.lblSearch.Text = "Filter";
             this.lblSearch.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // txtSearch
-            // 
-            this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSearch.Location = new System.Drawing.Point(50, 5);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(638, 20);
-            this.txtSearch.TabIndex = 1;
-            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
             // pnlTop
             // 
@@ -165,17 +168,6 @@
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(691, 426);
             this.pnlMain.TabIndex = 20;
-            // 
-            // pnlPlugins
-            // 
-            this.pnlPlugins.AutoScroll = true;
-            this.pnlPlugins.BackColor = System.Drawing.Color.White;
-            this.pnlPlugins.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlPlugins.Location = new System.Drawing.Point(0, 0);
-            this.pnlPlugins.Margin = new System.Windows.Forms.Padding(2);
-            this.pnlPlugins.Name = "pnlPlugins";
-            this.pnlPlugins.Size = new System.Drawing.Size(691, 426);
-            this.pnlPlugins.TabIndex = 20;
             // 
             // pnlNoPluginFound
             // 
@@ -248,6 +240,17 @@
             this.lblPluginsNotFoundText.Tag = "Searching for \"{0}\" did not match any plugins installed";
             this.lblPluginsNotFoundText.Text = "Searching for \"{0}\" did not match any plugins installed";
             this.lblPluginsNotFoundText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // pnlPlugins
+            // 
+            this.pnlPlugins.AutoScroll = true;
+            this.pnlPlugins.BackColor = System.Drawing.Color.White;
+            this.pnlPlugins.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlPlugins.Location = new System.Drawing.Point(0, 0);
+            this.pnlPlugins.Margin = new System.Windows.Forms.Padding(2);
+            this.pnlPlugins.Name = "pnlPlugins";
+            this.pnlPlugins.Size = new System.Drawing.Size(691, 426);
+            this.pnlPlugins.TabIndex = 20;
             // 
             // pnlHelp
             // 

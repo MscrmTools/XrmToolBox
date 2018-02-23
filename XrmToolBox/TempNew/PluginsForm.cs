@@ -488,5 +488,22 @@ namespace XrmToolBox.TempNew
             searchThread = new Thread(DisplayPlugins);
             searchThread.Start(filterText);
         }
+
+        private void txtSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                var name = ((TextBox)sender).Text.ToLower();
+                var plugin = pluginsManager.Plugins.FirstOrDefault(p => p.Metadata.Name.ToLower().Contains(name));
+
+                if (plugin != null)
+                {
+                    OpenPluginRequested?.Invoke(this, new PluginEventArgs(plugin));
+
+                    // Clear the textbox
+                    txtSearch.Text = string.Empty;
+                }
+            }
+        }
     }
 }
