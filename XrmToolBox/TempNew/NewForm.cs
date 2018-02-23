@@ -20,6 +20,7 @@ using WeifenLuo.WinFormsUI.ThemeVS2015;
 using XrmToolBox.AppCode;
 using XrmToolBox.Controls;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Forms;
 using XrmToolBox.PluginsStore;
@@ -31,6 +32,7 @@ namespace XrmToolBox.TempNew
     {
         private readonly PluginsForm pluginsForm;
         private readonly Dictionary<PluginForm, ConnectionDetail> pluginConnections = new Dictionary<PluginForm, ConnectionDetail>();
+        private readonly List<PluginControlStatus> pluginControlStatuses = new List<PluginControlStatus>();
         private StartPage startPage;
 
         private CrmConnectionStatusBar ccsb;
@@ -519,6 +521,7 @@ namespace XrmToolBox.TempNew
 
                 var pluginForm = new PluginForm(pluginControl, name);
                 pluginForm.Show(dpMain, DockState.Document);
+                pluginForm.SendMessageToStatusBar += StatusBarMessenger_SendMessageToStatusBar;
                 pluginForm.CloseRequested += PluginForm_CloseRequested;
                 pluginForm.FormClosed += (sender, e) =>
                 {
@@ -530,6 +533,7 @@ namespace XrmToolBox.TempNew
 
                     FillPluginsListMenuDisplay();
                 };
+
                 dpMain.Refresh();
 
                 pluginConnections.Add(pluginForm, connectionDetail);
@@ -631,11 +635,6 @@ namespace XrmToolBox.TempNew
         private void NewForm_OnRequestConnection(object sender, System.EventArgs e)
         {
             ConnectUponApproval(e is RequestConnectionEventArgs ? e : sender);
-        }
-
-        private void tstSearch_TextChanged(object sender, System.EventArgs e)
-        {
-            // pluginsForm.FilterText = tstSearch.Text;
         }
 
         #region Connection methods
@@ -878,6 +877,54 @@ namespace XrmToolBox.TempNew
         }
 
         #endregion Message broker
+
+        #region StatusBar Messenger
+
+        private void StatusBarMessenger_SendMessageToStatusBar(object sender, StatusBarMessageEventArgs e)
+        {
+            var currentPlugin = pluginControlStatuses.FirstOrDefault(pcs => pcs.Control == sender);
+            if (currentPlugin == null)
+            {
+                pluginControlStatuses.Add(new PluginControlStatus(
+                    (IXrmToolBoxPluginControl)sender,
+                    e.Progress,
+                    e.Message
+                ));
+            }
+            else
+            {
+                currentPlugin.Percentage = e.Progress;
+                currentPlugin.Message = e.Message;
+            }
+
+            void Mi()
+            {
+                if (dpMain.ActiveContent is PluginForm pf)
+                {
+                    if (pf.Control == sender)
+                    {
+                        ccsb.SetMessage(e.Message);
+                        ccsb.SetProgress(e.Progress);
+                    }
+                }
+                else
+                {
+                    ccsb.SetMessage(null);
+                    ccsb.SetProgress(null);
+                }
+            }
+
+            if (InvokeRequired)
+            {
+                Invoke((MethodInvoker)Mi);
+            }
+            else
+            {
+                Mi();
+            }
+        }
+
+        #endregion StatusBar Messenger
 
         #region Check for update
 
@@ -1224,6 +1271,43 @@ namespace XrmToolBox.TempNew
         }
 
         #endregion Document management
+
+        #region Key Shortcuts
+
+        private void NewForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.Shift && e.KeyCode == Keys.C)
+            {
+                tsbConnect_Click(null, null);
+            }
+            else
+            {
+                ((dpMain.ActiveContent as PluginForm)?.Control as IShortcutReceiver)?.ReceiveKeyDownShortcut(e);
+            }
+        }
+
+        private void NewForm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            ((dpMain.ActiveContent as PluginForm)?.Control as IShortcutReceiver)?.ReceiveKeyPressShortcut(e);
+        }
+
+        private void NewForm_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (!(e.Control && e.Shift && e.KeyCode == Keys.C))
+            {
+                ((dpMain.ActiveContent as PluginForm)?.Control as IShortcutReceiver)?.ReceiveKeyUpShortcut(e);
+            }
+        }
+
+        private void NewForm_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (!(e.Control && e.Shift && e.KeyCode == Keys.C))
+            {
+                ((dpMain.ActiveContent as PluginForm)?.Control as IShortcutReceiver)?.ReceivePreviewKeyDownShortcut(e);
+            }
+        }
+
+        #endregion Key Shortcuts
 
         private void NewForm_FormClosing(object sender, FormClosingEventArgs e)
         {

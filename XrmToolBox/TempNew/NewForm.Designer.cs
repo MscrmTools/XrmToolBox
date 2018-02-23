@@ -600,6 +600,10 @@
             this.Text = "XrmToolBox for Microsoft Dynamics CRM/365 CE";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.NewForm_FormClosing);
             this.Load += new System.EventHandler(this.NewForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.NewForm_KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NewForm_KeyPress);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.NewForm_KeyUp);
+            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.NewForm_PreviewKeyDown);
             this.tsMain.ResumeLayout(false);
             this.tsMain.PerformLayout();
             this.pnlSupport.ResumeLayout(false);

@@ -11,13 +11,16 @@ using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace XrmToolBox.TempNew
 {
-    public partial class PluginForm : DockContent
+    public partial class PluginForm : DockContent, IStatusBarMessenger
     {
         private readonly PluginControlBase pluginControlBase;
+
+        private StatusBarMessageEventArgs lastStatusEventArgs;
 
         public PluginForm(UserControl control, string name)
         {
@@ -40,41 +43,56 @@ namespace XrmToolBox.TempNew
 
         public event EventHandler CloseRequested;
 
-        private void StatusBarMessager_SendMessageToStatusBar(object sender, Extensibility.Args.StatusBarMessageEventArgs e)
+        public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
+
+        private void StatusBarMessager_SendMessageToStatusBar(object sender, StatusBarMessageEventArgs e)
         {
+            lastStatusEventArgs = e;
+
+            if (DockState != DockState.Float)
+            {
+                statusStrip1.Visible = false;
+                SendMessageToStatusBar?.Invoke(sender, e);
+                return;
+            }
+
+            SendMessageToStatusBar?.Invoke(sender, new StatusBarMessageEventArgs(null, null));
+
             void Mi()
             {
+                statusStrip1.Visible = true;
+
                 if (string.IsNullOrEmpty(e.Message) && e.Progress == null)
                 {
-                    statusStrip.Visible = false;
+                    statusStrip1.Visible = false;
                 }
                 else if (!string.IsNullOrEmpty(e.Message) && e.Progress != null)
                 {
-                    toolStripProgressBar.Value = e.Progress ?? 0;
+                    toolStripProgressBar.Value = e.Progress.Value;
                     toolStripStatusLabel.Text = e.Message;
                     toolStripProgressBar.Visible = true;
                     toolStripStatusLabel.Visible = true;
-                    statusStrip.Visible = true;
+                    statusStrip1.Visible = true;
                 }
                 else if (!string.IsNullOrEmpty(e.Message))
                 {
                     toolStripStatusLabel.Text = e.Message;
                     toolStripStatusLabel.Visible = true;
                     toolStripProgressBar.Visible = false;
-                    statusStrip.Visible = true;
+                    statusStrip1.Visible = true;
                 }
                 else if (e.Progress != null)
                 {
                     toolStripProgressBar.Value = e.Progress.Value;
                     toolStripProgressBar.Visible = true;
                     toolStripStatusLabel.Visible = false;
-                    statusStrip.Visible = true;
+                    statusStrip1.Visible = true;
                 }
             }
 
-            if (InvokeRequired)
+            if (statusStrip1.InvokeRequired)
             {
-                Invoke((MethodInvoker)Mi);
+                statusStrip1.Invoke((MethodInvoker)Mi);
             }
             else
             {
@@ -109,20 +127,30 @@ namespace XrmToolBox.TempNew
         private void PluginForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             CloseRequested?.Invoke(this, new System.EventArgs());
-            //if (Options.Instance.CloseEachPluginSilently) return;
-
-            //if (e.CloseReason != CloseReason.UserClosing) return;
-
-            //var closeInfo = new PluginCloseInfo(ToolBoxCloseReason.PluginRequest);
-
-            //pluginControlBase.ClosingPlugin(closeInfo);
-
-            //e.Cancel = closeInfo.Cancel;
         }
 
         private void PluginForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             pluginControlBase.Dispose();
+        }
+
+        private void PluginForm_DockStateChanged(object sender, System.EventArgs e)
+        {
+            if (lastStatusEventArgs != null)
+            {
+                if (DockState == DockState.Float || DockState == DockState.Hidden)
+                {
+                    SendMessageToStatusBar?.Invoke(Control, new StatusBarMessageEventArgs(null, null));
+                }
+
+                var timer = new Timer { Interval = 100 };
+                timer.Tick += (s, evt) =>
+                {
+                    timer.Stop();
+                    StatusBarMessager_SendMessageToStatusBar(Control, lastStatusEventArgs);
+                };
+                timer.Start();
+            }
         }
     }
 }
