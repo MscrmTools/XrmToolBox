@@ -42,6 +42,8 @@ namespace XrmToolBox.TempNew
             pluginsManager = new PluginManagerExtended(this) { IsWatchingForNewPlugins = true };
             pluginsManager.Initialize();
             pluginsManager.PluginsListUpdated += pManager_PluginsListUpdated;
+
+            MouseWheel += (sender, e) => pnlPlugins.Focus();
         }
 
         #endregion Constructor
