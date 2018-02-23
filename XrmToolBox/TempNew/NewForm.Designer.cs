@@ -594,6 +594,7 @@
             this.Controls.Add(this.pnlConnectLoading);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
+            this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "NewForm";
             this.Opacity = 0D;
