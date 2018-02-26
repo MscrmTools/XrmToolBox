@@ -401,6 +401,7 @@
             this.tsbOpenOrg.Text = "Open organization";
             this.tsbOpenOrg.ToolTipText = "Opens the connected organization in your web browser";
             this.tsbOpenOrg.Visible = false;
+            this.tsbOpenOrg.Click += new System.EventHandler(this.tsbOpenOrg_Click);
             // 
             // pnlTop
             // 

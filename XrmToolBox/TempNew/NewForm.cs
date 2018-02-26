@@ -1192,6 +1192,25 @@ namespace XrmToolBox.TempNew
             aForm.ShowDialog(this);
         }
 
+        private void tsbOpenOrg_Click(object sender, System.EventArgs e)
+        {
+            var activeContent = dpMain.ActiveContent as PluginForm;
+            var url = string.Empty;
+            if (activeContent == null)
+            {
+                url = connectionDetail.WebApplicationUrl;
+            }
+            else if (pluginConnections.ContainsKey(activeContent) && pluginConnections[activeContent] != null)
+            {
+                url = pluginConnections[activeContent].WebApplicationUrl;
+            }
+
+            if (url.Length > 0)
+            {
+                Process.Start(url);
+            }
+        }
+
         #region Document management
 
         private void tsbManageWindows_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
