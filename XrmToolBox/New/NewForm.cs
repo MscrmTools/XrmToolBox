@@ -251,16 +251,16 @@ namespace XrmToolBox.New
                 Options.Instance.Size.ApplyFormSize(this);
             }
 
+            // Hide & remove Welcome screen
+            Opacity = 100;
+            WelcomeDialog.CloseForm();
+            BringToTop();
+
             if (!Options.Instance.AllowLogUsage.HasValue)
             {
                 Options.Instance.AllowLogUsage = LogUsage.PromptToLog();
                 Options.Instance.Save();
             }
-
-            // Hide & remove Welcome screen
-            Opacity = 100;
-            WelcomeDialog.CloseForm();
-            BringToTop();
 
             if (Options.Instance.DisplayPluginsStoreOnStartup)
             {
