@@ -33,13 +33,8 @@ namespace MsCrmTools.SampleTool
     ExportMetadata("BackgroundColor", "Lavender"),
     ExportMetadata("PrimaryFontColor", "#000000"),
     ExportMetadata("SecondaryFontColor", "DarkGray")]
-    public class Plugin : PluginBase
+    public class Plugin : PluginBase, INoConnectionRequired
     {
-        public Plugin()
-        {
-            var a = new CsvHelper.CsvParser(TextReader.Null);
-        }
-
         /// <summary>
         /// This method return the actual usercontrol that will
         /// be used in XrmToolBox

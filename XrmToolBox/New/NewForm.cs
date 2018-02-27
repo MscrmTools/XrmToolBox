@@ -448,6 +448,12 @@ namespace XrmToolBox.New
 
         private void PluginsForm_OpenPluginRequested(object sender, PluginEventArgs e)
         {
+            if (e.Plugin.Value is INoConnectionRequired)
+            {
+                DisplayPluginControl(e.Plugin);
+                return;
+            }
+
             if (service == null)
             {
                 var result = MessageBox.Show(this, @"Do you want to connect to an organization first?", @"Question",
