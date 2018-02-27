@@ -13,7 +13,7 @@ using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Forms;
 using XrmToolBox.PluginsStore;
-using XrmToolBox.TempNew;
+using XrmToolBox.New;
 using PluginUpdates = XrmToolBox.AppCode.PluginUpdates;
 
 namespace XrmToolBox

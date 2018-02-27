@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
-namespace XrmToolBox.TempNew
+namespace XrmToolBox.New
 {
     partial class NewForm
     {

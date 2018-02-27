@@ -9,7 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
-using XrmToolBox.TempNew;
+using XrmToolBox.New;
 
 namespace XrmToolBox
 {

@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
-namespace XrmToolBox.TempNew
+namespace XrmToolBox.New
 {
     public partial class NewVersionForm : DockContent
     {

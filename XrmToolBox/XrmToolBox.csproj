@@ -185,11 +185,8 @@
   <ItemGroup>
     <Compile Include="AppCode\DockExtensions.cs" />
     <Compile Include="AppCode\Extensions.cs" />
-    <Compile Include="AppCode\GithubInformation.cs" />
-    <Compile Include="AppCode\Github.cs" />
     <Compile Include="AppCode\ListViewItemComparer.cs" />
     <Compile Include="AppCode\LogUsage.cs" />
-    <Compile Include="AppCode\Markdown.cs" />
     <Compile Include="AppCode\MostRecentlyUsedItems.cs" />
     <Compile Include="AppCode\PluginControlStatus.cs" />
     <Compile Include="AppCode\PluginUpdates.cs" />
@@ -214,30 +211,13 @@
     <Compile Include="Forms\WelcomeDialog.Designer.cs">
       <DependentUpon>WelcomeDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="InvalidXrmSdkReferenceException.cs" />
     <Compile Include="AppCode\ItSecurityChecker.cs" />
-    <Compile Include="MainForm.PluginsManagement.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AppCode\GithubVersionChecker.cs" />
     <Compile Include="CrmExceptionHelper.cs" />
-    <Compile Include="Forms\AboutForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\AboutForm.Designer.cs">
-      <DependentUpon>AboutForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\OptionsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\OptionsDialog.Designer.cs">
       <DependentUpon>OptionsDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Options.cs" />
     <Compile Include="PluginManagerExtended.cs" />
@@ -251,74 +231,70 @@
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </Compile>
     <Compile Include="ProxySettingsHelper.cs" />
-    <Compile Include="TempNew\EventArgs\OpenMruPluginEventArgs.cs" />
-    <Compile Include="TempNew\EventArgs\OpenPluginEventArgs.cs" />
-    <Compile Include="TempNew\EventArgs\PluginEventArgs.cs" />
-    <Compile Include="TempNew\EventArgs\PluginsListEventArgs.cs" />
-    <Compile Include="TempNew\InvalidPluginsForm.cs">
+    <Compile Include="New\EventArgs\OpenMruPluginEventArgs.cs" />
+    <Compile Include="New\EventArgs\OpenPluginEventArgs.cs" />
+    <Compile Include="New\EventArgs\PluginEventArgs.cs" />
+    <Compile Include="New\EventArgs\PluginsListEventArgs.cs" />
+    <Compile Include="New\InvalidPluginsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TempNew\InvalidPluginsForm.Designer.cs">
+    <Compile Include="New\InvalidPluginsForm.Designer.cs">
       <DependentUpon>InvalidPluginsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TempNew\MostRecentlyUsedItemControl.cs">
+    <Compile Include="New\MostRecentlyUsedItemControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TempNew\MostRecentlyUsedItemControl.Designer.cs">
+    <Compile Include="New\MostRecentlyUsedItemControl.Designer.cs">
       <DependentUpon>MostRecentlyUsedItemControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="TempNew\NewForm.Community.cs">
+    <Compile Include="New\NewForm.Community.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TempNew\NewForm.cs">
+    <Compile Include="New\NewForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TempNew\NewForm.Designer.cs">
+    <Compile Include="New\NewForm.Designer.cs">
       <DependentUpon>NewForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TempNew\NewVersionForm.cs">
+    <Compile Include="New\NewVersionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TempNew\NewVersionForm.Designer.cs">
+    <Compile Include="New\NewVersionForm.Designer.cs">
       <DependentUpon>NewVersionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TempNew\PluginForm.cs">
+    <Compile Include="New\PluginForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TempNew\PluginForm.Designer.cs">
+    <Compile Include="New\PluginForm.Designer.cs">
       <DependentUpon>PluginForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TempNew\InvalidPluginsInfo.cs">
+    <Compile Include="New\InvalidPluginsInfo.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TempNew\InvalidPluginsInfo.Designer.cs">
+    <Compile Include="New\InvalidPluginsInfo.Designer.cs">
       <DependentUpon>InvalidPluginsInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="TempNew\PluginsFilterInfo.cs">
+    <Compile Include="New\PluginsFilterInfo.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TempNew\PluginsFilterInfo.Designer.cs">
+    <Compile Include="New\PluginsFilterInfo.Designer.cs">
       <DependentUpon>PluginsFilterInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="TempNew\PluginsForm.cs">
+    <Compile Include="New\PluginsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TempNew\PluginsForm.Designer.cs">
+    <Compile Include="New\PluginsForm.Designer.cs">
       <DependentUpon>PluginsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TempNew\StartPage.cs">
+    <Compile Include="New\StartPage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TempNew\StartPage.Designer.cs">
+    <Compile Include="New\StartPage.Designer.cs">
       <DependentUpon>StartPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI.cs" />
     <Compile Include="XmlSerializerHelper.cs" />
     <EmbeddedResource Include="Controls\ConnectingControl.resx">
       <DependentUpon>ConnectingControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\AboutForm.resx">
-      <DependentUpon>AboutForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NewVersionForm.resx">
       <DependentUpon>NewVersionForm.cs</DependentUpon>
@@ -328,9 +304,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\WelcomeDialog.resx">
       <DependentUpon>WelcomeDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -345,39 +318,36 @@
     <EmbeddedResource Include="Forms\TabConnectionUpdater.resx">
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TempNew\InvalidPluginsForm.resx">
+    <EmbeddedResource Include="New\InvalidPluginsForm.resx">
       <DependentUpon>InvalidPluginsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TempNew\MostRecentlyUsedItemControl.resx">
+    <EmbeddedResource Include="New\MostRecentlyUsedItemControl.resx">
       <DependentUpon>MostRecentlyUsedItemControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TempNew\NewForm.resx">
+    <EmbeddedResource Include="New\NewForm.resx">
       <DependentUpon>NewForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TempNew\NewVersionForm.resx">
+    <EmbeddedResource Include="New\NewVersionForm.resx">
       <DependentUpon>NewVersionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TempNew\PluginForm.resx">
+    <EmbeddedResource Include="New\PluginForm.resx">
       <DependentUpon>PluginForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TempNew\InvalidPluginsInfo.resx">
+    <EmbeddedResource Include="New\InvalidPluginsInfo.resx">
       <DependentUpon>InvalidPluginsInfo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TempNew\PluginsFilterInfo.resx">
+    <EmbeddedResource Include="New\PluginsFilterInfo.resx">
       <DependentUpon>PluginsFilterInfo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TempNew\PluginsForm.resx">
+    <EmbeddedResource Include="New\PluginsForm.resx">
       <DependentUpon>PluginsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TempNew\StartPage.resx">
+    <EmbeddedResource Include="New\StartPage.resx">
       <DependentUpon>StartPage.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <Compile Include="MainForm.Community.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <None Include="app.manifest" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
@@ -389,7 +359,6 @@
     <None Include="Resources\twitter.png" />
     <None Include="Resources\Gitter32.png" />
     <None Include="Resources\paypal.png" />
-    <Content Include="XrmToolBox.ico" />
     <Content Include="XrmToolBox201512.ico" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />

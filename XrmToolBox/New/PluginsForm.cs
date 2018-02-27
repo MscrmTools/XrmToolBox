@@ -14,9 +14,9 @@ using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.UserControls;
-using XrmToolBox.TempNew.EventArgs;
+using XrmToolBox.New.EventArgs;
 
-namespace XrmToolBox.TempNew
+namespace XrmToolBox.New
 {
     public partial class PluginsForm : DockContent
     {

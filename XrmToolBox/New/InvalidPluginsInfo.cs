@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace XrmToolBox.TempNew
+namespace XrmToolBox.New
 {
     public partial class InvalidPluginsInfo : UserControl
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XrmToolBox.Extensibility.Interfaces;
 
-namespace XrmToolBox.TempNew.EventArgs
+namespace XrmToolBox.New.EventArgs
 {
     public class OpenPluginEventArgs : System.EventArgs
     {

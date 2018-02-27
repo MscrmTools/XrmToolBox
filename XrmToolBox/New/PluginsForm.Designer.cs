@@ -1,4 +1,4 @@
-﻿namespace XrmToolBox.TempNew
+﻿namespace XrmToolBox.New
 {
     partial class PluginsForm
     {

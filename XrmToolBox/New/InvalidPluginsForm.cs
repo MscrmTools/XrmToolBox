@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 
-namespace XrmToolBox.TempNew
+namespace XrmToolBox.New
 {
     public partial class InvalidPluginsForm : Form
     {

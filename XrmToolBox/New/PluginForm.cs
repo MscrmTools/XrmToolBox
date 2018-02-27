@@ -14,7 +14,7 @@ using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 
-namespace XrmToolBox.TempNew
+namespace XrmToolBox.New
 {
     public partial class PluginForm : DockContent, IStatusBarMessenger
     {

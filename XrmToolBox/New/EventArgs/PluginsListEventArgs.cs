@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XrmToolBox.TempNew.EventArgs
+namespace XrmToolBox.New.EventArgs
 {
     public class PluginsListEventArgs : System.EventArgs
     {

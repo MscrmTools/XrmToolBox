@@ -1,6 +1,6 @@
 ﻿using XrmToolBox.AppCode;
 
-namespace XrmToolBox.TempNew.EventArgs
+namespace XrmToolBox.New.EventArgs
 {
     public class OpenMruPluginEventArgs : System.EventArgs
     {

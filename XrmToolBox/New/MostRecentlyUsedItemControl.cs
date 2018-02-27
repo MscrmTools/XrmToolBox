@@ -4,10 +4,10 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
-using XrmToolBox.TempNew.EventArgs;
+using XrmToolBox.New.EventArgs;
 using Timer = System.Timers.Timer;
 
-namespace XrmToolBox.TempNew
+namespace XrmToolBox.New
 {
     public partial class MostRecentlyUsedItemControl : UserControl
     {

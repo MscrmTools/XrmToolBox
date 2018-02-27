@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using XrmToolBox.TempNew;
+using XrmToolBox.New;
 
 namespace XrmToolBox.Forms
 {

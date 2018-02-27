@@ -6,9 +6,9 @@ using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.AppCode;
-using XrmToolBox.TempNew.EventArgs;
+using XrmToolBox.New.EventArgs;
 
-namespace XrmToolBox.TempNew
+namespace XrmToolBox.New
 {
     public partial class StartPage : DockContent
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.UserControls;
 
-namespace XrmToolBox.TempNew.EventArgs
+namespace XrmToolBox.New.EventArgs
 {
     public class PluginEventArgs : System.EventArgs
     {

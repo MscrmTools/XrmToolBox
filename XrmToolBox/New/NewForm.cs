@@ -24,9 +24,9 @@ using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Forms;
 using XrmToolBox.PluginsStore;
-using XrmToolBox.TempNew.EventArgs;
+using XrmToolBox.New.EventArgs;
 
-namespace XrmToolBox.TempNew
+namespace XrmToolBox.New
 {
     public partial class NewForm : Form
     {

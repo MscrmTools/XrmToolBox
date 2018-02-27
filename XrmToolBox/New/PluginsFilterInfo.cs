@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace XrmToolBox.TempNew
+namespace XrmToolBox.New
 {
     public partial class PluginsFilterInfo : UserControl
     {
