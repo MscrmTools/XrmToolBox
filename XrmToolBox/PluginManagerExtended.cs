@@ -97,10 +97,20 @@ namespace XrmToolBox
             }
             catch (ReflectionTypeLoadException e)
             {
+                ValidationErrors = new Dictionary<string, string>();
+
                 foreach (var exception in e.LoaderExceptions)
                 {
-                    var source = exception.Source;
+                    var assemblies = e.Types.Select(t => t?.Assembly.FullName ?? "").Distinct();
+                    foreach (var assembly in assemblies)
+                    {
+                        ValidationErrors.Add(assembly, exception.Message);
+                    }
                 }
+
+                var ipForm = new InvalidPluginsForm(ValidationErrors);
+                ipForm.TopMost = true;
+                ipForm.ShowDialog();
             }
         }
 
