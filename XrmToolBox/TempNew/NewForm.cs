@@ -50,6 +50,7 @@ namespace XrmToolBox.TempNew
         public NewForm(string[] args)
         {
             InitializeComponent();
+
             Text = $@"{Text} (v{Assembly.GetExecutingAssembly().GetName().Version})";
 
             // Set drawing optimizations
@@ -66,7 +67,15 @@ namespace XrmToolBox.TempNew
             ccsb.MergeConnectionsFiles = Options.Instance.MergeConnectionFiles;
 
             WelcomeDialog.SetStatus("Loading plugins...");
-            pluginsForm = new PluginsForm();
+            try
+            {
+                pluginsForm = new PluginsForm();
+            }
+            catch
+            {
+                Close();
+            }
+
             pluginsForm.OpenPluginRequested += PluginsForm_OpenPluginRequested;
             pluginsForm.OpenPluginProjectUrlRequested += PluginsForm_OpenPluginProjectUrlRequested;
             pluginsForm.UninstallPluginRequested += PluginsForm_UninstallPluginRequested;
@@ -91,6 +100,7 @@ namespace XrmToolBox.TempNew
                 {
                     initialConnectionName = Options.Instance.LastConnection;
                 }
+
                 if (!string.IsNullOrEmpty(Options.Instance.LastPlugin))
                 {
                     initialPluginName = Options.Instance.LastPlugin;
@@ -291,8 +301,8 @@ namespace XrmToolBox.TempNew
             Options.Instance.Size.CurrentSize = Size;
             Options.Instance.Size.IsMaximized = WindowState == FormWindowState.Maximized;
             Options.Instance.LastConnection = connectionDetail?.ConnectionName;
-            Options.Instance.PluginsListDocking = pluginsForm.DockState;
-            Options.Instance.PluginsListIsHidden = pluginsForm.IsHidden;
+            Options.Instance.PluginsListDocking = pluginsForm?.DockState ?? DockState.Document;
+            Options.Instance.PluginsListIsHidden = pluginsForm?.IsHidden ?? false;
 
             if (dpMain.ActiveContent is PluginForm pf)
             {
@@ -1069,16 +1079,11 @@ namespace XrmToolBox.TempNew
                     form = new StoreFormFromPortal();
                 }
 
-                form.PluginsUpdated += (storeForm, evt) =>
-                {
-                    // If plugins list gets updated, refresh the list
-                    pluginsForm.ReloadPluginsList();
-                };
-
                 // Avoid scanning for new files during Plugins Store usage.
                 pluginsForm.PluginManager.IsWatchingForNewPlugins = false;
                 ((Form)form).ShowDialog(this);
                 pluginsForm.PluginManager.IsWatchingForNewPlugins = true;
+                pluginsForm.ReloadPluginsList();
 
                 // Apply option to show Plugins Store on startup on main options
                 if (Options.Instance.DisplayPluginsStoreOnStartup != PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup)
@@ -1158,7 +1163,7 @@ namespace XrmToolBox.TempNew
                 {
                     var lastReleaseVersion = releases.Items.Max(i => new Version(i.Version));
                     var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-                    if (lastReleaseVersion >= currentVersion)
+                    if (lastReleaseVersion > currentVersion)
                     {
                         var release = releases.Items.FirstOrDefault(r => r.Version == lastReleaseVersion.ToString());
 

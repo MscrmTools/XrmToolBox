@@ -42,9 +42,10 @@ namespace XrmToolBox.TempNew
             lblConnectionName.BackColor = Color.Transparent;
         }
 
-        private void OnClick(object sender, System.EventArgs e)
+        private void OnMouseClick(object sender, MouseEventArgs e)
         {
-            OpenMruPluginRequested?.Invoke(this, new OpenMruPluginEventArgs(item));
+            if (e.Button == MouseButtons.Left)
+                OpenMruPluginRequested?.Invoke(this, new OpenMruPluginEventArgs(item));
         }
 
         private void MostRecentlyUsedItemControl_Load(object sender, System.EventArgs e)
@@ -73,13 +74,13 @@ namespace XrmToolBox.TempNew
 
                 MouseEnter += OnMouseEnter;
                 MouseLeave += OnMouseLeave;
-                Click += OnClick;
+                MouseClick += OnMouseClick;
 
                 foreach (Control ctrl in Controls)
                 {
                     ctrl.MouseEnter += OnMouseEnter;
                     ctrl.MouseLeave += OnMouseLeave;
-                    ctrl.Click += OnClick;
+                    ctrl.MouseClick += OnMouseClick;
                 }
             };
             timer.Start();

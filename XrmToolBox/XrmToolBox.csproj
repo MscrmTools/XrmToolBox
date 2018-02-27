@@ -255,6 +255,12 @@
     <Compile Include="TempNew\EventArgs\OpenPluginEventArgs.cs" />
     <Compile Include="TempNew\EventArgs\PluginEventArgs.cs" />
     <Compile Include="TempNew\EventArgs\PluginsListEventArgs.cs" />
+    <Compile Include="TempNew\InvalidPluginsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TempNew\InvalidPluginsForm.Designer.cs">
+      <DependentUpon>InvalidPluginsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TempNew\MostRecentlyUsedItemControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -281,6 +287,18 @@
     </Compile>
     <Compile Include="TempNew\PluginForm.Designer.cs">
       <DependentUpon>PluginForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TempNew\InvalidPluginsInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TempNew\InvalidPluginsInfo.Designer.cs">
+      <DependentUpon>InvalidPluginsInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TempNew\PluginsFilterInfo.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TempNew\PluginsFilterInfo.Designer.cs">
+      <DependentUpon>PluginsFilterInfo.cs</DependentUpon>
     </Compile>
     <Compile Include="TempNew\PluginsForm.cs">
       <SubType>Form</SubType>
@@ -327,6 +345,9 @@
     <EmbeddedResource Include="Forms\TabConnectionUpdater.resx">
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TempNew\InvalidPluginsForm.resx">
+      <DependentUpon>InvalidPluginsForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TempNew\MostRecentlyUsedItemControl.resx">
       <DependentUpon>MostRecentlyUsedItemControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -338,6 +359,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TempNew\PluginForm.resx">
       <DependentUpon>PluginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TempNew\InvalidPluginsInfo.resx">
+      <DependentUpon>InvalidPluginsInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TempNew\PluginsFilterInfo.resx">
+      <DependentUpon>PluginsFilterInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TempNew\PluginsForm.resx">
       <DependentUpon>PluginsForm.cs</DependentUpon>

@@ -70,7 +70,7 @@ namespace XrmToolBox.TempNew
 
         public void OpenPlugin(string pluginName)
         {
-            var plugin = pluginsManager.Plugins.FirstOrDefault(p => p.Metadata.Name == pluginName);
+            var plugin = pluginsManager.ValidatedPlugins.FirstOrDefault(p => p.Metadata.Name == pluginName);
             if (plugin == null)
             {
                 var message = $@"Plugin '{pluginName}' was not found.\n\nYou can install it from the Plugins Store";
@@ -94,10 +94,24 @@ namespace XrmToolBox.TempNew
             isc.LoadAllowedPlugins();
             Invoke(new Action(() =>
             {
-                pnlTop.Visible = isc.HasPluginsRestriction;
+                pnlTop.Controls.Clear();
+
+                if (isc.HasPluginsRestriction)
+                {
+                    var secInfo = new PluginsFilterInfo { Dock = DockStyle.Fill };
+                    pnlTop.Controls.Add(secInfo);
+                }
+
+                if (pluginsManager.ValidationErrors?.Any() ?? false)
+                {
+                    var invalidInfo = new InvalidPluginsInfo(pluginsManager.ValidationErrors) { Dock = DockStyle.Fill };
+                    pnlTop.Controls.Add(invalidInfo);
+                }
+
+                pnlTop.Visible = pnlTop.Controls.Count > 0;
             }));
 
-            if (!pluginsManager.Plugins.Any())
+            if (!pluginsManager.ValidatedPlugins?.Any() ?? false)
             {
                 Invoke(new Action(() =>
                 {
@@ -112,11 +126,11 @@ namespace XrmToolBox.TempNew
 
             // Search with filter defined
             var filteredPlugins = (filter != null && filter.ToString().Length > 0
-                ? pluginsManager.Plugins.Where(p
+                ? pluginsManager.ValidatedPlugins.Where(p
                     => p.Metadata.Name.ToLower().Contains(filter.ToString().ToLower())
                     || p.Metadata.Description.ToLower().Contains(filter.ToString().ToLower())
                     || p.Value.GetType().GetCompany().ToLower().Contains(filter.ToString().ToLower()))
-                : pluginsManager.Plugins).OrderBy(p => p.Metadata.Name).ToList();
+                : pluginsManager.ValidatedPlugins).OrderBy(p => p.Metadata.Name).ToList();
 
             if (Options.Instance.DisplayOrder == "Most used")
             {
@@ -352,6 +366,10 @@ namespace XrmToolBox.TempNew
             pluginsManager.Recompose();
             pluginsModels.Clear();
             DisplayPlugins(filterText);
+
+            if (pluginsManager.ValidationErrors.Count > 0)
+            {
+            }
         }
 
         private async Task WaitFileIsCopied()
@@ -494,7 +512,7 @@ namespace XrmToolBox.TempNew
             if (e.KeyData == Keys.Enter)
             {
                 var name = ((TextBox)sender).Text.ToLower();
-                var plugin = pluginsManager.Plugins.FirstOrDefault(p => p.Metadata.Name.ToLower().Contains(name));
+                var plugin = pluginsManager.ValidatedPlugins.FirstOrDefault(p => p.Metadata.Name.ToLower().Contains(name));
 
                 if (plugin != null)
                 {

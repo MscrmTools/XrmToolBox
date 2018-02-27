@@ -142,16 +142,20 @@ namespace XrmToolBox.Forms
         {
             foreach (var plugin in pManager.Plugins)
             {
-                var title = plugin.Metadata.Name;
-                var author = plugin.Value.GetCompany();
-                var version = plugin.Value.GetVersion();
+                try
+                {
+                    var title = plugin.Metadata.Name;
+                    var author = plugin.Value.GetCompany();
+                    var version = plugin.Value.GetVersion();
 
-                var item = new ListViewItem(title);
-                item.SubItems.Add(author);
-                item.SubItems.Add(version);
-                item.Checked = option.HiddenPlugins == null || !option.HiddenPlugins.Contains(title);
+                    var item = new ListViewItem(title);
+                    item.SubItems.Add(author);
+                    item.SubItems.Add(version);
+                    item.Checked = option.HiddenPlugins == null || !option.HiddenPlugins.Contains(title);
 
-                lvPlugins.Items.Add(item);
+                    lvPlugins.Items.Add(item);
+                }
+                catch { }
             }
 
             // Load proxy options

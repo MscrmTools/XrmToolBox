@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
+using System.IO;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
@@ -33,6 +35,11 @@ namespace MsCrmTools.SampleTool
     ExportMetadata("SecondaryFontColor", "DarkGray")]
     public class Plugin : PluginBase
     {
+        public Plugin()
+        {
+            var a = new CsvHelper.CsvParser(TextReader.Null);
+        }
+
         /// <summary>
         /// This method return the actual usercontrol that will
         /// be used in XrmToolBox

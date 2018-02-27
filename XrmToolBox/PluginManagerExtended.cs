@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
+using XrmToolBox.TempNew;
 
 namespace XrmToolBox
 {
@@ -15,14 +17,12 @@ namespace XrmToolBox
     {
         //private static readonly string PluginPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "Plugins");
         private static readonly string PluginPath = Paths.PluginsPath;
+
         private CompositionContainer container;
         private DirectoryCatalog directoryCatalog;
-        private DateTime lastPluginsUpdate;
 
         public PluginManagerExtended(Form parentForm)
         {
-            lastPluginsUpdate = DateTime.Now;
-
             if (!Directory.Exists(PluginPath))
             {
                 Directory.CreateDirectory(PluginPath);
@@ -40,13 +40,22 @@ namespace XrmToolBox
 
         public event EventHandler PluginsListUpdated;
 
+        public Dictionary<string, string> ValidationErrors { get; set; }
+
         public bool IsWatchingForNewPlugins { get; set; }
 
         [ImportMany(AllowRecomposition = true)]
         public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> Plugins { get; set; }
 
+        public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> ValidatedPlugins
+        {
+            get { return Plugins?.Where(p => !ValidationErrors.ContainsKey(p.Metadata.Name)); }
+        }
+
         public void Initialize()
         {
+            ValidationErrors = new Dictionary<string, string>();
+
             try
             {
                 directoryCatalog = new DirectoryCatalog(PluginPath);
@@ -55,32 +64,62 @@ namespace XrmToolBox
                 catalog.Catalogs.Add(directoryCatalog);
                 container = new CompositionContainer(catalog);
                 container.ComposeParts(this);
+                ValidatePlugins();
             }
             catch (ReflectionTypeLoadException ex)
             {
-                if (ex.LoaderExceptions.Length == 1)
-                {
-                    throw ex.LoaderExceptions[0];
-                }
-                var sb = new StringBuilder();
-                var i = 1;
-                sb.AppendLine("Multiple Exception Occured Attempting to Intialize the Plugin Manager");
+                ValidationErrors = new Dictionary<string, string>();
+
                 foreach (var exception in ex.LoaderExceptions)
                 {
-                    sb.AppendLine("Exception " + i++);
-                    sb.AppendLine(exception.ToString());
-                    sb.AppendLine();
-                    sb.AppendLine();
+                    var assemblies = ex.Types.Select(t => t?.Assembly.FullName ?? "").Distinct();
+                    foreach (var assembly in assemblies)
+                    {
+                        ValidationErrors.Add(assembly, exception.Message);
+                    }
                 }
 
-                throw new ReflectionTypeLoadException(ex.Types, ex.LoaderExceptions, sb.ToString());
+                var ipForm = new InvalidPluginsForm(ValidationErrors);
+                ipForm.TopMost = true;
+                ipForm.ShowDialog();
+
+                throw;
             }
         }
 
         public void Recompose()
         {
-            directoryCatalog.Refresh();
-            container.ComposeParts(directoryCatalog.Parts);
+            try
+            {
+                directoryCatalog.Refresh();
+                container.ComposeParts(directoryCatalog.Parts);
+                ValidatePlugins();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                foreach (var exception in e.LoaderExceptions)
+                {
+                    var source = exception.Source;
+                }
+            }
+        }
+
+        public void ValidatePlugins()
+        {
+            ValidationErrors = new Dictionary<string, string>();
+
+            foreach (var plugin in Plugins)
+            {
+                try
+                {
+                    // ReSharper disable once UnusedVariable
+                    var value = plugin.Value;
+                }
+                catch (Exception e)
+                {
+                    ValidationErrors.Add(plugin.Metadata.Name, e.Message);
+                }
+            }
         }
 
         private void watcher_EventRaised(object sender, FileSystemEventArgs e)
@@ -91,7 +130,7 @@ namespace XrmToolBox
 
                 if (IsWatchingForNewPlugins)
                 {
-                    PluginsListUpdated(this, new EventArgs());
+                    PluginsListUpdated?.Invoke(this, new EventArgs());
                 }
             }
             finally

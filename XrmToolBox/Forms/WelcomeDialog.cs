@@ -84,6 +84,8 @@ namespace XrmToolBox.Forms
             if (!closeWindow)
             {
                 linkClose.Visible = true;
+                lblWorkingState.Text = string.Empty;
+                lblWorkingState.Visible = false;
             }
         }
 
