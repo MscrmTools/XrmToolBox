@@ -433,7 +433,7 @@ namespace XrmToolBox.New
                 return;
             }
 
-            var filePath = Assembly.GetAssembly(e.PluginControl.GetType()).Location;
+            var filePath = Assembly.GetAssembly(e.PluginControl?.GetType() ?? e.Plugin.Value.GetType()).Location;
             if (File.Exists(filePath))
             {
                 var fileName = Path.GetFileName(filePath);
