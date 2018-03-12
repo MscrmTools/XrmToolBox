@@ -306,6 +306,7 @@ namespace XrmToolBox.PluginsStore
             // 
             this.tssProgress.Name = "tssProgress";
             this.tssProgress.Size = new System.Drawing.Size(133, 16);
+            this.tssProgress.Step = 1;
             this.tssProgress.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.tssProgress.Visible = false;
             // 
@@ -627,6 +628,7 @@ namespace XrmToolBox.PluginsStore
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "XrmToolBox Plugins Store";
+            this.TopMost = true;
             this.Load += new System.EventHandler(this.PluginsChecker_Load);
             this.tsMain.ResumeLayout(false);
             this.tsMain.PerformLayout();

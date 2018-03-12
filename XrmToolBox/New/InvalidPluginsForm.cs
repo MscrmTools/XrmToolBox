@@ -36,6 +36,7 @@ namespace XrmToolBox.New
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             Process.Start(Paths.PluginsPath);
+            Close();
         }
     }
 }

@@ -5,9 +5,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.ServiceModel.Channels;
 using System.Threading;
 using System.Windows.Forms;
 using XrmToolBox.PluginsStore.DTO;
+using Message = System.Windows.Forms.Message;
 
 namespace XrmToolBox.PluginsStore
 {
@@ -98,6 +100,7 @@ namespace XrmToolBox.PluginsStore
 
             lvPlugins.Items.Clear();
             tssLabel.Text = "Retrieving plugins from Nuget feed...";
+            tssProgress.Style = ProgressBarStyle.Marquee;
             tssProgress.Visible = true;
             tssPluginsCount.Visible = false;
             splitContainer1.Panel2Collapsed = true;
@@ -336,16 +339,42 @@ namespace XrmToolBox.PluginsStore
                 return;
             }
 
-            var updates = store.PrepareInstallationPackages(packages);
-            if (store.PerformInstallation(updates))
-            {
-                // Refresh plugins list when installation is done
-                RefreshPluginsList();
-                MessageBox.Show("Installation done!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            tsMain.Enabled = false;
+            lvPlugins.Enabled = false;
 
-            var size = store.CalculateCacheFolderSize();
-            tsbCleanCacheFolder.ToolTipText = $"Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {size}MB";
+            var bw = new BackgroundWorker();
+            bw.WorkerReportsProgress = true;
+            bw.DoWork += (sbw, evt) =>
+            {
+                var updates = store.PrepareInstallationPackages((List<XtbPlugin>)evt.Argument, (BackgroundWorker)sbw);
+                evt.Result = store.PerformInstallation(updates);
+            };
+            bw.ProgressChanged += (sbw, evt) =>
+            {
+                tssProgress.Style = ProgressBarStyle.Continuous;
+                tssProgress.Visible = true;
+                tssProgress.Value = evt.ProgressPercentage;
+                tssLabel.Visible = true;
+                tssLabel.Text = $@"Loading {evt.UserState.ToString()}...";
+                tssPluginsCount.Text = string.Empty;
+            };
+            bw.RunWorkerCompleted += (sbw, evt) =>
+            {
+                tsMain.Enabled = true;
+                lvPlugins.Enabled = true;
+                tssProgress.Visible = false;
+                tssLabel.Text = string.Empty;
+
+                if ((bool)evt.Result)
+                {
+                    // Refresh plugins list when installation is done
+                    RefreshPluginsList();
+                    MessageBox.Show("Installation done!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                var size = store.CalculateCacheFolderSize();
+                tsbCleanCacheFolder.ToolTipText = $"Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {size}MB";
+            };
+            bw.RunWorkerAsync(packages);
         }
 
         private void tsbLoadPlugins_Click(object sender, EventArgs e)

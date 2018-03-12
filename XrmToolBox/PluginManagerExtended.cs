@@ -104,12 +104,12 @@ namespace XrmToolBox
                     var assemblies = e.Types.Select(t => t?.Assembly.FullName ?? "").Distinct();
                     foreach (var assembly in assemblies)
                     {
-                        ValidationErrors.Add(assembly, exception.Message);
+                        if (!ValidationErrors.ContainsKey(assembly))
+                            ValidationErrors.Add(assembly, exception.Message);
                     }
                 }
 
-                var ipForm = new InvalidPluginsForm(ValidationErrors);
-                ipForm.TopMost = true;
+                var ipForm = new InvalidPluginsForm(ValidationErrors) { TopMost = true };
                 ipForm.ShowDialog();
             }
         }

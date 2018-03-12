@@ -73,52 +73,53 @@ namespace XrmToolBox.New
             }
             catch
             {
-                Close();
             }
 
-            pluginsForm.OpenPluginRequested += PluginsForm_OpenPluginRequested;
-            pluginsForm.OpenPluginProjectUrlRequested += PluginsForm_OpenPluginProjectUrlRequested;
-            pluginsForm.UninstallPluginRequested += PluginsForm_UninstallPluginRequested;
-            pluginsForm.ActionRequested += PluginsForm_ActionRequested;
-
-            if (!Options.Instance.DoNotShowStartPage)
+            if (pluginsForm != null)
             {
-                WelcomeDialog.SetStatus("Preparing Start page...");
-
-                ShowStartPage();
-            }
-
-            pluginsForm.Show(dpMain, Options.Instance.PluginsListDocking);
-            pluginsForm.IsHidden = Options.Instance.PluginsListIsHidden;
-
-            ProcessMenuItemsForPlugin();
-
-            // Restore session management
-            if (Options.Instance.RememberSession)
-            {
-                if (!string.IsNullOrEmpty(Options.Instance.LastConnection))
+                pluginsForm.OpenPluginRequested += PluginsForm_OpenPluginRequested;
+                pluginsForm.OpenPluginProjectUrlRequested += PluginsForm_OpenPluginProjectUrlRequested;
+                pluginsForm.UninstallPluginRequested += PluginsForm_UninstallPluginRequested;
+                pluginsForm.ActionRequested += PluginsForm_ActionRequested;
+                if (!Options.Instance.DoNotShowStartPage)
                 {
-                    initialConnectionName = Options.Instance.LastConnection;
+                    WelcomeDialog.SetStatus("Preparing Start page...");
+
+                    ShowStartPage();
                 }
 
-                if (!string.IsNullOrEmpty(Options.Instance.LastPlugin))
+                pluginsForm.Show(dpMain, Options.Instance.PluginsListDocking);
+                pluginsForm.IsHidden = Options.Instance.PluginsListIsHidden;
+
+                ProcessMenuItemsForPlugin();
+
+                // Restore session management
+                if (Options.Instance.RememberSession)
                 {
-                    initialPluginName = Options.Instance.LastPlugin;
+                    if (!string.IsNullOrEmpty(Options.Instance.LastConnection))
+                    {
+                        initialConnectionName = Options.Instance.LastConnection;
+                    }
+
+                    if (!string.IsNullOrEmpty(Options.Instance.LastPlugin))
+                    {
+                        initialPluginName = Options.Instance.LastPlugin;
+                    }
                 }
-            }
 
-            // Read arguments to detect if a plugin should be displayed automatically
-            if (args.Length > 0)
-            {
-                initialConnectionName = ExtractSwitchValue("/connection:", ref args);
-                initialPluginName = ExtractSwitchValue("/plugin:", ref args);
-
-                if (!string.IsNullOrEmpty(initialConnectionName))
+                // Read arguments to detect if a plugin should be displayed automatically
+                if (args.Length > 0)
                 {
-                    pnlConnectLoading.BringToFront();
+                    initialConnectionName = ExtractSwitchValue("/connection:", ref args);
+                    initialPluginName = ExtractSwitchValue("/plugin:", ref args);
 
-                    pnlConnectLoading.Visible = true;
-                    lblConnecting.Text = string.Format(lblConnecting.Tag.ToString(), initialConnectionName);
+                    if (!string.IsNullOrEmpty(initialConnectionName))
+                    {
+                        pnlConnectLoading.BringToFront();
+
+                        pnlConnectLoading.Visible = true;
+                        lblConnecting.Text = string.Format(lblConnecting.Tag.ToString(), initialConnectionName);
+                    }
                 }
             }
         }
@@ -200,7 +201,7 @@ namespace XrmToolBox.New
 
         private async void NewForm_Load(object sender, System.EventArgs e)
         {
-            if (!Options.Instance.DoNotShowStartPage)
+            if (!Options.Instance.DoNotShowStartPage && startPage != null)
             {
                 startPage.EnsureVisible(dpMain, DockState.Document);
             }
@@ -252,9 +253,12 @@ namespace XrmToolBox.New
             }
 
             // Hide & remove Welcome screen
-            Opacity = 100;
             WelcomeDialog.CloseForm();
-            BringToTop();
+            Invoke(new Action(() =>
+            {
+                Opacity = 100;
+                BringToTop();
+            }));
 
             if (!Options.Instance.AllowLogUsage.HasValue)
             {
@@ -1060,6 +1064,11 @@ namespace XrmToolBox.New
         {
             if (e.ClickedItem == pluginsStoreToolStripMenuItem)
             {
+                if (pluginsForm == null)
+                {
+                    return;
+                }
+
                 // If the options were not initialized, it means we are using the
                 // new plugins store for the first time. Copy values from main
                 // options file

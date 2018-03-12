@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -131,12 +132,15 @@ namespace XrmToolBox.PluginsStore
             return plugin?.ProjectUrl;
         }
 
-        public PluginUpdates PrepareInstallationPackages(List<XtbPlugin> pluginsToInstall)
+        public PluginUpdates PrepareInstallationPackages(List<XtbPlugin> pluginsToInstall, BackgroundWorker worker = null)
         {
             var pus = new PluginUpdates { PreviousProcessId = Process.GetCurrentProcess().Id };
-
+            int i = 0;
             foreach (var plugin in pluginsToInstall)
             {
+                i++;
+                worker?.ReportProgress(i * 100 / pluginsToInstall.Count, plugin.Name);
+
                 var nugetPlugin =
                     manager.SourceRepository.FindPackage(plugin.NugetId, new SemanticVersion(plugin.Version), false, false);
 

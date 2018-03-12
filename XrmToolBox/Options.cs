@@ -39,22 +39,25 @@ namespace XrmToolBox
                 size.Width = Screen.PrimaryScreen.WorkingArea.Width;
             }
 
-            if (form.MinimumSize.Width > size.Width)
+            form.Invoke(new Action(() =>
             {
-                size.Width = form.MinimumSize.Width;
-            }
+                if (form.MinimumSize.Width > size.Width)
+                {
+                    size.Width = form.MinimumSize.Width;
+                }
 
-            if (form.MinimumSize.Height > size.Height)
-            {
-                size.Height = form.MinimumSize.Height;
-            }
+                if (form.MinimumSize.Height > size.Height)
+                {
+                    size.Height = form.MinimumSize.Height;
+                }
 
-            if (size.Height != 0)
-            {
-                form.Size = size;
-                form.Top = (Screen.PrimaryScreen.WorkingArea.Height - size.Height) / 2;
-                form.Left = (Screen.PrimaryScreen.WorkingArea.Width - size.Width) / 2;
-            }
+                if (size.Height != 0)
+                {
+                    form.Size = size;
+                    form.Top = (Screen.PrimaryScreen.WorkingArea.Height - size.Height) / 2;
+                    form.Left = (Screen.PrimaryScreen.WorkingArea.Width - size.Width) / 2;
+                }
+            }));
         }
     }
 
