@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.ServiceModel.Channels;
 using System.Threading;
 using System.Windows.Forms;
 using XrmToolBox.PluginsStore.DTO;
@@ -13,14 +12,6 @@ using Message = System.Windows.Forms.Message;
 
 namespace XrmToolBox.PluginsStore
 {
-    //public enum PackageInstallAction
-    //{
-    //    None,
-    //    Install,
-    //    Update,
-    //    Unavailable
-    //}
-
     public partial class StoreFormFromPortal : Form, IStoreForm
     {
         private int sortedColumnIndex = -1;
@@ -45,7 +36,7 @@ namespace XrmToolBox.PluginsStore
             store = new StoreFromPortal();
             store.PluginsUpdated += (sender, e) => { PluginsUpdated?.Invoke(sender, e); };
             var size = store.CalculateCacheFolderSize();
-            tsbCleanCacheFolder.ToolTipText = $"Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {size}MB";
+            tsbCleanCacheFolder.ToolTipText = $@"Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {size}MB";
         }
 
         public event EventHandler PluginsUpdated;
@@ -93,13 +84,13 @@ namespace XrmToolBox.PluginsStore
             selectedPackagesId.Clear();
 
             tstSearch.TextChanged -= tstSearch_TextChanged;
-            tstSearch.Text = "Search by Title or Authors";
+            tstSearch.Text = @"Search by Title or Authors";
             tstSearch.ForeColor = SystemColors.InactiveCaption;
             tstSearch.TextChanged += tstSearch_TextChanged;
             tstSearch.Enabled = false;
 
             lvPlugins.Items.Clear();
-            tssLabel.Text = "Retrieving plugins from Nuget feed...";
+            tssLabel.Text = @"Retrieving plugins from Nuget feed...";
             tssProgress.Style = ProgressBarStyle.Marquee;
             tssProgress.Visible = true;
             tssPluginsCount.Visible = false;
@@ -179,10 +170,7 @@ namespace XrmToolBox.PluginsStore
 
                 var items = (List<ListViewItem>)e.Result;
 
-                tssPluginsCount.Text = string.Format("Plugins: {0} / New: {1} / Updates: {2}",
-                    allPlugins,
-                    newPlugin,
-                    updatePlugin);
+                tssPluginsCount.Text = $@"Plugins: {allPlugins} / New: {newPlugin} / Updates: {updatePlugin}";
                 tssPluginsCount.Visible = true;
 
                 lvPlugins.Items.AddRange(items.ToArray());
@@ -199,6 +187,7 @@ namespace XrmToolBox.PluginsStore
                 {
                     value = Convert.ToBoolean(lvPlugins.Columns[e.Column].Tag);
                 }
+                // ReSharper disable once EmptyGeneralCatchClause
                 catch
                 {
                 }
@@ -237,6 +226,7 @@ namespace XrmToolBox.PluginsStore
                 {
                     value = Convert.ToBoolean(e.Header.Tag);
                 }
+                // ReSharper disable once EmptyGeneralCatchClause
                 catch (Exception)
                 {
                 }
@@ -339,11 +329,20 @@ namespace XrmToolBox.PluginsStore
                 return;
             }
 
+            var licensedPlugins = packages.Where(p => p.LicenseUrl != null).ToList();
+            if (licensedPlugins.Any())
+            {
+                var licenseAcceptanceForm = new LicenseAcceptanceForm(licensedPlugins);
+                if (licenseAcceptanceForm.ShowDialog(this) != DialogResult.Yes)
+                {
+                    return;
+                }
+            }
+
             tsMain.Enabled = false;
             lvPlugins.Enabled = false;
 
-            var bw = new BackgroundWorker();
-            bw.WorkerReportsProgress = true;
+            var bw = new BackgroundWorker { WorkerReportsProgress = true };
             bw.DoWork += (sbw, evt) =>
             {
                 var updates = store.PrepareInstallationPackages((List<XtbPlugin>)evt.Argument, (BackgroundWorker)sbw);
@@ -369,10 +368,10 @@ namespace XrmToolBox.PluginsStore
                 {
                     // Refresh plugins list when installation is done
                     RefreshPluginsList();
-                    MessageBox.Show("Installation done!", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(@"Installation done!", @"Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 var size = store.CalculateCacheFolderSize();
-                tsbCleanCacheFolder.ToolTipText = $"Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {size}MB";
+                tsbCleanCacheFolder.ToolTipText = $@"Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {size}MB";
             };
             bw.RunWorkerAsync(packages);
         }
@@ -426,8 +425,7 @@ namespace XrmToolBox.PluginsStore
 
             if (!string.IsNullOrEmpty(releaseNotes))
             {
-                Uri releaseNotesUri;
-                if (Uri.TryCreate(releaseNotes, UriKind.Absolute, out releaseNotesUri))
+                if (Uri.TryCreate(releaseNotes, UriKind.Absolute, out _))
                 {
                     var llbl = new LinkLabel { Text = releaseNotes };
                     llbl.Click += (s, evt) => { Process.Start(((LinkLabel)s).Text); };
@@ -438,9 +436,12 @@ namespace XrmToolBox.PluginsStore
                 }
                 else
                 {
-                    var lbl = new Label { Text = releaseNotes };
-                    lbl.Dock = DockStyle.Fill;
-                    lbl.AutoSize = false;
+                    var lbl = new Label
+                    {
+                        Text = releaseNotes,
+                        Dock = DockStyle.Fill,
+                        AutoSize = false
+                    };
 
                     pnlReleaseNotesDetails.Controls.Add(lbl);
                 }
@@ -449,7 +450,7 @@ namespace XrmToolBox.PluginsStore
             {
                 var lbl = new Label
                 {
-                    Text = "N/A",
+                    Text = @"N/A",
                     Dock = DockStyle.Fill,
                     AutoSize = false
                 };
@@ -461,7 +462,7 @@ namespace XrmToolBox.PluginsStore
             {
                 case CompatibleState.DoesntFitMinimumVersion:
                     {
-                        lblNotif.Text = $"This plugin has not been developed specificaly to support latest breaking change version of XrmToolBox. Contact plugin author to make him support at least version {Store.MinCompatibleVersion}";
+                        lblNotif.Text = $@"This plugin has not been developed specificaly to support latest breaking change version of XrmToolBox. Contact plugin author to make him support at least version {Store.MinCompatibleVersion}";
                         pbNotifIcon.Image = iiNotif.Images[2];
                         pnlNotif.Visible = true;
                     }
@@ -469,7 +470,7 @@ namespace XrmToolBox.PluginsStore
 
                 case CompatibleState.RequireNewVersionOfXtb:
                     {
-                        lblNotif.Text = "This plugin implements features from latest version of XrmToolBox. Please update your XrmToolBox to latest version to be able to install this plugin version";
+                        lblNotif.Text = @"This plugin implements features from latest version of XrmToolBox. Please update your XrmToolBox to latest version to be able to install this plugin version";
                         pbNotifIcon.Image = iiNotif.Images[1];
                         pnlNotif.Visible = true;
                     }
@@ -477,7 +478,7 @@ namespace XrmToolBox.PluginsStore
 
                 case CompatibleState.Other:
                     {
-                        lblNotif.Text = "Something is wrong with this plugin package and we can't validate it is compatible with this version of XrmToolBox. Please contact the author to make him review his package";
+                        lblNotif.Text = @"Something is wrong with this plugin package and we can't validate it is compatible with this version of XrmToolBox. Please contact the author to make him review his package";
                         pbNotifIcon.Image = iiNotif.Images[2];
                         pnlNotif.Visible = true;
                     }
@@ -592,7 +593,7 @@ namespace XrmToolBox.PluginsStore
                 var lblDescriptionHeader = new Label
                 {
                     Dock = DockStyle.Top,
-                    Text = "Description",
+                    Text = @"Description",
                     Font = new Font("Microsoft Sans Serif", 8, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point),
                     Height = 16
                 };
@@ -638,8 +639,7 @@ namespace XrmToolBox.PluginsStore
             };
 
             Control rightControl = null;
-            var stringValue = value as string;
-            if (stringValue != null)
+            if (value is string stringValue)
             {
                 rightControl = new Label
                 {
@@ -648,8 +648,7 @@ namespace XrmToolBox.PluginsStore
                 };
             }
 
-            Uri parsedUri;
-            if (Uri.TryCreate(value?.ToString(), UriKind.Absolute, out parsedUri))
+            if (Uri.TryCreate(value?.ToString(), UriKind.Absolute, out var parsedUri))
             {
                 rightControl = new LinkLabel
                 {
@@ -666,7 +665,7 @@ namespace XrmToolBox.PluginsStore
                 rightControl = new Label
                 {
                     Dock = DockStyle.Fill,
-                    Text = "N/A"
+                    Text = @"N/A"
                 };
             }
 
@@ -722,15 +721,15 @@ namespace XrmToolBox.PluginsStore
         private void tsbCleanCacheFolder_Click(object sender, EventArgs e)
         {
             if (DialogResult.No ==
-                MessageBox.Show(this, "Are you sure you want to delete XrmToolBox Plugins Store cache?", "Question",
+                MessageBox.Show(this, @"Are you sure you want to delete XrmToolBox Plugins Store cache?", @"Question",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question))
             {
                 return;
             }
 
             var size = store.CleanCacheFolder();
-            tsbCleanCacheFolder.ToolTipText = $"Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {size}MB";
-            MessageBox.Show(this, "Cache folder has been cleaned");
+            tsbCleanCacheFolder.ToolTipText = $@"Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {size}MB";
+            MessageBox.Show(this, @"Cache folder has been cleaned");
         }
 
         private Thread searchThread;
@@ -834,8 +833,8 @@ namespace XrmToolBox.PluginsStore
             if (conflicts.Count > 0)
             {
                 var result = MessageBox.Show(this,
-                    "Some plugins will be partially removed since they share files with other plugins.\n\nDo you want to continue anyway?",
-                    "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    @"Some plugins will be partially removed since they share files with other plugins.\n\nDo you want to continue anyway?",
+                    @"Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (result == DialogResult.No)
                 {
                     return;

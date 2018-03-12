@@ -101,9 +101,21 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="IStore.cs" />
     <Compile Include="IStoreForm.cs" />
+    <Compile Include="LicenseAcceptanceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LicenseAcceptanceForm.Designer.cs">
+      <DependentUpon>LicenseAcceptanceForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ListViewItemComparer.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="PluginDeletions.cs" />
+    <Compile Include="PluginLicense.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PluginLicense.Designer.cs">
+      <DependentUpon>PluginLicense.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -130,6 +142,12 @@
     <Compile Include="XtbNugetPackage.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="LicenseAcceptanceForm.resx">
+      <DependentUpon>LicenseAcceptanceForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PluginLicense.resx">
+      <DependentUpon>PluginLicense.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

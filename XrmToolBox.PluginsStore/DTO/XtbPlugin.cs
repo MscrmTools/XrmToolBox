@@ -57,6 +57,9 @@ namespace XrmToolBox.PluginsStore.DTO
         [DataMember(Name = "mctools_latestreleasenote")]
         public string LatestReleaseNote { get; internal set; }
 
+        [DataMember(Name = "mctools_licenseurl")]
+        public string LicenseUrl { get; internal set; }
+
         [DataMember(Name = "list-id")]
         public string ListId { get; set; }
 
