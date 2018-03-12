@@ -78,6 +78,9 @@ namespace XrmToolBox.PluginsStore.DTO
         [DataMember(Name = "mctools_projecturl")]
         public string ProjectUrl { get; internal set; }
 
+        [DataMember(Name = "mctools_requirelicenseacceptance")]
+        public bool? RequireLicenseAcceptance { get; internal set; }
+
         public bool RequiresXtbRestart { get; internal set; }
 
         [DataMember(Name = "mctools_totaldownloadcount")]

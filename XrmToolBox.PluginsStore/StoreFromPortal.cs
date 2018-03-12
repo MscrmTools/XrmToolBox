@@ -123,6 +123,11 @@ namespace XrmToolBox.PluginsStore
 
         public XtbPlugin GetPluginByFileName(string filename)
         {
+            if (XrmToolBoxPlugins == null)
+            {
+                LoadNugetPackages();
+            }
+
             return XrmToolBoxPlugins.Plugins.FirstOrDefault(p => p.Files.Any(f => f.ToLower().IndexOf(filename.ToLower(), StringComparison.Ordinal) >= 0));
         }
 

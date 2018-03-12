@@ -329,7 +329,7 @@ namespace XrmToolBox.PluginsStore
                 return;
             }
 
-            var licensedPlugins = packages.Where(p => p.LicenseUrl != null).ToList();
+            var licensedPlugins = packages.Where(p => p.RequireLicenseAcceptance ?? false).ToList();
             if (licensedPlugins.Any())
             {
                 var licenseAcceptanceForm = new LicenseAcceptanceForm(licensedPlugins);
