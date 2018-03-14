@@ -299,18 +299,21 @@ namespace XrmToolBox.PluginsStore
             }
         }
 
-        public bool PerformInstallation(PluginUpdates updates)
+        public bool PerformInstallation(PluginUpdates updates, Form storeForm)
         {
             if (updates.Plugins.Any(p => p.RequireRestart))
             {
                 XmlSerializerHelper.SerializeToFile(updates, Path.Combine(Paths.XrmToolBoxPath, "Update.xml"));
 
-                if (DialogResult.Yes == MessageBox.Show(
-                    "This application needs to restart to install updated plugins (or new plugins that share some files with already installed plugins). Click Yes to restart this application now",
-                    "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
+                storeForm.Invoke(new Action(() =>
                 {
-                    Application.Restart();
-                }
+                    if (DialogResult.Yes == MessageBox.Show(storeForm,
+                            @"This application needs to restart to install updated plugins (or new plugins that share some files with already installed plugins). Click Yes to restart this application now",
+                            @"Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
+                    {
+                        Application.Restart();
+                    }
+                }));
 
                 return false;
             }

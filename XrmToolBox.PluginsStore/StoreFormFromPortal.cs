@@ -346,7 +346,7 @@ namespace XrmToolBox.PluginsStore
             bw.DoWork += (sbw, evt) =>
             {
                 var updates = store.PrepareInstallationPackages((List<XtbPlugin>)evt.Argument, (BackgroundWorker)sbw);
-                evt.Result = store.PerformInstallation(updates);
+                evt.Result = store.PerformInstallation(updates, this);
             };
             bw.ProgressChanged += (sbw, evt) =>
             {
@@ -354,11 +354,14 @@ namespace XrmToolBox.PluginsStore
                 tssProgress.Visible = true;
                 tssProgress.Value = evt.ProgressPercentage;
                 tssLabel.Visible = true;
-                tssLabel.Text = $@"Loading {evt.UserState.ToString()}...";
+                tssLabel.Text = $@"Downloading {evt.UserState.ToString()}...";
                 tssPluginsCount.Text = string.Empty;
             };
             bw.RunWorkerCompleted += (sbw, evt) =>
             {
+                if (!Application.OpenForms.OfType<StoreFormFromPortal>().Any())
+                    return;
+
                 tsMain.Enabled = true;
                 lvPlugins.Enabled = true;
                 tssProgress.Visible = false;
@@ -368,7 +371,7 @@ namespace XrmToolBox.PluginsStore
                 {
                     // Refresh plugins list when installation is done
                     RefreshPluginsList();
-                    MessageBox.Show(@"Installation done!", @"Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(this, @"Installation done!", @"Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 var size = store.CalculateCacheFolderSize();
                 tsbCleanCacheFolder.ToolTipText = $@"Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {size}MB";
