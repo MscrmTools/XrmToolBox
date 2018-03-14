@@ -157,29 +157,35 @@ namespace XrmToolBox
             if (!File.Exists(updateFile))
                 return;
 
-            using (StreamReader reader = new StreamReader(updateFile))
+            try
             {
-                var pus = (PluginUpdates)XmlSerializerHelper.Deserialize(reader.ReadToEnd(), typeof(PluginUpdates));
-
-                try
+                using (StreamReader reader = new StreamReader(updateFile))
                 {
+                    var pus = (PluginUpdates)XmlSerializerHelper.Deserialize(reader.ReadToEnd(),
+                        typeof(PluginUpdates));
+
                     var oldProcess = Process.GetProcessById(pus.PreviousProcessId);
-                    oldProcess.WaitForExit(1000);
-                }
-                catch { }
+                    oldProcess.WaitForExit();
 
-                foreach (var pu in pus.Plugins)
-                {
-                    if (!Directory.Exists(Path.GetDirectoryName(pu.Destination)))
+                    foreach (var pu in pus.Plugins)
                     {
-                        Directory.CreateDirectory(Path.GetDirectoryName(pu.Destination));
+                        if (!Directory.Exists(Path.GetDirectoryName(pu.Destination)))
+                        {
+                            Directory.CreateDirectory(Path.GetDirectoryName(pu.Destination));
+                        }
+
+                        File.Copy(pu.Source, pu.Destination, true);
                     }
-
-                    File.Copy(pu.Source, pu.Destination, true);
                 }
-            }
 
-            File.Delete(updateFile);
+                File.Delete(updateFile);
+            }
+            catch
+            {
+                MessageBox.Show(
+                    @"An error occured when trying to update some plugins.\n\nPlease start XrmToolBox again to fix this problem.",
+                    @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private static void RemovePlugins()
@@ -189,29 +195,38 @@ namespace XrmToolBox
             if (!File.Exists(updateFile))
                 return;
 
-            using (StreamReader reader = new StreamReader(updateFile))
+            try
             {
-                var pds = (PluginDeletions)XmlSerializerHelper.Deserialize(reader.ReadToEnd(), typeof(PluginDeletions));
-                foreach (var pd in pds.Plugins)
+                using (StreamReader reader = new StreamReader(updateFile))
                 {
-                    foreach (var filePath in pd.Files)
+                    var pds = (PluginDeletions)XmlSerializerHelper.Deserialize(reader.ReadToEnd(), typeof(PluginDeletions));
+                    foreach (var pd in pds.Plugins)
                     {
-                        var pathToDelete = Path.Combine(Paths.XrmToolBoxPath, filePath);
+                        foreach (var filePath in pd.Files)
+                        {
+                            var pathToDelete = Path.Combine(Paths.XrmToolBoxPath, filePath);
 
-                        if (File.Exists(pathToDelete))
-                        {
-                            File.Delete(pathToDelete);
-                        }
-                        else
-                        {
-                            pathToDelete = Path.Combine(Paths.PluginsPath, filePath);
                             if (File.Exists(pathToDelete))
                             {
                                 File.Delete(pathToDelete);
                             }
+                            else
+                            {
+                                pathToDelete = Path.Combine(Paths.PluginsPath, filePath);
+                                if (File.Exists(pathToDelete))
+                                {
+                                    File.Delete(pathToDelete);
+                                }
+                            }
                         }
                     }
                 }
+            }
+            catch
+            {
+                MessageBox.Show(
+                    @"An error occured when trying to delete some plugins.\n\nPlease start XrmToolBox again to fix this problem.",
+                    @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             File.Delete(updateFile);
