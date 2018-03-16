@@ -221,6 +221,8 @@ namespace XrmToolBox
                         }
                     }
                 }
+
+                File.Delete(updateFile);
             }
             catch
             {
@@ -228,8 +230,6 @@ namespace XrmToolBox
                     @"An error occured when trying to delete some plugins.\n\nPlease start XrmToolBox again to fix this problem.",
                     @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            File.Delete(updateFile);
         }
 
         /// <summary>
