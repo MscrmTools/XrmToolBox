@@ -71,8 +71,8 @@ namespace XrmToolBox.PluginsStore
             var xValue = x.SubItems[col].Text;
             var yValue = y.SubItems[col].Text;
 
-            int ixValue, iyValue;
-            if(int.TryParse(xValue, out ixValue) && int.TryParse(yValue, out iyValue))
+            decimal ixValue, iyValue;
+            if(decimal.TryParse(xValue, out ixValue) && decimal.TryParse(yValue, out iyValue))
             {
                 if(innerOrder == SortOrder.Ascending)
                 {
