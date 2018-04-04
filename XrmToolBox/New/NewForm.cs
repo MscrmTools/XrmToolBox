@@ -1100,6 +1100,8 @@ namespace XrmToolBox.New
                 pluginsForm.PluginManager.IsWatchingForNewPlugins = true;
                 pluginsForm.ReloadPluginsList();
 
+                Options.Instance.PluginsStoreUseLegacy = PluginsStore.Options.Instance.UseLegacy;
+
                 // Apply option to show Plugins Store on startup on main options
                 if (Options.Instance.DisplayPluginsStoreOnStartup != PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup)
                 {
