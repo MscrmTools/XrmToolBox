@@ -446,6 +446,14 @@ namespace XrmToolBox.New
                 xrmToolBoxArgs += $@" /connection:""{connectionName}""";
                 shortcutName = $"{toolName} ({connectionName})";
             }
+
+            var currentArgs = Environment.GetCommandLineArgs();
+            var overrideArg = currentArgs.FirstOrDefault(a => a.StartsWith("/overridepath:"));
+            if (overrideArg != null)
+            {
+                xrmToolBoxArgs += $@" {overrideArg}";
+            }
+
             try
             {
                 var lnk = shell.CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{shortcutName}.lnk"));

@@ -460,7 +460,7 @@ namespace XrmToolBox.New
 
             if (service == null)
             {
-                var result = MessageBox.Show(this, @"Do you want to connect to an organization first?", @"Question",
+                var result = MessageBox.Show(new Form { TopMost = true }, @"Do you want to connect to an organization first?", $@"Opening {e.Plugin.Metadata.Name}",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
 
                 if (result == DialogResult.Yes)
@@ -553,6 +553,12 @@ namespace XrmToolBox.New
                 ((IXrmToolBoxPluginControl)pluginControl).OnCloseTool += NewForm_OnCloseTool;
                 string name = $"{plugin.Metadata.Name} ({connectionDetail?.ConnectionName ?? "Not connected"})";
 
+                if (pnlConnectLoading.Visible)
+                {
+                    pnlConnectLoading.SendToBack();
+                    pnlConnectLoading.Visible = false;
+                }
+
                 var pluginForm = new PluginForm(pluginControl, name);
                 pluginForm.Show(dpMain, DockState.Document);
                 pluginForm.SendMessageToStatusBar += StatusBarMessenger_SendMessageToStatusBar;
@@ -644,17 +650,20 @@ namespace XrmToolBox.New
                 }
 
                 Options.Instance.Save();
-
-                if (pnlConnectLoading.Visible)
-                {
-                    pnlConnectLoading.SendToBack();
-                    pnlConnectLoading.Visible = false;
-                }
             }
             catch (Exception error)
             {
-                MessageBox.Show(this, $@"An error occured when trying to display this plugin: {error.Message}", @"Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Invoke(new Action(() =>
+                {
+                    MessageBox.Show(this, $@"An error occured when trying to display this plugin: {error.Message}", @"Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                    if (pnlConnectLoading.Visible)
+                    {
+                        pnlConnectLoading.SendToBack();
+                        pnlConnectLoading.Visible = false;
+                    }
+                }));
             }
         }
 
@@ -689,56 +698,60 @@ namespace XrmToolBox.New
 
                 connectionDetail = e.ConnectionDetail;
                 service = e.OrganizationService;
-                ccsb.SetConnectionStatus(true, e.ConnectionDetail);
-                ccsb.SetMessage(string.Empty);
 
-                if (parameter != null)
+                Invoke(new Action(() =>
                 {
-                    var us = parameter.ConnectionParmater as UserControl;
-                    var p = parameter.ConnectionParmater as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
-                    var rcea = parameter.ConnectionParmater as RequestConnectionEventArgs;
+                    ccsb.SetConnectionStatus(true, e.ConnectionDetail);
+                    ccsb.SetMessage(string.Empty);
 
-                    if (us != null)
+                    if (parameter != null)
                     {
-                        if (!(us.Tag is Lazy<IXrmToolBoxPlugin, IPluginMetadata> pluginModel))
+                        var us = parameter.ConnectionParmater as UserControl;
+                        var p = parameter.ConnectionParmater as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
+                        var rcea = parameter.ConnectionParmater as RequestConnectionEventArgs;
+
+                        if (us != null)
                         {
-                            // Actual Plugin was passed, Just update the plugin's Tab.
-                            UpdateTabConnection((PluginForm)us.Parent);
+                            if (!(us.Tag is Lazy<IXrmToolBoxPlugin, IPluginMetadata> pluginModel))
+                            {
+                                // Actual Plugin was passed, Just update the plugin's Tab.
+                                UpdateTabConnection((PluginForm)us.Parent);
+                            }
+                            else
+                            {
+                                DisplayPluginControl(pluginModel);
+                            }
                         }
-                        else
+                        else if (p != null)
                         {
-                            DisplayPluginControl(pluginModel);
+                            DisplayPluginControl(p);
+                        }
+                        else if (parameter.ConnectionParmater?.ToString() == "ApplyConnectionToTabs" && dpMain.Contents.OfType<PluginForm>().Any())
+                        {
+                            ApplyConnectionToTabs();
+                        }
+                        else if (rcea != null)
+                        {
+                            var userControl = (UserControl)rcea.Control;
+
+                            rcea.Control.UpdateConnection(e.OrganizationService, connectionDetail, rcea.ActionName, rcea.Parameter);
+
+                            var indexOfParenthesis = userControl.Parent.Text?.IndexOf("(") ?? -1;
+                            var pluginName = userControl.Parent.Text?.Substring(0, indexOfParenthesis - 1) ?? "N/A";
+
+                            userControl.Parent.Text = $@"{pluginName} ({e.ConnectionDetail.ConnectionName})";
                         }
                     }
-                    else if (p != null)
-                    {
-                        DisplayPluginControl(p);
-                    }
-                    else if (parameter.ConnectionParmater?.ToString() == "ApplyConnectionToTabs" && dpMain.Contents.OfType<PluginForm>().Any())
+                    else if (dpMain.Contents.OfType<PluginForm>().Count() > 1)
                     {
                         ApplyConnectionToTabs();
                     }
-                    else if (rcea != null)
-                    {
-                        var userControl = (UserControl)rcea.Control;
 
-                        rcea.Control.UpdateConnection(e.OrganizationService, connectionDetail, rcea.ActionName, rcea.Parameter);
+                    StartPluginWithConnection();
 
-                        var indexOfParenthesis = userControl.Parent.Text?.IndexOf("(") ?? -1;
-                        var pluginName = userControl.Parent.Text?.Substring(0, indexOfParenthesis - 1) ?? "N/A";
-
-                        userControl.Parent.Text = $@"{pluginName} ({e.ConnectionDetail.ConnectionName})";
-                    }
-                }
-                else if (dpMain.Contents.OfType<PluginForm>().Count() > 1)
-                {
-                    ApplyConnectionToTabs();
-                }
-
-                StartPluginWithConnection();
-
-                tssOpenOrg.Visible = true;
-                tsbOpenOrg.Visible = true;
+                    tssOpenOrg.Visible = true;
+                    tsbOpenOrg.Visible = true;
+                }));
             };
             cManager.ConnectionFailed += (sender, e) =>
             {
