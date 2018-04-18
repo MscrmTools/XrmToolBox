@@ -359,7 +359,7 @@ namespace XrmToolBox.New
                     initialPluginName = e.Item.PluginName;
                     initialConnectionName = e.Item.ConnectionName;
 
-                    if (e.Item.ConnectionName != connectionDetail?.ConnectionName)
+                    if (connection.ConnectionName != connectionDetail?.ConnectionName)
                     {
                         var info = new ConnectionParameterInfo();
 
@@ -370,8 +370,7 @@ namespace XrmToolBox.New
                         connectingControl.BringToFront();
 
                         info.ConnControl = connectingControl;
-
-                        ConnectionManager.Instance.ConnectToServer(connection, info);
+                        fHelper.AskForConnection(connection, info, null);
                     }
                     else
                     {
