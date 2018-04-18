@@ -39,7 +39,7 @@ namespace XrmToolBox.New
 
             var list = new List<Control>();
 
-            foreach (var mru in MostRecentlyUsedItems.Instance.Items)
+            foreach (var mru in MostRecentlyUsedItems.Instance.Items.OrderBy(i => i.Date))
             {
                 var plugin = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == mru.PluginName);
                 if (plugin != null)
