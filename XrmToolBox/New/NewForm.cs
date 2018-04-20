@@ -874,10 +874,10 @@ namespace XrmToolBox.New
                 return;
             }
 
-            var content = dpMain.Contents.FirstOrDefault(c => (c as PluginForm)?.PluginTitle == message.TargetPlugin);
+            var content = dpMain.Contents.FirstOrDefault(c => (c as PluginForm)?.PluginTitle == message.TargetPlugin) as DockContent;
             if (content != null && !message.NewInstance)
             {
-                // TODO Mettre au premier plan
+                content.Show(dpMain, content.DockState);
             }
             else
             {
