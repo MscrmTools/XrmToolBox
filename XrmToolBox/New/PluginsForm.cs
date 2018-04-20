@@ -531,5 +531,34 @@ namespace XrmToolBox.New
                 }
             }
         }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Control | Keys.Tab:
+
+                    if (TabIndex == DockPanel.Documents.OfType<DockContent>().Count() - 1)
+                    {
+                        DockPanel.Documents.OfType<DockContent>().First(d => d.TabIndex == 0).Activate();
+                        return true;
+                    }
+
+                    foreach (var document in DockPanel.Documents.OfType<DockContent>())
+                    {
+                        if (document.TabIndex == TabIndex + 1)
+                        {
+                            document.Activate();
+                            return true;
+                        }
+                    }
+                    break;
+
+                default:
+                    return base.ProcessCmdKey(ref msg, keyData);
+            }
+
+            return true;
+        }
     }
 }
