@@ -60,6 +60,7 @@ namespace XrmToolBox.New
             WelcomeDialog.ShowSplashScreen();
 
             SetTheme();
+            dpMain.Theme.Extender.FloatWindowFactory = new CustomFloatWindowFactory();
 
             // Connection Management
             WelcomeDialog.SetStatus("Loading connection controls...");
