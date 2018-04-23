@@ -26,7 +26,13 @@ namespace XrmToolBox.New
             this.base64Image = base64Image;
         }
 
+        public MostRecentlyUsedItem Item => item;
+
         public event EventHandler<OpenMruPluginEventArgs> OpenMruPluginRequested;
+
+        public event EventHandler RemoveMruRequested;
+
+        public event EventHandler ClearMruRequested;
 
         private void OnMouseEnter(object sender, System.EventArgs e)
         {
@@ -45,7 +51,9 @@ namespace XrmToolBox.New
         private void OnMouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
+            {
                 OpenMruPluginRequested?.Invoke(this, new OpenMruPluginEventArgs(item));
+            }
         }
 
         private void MostRecentlyUsedItemControl_Load(object sender, System.EventArgs e)
@@ -75,7 +83,6 @@ namespace XrmToolBox.New
                 MouseEnter += OnMouseEnter;
                 MouseLeave += OnMouseLeave;
                 MouseClick += OnMouseClick;
-
                 foreach (Control ctrl in Controls)
                 {
                     ctrl.MouseEnter += OnMouseEnter;
@@ -84,6 +91,18 @@ namespace XrmToolBox.New
                 }
             };
             timer.Start();
+        }
+
+        private void cmsMru_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem == tsmiRemove)
+            {
+                RemoveMruRequested?.Invoke(this, new System.EventArgs());
+            }
+            else if (e.ClickedItem == tsmiRemoveAll)
+            {
+                ClearMruRequested?.Invoke(this, new System.EventArgs());
+            }
         }
     }
 }

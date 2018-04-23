@@ -46,6 +46,8 @@ namespace XrmToolBox.New
                 {
                     var ctrl = new MostRecentlyUsedItemControl(plugin.Metadata.BigImageBase64, mru);
                     ctrl.OpenMruPluginRequested += Ctrl_OpenMruPluginRequested;
+                    ctrl.RemoveMruRequested += Ctrl_RemoveRequested;
+                    ctrl.ClearMruRequested += Ctrl_ClearMruRequested;
                     ctrl.Dock = DockStyle.Top;
 
                     list.Add(ctrl);
@@ -53,6 +55,24 @@ namespace XrmToolBox.New
             }
 
             pnlMru.Controls.AddRange(list.ToArray());
+        }
+
+        private void Ctrl_ClearMruRequested(object sender, System.EventArgs e)
+        {
+            if (MessageBox.Show(this, @"Are you sure you want to clear the Most REcently Used plugins list?", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                MostRecentlyUsedItems.Instance.Items.Clear();
+                pnlMru.Controls.Clear();
+                MostRecentlyUsedItems.Instance.Save();
+            }
+        }
+
+        private void Ctrl_RemoveRequested(object sender, System.EventArgs e)
+        {
+            var mruControl = (MostRecentlyUsedItemControl)sender;
+            MostRecentlyUsedItems.Instance.Items.Remove(mruControl.Item);
+            pnlMru.Controls.Remove(mruControl);
+            MostRecentlyUsedItems.Instance.Save();
         }
 
         private void Ctrl_OpenMruPluginRequested(object sender, OpenMruPluginEventArgs e)
