@@ -49,6 +49,24 @@ namespace XrmToolBox.AutoUpdater
                 Directory.CreateDirectory(packageFolder);
             }
 
+            var processes = Process.GetProcessesByName("xrmtoolbox");
+            if (processes.Length > 0)
+            {
+                if (MessageBox.Show(this,
+                        @"We need to close all XrmToolBox instances to perform the update. Do you want to continue?",
+                        @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    foreach (var process in processes)
+                    {
+                        process.Kill();
+                    }
+                }
+                else
+                {
+                    Close();
+                }
+            }
+
             using (var client = new WebClient())
             {
                 lblProgress.Text = "Downloading new version of XrmToolBox...";
