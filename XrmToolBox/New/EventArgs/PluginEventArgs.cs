@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.UserControls;
 
@@ -21,6 +17,13 @@ namespace XrmToolBox.New.EventArgs
             PluginName = pluginName;
         }
 
+        public PluginEventArgs(OpenMruPluginEventArgs mruInfo, Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin)
+        {
+            MruInfo = mruInfo;
+            PluginName = mruInfo.Item.PluginName;
+            Plugin = plugin;
+        }
+
         public PluginEventArgs(IXrmToolBoxPluginControl pluginControl)
         {
             PluginControl = pluginControl;
@@ -31,9 +34,10 @@ namespace XrmToolBox.New.EventArgs
             Plugin = plugin;
         }
 
+        public OpenMruPluginEventArgs MruInfo { get; }
         public Lazy<IXrmToolBoxPlugin, IPluginMetadata> Plugin { get; }
+        public IXrmToolBoxPluginControl PluginControl { get; }
         public PluginModel PluginModel { get; }
         public string PluginName { get; }
-        public IXrmToolBoxPluginControl PluginControl { get; }
     }
 }

@@ -1,8 +1,10 @@
-﻿using System;
+﻿using McTools.Xrm.Connection;
+using McTools.Xrm.Connection.WinForms;
+using Microsoft.Xrm.Sdk;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -12,19 +14,15 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using McTools.Xrm.Connection;
-using McTools.Xrm.Connection.WinForms;
-using Microsoft.Xrm.Sdk;
 using WeifenLuo.WinFormsUI.Docking;
-using WeifenLuo.WinFormsUI.ThemeVS2015;
 using XrmToolBox.AppCode;
 using XrmToolBox.Controls;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Forms;
-using XrmToolBox.PluginsStore;
 using XrmToolBox.New.EventArgs;
+using XrmToolBox.PluginsStore;
 
 namespace XrmToolBox.New
 {
@@ -347,7 +345,7 @@ namespace XrmToolBox.New
             if (cid == Guid.Empty)
             {
                 initialPluginName = e.Item.PluginName;
-                StartPluginWithoutConnection();
+                StartPluginWithoutConnection(e);
                 return;
             }
 
@@ -458,7 +456,7 @@ namespace XrmToolBox.New
                 return;
             }
 
-            if (service == null)
+            if (service == null && e.MruInfo == null)
             {
                 var result = MessageBox.Show(new Form { TopMost = true }, @"Do you want to connect to an organization first?", $@"Opening {e.Plugin.Metadata.Name}",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
@@ -479,7 +477,7 @@ namespace XrmToolBox.New
             {
                 if (e.Plugin != null)
                 {
-                    DisplayPluginControl(e.Plugin);
+                    DisplayPluginControl(e.Plugin, e.MruInfo == null || e.MruInfo.Item.ConnectionId != Guid.Empty);
                 }
             }
 
@@ -494,7 +492,7 @@ namespace XrmToolBox.New
             }
         }
 
-        private void DisplayPluginControl(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin)
+        private void DisplayPluginControl(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, bool displayConnected = true)
         {
             Guid pluginControlInstanceId = Guid.NewGuid();
 
@@ -515,7 +513,9 @@ namespace XrmToolBox.New
                     host.OnOutgoingMessage += MainForm_MessageBroker;
                 }
 
-                if (service != null)
+                string name = string.Empty;
+
+                if (service != null && displayConnected)
                 {
                     mruItem.ConnectionId = connectionDetail.ConnectionId ?? Guid.Empty;
                     mruItem.ConnectionName = connectionDetail.ConnectionName;
@@ -547,11 +547,16 @@ namespace XrmToolBox.New
                     {
                         ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedWebClientService, connectionDetail);
                     }
+
+                    name = $"{plugin.Metadata.Name} ({connectionDetail?.ConnectionName ?? "Not connected"})";
+                }
+                else
+                {
+                    name = $"{plugin.Metadata.Name} (Not connected)";
                 }
 
                 ((IXrmToolBoxPluginControl)pluginControl).OnRequestConnection += NewForm_OnRequestConnection;
                 ((IXrmToolBoxPluginControl)pluginControl).OnCloseTool += NewForm_OnCloseTool;
-                string name = $"{plugin.Metadata.Name} ({connectionDetail?.ConnectionName ?? "Not connected"})";
 
                 if (pnlConnectLoading.Visible)
                 {
@@ -791,11 +796,11 @@ namespace XrmToolBox.New
             }
         }
 
-        private void StartPluginWithoutConnection()
+        private void StartPluginWithoutConnection(OpenMruPluginEventArgs e = null)
         {
             if (!string.IsNullOrEmpty(initialPluginName))
             {
-                pluginsForm.OpenPlugin(initialPluginName);
+                pluginsForm.OpenPlugin(initialPluginName, e);
 
                 // Resetting initial plugin name
                 initialPluginName = string.Empty;

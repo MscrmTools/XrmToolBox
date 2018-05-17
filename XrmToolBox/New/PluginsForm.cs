@@ -1,4 +1,5 @@
-﻿using System;
+﻿using McTools.Xrm.Connection;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -8,7 +9,6 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using McTools.Xrm.Connection;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
@@ -22,12 +22,11 @@ namespace XrmToolBox.New
     {
         #region Variables
 
-        private Thread searchThread;
         private readonly PluginManagerExtended pluginsManager;
         private readonly List<PluginModel> pluginsModels;
-        private PluginModel selectedPluginModel;
-
         private string filterText;
+        private Thread searchThread;
+        private PluginModel selectedPluginModel;
 
         #endregion Variables
 
@@ -58,34 +57,258 @@ namespace XrmToolBox.New
 
         #region Events
 
-        public event EventHandler<PluginEventArgs> OpenPluginRequested;
+        public event EventHandler<PluginsListEventArgs> ActionRequested;
 
         public event EventHandler<PluginEventArgs> OpenPluginProjectUrlRequested;
 
-        public event EventHandler<PluginEventArgs> UninstallPluginRequested;
+        public event EventHandler<PluginEventArgs> OpenPluginRequested;
 
-        public event EventHandler<PluginsListEventArgs> ActionRequested;
+        public event EventHandler<PluginEventArgs> UninstallPluginRequested;
 
         #endregion Events
 
-        public void OpenPlugin(string pluginName)
+        public void OpenPlugin(string pluginName, OpenMruPluginEventArgs e = null)
         {
+            if (e != null)
+            {
+                pluginName = e.Item.PluginName;
+            }
+
             var plugin = pluginsManager.ValidatedPlugins.FirstOrDefault(p => p.Metadata.Name == pluginName);
             if (plugin == null)
             {
-                var message = $@"Plugin '{pluginName}' was not found.\n\nYou can install it from the Plugins Store";
+                var message = $"Plugin '{pluginName}' was not found.\n\nYou can install it from the Plugins Store";
                 MessageBox.Show(this, message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            OpenPluginRequested?.Invoke(this, new PluginEventArgs(plugin));
+            OpenPluginRequested?.Invoke(this, e != null ? new PluginEventArgs(e, plugin) : new PluginEventArgs(plugin));
         }
 
-        private void PluginsForm_Load(object sender, System.EventArgs e)
+        public void ReloadPluginsList()
         {
-            DisplayPlugins();
+            pluginsManager.Recompose();
+            pluginsModels.Clear();
+            DisplayPlugins(filterText);
+        }
 
-            txtSearch.AutoCompleteCustomSource.AddRange(PluginManager.Plugins.Select(p => p.Metadata.Name).ToArray());
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Control | Keys.Tab:
+
+                    if (TabIndex == DockPanel.Documents.OfType<DockContent>().Count() - 1)
+                    {
+                        DockPanel.Documents.OfType<DockContent>().First(d => d.TabIndex == 0).Activate();
+                        return true;
+                    }
+
+                    foreach (var document in DockPanel.Documents.OfType<DockContent>())
+                    {
+                        if (document.TabIndex == TabIndex + 1)
+                        {
+                            document.Activate();
+                            return true;
+                        }
+                    }
+                    break;
+
+                default:
+                    return base.ProcessCmdKey(ref msg, keyData);
+            }
+
+            return true;
+        }
+
+        private static ScrollBars GetVisibleScrollbars(ScrollableControl ctl)
+        {
+            if (ctl.HorizontalScroll.Visible)
+                return ctl.VerticalScroll.Visible ? ScrollBars.Both : ScrollBars.Horizontal;
+
+            return ctl.VerticalScroll.Visible ? ScrollBars.Vertical : ScrollBars.None;
+        }
+
+        private void AdaptPluginControlSize()
+        {
+            if (pnlPlugins == null) return;
+
+            if (GetVisibleScrollbars(pnlPlugins) == ScrollBars.Vertical)
+            {
+                foreach (var ctrl in pnlPlugins.Controls)
+                {
+                    if (ctrl is UserControl control)
+                    {
+                        control.Width = pnlPlugins.Width - 28;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var ctrl in pnlPlugins.Controls)
+                {
+                    if (ctrl is UserControl control)
+                    {
+                        control.Width = pnlPlugins.Width - 10;
+                    }
+                }
+            }
+        }
+
+        private void cmsOnePlugin_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem == tsmiOpenProjectHomePage)
+            {
+                OpenPluginProjectUrlRequested?.Invoke(this, new PluginEventArgs(selectedPluginModel));
+            }
+            else if (e.ClickedItem == tsmiUninstallPlugin)
+            {
+                UninstallPluginRequested?.Invoke(this, new PluginEventArgs(selectedPluginModel));
+            }
+            else if (e.ClickedItem == tsmiHidePlugin)
+            {
+                var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
+                Options.Instance.HiddenPlugins.Add(plugin.Metadata.Name);
+                ReloadPluginsList();
+            }
+            else if (e.ClickedItem == tsmiShortcutTool)
+            {
+                var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
+                CreateShortcut(plugin.Metadata.Name);
+            }
+            else if (e.ClickedItem == tsmiShortcutToolConnection)
+            {
+                var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
+                CreateShortcut(plugin.Metadata.Name, ConnectionDetail?.ConnectionName);
+            }
+        }
+
+        private void CreateModel<T>(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count)
+          where T : PluginModel
+        {
+            var name = plugin.Value.GetAssemblyQualifiedName();
+            var pm = (T)pluginsModels.FirstOrDefault(t => ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)t.Tag).Value.GetType().AssemblyQualifiedName == name && t is T);
+            var small = (typeof(T) == typeof(SmallPluginModel));
+
+            if (pm == null)
+            {
+                var title = plugin.Metadata.Name;
+                var desc = plugin.Metadata.Description;
+
+                var author = plugin.Value.GetCompany();
+                var version = plugin.Value.GetVersion();
+
+                var backColor = ColorTranslator.FromHtml(plugin.Metadata.BackgroundColor);
+                var primaryColor = ColorTranslator.FromHtml(plugin.Metadata.PrimaryFontColor);
+                var secondaryColor = ColorTranslator.FromHtml(plugin.Metadata.SecondaryFontColor);
+
+                var args = new[]
+                {
+                    typeof(Image),
+                    typeof(string),
+                    typeof(string),
+                    typeof(string),
+                    typeof(string),
+                    typeof(Color),
+                    typeof(Color),
+                    typeof(Color),
+                    typeof(int)
+                };
+
+                var vals = new object[]
+                {
+                    GetImage(small ? plugin.Metadata.SmallImageBase64 : plugin.Metadata.BigImageBase64, small),
+                    title,
+                    desc,
+                    author,
+                    version,
+                    backColor,
+                    primaryColor,
+                    secondaryColor,
+                    count
+                };
+
+                var ctor = typeof(T).GetConstructor(args);
+                if (ctor == null)
+                {
+                    throw new Exception("Unable to find a constructor of type " + typeof(T).FullName + "(" + string.Join(Environment.NewLine, args.Select(c => c.FullName)) + ")");
+                }
+
+                pm = (T)ctor.Invoke(vals);
+
+                pm.Tag = plugin;
+                pm.Clicked += Pm_Clicked;
+
+                pluginsModels.Add(pm);
+            }
+
+            var localTop = top;
+
+            Invoke(new Action(() =>
+            {
+                pm.Left = 4;
+                pm.Top = localTop;
+                pm.Width = width;
+            }));
+            top += pm.Height + 4;
+        }
+
+        private void CreateShortcut(string toolName, string connectionName = "")
+        {
+            Type t = Type.GetTypeFromCLSID(new Guid("72C24DD5-D70A-438B-8A42-98424B88AFB8"));//Windows Script Host Shell Object
+            dynamic shell = Activator.CreateInstance(t);
+            var xrmToolBoxArgs = string.Empty;
+            var shortcutName = string.Empty;
+            if (!string.IsNullOrEmpty(toolName))
+            {
+                xrmToolBoxArgs += $@" /plugin:""{toolName}""";
+                shortcutName = toolName;
+            }
+            if (!string.IsNullOrEmpty(connectionName))
+            {
+                xrmToolBoxArgs += $@" /connection:""{connectionName}""";
+                shortcutName = $"{toolName} ({connectionName})";
+            }
+
+            var currentArgs = Environment.GetCommandLineArgs();
+            var overrideArg = currentArgs.FirstOrDefault(a => a.StartsWith("/overridepath:"));
+            if (overrideArg != null)
+            {
+                xrmToolBoxArgs += $@" {overrideArg}";
+            }
+
+            try
+            {
+                var lnk = shell.CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{shortcutName}.lnk"));
+                try
+                {
+                    lnk.TargetPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "XrmToolBox.exe");
+                    lnk.Arguments = xrmToolBoxArgs;
+                    lnk.Save();
+                    MessageBox.Show(this, $@"Shortcut {shortcutName} has been created in the Desktop",
+                        @"Success", MessageBoxButtons.OK);
+                }
+                finally
+                {
+                    Marshal.FinalReleaseComObject(lnk);
+                }
+            }
+            finally
+            {
+                Marshal.FinalReleaseComObject(shell);
+            }
+        }
+
+        private void DisplayOnePlugin(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count = -1)
+        {
+            if (Options.Instance.DisplayLargeIcons)
+            {
+                CreateModel<LargePluginModel>(plugin, ref top, width, count);
+            }
+            else
+            {
+                CreateModel<SmallPluginModel>(plugin, ref top, width, count);
+            }
         }
 
         private void DisplayPlugins(object filter = null)
@@ -220,163 +443,6 @@ namespace XrmToolBox.New
             }));
         }
 
-        private void DisplayOnePlugin(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count = -1)
-        {
-            if (Options.Instance.DisplayLargeIcons)
-            {
-                CreateModel<LargePluginModel>(plugin, ref top, width, count);
-            }
-            else
-            {
-                CreateModel<SmallPluginModel>(plugin, ref top, width, count);
-            }
-        }
-
-        private void CreateModel<T>(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count)
-          where T : PluginModel
-        {
-            var name = plugin.Value.GetAssemblyQualifiedName();
-            var pm = (T)pluginsModels.FirstOrDefault(t => ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)t.Tag).Value.GetType().AssemblyQualifiedName == name && t is T);
-            var small = (typeof(T) == typeof(SmallPluginModel));
-
-            if (pm == null)
-            {
-                var title = plugin.Metadata.Name;
-                var desc = plugin.Metadata.Description;
-
-                var author = plugin.Value.GetCompany();
-                var version = plugin.Value.GetVersion();
-
-                var backColor = ColorTranslator.FromHtml(plugin.Metadata.BackgroundColor);
-                var primaryColor = ColorTranslator.FromHtml(plugin.Metadata.PrimaryFontColor);
-                var secondaryColor = ColorTranslator.FromHtml(plugin.Metadata.SecondaryFontColor);
-
-                var args = new[]
-                {
-                    typeof(Image),
-                    typeof(string),
-                    typeof(string),
-                    typeof(string),
-                    typeof(string),
-                    typeof(Color),
-                    typeof(Color),
-                    typeof(Color),
-                    typeof(int)
-                };
-
-                var vals = new object[]
-                {
-                    GetImage(small ? plugin.Metadata.SmallImageBase64 : plugin.Metadata.BigImageBase64, small),
-                    title,
-                    desc,
-                    author,
-                    version,
-                    backColor,
-                    primaryColor,
-                    secondaryColor,
-                    count
-                };
-
-                var ctor = typeof(T).GetConstructor(args);
-                if (ctor == null)
-                {
-                    throw new Exception("Unable to find a constructor of type " + typeof(T).FullName + "(" + string.Join(Environment.NewLine, args.Select(c => c.FullName)) + ")");
-                }
-
-                pm = (T)ctor.Invoke(vals);
-
-                pm.Tag = plugin;
-                pm.Clicked += Pm_Clicked;
-
-                pluginsModels.Add(pm);
-            }
-
-            var localTop = top;
-
-            Invoke(new Action(() =>
-            {
-                pm.Left = 4;
-                pm.Top = localTop;
-                pm.Width = width;
-            }));
-            top += pm.Height + 4;
-        }
-
-        private void Pm_Clicked(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                OpenPluginRequested?.Invoke(this, new PluginEventArgs((PluginModel)sender));
-            }
-            else if (e.Button == MouseButtons.Right)
-            {
-                if (sender is PluginModel ctrl)
-                {
-                    selectedPluginModel = ctrl;
-                    cmsOnePlugin.Show(Cursor.Position);
-                }
-            }
-        }
-
-        public void ReloadPluginsList()
-        {
-            pluginsManager.Recompose();
-            pluginsModels.Clear();
-            DisplayPlugins(filterText);
-        }
-
-        private void AdaptPluginControlSize()
-        {
-            if (pnlPlugins == null) return;
-
-            if (GetVisibleScrollbars(pnlPlugins) == ScrollBars.Vertical)
-            {
-                foreach (var ctrl in pnlPlugins.Controls)
-                {
-                    if (ctrl is UserControl control)
-                    {
-                        control.Width = pnlPlugins.Width - 28;
-                    }
-                }
-            }
-            else
-            {
-                foreach (var ctrl in pnlPlugins.Controls)
-                {
-                    if (ctrl is UserControl control)
-                    {
-                        control.Width = pnlPlugins.Width - 10;
-                    }
-                }
-            }
-        }
-
-        private static ScrollBars GetVisibleScrollbars(ScrollableControl ctl)
-        {
-            if (ctl.HorizontalScroll.Visible)
-                return ctl.VerticalScroll.Visible ? ScrollBars.Both : ScrollBars.Horizontal;
-
-            return ctl.VerticalScroll.Visible ? ScrollBars.Vertical : ScrollBars.None;
-        }
-
-        private async void pManager_PluginsListUpdated(object sender, System.EventArgs e)
-        {
-            await WaitFileIsCopied();
-
-            pluginsManager.Recompose();
-            pluginsModels.Clear();
-            DisplayPlugins(filterText);
-
-            if (pluginsManager.ValidationErrors.Count > 0)
-            {
-            }
-        }
-
-        private async Task WaitFileIsCopied()
-        {
-            await Task.Delay(1000);
-        }
-
         private Image GetImage(string base64ImageContent, bool small = false)
         {
             // Default logo (no-logo)
@@ -402,94 +468,14 @@ namespace XrmToolBox.New
             return logo;
         }
 
-        private void cmsOnePlugin_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void llResetSearchFilter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if (e.ClickedItem == tsmiOpenProjectHomePage)
-            {
-                OpenPluginProjectUrlRequested?.Invoke(this, new PluginEventArgs(selectedPluginModel));
-            }
-            else if (e.ClickedItem == tsmiUninstallPlugin)
-            {
-                UninstallPluginRequested?.Invoke(this, new PluginEventArgs(selectedPluginModel));
-            }
-            else if (e.ClickedItem == tsmiHidePlugin)
-            {
-                var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
-                Options.Instance.HiddenPlugins.Add(plugin.Metadata.Name);
-                ReloadPluginsList();
-            }
-            else if (e.ClickedItem == tsmiShortcutTool)
-            {
-                var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
-                CreateShortcut(plugin.Metadata.Name);
-            }
-            else if (e.ClickedItem == tsmiShortcutToolConnection)
-            {
-                var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
-                CreateShortcut(plugin.Metadata.Name, ConnectionDetail?.ConnectionName);
-            }
-        }
-
-        private void CreateShortcut(string toolName, string connectionName = "")
-        {
-            Type t = Type.GetTypeFromCLSID(new Guid("72C24DD5-D70A-438B-8A42-98424B88AFB8"));//Windows Script Host Shell Object
-            dynamic shell = Activator.CreateInstance(t);
-            var xrmToolBoxArgs = string.Empty;
-            var shortcutName = string.Empty;
-            if (!string.IsNullOrEmpty(toolName))
-            {
-                xrmToolBoxArgs += $@" /plugin:""{toolName}""";
-                shortcutName = toolName;
-            }
-            if (!string.IsNullOrEmpty(connectionName))
-            {
-                xrmToolBoxArgs += $@" /connection:""{connectionName}""";
-                shortcutName = $"{toolName} ({connectionName})";
-            }
-
-            var currentArgs = Environment.GetCommandLineArgs();
-            var overrideArg = currentArgs.FirstOrDefault(a => a.StartsWith("/overridepath:"));
-            if (overrideArg != null)
-            {
-                xrmToolBoxArgs += $@" {overrideArg}";
-            }
-
-            try
-            {
-                var lnk = shell.CreateShortcut(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), $"{shortcutName}.lnk"));
-                try
-                {
-                    lnk.TargetPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "XrmToolBox.exe");
-                    lnk.Arguments = xrmToolBoxArgs;
-                    lnk.Save();
-                    MessageBox.Show(this, $@"Shortcut {shortcutName} has been created in the Desktop",
-                        @"Success", MessageBoxButtons.OK);
-                }
-                finally
-                {
-                    Marshal.FinalReleaseComObject(lnk);
-                }
-            }
-            finally
-            {
-                Marshal.FinalReleaseComObject(shell);
-            }
+            txtSearch.Text = string.Empty;
         }
 
         private void pbOpenPluginsStore_Click(object sender, System.EventArgs e)
         {
             ActionRequested?.Invoke(this, new PluginsListEventArgs(PluginsListAction.OpenPluginsStore));
-        }
-
-        private void pnlNoPluginFound_Resize(object sender, System.EventArgs e)
-        {
-            pbOpenPluginsStore.Location = new Point((pnlNoPluginFound.Width - pbOpenPluginsStore.Width) / 2, pbOpenPluginsStore.Location.Y);
-            llResetSearchFilter.Location = new Point((pnlNoPluginFound.Width - llResetSearchFilter.Width) / 2, llResetSearchFilter.Location.Y);
-        }
-
-        private void llResetSearchFilter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            txtSearch.Text = string.Empty;
         }
 
         private void PluginsForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -506,13 +492,46 @@ namespace XrmToolBox.New
             e.Cancel = true;
         }
 
-        private void txtSearch_TextChanged(object sender, System.EventArgs e)
+        private void PluginsForm_Load(object sender, System.EventArgs e)
         {
-            filterText = txtSearch.Text;
+            DisplayPlugins();
 
-            searchThread?.Abort();
-            searchThread = new Thread(DisplayPlugins);
-            searchThread.Start(filterText);
+            txtSearch.AutoCompleteCustomSource.AddRange(PluginManager.Plugins.Select(p => p.Metadata.Name).ToArray());
+        }
+
+        private void Pm_Clicked(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                OpenPluginRequested?.Invoke(this, new PluginEventArgs((PluginModel)sender));
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                if (sender is PluginModel ctrl)
+                {
+                    selectedPluginModel = ctrl;
+                    cmsOnePlugin.Show(Cursor.Position);
+                }
+            }
+        }
+
+        private async void pManager_PluginsListUpdated(object sender, System.EventArgs e)
+        {
+            await WaitFileIsCopied();
+
+            pluginsManager.Recompose();
+            pluginsModels.Clear();
+            DisplayPlugins(filterText);
+
+            if (pluginsManager.ValidationErrors.Count > 0)
+            {
+            }
+        }
+
+        private void pnlNoPluginFound_Resize(object sender, System.EventArgs e)
+        {
+            pbOpenPluginsStore.Location = new Point((pnlNoPluginFound.Width - pbOpenPluginsStore.Width) / 2, pbOpenPluginsStore.Location.Y);
+            llResetSearchFilter.Location = new Point((pnlNoPluginFound.Width - llResetSearchFilter.Width) / 2, llResetSearchFilter.Location.Y);
         }
 
         private void txtSearch_KeyDown(object sender, KeyEventArgs e)
@@ -532,33 +551,18 @@ namespace XrmToolBox.New
             }
         }
 
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        private void txtSearch_TextChanged(object sender, System.EventArgs e)
         {
-            switch (keyData)
-            {
-                case Keys.Control | Keys.Tab:
+            filterText = txtSearch.Text;
 
-                    if (TabIndex == DockPanel.Documents.OfType<DockContent>().Count() - 1)
-                    {
-                        DockPanel.Documents.OfType<DockContent>().First(d => d.TabIndex == 0).Activate();
-                        return true;
-                    }
+            searchThread?.Abort();
+            searchThread = new Thread(DisplayPlugins);
+            searchThread.Start(filterText);
+        }
 
-                    foreach (var document in DockPanel.Documents.OfType<DockContent>())
-                    {
-                        if (document.TabIndex == TabIndex + 1)
-                        {
-                            document.Activate();
-                            return true;
-                        }
-                    }
-                    break;
-
-                default:
-                    return base.ProcessCmdKey(ref msg, keyData);
-            }
-
-            return true;
+        private async Task WaitFileIsCopied()
+        {
+            await Task.Delay(1000);
         }
     }
 }
