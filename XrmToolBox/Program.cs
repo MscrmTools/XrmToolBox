@@ -1,86 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Web.Script.Serialization;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
-using XrmToolBox.Forms;
-using XrmToolBox.PluginsStore;
 using XrmToolBox.New;
+using XrmToolBox.PluginsStore;
 using PluginUpdates = XrmToolBox.AppCode.PluginUpdates;
 
 namespace XrmToolBox
 {
     internal static class Program
     {
-        /// <summary>
-        /// Point d'entrée principal de l'application.
-        /// </summary>
-        [STAThread]
-        private static void Main(string[] args)
-        {
-            try
-            {
-                var isc = new ItSecurityChecker();
-                if (isc.IsDisabled())
-                {
-                    var message =
-                        "IT department restricted the access to XrmToolBox.\r\n\r\nPlease contact your administrators if you need access to XrmToolBox";
-                    MessageBox.Show(message, "XrmToolBox restriction detected!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                if (!CheckRequiredAssemblies())
-                {
-                    return;
-                }
-
-                foreach (var arg in args)
-                {
-                    if (arg.ToLower().StartsWith("/overridepath:"))
-                    {
-                        var parts = arg.Split(':');
-                        Paths.OverrideRootPath(string.Join(":", parts.Skip(1)));
-                    }
-                }
-
-                InitializePluginsFolder();
-                CopyUpdatedPlugins();
-                RemovePlugins();
-
-                RedirectAssembly("NuGet.Core");
-                RedirectAssembly("McTools.Xrm.Connection");
-                RedirectAssembly("McTools.Xrm.Connection.WinForms");
-                RedirectAssembly("XrmToolBox.Extensibility");
-                RedirectAssembly("XrmToolBox.PluginsStore");
-                RedirectAssembly("Microsoft.Xrm.Sdk");
-                RedirectAssembly("Microsoft.Xrm.Sdk.Workflow");
-                RedirectAssembly("Microsoft.Crm.Sdk.Proxy");
-                RedirectAssembly("Microsoft.Xrm.Tooling.Connector");
-                RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory");
-                RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms");
-                RedirectAssembly("WeifenLuo.WinFormsUI.Docking");
-                RedirectAssembly("WeifenLuo.WinFormsUI.Docking.ThemeVS2015");
-
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new NewForm(args));
-            }
-            catch (Exception error)
-            {
-                const string lockedMessage = "One reason can be that at least one file is locked by Windows. Please unblock each locked files or unlock XrmToolBox.zip before extracting its content";
-                MessageBox.Show("An unexpected error occured: " + error + "\r\n\r\n" + lockedMessage, "Error", MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-            }
-        }
-
         public static void RedirectAssembly(string shortName)
         {
             var targetAssemblyName = Assembly.Load(shortName).GetName();
@@ -164,8 +99,12 @@ namespace XrmToolBox
                     var pus = (PluginUpdates)XmlSerializerHelper.Deserialize(reader.ReadToEnd(),
                         typeof(PluginUpdates));
 
-                    var oldProcess = Process.GetProcessById(pus.PreviousProcessId);
-                    oldProcess.WaitForExit();
+                    try
+                    {
+                        var oldProcess = Process.GetProcessById(pus.PreviousProcessId);
+                        oldProcess.WaitForExit();
+                    }
+                    catch { }
 
                     foreach (var pu in pus.Plugins)
                     {
@@ -180,54 +119,10 @@ namespace XrmToolBox
 
                 File.Delete(updateFile);
             }
-            catch
+            catch (Exception error)
             {
                 MessageBox.Show(
-                    @"An error occured when trying to update some plugins.\n\nPlease start XrmToolBox again to fix this problem.",
-                    @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private static void RemovePlugins()
-        {
-            var updateFile = Path.Combine(Paths.XrmToolBoxPath, "Deletion.xml");
-
-            if (!File.Exists(updateFile))
-                return;
-
-            try
-            {
-                using (StreamReader reader = new StreamReader(updateFile))
-                {
-                    var pds = (PluginDeletions)XmlSerializerHelper.Deserialize(reader.ReadToEnd(), typeof(PluginDeletions));
-                    foreach (var pd in pds.Plugins)
-                    {
-                        foreach (var filePath in pd.Files)
-                        {
-                            var pathToDelete = Path.Combine(Paths.XrmToolBoxPath, filePath);
-
-                            if (File.Exists(pathToDelete))
-                            {
-                                File.Delete(pathToDelete);
-                            }
-                            else
-                            {
-                                pathToDelete = Path.Combine(Paths.PluginsPath, filePath);
-                                if (File.Exists(pathToDelete))
-                                {
-                                    File.Delete(pathToDelete);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                File.Delete(updateFile);
-            }
-            catch
-            {
-                MessageBox.Show(
-                    @"An error occured when trying to delete some plugins.\n\nPlease start XrmToolBox again to fix this problem.",
+                    $"An error occured when trying to update some plugins: {error.Message}\n\nPlease start XrmToolBox again to fix this problem",
                     @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -333,6 +228,119 @@ namespace XrmToolBox
 
             // Delete zip file
             File.Delete(pluginsZipFilePath);
+        }
+
+        /// <summary>
+        /// Point d'entrée principal de l'application.
+        /// </summary>
+        [STAThread]
+        private static void Main(string[] args)
+        {
+            try
+            {
+                var isc = new ItSecurityChecker();
+                if (isc.IsDisabled())
+                {
+                    var message =
+                        "IT department restricted the access to XrmToolBox.\r\n\r\nPlease contact your administrators if you need access to XrmToolBox";
+                    MessageBox.Show(message, "XrmToolBox restriction detected!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (!CheckRequiredAssemblies())
+                {
+                    return;
+                }
+
+                foreach (var arg in args)
+                {
+                    if (arg.ToLower().StartsWith("/overridepath:"))
+                    {
+                        var parts = arg.Split(':');
+                        Paths.OverrideRootPath(string.Join(":", parts.Skip(1)));
+                    }
+                }
+
+                InitializePluginsFolder();
+                CopyUpdatedPlugins();
+                RemovePlugins();
+
+                RedirectAssembly("NuGet.Core");
+                RedirectAssembly("McTools.Xrm.Connection");
+                RedirectAssembly("McTools.Xrm.Connection.WinForms");
+                RedirectAssembly("XrmToolBox.Extensibility");
+                RedirectAssembly("XrmToolBox.PluginsStore");
+                RedirectAssembly("Microsoft.Xrm.Sdk");
+                RedirectAssembly("Microsoft.Xrm.Sdk.Workflow");
+                RedirectAssembly("Microsoft.Crm.Sdk.Proxy");
+                RedirectAssembly("Microsoft.Xrm.Tooling.Connector");
+                RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory");
+                RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms");
+                RedirectAssembly("WeifenLuo.WinFormsUI.Docking");
+                RedirectAssembly("WeifenLuo.WinFormsUI.Docking.ThemeVS2015");
+
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new NewForm(args));
+            }
+            catch (Exception error)
+            {
+                const string lockedMessage = "One reason can be that at least one file is locked by Windows. Please unblock each locked files or unlock XrmToolBox.zip before extracting its content";
+                MessageBox.Show("An unexpected error occured: " + error + "\r\n\r\n" + lockedMessage, "Error", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+        }
+
+        private static void RemovePlugins()
+        {
+            var updateFile = Path.Combine(Paths.XrmToolBoxPath, "Deletion.xml");
+
+            if (!File.Exists(updateFile))
+                return;
+
+            try
+            {
+                using (StreamReader reader = new StreamReader(updateFile))
+                {
+                    var pds = (PluginDeletions)XmlSerializerHelper.Deserialize(reader.ReadToEnd(), typeof(PluginDeletions));
+
+                    try
+                    {
+                        var oldProcess = Process.GetProcessById(pds.PreviousProcessId);
+                        oldProcess.WaitForExit();
+                    }
+                    catch { }
+
+                    foreach (var pd in pds.Plugins)
+                    {
+                        foreach (var filePath in pd.Files)
+                        {
+                            var pathToDelete = Path.Combine(Paths.XrmToolBoxPath, filePath);
+
+                            if (File.Exists(pathToDelete))
+                            {
+                                File.Delete(pathToDelete);
+                            }
+                            else
+                            {
+                                pathToDelete = Path.Combine(Paths.PluginsPath, filePath);
+                                if (File.Exists(pathToDelete))
+                                {
+                                    File.Delete(pathToDelete);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                File.Delete(updateFile);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(
+                    $"An error occured when trying to delete some plugins: {error.Message}.\n\nPlease start XrmToolBox again to fix this problem.",
+                    @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
