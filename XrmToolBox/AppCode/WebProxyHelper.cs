@@ -23,8 +23,8 @@ namespace XrmToolBox.AppCode
 
                     WebRequest.DefaultWebProxy.Credentials = new NetworkCredential
                     {
-                        Domain = userNamePart[0],
-                        UserName = userNamePart[1],
+                        Domain = userNamePart.Length == 2 ? userNamePart[0] : null,
+                        UserName = userNamePart.Length == 2 ? userNamePart[1] : userNamePart[0],
                         Password = ConnectionManager.Instance.ConnectionsList.Password
                     };
                 }
@@ -34,7 +34,7 @@ namespace XrmToolBox.AppCode
                 WebRequest.DefaultWebProxy = WebRequest.GetSystemWebProxy();
                 //Use default credentials if no proxy credentials
                 if (WebRequest.DefaultWebProxy.Credentials == null)
-                    WebRequest.DefaultWebProxy.Credentials = System.Net.CredentialCache.DefaultCredentials;
+                    WebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
             }
             else
             {
