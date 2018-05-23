@@ -572,6 +572,7 @@ namespace XrmToolBox.New
                 }
 
                 var pluginForm = new PluginForm(pluginControl, name);
+                pluginForm.PluginName = plugin.Metadata.Name;
                 pluginForm.Show(dpMain, DockState.Document);
                 pluginForm.SendMessageToStatusBar += StatusBarMessenger_SendMessageToStatusBar;
                 pluginForm.CloseRequested += PluginForm_CloseRequested;
@@ -886,19 +887,27 @@ namespace XrmToolBox.New
                 return;
             }
 
-            var content = dpMain.Contents.FirstOrDefault(c => (c as PluginForm)?.PluginTitle == message.TargetPlugin) as DockContent;
-            if (content != null && !message.NewInstance)
-            {
-                content.Show(dpMain, content.DockState);
-            }
-            else
+            var content = GetPluginByName(message.TargetPlugin);
+            if (content == null || message.NewInstance)
             {
                 pluginsForm.OpenPlugin(message.TargetPlugin);
-                MainForm_MessageBroker(sender, message);
-                return;
             }
 
-           ((PluginForm)content).SendIncomingBrokerMessage(message);
+            content = GetPluginByName(message.TargetPlugin);
+            if (content == null)
+            {
+                MessageBox.Show($@"Cannot switch to plugin {message.TargetPlugin}.", message.SourcePlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            content.Show(dpMain, content.DockState);
+            content.SendIncomingBrokerMessage(message);
+        }
+
+        private PluginForm GetPluginByName(string name)
+        {
+            return dpMain.Contents
+                .OfType<PluginForm>()
+                .FirstOrDefault(c => c.PluginName == name);
         }
 
         private bool IsMessageValid(object sender, MessageBusEventArgs message)
