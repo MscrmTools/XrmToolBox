@@ -104,7 +104,6 @@ namespace XrmToolBox.PluginsStore
             // 
             // tsMain
             // 
-            this.tsMain.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.tsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbLoadPlugins,
             this.toolStripSeparator1,
@@ -441,7 +440,7 @@ namespace XrmToolBox.PluginsStore
             this.pbStar.Dock = System.Windows.Forms.DockStyle.Left;
             this.pbStar.Image = ((System.Drawing.Image)(resources.GetObject("pbStar.Image")));
             this.pbStar.Location = new System.Drawing.Point(0, 0);
-            this.pbStar.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.pbStar.Margin = new System.Windows.Forms.Padding(6);
             this.pbStar.Name = "pbStar";
             this.pbStar.Size = new System.Drawing.Size(220, 44);
             this.pbStar.TabIndex = 0;
@@ -467,7 +466,7 @@ namespace XrmToolBox.PluginsStore
             this.pnlNotif.Controls.Add(this.pbNotifIcon);
             this.pnlNotif.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlNotif.Location = new System.Drawing.Point(0, 0);
-            this.pnlNotif.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlNotif.Margin = new System.Windows.Forms.Padding(4);
             this.pnlNotif.Name = "pnlNotif";
             this.pnlNotif.Size = new System.Drawing.Size(1830, 37);
             this.pnlNotif.TabIndex = 3;
@@ -491,7 +490,7 @@ namespace XrmToolBox.PluginsStore
             this.pbNotifIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pbNotifIcon.Dock = System.Windows.Forms.DockStyle.Left;
             this.pbNotifIcon.Location = new System.Drawing.Point(0, 0);
-            this.pbNotifIcon.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pbNotifIcon.Margin = new System.Windows.Forms.Padding(4);
             this.pbNotifIcon.Name = "pbNotifIcon";
             this.pbNotifIcon.Size = new System.Drawing.Size(39, 35);
             this.pbNotifIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
