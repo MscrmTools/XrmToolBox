@@ -329,6 +329,7 @@ namespace XrmToolBox.New
             {
                 startPage = new StartPage(pluginsForm.PluginManager);
                 startPage.OpenMruPluginRequested += StartPage_OpenMruPluginRequested;
+                startPage.OpenPluginRequested += StartPage_OpenPluginRequested;
                 startPage.OpenConnectionsManagementRequested += (s, evt) => { fHelper.DisplayConnectionsList(this); };
                 startPage.OpenPluginsStoreRequested += (s, evt) =>
                 {
@@ -336,6 +337,12 @@ namespace XrmToolBox.New
                 };
             }
             startPage.Show(dpMain, DockState.Document);
+        }
+
+        private void StartPage_OpenPluginRequested(object sender, OpenFavoritePluginEventArgs e)
+        {
+            initialPluginName = e.Item.PluginName;
+            StartPluginWithoutConnection();
         }
 
         private void StartPage_OpenMruPluginRequested(object sender, OpenMruPluginEventArgs e)

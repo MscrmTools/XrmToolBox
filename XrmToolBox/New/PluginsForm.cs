@@ -155,6 +155,15 @@ namespace XrmToolBox.New
             }
         }
 
+        private void AddToFavorites(string pluginName)
+        {
+            if (Favorites.Instance.Items.All(i => i.PluginName != pluginName))
+            {
+                Favorites.Instance.Items.Add(new Favorite { PluginName = pluginName });
+                Favorites.Instance.Save();
+            }
+        }
+
         private void cmsOnePlugin_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             if (e.ClickedItem == tsmiOpenProjectHomePage)
@@ -180,6 +189,11 @@ namespace XrmToolBox.New
             {
                 var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
                 CreateShortcut(plugin.Metadata.Name, ConnectionDetail?.ConnectionName);
+            }
+            else if (e.ClickedItem == tsmiAddToFavorites)
+            {
+                var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
+                AddToFavorites(plugin.Metadata.Name);
             }
         }
 

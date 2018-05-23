@@ -186,6 +186,7 @@
     <Compile Include="AppCode\Extensions.cs" />
     <Compile Include="AppCode\ListViewItemComparer.cs" />
     <Compile Include="AppCode\LogUsage.cs" />
+    <Compile Include="AppCode\Favorites.cs" />
     <Compile Include="AppCode\MostRecentlyUsedItems.cs" />
     <Compile Include="AppCode\PluginControlStatus.cs" />
     <Compile Include="AppCode\PluginUpdates.cs" />
@@ -220,6 +221,13 @@
     </Compile>
     <Compile Include="New\CustomFloatWindow.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="New\EventArgs\OpenFavoritePluginEventArgs.cs" />
+    <Compile Include="New\FavoriteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="New\FavoriteControl.Designer.cs">
+      <DependentUpon>FavoriteControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Options.cs" />
     <Compile Include="PluginManagerExtended.cs" />
@@ -306,6 +314,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\WelcomeDialog.resx">
       <DependentUpon>WelcomeDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="New\FavoriteControl.resx">
+      <DependentUpon>FavoriteControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -403,7 +414,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

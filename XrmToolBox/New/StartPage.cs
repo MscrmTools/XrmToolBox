@@ -27,11 +27,13 @@ namespace XrmToolBox.New
             // LoadMru();
         }
 
+        public event EventHandler OpenConnectionsManagementRequested;
+
         public event EventHandler<OpenMruPluginEventArgs> OpenMruPluginRequested;
 
-        public event EventHandler OpenPluginsStoreRequested;
+        public event EventHandler<OpenFavoritePluginEventArgs> OpenPluginRequested;
 
-        public event EventHandler OpenConnectionsManagementRequested;
+        public event EventHandler OpenPluginsStoreRequested;
 
         public void LoadMru()
         {
@@ -39,31 +41,113 @@ namespace XrmToolBox.New
 
             var list = new List<Control>();
 
-            foreach (var mru in MostRecentlyUsedItems.Instance.Items.OrderBy(i => i.Date))
+            if (MostRecentlyUsedItems.Instance.Items.Any())
             {
-                var plugin = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == mru.PluginName);
-                if (plugin != null)
+                foreach (var mru in MostRecentlyUsedItems.Instance.Items.OrderBy(i => i.Date))
                 {
-                    var ctrl = new MostRecentlyUsedItemControl(plugin.Metadata.BigImageBase64, mru);
-                    ctrl.OpenMruPluginRequested += Ctrl_OpenMruPluginRequested;
-                    ctrl.RemoveMruRequested += Ctrl_RemoveRequested;
-                    ctrl.ClearMruRequested += Ctrl_ClearMruRequested;
-                    ctrl.Dock = DockStyle.Top;
+                    var plugin = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == mru.PluginName);
+                    if (plugin != null)
+                    {
+                        var ctrl = new MostRecentlyUsedItemControl(plugin.Metadata.BigImageBase64, mru);
+                        ctrl.OpenMruPluginRequested += Ctrl_OpenMruPluginRequested;
+                        ctrl.RemoveMruRequested += Ctrl_RemoveRequested;
+                        ctrl.ClearMruRequested += Ctrl_ClearMruRequested;
+                        ctrl.Dock = DockStyle.Top;
 
-                    list.Add(ctrl);
+                        list.Add(ctrl);
+                    }
                 }
+
+                list.Add(pnlMruSubTitle);
+            }
+
+            if (Favorites.Instance.Items.Any())
+            {
+                foreach (var fav in Favorites.Instance.Items.OrderByDescending(i => i.PluginName))
+                {
+                    var plugin = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == fav.PluginName);
+                    if (plugin != null)
+                    {
+                        var ctrl = new FavoriteControl(plugin.Metadata.BigImageBase64, fav);
+                        ctrl.OpenFavoritePluginRequested += Ctrl_OpenFavoritePluginRequested;
+                        ctrl.RemoveFavoriteRequested += Ctrl_RemoveFavoriteRequested;
+                        ctrl.Dock = DockStyle.Top;
+
+                        list.Add(ctrl);
+                    }
+                }
+
+                list.Add(pnlFavoritesSubTitle);
             }
 
             pnlMru.Controls.AddRange(list.ToArray());
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            switch (keyData)
+            {
+                case Keys.Control | Keys.Tab:
+
+                    if (TabIndex == DockPanel.Documents.OfType<DockContent>().Count() - 1)
+                    {
+                        DockPanel.Documents.OfType<DockContent>().First(d => d.TabIndex == 0).Activate();
+                        return true;
+                    }
+
+                    foreach (var document in DockPanel.Documents.OfType<DockContent>())
+                    {
+                        if (document.TabIndex == TabIndex + 1)
+                        {
+                            document.Activate();
+                            return true;
+                        }
+                    }
+                    break;
+
+                default:
+                    return base.ProcessCmdKey(ref msg, keyData);
+            }
+
+            return true;
+        }
+
+        private void chkDoNotShowAtStartup_CheckedChanged(object sender, System.EventArgs e)
+        {
+            Options.Instance.DoNotShowStartPage = chkDoNotShowAtStartup.Checked;
+            Options.Instance.Save();
+        }
+
         private void Ctrl_ClearMruRequested(object sender, System.EventArgs e)
         {
-            if (MessageBox.Show(this, @"Are you sure you want to clear the Most REcently Used plugins list?", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show(this, @"Are you sure you want to clear the Most Recently Used plugins list?", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 MostRecentlyUsedItems.Instance.Items.Clear();
-                pnlMru.Controls.Clear();
                 MostRecentlyUsedItems.Instance.Save();
+                LoadMru();
+            }
+        }
+
+        private void Ctrl_OpenFavoritePluginRequested(object sender, OpenFavoritePluginEventArgs e)
+        {
+            OpenPluginRequested?.Invoke(this, new OpenFavoritePluginEventArgs(e.Item));
+        }
+
+        private void Ctrl_OpenMruPluginRequested(object sender, OpenMruPluginEventArgs e)
+        {
+            OpenMruPluginRequested?.Invoke(sender, e);
+        }
+
+        private void Ctrl_RemoveFavoriteRequested(object sender, System.EventArgs e)
+        {
+            var favControl = (FavoriteControl)sender;
+            Favorites.Instance.Items.Remove(favControl.Item);
+            Favorites.Instance.Save();
+
+            pnlMru.Controls.Remove(favControl);
+            if (Favorites.Instance.Items.Count == 0)
+            {
+                pnlMru.Controls.Remove(pnlFavoritesSubTitle);
             }
         }
 
@@ -73,23 +157,6 @@ namespace XrmToolBox.New
             MostRecentlyUsedItems.Instance.Items.Remove(mruControl.Item);
             pnlMru.Controls.Remove(mruControl);
             MostRecentlyUsedItems.Instance.Save();
-        }
-
-        private void Ctrl_OpenMruPluginRequested(object sender, OpenMruPluginEventArgs e)
-        {
-            OpenMruPluginRequested?.Invoke(sender, e);
-        }
-
-        private void LabelMouseEnter(object sender, System.EventArgs e)
-        {
-            var label = (Label)sender;
-            label.Cursor = Cursors.Hand;
-        }
-
-        private void LabelMouseLeave(object sender, System.EventArgs e)
-        {
-            var label = (Label)sender;
-            label.Cursor = Cursors.Default;
         }
 
         private void LabelClick(object sender, System.EventArgs e)
@@ -126,6 +193,25 @@ namespace XrmToolBox.New
             {
                 Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=donations&business=tanguy92@hotmail.com&lc=EN&item_name=Donation%20for%20MSCRM%20Tools%20-%20XrmToolBox&currency_code=USD&bn=PP%2dDonationsBF");
             }
+        }
+
+        private void LabelMouseEnter(object sender, System.EventArgs e)
+        {
+            var label = (Label)sender;
+            label.Cursor = Cursors.Hand;
+        }
+
+        private void LabelMouseLeave(object sender, System.EventArgs e)
+        {
+            var label = (Label)sender;
+            label.Cursor = Cursors.Default;
+        }
+
+        private void lblWelcomeDescription_Resize(object sender, System.EventArgs e)
+        {
+            Size sz = new Size(lblWelcomeDescription.Width, Int32.MaxValue);
+            sz = TextRenderer.MeasureText(lblWelcomeDescription.Text, lblWelcomeDescription.Font, sz, TextFormatFlags.WordBreak);
+            lblWelcomeDescription.Height = sz.Height + Padding.Bottom + Padding.Top + 20;
         }
 
         private void StartPage_Resize(object sender, System.EventArgs e)
@@ -168,48 +254,6 @@ namespace XrmToolBox.New
 
                 pnlMain.Controls.AddRange(controls.ToArray());
             }
-        }
-
-        private void lblWelcomeDescription_Resize(object sender, System.EventArgs e)
-        {
-            Size sz = new Size(lblWelcomeDescription.Width, Int32.MaxValue);
-            sz = TextRenderer.MeasureText(lblWelcomeDescription.Text, lblWelcomeDescription.Font, sz, TextFormatFlags.WordBreak);
-            lblWelcomeDescription.Height = sz.Height + Padding.Bottom + Padding.Top + 20;
-        }
-
-        private void chkDoNotShowAtStartup_CheckedChanged(object sender, System.EventArgs e)
-        {
-            Options.Instance.DoNotShowStartPage = chkDoNotShowAtStartup.Checked;
-            Options.Instance.Save();
-        }
-
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            switch (keyData)
-            {
-                case Keys.Control | Keys.Tab:
-
-                    if (TabIndex == DockPanel.Documents.OfType<DockContent>().Count() - 1)
-                    {
-                        DockPanel.Documents.OfType<DockContent>().First(d => d.TabIndex == 0).Activate();
-                        return true;
-                    }
-
-                    foreach (var document in DockPanel.Documents.OfType<DockContent>())
-                    {
-                        if (document.TabIndex == TabIndex + 1)
-                        {
-                            document.Activate();
-                            return true;
-                        }
-                    }
-                    break;
-
-                default:
-                    return base.ProcessCmdKey(ref msg, keyData);
-            }
-
-            return true;
         }
     }
 }
