@@ -11,8 +11,8 @@ namespace XrmToolBox.New
 {
     public partial class MostRecentlyUsedItemControl : UserControl
     {
-        private readonly MostRecentlyUsedItem item;
         private readonly string base64Image;
+        private readonly MostRecentlyUsedItem item;
         private Thread clickThread;
 
         public MostRecentlyUsedItemControl(string base64Image, MostRecentlyUsedItem item)
@@ -26,33 +26,23 @@ namespace XrmToolBox.New
             this.base64Image = base64Image;
         }
 
-        public MostRecentlyUsedItem Item => item;
+        public event EventHandler ClearMruRequested;
 
         public event EventHandler<OpenMruPluginEventArgs> OpenMruPluginRequested;
 
         public event EventHandler RemoveMruRequested;
 
-        public event EventHandler ClearMruRequested;
+        public MostRecentlyUsedItem Item => item;
 
-        private void OnMouseEnter(object sender, System.EventArgs e)
+        private void cmsMru_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            pbLogo.BackColor = Color.AliceBlue;
-            lblPlugin.BackColor = Color.AliceBlue;
-            lblConnectionName.BackColor = Color.AliceBlue;
-        }
-
-        private void OnMouseLeave(object sender, System.EventArgs e)
-        {
-            pbLogo.BackColor = Color.Transparent;
-            lblPlugin.BackColor = Color.Transparent;
-            lblConnectionName.BackColor = Color.Transparent;
-        }
-
-        private void OnMouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
+            if (e.ClickedItem == tsmiRemove)
             {
-                OpenMruPluginRequested?.Invoke(this, new OpenMruPluginEventArgs(item));
+                RemoveMruRequested?.Invoke(this, new System.EventArgs());
+            }
+            else if (e.ClickedItem == tsmiRemoveAll)
+            {
+                ClearMruRequested?.Invoke(this, new System.EventArgs());
             }
         }
 
@@ -93,16 +83,28 @@ namespace XrmToolBox.New
             timer.Start();
         }
 
-        private void cmsMru_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void OnMouseClick(object sender, MouseEventArgs e)
         {
-            if (e.ClickedItem == tsmiRemove)
+            if (e.Button == MouseButtons.Left)
             {
-                RemoveMruRequested?.Invoke(this, new System.EventArgs());
+                OpenMruPluginRequested?.Invoke(this, new OpenMruPluginEventArgs(item));
             }
-            else if (e.ClickedItem == tsmiRemoveAll)
-            {
-                ClearMruRequested?.Invoke(this, new System.EventArgs());
-            }
+        }
+
+        private void OnMouseEnter(object sender, System.EventArgs e)
+        {
+            pbLogo.BackColor = Color.AliceBlue;
+            lblPlugin.BackColor = Color.AliceBlue;
+            lblConnectionName.BackColor = Color.AliceBlue;
+            BackColor = Color.AliceBlue;
+        }
+
+        private void OnMouseLeave(object sender, System.EventArgs e)
+        {
+            pbLogo.BackColor = Color.Transparent;
+            lblPlugin.BackColor = Color.Transparent;
+            lblConnectionName.BackColor = Color.Transparent;
+            BackColor = Color.Transparent;
         }
     }
 }

@@ -43,7 +43,7 @@
             this.lblPlugin.AutoEllipsis = true;
             this.lblPlugin.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblPlugin.Font = new System.Drawing.Font("Segoe UI Light", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPlugin.Location = new System.Drawing.Point(128, 18);
+            this.lblPlugin.Location = new System.Drawing.Point(128, 9);
             this.lblPlugin.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblPlugin.Name = "lblPlugin";
             this.lblPlugin.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
@@ -68,7 +68,7 @@
             // 
             this.tsmiRemove.Image = global::XrmToolBox.Properties.Resources.close;
             this.tsmiRemove.Name = "tsmiRemove";
-            this.tsmiRemove.Size = new System.Drawing.Size(281, 34);
+            this.tsmiRemove.Size = new System.Drawing.Size(293, 34);
             this.tsmiRemove.Text = "Remove from this list";
             this.tsmiRemove.ToolTipText = "Remove this item from the Most Recently Used items";
             // 
@@ -76,7 +76,7 @@
             // 
             this.pbLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.pbLogo.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pbLogo.Location = new System.Drawing.Point(18, 18);
+            this.pbLogo.Location = new System.Drawing.Point(18, 9);
             this.pbLogo.Margin = new System.Windows.Forms.Padding(5, 14, 5, 14);
             this.pbLogo.Name = "pbLogo";
             this.pbLogo.Size = new System.Drawing.Size(110, 112);
@@ -94,7 +94,7 @@
             this.Controls.Add(this.pbLogo);
             this.Margin = new System.Windows.Forms.Padding(18);
             this.Name = "FavoriteControl";
-            this.Padding = new System.Windows.Forms.Padding(18, 18, 0, 0);
+            this.Padding = new System.Windows.Forms.Padding(18, 9, 0, 9);
             this.Size = new System.Drawing.Size(882, 130);
             this.Load += new System.EventHandler(this.MostRecentlyUsedItemControl_Load);
             this.cmsMru.ResumeLayout(false);
