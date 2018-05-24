@@ -73,7 +73,7 @@ namespace XrmToolBox.New
 
                     if (TabIndex == DockPanel.Documents.OfType<DockContent>().Count() - 1)
                     {
-                        DockPanel.Documents.OfType<DockContent>().First(d => d.TabIndex == 0).Activate();
+                        DockPanel.Documents.OfType<DockContent>().FirstOrDefault(d => d.TabIndex == 0)?.Activate();
                         return true;
                     }
 
