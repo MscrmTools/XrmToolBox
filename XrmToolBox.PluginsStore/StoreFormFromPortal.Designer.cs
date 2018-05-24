@@ -292,7 +292,6 @@ namespace XrmToolBox.PluginsStore
             // 
             // statusStrip1
             // 
-            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tssProgress,
             this.tssLabel,

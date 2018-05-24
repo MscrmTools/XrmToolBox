@@ -38,7 +38,14 @@ namespace XrmToolBox.PluginsStore
             tsbCleanCacheFolder.ToolTipText = $@"Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {size}MB";
         }
 
+        public event EventHandler PluginsClosingRequested;
+
         public event EventHandler PluginsUpdated;
+
+        public void AskForPluginsClosing()
+        {
+            PluginsClosingRequested?.Invoke(this, new EventArgs());
+        }
 
         public void RefreshPluginsList(bool reload = true)
         {

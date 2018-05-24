@@ -1126,6 +1126,10 @@ namespace XrmToolBox.New
                 else
                 {
                     form = new StoreFormFromPortal();
+                    ((StoreFormFromPortal)form).PluginsClosingRequested += (s, evt) =>
+                    {
+                        RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
+                    };
                 }
 
                 // Avoid scanning for new files during Plugins Store usage.

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NuGet;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -7,14 +8,11 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
-using System.Text;
 using System.Windows.Forms;
-using Newtonsoft.Json;
-using NuGet;
 using XrmToolBox.Extensibility;
 using XrmToolBox.PluginsStore.DTO;
-using System.Runtime.Serialization;
 
 namespace XrmToolBox.PluginsStore
 {
@@ -25,12 +23,9 @@ namespace XrmToolBox.PluginsStore
 
         private readonly string applicationPluginsFolder;
         private readonly string nugetPluginsFolder;
-        private FileInfo[] plugins;
         private Dictionary<string, int> currentVersionDownloadsCount;
-        public XtbPlugins XrmToolBoxPlugins { get; set; }
-        public int PluginsCount => XrmToolBoxPlugins?.Plugins.Count ?? 0;
-        public bool HasUpdates => XrmToolBoxPlugins?.Plugins.Any(p => p.Action == PackageInstallAction.Update) ?? false;
         private PackageManager manager;
+        private FileInfo[] plugins;
 
         public StoreFromPortal()
         {
@@ -48,77 +43,41 @@ namespace XrmToolBox.PluginsStore
 
         public event EventHandler PluginsUpdated;
 
-        private T GetContent<T>(string url)
+        public bool HasUpdates => XrmToolBoxPlugins?.Plugins.Any(p => p.Action == PackageInstallAction.Update) ?? false;
+        public int PluginsCount => XrmToolBoxPlugins?.Plugins.Count ?? 0;
+        public XtbPlugins XrmToolBoxPlugins { get; set; }
+
+        public long CalculateCacheFolderSize()
         {
-            var request = WebRequest.CreateHttp(url);
-            var response = request.GetResponse();
-            using (Stream dataStream = response.GetResponseStream())
+            if (Directory.Exists(nugetPluginsFolder))
             {
-                if (dataStream != null)
+                var size = GetDirectorySize(nugetPluginsFolder);
+                return size / 1024 / 1024;
+            }
+
+            return 0;
+        }
+
+        public long CleanCacheFolder()
+        {
+            if (Directory.Exists(nugetPluginsFolder))
+            {
+                foreach (var item in new DirectoryInfo(nugetPluginsFolder).GetFileSystemInfos())
                 {
-                    var serializer = new DataContractJsonSerializer(typeof(T),
-                        new DataContractJsonSerializerSettings
-                        {
-                            UseSimpleDictionaryFormat = true,
-                            DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ss", new DateTimeFormatInfo { FullDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss" })
-                        });
-
-                    return (T)serializer.ReadObject(dataStream);
+                    if ((item.Attributes & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        Directory.Delete(item.FullName, true);
+                    }
+                    else
+                    {
+                        File.Delete(item.FullName);
+                    }
                 }
+
+                return CalculateCacheFolderSize();
             }
 
-            return default(T);
-        }
-
-        /// <summary>
-        /// Verify version plugin is built for with current XTB version and a compatibility list
-        /// </summary>
-        /// <param name="xtbDependencyVersion"></param>
-        /// <returns></returns>
-        private CompatibleState IsPluginDependencyCompatible(Version xtbDependencyVersion)
-        {
-            if (xtbDependencyVersion >= MinCompatibleVersion
-                && xtbDependencyVersion <= Assembly.GetEntryAssembly().GetName().Version)
-            {
-                return CompatibleState.Compatible;
-            }
-
-            if (xtbDependencyVersion < MinCompatibleVersion)
-            {
-                return CompatibleState.DoesntFitMinimumVersion;
-            }
-
-            if (xtbDependencyVersion > Assembly.GetEntryAssembly().GetName().Version)
-            {
-                return CompatibleState.RequireNewVersionOfXtb;
-            }
-
-            return CompatibleState.Other;
-        }
-
-        private long GetDirectorySize(string path)
-        {
-            string[] files = Directory.GetFiles(path);
-            string[] subdirectories = Directory.GetDirectories(path);
-
-            long size = files.Sum(x => new FileInfo(x).Length);
-            foreach (string s in subdirectories)
-                size += GetDirectorySize(s);
-
-            return size;
-        }
-
-        public void LoadNugetPackages()
-        {
-            plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
-
-            XrmToolBoxPlugins = GetContent<XtbPlugins>("https://www.xrmtoolbox.com/_odata/plugins");
-
-            foreach (var plugin in XrmToolBoxPlugins.Plugins)
-            {
-                AnalyzePackage(plugin);
-                plugin.Compatibilty = IsPluginDependencyCompatible(new Version(plugin.MinimalXrmToolBoxVersion));
-            }
+            return 0;
         }
 
         public XtbPlugin GetPluginByFileName(string filename)
@@ -135,6 +94,91 @@ namespace XrmToolBox.PluginsStore
         {
             XtbPlugin plugin = GetPluginByFileName(fileName);
             return plugin?.ProjectUrl;
+        }
+
+        public void LoadNugetPackages()
+        {
+            plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
+
+            XrmToolBoxPlugins = GetContent<XtbPlugins>("https://www.xrmtoolbox.com/_odata/plugins");
+
+            foreach (var plugin in XrmToolBoxPlugins.Plugins)
+            {
+                AnalyzePackage(plugin);
+                plugin.Compatibilty = IsPluginDependencyCompatible(new Version(plugin.MinimalXrmToolBoxVersion));
+            }
+        }
+
+        public bool PerformInstallation(PluginUpdates updates, StoreFormFromPortal storeForm)
+        {
+            if (updates.Plugins.Any(p => p.RequireRestart))
+            {
+                XmlSerializerHelper.SerializeToFile(updates, Path.Combine(Paths.XrmToolBoxPath, "Update.xml"));
+
+                storeForm.Invoke(new Action(() =>
+                {
+                    if (DialogResult.Yes == MessageBox.Show(storeForm,
+                            @"This application needs to restart to install updated plugins (or new plugins that share some files with already installed plugins). Click Yes to restart this application now",
+                            @"Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
+                    {
+                        storeForm.AskForPluginsClosing();
+                        Application.Restart();
+                    }
+                }));
+
+                return false;
+            }
+
+            foreach (var pu in updates.Plugins)
+            {
+                try
+                {
+                    // Can install plugin directly
+                    var destinationDirectory = Path.GetDirectoryName(pu.Destination);
+                    if (destinationDirectory == null)
+                    {
+                        continue;
+                    }
+
+                    if (!Directory.Exists(destinationDirectory))
+                    {
+                        Directory.CreateDirectory(destinationDirectory);
+                    }
+                    File.Copy(pu.Source, pu.Destination, true);
+                }
+                catch (Exception error)
+                {
+                    MessageBox.Show("An error occured while copying files: " + error.Message +
+                                    "\r\n\r\nCopy has been aborted", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+            }
+
+            PluginsUpdated?.Invoke(this, new EventArgs());
+            return true;
+        }
+
+        public void PerformUninstallation(PluginDeletions deletions)
+        {
+            string filePath = Path.Combine(Paths.XrmToolBoxPath, "Deletion.xml");
+
+            if (File.Exists(filePath))
+            {
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    var existingPds = (PluginDeletions)XmlSerializerHelper.Deserialize(reader.ReadToEnd(), typeof(PluginDeletions));
+                    deletions.Plugins.AddRange(existingPds.Plugins);
+                }
+            }
+
+            XmlSerializerHelper.SerializeToFile(deletions, filePath);
+
+            if (DialogResult.Yes == MessageBox.Show(
+                "This application needs to restart to remove plugins. Click Yes to restart this application now",
+                "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
+            {
+                Application.Restart();
+            }
         }
 
         public PluginUpdates PrepareInstallationPackages(List<XtbPlugin> pluginsToInstall, BackgroundWorker worker = null)
@@ -207,6 +251,51 @@ namespace XrmToolBox.PluginsStore
             }
 
             return pus;
+        }
+
+        public PluginDeletions PrepareUninstallPlugins(List<XtbPlugin> pluginsTodelete)
+        {
+            var pds = new PluginDeletions { PreviousProcessId = Process.GetCurrentProcess().Id };
+
+            // Get list of files to delete
+            foreach (var plugin in pluginsTodelete)
+            {
+                var conflicts = XrmToolBoxPlugins.Plugins.Where(p =>
+                    p.Id != plugin.Id
+                    && (p.Action == PackageInstallAction.None || p.Action == PackageInstallAction.Update)
+                    && plugin.Files.Any(ff => p.Files.Contains(ff))).ToList();
+
+                if (conflicts.Any())
+                {
+                    var conflictedFiles = conflicts.SelectMany(c => c.Files).Select(f => f);
+
+                    pds.Plugins.Add(new PluginDeletion
+                    {
+                        Conflict = true,
+                        Files = plugin.Files.Where(f => !conflictedFiles.Contains(f)).Select(f => Path.GetFileName(f)).ToList()
+                    });
+                }
+                else
+                {
+                    pds.Plugins.Add(new PluginDeletion
+                    {
+                        Files = plugin.Files.Select(f => Path.GetFileName(f)).ToList()
+                    });
+                }
+            }
+
+            return pds;
+        }
+
+        public void UninstallByFileName(string fileName)
+        {
+            var plugin = GetPluginByFileName(fileName.ToLower());
+
+            if (plugin != null)
+            {
+                var pds = PrepareUninstallPlugins(new List<XtbPlugin> { plugin });
+                PerformUninstallation(pds);
+            }
         }
 
         private void AnalyzePackage(XtbPlugin plugin)
@@ -299,153 +388,64 @@ namespace XrmToolBox.PluginsStore
             }
         }
 
-        public bool PerformInstallation(PluginUpdates updates, Form storeForm)
+        private T GetContent<T>(string url)
         {
-            if (updates.Plugins.Any(p => p.RequireRestart))
+            var request = WebRequest.CreateHttp(url);
+            var response = request.GetResponse();
+            using (Stream dataStream = response.GetResponseStream())
             {
-                XmlSerializerHelper.SerializeToFile(updates, Path.Combine(Paths.XrmToolBoxPath, "Update.xml"));
-
-                storeForm.Invoke(new Action(() =>
+                if (dataStream != null)
                 {
-                    if (DialogResult.Yes == MessageBox.Show(storeForm,
-                            @"This application needs to restart to install updated plugins (or new plugins that share some files with already installed plugins). Click Yes to restart this application now",
-                            @"Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
-                    {
-                        Application.Restart();
-                    }
-                }));
+                    var serializer = new DataContractJsonSerializer(typeof(T),
+                        new DataContractJsonSerializerSettings
+                        {
+                            UseSimpleDictionaryFormat = true,
+                            DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ss", new DateTimeFormatInfo { FullDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss" })
+                        });
 
-                return false;
-            }
-
-            foreach (var pu in updates.Plugins)
-            {
-                try
-                {
-                    // Can install plugin directly
-                    var destinationDirectory = Path.GetDirectoryName(pu.Destination);
-                    if (destinationDirectory == null)
-                    {
-                        continue;
-                    }
-
-                    if (!Directory.Exists(destinationDirectory))
-                    {
-                        Directory.CreateDirectory(destinationDirectory);
-                    }
-                    File.Copy(pu.Source, pu.Destination, true);
-                }
-                catch (Exception error)
-                {
-                    MessageBox.Show("An error occured while copying files: " + error.Message +
-                                    "\r\n\r\nCopy has been aborted", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return false;
+                    return (T)serializer.ReadObject(dataStream);
                 }
             }
 
-            PluginsUpdated?.Invoke(this, new EventArgs());
-            return true;
+            return default(T);
         }
 
-        public PluginDeletions PrepareUninstallPlugins(List<XtbPlugin> pluginsTodelete)
+        private long GetDirectorySize(string path)
         {
-            var pds = new PluginDeletions { PreviousProcessId = Process.GetCurrentProcess().Id };
+            string[] files = Directory.GetFiles(path);
+            string[] subdirectories = Directory.GetDirectories(path);
 
-            // Get list of files to delete
-            foreach (var plugin in pluginsTodelete)
-            {
-                var conflicts = XrmToolBoxPlugins.Plugins.Where(p =>
-                    p.Id != plugin.Id
-                    && (p.Action == PackageInstallAction.None || p.Action == PackageInstallAction.Update)
-                    && plugin.Files.Any(ff => p.Files.Contains(ff))).ToList();
+            long size = files.Sum(x => new FileInfo(x).Length);
+            foreach (string s in subdirectories)
+                size += GetDirectorySize(s);
 
-                if (conflicts.Any())
-                {
-                    var conflictedFiles = conflicts.SelectMany(c => c.Files).Select(f => f);
-
-                    pds.Plugins.Add(new PluginDeletion
-                    {
-                        Conflict = true,
-                        Files = plugin.Files.Where(f => !conflictedFiles.Contains(f)).Select(f => Path.GetFileName(f)).ToList()
-                    });
-                }
-                else
-                {
-                    pds.Plugins.Add(new PluginDeletion
-                    {
-                        Files = plugin.Files.Select(f => Path.GetFileName(f)).ToList()
-                    });
-                }
-            }
-
-            return pds;
+            return size;
         }
 
-        public void PerformUninstallation(PluginDeletions deletions)
+        /// <summary>
+        /// Verify version plugin is built for with current XTB version and a compatibility list
+        /// </summary>
+        /// <param name="xtbDependencyVersion"></param>
+        /// <returns></returns>
+        private CompatibleState IsPluginDependencyCompatible(Version xtbDependencyVersion)
         {
-            string filePath = Path.Combine(Paths.XrmToolBoxPath, "Deletion.xml");
-
-            if (File.Exists(filePath))
+            if (xtbDependencyVersion >= MinCompatibleVersion
+                && xtbDependencyVersion <= Assembly.GetEntryAssembly().GetName().Version)
             {
-                using (StreamReader reader = new StreamReader(filePath))
-                {
-                    var existingPds = (PluginDeletions)XmlSerializerHelper.Deserialize(reader.ReadToEnd(), typeof(PluginDeletions));
-                    deletions.Plugins.AddRange(existingPds.Plugins);
-                }
+                return CompatibleState.Compatible;
             }
 
-            XmlSerializerHelper.SerializeToFile(deletions, filePath);
-
-            if (DialogResult.Yes == MessageBox.Show(
-                "This application needs to restart to remove plugins. Click Yes to restart this application now",
-                "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
+            if (xtbDependencyVersion < MinCompatibleVersion)
             {
-                Application.Restart();
-            }
-        }
-
-        public void UninstallByFileName(string fileName)
-        {
-            var plugin = GetPluginByFileName(fileName.ToLower());
-
-            if (plugin != null)
-            {
-                var pds = PrepareUninstallPlugins(new List<XtbPlugin> { plugin });
-                PerformUninstallation(pds);
-            }
-        }
-
-        public long CleanCacheFolder()
-        {
-            if (Directory.Exists(nugetPluginsFolder))
-            {
-                foreach (var item in new DirectoryInfo(nugetPluginsFolder).GetFileSystemInfos())
-                {
-                    if ((item.Attributes & FileAttributes.Directory) == FileAttributes.Directory)
-                    {
-                        Directory.Delete(item.FullName, true);
-                    }
-                    else
-                    {
-                        File.Delete(item.FullName);
-                    }
-                }
-
-                return CalculateCacheFolderSize();
+                return CompatibleState.DoesntFitMinimumVersion;
             }
 
-            return 0;
-        }
-
-        public long CalculateCacheFolderSize()
-        {
-            if (Directory.Exists(nugetPluginsFolder))
+            if (xtbDependencyVersion > Assembly.GetEntryAssembly().GetName().Version)
             {
-                var size = GetDirectorySize(nugetPluginsFolder);
-                return size / 1024 / 1024;
+                return CompatibleState.RequireNewVersionOfXtb;
             }
 
-            return 0;
+            return CompatibleState.Other;
         }
     }
 }
