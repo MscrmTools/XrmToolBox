@@ -886,7 +886,10 @@ namespace XrmToolBox.New
 
         private bool IsMessageValid(object sender, MessageBusEventArgs message)
         {
-            if (message == null || !(sender is UserControl) || !(sender is IXrmToolBoxPluginControl))
+            if (message == null || 
+                !(sender is UserControl sourceControl) || 
+                !(sourceControl is IXrmToolBoxPluginControl) || 
+                !(sourceControl.Parent is PluginForm pluginForm))
             {
                 // Error. Possible reasons are:
                 // * empty sender
@@ -896,17 +899,16 @@ namespace XrmToolBox.New
                 return false;
             }
 
-            var sourceControl = (UserControl)sender;
-
             if (string.IsNullOrEmpty(message.SourcePlugin))
             {
-                message.SourcePlugin = sourceControl.GetType().GetTitle();
+                message.SourcePlugin = pluginForm?.PluginName;
             }
-            else if (message.SourcePlugin != sourceControl.GetType().GetTitle())
-            {
-                // For some reason incorrect name was set in Source Plugin field
-                return false;
-            }
+            // Commenting below - perhaps the caller wanted to override the default name for some reason // J Rapp 2018-05-30
+            //else if (message.SourcePlugin != sourceControl.GetType().GetTitle())
+            //{
+            //    // For some reason incorrect name was set in Source Plugin field
+            //    return false;
+            //}
 
             // Everything went ok
             return true;
