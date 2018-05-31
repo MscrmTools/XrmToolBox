@@ -28,21 +28,18 @@ namespace XrmToolBox.New
 {
     public partial class NewForm : Form
     {
-        private readonly PluginsForm pluginsForm;
         private readonly Dictionary<PluginForm, ConnectionDetail> pluginConnections = new Dictionary<PluginForm, ConnectionDetail>();
         private readonly List<PluginControlStatus> pluginControlStatuses = new List<PluginControlStatus>();
-        private StartPage startPage;
-
+        private readonly PluginsForm pluginsForm;
         private CrmConnectionStatusBar ccsb;
         private ConnectionManager cManager;
-        private FormHelper fHelper;
-        private IOrganizationService service;
         private ConnectionDetail connectionDetail;
         private IDockContent currentContent;
-
+        private FormHelper fHelper;
         private string initialConnectionName;
         private string initialPluginName;
-
+        private IOrganizationService service;
+        private StartPage startPage;
         private IStore store;
 
         public NewForm(string[] args)
@@ -131,51 +128,6 @@ namespace XrmToolBox.New
 
         #region Form management
 
-        private string ExtractSwitchValue(string key, ref string[] args)
-        {
-            var name = string.Empty;
-
-            foreach (var arg in args)
-            {
-                if (arg.StartsWith(key))
-                {
-                    name = arg.Substring(key.Length);
-                }
-            }
-
-            return name;
-        }
-
-        private void SetTheme()
-        {
-            if (Options.Instance.Theme != null)
-            {
-                switch (Options.Instance.Theme)
-                {
-                    case "Blue theme":
-                        {
-                            var theme = new VS2015BlueTheme();
-                            dpMain.Theme = theme;
-                        }
-                        break;
-
-                    case "Light theme":
-                        {
-                            var theme = new VS2015LightTheme();
-                            dpMain.Theme = theme;
-                        }
-                        break;
-
-                    case "Dark theme":
-                        {
-                            var theme = new VS2015DarkTheme();
-                            dpMain.Theme = theme;
-                        }
-                        break;
-                }
-            }
-        }
-
         private void BringToTop()
         {
             //Checks if the method is called from UI thread or not
@@ -196,6 +148,42 @@ namespace XrmToolBox.New
                 //Set form's topmost status back to whatever it was
                 TopMost = top;
             }
+        }
+
+        private string ExtractSwitchValue(string key, ref string[] args)
+        {
+            var name = string.Empty;
+
+            foreach (var arg in args)
+            {
+                if (arg.StartsWith(key))
+                {
+                    name = arg.Substring(key.Length);
+                }
+            }
+
+            return name;
+        }
+
+        private void NewForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Options.Instance.Size.Height = Height;
+            Options.Instance.Size.CurrentSize = Size;
+            Options.Instance.Size.IsMaximized = WindowState == FormWindowState.Maximized;
+            Options.Instance.LastConnection = connectionDetail?.ConnectionName;
+            Options.Instance.PluginsListDocking = pluginsForm?.DockState ?? DockState.Document;
+            Options.Instance.PluginsListIsHidden = pluginsForm?.IsHidden ?? false;
+
+            if (dpMain.ActiveContent is PluginForm pf)
+            {
+                Options.Instance.LastPlugin = pf.PluginTitle;
+            }
+            else
+            {
+                Options.Instance.LastPlugin = "";
+            }
+
+            Options.Instance.Save();
         }
 
         private async void NewForm_Load(object sender, System.EventArgs e)
@@ -298,25 +286,34 @@ namespace XrmToolBox.New
             }
         }
 
-        private void NewForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void SetTheme()
         {
-            Options.Instance.Size.Height = Height;
-            Options.Instance.Size.CurrentSize = Size;
-            Options.Instance.Size.IsMaximized = WindowState == FormWindowState.Maximized;
-            Options.Instance.LastConnection = connectionDetail?.ConnectionName;
-            Options.Instance.PluginsListDocking = pluginsForm?.DockState ?? DockState.Document;
-            Options.Instance.PluginsListIsHidden = pluginsForm?.IsHidden ?? false;
-
-            if (dpMain.ActiveContent is PluginForm pf)
+            if (Options.Instance.Theme != null)
             {
-                Options.Instance.LastPlugin = pf.PluginTitle;
-            }
-            else
-            {
-                Options.Instance.LastPlugin = "";
-            }
+                switch (Options.Instance.Theme)
+                {
+                    case "Blue theme":
+                        {
+                            var theme = new VS2015BlueTheme();
+                            dpMain.Theme = theme;
+                        }
+                        break;
 
-            Options.Instance.Save();
+                    case "Light theme":
+                        {
+                            var theme = new VS2015LightTheme();
+                            dpMain.Theme = theme;
+                        }
+                        break;
+
+                    case "Dark theme":
+                        {
+                            var theme = new VS2015DarkTheme();
+                            dpMain.Theme = theme;
+                        }
+                        break;
+                }
+            }
         }
 
         #endregion Form management
@@ -337,12 +334,6 @@ namespace XrmToolBox.New
                 };
             }
             startPage.Show(dpMain, DockState.Document);
-        }
-
-        private void StartPage_OpenPluginRequested(object sender, OpenFavoritePluginEventArgs e)
-        {
-            initialPluginName = e.Item.PluginName;
-            StartPluginWithoutConnection();
         }
 
         private void StartPage_OpenMruPluginRequested(object sender, OpenMruPluginEventArgs e)
@@ -386,118 +377,15 @@ namespace XrmToolBox.New
             }
         }
 
+        private void StartPage_OpenPluginRequested(object sender, OpenFavoritePluginEventArgs e)
+        {
+            initialPluginName = e.Item.PluginName;
+            StartPluginWithoutConnection();
+        }
+
         #endregion Start page
 
         #region Plugins Form events
-
-        private void PluginsForm_ActionRequested(object sender, PluginsListEventArgs e)
-        {
-            switch (e.Action)
-            {
-                case PluginsListAction.OpenPluginsStore:
-                    tsddbTools_DropDownItemClicked(sender, new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
-                    break;
-            }
-        }
-
-        private void PluginsForm_OpenPluginProjectUrlRequested(object sender, PluginEventArgs e)
-        {
-            var filePath = Assembly.GetAssembly(e.PluginControl.GetType()).Location;
-            if (File.Exists(filePath))
-            {
-                var fileName = Path.GetFileName(filePath);
-
-                if (store == null)
-                {
-                    MessageBox.Show(this,
-                        @"The Plugins Store is not initialized so we cannot find the project url",
-                        @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                string projectUrl = store.GetPluginProjectUrlByFileName(fileName.ToLower());
-                if (projectUrl != null)
-                {
-                    Process.Start(projectUrl);
-                }
-                else
-                {
-                    MessageBox.Show(this,
-                        @"This plugin is not on the Plugins Store or its Project Url is not defined. Therefore, we cannot lead you to the project page",
-                        @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
-        private void PluginsForm_UninstallPluginRequested(object sender, PluginEventArgs e)
-        {
-            if (DialogResult.No == MessageBox.Show(this,
-                    @"Are you sure you want to uninstall this plugin?",
-                    @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
-            {
-                return;
-            }
-
-            var filePath = Assembly.GetAssembly(e.PluginControl?.GetType() ?? e.Plugin.Value.GetType()).Location;
-            if (File.Exists(filePath))
-            {
-                var fileName = Path.GetFileName(filePath);
-
-                if (store == null)
-                {
-                    MessageBox.Show(this,
-                        @"The Plugins Store is not initialized so we cannot find files to uninstall",
-                        @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                store.UninstallByFileName(fileName);
-            }
-        }
-
-        private void PluginsForm_OpenPluginRequested(object sender, PluginEventArgs e)
-        {
-            if (e.Plugin.Value is INoConnectionRequired)
-            {
-                DisplayPluginControl(e.Plugin);
-                return;
-            }
-
-            if (service == null && e.MruInfo == null)
-            {
-                var result = MessageBox.Show(new Form { TopMost = true }, @"Do you want to connect to an organization first?", $@"Opening {e.Plugin.Metadata.Name}",
-                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
-
-                if (result == DialogResult.Yes)
-                {
-                    ConnectUponApproval(e.Plugin);
-                }
-                else if (result == DialogResult.No)
-                {
-                    if (e.Plugin != null)
-                    {
-                        DisplayPluginControl(e.Plugin);
-                    }
-                }
-            }
-            else
-            {
-                if (e.Plugin != null)
-                {
-                    DisplayPluginControl(e.Plugin, e.MruInfo == null || e.MruInfo.Item.ConnectionId != Guid.Empty);
-                }
-            }
-
-            FillPluginsListMenuDisplay();
-        }
-
-        private void NewForm_OnCloseTool(object sender, System.EventArgs e)
-        {
-            if (dpMain.ActiveContent is PluginForm pluginForm)
-            {
-                RequestCloseTab(pluginForm, new PluginCloseInfo(), Options.Instance.CloseEachPluginSilently);
-            }
-        }
 
         private void DisplayPluginControl(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, bool displayConnected = true)
         {
@@ -680,13 +568,161 @@ namespace XrmToolBox.New
             }
         }
 
+        private void NewForm_OnCloseTool(object sender, System.EventArgs e)
+        {
+            if (dpMain.ActiveContent is PluginForm pluginForm)
+            {
+                RequestCloseTab(pluginForm, new PluginCloseInfo(), Options.Instance.CloseEachPluginSilently);
+            }
+        }
+
+        private void PluginsForm_ActionRequested(object sender, PluginsListEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case PluginsListAction.OpenPluginsStore:
+                    tsddbTools_DropDownItemClicked(sender, new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
+                    break;
+            }
+        }
+
+        private void PluginsForm_OpenPluginProjectUrlRequested(object sender, PluginEventArgs e)
+        {
+            var filePath = Assembly.GetAssembly(e.PluginControl.GetType()).Location;
+            if (File.Exists(filePath))
+            {
+                var fileName = Path.GetFileName(filePath);
+
+                if (store == null)
+                {
+                    MessageBox.Show(this,
+                        @"The Plugins Store is not initialized so we cannot find the project url",
+                        @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                string projectUrl = store.GetPluginProjectUrlByFileName(fileName.ToLower());
+                if (projectUrl != null)
+                {
+                    Process.Start(projectUrl);
+                }
+                else
+                {
+                    MessageBox.Show(this,
+                        @"This plugin is not on the Plugins Store or its Project Url is not defined. Therefore, we cannot lead you to the project page",
+                        @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void PluginsForm_OpenPluginRequested(object sender, PluginEventArgs e)
+        {
+            if (e.Plugin.Value is INoConnectionRequired)
+            {
+                DisplayPluginControl(e.Plugin);
+                return;
+            }
+
+            if (service == null && e.MruInfo == null)
+            {
+                var result = MessageBox.Show(new Form { TopMost = true }, @"Do you want to connect to an organization first?", $@"Opening {e.Plugin.Metadata.Name}",
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    ConnectUponApproval(e.Plugin);
+                }
+                else if (result == DialogResult.No)
+                {
+                    if (e.Plugin != null)
+                    {
+                        DisplayPluginControl(e.Plugin);
+                    }
+                }
+            }
+            else
+            {
+                if (e.Plugin != null)
+                {
+                    DisplayPluginControl(e.Plugin, e.MruInfo == null || e.MruInfo.Item.ConnectionId != Guid.Empty);
+                }
+            }
+
+            FillPluginsListMenuDisplay();
+        }
+
+        private void PluginsForm_UninstallPluginRequested(object sender, PluginEventArgs e)
+        {
+            if (DialogResult.No == MessageBox.Show(this,
+                    @"Are you sure you want to uninstall this plugin?",
+                    @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
+            {
+                return;
+            }
+
+            var filePath = Assembly.GetAssembly(e.PluginControl?.GetType() ?? e.Plugin.Value.GetType()).Location;
+            if (File.Exists(filePath))
+            {
+                var fileName = Path.GetFileName(filePath);
+
+                if (store == null)
+                {
+                    MessageBox.Show(this,
+                        @"The Plugins Store is not initialized so we cannot find files to uninstall",
+                        @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                store.UninstallByFileName(fileName);
+            }
+        }
+
         #endregion Plugins Form events
 
         #region Connection methods
 
-        private void NewForm_OnRequestConnection(object sender, System.EventArgs e)
+        private void ApplyConnectionToTabs()
         {
-            ConnectUponApproval(e is RequestConnectionEventArgs ? e : sender);
+            var pluginForms = dpMain.Contents.OfType<PluginForm>().ToList();
+
+            var tcu = new TabConnectionUpdater(pluginForms) { StartPosition = FormStartPosition.CenterParent };
+
+            if (tcu.ShowDialog(this) == DialogResult.OK)
+            {
+                foreach (PluginForm form in tcu.SelectedPluginForms)
+                {
+                    UpdateTabConnection(form);
+                }
+
+                if (tcu.SelectedPluginForms.Any())
+                {
+                    FillPluginsListMenuDisplay();
+                }
+            }
+        }
+
+        private void ConnectUponApproval(object connectionParameter)
+        {
+            var info = new ConnectionParameterInfo
+            {
+                ConnectionParmater = connectionParameter
+            };
+
+            fHelper.AskForConnection(info, () =>
+            {
+                var connectingControl = new ConnectingControl { Anchor = AnchorStyles.None };
+                connectingControl.Left = Width / 2 - connectingControl.Width / 2;
+                connectingControl.Top = Height / 2 - connectingControl.Height / 2;
+                Controls.Add(connectingControl);
+                connectingControl.BringToFront();
+
+                info.ConnControl = connectingControl;
+            });
+        }
+
+        private Task LaunchInitialConnection(ConnectionDetail detail)
+        {
+            return new Task(() => ConnectionManager.Instance.ConnectToServer(detail));
         }
 
         private void ManageConnectionControl()
@@ -793,6 +829,11 @@ namespace XrmToolBox.New
             Controls.SetChildIndex(ccsb, Controls.Count - 1);
         }
 
+        private void NewForm_OnRequestConnection(object sender, System.EventArgs e)
+        {
+            ConnectUponApproval(e is RequestConnectionEventArgs ? e : sender);
+        }
+
         private void StartPluginWithConnection()
         {
             if (!string.IsNullOrEmpty(initialConnectionName) && !string.IsNullOrEmpty(initialPluginName))
@@ -815,24 +856,9 @@ namespace XrmToolBox.New
             }
         }
 
-        private void ApplyConnectionToTabs()
+        private void tsbConnect_Click(object sender, System.EventArgs e)
         {
-            var pluginForms = dpMain.Contents.OfType<PluginForm>().ToList();
-
-            var tcu = new TabConnectionUpdater(pluginForms) { StartPosition = FormStartPosition.CenterParent };
-
-            if (tcu.ShowDialog(this) == DialogResult.OK)
-            {
-                foreach (PluginForm form in tcu.SelectedPluginForms)
-                {
-                    UpdateTabConnection(form);
-                }
-
-                if (tcu.SelectedPluginForms.Any())
-                {
-                    FillPluginsListMenuDisplay();
-                }
-            }
+            ConnectUponApproval("ApplyConnectionToTabs");
         }
 
         private void UpdateTabConnection(PluginForm pluginForm, string actionName = "", object parameter = null)
@@ -847,61 +873,9 @@ namespace XrmToolBox.New
             pluginForm.Text = $@"{pluginName} ({connectionDetail?.ConnectionName ?? "Not connected"})";
         }
 
-        private void ConnectUponApproval(object connectionParameter)
-        {
-            var info = new ConnectionParameterInfo
-            {
-                ConnectionParmater = connectionParameter
-            };
-
-            fHelper.AskForConnection(info, () =>
-            {
-                var connectingControl = new ConnectingControl { Anchor = AnchorStyles.None };
-                connectingControl.Left = Width / 2 - connectingControl.Width / 2;
-                connectingControl.Top = Height / 2 - connectingControl.Height / 2;
-                Controls.Add(connectingControl);
-                connectingControl.BringToFront();
-
-                info.ConnControl = connectingControl;
-            });
-        }
-
-        private Task LaunchInitialConnection(ConnectionDetail detail)
-        {
-            return new Task(() => ConnectionManager.Instance.ConnectToServer(detail));
-        }
-
-        private void tsbConnect_Click(object sender, System.EventArgs e)
-        {
-            ConnectUponApproval("ApplyConnectionToTabs");
-        }
-
         #endregion Connection methods
 
         #region Message broker
-
-        private void MainForm_MessageBroker(object sender, MessageBusEventArgs message)
-        {
-            if (!IsMessageValid(sender, message))
-            {
-                return;
-            }
-
-            var content = GetPluginByName(message.TargetPlugin);
-            if (content == null || message.NewInstance)
-            {
-                pluginsForm.OpenPlugin(message.TargetPlugin);
-            }
-
-            content = GetPluginByName(message.TargetPlugin);
-            if (content == null)
-            {
-                MessageBox.Show($@"Cannot switch to plugin {message.TargetPlugin}.", message.SourcePlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-            content.Show(dpMain, content.DockState);
-            content.SendIncomingBrokerMessage(message);
-        }
 
         private PluginForm GetPluginByName(string name)
         {
@@ -936,6 +910,29 @@ namespace XrmToolBox.New
 
             // Everything went ok
             return true;
+        }
+
+        private void MainForm_MessageBroker(object sender, MessageBusEventArgs message)
+        {
+            if (!IsMessageValid(sender, message))
+            {
+                return;
+            }
+
+            var content = GetPluginByName(message.TargetPlugin);
+            if (content == null || message.NewInstance)
+            {
+                pluginsForm.OpenPlugin(message.TargetPlugin);
+            }
+
+            content = GetPluginByName(message.TargetPlugin);
+            if (content == null)
+            {
+                MessageBox.Show($@"Cannot switch to plugin {message.TargetPlugin}.", message.SourcePlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            content.Show(dpMain, content.DockState);
+            content.SendIncomingBrokerMessage(message);
         }
 
         #endregion Message broker
@@ -1055,6 +1052,31 @@ namespace XrmToolBox.New
 
         #region Change of active content
 
+        private void ApplyActiveContentDisplay()
+        {
+            if (dpMain.ActiveContent != null && currentContent != dpMain.ActiveContent)
+            {
+                currentContent = dpMain.ActiveContent;
+
+                ProcessMenuItemsForPlugin();
+
+                if (dpMain.ActiveContent is StartPage sp)
+                {
+                    sp.LoadMru();
+                }
+
+                if (dpMain.ActiveContent is PluginForm)
+                {
+                    tsmiAbout.Click -= tsmiAbout_Click;
+                }
+                else
+                {
+                    tsmiAbout.Click -= tsmiAbout_Click;
+                    tsmiAbout.Click += tsmiAbout_Click;
+                }
+            }
+        }
+
         private void dpMain_ActiveContentChanged(object sender, System.EventArgs e)
         {
             ApplyActiveContentDisplay();
@@ -1075,24 +1097,84 @@ namespace XrmToolBox.New
             ApplyActiveContentDisplay();
         }
 
-        private void ApplyActiveContentDisplay()
-        {
-            if (dpMain.ActiveContent != null && currentContent != dpMain.ActiveContent)
-            {
-                currentContent = dpMain.ActiveContent;
-
-                ProcessMenuItemsForPlugin();
-
-                if (dpMain.ActiveContent is StartPage sp)
-                {
-                    sp.LoadMru();
-                }
-            }
-        }
-
         #endregion Change of active content
 
         #region Menu Toolbar
+
+        private void checkForUpdateToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            var worker = new BackgroundWorker();
+            worker.DoWork += (s, evt) =>
+            {
+                var request = WebRequest.CreateHttp("https://www.xrmtoolbox.com/_odata/releases");
+                var response = request.GetResponse();
+                using (Stream dataStream = response.GetResponseStream())
+                {
+                    if (dataStream != null)
+                    {
+                        var serializer = new DataContractJsonSerializer(typeof(Releases),
+                            new DataContractJsonSerializerSettings
+                            {
+                                UseSimpleDictionaryFormat = true,
+                                DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ss", new DateTimeFormatInfo { FullDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss" })
+                            });
+
+                        evt.Result = (Releases)serializer.ReadObject(dataStream);
+                    }
+                }
+            };
+            worker.RunWorkerCompleted += (s, evt) =>
+            {
+                if (evt.Result is Releases releases)
+                {
+                    var lastReleaseVersion = releases.Items.Max(i => new Version(i.Version));
+                    var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                    if (lastReleaseVersion > currentVersion)
+                    {
+                        var release = releases.Items.FirstOrDefault(r => r.Version == lastReleaseVersion.ToString());
+
+                        Invoke(new Action(() =>
+                        {
+                            var nvForm = new NewVersionForm(release?.Version, new Uri(release?.DownloadUrl ?? "about:_blank"));
+                            nvForm.Show(dpMain, DockState.Document);
+                        }));
+                    }
+                    else
+                    {
+                        MessageBox.Show(this, @"No update available!", @"Information", MessageBoxButtons.OK,
+                            MessageBoxIcon.Information);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(this, @"No update information found!", @"Information", MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+                }
+
+                Options.Instance.LastUpdateCheck = DateTime.Now;
+                Options.Instance.Save();
+            };
+            worker.RunWorkerAsync();
+        }
+
+        private void tsbOpenOrg_Click(object sender, System.EventArgs e)
+        {
+            var activeContent = dpMain.ActiveContent as PluginForm;
+            var url = string.Empty;
+            if (activeContent == null)
+            {
+                url = connectionDetail.WebApplicationUrl;
+            }
+            else if (pluginConnections.ContainsKey(activeContent) && pluginConnections[activeContent] != null)
+            {
+                url = pluginConnections[activeContent].WebApplicationUrl;
+            }
+
+            if (url.Length > 0)
+            {
+                Process.Start(url);
+            }
+        }
 
         private void tsddbTools_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
@@ -1190,121 +1272,16 @@ namespace XrmToolBox.New
             }
         }
 
-        private void checkForUpdateToolStripMenuItem_Click(object sender, System.EventArgs e)
-        {
-            var worker = new BackgroundWorker();
-            worker.DoWork += (s, evt) =>
-            {
-                var request = WebRequest.CreateHttp("https://www.xrmtoolbox.com/_odata/releases");
-                var response = request.GetResponse();
-                using (Stream dataStream = response.GetResponseStream())
-                {
-                    if (dataStream != null)
-                    {
-                        var serializer = new DataContractJsonSerializer(typeof(Releases),
-                            new DataContractJsonSerializerSettings
-                            {
-                                UseSimpleDictionaryFormat = true,
-                                DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ss", new DateTimeFormatInfo { FullDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss" })
-                            });
-
-                        evt.Result = (Releases)serializer.ReadObject(dataStream);
-                    }
-                }
-            };
-            worker.RunWorkerCompleted += (s, evt) =>
-            {
-                if (evt.Result is Releases releases)
-                {
-                    var lastReleaseVersion = releases.Items.Max(i => new Version(i.Version));
-                    var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-                    if (lastReleaseVersion > currentVersion)
-                    {
-                        var release = releases.Items.FirstOrDefault(r => r.Version == lastReleaseVersion.ToString());
-
-                        Invoke(new Action(() =>
-                        {
-                            var nvForm = new NewVersionForm(release?.Version, new Uri(release?.DownloadUrl ?? "about:_blank"));
-                            nvForm.Show(dpMain, DockState.Document);
-                        }));
-                    }
-                    else
-                    {
-                        MessageBox.Show(this, @"No update available!", @"Information", MessageBoxButtons.OK,
-                            MessageBoxIcon.Information);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show(this, @"No update information found!", @"Information", MessageBoxButtons.OK,
-                        MessageBoxIcon.Information);
-                }
-
-                Options.Instance.LastUpdateCheck = DateTime.Now;
-                Options.Instance.Save();
-            };
-            worker.RunWorkerAsync();
-        }
-
-        private void aboutXrmToolBoxToolStripMenuItem_Click(object sender, System.EventArgs e)
-        {
-            var aForm = new WelcomeDialog(false) { StartPosition = FormStartPosition.CenterParent };
-            aForm.ShowDialog(this);
-        }
-
-        private void tsbOpenOrg_Click(object sender, System.EventArgs e)
-        {
-            var activeContent = dpMain.ActiveContent as PluginForm;
-            var url = string.Empty;
-            if (activeContent == null)
-            {
-                url = connectionDetail.WebApplicationUrl;
-            }
-            else if (pluginConnections.ContainsKey(activeContent) && pluginConnections[activeContent] != null)
-            {
-                url = pluginConnections[activeContent].WebApplicationUrl;
-            }
-
-            if (url.Length > 0)
-            {
-                Process.Start(url);
-            }
-        }
-
         #region Document management
 
-        private void tsbManageWindows_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        /// <summary>
+        /// Only to be called from the RequestCloseTab
+        /// </summary>
+        /// <param name="page"></param>
+        private void CloseTab(PluginForm page)
         {
-            if (e.ClickedItem == closeAllWindowsToolStripMenuItem)
-            {
-                RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
-            }
-            else if (e.ClickedItem == closeAllWindowsExceptActiveToolStripMenuItem)
-            {
-                RequestCloseTabs(dpMain.Contents.OfType<PluginForm>().Where(p => dpMain.ActiveContent != p), new PluginCloseInfo(ToolBoxCloseReason.CloseAllExceptActive));
-            }
-            else if (e.ClickedItem == closeCurrentWindowToolStripMenuItem)
-            {
-                if (dpMain.ActiveContent is PluginForm p)
-                {
-                    RequestCloseTab(p, new PluginCloseInfo(ToolBoxCloseReason.CloseCurrent));
-                }
-            }
-            else if (e.ClickedItem == tsmiShowStartPage)
-            {
-                if (dpMain.Contents.OfType<StartPage>().Any())
-                {
-                    startPage.EnsureVisible(dpMain, DockState.Document);
-                }
-                else
-                {
-                    ShowStartPage();
-                }
-            }
-            else if (e.ClickedItem.Tag is PluginForm pf)
-            {
-                pf.EnsureVisible(dpMain, DockState.Document);
-            }
+            ((UserControl)page.Control)?.Dispose();
+            page.Close();
         }
 
         private void FillPluginsListMenuDisplay()
@@ -1330,6 +1307,11 @@ namespace XrmToolBox.New
                     Tag = pluginPage
                 });
             }
+        }
+
+        private void PluginForm_CloseRequested(object sender, System.EventArgs e)
+        {
+            RequestCloseTab((PluginForm)sender, new PluginCloseInfo(ToolBoxCloseReason.CloseCurrent));
         }
 
         private void RequestCloseTab(PluginForm content, PluginCloseInfo info, bool forceSilent = false)
@@ -1370,19 +1352,38 @@ namespace XrmToolBox.New
             }
         }
 
-        /// <summary>
-        /// Only to be called from the RequestCloseTab
-        /// </summary>
-        /// <param name="page"></param>
-        private void CloseTab(PluginForm page)
+        private void tsbManageWindows_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            ((UserControl)page.Control)?.Dispose();
-            page.Close();
-        }
-
-        private void PluginForm_CloseRequested(object sender, System.EventArgs e)
-        {
-            RequestCloseTab((PluginForm)sender, new PluginCloseInfo(ToolBoxCloseReason.CloseCurrent));
+            if (e.ClickedItem == closeAllWindowsToolStripMenuItem)
+            {
+                RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
+            }
+            else if (e.ClickedItem == closeAllWindowsExceptActiveToolStripMenuItem)
+            {
+                RequestCloseTabs(dpMain.Contents.OfType<PluginForm>().Where(p => dpMain.ActiveContent != p), new PluginCloseInfo(ToolBoxCloseReason.CloseAllExceptActive));
+            }
+            else if (e.ClickedItem == closeCurrentWindowToolStripMenuItem)
+            {
+                if (dpMain.ActiveContent is PluginForm p)
+                {
+                    RequestCloseTab(p, new PluginCloseInfo(ToolBoxCloseReason.CloseCurrent));
+                }
+            }
+            else if (e.ClickedItem == tsmiShowStartPage)
+            {
+                if (dpMain.Contents.OfType<StartPage>().Any())
+                {
+                    startPage.EnsureVisible(dpMain, DockState.Document);
+                }
+                else
+                {
+                    ShowStartPage();
+                }
+            }
+            else if (e.ClickedItem.Tag is PluginForm pf)
+            {
+                pf.EnsureVisible(dpMain, DockState.Document);
+            }
         }
 
         #endregion Document management

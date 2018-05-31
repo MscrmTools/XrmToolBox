@@ -3,16 +3,16 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using Microsoft.Crm.Sdk.Messages;
 using System;
 using System.Windows.Forms;
-using Microsoft.Crm.Sdk.Messages;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SampleTool
 {
-    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver
+    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin
     {
         #region Base tool implementation
 
@@ -40,6 +40,13 @@ namespace MsCrmTools.SampleTool
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
+
+        public override void ClosingPlugin(PluginCloseInfo info)
+        {
+            //MessageBox.Show("Custom logic here");
+
+            base.ClosingPlugin(info);
+        }
 
         public void ProcessWhoAmI()
         {
@@ -95,16 +102,16 @@ namespace MsCrmTools.SampleTool
             });
         }
 
+        private void tsbCancel_Click(object sender, EventArgs e)
+        {
+            CancelWorker();
+            tsbCancel.Enabled = false;
+            MessageBox.Show("Cancelled");
+        }
+
         private void tsbClose_Click(object sender, EventArgs e)
         {
             CloseTool();
-        }
-
-        public override void ClosingPlugin(PluginCloseInfo info)
-        {
-            //MessageBox.Show("Custom logic here");
-
-            base.ClosingPlugin(info);
         }
 
         private void tsbWhoAmI_Click(object sender, EventArgs e)
@@ -112,13 +119,6 @@ namespace MsCrmTools.SampleTool
             HideNotification();
 
             ExecuteMethod(ProcessWhoAmI);
-        }
-
-        private void tsbCancel_Click(object sender, EventArgs e)
-        {
-            CancelWorker();
-            tsbCancel.Enabled = false;
-            MessageBox.Show("Cancelled");
         }
 
         #endregion Base tool implementation
@@ -171,11 +171,6 @@ namespace MsCrmTools.SampleTool
 
         #region Shortcut Receiver implementation
 
-        public void ReceiveShortcut(KeyEventArgs e)
-        {
-            MessageBox.Show(e.ToString());
-        }
-
         public void ReceiveKeyDownShortcut(KeyEventArgs e)
         {
             MessageBox.Show("A KeyDown event was received!");
@@ -196,11 +191,26 @@ namespace MsCrmTools.SampleTool
             MessageBox.Show("A PreviewKeyDown event was received!");
         }
 
+        public void ReceiveShortcut(KeyEventArgs e)
+        {
+            MessageBox.Show(e.ToString());
+        }
+
         #endregion Shortcut Receiver implementation
 
         private void SampleTool_Load(object sender, EventArgs e)
         {
             ShowInfoNotification("This is a notification that can lead to XrmToolBox repository", new Uri("http://github.com/MscrmTools/XrmToolBox"));
         }
+
+        #region IAboutPlugin implementation
+
+        public void ShowAboutDialog()
+        {
+            MessageBox.Show(@"This is a sample plugin", @"About Sample Plugin", MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+
+        #endregion IAboutPlugin implementation
     }
 }

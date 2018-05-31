@@ -1,10 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Web;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
+using XrmToolBox.Forms;
 
 namespace XrmToolBox.New
 {
@@ -64,74 +63,21 @@ namespace XrmToolBox.New
         {
             dropDownItems.AddRange(new ToolStripItem[]
             {
-                donateInUSDollarsToolStripMenuItem,
-                donateInEuroToolStripMenuItem,
-                donateInGBPToolStripMenuItem
+                tsmiDonateUsdXrmToolBox,
+                tsmiDonateEurXrmToolBox,
+                tsmiDonateGbpXrmToolBox
             });
         }
 
-        private void ProcessMenuItemsForPlugin()
+        private void feedbackToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             if (!(dpMain.ActiveContent is PluginForm)) // Home Screen
-            {
-                githubPluginMenuItem.Visible = false;
-                GithubXrmToolBoxMenuItem.Visible = false;
-                PaypalXrmToolBoxToolStripMenuItem.Visible = false;
-                PayPalSelectedPluginToolStripMenuItem.Visible = false;
-                HelpSelectedPluginToolStripMenuItem.Visible = false;
-                displayXrmToolBoxHelpToolStripMenuItem.Visible = false;
-                AssignPayPalMenuItems(donateToolStripMenuItem.DropDownItems);
-                return;
-            }
-
-            var pluginName = ((PluginForm)dpMain.ActiveContent).PluginTitle;
-
-            if (((PluginForm)dpMain.ActiveContent).Control is IHelpPlugin help)
-            {
-                displayXrmToolBoxHelpToolStripMenuItem.Visible = true;
-                HelpSelectedPluginToolStripMenuItem.Visible = true;
-                HelpSelectedPluginToolStripMenuItem.Text =
-                    string.Format(HelpSelectedPluginToolStripMenuItem.Tag.ToString(), pluginName);
-                HelpSelectedPluginToolStripMenuItem.Image = (help as PluginControlBase)?.TabIcon;
-            }
-            else
-            {
-                HelpSelectedPluginToolStripMenuItem.Visible = false;
-                displayXrmToolBoxHelpToolStripMenuItem.Visible = false;
-            }
-
-            if (((PluginForm)dpMain.ActiveContent).Control is IPayPalPlugin paypal)
-            {
-                PaypalXrmToolBoxToolStripMenuItem.Visible = true;
-                PayPalSelectedPluginToolStripMenuItem.Visible = true;
-                PayPalSelectedPluginToolStripMenuItem.Text = pluginName;
-                PayPalSelectedPluginToolStripMenuItem.Image = (paypal as PluginControlBase)?.TabIcon;
-                AssignPayPalMenuItems(PaypalXrmToolBoxToolStripMenuItem.DropDownItems);
-            }
-            else
-            {
-                PaypalXrmToolBoxToolStripMenuItem.Visible = false;
-                PayPalSelectedPluginToolStripMenuItem.Visible = false;
-                AssignPayPalMenuItems(donateToolStripMenuItem.DropDownItems);
-            }
-
-            if (((PluginForm)dpMain.ActiveContent).Control is IGitHubPlugin github)
-            {
-                GithubXrmToolBoxMenuItem.Visible = true;
-                githubPluginMenuItem.Visible = true;
-                githubPluginMenuItem.Text = pluginName;
-                githubPluginMenuItem.Image = (github as PluginControlBase)?.TabIcon;
-            }
-            else
-            {
-                GithubXrmToolBoxMenuItem.Visible = false;
-                githubPluginMenuItem.Visible = false;
-            }
+                GithubXrmToolBoxMenuItem_Click(sender, e);
         }
 
-        private void HelpSelectedPluginToolStripMenuItem_Click(object sender, System.EventArgs e)
+        private void githubPluginMenuItem_Click(object sender, System.EventArgs e)
         {
-            Process.Start(GetHelpUrl());
+            Process.Start(GetGithubBaseUrl("issues/new"));
         }
 
         private void GithubXrmToolBoxMenuItem_Click(object sender, System.EventArgs e)
@@ -139,9 +85,9 @@ namespace XrmToolBox.New
             Process.Start("https://github.com/MscrmTools/XrmToolBox/issues/new");
         }
 
-        private void githubPluginMenuItem_Click(object sender, System.EventArgs e)
+        private void HelpSelectedPluginToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            Process.Start(GetGithubBaseUrl("issues/new"));
+            Process.Start(GetHelpUrl());
         }
 
         private void helpToolStripMenuItem_Click(object sender, System.EventArgs e)
@@ -150,10 +96,82 @@ namespace XrmToolBox.New
                 displayXrmToolBoxHelpToolStripMenuItem_Click(sender, e);
         }
 
-        private void feedbackToolStripMenuItem_Click(object sender, System.EventArgs e)
+        private void ProcessMenuItemsForPlugin()
         {
             if (!(dpMain.ActiveContent is PluginForm)) // Home Screen
-                GithubXrmToolBoxMenuItem_Click(sender, e);
+            {
+                tsmiFeedbackXrmToolBox.Visible = false;
+                tsmiFeedbackSelectedPlugin.Visible = false;
+                tsmiDonateXrmToolBox.Visible = false;
+                tsmiDonateSelectedPlugin.Visible = false;
+                tsmiHelpXrmToolBox.Visible = false;
+                tsmiHelpSelectedPlugin.Visible = false;
+                tsmiAboutXrmToolBox.Visible = false;
+                tsmiAboutSelectedPlugin.Visible = false;
+                AssignPayPalMenuItems(tsmiDonate.DropDownItems);
+                return;
+            }
+
+            var pluginName = ((PluginForm)dpMain.ActiveContent).PluginTitle;
+
+            if (((PluginForm)dpMain.ActiveContent).Control is IHelpPlugin help)
+            {
+                tsmiHelpXrmToolBox.Visible = true;
+                tsmiHelpSelectedPlugin.Visible = true;
+                tsmiHelpSelectedPlugin.Text =
+                    string.Format(tsmiHelpSelectedPlugin.Tag.ToString(), pluginName);
+                tsmiHelpSelectedPlugin.Image = (help as PluginControlBase)?.TabIcon;
+            }
+            else
+            {
+                tsmiHelpXrmToolBox.Visible = false;
+                tsmiHelpSelectedPlugin.Visible = false;
+            }
+
+            if (((PluginForm)dpMain.ActiveContent).Control is IPayPalPlugin paypal)
+            {
+                tsmiDonateXrmToolBox.Visible = true;
+                tsmiDonateSelectedPlugin.Visible = true;
+                tsmiDonateSelectedPlugin.Text = pluginName;
+                tsmiDonateSelectedPlugin.Image = (paypal as PluginControlBase)?.TabIcon;
+                AssignPayPalMenuItems(tsmiDonateXrmToolBox.DropDownItems);
+            }
+            else
+            {
+                tsmiDonateXrmToolBox.Visible = false;
+                tsmiDonateSelectedPlugin.Visible = false;
+                AssignPayPalMenuItems(tsmiDonate.DropDownItems);
+            }
+
+            if (((PluginForm)dpMain.ActiveContent).Control is IGitHubPlugin github)
+            {
+                tsmiFeedbackXrmToolBox.Visible = true;
+                tsmiFeedbackSelectedPlugin.Visible = true;
+                tsmiFeedbackSelectedPlugin.Text = pluginName;
+                tsmiFeedbackSelectedPlugin.Image = (github as PluginControlBase)?.TabIcon;
+            }
+            else
+            {
+                tsmiFeedbackXrmToolBox.Visible = false;
+                tsmiFeedbackSelectedPlugin.Visible = false;
+            }
+
+            if (((PluginForm)dpMain.ActiveContent).Control is IAboutPlugin aboutPlugin)
+            {
+                tsmiAboutXrmToolBox.Visible = true;
+                tsmiAboutSelectedPlugin.Visible = true;
+                tsmiAboutSelectedPlugin.Text = pluginName;
+                tsmiAboutSelectedPlugin.Image = (aboutPlugin as PluginControlBase)?.TabIcon;
+
+                tsmiAbout.Click -= tsmiAbout_Click;
+            }
+            else
+            {
+                tsmiAboutXrmToolBox.Visible = false;
+                tsmiAboutSelectedPlugin.Visible = false;
+
+                tsmiAbout.Click += tsmiAbout_Click;
+            }
         }
 
         #endregion Prepare Community items
@@ -181,6 +199,23 @@ namespace XrmToolBox.New
         {
             var plugin = (IHelpPlugin)((PluginForm)dpMain.ActiveContent).Control;
             return plugin.HelpUrl;
+        }
+
+        private void tsmiAbout_Click(object sender, System.EventArgs e)
+        {
+            var aForm = new WelcomeDialog(false) { StartPosition = FormStartPosition.CenterParent };
+            aForm.ShowDialog(this);
+        }
+
+        private void tsmiAboutSelectedPlugin_Click(object sender, System.EventArgs e)
+        {
+            var plugin = (IAboutPlugin)((PluginForm)dpMain.ActiveContent).Control;
+            plugin.ShowAboutDialog();
+        }
+
+        private void tsmiAboutXrmToolBox_Click(object sender, System.EventArgs e)
+        {
+            tsmiAbout_Click(sender, e);
         }
     }
 }

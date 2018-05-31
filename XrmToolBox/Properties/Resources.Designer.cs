@@ -93,6 +93,16 @@ namespace XrmToolBox.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap logo_0016 {
+            get {
+                object obj = ResourceManager.GetObject("logo_0016", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap logo_0032 {
             get {
                 object obj = ResourceManager.GetObject("logo_0032", resourceCulture);

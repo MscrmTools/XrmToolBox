@@ -45,26 +45,28 @@
             this.pluginsStoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.displayXrmToolBoxHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.HelpSelectedPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.feedbackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.GithubXrmToolBoxMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.githubPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiHelpXrmToolBox = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiHelpSelectedPlugin = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiFeedback = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiFeedbackXrmToolBox = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiFeedbackSelectedPlugin = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
-            this.donateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.donateInUSDollarsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.donateInEuroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.donateInGBPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.PaypalXrmToolBoxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.PayPalSelectedPluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.donateDollarPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.donateEuroPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.donateGbpPluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDonate = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDonateUsdXrmToolBox = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDonateEurXrmToolBox = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDonateGbpXrmToolBox = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDonateXrmToolBox = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDonateSelectedPlugin = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDonateUsdSelectedPlugin = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDonateEurSelectedPlugin = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDonateGbpSelectedPlugin = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.checkForUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
-            this.aboutXrmToolBoxToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAboutXrmToolBox = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAboutSelectedPlugin = new System.Windows.Forms.ToolStripMenuItem();
             this.tssOpenOrg = new System.Windows.Forms.ToolStripSeparator();
             this.tsbOpenOrg = new System.Windows.Forms.ToolStripButton();
             this.pnlTop = new System.Windows.Forms.Panel();
@@ -100,7 +102,8 @@
             this.tsbOpenOrg});
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
-            this.tsMain.Size = new System.Drawing.Size(705, 25);
+            this.tsMain.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.tsMain.Size = new System.Drawing.Size(1293, 37);
             this.tsMain.TabIndex = 3;
             this.tsMain.Text = "tsMain";
             // 
@@ -109,14 +112,14 @@
             this.tsbConnect.Image = ((System.Drawing.Image)(resources.GetObject("tsbConnect.Image")));
             this.tsbConnect.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbConnect.Name = "tsbConnect";
-            this.tsbConnect.Size = new System.Drawing.Size(72, 22);
+            this.tsbConnect.Size = new System.Drawing.Size(122, 34);
             this.tsbConnect.Text = "Connect";
             this.tsbConnect.Click += new System.EventHandler(this.tsbConnect_Click);
             // 
             // tssSearch
             // 
             this.tssSearch.Name = "tssSearch";
-            this.tssSearch.Size = new System.Drawing.Size(6, 25);
+            this.tssSearch.Size = new System.Drawing.Size(6, 37);
             // 
             // tsbManageWindows
             // 
@@ -128,44 +131,44 @@
             this.tsmiShowStartPage});
             this.tsbManageWindows.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbManageWindows.Name = "tsbManageWindows";
-            this.tsbManageWindows.Size = new System.Drawing.Size(69, 22);
+            this.tsbManageWindows.Size = new System.Drawing.Size(119, 34);
             this.tsbManageWindows.Text = "Windows";
             this.tsbManageWindows.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsbManageWindows_DropDownItemClicked);
             // 
             // closeCurrentWindowToolStripMenuItem
             // 
             this.closeCurrentWindowToolStripMenuItem.Name = "closeCurrentWindowToolStripMenuItem";
-            this.closeCurrentWindowToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.closeCurrentWindowToolStripMenuItem.Size = new System.Drawing.Size(385, 34);
             this.closeCurrentWindowToolStripMenuItem.Text = "Close current window";
             // 
             // closeAllWindowsToolStripMenuItem
             // 
             this.closeAllWindowsToolStripMenuItem.Name = "closeAllWindowsToolStripMenuItem";
-            this.closeAllWindowsToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.closeAllWindowsToolStripMenuItem.Size = new System.Drawing.Size(385, 34);
             this.closeAllWindowsToolStripMenuItem.Text = "Close all";
             // 
             // closeAllWindowsExceptActiveToolStripMenuItem
             // 
             this.closeAllWindowsExceptActiveToolStripMenuItem.Name = "closeAllWindowsExceptActiveToolStripMenuItem";
-            this.closeAllWindowsExceptActiveToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.closeAllWindowsExceptActiveToolStripMenuItem.Size = new System.Drawing.Size(385, 34);
             this.closeAllWindowsExceptActiveToolStripMenuItem.Text = "Close all except active window";
             this.closeAllWindowsExceptActiveToolStripMenuItem.ToolTipText = "Only applies to Plugin pages";
             // 
             // tssWindows
             // 
             this.tssWindows.Name = "tssWindows";
-            this.tssWindows.Size = new System.Drawing.Size(231, 6);
+            this.tssWindows.Size = new System.Drawing.Size(382, 6);
             // 
             // tsmiShowStartPage
             // 
             this.tsmiShowStartPage.Name = "tsmiShowStartPage";
-            this.tsmiShowStartPage.Size = new System.Drawing.Size(234, 22);
+            this.tsmiShowStartPage.Size = new System.Drawing.Size(385, 34);
             this.tsmiShowStartPage.Text = "Show Start Page";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 37);
             // 
             // tsddbTools
             // 
@@ -177,7 +180,7 @@
             this.tsddbTools.Image = ((System.Drawing.Image)(resources.GetObject("tsddbTools.Image")));
             this.tsddbTools.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbTools.Name = "tsddbTools";
-            this.tsddbTools.Size = new System.Drawing.Size(64, 22);
+            this.tsddbTools.Size = new System.Drawing.Size(109, 34);
             this.tsddbTools.Text = "Tools";
             this.tsddbTools.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsddbTools_DropDownItemClicked);
             // 
@@ -185,211 +188,229 @@
             // 
             this.manageConnectionsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("manageConnectionsToolStripMenuItem.Image")));
             this.manageConnectionsToolStripMenuItem.Name = "manageConnectionsToolStripMenuItem";
-            this.manageConnectionsToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.manageConnectionsToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
             this.manageConnectionsToolStripMenuItem.Text = "Manage connections";
             // 
             // toolStripSeparator10
             // 
             this.toolStripSeparator10.Name = "toolStripSeparator10";
-            this.toolStripSeparator10.Size = new System.Drawing.Size(182, 6);
+            this.toolStripSeparator10.Size = new System.Drawing.Size(295, 6);
             // 
             // pluginsStoreToolStripMenuItem
             // 
             this.pluginsStoreToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pluginsStoreToolStripMenuItem.Image")));
             this.pluginsStoreToolStripMenuItem.Name = "pluginsStoreToolStripMenuItem";
-            this.pluginsStoreToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.pluginsStoreToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
             this.pluginsStoreToolStripMenuItem.Text = "Plugins Store";
             // 
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("settingsToolStripMenuItem.Image")));
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
             this.settingsToolStripMenuItem.Text = "Settings";
             // 
             // toolStripDropDownButton2
             // 
             this.toolStripDropDownButton2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.helpToolStripMenuItem,
-            this.feedbackToolStripMenuItem,
+            this.tsmiHelp,
+            this.tsmiFeedback,
             this.toolStripSeparator11,
-            this.donateToolStripMenuItem,
+            this.tsmiDonate,
             this.toolStripSeparator12,
             this.checkForUpdateToolStripMenuItem,
             this.toolStripSeparator13,
-            this.aboutXrmToolBoxToolStripMenuItem1});
+            this.tsmiAbout});
             this.toolStripDropDownButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton2.Image")));
             this.toolStripDropDownButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
-            this.toolStripDropDownButton2.Size = new System.Drawing.Size(69, 22);
+            this.toolStripDropDownButton2.Size = new System.Drawing.Size(119, 34);
             this.toolStripDropDownButton2.Text = "About";
             // 
-            // helpToolStripMenuItem
+            // tsmiHelp
             // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.displayXrmToolBoxHelpToolStripMenuItem,
-            this.HelpSelectedPluginToolStripMenuItem});
-            this.helpToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("helpToolStripMenuItem.Image")));
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
-            this.helpToolStripMenuItem.Text = "Help";
-            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
+            this.tsmiHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiHelpXrmToolBox,
+            this.tsmiHelpSelectedPlugin});
+            this.tsmiHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsmiHelp.Image")));
+            this.tsmiHelp.Name = "tsmiHelp";
+            this.tsmiHelp.Size = new System.Drawing.Size(362, 34);
+            this.tsmiHelp.Text = "Help";
+            this.tsmiHelp.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
-            // displayXrmToolBoxHelpToolStripMenuItem
+            // tsmiHelpXrmToolBox
             // 
-            this.displayXrmToolBoxHelpToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("displayXrmToolBoxHelpToolStripMenuItem.Image")));
-            this.displayXrmToolBoxHelpToolStripMenuItem.Name = "displayXrmToolBoxHelpToolStripMenuItem";
-            this.displayXrmToolBoxHelpToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
-            this.displayXrmToolBoxHelpToolStripMenuItem.Text = "Display XrmToolBox help";
-            this.displayXrmToolBoxHelpToolStripMenuItem.Click += new System.EventHandler(this.displayXrmToolBoxHelpToolStripMenuItem_Click);
+            this.tsmiHelpXrmToolBox.Image = ((System.Drawing.Image)(resources.GetObject("tsmiHelpXrmToolBox.Image")));
+            this.tsmiHelpXrmToolBox.Name = "tsmiHelpXrmToolBox";
+            this.tsmiHelpXrmToolBox.Size = new System.Drawing.Size(332, 34);
+            this.tsmiHelpXrmToolBox.Text = "Display XrmToolBox help";
+            this.tsmiHelpXrmToolBox.Click += new System.EventHandler(this.displayXrmToolBoxHelpToolStripMenuItem_Click);
             // 
-            // HelpSelectedPluginToolStripMenuItem
+            // tsmiHelpSelectedPlugin
             // 
-            this.HelpSelectedPluginToolStripMenuItem.Name = "HelpSelectedPluginToolStripMenuItem";
-            this.HelpSelectedPluginToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
-            this.HelpSelectedPluginToolStripMenuItem.Tag = "Display {0} help";
-            this.HelpSelectedPluginToolStripMenuItem.Text = "Selected Plugin";
-            this.HelpSelectedPluginToolStripMenuItem.Click += new System.EventHandler(this.HelpSelectedPluginToolStripMenuItem_Click);
+            this.tsmiHelpSelectedPlugin.Name = "tsmiHelpSelectedPlugin";
+            this.tsmiHelpSelectedPlugin.Size = new System.Drawing.Size(332, 34);
+            this.tsmiHelpSelectedPlugin.Tag = "Display {0} help";
+            this.tsmiHelpSelectedPlugin.Text = "Selected Plugin";
+            this.tsmiHelpSelectedPlugin.Click += new System.EventHandler(this.HelpSelectedPluginToolStripMenuItem_Click);
             // 
-            // feedbackToolStripMenuItem
+            // tsmiFeedback
             // 
-            this.feedbackToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.GithubXrmToolBoxMenuItem,
-            this.githubPluginMenuItem});
-            this.feedbackToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("feedbackToolStripMenuItem.Image")));
-            this.feedbackToolStripMenuItem.Name = "feedbackToolStripMenuItem";
-            this.feedbackToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
-            this.feedbackToolStripMenuItem.Text = "Feedback / Issue / Question";
-            this.feedbackToolStripMenuItem.Click += new System.EventHandler(this.feedbackToolStripMenuItem_Click);
+            this.tsmiFeedback.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiFeedbackXrmToolBox,
+            this.tsmiFeedbackSelectedPlugin});
+            this.tsmiFeedback.Image = ((System.Drawing.Image)(resources.GetObject("tsmiFeedback.Image")));
+            this.tsmiFeedback.Name = "tsmiFeedback";
+            this.tsmiFeedback.Size = new System.Drawing.Size(362, 34);
+            this.tsmiFeedback.Text = "Feedback / Issue / Question";
+            this.tsmiFeedback.Click += new System.EventHandler(this.feedbackToolStripMenuItem_Click);
             // 
-            // GithubXrmToolBoxMenuItem
+            // tsmiFeedbackXrmToolBox
             // 
-            this.GithubXrmToolBoxMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("GithubXrmToolBoxMenuItem.Image")));
-            this.GithubXrmToolBoxMenuItem.Name = "GithubXrmToolBoxMenuItem";
-            this.GithubXrmToolBoxMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.GithubXrmToolBoxMenuItem.Text = "XrmToolbox";
-            this.GithubXrmToolBoxMenuItem.Click += new System.EventHandler(this.GithubXrmToolBoxMenuItem_Click);
+            this.tsmiFeedbackXrmToolBox.Image = ((System.Drawing.Image)(resources.GetObject("tsmiFeedbackXrmToolBox.Image")));
+            this.tsmiFeedbackXrmToolBox.Name = "tsmiFeedbackXrmToolBox";
+            this.tsmiFeedbackXrmToolBox.Size = new System.Drawing.Size(288, 34);
+            this.tsmiFeedbackXrmToolBox.Text = "XrmToolbox";
+            this.tsmiFeedbackXrmToolBox.Click += new System.EventHandler(this.GithubXrmToolBoxMenuItem_Click);
             // 
-            // githubPluginMenuItem
+            // tsmiFeedbackSelectedPlugin
             // 
-            this.githubPluginMenuItem.Name = "githubPluginMenuItem";
-            this.githubPluginMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.githubPluginMenuItem.Text = "Selected Plugin";
-            this.githubPluginMenuItem.Visible = false;
-            this.githubPluginMenuItem.Click += new System.EventHandler(this.githubPluginMenuItem_Click);
+            this.tsmiFeedbackSelectedPlugin.Name = "tsmiFeedbackSelectedPlugin";
+            this.tsmiFeedbackSelectedPlugin.Size = new System.Drawing.Size(288, 34);
+            this.tsmiFeedbackSelectedPlugin.Text = "Selected Plugin";
+            this.tsmiFeedbackSelectedPlugin.Visible = false;
+            this.tsmiFeedbackSelectedPlugin.Click += new System.EventHandler(this.githubPluginMenuItem_Click);
             // 
             // toolStripSeparator11
             // 
             this.toolStripSeparator11.Name = "toolStripSeparator11";
-            this.toolStripSeparator11.Size = new System.Drawing.Size(217, 6);
+            this.toolStripSeparator11.Size = new System.Drawing.Size(359, 6);
             // 
-            // donateToolStripMenuItem
+            // tsmiDonate
             // 
-            this.donateToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.donateInUSDollarsToolStripMenuItem,
-            this.donateInEuroToolStripMenuItem,
-            this.donateInGBPToolStripMenuItem,
-            this.PaypalXrmToolBoxToolStripMenuItem,
-            this.PayPalSelectedPluginToolStripMenuItem});
-            this.donateToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateToolStripMenuItem.Image")));
-            this.donateToolStripMenuItem.Name = "donateToolStripMenuItem";
-            this.donateToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
-            this.donateToolStripMenuItem.Text = "Donate";
+            this.tsmiDonate.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiDonateUsdXrmToolBox,
+            this.tsmiDonateEurXrmToolBox,
+            this.tsmiDonateGbpXrmToolBox,
+            this.tsmiDonateXrmToolBox,
+            this.tsmiDonateSelectedPlugin});
+            this.tsmiDonate.Image = ((System.Drawing.Image)(resources.GetObject("tsmiDonate.Image")));
+            this.tsmiDonate.Name = "tsmiDonate";
+            this.tsmiDonate.Size = new System.Drawing.Size(362, 34);
+            this.tsmiDonate.Text = "Donate";
             // 
-            // donateInUSDollarsToolStripMenuItem
+            // tsmiDonateUsdXrmToolBox
             // 
-            this.donateInUSDollarsToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateInUSDollarsToolStripMenuItem.Image")));
-            this.donateInUSDollarsToolStripMenuItem.Name = "donateInUSDollarsToolStripMenuItem";
-            this.donateInUSDollarsToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.donateInUSDollarsToolStripMenuItem.Text = "Donate in US Dollars";
-            this.donateInUSDollarsToolStripMenuItem.Click += new System.EventHandler(this.donateInUSDollarsToolStripMenuItem_Click);
+            this.tsmiDonateUsdXrmToolBox.Image = ((System.Drawing.Image)(resources.GetObject("tsmiDonateUsdXrmToolBox.Image")));
+            this.tsmiDonateUsdXrmToolBox.Name = "tsmiDonateUsdXrmToolBox";
+            this.tsmiDonateUsdXrmToolBox.Size = new System.Drawing.Size(296, 34);
+            this.tsmiDonateUsdXrmToolBox.Text = "Donate in US Dollars";
+            this.tsmiDonateUsdXrmToolBox.Click += new System.EventHandler(this.donateInUSDollarsToolStripMenuItem_Click);
             // 
-            // donateInEuroToolStripMenuItem
+            // tsmiDonateEurXrmToolBox
             // 
-            this.donateInEuroToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateInEuroToolStripMenuItem.Image")));
-            this.donateInEuroToolStripMenuItem.Name = "donateInEuroToolStripMenuItem";
-            this.donateInEuroToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.donateInEuroToolStripMenuItem.Text = "Donate in Euro";
-            this.donateInEuroToolStripMenuItem.Click += new System.EventHandler(this.donateInEuroToolStripMenuItem_Click);
+            this.tsmiDonateEurXrmToolBox.Image = ((System.Drawing.Image)(resources.GetObject("tsmiDonateEurXrmToolBox.Image")));
+            this.tsmiDonateEurXrmToolBox.Name = "tsmiDonateEurXrmToolBox";
+            this.tsmiDonateEurXrmToolBox.Size = new System.Drawing.Size(296, 34);
+            this.tsmiDonateEurXrmToolBox.Text = "Donate in Euro";
+            this.tsmiDonateEurXrmToolBox.Click += new System.EventHandler(this.donateInEuroToolStripMenuItem_Click);
             // 
-            // donateInGBPToolStripMenuItem
+            // tsmiDonateGbpXrmToolBox
             // 
-            this.donateInGBPToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateInGBPToolStripMenuItem.Image")));
-            this.donateInGBPToolStripMenuItem.Name = "donateInGBPToolStripMenuItem";
-            this.donateInGBPToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.donateInGBPToolStripMenuItem.Text = "Donate in GBP";
-            this.donateInGBPToolStripMenuItem.Click += new System.EventHandler(this.donateInGBPToolStripMenuItem_Click);
+            this.tsmiDonateGbpXrmToolBox.Image = ((System.Drawing.Image)(resources.GetObject("tsmiDonateGbpXrmToolBox.Image")));
+            this.tsmiDonateGbpXrmToolBox.Name = "tsmiDonateGbpXrmToolBox";
+            this.tsmiDonateGbpXrmToolBox.Size = new System.Drawing.Size(296, 34);
+            this.tsmiDonateGbpXrmToolBox.Text = "Donate in GBP";
+            this.tsmiDonateGbpXrmToolBox.Click += new System.EventHandler(this.donateInGBPToolStripMenuItem_Click);
             // 
-            // PaypalXrmToolBoxToolStripMenuItem
+            // tsmiDonateXrmToolBox
             // 
-            this.PaypalXrmToolBoxToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("PaypalXrmToolBoxToolStripMenuItem.Image")));
-            this.PaypalXrmToolBoxToolStripMenuItem.Name = "PaypalXrmToolBoxToolStripMenuItem";
-            this.PaypalXrmToolBoxToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.PaypalXrmToolBoxToolStripMenuItem.Text = "XrmToolBox";
+            this.tsmiDonateXrmToolBox.Image = ((System.Drawing.Image)(resources.GetObject("tsmiDonateXrmToolBox.Image")));
+            this.tsmiDonateXrmToolBox.Name = "tsmiDonateXrmToolBox";
+            this.tsmiDonateXrmToolBox.Size = new System.Drawing.Size(296, 34);
+            this.tsmiDonateXrmToolBox.Text = "XrmToolBox";
             // 
-            // PayPalSelectedPluginToolStripMenuItem
+            // tsmiDonateSelectedPlugin
             // 
-            this.PayPalSelectedPluginToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.donateDollarPluginMenuItem,
-            this.donateEuroPluginMenuItem,
-            this.donateGbpPluginMenuItem});
-            this.PayPalSelectedPluginToolStripMenuItem.Name = "PayPalSelectedPluginToolStripMenuItem";
-            this.PayPalSelectedPluginToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.PayPalSelectedPluginToolStripMenuItem.Text = "SelectedPlugin";
+            this.tsmiDonateSelectedPlugin.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiDonateUsdSelectedPlugin,
+            this.tsmiDonateEurSelectedPlugin,
+            this.tsmiDonateGbpSelectedPlugin});
+            this.tsmiDonateSelectedPlugin.Name = "tsmiDonateSelectedPlugin";
+            this.tsmiDonateSelectedPlugin.Size = new System.Drawing.Size(296, 34);
+            this.tsmiDonateSelectedPlugin.Text = "SelectedPlugin";
             // 
-            // donateDollarPluginMenuItem
+            // tsmiDonateUsdSelectedPlugin
             // 
-            this.donateDollarPluginMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateDollarPluginMenuItem.Image")));
-            this.donateDollarPluginMenuItem.Name = "donateDollarPluginMenuItem";
-            this.donateDollarPluginMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.donateDollarPluginMenuItem.Text = "Donate in US Dollars";
-            this.donateDollarPluginMenuItem.Click += new System.EventHandler(this.donateDollarPluginMenuItem_Click);
+            this.tsmiDonateUsdSelectedPlugin.Image = ((System.Drawing.Image)(resources.GetObject("tsmiDonateUsdSelectedPlugin.Image")));
+            this.tsmiDonateUsdSelectedPlugin.Name = "tsmiDonateUsdSelectedPlugin";
+            this.tsmiDonateUsdSelectedPlugin.Size = new System.Drawing.Size(296, 34);
+            this.tsmiDonateUsdSelectedPlugin.Text = "Donate in US Dollars";
+            this.tsmiDonateUsdSelectedPlugin.Click += new System.EventHandler(this.donateDollarPluginMenuItem_Click);
             // 
-            // donateEuroPluginMenuItem
+            // tsmiDonateEurSelectedPlugin
             // 
-            this.donateEuroPluginMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateEuroPluginMenuItem.Image")));
-            this.donateEuroPluginMenuItem.Name = "donateEuroPluginMenuItem";
-            this.donateEuroPluginMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.donateEuroPluginMenuItem.Text = "Donate in Euro";
-            this.donateEuroPluginMenuItem.Click += new System.EventHandler(this.donateEuroPluginMenuItem_Click);
+            this.tsmiDonateEurSelectedPlugin.Image = ((System.Drawing.Image)(resources.GetObject("tsmiDonateEurSelectedPlugin.Image")));
+            this.tsmiDonateEurSelectedPlugin.Name = "tsmiDonateEurSelectedPlugin";
+            this.tsmiDonateEurSelectedPlugin.Size = new System.Drawing.Size(296, 34);
+            this.tsmiDonateEurSelectedPlugin.Text = "Donate in Euro";
+            this.tsmiDonateEurSelectedPlugin.Click += new System.EventHandler(this.donateEuroPluginMenuItem_Click);
             // 
-            // donateGbpPluginMenuItem
+            // tsmiDonateGbpSelectedPlugin
             // 
-            this.donateGbpPluginMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("donateGbpPluginMenuItem.Image")));
-            this.donateGbpPluginMenuItem.Name = "donateGbpPluginMenuItem";
-            this.donateGbpPluginMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.donateGbpPluginMenuItem.Text = "Donate in GBP";
-            this.donateGbpPluginMenuItem.Click += new System.EventHandler(this.donateGbpPluginMenuItem_Click);
+            this.tsmiDonateGbpSelectedPlugin.Image = ((System.Drawing.Image)(resources.GetObject("tsmiDonateGbpSelectedPlugin.Image")));
+            this.tsmiDonateGbpSelectedPlugin.Name = "tsmiDonateGbpSelectedPlugin";
+            this.tsmiDonateGbpSelectedPlugin.Size = new System.Drawing.Size(296, 34);
+            this.tsmiDonateGbpSelectedPlugin.Text = "Donate in GBP";
+            this.tsmiDonateGbpSelectedPlugin.Click += new System.EventHandler(this.donateGbpPluginMenuItem_Click);
             // 
             // toolStripSeparator12
             // 
             this.toolStripSeparator12.Name = "toolStripSeparator12";
-            this.toolStripSeparator12.Size = new System.Drawing.Size(217, 6);
+            this.toolStripSeparator12.Size = new System.Drawing.Size(359, 6);
             // 
             // checkForUpdateToolStripMenuItem
             // 
             this.checkForUpdateToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("checkForUpdateToolStripMenuItem.Image")));
             this.checkForUpdateToolStripMenuItem.Name = "checkForUpdateToolStripMenuItem";
-            this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(362, 34);
             this.checkForUpdateToolStripMenuItem.Text = "Check for update";
             this.checkForUpdateToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdateToolStripMenuItem_Click);
             // 
             // toolStripSeparator13
             // 
             this.toolStripSeparator13.Name = "toolStripSeparator13";
-            this.toolStripSeparator13.Size = new System.Drawing.Size(217, 6);
+            this.toolStripSeparator13.Size = new System.Drawing.Size(359, 6);
             // 
-            // aboutXrmToolBoxToolStripMenuItem1
+            // tsmiAbout
             // 
-            this.aboutXrmToolBoxToolStripMenuItem1.Name = "aboutXrmToolBoxToolStripMenuItem1";
-            this.aboutXrmToolBoxToolStripMenuItem1.Size = new System.Drawing.Size(220, 22);
-            this.aboutXrmToolBoxToolStripMenuItem1.Text = "About XrmToolBox";
-            this.aboutXrmToolBoxToolStripMenuItem1.Click += new System.EventHandler(this.aboutXrmToolBoxToolStripMenuItem_Click);
+            this.tsmiAbout.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiAboutXrmToolBox,
+            this.tsmiAboutSelectedPlugin});
+            this.tsmiAbout.Name = "tsmiAbout";
+            this.tsmiAbout.Size = new System.Drawing.Size(362, 34);
+            this.tsmiAbout.Text = "About";
+            this.tsmiAbout.Click += new System.EventHandler(this.tsmiAbout_Click);
+            // 
+            // tsmiAboutXrmToolBox
+            // 
+            this.tsmiAboutXrmToolBox.Image = global::XrmToolBox.Properties.Resources.logo_0016;
+            this.tsmiAboutXrmToolBox.Name = "tsmiAboutXrmToolBox";
+            this.tsmiAboutXrmToolBox.Size = new System.Drawing.Size(288, 34);
+            this.tsmiAboutXrmToolBox.Text = "About XrmToolBox";
+            this.tsmiAboutXrmToolBox.Click += new System.EventHandler(this.tsmiAboutXrmToolBox_Click);
+            // 
+            // tsmiAboutSelectedPlugin
+            // 
+            this.tsmiAboutSelectedPlugin.Name = "tsmiAboutSelectedPlugin";
+            this.tsmiAboutSelectedPlugin.Size = new System.Drawing.Size(288, 34);
+            this.tsmiAboutSelectedPlugin.Text = "Selected plugin";
+            this.tsmiAboutSelectedPlugin.Click += new System.EventHandler(this.tsmiAboutSelectedPlugin_Click);
             // 
             // tssOpenOrg
             // 
             this.tssOpenOrg.Name = "tssOpenOrg";
-            this.tssOpenOrg.Size = new System.Drawing.Size(6, 25);
+            this.tssOpenOrg.Size = new System.Drawing.Size(6, 37);
             this.tssOpenOrg.Visible = false;
             // 
             // tsbOpenOrg
@@ -397,7 +418,7 @@
             this.tsbOpenOrg.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpenOrg.Image")));
             this.tsbOpenOrg.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbOpenOrg.Name = "tsbOpenOrg";
-            this.tsbOpenOrg.Size = new System.Drawing.Size(125, 22);
+            this.tsbOpenOrg.Size = new System.Drawing.Size(218, 34);
             this.tsbOpenOrg.Text = "Open organization";
             this.tsbOpenOrg.ToolTipText = "Opens the connected organization in your web browser";
             this.tsbOpenOrg.Visible = false;
@@ -407,10 +428,10 @@
             // 
             this.pnlTop.BackColor = System.Drawing.SystemColors.Info;
             this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlTop.Location = new System.Drawing.Point(0, 25);
-            this.pnlTop.Margin = new System.Windows.Forms.Padding(2);
+            this.pnlTop.Location = new System.Drawing.Point(0, 37);
+            this.pnlTop.Margin = new System.Windows.Forms.Padding(4);
             this.pnlTop.Name = "pnlTop";
-            this.pnlTop.Size = new System.Drawing.Size(705, 39);
+            this.pnlTop.Size = new System.Drawing.Size(1293, 72);
             this.pnlTop.TabIndex = 4;
             this.pnlTop.Visible = false;
             // 
@@ -424,10 +445,10 @@
             this.pnlSupport.Controls.Add(this.lblTitle);
             this.pnlSupport.Controls.Add(this.llDismiss);
             this.pnlSupport.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlSupport.Location = new System.Drawing.Point(0, 345);
-            this.pnlSupport.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.pnlSupport.Location = new System.Drawing.Point(0, 637);
+            this.pnlSupport.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.pnlSupport.Name = "pnlSupport";
-            this.pnlSupport.Size = new System.Drawing.Size(705, 67);
+            this.pnlSupport.Size = new System.Drawing.Size(1293, 124);
             this.pnlSupport.TabIndex = 11;
             this.pnlSupport.Visible = false;
             // 
@@ -435,10 +456,10 @@
             // 
             this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(477, 10);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.pictureBox2.Location = new System.Drawing.Point(875, 18);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(158, 41);
+            this.pictureBox2.Size = new System.Drawing.Size(290, 76);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 22;
             this.pictureBox2.TabStop = false;
@@ -451,10 +472,10 @@
             this.llDonate.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.llDonate.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline;
             this.llDonate.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.llDonate.Location = new System.Drawing.Point(334, 43);
-            this.llDonate.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.llDonate.Location = new System.Drawing.Point(612, 79);
+            this.llDonate.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.llDonate.Name = "llDonate";
-            this.llDonate.Size = new System.Drawing.Size(127, 16);
+            this.llDonate.Size = new System.Drawing.Size(233, 30);
             this.llDonate.TabIndex = 21;
             this.llDonate.TabStop = true;
             this.llDonate.Text = "Click here to donate";
@@ -468,10 +489,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.label5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label5.Location = new System.Drawing.Point(330, 6);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Location = new System.Drawing.Point(605, 11);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(141, 37);
+            this.label5.Size = new System.Drawing.Size(259, 68);
             this.label5.TabIndex = 20;
             this.label5.Text = "XrmToolBox is free and it won\'t change. But you can show your support by making a" +
     " donation to its author.";
@@ -482,10 +503,10 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label4.Location = new System.Drawing.Point(98, 39);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Location = new System.Drawing.Point(180, 72);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(124, 20);
+            this.label4.Size = new System.Drawing.Size(216, 36);
             this.label4.TabIndex = 17;
             this.label4.Text = "Donate on PayPal";
             // 
@@ -493,10 +514,10 @@
             // 
             this.lblTitle.Font = new System.Drawing.Font("Segoe UI", 18F);
             this.lblTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.lblTitle.Location = new System.Drawing.Point(2, 3);
-            this.lblTitle.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTitle.Location = new System.Drawing.Point(4, 6);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(342, 35);
+            this.lblTitle.Size = new System.Drawing.Size(627, 65);
             this.lblTitle.TabIndex = 9;
             this.lblTitle.Text = "How can I help MscrmTools?";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -505,10 +526,10 @@
             // 
             this.llDismiss.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.llDismiss.AutoSize = true;
-            this.llDismiss.Location = new System.Drawing.Point(659, 3);
-            this.llDismiss.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.llDismiss.Location = new System.Drawing.Point(1208, 6);
+            this.llDismiss.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.llDismiss.Name = "llDismiss";
-            this.llDismiss.Size = new System.Drawing.Size(42, 13);
+            this.llDismiss.Size = new System.Drawing.Size(80, 25);
             this.llDismiss.TabIndex = 0;
             this.llDismiss.TabStop = true;
             this.llDismiss.Text = "Dismiss";
@@ -518,10 +539,10 @@
             // 
             this.pnlBottom.BackColor = System.Drawing.SystemColors.Info;
             this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlBottom.Location = new System.Drawing.Point(0, 306);
-            this.pnlBottom.Margin = new System.Windows.Forms.Padding(2);
+            this.pnlBottom.Location = new System.Drawing.Point(0, 565);
+            this.pnlBottom.Margin = new System.Windows.Forms.Padding(4);
             this.pnlBottom.Name = "pnlBottom";
-            this.pnlBottom.Size = new System.Drawing.Size(705, 39);
+            this.pnlBottom.Size = new System.Drawing.Size(1293, 72);
             this.pnlBottom.TabIndex = 12;
             this.pnlBottom.Visible = false;
             // 
@@ -533,10 +554,10 @@
             this.pnlConnectLoading.BackColor = System.Drawing.Color.Transparent;
             this.pnlConnectLoading.Controls.Add(this.lblConnecting);
             this.pnlConnectLoading.Controls.Add(this.pbConnectionLoading);
-            this.pnlConnectLoading.Location = new System.Drawing.Point(-90, -44);
-            this.pnlConnectLoading.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.pnlConnectLoading.Location = new System.Drawing.Point(-165, -81);
+            this.pnlConnectLoading.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.pnlConnectLoading.Name = "pnlConnectLoading";
-            this.pnlConnectLoading.Size = new System.Drawing.Size(884, 499);
+            this.pnlConnectLoading.Size = new System.Drawing.Size(1621, 921);
             this.pnlConnectLoading.TabIndex = 17;
             this.pnlConnectLoading.Visible = false;
             // 
@@ -544,10 +565,10 @@
             // 
             this.lblConnecting.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblConnecting.Font = new System.Drawing.Font("Segoe UI Light", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblConnecting.Location = new System.Drawing.Point(0, 275);
-            this.lblConnecting.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblConnecting.Location = new System.Drawing.Point(0, 508);
+            this.lblConnecting.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblConnecting.Name = "lblConnecting";
-            this.lblConnecting.Size = new System.Drawing.Size(884, 28);
+            this.lblConnecting.Size = new System.Drawing.Size(1621, 52);
             this.lblConnecting.TabIndex = 1;
             this.lblConnecting.Tag = "Please wait while XrmToolBox is connecting to {0}";
             this.lblConnecting.Text = "Please wait while XrmToolBox is connecting to {0}";
@@ -558,10 +579,10 @@
             this.pbConnectionLoading.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pbConnectionLoading.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pbConnectionLoading.Image = ((System.Drawing.Image)(resources.GetObject("pbConnectionLoading.Image")));
-            this.pbConnectionLoading.Location = new System.Drawing.Point(0, 157);
-            this.pbConnectionLoading.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.pbConnectionLoading.Location = new System.Drawing.Point(0, 290);
+            this.pbConnectionLoading.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.pbConnectionLoading.Name = "pbConnectionLoading";
-            this.pbConnectionLoading.Size = new System.Drawing.Size(884, 106);
+            this.pbConnectionLoading.Size = new System.Drawing.Size(1621, 196);
             this.pbConnectionLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pbConnectionLoading.TabIndex = 0;
             this.pbConnectionLoading.TabStop = false;
@@ -571,10 +592,10 @@
             this.dpMain.BackColor = System.Drawing.Color.White;
             this.dpMain.DefaultFloatWindowSize = new System.Drawing.Size(800, 600);
             this.dpMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dpMain.Location = new System.Drawing.Point(0, 64);
-            this.dpMain.Margin = new System.Windows.Forms.Padding(2);
+            this.dpMain.Location = new System.Drawing.Point(0, 109);
+            this.dpMain.Margin = new System.Windows.Forms.Padding(4);
             this.dpMain.Name = "dpMain";
-            this.dpMain.Size = new System.Drawing.Size(705, 242);
+            this.dpMain.Size = new System.Drawing.Size(1293, 456);
             this.dpMain.TabIndex = 21;
             this.dpMain.ActiveDocumentChanged += new System.EventHandler(this.dpMain_ActiveDocumentChanged);
             this.dpMain.ActiveContentChanged += new System.EventHandler(this.dpMain_ActiveContentChanged);
@@ -583,10 +604,10 @@
             // 
             // NewForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(705, 412);
+            this.ClientSize = new System.Drawing.Size(1293, 761);
             this.Controls.Add(this.dpMain);
             this.Controls.Add(this.pnlBottom);
             this.Controls.Add(this.pnlSupport);
@@ -596,7 +617,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.KeyPreview = true;
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "NewForm";
             this.Opacity = 0D;
             this.Text = "XrmToolBox for Microsoft Dynamics CRM/365 CE";
@@ -648,28 +669,30 @@
         private System.Windows.Forms.ToolStripMenuItem pluginsStoreToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton2;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem displayXrmToolBoxHelpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem HelpSelectedPluginToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem feedbackToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem GithubXrmToolBoxMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem githubPluginMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiHelp;
+        private System.Windows.Forms.ToolStripMenuItem tsmiHelpXrmToolBox;
+        private System.Windows.Forms.ToolStripMenuItem tsmiHelpSelectedPlugin;
+        private System.Windows.Forms.ToolStripMenuItem tsmiFeedback;
+        private System.Windows.Forms.ToolStripMenuItem tsmiFeedbackXrmToolBox;
+        private System.Windows.Forms.ToolStripMenuItem tsmiFeedbackSelectedPlugin;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
-        private System.Windows.Forms.ToolStripMenuItem donateToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem donateInUSDollarsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem donateInEuroToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem donateInGBPToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem PaypalXrmToolBoxToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem PayPalSelectedPluginToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem donateDollarPluginMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem donateEuroPluginMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem donateGbpPluginMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDonate;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDonateUsdXrmToolBox;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDonateEurXrmToolBox;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDonateGbpXrmToolBox;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDonateXrmToolBox;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDonateSelectedPlugin;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDonateUsdSelectedPlugin;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDonateEurSelectedPlugin;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDonateGbpSelectedPlugin;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
         private System.Windows.Forms.ToolStripMenuItem checkForUpdateToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
-        private System.Windows.Forms.ToolStripMenuItem aboutXrmToolBoxToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAbout;
         private WeifenLuo.WinFormsUI.Docking.DockPanel dpMain;
         private System.Windows.Forms.ToolStripSeparator tssWindows;
         private System.Windows.Forms.ToolStripMenuItem tsmiShowStartPage;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAboutXrmToolBox;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAboutSelectedPlugin;
     }
 }

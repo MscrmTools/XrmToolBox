@@ -131,6 +131,7 @@
       <DependentUpon>Icons.resx</DependentUpon>
     </Compile>
     <Compile Include="InformationPanel.cs" />
+    <Compile Include="Interfaces\IAboutPlugin.cs" />
     <Compile Include="Interfaces\ICodePlexPlugin.cs" />
     <Compile Include="Interfaces\IEarlyBoundProxy.cs" />
     <Compile Include="Interfaces\IGitHubPlugin.cs" />

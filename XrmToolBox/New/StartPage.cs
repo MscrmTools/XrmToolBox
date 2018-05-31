@@ -23,8 +23,6 @@ namespace XrmToolBox.New
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 
             this.pManager = pManager;
-
-            // LoadMru();
         }
 
         public event EventHandler OpenConnectionsManagementRequested;
@@ -37,12 +35,10 @@ namespace XrmToolBox.New
 
         public void LoadMru()
         {
-            pnlMru.Controls.Clear();
-
-            var list = new List<Control>();
-
             if (MostRecentlyUsedItems.Instance.Items.Any())
             {
+                var mruList = new List<Control>();
+
                 foreach (var mru in MostRecentlyUsedItems.Instance.Items.OrderBy(i => i.Date))
                 {
                     var plugin = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == mru.PluginName);
@@ -54,33 +50,50 @@ namespace XrmToolBox.New
                         ctrl.ClearMruRequested += Ctrl_ClearMruRequested;
                         ctrl.Dock = DockStyle.Top;
 
-                        list.Add(ctrl);
+                        mruList.Add(ctrl);
                     }
                 }
 
-                list.Add(pnlMruSubTitle);
+                pnlRecent.Controls.Clear();
+                pnlRecent.Controls.AddRange(mruList.ToArray());
             }
 
             if (Favorites.Instance.Items.Any())
             {
-                foreach (var fav in Favorites.Instance.Items.OrderByDescending(i => i.PluginName))
+                var width = Width < 1200 ? pnlFavorites.Width / 2 : pnlFavorites.Width;
+                var index = 0;
+
+                var favList = new List<Control>();
+
+                foreach (var fav in Favorites.Instance.Items.OrderBy(i => i.PluginName))
                 {
+                    index++;
+                    var left = index % 2 == 0 ? width : 0;
+
                     var plugin = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == fav.PluginName);
                     if (plugin != null)
                     {
                         var ctrl = new FavoriteControl(plugin.Metadata.BigImageBase64, fav);
                         ctrl.OpenFavoritePluginRequested += Ctrl_OpenFavoritePluginRequested;
                         ctrl.RemoveFavoriteRequested += Ctrl_RemoveFavoriteRequested;
-                        ctrl.Dock = DockStyle.Top;
+                        if (Width < 1200)
+                        {
+                            ctrl.Width = width;
+                            ctrl.Top = (index / 2) * ctrl.Height;
+                            ctrl.Left = left;
+                        }
+                        else
+                        {
+                            ctrl.Dock = DockStyle.Top;
+                        }
 
-                        list.Add(ctrl);
+                        favList.Add(ctrl);
                     }
                 }
 
-                list.Add(pnlFavoritesSubTitle);
+                pnlFavorites.Controls.Clear();
+                pnlFavorites.Controls.AddRange(favList.ToArray());
             }
-
-            pnlMru.Controls.AddRange(list.ToArray());
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -91,7 +104,7 @@ namespace XrmToolBox.New
 
                     if (TabIndex == DockPanel.Documents.OfType<DockContent>().Count() - 1)
                     {
-                        DockPanel.Documents.OfType<DockContent>().First(d => d.TabIndex == 0).Activate();
+                        DockPanel.Documents.OfType<DockContent>().FirstOrDefault(d => d.TabIndex == 0)?.Activate();
                         return true;
                     }
 
@@ -141,21 +154,18 @@ namespace XrmToolBox.New
         private void Ctrl_RemoveFavoriteRequested(object sender, System.EventArgs e)
         {
             var favControl = (FavoriteControl)sender;
+            pnlFavorites.Controls.Remove(favControl);
+
             Favorites.Instance.Items.Remove(favControl.Item);
             Favorites.Instance.Save();
-
-            pnlMru.Controls.Remove(favControl);
-            if (Favorites.Instance.Items.Count == 0)
-            {
-                pnlMru.Controls.Remove(pnlFavoritesSubTitle);
-            }
         }
 
         private void Ctrl_RemoveRequested(object sender, System.EventArgs e)
         {
             var mruControl = (MostRecentlyUsedItemControl)sender;
+            pnlFavorites.Controls.Remove(mruControl);
+
             MostRecentlyUsedItems.Instance.Items.Remove(mruControl.Item);
-            pnlMru.Controls.Remove(mruControl);
             MostRecentlyUsedItems.Instance.Save();
         }
 
@@ -218,38 +228,46 @@ namespace XrmToolBox.New
         {
             if (Width < 1200)
             {
-                pnlMain.Controls.Remove(pnlMruParent);
+                pnlMain.Controls.Remove(pnlFavoritesParent);
+                pnlMain.Controls.Remove(pnlRecentParent);
                 pnlMain.Controls.Remove(pnlRightActions);
                 pnlMain.Controls.Remove(pnlWelcome);
 
                 pnlWelcome.Dock = DockStyle.Top;
-                pnlMruParent.Dock = DockStyle.Fill;
+                pnlRecentParent.Dock = DockStyle.Fill;
+                pnlFavoritesParent.Dock = DockStyle.Top;
                 pnlRightActions.Dock = DockStyle.Right;
+
+                pnlFavorites.Height = 100 + (Favorites.Instance.Items.Count + 1) / 2 * 130;
 
                 List<Control> controls = new List<Control>();
                 controls.Add(pnlWelcome);
+                controls.Add(pnlFavoritesParent);
                 controls.Add(pnlRightActions);
-                controls.Add(pnlMruParent);
+                controls.Add(pnlRecentParent);
                 controls.Reverse();
 
                 pnlMain.Controls.AddRange(controls.ToArray());
 
-                pnlMruParent.BringToFront();
+                // pnlFavoritesParent.BringToFront();
             }
             else
             {
-                pnlMain.Controls.Remove(pnlMruParent);
+                pnlMain.Controls.Remove(pnlFavoritesParent);
+                pnlMain.Controls.Remove(pnlRecentParent);
                 pnlMain.Controls.Remove(pnlRightActions);
                 pnlMain.Controls.Remove(pnlWelcome);
 
-                pnlWelcome.Dock = DockStyle.Fill;
-                pnlMruParent.Dock = DockStyle.Left;
+                pnlWelcome.Dock = DockStyle.Top;
+                pnlRecentParent.Dock = DockStyle.Fill;
+                pnlFavoritesParent.Dock = DockStyle.Left;
                 pnlRightActions.Dock = DockStyle.Right;
 
                 List<Control> controls = new List<Control>();
-                controls.Add(pnlMruParent);
+                controls.Add(pnlFavoritesParent);
                 controls.Add(pnlRightActions);
                 controls.Add(pnlWelcome);
+                controls.Add(pnlRecentParent);
                 controls.Reverse();
 
                 pnlMain.Controls.AddRange(controls.ToArray());
