@@ -32,11 +32,7 @@
             this.pnlEmptyLeft = new System.Windows.Forms.Panel();
             this.pnlEmptyRight = new System.Windows.Forms.Panel();
             this.pnlMain = new System.Windows.Forms.Panel();
-            this.pnlRecentParent = new System.Windows.Forms.Panel();
-            this.pnlRecent = new System.Windows.Forms.Panel();
-            this.label4 = new System.Windows.Forms.Label();
             this.pnlWelcome = new System.Windows.Forms.Panel();
-            this.llHideWelcome = new System.Windows.Forms.LinkLabel();
             this.lblWelcomeDescription = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.pnlRightActions = new System.Windows.Forms.Panel();
@@ -52,16 +48,22 @@
             this.lblManageConnections = new System.Windows.Forms.Label();
             this.lblOpenPluginsStore = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.pnlFavoritesParent = new System.Windows.Forms.Panel();
-            this.pnlFavorites = new System.Windows.Forms.Panel();
+            this.pnlMruParent = new System.Windows.Forms.Panel();
+            this.pnlMru = new System.Windows.Forms.Panel();
+            this.pnlMruSubTitle = new System.Windows.Forms.Panel();
+            this.lblMruSubTitle = new System.Windows.Forms.Label();
+            this.pnlFavoritesSubTitle = new System.Windows.Forms.Panel();
+            this.lblFavoritesSubTitle = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.chkDoNotShowAtStartup = new System.Windows.Forms.CheckBox();
             this.pnlMain.SuspendLayout();
-            this.pnlRecentParent.SuspendLayout();
             this.pnlWelcome.SuspendLayout();
             this.pnlRightActions.SuspendLayout();
             this.pnlRightScrollable.SuspendLayout();
-            this.pnlFavoritesParent.SuspendLayout();
+            this.pnlMruParent.SuspendLayout();
+            this.pnlMru.SuspendLayout();
+            this.pnlMruSubTitle.SuspendLayout();
+            this.pnlFavoritesSubTitle.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlEmptyLeft
@@ -86,12 +88,10 @@
             // 
             // pnlMain
             // 
-            this.pnlMain.AutoScroll = true;
             this.pnlMain.BackColor = System.Drawing.Color.White;
-            this.pnlMain.Controls.Add(this.pnlRecentParent);
             this.pnlMain.Controls.Add(this.pnlWelcome);
             this.pnlMain.Controls.Add(this.pnlRightActions);
-            this.pnlMain.Controls.Add(this.pnlFavoritesParent);
+            this.pnlMain.Controls.Add(this.pnlMruParent);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMain.Location = new System.Drawing.Point(92, 0);
             this.pnlMain.Margin = new System.Windows.Forms.Padding(6);
@@ -99,73 +99,29 @@
             this.pnlMain.Size = new System.Drawing.Size(1987, 1222);
             this.pnlMain.TabIndex = 2;
             // 
-            // pnlRecentParent
-            // 
-            this.pnlRecentParent.Controls.Add(this.pnlRecent);
-            this.pnlRecentParent.Controls.Add(this.label4);
-            this.pnlRecentParent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlRecentParent.Location = new System.Drawing.Point(733, 565);
-            this.pnlRecentParent.Name = "pnlRecentParent";
-            this.pnlRecentParent.Size = new System.Drawing.Size(667, 657);
-            this.pnlRecentParent.TabIndex = 17;
-            // 
-            // pnlRecent
-            // 
-            this.pnlRecent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlRecent.Location = new System.Drawing.Point(0, 111);
-            this.pnlRecent.Name = "pnlRecent";
-            this.pnlRecent.Size = new System.Drawing.Size(667, 546);
-            this.pnlRecent.TabIndex = 3;
-            // 
-            // label4
-            // 
-            this.label4.BackColor = System.Drawing.Color.White;
-            this.label4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label4.Font = new System.Drawing.Font("Segoe UI Light", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label4.Location = new System.Drawing.Point(0, 0);
-            this.label4.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.label4.Name = "label4";
-            this.label4.Padding = new System.Windows.Forms.Padding(0, 37, 0, 0);
-            this.label4.Size = new System.Drawing.Size(667, 111);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Recent";
-            // 
             // pnlWelcome
             // 
             this.pnlWelcome.AutoSize = true;
             this.pnlWelcome.BackColor = System.Drawing.Color.White;
-            this.pnlWelcome.Controls.Add(this.llHideWelcome);
             this.pnlWelcome.Controls.Add(this.lblWelcomeDescription);
             this.pnlWelcome.Controls.Add(this.label3);
-            this.pnlWelcome.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlWelcome.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlWelcome.Location = new System.Drawing.Point(733, 0);
             this.pnlWelcome.Margin = new System.Windows.Forms.Padding(6);
             this.pnlWelcome.Name = "pnlWelcome";
-            this.pnlWelcome.Size = new System.Drawing.Size(667, 565);
+            this.pnlWelcome.Size = new System.Drawing.Size(667, 1222);
             this.pnlWelcome.TabIndex = 16;
-            // 
-            // llHideWelcome
-            // 
-            this.llHideWelcome.AutoSize = true;
-            this.llHideWelcome.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.llHideWelcome.Location = new System.Drawing.Point(0, 540);
-            this.llHideWelcome.Name = "llHideWelcome";
-            this.llHideWelcome.Size = new System.Drawing.Size(225, 25);
-            this.llHideWelcome.TabIndex = 4;
-            this.llHideWelcome.TabStop = true;
-            this.llHideWelcome.Text = "Hide Welcome message";
             // 
             // lblWelcomeDescription
             // 
-            this.lblWelcomeDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.lblWelcomeDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblWelcomeDescription.Font = new System.Drawing.Font("Segoe UI Light", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWelcomeDescription.Location = new System.Drawing.Point(0, 111);
             this.lblWelcomeDescription.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblWelcomeDescription.Name = "lblWelcomeDescription";
             this.lblWelcomeDescription.Padding = new System.Windows.Forms.Padding(0, 18, 0, 0);
-            this.lblWelcomeDescription.Size = new System.Drawing.Size(667, 454);
+            this.lblWelcomeDescription.Size = new System.Drawing.Size(667, 441);
             this.lblWelcomeDescription.TabIndex = 3;
             this.lblWelcomeDescription.Text = resources.GetString("lblWelcomeDescription.Text");
             this.lblWelcomeDescription.Resize += new System.EventHandler(this.lblWelcomeDescription_Resize);
@@ -393,29 +349,72 @@
             this.label2.TabIndex = 13;
             this.label2.Text = "Quick actions";
             // 
-            // pnlFavoritesParent
+            // pnlMruParent
             // 
-            this.pnlFavoritesParent.BackColor = System.Drawing.Color.LightGray;
-            this.pnlFavoritesParent.Controls.Add(this.pnlFavorites);
-            this.pnlFavoritesParent.Controls.Add(this.label1);
-            this.pnlFavoritesParent.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnlFavoritesParent.Location = new System.Drawing.Point(0, 0);
-            this.pnlFavoritesParent.Margin = new System.Windows.Forms.Padding(6);
-            this.pnlFavoritesParent.Name = "pnlFavoritesParent";
-            this.pnlFavoritesParent.Size = new System.Drawing.Size(733, 1222);
-            this.pnlFavoritesParent.TabIndex = 3;
+            this.pnlMruParent.BackColor = System.Drawing.Color.LightGray;
+            this.pnlMruParent.Controls.Add(this.pnlMru);
+            this.pnlMruParent.Controls.Add(this.label1);
+            this.pnlMruParent.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlMruParent.Location = new System.Drawing.Point(0, 0);
+            this.pnlMruParent.Margin = new System.Windows.Forms.Padding(6);
+            this.pnlMruParent.Name = "pnlMruParent";
+            this.pnlMruParent.Size = new System.Drawing.Size(733, 1222);
+            this.pnlMruParent.TabIndex = 3;
             // 
-            // pnlFavorites
+            // pnlMru
             // 
-            this.pnlFavorites.AutoScroll = true;
-            this.pnlFavorites.AutoSize = true;
-            this.pnlFavorites.BackColor = System.Drawing.Color.White;
-            this.pnlFavorites.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlFavorites.Location = new System.Drawing.Point(0, 100);
-            this.pnlFavorites.Margin = new System.Windows.Forms.Padding(6);
-            this.pnlFavorites.Name = "pnlFavorites";
-            this.pnlFavorites.Size = new System.Drawing.Size(733, 1122);
-            this.pnlFavorites.TabIndex = 2;
+            this.pnlMru.AutoScroll = true;
+            this.pnlMru.AutoSize = true;
+            this.pnlMru.BackColor = System.Drawing.Color.White;
+            this.pnlMru.Controls.Add(this.pnlMruSubTitle);
+            this.pnlMru.Controls.Add(this.pnlFavoritesSubTitle);
+            this.pnlMru.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlMru.Location = new System.Drawing.Point(0, 111);
+            this.pnlMru.Margin = new System.Windows.Forms.Padding(6);
+            this.pnlMru.Name = "pnlMru";
+            this.pnlMru.Size = new System.Drawing.Size(733, 1111);
+            this.pnlMru.TabIndex = 2;
+            // 
+            // pnlMruSubTitle
+            // 
+            this.pnlMruSubTitle.Controls.Add(this.lblMruSubTitle);
+            this.pnlMruSubTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlMruSubTitle.Location = new System.Drawing.Point(0, 60);
+            this.pnlMruSubTitle.Name = "pnlMruSubTitle";
+            this.pnlMruSubTitle.Size = new System.Drawing.Size(733, 60);
+            this.pnlMruSubTitle.TabIndex = 1;
+            // 
+            // lblMruSubTitle
+            // 
+            this.lblMruSubTitle.AutoSize = true;
+            this.lblMruSubTitle.Font = new System.Drawing.Font("Segoe UI Light", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMruSubTitle.ForeColor = System.Drawing.Color.SteelBlue;
+            this.lblMruSubTitle.Location = new System.Drawing.Point(9, 14);
+            this.lblMruSubTitle.Name = "lblMruSubTitle";
+            this.lblMruSubTitle.Size = new System.Drawing.Size(102, 38);
+            this.lblMruSubTitle.TabIndex = 0;
+            this.lblMruSubTitle.Text = "Recent";
+            // 
+            // pnlFavoritesSubTitle
+            // 
+            this.pnlFavoritesSubTitle.Controls.Add(this.lblFavoritesSubTitle);
+            this.pnlFavoritesSubTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlFavoritesSubTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.142858F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pnlFavoritesSubTitle.ForeColor = System.Drawing.Color.SteelBlue;
+            this.pnlFavoritesSubTitle.Location = new System.Drawing.Point(0, 0);
+            this.pnlFavoritesSubTitle.Name = "pnlFavoritesSubTitle";
+            this.pnlFavoritesSubTitle.Size = new System.Drawing.Size(733, 60);
+            this.pnlFavoritesSubTitle.TabIndex = 0;
+            // 
+            // lblFavoritesSubTitle
+            // 
+            this.lblFavoritesSubTitle.AutoSize = true;
+            this.lblFavoritesSubTitle.Font = new System.Drawing.Font("Segoe UI Light", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFavoritesSubTitle.Location = new System.Drawing.Point(6, 10);
+            this.lblFavoritesSubTitle.Name = "lblFavoritesSubTitle";
+            this.lblFavoritesSubTitle.Size = new System.Drawing.Size(128, 38);
+            this.lblFavoritesSubTitle.TabIndex = 0;
+            this.lblFavoritesSubTitle.Text = "Favorites";
             // 
             // label1
             // 
@@ -426,10 +425,10 @@
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label1.Name = "label1";
-            this.label1.Padding = new System.Windows.Forms.Padding(0, 20, 0, 0);
-            this.label1.Size = new System.Drawing.Size(733, 100);
+            this.label1.Padding = new System.Windows.Forms.Padding(0, 37, 0, 0);
+            this.label1.Size = new System.Drawing.Size(733, 111);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Favorites";
+            this.label1.Text = "Favorites && Recent";
             // 
             // chkDoNotShowAtStartup
             // 
@@ -463,14 +462,17 @@
             this.Resize += new System.EventHandler(this.StartPage_Resize);
             this.pnlMain.ResumeLayout(false);
             this.pnlMain.PerformLayout();
-            this.pnlRecentParent.ResumeLayout(false);
             this.pnlWelcome.ResumeLayout(false);
-            this.pnlWelcome.PerformLayout();
             this.pnlRightActions.ResumeLayout(false);
             this.pnlRightActions.PerformLayout();
             this.pnlRightScrollable.ResumeLayout(false);
-            this.pnlFavoritesParent.ResumeLayout(false);
-            this.pnlFavoritesParent.PerformLayout();
+            this.pnlMruParent.ResumeLayout(false);
+            this.pnlMruParent.PerformLayout();
+            this.pnlMru.ResumeLayout(false);
+            this.pnlMruSubTitle.ResumeLayout(false);
+            this.pnlMruSubTitle.PerformLayout();
+            this.pnlFavoritesSubTitle.ResumeLayout(false);
+            this.pnlFavoritesSubTitle.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -481,9 +483,9 @@
         private System.Windows.Forms.Panel pnlEmptyLeft;
         private System.Windows.Forms.Panel pnlEmptyRight;
         private System.Windows.Forms.Panel pnlMain;
-        private System.Windows.Forms.Panel pnlFavoritesParent;
+        private System.Windows.Forms.Panel pnlMruParent;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel pnlFavorites;
+        private System.Windows.Forms.Panel pnlMru;
         private System.Windows.Forms.Panel pnlWelcome;
         private System.Windows.Forms.Label lblWelcomeDescription;
         private System.Windows.Forms.Label label3;
@@ -501,9 +503,9 @@
         private System.Windows.Forms.Label lblManageConnections;
         private System.Windows.Forms.Label lblOpenPluginsStore;
         private System.Windows.Forms.CheckBox chkDoNotShowAtStartup;
-        private System.Windows.Forms.Panel pnlRecentParent;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Panel pnlRecent;
-        private System.Windows.Forms.LinkLabel llHideWelcome;
+        private System.Windows.Forms.Panel pnlMruSubTitle;
+        private System.Windows.Forms.Label lblMruSubTitle;
+        private System.Windows.Forms.Panel pnlFavoritesSubTitle;
+        private System.Windows.Forms.Label lblFavoritesSubTitle;
     }
 }
