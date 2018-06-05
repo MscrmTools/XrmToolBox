@@ -69,6 +69,7 @@ namespace XrmToolBox.New
             }
             catch
             {
+                // do nothing
             }
 
             if (pluginsForm != null)
@@ -167,6 +168,10 @@ namespace XrmToolBox.New
 
         private void NewForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            var pci = new PluginCloseInfo(ToolBoxCloseReason.CloseAll);
+            RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), pci);
+            e.Cancel = pci.Cancel;
+
             Options.Instance.Size.Height = Height;
             Options.Instance.Size.CurrentSize = Size;
             Options.Instance.Size.IsMaximized = WindowState == FormWindowState.Maximized;
@@ -408,7 +413,7 @@ namespace XrmToolBox.New
                     host.OnOutgoingMessage += MainForm_MessageBroker;
                 }
 
-                string name = string.Empty;
+                string name;
 
                 if (service != null && displayConnected)
                 {
@@ -463,7 +468,6 @@ namespace XrmToolBox.New
                 pluginForm.PluginName = plugin.Metadata.Name;
                 pluginForm.Show(dpMain, DockState.Document);
                 pluginForm.SendMessageToStatusBar += StatusBarMessenger_SendMessageToStatusBar;
-                pluginForm.CloseRequested += PluginForm_CloseRequested;
                 pluginForm.FormClosed += (sender, e) =>
                 {
                     var pf = (PluginForm)sender;
@@ -886,9 +890,9 @@ namespace XrmToolBox.New
 
         private bool IsMessageValid(object sender, MessageBusEventArgs message)
         {
-            if (message == null || 
-                !(sender is UserControl sourceControl) || 
-                !(sourceControl is IXrmToolBoxPluginControl) || 
+            if (message == null ||
+                !(sender is UserControl sourceControl) ||
+                !(sourceControl is IXrmToolBoxPluginControl) ||
                 !(sourceControl.Parent is PluginForm pluginForm))
             {
                 // Error. Possible reasons are:
@@ -901,7 +905,7 @@ namespace XrmToolBox.New
 
             if (string.IsNullOrEmpty(message.SourcePlugin))
             {
-                message.SourcePlugin = pluginForm?.PluginName;
+                message.SourcePlugin = pluginForm.PluginName;
             }
             // Commenting below - perhaps the caller wanted to override the default name for some reason // J Rapp 2018-05-30
             //else if (message.SourcePlugin != sourceControl.GetType().GetTitle())
@@ -1276,16 +1280,6 @@ namespace XrmToolBox.New
 
         #region Document management
 
-        /// <summary>
-        /// Only to be called from the RequestCloseTab
-        /// </summary>
-        /// <param name="page"></param>
-        private void CloseTab(PluginForm page)
-        {
-            ((UserControl)page.Control)?.Dispose();
-            page.Close();
-        }
-
         private void FillPluginsListMenuDisplay()
         {
             var staticItems = tsbManageWindows.DropDownItems.Cast<ToolStripItem>().Take(5).ToList();
@@ -1311,24 +1305,12 @@ namespace XrmToolBox.New
             }
         }
 
-        private void PluginForm_CloseRequested(object sender, System.EventArgs e)
-        {
-            RequestCloseTab((PluginForm)sender, new PluginCloseInfo(ToolBoxCloseReason.CloseCurrent));
-        }
-
         private void RequestCloseTab(PluginForm content, PluginCloseInfo info, bool forceSilent = false)
         {
-            info.Silent = Options.Instance.CloseEachPluginSilently || forceSilent;
-            var plugin = content.Control;
-            plugin?.ClosingPlugin(info);
-            if (info.Cancel)
+            if (content.CloseWithReason(info.ToolBoxReason, forceSilent))
             {
-                return;
+                pluginConnections.Remove(content);
             }
-
-            content.CloseRequested -= PluginForm_CloseRequested;
-            pluginConnections.Remove(content);
-            CloseTab(content);
         }
 
         private void RequestCloseTabs(IEnumerable<PluginForm> pages, PluginCloseInfo info)

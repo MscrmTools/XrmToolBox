@@ -35,8 +35,6 @@ namespace XrmToolBox.New
             }
         }
 
-        public event EventHandler CloseRequested;
-
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
 
         public IXrmToolBoxPluginControl Control => pluginControlBase;
@@ -49,6 +47,24 @@ namespace XrmToolBox.New
         {
             get => base.Text;
             set => base.Text = value;
+        }
+
+        public bool CloseWithReason(ToolBoxCloseReason reason, bool forceSilent = false)
+        {
+            if (Options.Instance.CloseEachPluginSilently || forceSilent)
+            {
+                FormClosing -= PluginForm_FormClosing;
+                Close();
+                return true;
+            }
+
+            PluginCloseInfo info = new PluginCloseInfo(reason);
+            pluginControlBase?.ClosingPlugin(info);
+            if (info.Cancel) return false;
+
+            FormClosing -= PluginForm_FormClosing;
+            Close();
+            return true;
         }
 
         public void SendIncomingBrokerMessage(MessageBusEventArgs message)
@@ -120,7 +136,10 @@ namespace XrmToolBox.New
 
         private void PluginForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            CloseRequested?.Invoke(this, new System.EventArgs());
+            if (e.CloseReason == CloseReason.UserClosing && Options.Instance.CloseEachPluginSilently == false)
+            {
+                e.Cancel = !CloseWithReason(ToolBoxCloseReason.CloseCurrent);
+            }
         }
 
         private void StatusBarMessager_SendMessageToStatusBar(object sender, StatusBarMessageEventArgs e)
