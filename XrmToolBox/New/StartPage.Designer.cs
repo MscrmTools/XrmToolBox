@@ -48,22 +48,24 @@
             this.lblManageConnections = new System.Windows.Forms.Label();
             this.lblOpenPluginsStore = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.chkDoNotShowAtStartup = new System.Windows.Forms.CheckBox();
             this.pnlMruParent = new System.Windows.Forms.Panel();
             this.pnlMru = new System.Windows.Forms.Panel();
-            this.pnlMruSubTitle = new System.Windows.Forms.Panel();
-            this.lblMruSubTitle = new System.Windows.Forms.Label();
-            this.pnlFavoritesSubTitle = new System.Windows.Forms.Panel();
-            this.lblFavoritesSubTitle = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.chkDoNotShowAtStartup = new System.Windows.Forms.CheckBox();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.lblRupTitle = new System.Windows.Forms.Label();
+            this.lblFavTitle = new System.Windows.Forms.Label();
+            this.pnlRupItems = new System.Windows.Forms.Panel();
+            this.pnlFavItems = new System.Windows.Forms.Panel();
             this.pnlMain.SuspendLayout();
             this.pnlWelcome.SuspendLayout();
             this.pnlRightActions.SuspendLayout();
             this.pnlRightScrollable.SuspendLayout();
             this.pnlMruParent.SuspendLayout();
             this.pnlMru.SuspendLayout();
-            this.pnlMruSubTitle.SuspendLayout();
-            this.pnlFavoritesSubTitle.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlEmptyLeft
@@ -89,9 +91,9 @@
             // pnlMain
             // 
             this.pnlMain.BackColor = System.Drawing.Color.White;
+            this.pnlMain.Controls.Add(this.pnlMruParent);
             this.pnlMain.Controls.Add(this.pnlWelcome);
             this.pnlMain.Controls.Add(this.pnlRightActions);
-            this.pnlMain.Controls.Add(this.pnlMruParent);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMain.Location = new System.Drawing.Point(92, 0);
             this.pnlMain.Margin = new System.Windows.Forms.Padding(6);
@@ -101,30 +103,29 @@
             // 
             // pnlWelcome
             // 
-            this.pnlWelcome.AutoSize = true;
+            this.pnlWelcome.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.pnlWelcome.BackColor = System.Drawing.Color.White;
             this.pnlWelcome.Controls.Add(this.lblWelcomeDescription);
             this.pnlWelcome.Controls.Add(this.label3);
-            this.pnlWelcome.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlWelcome.Location = new System.Drawing.Point(733, 0);
+            this.pnlWelcome.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlWelcome.Location = new System.Drawing.Point(0, 0);
             this.pnlWelcome.Margin = new System.Windows.Forms.Padding(6);
             this.pnlWelcome.Name = "pnlWelcome";
-            this.pnlWelcome.Size = new System.Drawing.Size(667, 1222);
+            this.pnlWelcome.Size = new System.Drawing.Size(1400, 233);
             this.pnlWelcome.TabIndex = 16;
             // 
             // lblWelcomeDescription
             // 
-            this.lblWelcomeDescription.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblWelcomeDescription.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblWelcomeDescription.Font = new System.Drawing.Font("Segoe UI Light", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblWelcomeDescription.Location = new System.Drawing.Point(0, 111);
             this.lblWelcomeDescription.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblWelcomeDescription.Name = "lblWelcomeDescription";
             this.lblWelcomeDescription.Padding = new System.Windows.Forms.Padding(0, 18, 0, 0);
-            this.lblWelcomeDescription.Size = new System.Drawing.Size(667, 441);
+            this.lblWelcomeDescription.Size = new System.Drawing.Size(1400, 122);
             this.lblWelcomeDescription.TabIndex = 3;
-            this.lblWelcomeDescription.Text = resources.GetString("lblWelcomeDescription.Text");
-            this.lblWelcomeDescription.Resize += new System.EventHandler(this.lblWelcomeDescription_Resize);
+            this.lblWelcomeDescription.Text = "This application will improve your productivity when customizing, developing and " +
+    "administering Microsoft Dynamics 365 Customer Engagement.";
             // 
             // label3
             // 
@@ -135,7 +136,7 @@
             this.label3.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label3.Name = "label3";
             this.label3.Padding = new System.Windows.Forms.Padding(0, 37, 0, 0);
-            this.label3.Size = new System.Drawing.Size(667, 111);
+            this.label3.Size = new System.Drawing.Size(1400, 111);
             this.label3.TabIndex = 2;
             this.label3.Text = "Welcome to XrmToolBox!";
             // 
@@ -349,87 +350,6 @@
             this.label2.TabIndex = 13;
             this.label2.Text = "Quick actions";
             // 
-            // pnlMruParent
-            // 
-            this.pnlMruParent.BackColor = System.Drawing.Color.LightGray;
-            this.pnlMruParent.Controls.Add(this.pnlMru);
-            this.pnlMruParent.Controls.Add(this.label1);
-            this.pnlMruParent.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnlMruParent.Location = new System.Drawing.Point(0, 0);
-            this.pnlMruParent.Margin = new System.Windows.Forms.Padding(6);
-            this.pnlMruParent.Name = "pnlMruParent";
-            this.pnlMruParent.Size = new System.Drawing.Size(733, 1222);
-            this.pnlMruParent.TabIndex = 3;
-            // 
-            // pnlMru
-            // 
-            this.pnlMru.AutoScroll = true;
-            this.pnlMru.AutoSize = true;
-            this.pnlMru.BackColor = System.Drawing.Color.White;
-            this.pnlMru.Controls.Add(this.pnlMruSubTitle);
-            this.pnlMru.Controls.Add(this.pnlFavoritesSubTitle);
-            this.pnlMru.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlMru.Location = new System.Drawing.Point(0, 111);
-            this.pnlMru.Margin = new System.Windows.Forms.Padding(6);
-            this.pnlMru.Name = "pnlMru";
-            this.pnlMru.Size = new System.Drawing.Size(733, 1111);
-            this.pnlMru.TabIndex = 2;
-            // 
-            // pnlMruSubTitle
-            // 
-            this.pnlMruSubTitle.Controls.Add(this.lblMruSubTitle);
-            this.pnlMruSubTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlMruSubTitle.Location = new System.Drawing.Point(0, 60);
-            this.pnlMruSubTitle.Name = "pnlMruSubTitle";
-            this.pnlMruSubTitle.Size = new System.Drawing.Size(733, 60);
-            this.pnlMruSubTitle.TabIndex = 1;
-            // 
-            // lblMruSubTitle
-            // 
-            this.lblMruSubTitle.AutoSize = true;
-            this.lblMruSubTitle.Font = new System.Drawing.Font("Segoe UI Light", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMruSubTitle.ForeColor = System.Drawing.Color.SteelBlue;
-            this.lblMruSubTitle.Location = new System.Drawing.Point(9, 14);
-            this.lblMruSubTitle.Name = "lblMruSubTitle";
-            this.lblMruSubTitle.Size = new System.Drawing.Size(102, 38);
-            this.lblMruSubTitle.TabIndex = 0;
-            this.lblMruSubTitle.Text = "Recent";
-            // 
-            // pnlFavoritesSubTitle
-            // 
-            this.pnlFavoritesSubTitle.Controls.Add(this.lblFavoritesSubTitle);
-            this.pnlFavoritesSubTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlFavoritesSubTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.142858F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.pnlFavoritesSubTitle.ForeColor = System.Drawing.Color.SteelBlue;
-            this.pnlFavoritesSubTitle.Location = new System.Drawing.Point(0, 0);
-            this.pnlFavoritesSubTitle.Name = "pnlFavoritesSubTitle";
-            this.pnlFavoritesSubTitle.Size = new System.Drawing.Size(733, 60);
-            this.pnlFavoritesSubTitle.TabIndex = 0;
-            // 
-            // lblFavoritesSubTitle
-            // 
-            this.lblFavoritesSubTitle.AutoSize = true;
-            this.lblFavoritesSubTitle.Font = new System.Drawing.Font("Segoe UI Light", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblFavoritesSubTitle.Location = new System.Drawing.Point(6, 10);
-            this.lblFavoritesSubTitle.Name = "lblFavoritesSubTitle";
-            this.lblFavoritesSubTitle.Size = new System.Drawing.Size(128, 38);
-            this.lblFavoritesSubTitle.TabIndex = 0;
-            this.lblFavoritesSubTitle.Text = "Favorites";
-            // 
-            // label1
-            // 
-            this.label1.BackColor = System.Drawing.Color.White;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Font = new System.Drawing.Font("Segoe UI Light", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.label1.Name = "label1";
-            this.label1.Padding = new System.Windows.Forms.Padding(0, 37, 0, 0);
-            this.label1.Size = new System.Drawing.Size(733, 111);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Favorites && Recent";
-            // 
             // chkDoNotShowAtStartup
             // 
             this.chkDoNotShowAtStartup.AutoSize = true;
@@ -446,6 +366,96 @@
             this.chkDoNotShowAtStartup.UseVisualStyleBackColor = false;
             this.chkDoNotShowAtStartup.CheckedChanged += new System.EventHandler(this.chkDoNotShowAtStartup_CheckedChanged);
             // 
+            // pnlMruParent
+            // 
+            this.pnlMruParent.BackColor = System.Drawing.Color.LightGray;
+            this.pnlMruParent.Controls.Add(this.pnlMru);
+            this.pnlMruParent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlMruParent.Location = new System.Drawing.Point(0, 233);
+            this.pnlMruParent.Margin = new System.Windows.Forms.Padding(6);
+            this.pnlMruParent.Name = "pnlMruParent";
+            this.pnlMruParent.Size = new System.Drawing.Size(1400, 989);
+            this.pnlMruParent.TabIndex = 17;
+            // 
+            // pnlMru
+            // 
+            this.pnlMru.AutoScroll = true;
+            this.pnlMru.AutoSize = true;
+            this.pnlMru.BackColor = System.Drawing.Color.White;
+            this.pnlMru.Controls.Add(this.splitContainer1);
+            this.pnlMru.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlMru.Location = new System.Drawing.Point(0, 0);
+            this.pnlMru.Margin = new System.Windows.Forms.Padding(6);
+            this.pnlMru.Name = "pnlMru";
+            this.pnlMru.Size = new System.Drawing.Size(1400, 989);
+            this.pnlMru.TabIndex = 2;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.pnlRupItems);
+            this.splitContainer1.Panel1.Controls.Add(this.lblRupTitle);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.AutoScroll = true;
+            this.splitContainer1.Panel2.Controls.Add(this.pnlFavItems);
+            this.splitContainer1.Panel2.Controls.Add(this.lblFavTitle);
+            this.splitContainer1.Size = new System.Drawing.Size(1400, 989);
+            this.splitContainer1.SplitterDistance = 671;
+            this.splitContainer1.TabIndex = 2;
+            // 
+            // lblRupTitle
+            // 
+            this.lblRupTitle.BackColor = System.Drawing.Color.White;
+            this.lblRupTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblRupTitle.Font = new System.Drawing.Font("Segoe UI Light", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblRupTitle.ForeColor = System.Drawing.Color.SteelBlue;
+            this.lblRupTitle.Location = new System.Drawing.Point(0, 0);
+            this.lblRupTitle.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblRupTitle.Name = "lblRupTitle";
+            this.lblRupTitle.Padding = new System.Windows.Forms.Padding(0, 30, 0, 0);
+            this.lblRupTitle.Size = new System.Drawing.Size(671, 111);
+            this.lblRupTitle.TabIndex = 2;
+            this.lblRupTitle.Text = "Recently Used Plugins";
+            // 
+            // lblFavTitle
+            // 
+            this.lblFavTitle.BackColor = System.Drawing.Color.White;
+            this.lblFavTitle.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblFavTitle.Font = new System.Drawing.Font("Segoe UI Light", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFavTitle.ForeColor = System.Drawing.Color.SteelBlue;
+            this.lblFavTitle.Location = new System.Drawing.Point(0, 0);
+            this.lblFavTitle.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblFavTitle.Name = "lblFavTitle";
+            this.lblFavTitle.Padding = new System.Windows.Forms.Padding(0, 30, 0, 0);
+            this.lblFavTitle.Size = new System.Drawing.Size(725, 111);
+            this.lblFavTitle.TabIndex = 2;
+            this.lblFavTitle.Text = "Favorites";
+            // 
+            // pnlRupItems
+            // 
+            this.pnlRupItems.AutoScroll = true;
+            this.pnlRupItems.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlRupItems.Location = new System.Drawing.Point(0, 111);
+            this.pnlRupItems.Name = "pnlRupItems";
+            this.pnlRupItems.Size = new System.Drawing.Size(671, 878);
+            this.pnlRupItems.TabIndex = 3;
+            // 
+            // pnlFavItems
+            // 
+            this.pnlFavItems.AutoScroll = true;
+            this.pnlFavItems.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlFavItems.Location = new System.Drawing.Point(0, 111);
+            this.pnlFavItems.Name = "pnlFavItems";
+            this.pnlFavItems.Size = new System.Drawing.Size(725, 878);
+            this.pnlFavItems.TabIndex = 4;
+            // 
             // StartPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
@@ -461,7 +471,6 @@
             this.Text = "Start page";
             this.Resize += new System.EventHandler(this.StartPage_Resize);
             this.pnlMain.ResumeLayout(false);
-            this.pnlMain.PerformLayout();
             this.pnlWelcome.ResumeLayout(false);
             this.pnlRightActions.ResumeLayout(false);
             this.pnlRightActions.PerformLayout();
@@ -469,10 +478,10 @@
             this.pnlMruParent.ResumeLayout(false);
             this.pnlMruParent.PerformLayout();
             this.pnlMru.ResumeLayout(false);
-            this.pnlMruSubTitle.ResumeLayout(false);
-            this.pnlMruSubTitle.PerformLayout();
-            this.pnlFavoritesSubTitle.ResumeLayout(false);
-            this.pnlFavoritesSubTitle.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -483,9 +492,6 @@
         private System.Windows.Forms.Panel pnlEmptyLeft;
         private System.Windows.Forms.Panel pnlEmptyRight;
         private System.Windows.Forms.Panel pnlMain;
-        private System.Windows.Forms.Panel pnlMruParent;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel pnlMru;
         private System.Windows.Forms.Panel pnlWelcome;
         private System.Windows.Forms.Label lblWelcomeDescription;
         private System.Windows.Forms.Label label3;
@@ -503,9 +509,12 @@
         private System.Windows.Forms.Label lblManageConnections;
         private System.Windows.Forms.Label lblOpenPluginsStore;
         private System.Windows.Forms.CheckBox chkDoNotShowAtStartup;
-        private System.Windows.Forms.Panel pnlMruSubTitle;
-        private System.Windows.Forms.Label lblMruSubTitle;
-        private System.Windows.Forms.Panel pnlFavoritesSubTitle;
-        private System.Windows.Forms.Label lblFavoritesSubTitle;
+        private System.Windows.Forms.Panel pnlMruParent;
+        private System.Windows.Forms.Panel pnlMru;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.Label lblRupTitle;
+        private System.Windows.Forms.Label lblFavTitle;
+        private System.Windows.Forms.Panel pnlRupItems;
+        private System.Windows.Forms.Panel pnlFavItems;
     }
 }

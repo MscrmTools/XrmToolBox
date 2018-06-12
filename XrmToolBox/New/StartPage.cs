@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
@@ -23,8 +22,7 @@ namespace XrmToolBox.New
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 
             this.pManager = pManager;
-
-            // LoadMru();
+            chkDoNotShowAtStartup.Checked = Options.Instance.DoNotShowStartPage;
         }
 
         public event EventHandler OpenConnectionsManagementRequested;
@@ -37,8 +35,6 @@ namespace XrmToolBox.New
 
         public void LoadMru()
         {
-            pnlMru.Controls.Clear();
-
             var list = new List<Control>();
 
             if (MostRecentlyUsedItems.Instance.Items.Any())
@@ -58,11 +54,12 @@ namespace XrmToolBox.New
                     }
                 }
 
-                list.Add(pnlMruSubTitle);
+                pnlRupItems.Controls.AddRange(list.ToArray());
             }
 
             if (Favorites.Instance.Items.Any())
             {
+                list.Clear();
                 foreach (var fav in Favorites.Instance.Items.OrderByDescending(i => i.PluginName))
                 {
                     var plugin = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == fav.PluginName);
@@ -77,10 +74,8 @@ namespace XrmToolBox.New
                     }
                 }
 
-                list.Add(pnlFavoritesSubTitle);
+                pnlFavItems.Controls.AddRange(list.ToArray());
             }
-
-            pnlMru.Controls.AddRange(list.ToArray());
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -144,18 +139,14 @@ namespace XrmToolBox.New
             Favorites.Instance.Items.Remove(favControl.Item);
             Favorites.Instance.Save();
 
-            pnlMru.Controls.Remove(favControl);
-            if (Favorites.Instance.Items.Count == 0)
-            {
-                pnlMru.Controls.Remove(pnlFavoritesSubTitle);
-            }
+            pnlFavItems.Controls.Remove(favControl);
         }
 
         private void Ctrl_RemoveRequested(object sender, System.EventArgs e)
         {
             var mruControl = (MostRecentlyUsedItemControl)sender;
             MostRecentlyUsedItems.Instance.Items.Remove(mruControl.Item);
-            pnlMru.Controls.Remove(mruControl);
+            pnlRupItems.Controls.Remove(mruControl);
             MostRecentlyUsedItems.Instance.Save();
         }
 
@@ -207,53 +198,10 @@ namespace XrmToolBox.New
             label.Cursor = Cursors.Default;
         }
 
-        private void lblWelcomeDescription_Resize(object sender, System.EventArgs e)
-        {
-            Size sz = new Size(lblWelcomeDescription.Width, Int32.MaxValue);
-            sz = TextRenderer.MeasureText(lblWelcomeDescription.Text, lblWelcomeDescription.Font, sz, TextFormatFlags.WordBreak);
-            lblWelcomeDescription.Height = sz.Height + Padding.Bottom + Padding.Top + 20;
-        }
-
         private void StartPage_Resize(object sender, System.EventArgs e)
         {
-            if (Width < 1200)
-            {
-                pnlMain.Controls.Remove(pnlMruParent);
-                pnlMain.Controls.Remove(pnlRightActions);
-                pnlMain.Controls.Remove(pnlWelcome);
-
-                pnlWelcome.Dock = DockStyle.Top;
-                pnlMruParent.Dock = DockStyle.Fill;
-                pnlRightActions.Dock = DockStyle.Right;
-
-                List<Control> controls = new List<Control>();
-                controls.Add(pnlWelcome);
-                controls.Add(pnlRightActions);
-                controls.Add(pnlMruParent);
-                controls.Reverse();
-
-                pnlMain.Controls.AddRange(controls.ToArray());
-
-                pnlMruParent.BringToFront();
-            }
-            else
-            {
-                pnlMain.Controls.Remove(pnlMruParent);
-                pnlMain.Controls.Remove(pnlRightActions);
-                pnlMain.Controls.Remove(pnlWelcome);
-
-                pnlWelcome.Dock = DockStyle.Fill;
-                pnlMruParent.Dock = DockStyle.Left;
-                pnlRightActions.Dock = DockStyle.Right;
-
-                List<Control> controls = new List<Control>();
-                controls.Add(pnlMruParent);
-                controls.Add(pnlRightActions);
-                controls.Add(pnlWelcome);
-                controls.Reverse();
-
-                pnlMain.Controls.AddRange(controls.ToArray());
-            }
+            if (splitContainer1.Width > 0)
+                splitContainer1.SplitterDistance = splitContainer1.Width / 2;
         }
     }
 }
