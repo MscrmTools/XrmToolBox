@@ -54,6 +54,7 @@ namespace XrmToolBox.New
                     }
                 }
 
+                pnlRupItems.Controls.Clear();
                 pnlRupItems.Controls.AddRange(list.ToArray());
             }
 
@@ -74,6 +75,7 @@ namespace XrmToolBox.New
                     }
                 }
 
+                pnlFavItems.Controls.Clear();
                 pnlFavItems.Controls.AddRange(list.ToArray());
             }
         }
