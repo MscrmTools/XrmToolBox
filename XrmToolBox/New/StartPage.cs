@@ -202,8 +202,14 @@ namespace XrmToolBox.New
 
         private void StartPage_Resize(object sender, System.EventArgs e)
         {
-            if (splitContainer1.Width > 0)
+            try
+            {
                 splitContainer1.SplitterDistance = splitContainer1.Width / 2;
+            }
+            catch
+            {
+                // do nothing
+            }
         }
     }
 }
