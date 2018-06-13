@@ -266,6 +266,7 @@ namespace XrmToolBox
                 RemovePlugins();
 
                 RedirectAssembly("NuGet.Core");
+                RedirectAssembly("Newtonsoft.Json");
                 RedirectAssembly("McTools.Xrm.Connection");
                 RedirectAssembly("McTools.Xrm.Connection.WinForms");
                 RedirectAssembly("XrmToolBox.Extensibility");
