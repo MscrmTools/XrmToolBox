@@ -468,6 +468,7 @@ namespace XrmToolBox.New
                 pluginForm.PluginName = plugin.Metadata.Name;
                 pluginForm.Show(dpMain, DockState.Document);
                 pluginForm.SendMessageToStatusBar += StatusBarMessenger_SendMessageToStatusBar;
+                pluginForm.TabPageContextMenuStrip = cmsMain;
                 pluginForm.FormClosed += (sender, e) =>
                 {
                     var pf = (PluginForm)sender;
@@ -576,7 +577,7 @@ namespace XrmToolBox.New
         {
             if (dpMain.ActiveContent is PluginForm pluginForm)
             {
-                RequestCloseTab(pluginForm, new PluginCloseInfo(), Options.Instance.CloseEachPluginSilently);
+                RequestCloseTab(pluginForm, new PluginCloseInfo(ToolBoxCloseReason.PluginRequest), Options.Instance.CloseEachPluginSilently);
             }
         }
 
@@ -1367,6 +1368,22 @@ namespace XrmToolBox.New
             else if (e.ClickedItem.Tag is PluginForm pf)
             {
                 pf.EnsureVisible(dpMain, DockState.Document);
+            }
+        }
+
+        private void cmsMain_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem == cmsMainCloseAll)
+            {
+                RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
+            }
+            else if (e.ClickedItem == cmsMainCloseExceptThis)
+            {
+                RequestCloseTabs(dpMain.Contents.OfType<PluginForm>().Where(p => dpMain.ActiveContent != p), new PluginCloseInfo(ToolBoxCloseReason.CloseAllExceptActive));
+            }
+            else if (e.ClickedItem == cmsMainCloseThis)
+            {
+                RequestCloseTab((PluginForm)dpMain.ActiveContent, new PluginCloseInfo(ToolBoxCloseReason.CloseCurrent));
             }
         }
 

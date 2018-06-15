@@ -51,14 +51,19 @@ namespace XrmToolBox.New
 
         public bool CloseWithReason(ToolBoxCloseReason reason, bool forceSilent = false)
         {
+            PluginCloseInfo info;
             if (Options.Instance.CloseEachPluginSilently || forceSilent)
             {
                 FormClosing -= PluginForm_FormClosing;
+
+                info = new PluginCloseInfo(reason) { Silent = true };
+                pluginControlBase?.ClosingPlugin(info);
+
                 Close();
                 return true;
             }
 
-            PluginCloseInfo info = new PluginCloseInfo(reason);
+            info = new PluginCloseInfo(reason);
             pluginControlBase?.ClosingPlugin(info);
             if (info.Cancel) return false;
 
@@ -136,10 +141,7 @@ namespace XrmToolBox.New
 
         private void PluginForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing && Options.Instance.CloseEachPluginSilently == false)
-            {
-                e.Cancel = !CloseWithReason(ToolBoxCloseReason.CloseCurrent);
-            }
+            e.Cancel = !CloseWithReason(ToolBoxCloseReason.CloseCurrent);
         }
 
         private void StatusBarMessager_SendMessageToStatusBar(object sender, StatusBarMessageEventArgs e)

@@ -43,7 +43,7 @@ namespace MsCrmTools.SampleTool
 
         public override void ClosingPlugin(PluginCloseInfo info)
         {
-            //MessageBox.Show("Custom logic here");
+            MessageBox.Show("Closing tool");
 
             base.ClosingPlugin(info);
         }
@@ -173,22 +173,22 @@ namespace MsCrmTools.SampleTool
 
         public void ReceiveKeyDownShortcut(KeyEventArgs e)
         {
-            MessageBox.Show("A KeyDown event was received!");
+            //   MessageBox.Show("A KeyDown event was received!");
         }
 
         public void ReceiveKeyPressShortcut(KeyPressEventArgs e)
         {
-            MessageBox.Show("A KeyPress event was received!");
+            // MessageBox.Show("A KeyPress event was received!");
         }
 
         public void ReceiveKeyUpShortcut(KeyEventArgs e)
         {
-            MessageBox.Show("A KeyUp event was received!");
+            //MessageBox.Show("A KeyUp event was received!");
         }
 
         public void ReceivePreviewKeyDownShortcut(PreviewKeyDownEventArgs e)
         {
-            MessageBox.Show("A PreviewKeyDown event was received!");
+            //MessageBox.Show("A PreviewKeyDown event was received!");
         }
 
         public void ReceiveShortcut(KeyEventArgs e)

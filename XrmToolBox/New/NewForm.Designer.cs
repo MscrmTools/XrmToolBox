@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NewForm));
             this.tsMain = new System.Windows.Forms.ToolStrip();
             this.tsbConnect = new System.Windows.Forms.ToolStripButton();
@@ -82,11 +83,16 @@
             this.lblConnecting = new System.Windows.Forms.Label();
             this.pbConnectionLoading = new System.Windows.Forms.PictureBox();
             this.dpMain = new WeifenLuo.WinFormsUI.Docking.DockPanel();
+            this.cmsMain = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cmsMainCloseThis = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsMainCloseExceptThis = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsMainCloseAll = new System.Windows.Forms.ToolStripMenuItem();
             this.tsMain.SuspendLayout();
             this.pnlSupport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.pnlConnectLoading.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbConnectionLoading)).BeginInit();
+            this.cmsMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // tsMain
@@ -269,14 +275,14 @@
             // 
             this.tsmiFeedbackXrmToolBox.Image = ((System.Drawing.Image)(resources.GetObject("tsmiFeedbackXrmToolBox.Image")));
             this.tsmiFeedbackXrmToolBox.Name = "tsmiFeedbackXrmToolBox";
-            this.tsmiFeedbackXrmToolBox.Size = new System.Drawing.Size(288, 34);
+            this.tsmiFeedbackXrmToolBox.Size = new System.Drawing.Size(246, 34);
             this.tsmiFeedbackXrmToolBox.Text = "XrmToolbox";
             this.tsmiFeedbackXrmToolBox.Click += new System.EventHandler(this.GithubXrmToolBoxMenuItem_Click);
             // 
             // tsmiFeedbackSelectedPlugin
             // 
             this.tsmiFeedbackSelectedPlugin.Name = "tsmiFeedbackSelectedPlugin";
-            this.tsmiFeedbackSelectedPlugin.Size = new System.Drawing.Size(288, 34);
+            this.tsmiFeedbackSelectedPlugin.Size = new System.Drawing.Size(246, 34);
             this.tsmiFeedbackSelectedPlugin.Text = "Selected Plugin";
             this.tsmiFeedbackSelectedPlugin.Visible = false;
             this.tsmiFeedbackSelectedPlugin.Click += new System.EventHandler(this.githubPluginMenuItem_Click);
@@ -396,14 +402,14 @@
             // 
             this.tsmiAboutXrmToolBox.Image = global::XrmToolBox.Properties.Resources.logo_0016;
             this.tsmiAboutXrmToolBox.Name = "tsmiAboutXrmToolBox";
-            this.tsmiAboutXrmToolBox.Size = new System.Drawing.Size(288, 34);
+            this.tsmiAboutXrmToolBox.Size = new System.Drawing.Size(276, 34);
             this.tsmiAboutXrmToolBox.Text = "About XrmToolBox";
             this.tsmiAboutXrmToolBox.Click += new System.EventHandler(this.tsmiAboutXrmToolBox_Click);
             // 
             // tsmiAboutSelectedPlugin
             // 
             this.tsmiAboutSelectedPlugin.Name = "tsmiAboutSelectedPlugin";
-            this.tsmiAboutSelectedPlugin.Size = new System.Drawing.Size(288, 34);
+            this.tsmiAboutSelectedPlugin.Size = new System.Drawing.Size(276, 34);
             this.tsmiAboutSelectedPlugin.Text = "Selected plugin";
             this.tsmiAboutSelectedPlugin.Click += new System.EventHandler(this.tsmiAboutSelectedPlugin_Click);
             // 
@@ -418,7 +424,7 @@
             this.tsbOpenOrg.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpenOrg.Image")));
             this.tsbOpenOrg.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbOpenOrg.Name = "tsbOpenOrg";
-            this.tsbOpenOrg.Size = new System.Drawing.Size(218, 34);
+            this.tsbOpenOrg.Size = new System.Drawing.Size(206, 34);
             this.tsbOpenOrg.Text = "Open organization";
             this.tsbOpenOrg.ToolTipText = "Opens the connected organization in your web browser";
             this.tsbOpenOrg.Visible = false;
@@ -602,6 +608,34 @@
             this.dpMain.DocumentDragged += new System.EventHandler(this.dpMain_DocumentDragged);
             this.dpMain.ActivePaneChanged += new System.EventHandler(this.dpMain_ActivePaneChanged);
             // 
+            // cmsMain
+            // 
+            this.cmsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cmsMainCloseThis,
+            this.cmsMainCloseExceptThis,
+            this.cmsMainCloseAll});
+            this.cmsMain.Name = "cmsMain";
+            this.cmsMain.Size = new System.Drawing.Size(276, 144);
+            this.cmsMain.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsMain_ItemClicked);
+            // 
+            // cmsMainCloseThis
+            // 
+            this.cmsMainCloseThis.Name = "cmsMainCloseThis";
+            this.cmsMainCloseThis.Size = new System.Drawing.Size(275, 34);
+            this.cmsMainCloseThis.Text = "Close this tab";
+            // 
+            // cmsMainCloseExceptThis
+            // 
+            this.cmsMainCloseExceptThis.Name = "cmsMainCloseExceptThis";
+            this.cmsMainCloseExceptThis.Size = new System.Drawing.Size(275, 34);
+            this.cmsMainCloseExceptThis.Text = "Close all but this tab";
+            // 
+            // cmsMainCloseAll
+            // 
+            this.cmsMainCloseAll.Name = "cmsMainCloseAll";
+            this.cmsMainCloseAll.Size = new System.Drawing.Size(275, 34);
+            this.cmsMainCloseAll.Text = "Close all";
+            // 
             // NewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
@@ -634,6 +668,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.pnlConnectLoading.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbConnectionLoading)).EndInit();
+            this.cmsMain.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -694,5 +729,9 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiShowStartPage;
         private System.Windows.Forms.ToolStripMenuItem tsmiAboutXrmToolBox;
         private System.Windows.Forms.ToolStripMenuItem tsmiAboutSelectedPlugin;
+        private System.Windows.Forms.ContextMenuStrip cmsMain;
+        private System.Windows.Forms.ToolStripMenuItem cmsMainCloseThis;
+        private System.Windows.Forms.ToolStripMenuItem cmsMainCloseExceptThis;
+        private System.Windows.Forms.ToolStripMenuItem cmsMainCloseAll;
     }
 }

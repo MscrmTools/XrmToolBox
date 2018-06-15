@@ -45,11 +45,11 @@
             // gbOptions
             // 
             this.gbOptions.Controls.Add(this.cbMultipleCalls);
-            this.gbOptions.Location = new System.Drawing.Point(24, 66);
-            this.gbOptions.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.gbOptions.Location = new System.Drawing.Point(29, 79);
+            this.gbOptions.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.gbOptions.Name = "gbOptions";
-            this.gbOptions.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.gbOptions.Size = new System.Drawing.Size(243, 76);
+            this.gbOptions.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.gbOptions.Size = new System.Drawing.Size(297, 91);
             this.gbOptions.TabIndex = 3;
             this.gbOptions.TabStop = false;
             this.gbOptions.Text = "Options";
@@ -57,17 +57,16 @@
             // cbMultipleCalls
             // 
             this.cbMultipleCalls.AutoSize = true;
-            this.cbMultipleCalls.Location = new System.Drawing.Point(20, 28);
-            this.cbMultipleCalls.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbMultipleCalls.Location = new System.Drawing.Point(24, 34);
+            this.cbMultipleCalls.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.cbMultipleCalls.Name = "cbMultipleCalls";
-            this.cbMultipleCalls.Size = new System.Drawing.Size(124, 24);
+            this.cbMultipleCalls.Size = new System.Drawing.Size(149, 29);
             this.cbMultipleCalls.TabIndex = 0;
             this.cbMultipleCalls.Text = "Multiple calls";
             this.cbMultipleCalls.UseVisualStyleBackColor = true;
             // 
             // toolStripMenu
             // 
-            this.toolStripMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbClose,
             this.toolStripSeparator2,
@@ -78,7 +77,7 @@
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
             this.toolStripMenu.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
-            this.toolStripMenu.Size = new System.Drawing.Size(450, 32);
+            this.toolStripMenu.Size = new System.Drawing.Size(550, 37);
             this.toolStripMenu.TabIndex = 4;
             this.toolStripMenu.Text = "toolStrip1";
             // 
@@ -88,21 +87,21 @@
             this.tsbClose.Image = ((System.Drawing.Image)(resources.GetObject("tsbClose.Image")));
             this.tsbClose.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(28, 29);
+            this.tsbClose.Size = new System.Drawing.Size(28, 34);
             this.tsbClose.Text = "Close this tool";
             this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 37);
             // 
             // tsbWhoAmI
             // 
             this.tsbWhoAmI.Image = ((System.Drawing.Image)(resources.GetObject("tsbWhoAmI.Image")));
             this.tsbWhoAmI.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbWhoAmI.Name = "tsbWhoAmI";
-            this.tsbWhoAmI.Size = new System.Drawing.Size(118, 29);
+            this.tsbWhoAmI.Size = new System.Drawing.Size(132, 34);
             this.tsbWhoAmI.Text = "Who am I";
             this.tsbWhoAmI.ToolTipText = "Perfomrs a Who I Am request";
             this.tsbWhoAmI.Click += new System.EventHandler(this.tsbWhoAmI_Click);
@@ -110,7 +109,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 37);
             // 
             // tsbCancel
             // 
@@ -118,7 +117,7 @@
             this.tsbCancel.Image = ((System.Drawing.Image)(resources.GetObject("tsbCancel.Image")));
             this.tsbCancel.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCancel.Name = "tsbCancel";
-            this.tsbCancel.Size = new System.Drawing.Size(91, 29);
+            this.tsbCancel.Size = new System.Drawing.Size(103, 34);
             this.tsbCancel.Text = "Cancel";
             this.tsbCancel.ToolTipText = "Cancel the current request";
             this.tsbCancel.Click += new System.EventHandler(this.tsbCancel_Click);
@@ -126,18 +125,18 @@
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 37);
             // 
             // SampleTool
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.toolStripMenu);
             this.Controls.Add(this.gbOptions);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.Name = "SampleTool";
             this.PluginIcon = ((System.Drawing.Icon)(resources.GetObject("$this.PluginIcon")));
-            this.Size = new System.Drawing.Size(450, 462);
+            this.Size = new System.Drawing.Size(550, 554);
             this.Load += new System.EventHandler(this.SampleTool_Load);
             this.gbOptions.ResumeLayout(false);
             this.gbOptions.PerformLayout();
