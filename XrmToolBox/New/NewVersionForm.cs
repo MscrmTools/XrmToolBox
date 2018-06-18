@@ -53,7 +53,10 @@ namespace XrmToolBox.New
 
                 var destinationFile = Path.Combine(destinationFolder, "XrmToolBox.AutoUpdater.exe");
 
-                File.Copy(updaterFile, destinationFile, true);
+				if (!updaterFile.Equals(destinationFile, StringComparison.OrdinalIgnoreCase)) 
+				{
+					File.Copy(updaterFile, destinationFile, true);
+				}
 
                 var args = Environment.GetCommandLineArgs().ToList();
 
