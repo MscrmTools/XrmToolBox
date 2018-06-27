@@ -15,6 +15,7 @@ using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using XrmToolBox.Announcement;
 using XrmToolBox.AppCode;
 using XrmToolBox.Controls;
 using XrmToolBox.Extensibility;
@@ -172,6 +173,9 @@ namespace XrmToolBox.New
             RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), pci);
             e.Cancel = pci.Cancel;
 
+            AnnouncementSettings.Instance.LastShownDate = DateTime.Now;
+            AnnouncementSettings.Instance.Save();
+
             Options.Instance.Size.Height = Height;
             Options.Instance.Size.CurrentSize = Size;
             Options.Instance.Size.IsMaximized = WindowState == FormWindowState.Maximized;
@@ -237,7 +241,10 @@ namespace XrmToolBox.New
             // Adapt size of current form
             if (Options.Instance.Size.IsMaximized)
             {
-                WindowState = FormWindowState.Maximized;
+                Invoke(new Action(() =>
+                {
+                    WindowState = FormWindowState.Maximized;
+                }));
             }
             else
             {
@@ -457,6 +464,13 @@ namespace XrmToolBox.New
 
                 ((IXrmToolBoxPluginControl)pluginControl).OnRequestConnection += NewForm_OnRequestConnection;
                 ((IXrmToolBoxPluginControl)pluginControl).OnCloseTool += NewForm_OnCloseTool;
+                ((IXrmToolBoxPluginControl)pluginControl).OnWorkAsync += (sender, e) =>
+                {
+                    var bw = new BackgroundWorker();
+                    bw.DoWork += (s, evt) => { evt.Result = AnnouncementManager.GetItemToDisplay(); };
+                    bw.RunWorkerCompleted += (s, evt) => { AnnouncementManager.Display(evt.Result as AnnouncementItem); };
+                    bw.RunWorkerAsync();
+                };
 
                 if (pnlConnectLoading.Visible)
                 {

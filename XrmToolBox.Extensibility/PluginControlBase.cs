@@ -34,6 +34,12 @@ namespace XrmToolBox.Extensibility
 
         public ConnectionDetail ConnectionDetail { get; set; }
 
+        [Category("Plugin Control Properties")]
+        [Description("Icon")]
+        public Icon PluginIcon { get; set; }
+
+        public Image TabIcon { get; set; }
+
         public void CloseTool()
         {
             if (OnCloseTool != null)
@@ -48,22 +54,13 @@ namespace XrmToolBox.Extensibility
             CloseTool();
         }
 
-        public Image TabIcon { get; set; }
-
-        [Category("Plugin Control Properties")]
-        [Description("Icon")]
-        public Icon PluginIcon { get; set; }
-
         #region IMsCrmToolsPluginUserControl Members
 
         public event EventHandler OnCloseTool;
 
         public event EventHandler OnRequestConnection;
 
-        protected virtual void OnConnectionRequested(object sender, RequestConnectionEventArgs e)
-        {
-            OnRequestConnection?.Invoke(sender, e);
-        }
+        public event EventHandler OnWorkAsync;
 
         public IOrganizationService Service { get; private set; }
 
@@ -124,6 +121,11 @@ namespace XrmToolBox.Extensibility
             }
         }
 
+        protected virtual void OnConnectionRequested(object sender, RequestConnectionEventArgs e)
+        {
+            OnRequestConnection?.Invoke(sender, e);
+        }
+
         #endregion IMsCrmToolsPluginUserControl Members
 
         #region IWorkerHost
@@ -155,6 +157,8 @@ namespace XrmToolBox.Extensibility
             info.Host = this;
             _worker = new Worker();
             _worker.WorkAsync(info);
+
+            OnWorkAsync?.Invoke(this, new EventArgs());
         }
 
         #region Obsolete WorkAsync Calls
@@ -370,6 +374,16 @@ namespace XrmToolBox.Extensibility
         protected string LogFilePath => logManager?.FilePath;
 
         /// <summary>
+        /// Writes an error message in the log
+        /// </summary>
+        /// <param name="message">Message</param>
+        /// <param name="args">Message parameters</param>
+        protected void LogError(string message, params object[] args)
+        {
+            logManager.LogError(message, args);
+        }
+
+        /// <summary>
         /// Writes an information message in the log
         /// </summary>
         /// <param name="message">Message</param>
@@ -390,16 +404,6 @@ namespace XrmToolBox.Extensibility
         }
 
         /// <summary>
-        /// Writes an error message in the log
-        /// </summary>
-        /// <param name="message">Message</param>
-        /// <param name="args">Message parameters</param>
-        protected void LogError(string message, params object[] args)
-        {
-            logManager.LogError(message, args);
-        }
-
-        /// <summary>
         /// Opens the log file associated with the current plugin
         /// </summary>
         protected void OpenLogFile()
@@ -410,6 +414,28 @@ namespace XrmToolBox.Extensibility
         #endregion Logs
 
         #region Noticiation zone
+
+        protected void HideNotification()
+        {
+            var ctrls = Parent.Controls.Find("NotifPanel", false);
+            if (ctrls.Length == 1)
+            {
+                ctrls[0].Visible = false;
+            }
+        }
+
+        protected void ShowErrorNotification(string message, Uri moreInfoUri, int height = 32)
+        {
+            var ctrls = Parent.Controls.Find("NotifPanel", false);
+            if (ctrls.Length == 1)
+            {
+                ((NotificationArea)ctrls[0]).ShowErrorNotification(message, moreInfoUri, height);
+            }
+            else
+            {
+                throw new Exception("Unable to find Notification Area control");
+            }
+        }
 
         protected void ShowInfoNotification(string message, Uri moreInfoUri, int height = 32)
         {
@@ -434,28 +460,6 @@ namespace XrmToolBox.Extensibility
             else
             {
                 throw new Exception("Unable to find Notification Area control");
-            }
-        }
-
-        protected void ShowErrorNotification(string message, Uri moreInfoUri, int height = 32)
-        {
-            var ctrls = Parent.Controls.Find("NotifPanel", false);
-            if (ctrls.Length == 1)
-            {
-                ((NotificationArea)ctrls[0]).ShowErrorNotification(message, moreInfoUri, height);
-            }
-            else
-            {
-                throw new Exception("Unable to find Notification Area control");
-            }
-        }
-
-        protected void HideNotification()
-        {
-            var ctrls = Parent.Controls.Find("NotifPanel", false);
-            if (ctrls.Length == 1)
-            {
-                ctrls[0].Visible = false;
             }
         }
 

@@ -183,6 +183,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Announcement\AnnouncementDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Announcement\AnnouncementDialog.Designer.cs">
+      <DependentUpon>AnnouncementDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Announcement\AnnouncementManager.cs" />
+    <Compile Include="Announcement\AnnouncementSettings.cs" />
     <Compile Include="AppCode\DockExtensions.cs" />
     <Compile Include="AppCode\Extensions.cs" />
     <Compile Include="AppCode\ListViewItemComparer.cs" />
@@ -304,6 +312,9 @@
       <DependentUpon>StartPage.cs</DependentUpon>
     </Compile>
     <Compile Include="XmlSerializerHelper.cs" />
+    <EmbeddedResource Include="Announcement\AnnouncementDialog.resx">
+      <DependentUpon>AnnouncementDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ConnectingControl.resx">
       <DependentUpon>ConnectingControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -416,7 +427,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

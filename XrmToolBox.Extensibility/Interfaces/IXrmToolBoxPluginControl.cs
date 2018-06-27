@@ -22,6 +22,11 @@ namespace XrmToolBox.Extensibility.Interfaces
         event EventHandler OnRequestConnection;
 
         /// <summary>
+        /// EventHandler when a work async is started
+        /// </summary>
+        event EventHandler OnWorkAsync;
+
+        /// <summary>
         /// Gets the organization service used by the tool
         /// </summary>
         IOrganizationService Service { get; }
