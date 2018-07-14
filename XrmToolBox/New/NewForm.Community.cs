@@ -71,8 +71,7 @@ namespace XrmToolBox.New
 
         private void feedbackToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            if (!(dpMain.ActiveContent is PluginForm)) // Home Screen
-                GithubXrmToolBoxMenuItem_Click(sender, e);
+            GithubXrmToolBoxMenuItem_Click(sender, e);
         }
 
         private void githubPluginMenuItem_Click(object sender, System.EventArgs e)
@@ -121,11 +120,14 @@ namespace XrmToolBox.New
                 tsmiHelpSelectedPlugin.Text =
                     string.Format(tsmiHelpSelectedPlugin.Tag.ToString(), pluginName);
                 tsmiHelpSelectedPlugin.Image = (help as PluginControlBase)?.TabIcon;
+                tsmiHelp.Click -= displayXrmToolBoxHelpToolStripMenuItem_Click;
             }
             else
             {
                 tsmiHelpXrmToolBox.Visible = false;
                 tsmiHelpSelectedPlugin.Visible = false;
+                tsmiHelp.Click -= displayXrmToolBoxHelpToolStripMenuItem_Click;
+                tsmiHelp.Click += displayXrmToolBoxHelpToolStripMenuItem_Click;
             }
 
             if (((PluginForm)dpMain.ActiveContent).Control is IPayPalPlugin paypal)
@@ -149,11 +151,14 @@ namespace XrmToolBox.New
                 tsmiFeedbackSelectedPlugin.Visible = true;
                 tsmiFeedbackSelectedPlugin.Text = pluginName;
                 tsmiFeedbackSelectedPlugin.Image = (github as PluginControlBase)?.TabIcon;
+                tsmiFeedback.Click -= feedbackToolStripMenuItem_Click;
             }
             else
             {
                 tsmiFeedbackXrmToolBox.Visible = false;
                 tsmiFeedbackSelectedPlugin.Visible = false;
+                tsmiFeedback.Click -= feedbackToolStripMenuItem_Click;
+                tsmiFeedback.Click += feedbackToolStripMenuItem_Click;
             }
 
             if (((PluginForm)dpMain.ActiveContent).Control is IAboutPlugin aboutPlugin)
@@ -162,14 +167,13 @@ namespace XrmToolBox.New
                 tsmiAboutSelectedPlugin.Visible = true;
                 tsmiAboutSelectedPlugin.Text = pluginName;
                 tsmiAboutSelectedPlugin.Image = (aboutPlugin as PluginControlBase)?.TabIcon;
-
                 tsmiAbout.Click -= tsmiAbout_Click;
             }
             else
             {
                 tsmiAboutXrmToolBox.Visible = false;
                 tsmiAboutSelectedPlugin.Visible = false;
-
+                tsmiAbout.Click -= tsmiAbout_Click;
                 tsmiAbout.Click += tsmiAbout_Click;
             }
         }
