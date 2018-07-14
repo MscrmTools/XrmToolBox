@@ -84,9 +84,26 @@ namespace XrmToolBox.AutoUpdater
             args.RemoveAt(0);
             args.RemoveAt(0);
 
-            Process.Start(args.First(), string.Join(" ", args.Skip(1)));
+            var xtbPath = args.First();
 
-            Close();
+            if (!xtbPath.StartsWith("\""))
+            {
+                xtbPath = $"\"{xtbPath}\"";
+            }
+
+            try
+            {
+                Process.Start(xtbPath, string.Join(" ", args.Skip(1)));
+
+                Close();
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(this,
+                    $@"Unable to start XrmToolBox for the following reason: {error.Message}. File not found : {
+                            xtbPath
+                        }", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void Client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
