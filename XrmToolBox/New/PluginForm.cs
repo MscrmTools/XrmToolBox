@@ -1,6 +1,7 @@
 ﻿using McTools.Xrm.Connection;
 using Microsoft.Xrm.Sdk;
 using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
@@ -24,10 +25,15 @@ namespace XrmToolBox.New
             Text = name;
 
             control.Dock = DockStyle.Fill;
-            Controls.Add(control);
-            Controls.SetChildIndex(control, 0);
+            panel1.Controls.Add(control);
+            panel1.Controls.SetChildIndex(control, 0);
             pluginControlBase = (PluginControlBase)control;
             Icon = pluginControlBase.PluginIcon;
+
+            if (pluginControlBase.ConnectionDetail != null)
+            {
+                DisplayHighlight(pluginControlBase.ConnectionDetail);
+            }
 
             if (pluginControlBase is IStatusBarMessenger statusBarMessenger)
             {
@@ -36,6 +42,12 @@ namespace XrmToolBox.New
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
+
+        public sealed override Color BackColor
+        {
+            get => base.BackColor;
+            set => base.BackColor = value;
+        }
 
         public IXrmToolBoxPluginControl Control => pluginControlBase;
 
@@ -84,6 +96,7 @@ namespace XrmToolBox.New
         public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
             pluginControlBase.UpdateConnection(newService, detail, actionName, parameter);
+            DisplayHighlight(detail);
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -113,6 +126,25 @@ namespace XrmToolBox.New
             }
 
             return true;
+        }
+
+        private void DisplayHighlight(ConnectionDetail detail)
+        {
+            if (detail.IsEnvironmentHighlightSet)
+            {
+                BackColor = detail?.EnvironmentColor ?? DefaultBackColor;
+                lblEnvInfo.ForeColor = detail?.EnvironmentTextColor ?? DefaultForeColor;
+                lblEnvInfo.Text = detail.EnvironmentText;
+                lblEnvInfo.Visible = true;
+                Padding = new Padding(10, 0, 10, 10);
+            }
+            else
+            {
+                Padding = new Padding(0, 0, 0, 0);
+                lblEnvInfo.Visible = false;
+            }
+
+            Invalidate();
         }
 
         private void PluginForm_DockStateChanged(object sender, System.EventArgs e)
