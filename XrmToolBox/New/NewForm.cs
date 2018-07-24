@@ -812,10 +812,13 @@ namespace XrmToolBox.New
 
                             rcea.Control.UpdateConnection(e.OrganizationService, connectionDetail, rcea.ActionName, rcea.Parameter);
 
-                            var indexOfParenthesis = userControl.Parent.Text?.IndexOf("(") ?? -1;
-                            var pluginName = userControl.Parent.Text?.Substring(0, indexOfParenthesis - 1) ?? "N/A";
+                            if (userControl.ParentForm != null)
+                            {
+                                var indexOfParenthesis = userControl.ParentForm?.Text?.IndexOf("(") ?? -1;
+                                var pluginName = userControl.ParentForm?.Text?.Substring(0, indexOfParenthesis - 1) ?? "N/A";
 
-                            userControl.Parent.Text = $@"{pluginName} ({e.ConnectionDetail.ConnectionName})";
+                                userControl.ParentForm.Text = $@"{pluginName} ({e.ConnectionDetail.ConnectionName})";
+                            }
                         }
                     }
                     else if (dpMain.Contents.OfType<PluginForm>().Count() > 1)
