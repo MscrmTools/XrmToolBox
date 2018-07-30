@@ -920,7 +920,7 @@ namespace XrmToolBox.New
             if (message == null ||
                 !(sender is UserControl sourceControl) ||
                 !(sourceControl is IXrmToolBoxPluginControl) ||
-                !(sourceControl.Parent is PluginForm pluginForm))
+                !(sourceControl.ParentForm is PluginForm pluginForm))
             {
                 // Error. Possible reasons are:
                 // * empty sender
