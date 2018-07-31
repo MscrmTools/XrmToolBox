@@ -791,7 +791,7 @@ namespace XrmToolBox.New
                             if (!(us.Tag is Lazy<IXrmToolBoxPlugin, IPluginMetadata> pluginModel))
                             {
                                 // Actual Plugin was passed, Just update the plugin's Tab.
-                                UpdateTabConnection((PluginForm)us.Parent, e.ConnectionDetail);
+                                UpdateTabConnection((PluginForm)us.ParentForm, e.ConnectionDetail);
                             }
                             else
                             {
@@ -920,7 +920,7 @@ namespace XrmToolBox.New
             if (message == null ||
                 !(sender is UserControl sourceControl) ||
                 !(sourceControl is IXrmToolBoxPluginControl) ||
-                !(sourceControl.Parent is PluginForm pluginForm))
+                !(sourceControl.ParentForm is PluginForm pluginForm))
             {
                 // Error. Possible reasons are:
                 // * empty sender
