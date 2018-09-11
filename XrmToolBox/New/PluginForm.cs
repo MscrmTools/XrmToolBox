@@ -30,10 +30,7 @@ namespace XrmToolBox.New
             pluginControlBase = (PluginControlBase)control;
             Icon = pluginControlBase.PluginIcon;
 
-            if (pluginControlBase.ConnectionDetail != null)
-            {
-                DisplayHighlight(pluginControlBase.ConnectionDetail);
-            }
+            DisplayHighlight(pluginControlBase.ConnectionDetail);
 
             if (pluginControlBase is IStatusBarMessenger statusBarMessenger)
             {
@@ -130,7 +127,7 @@ namespace XrmToolBox.New
 
         private void DisplayHighlight(ConnectionDetail detail)
         {
-            if (detail.IsEnvironmentHighlightSet)
+            if (detail?.IsEnvironmentHighlightSet ?? false)
             {
                 BackColor = detail?.EnvironmentColor ?? DefaultBackColor;
                 lblEnvInfo.ForeColor = detail?.EnvironmentTextColor ?? DefaultForeColor;
