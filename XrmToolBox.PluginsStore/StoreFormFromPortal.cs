@@ -286,11 +286,13 @@ namespace XrmToolBox.PluginsStore
             var filter = text.ToString().ToLower();
             var options = Options.Instance;
             var lvic = new List<ListViewItem>();
-            foreach (var xtbPackage in store.XrmToolBoxPlugins.Plugins.Where(p => filter.Length > 0 &&
-                                                              (p.Name.ToLower().Replace(" for xrmtoolbox", "").Contains(filter) ||
-                                                               p.Authors.ToLower().IndexOf(filter, StringComparison.Ordinal) >= 0)
-                                                               || filter.Length == 0)
-                )
+            foreach (var xtbPackage in store.XrmToolBoxPlugins.Plugins
+                .Where(p => filter.Length > 0 &&
+                            (p.Name.ToLower().Replace(" for xrmtoolbox", "").Contains(filter) ||
+                             p.Authors.ToLower().IndexOf(filter, StringComparison.Ordinal) >= 0)
+                            || p.Description.ToLower().Contains(filter)
+                            || filter.Length == 0)
+            )
             {
                 if (xtbPackage.Action == PackageInstallAction.Unavailable
                     && options.PluginsStoreShowIncompatible.HasValue
