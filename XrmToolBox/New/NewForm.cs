@@ -620,7 +620,18 @@ namespace XrmToolBox.New
 
         private void PluginsForm_OpenPluginProjectUrlRequested(object sender, PluginEventArgs e)
         {
-            var filePath = Assembly.GetAssembly(e.PluginControl.GetType()).Location;
+            var type = e.PluginControl?.GetType();
+            if (type == null)
+            {
+                type = e.Plugin?.Value?.GetType();
+                if (type == null)
+                {
+                    MessageBox.Show(this, @"Unable to determine plugin location on disk");
+                    return;
+                }
+            }
+
+            var filePath = Assembly.GetAssembly(type).Location;
             if (File.Exists(filePath))
             {
                 var fileName = Path.GetFileName(filePath);
