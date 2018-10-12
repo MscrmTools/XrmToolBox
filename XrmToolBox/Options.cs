@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
+using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
 
 namespace XrmToolBox
@@ -94,45 +95,45 @@ namespace XrmToolBox
             }
         }
 
-        public bool DisplayRecentlyUpdatedFirst { get; set; }
-
-        public bool? PluginsStoreShowIncompatible { get; set; }
-        public bool? PluginsStoreShowUpdates { get; set; }
-        public bool? PluginsStoreShowNew { get; set; }
-        public bool? PluginsStoreShowInstalled { get; set; }
-
         public bool? AllowLogUsage { get; set; }
         public bool CheckUpdateOnStartup { get; set; }
         public bool CloseEachPluginSilently { get; set; }
         public bool CloseOpenedPluginsSilently { get; set; }
         public bool DisplayLargeIcons { get; set; }
         public bool DisplayMostUsedFirst { get; set; }
-        public bool DisplayPluginsStoreOnStartup { get; set; }
+        public string DisplayOrder { get; set; }
         public bool DisplayPluginsStoreOnlyIfUpdates { get; set; }
+        public bool DisplayPluginsStoreOnStartup { get; set; }
+        public bool DisplayRecentlyUpdatedFirst { get; set; }
+
+        public bool DoNotCheckForUpdates { get; set; }
+        public bool DoNotRememberPluginsWithoutConnection { get; set; }
+        public bool DoNotShowStartPage { get; set; }
         public List<string> HiddenPlugins { get; set; }
         public DateTime LastAdvertisementDisplay { get; set; }
+        public string LastConnection { get; set; }
+        public string LastPlugin { get; set; }
         public DateTime LastUpdateCheck { get; set; }
+        public bool MergeConnectionFiles { get; set; }
         public List<PluginUseCount> MostUsedList { get; set; }
+        public int MruItemsToDisplay { get; set; } = 10;
+        public DockState PluginsListDocking { get; set; } = DockState.Document;
+        public bool PluginsListIsHidden { get; set; } = false;
+        public bool? PluginsStoreShowIncompatible { get; set; }
+        public bool? PluginsStoreShowInstalled { get; set; }
+        public bool? PluginsStoreShowNew { get; set; }
+        public bool? PluginsStoreShowUpdates { get; set; }
+
+        public List<PluginUpdateSkip> PluginsUpdateSkip { get; set; } = new List<PluginUpdateSkip>();
+        public bool RememberSession { get; set; }
+
+        public bool ReuseConnections { get; set; }
+
+        public bool ShowPluginUpdatesPanelAtStartup { get; set; } = true;
 
         [XmlElement("FormSize")]
         public FormSize Size { get; set; }
 
-        public bool DoNotCheckForUpdates { get; set; }
-        public bool MergeConnectionFiles { get; set; }
-
-        public string LastConnection { get; set; }
-        public string LastPlugin { get; set; }
-        public bool RememberSession { get; set; }
-        public bool ReuseConnections { get; set; }
-        public string DisplayOrder { get; set; }
-        public bool? PluginsStoreUseLegacy { get; set; }
-        public DockState PluginsListDocking { get; set; } = DockState.Document;
-        public bool PluginsListIsHidden { get; set; } = false;
-
-        public int MruItemsToDisplay { get; set; } = 10;
-
-        public bool DoNotRememberPluginsWithoutConnection { get; set; }
-        public bool DoNotShowStartPage { get; set; }
         public string Theme { get; set; } = "Light theme";
 
         public static bool Load(out Options options, out string errorMessage)
@@ -204,7 +205,7 @@ namespace XrmToolBox
                 DoNotCheckForUpdates = DoNotCheckForUpdates,
                 MergeConnectionFiles = MergeConnectionFiles,
                 DisplayOrder = DisplayOrder,
-                PluginsStoreUseLegacy = PluginsStoreUseLegacy,
+                ShowPluginUpdatesPanelAtStartup = ShowPluginUpdatesPanelAtStartup,
                 PluginsStoreShowIncompatible = PluginsStoreShowIncompatible,
                 PluginsStoreShowInstalled = PluginsStoreShowInstalled,
                 PluginsStoreShowNew = PluginsStoreShowNew,
@@ -212,8 +213,14 @@ namespace XrmToolBox
                 MruItemsToDisplay = MruItemsToDisplay,
                 DoNotRememberPluginsWithoutConnection = DoNotRememberPluginsWithoutConnection,
                 DoNotShowStartPage = DoNotShowStartPage,
-                Theme = Theme
+                Theme = Theme,
+                PluginsUpdateSkip = PluginsUpdateSkip
             };
+        }
+
+        public void Replace(Options newOption)
+        {
+            innerOptions = newOption;
         }
 
         public void Save()
@@ -226,11 +233,6 @@ namespace XrmToolBox
             var settingsFile = Path.Combine(Paths.SettingsPath, "XrmToolBox.Settings.xml");
 
             XmlSerializerHelper.SerializeToFile(this, settingsFile);
-        }
-
-        public void Replace(Options newOption)
-        {
-            innerOptions = newOption;
         }
     }
 }

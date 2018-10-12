@@ -199,6 +199,7 @@
     <Compile Include="AppCode\MostRecentlyUsedItems.cs" />
     <Compile Include="AppCode\PluginControlStatus.cs" />
     <Compile Include="AppCode\PluginUpdates.cs" />
+    <Compile Include="AppCode\PluginUpdateSkip.cs" />
     <Compile Include="AppCode\ReleasesDTO.cs" />
     <Compile Include="AppCode\WebProxyHelper.cs" />
     <Compile Include="ConnectionParameterInfo.cs" />
@@ -207,6 +208,12 @@
     </Compile>
     <Compile Include="Controls\ConnectingControl.Designer.cs">
       <DependentUpon>ConnectingControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\NewPluginVersion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NewPluginVersion.Designer.cs">
+      <DependentUpon>NewPluginVersion.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\NewVersionForm.cs">
       <SubType>Form</SubType>
@@ -317,6 +324,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ConnectingControl.resx">
       <DependentUpon>ConnectingControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NewPluginVersion.resx">
+      <DependentUpon>NewPluginVersion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NewVersionForm.resx">
       <DependentUpon>NewVersionForm.cs</DependentUpon>

@@ -49,6 +49,7 @@ namespace XrmToolBox.Forms
             nudMruItemsToDisplay.Value = option.MruItemsToDisplay;
             chkDoNotRememberPluginsNotConnected.Checked = option.DoNotRememberPluginsWithoutConnection;
             chkDoNotShowAtStartup.Checked = option.DoNotShowStartPage;
+            chkDisplayPluginsUpdatePanel.Checked = option.ShowPluginUpdatesPanelAtStartup;
 
             cbbTheme.SelectedItem = option.Theme ?? "Light theme";
         }
@@ -77,6 +78,7 @@ namespace XrmToolBox.Forms
             option.MruItemsToDisplay = Convert.ToInt32(nudMruItemsToDisplay.Value);
             option.DoNotRememberPluginsWithoutConnection = chkDoNotRememberPluginsNotConnected.Checked;
             option.DoNotShowStartPage = chkDoNotShowAtStartup.Checked;
+            option.ShowPluginUpdatesPanelAtStartup = chkDisplayPluginsUpdatePanel.Checked;
             option.Theme = cbbTheme.SelectedItem?.ToString() ?? "Default theme";
 
             option.HiddenPlugins =
@@ -138,6 +140,40 @@ namespace XrmToolBox.Forms
             rbCustomAuthNo.Enabled = useCustomProxy;
         }
 
+        private void chkCloseEachPluginSilently_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkCloseEachPluginSilently.Checked)
+            {
+                chkClosePluginsSilently.Enabled = false;
+                chkClosePluginsSilently.Checked = true;
+            }
+            else
+            {
+                chkClosePluginsSilently.Enabled = true;
+                chkClosePluginsSilently.Checked = option.CloseOpenedPluginsSilently;
+            }
+        }
+
+        private void chkDisplayPluginsStoreOnStartup_CheckedChanged(object sender, EventArgs e)
+        {
+            chkDisplayPluginsStoreOnlyIfUpdates.Enabled = chkDisplayPluginsStoreOnStartup.Checked;
+
+            if (chkDisplayPluginsStoreOnStartup.Checked == false)
+            {
+                chkDisplayPluginsStoreOnlyIfUpdates.Checked = false;
+            }
+        }
+
+        private void llOpenRootFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName);
+        }
+
+        private void llOpenStorageFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(Paths.XrmToolBoxPath);
+        }
+
         private void OptionsDialog_Load(object sender, EventArgs e)
         {
             foreach (var plugin in pManager.Plugins)
@@ -172,40 +208,6 @@ namespace XrmToolBox.Forms
         {
             txtProxyPassword.Enabled = rbCustomAuthYes.Checked;
             txtProxyUser.Enabled = rbCustomAuthYes.Checked;
-        }
-
-        private void chkCloseEachPluginSilently_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkCloseEachPluginSilently.Checked)
-            {
-                chkClosePluginsSilently.Enabled = false;
-                chkClosePluginsSilently.Checked = true;
-            }
-            else
-            {
-                chkClosePluginsSilently.Enabled = true;
-                chkClosePluginsSilently.Checked = option.CloseOpenedPluginsSilently;
-            }
-        }
-
-        private void chkDisplayPluginsStoreOnStartup_CheckedChanged(object sender, EventArgs e)
-        {
-            chkDisplayPluginsStoreOnlyIfUpdates.Enabled = chkDisplayPluginsStoreOnStartup.Checked;
-
-            if (chkDisplayPluginsStoreOnStartup.Checked == false)
-            {
-                chkDisplayPluginsStoreOnlyIfUpdates.Checked = false;
-            }
-        }
-
-        private void llOpenStorageFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start(Paths.XrmToolBoxPath);
-        }
-
-        private void llOpenRootFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName);
         }
     }
 }

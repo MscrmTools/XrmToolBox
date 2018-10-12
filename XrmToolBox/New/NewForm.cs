@@ -24,6 +24,7 @@ using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Forms;
 using XrmToolBox.New.EventArgs;
 using XrmToolBox.PluginsStore;
+using XrmToolBox.PluginsStore.DTO;
 
 namespace XrmToolBox.New
 {
@@ -660,6 +661,64 @@ namespace XrmToolBox.New
 
         private void PluginsForm_OpenPluginRequested(object sender, PluginEventArgs e)
         {
+            if (store != null && store.PluginsCount > 0)
+            {
+                var location = e.Plugin.Value.GetType().Assembly.Location;
+
+                var updatedPlugin = ((StoreFromPortal)store).GetPluginUpdateByFile(location);
+                if (updatedPlugin != null)
+                {
+                    if (!Options.Instance.PluginsUpdateSkip.Any(
+                        x => x.Name == updatedPlugin.Name
+                             && x.Version == updatedPlugin.Version
+                             && x.Date > DateTime.Now))
+                    {
+                        var dialog = new NewPluginVersion(updatedPlugin);
+                        if (dialog.ShowDialog(this) == DialogResult.OK)
+                        {
+                            var pu = ((StoreFromPortal)store).PrepareInstallationPackages(new List<XtbPlugin> { updatedPlugin });
+                            if (pu.Plugins.Any(p => p.RequireRestart))
+                            {
+                                if (DialogResult.Yes == MessageBox.Show(this,
+                                        @"This application needs to restart to install updated plugins (or new plugins that share some files with already installed plugins). Click Yes to restart this application now",
+                                        @"Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
+                                {
+                                    RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
+                                    ((StoreFromPortal)store).PerformInstallation(pu, this);
+                                    Application.Restart();
+                                }
+                            }
+
+                            return;
+                        }
+                        else
+                        {
+                            var existing = Options.Instance.PluginsUpdateSkip.FirstOrDefault(
+                                x => x.Name == updatedPlugin.Name);
+
+                            if (existing != null)
+                            {
+                                Options.Instance.PluginsUpdateSkip.Remove(existing);
+                            }
+
+                            var nextDate = DateTime.Now.AddDays(dialog.NumberOfDaysToSkip);
+                            if (dialog.IsVersionSkipped)
+                            {
+                                nextDate = DateTime.Now.AddYears(10);
+                            }
+
+                            Options.Instance.PluginsUpdateSkip.Add(new PluginUpdateSkip
+                            {
+                                Name = updatedPlugin.Name,
+                                Version = updatedPlugin.Version,
+                                Date = nextDate
+                            });
+                            Options.Instance.Save();
+                        }
+                    }
+                }
+            }
+
             Cursor = Cursors.WaitCursor;
 
             if (e.Plugin.Value is INoConnectionRequired)

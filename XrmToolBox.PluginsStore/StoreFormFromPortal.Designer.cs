@@ -49,8 +49,6 @@ namespace XrmToolBox.PluginsStore
             this.tsmiShowNewPlugins = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowPluginsUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiShowInstalledPlugins = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiUseLegacyPluginsStore = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbProxySettings = new System.Windows.Forms.ToolStripButton();
             this.tsbCleanCacheFolder = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -131,7 +129,7 @@ namespace XrmToolBox.PluginsStore
             this.tsbLoadPlugins.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadPlugins.Image")));
             this.tsbLoadPlugins.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbLoadPlugins.Name = "tsbLoadPlugins";
-            this.tsbLoadPlugins.Size = new System.Drawing.Size(114, 34);
+            this.tsbLoadPlugins.Size = new System.Drawing.Size(102, 34);
             this.tsbLoadPlugins.Text = "Refresh";
             this.tsbLoadPlugins.Click += new System.EventHandler(this.tsbLoadPlugins_Click);
             // 
@@ -145,7 +143,7 @@ namespace XrmToolBox.PluginsStore
             this.tsbInstall.Image = ((System.Drawing.Image)(resources.GetObject("tsbInstall.Image")));
             this.tsbInstall.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbInstall.Name = "tsbInstall";
-            this.tsbInstall.Size = new System.Drawing.Size(100, 34);
+            this.tsbInstall.Size = new System.Drawing.Size(88, 34);
             this.tsbInstall.Text = "Install";
             this.tsbInstall.Click += new System.EventHandler(this.tsbInstall_Click);
             // 
@@ -154,7 +152,7 @@ namespace XrmToolBox.PluginsStore
             this.tsbUninstall.Image = ((System.Drawing.Image)(resources.GetObject("tsbUninstall.Image")));
             this.tsbUninstall.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbUninstall.Name = "tsbUninstall";
-            this.tsbUninstall.Size = new System.Drawing.Size(125, 34);
+            this.tsbUninstall.Size = new System.Drawing.Size(113, 34);
             this.tsbUninstall.Text = "Uninstall";
             this.tsbUninstall.Visible = false;
             this.tsbUninstall.Click += new System.EventHandler(this.tsbUninstall_Click);
@@ -208,9 +206,7 @@ namespace XrmToolBox.PluginsStore
             this.tsmiShowPluginsNotCompatible,
             this.tsmiShowNewPlugins,
             this.tsmiShowPluginsUpdate,
-            this.tsmiShowInstalledPlugins,
-            this.toolStripSeparator5,
-            this.tsmiUseLegacyPluginsStore});
+            this.tsmiShowInstalledPlugins});
             this.tsddbOptions.Image = ((System.Drawing.Image)(resources.GetObject("tsddbOptions.Image")));
             this.tsddbOptions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbOptions.Name = "tsddbOptions";
@@ -257,26 +253,13 @@ namespace XrmToolBox.PluginsStore
             this.tsmiShowInstalledPlugins.Text = "Show installed plugins";
             this.tsmiShowInstalledPlugins.Click += new System.EventHandler(this.tsmiPluginDisplayOption_Click);
             // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(370, 6);
-            // 
-            // tsmiUseLegacyPluginsStore
-            // 
-            this.tsmiUseLegacyPluginsStore.CheckOnClick = true;
-            this.tsmiUseLegacyPluginsStore.Name = "tsmiUseLegacyPluginsStore";
-            this.tsmiUseLegacyPluginsStore.Size = new System.Drawing.Size(373, 34);
-            this.tsmiUseLegacyPluginsStore.Text = "Use Legacy Plugins Store";
-            this.tsmiUseLegacyPluginsStore.Click += new System.EventHandler(this.tsmiUseLegacyPluginsStore_Click);
-            // 
             // tsbProxySettings
             // 
             this.tsbProxySettings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.tsbProxySettings.Image = ((System.Drawing.Image)(resources.GetObject("tsbProxySettings.Image")));
             this.tsbProxySettings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbProxySettings.Name = "tsbProxySettings";
-            this.tsbProxySettings.Size = new System.Drawing.Size(32, 34);
+            this.tsbProxySettings.Size = new System.Drawing.Size(23, 34);
             this.tsbProxySettings.Text = "Proxy settings";
             this.tsbProxySettings.Click += new System.EventHandler(this.tsbProxySettings_Click);
             // 
@@ -286,7 +269,7 @@ namespace XrmToolBox.PluginsStore
             this.tsbCleanCacheFolder.Image = ((System.Drawing.Image)(resources.GetObject("tsbCleanCacheFolder.Image")));
             this.tsbCleanCacheFolder.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCleanCacheFolder.Name = "tsbCleanCacheFolder";
-            this.tsbCleanCacheFolder.Size = new System.Drawing.Size(32, 34);
+            this.tsbCleanCacheFolder.Size = new System.Drawing.Size(23, 34);
             this.tsbCleanCacheFolder.Text = "Clean cache folder";
             this.tsbCleanCacheFolder.Click += new System.EventHandler(this.tsbCleanCacheFolder_Click);
             // 
@@ -709,7 +692,5 @@ namespace XrmToolBox.PluginsStore
         private ImageList ilImages24;
         private Panel pnlReleaseNotesDetails;
         private Label lblNoRating;
-        private ToolStripSeparator toolStripSeparator5;
-        private ToolStripMenuItem tsmiUseLegacyPluginsStore;
     }
 }

@@ -660,7 +660,6 @@ namespace XrmToolBox.PluginsStore
             tsmiShowNewPlugins.Checked = options.PluginsStoreShowNew ?? true;
             tsmiShowPluginsNotCompatible.Checked = options.PluginsStoreShowIncompatible ?? true;
             tsmiShowPluginsUpdate.Checked = options.PluginsStoreShowUpdates ?? true;
-            tsmiUseLegacyPluginsStore.Checked = options.UseLegacy ?? true;
 
             RefreshPluginsList();
 
@@ -838,12 +837,6 @@ namespace XrmToolBox.PluginsStore
             options.Save();
 
             RefreshPluginsList(false);
-        }
-
-        private void tsmiUseLegacyPluginsStore_Click(object sender, EventArgs e)
-        {
-            Options.Instance.UseLegacy = ((ToolStripMenuItem)sender).Checked;
-            Options.Instance.Save();
         }
 
         private void tstSearch_Enter(object sender, EventArgs e)

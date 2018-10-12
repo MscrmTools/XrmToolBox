@@ -96,6 +96,18 @@ namespace XrmToolBox.PluginsStore
             return plugin?.ProjectUrl;
         }
 
+        public XtbPlugin GetPluginUpdateByFile(string filepath)
+        {
+            var fi = new FileInfo(filepath);
+            var plugin = XrmToolBoxPlugins.Plugins.FirstOrDefault(p => p.Files.Any(f => f.ToLower().Contains(fi.Name.ToLower())));
+            if (plugin != null && plugin.Action == PackageInstallAction.Update)
+            {
+                return plugin;
+            }
+
+            return null;
+        }
+
         public void LoadNugetPackages()
         {
             plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
@@ -109,22 +121,26 @@ namespace XrmToolBox.PluginsStore
             }
         }
 
-        public bool PerformInstallation(PluginUpdates updates, StoreFormFromPortal storeForm)
+        public bool PerformInstallation(PluginUpdates updates, Form form)
         {
             if (updates.Plugins.Any(p => p.RequireRestart))
             {
                 XmlSerializerHelper.SerializeToFile(updates, Path.Combine(Paths.XrmToolBoxPath, "Update.xml"));
 
-                storeForm.Invoke(new Action(() =>
+                if (form is StoreFormFromPortal storeForm)
                 {
-                    if (DialogResult.Yes == MessageBox.Show(storeForm,
-                            @"This application needs to restart to install updated plugins (or new plugins that share some files with already installed plugins). Click Yes to restart this application now",
-                            @"Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
+                    form.Invoke(new Action(() =>
                     {
-                        storeForm.AskForPluginsClosing();
-                        Application.Restart();
-                    }
-                }));
+                        if (DialogResult.Yes == MessageBox.Show(form,
+                                @"This application needs to restart to install updated plugins (or new plugins that share some files with already installed plugins). Click Yes to restart this application now",
+                                @"Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
+                        {
+                            storeForm.AskForPluginsClosing();
+
+                            Application.Restart();
+                        }
+                    }));
+                }
 
                 return false;
             }
