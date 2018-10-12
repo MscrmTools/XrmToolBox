@@ -387,6 +387,7 @@
     <None Include="Resources\close.png" />
     <None Include="Resources\Clear_16.png" />
     <None Include="Resources\logo_0016.png" />
+    <None Include="Resources\PluginsStore64.png" />
     <Content Include="XrmToolBox201512.ico" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />

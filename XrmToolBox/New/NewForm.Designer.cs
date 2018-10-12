@@ -78,6 +78,11 @@
             this.label4 = new System.Windows.Forms.Label();
             this.lblTitle = new System.Windows.Forms.Label();
             this.llDismiss = new System.Windows.Forms.LinkLabel();
+            this.pnlPluginsUpdate = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.llClosePluginsUpdatePanel = new System.Windows.Forms.LinkLabel();
+            this.pbOpenPluginsStore = new System.Windows.Forms.PictureBox();
+            this.lblPluginsUpdateAvailable = new System.Windows.Forms.Label();
             this.pnlBottom = new System.Windows.Forms.Panel();
             this.pnlConnectLoading = new System.Windows.Forms.Panel();
             this.lblConnecting = new System.Windows.Forms.Label();
@@ -90,6 +95,8 @@
             this.tsMain.SuspendLayout();
             this.pnlSupport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.pnlPluginsUpdate.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbOpenPluginsStore)).BeginInit();
             this.pnlConnectLoading.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbConnectionLoading)).BeginInit();
             this.cmsMain.SuspendLayout();
@@ -424,7 +431,7 @@
             this.tsbOpenOrg.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpenOrg.Image")));
             this.tsbOpenOrg.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbOpenOrg.Name = "tsbOpenOrg";
-            this.tsbOpenOrg.Size = new System.Drawing.Size(206, 34);
+            this.tsbOpenOrg.Size = new System.Drawing.Size(218, 34);
             this.tsbOpenOrg.Text = "Open organization";
             this.tsbOpenOrg.ToolTipText = "Opens the connected organization in your web browser";
             this.tsbOpenOrg.Visible = false;
@@ -451,7 +458,7 @@
             this.pnlSupport.Controls.Add(this.lblTitle);
             this.pnlSupport.Controls.Add(this.llDismiss);
             this.pnlSupport.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlSupport.Location = new System.Drawing.Point(0, 637);
+            this.pnlSupport.Location = new System.Drawing.Point(0, 587);
             this.pnlSupport.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.pnlSupport.Name = "pnlSupport";
             this.pnlSupport.Size = new System.Drawing.Size(1293, 124);
@@ -541,11 +548,82 @@
             this.llDismiss.Text = "Dismiss";
             this.llDismiss.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llDismiss_LinkClicked);
             // 
+            // pnlPluginsUpdate
+            // 
+            this.pnlPluginsUpdate.BackColor = System.Drawing.Color.AliceBlue;
+            this.pnlPluginsUpdate.Controls.Add(this.label1);
+            this.pnlPluginsUpdate.Controls.Add(this.llClosePluginsUpdatePanel);
+            this.pnlPluginsUpdate.Controls.Add(this.pbOpenPluginsStore);
+            this.pnlPluginsUpdate.Controls.Add(this.lblPluginsUpdateAvailable);
+            this.pnlPluginsUpdate.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlPluginsUpdate.Location = new System.Drawing.Point(0, 711);
+            this.pnlPluginsUpdate.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.pnlPluginsUpdate.Name = "pnlPluginsUpdate";
+            this.pnlPluginsUpdate.Size = new System.Drawing.Size(1293, 50);
+            this.pnlPluginsUpdate.TabIndex = 11;
+            this.pnlPluginsUpdate.Visible = false;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(117)))), ((int)(((byte)(188)))));
+            this.label1.Location = new System.Drawing.Point(930, 0);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(269, 50);
+            this.label1.TabIndex = 13;
+            this.label1.Tag = "";
+            this.label1.Text = "Open Plugins Store";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label1.Click += new System.EventHandler(this.openPluginsStoreButton_Click);
+            // 
+            // llClosePluginsUpdatePanel
+            // 
+            this.llClosePluginsUpdatePanel.Dock = System.Windows.Forms.DockStyle.Right;
+            this.llClosePluginsUpdatePanel.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.llClosePluginsUpdatePanel.LinkColor = System.Drawing.Color.Black;
+            this.llClosePluginsUpdatePanel.Location = new System.Drawing.Point(1267, 0);
+            this.llClosePluginsUpdatePanel.Name = "llClosePluginsUpdatePanel";
+            this.llClosePluginsUpdatePanel.Size = new System.Drawing.Size(26, 50);
+            this.llClosePluginsUpdatePanel.TabIndex = 12;
+            this.llClosePluginsUpdatePanel.TabStop = true;
+            this.llClosePluginsUpdatePanel.Text = "X";
+            this.llClosePluginsUpdatePanel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.llClosePluginsUpdatePanel.VisitedLinkColor = System.Drawing.Color.Black;
+            this.llClosePluginsUpdatePanel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llClosePluginsUpdatePanel_LinkClicked);
+            // 
+            // pbOpenPluginsStore
+            // 
+            this.pbOpenPluginsStore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbOpenPluginsStore.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbOpenPluginsStore.Image = global::XrmToolBox.Properties.Resources.PluginsStore64;
+            this.pbOpenPluginsStore.Location = new System.Drawing.Point(1206, 0);
+            this.pbOpenPluginsStore.Name = "pbOpenPluginsStore";
+            this.pbOpenPluginsStore.Size = new System.Drawing.Size(50, 50);
+            this.pbOpenPluginsStore.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbOpenPluginsStore.TabIndex = 11;
+            this.pbOpenPluginsStore.TabStop = false;
+            this.pbOpenPluginsStore.Click += new System.EventHandler(this.openPluginsStoreButton_Click);
+            // 
+            // lblPluginsUpdateAvailable
+            // 
+            this.lblPluginsUpdateAvailable.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.lblPluginsUpdateAvailable.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblPluginsUpdateAvailable.Location = new System.Drawing.Point(4, 3);
+            this.lblPluginsUpdateAvailable.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblPluginsUpdateAvailable.Name = "lblPluginsUpdateAvailable";
+            this.lblPluginsUpdateAvailable.Size = new System.Drawing.Size(724, 50);
+            this.lblPluginsUpdateAvailable.TabIndex = 10;
+            this.lblPluginsUpdateAvailable.Tag = "{0} Update{1} {2} available for your plugins";
+            this.lblPluginsUpdateAvailable.Text = "X Updates are available for your plugins";
+            // 
             // pnlBottom
             // 
             this.pnlBottom.BackColor = System.Drawing.SystemColors.Info;
             this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlBottom.Location = new System.Drawing.Point(0, 565);
+            this.pnlBottom.Location = new System.Drawing.Point(0, 515);
             this.pnlBottom.Margin = new System.Windows.Forms.Padding(4);
             this.pnlBottom.Name = "pnlBottom";
             this.pnlBottom.Size = new System.Drawing.Size(1293, 72);
@@ -601,7 +679,7 @@
             this.dpMain.Location = new System.Drawing.Point(0, 109);
             this.dpMain.Margin = new System.Windows.Forms.Padding(4);
             this.dpMain.Name = "dpMain";
-            this.dpMain.Size = new System.Drawing.Size(1293, 456);
+            this.dpMain.Size = new System.Drawing.Size(1293, 406);
             this.dpMain.TabIndex = 21;
             this.dpMain.ActiveDocumentChanged += new System.EventHandler(this.dpMain_ActiveDocumentChanged);
             this.dpMain.ActiveContentChanged += new System.EventHandler(this.dpMain_ActiveContentChanged);
@@ -610,12 +688,13 @@
             // 
             // cmsMain
             // 
+            this.cmsMain.ImageScalingSize = new System.Drawing.Size(28, 28);
             this.cmsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmsMainCloseThis,
             this.cmsMainCloseExceptThis,
             this.cmsMainCloseAll});
             this.cmsMain.Name = "cmsMain";
-            this.cmsMain.Size = new System.Drawing.Size(276, 144);
+            this.cmsMain.Size = new System.Drawing.Size(276, 106);
             this.cmsMain.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsMain_ItemClicked);
             // 
             // cmsMainCloseThis
@@ -645,6 +724,7 @@
             this.Controls.Add(this.dpMain);
             this.Controls.Add(this.pnlBottom);
             this.Controls.Add(this.pnlSupport);
+            this.Controls.Add(this.pnlPluginsUpdate);
             this.Controls.Add(this.pnlTop);
             this.Controls.Add(this.tsMain);
             this.Controls.Add(this.pnlConnectLoading);
@@ -666,6 +746,8 @@
             this.pnlSupport.ResumeLayout(false);
             this.pnlSupport.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.pnlPluginsUpdate.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbOpenPluginsStore)).EndInit();
             this.pnlConnectLoading.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbConnectionLoading)).EndInit();
             this.cmsMain.ResumeLayout(false);
@@ -682,6 +764,7 @@
         private System.Windows.Forms.ToolStripSeparator tssOpenOrg;
         private System.Windows.Forms.ToolStripButton tsbOpenOrg;
         private System.Windows.Forms.Panel pnlSupport;
+        private System.Windows.Forms.Panel pnlPluginsUpdate;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.LinkLabel llDonate;
         private System.Windows.Forms.Label label5;
@@ -733,5 +816,9 @@
         private System.Windows.Forms.ToolStripMenuItem cmsMainCloseThis;
         private System.Windows.Forms.ToolStripMenuItem cmsMainCloseExceptThis;
         private System.Windows.Forms.ToolStripMenuItem cmsMainCloseAll;
+        private System.Windows.Forms.Label lblPluginsUpdateAvailable;
+        private System.Windows.Forms.PictureBox pbOpenPluginsStore;
+        private System.Windows.Forms.LinkLabel llClosePluginsUpdatePanel;
+        private System.Windows.Forms.Label label1;
     }
 }

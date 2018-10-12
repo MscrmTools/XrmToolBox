@@ -266,20 +266,33 @@ namespace XrmToolBox.New
                 Options.Instance.Save();
             }
 
-            if (Options.Instance.DisplayPluginsStoreOnStartup)
+            if (store == null)
             {
-                if (store == null)
+                store = new StoreFromPortal();
+                if (store.PluginsCount == 0)
                 {
-                    if (Options.Instance.PluginsStoreUseLegacy ?? false)
-                    {
-                        store = new Store();
-                    }
-                    else
-                    {
-                        store = new StoreFromPortal();
-                    }
+                    store.LoadNugetPackages();
                 }
 
+                if (Options.Instance.ShowPluginUpdatesPanelAtStartup)
+                {
+                    var count = ((StoreFromPortal)store).XrmToolBoxPlugins.Plugins
+                        .Where(p => p.Action == PackageInstallAction.Update)
+                        .ToList().Count;
+
+                    pnlPluginsUpdate.Visible = count > 0;
+                    if (count > 0)
+                    {
+                        lblPluginsUpdateAvailable.Text = string.Format(lblPluginsUpdateAvailable.Tag.ToString(),
+                            count,
+                            count > 1 ? "s" : "",
+                            count > 1 ? "are" : "is");
+                    }
+                }
+            }
+
+            if (Options.Instance.DisplayPluginsStoreOnStartup)
+            {
                 if (Options.Instance.DisplayPluginsStoreOnlyIfUpdates)
                 {
                     if (store.PluginsCount == 0)
@@ -1238,28 +1251,17 @@ namespace XrmToolBox.New
                     PluginsStore.Options.Instance.IsInitialized = true;
                 }
 
-                IStoreForm form;
-
-                if (Options.Instance.PluginsStoreUseLegacy ?? false)
+                IStoreForm form = new StoreFormFromPortal();
+                ((StoreFormFromPortal)form).PluginsClosingRequested += (s, evt) =>
                 {
-                    form = new StoreForm();
-                }
-                else
-                {
-                    form = new StoreFormFromPortal();
-                    ((StoreFormFromPortal)form).PluginsClosingRequested += (s, evt) =>
-                    {
-                        RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
-                    };
-                }
+                    RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
+                };
 
                 // Avoid scanning for new files during Plugins Store usage.
                 pluginsForm.PluginManager.IsWatchingForNewPlugins = false;
                 ((Form)form).ShowDialog(this);
                 pluginsForm.PluginManager.IsWatchingForNewPlugins = true;
                 pluginsForm.ReloadPluginsList();
-
-                Options.Instance.PluginsStoreUseLegacy = PluginsStore.Options.Instance.UseLegacy;
 
                 // Apply option to show Plugins Store on startup on main options
                 if (Options.Instance.DisplayPluginsStoreOnStartup != PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup)
@@ -1473,5 +1475,16 @@ namespace XrmToolBox.New
         }
 
         #endregion Support panel
+
+        private void llClosePluginsUpdatePanel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            pnlPluginsUpdate.Visible = false;
+        }
+
+        private void openPluginsStoreButton_Click(object sender, System.EventArgs e)
+        {
+            pnlPluginsUpdate.Visible = false;
+            tsddbTools_DropDownItemClicked(null, new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
+        }
     }
 }
