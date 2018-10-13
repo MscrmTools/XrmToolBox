@@ -11,11 +11,11 @@ namespace XrmToolBox.Forms
             InitializeComponent();
 
             cbbReminder.SelectedIndex = 0;
-            lblPluginTitle.Text = $@"{plugin.Name} - {plugin.Version}";
+            lblPluginTitle.Text = plugin.Name;
+            lblNewVersion.Text = $"New version: {plugin.Version}";
             rtbReleaseNotes.Text = plugin.LatestReleaseNote;
             rtbReleaseNotes.BackColor = Color.White;
             rtbReleaseNotes.Padding = new Padding(10);
-            lblDesc.Text = string.Format(lblDesc.Tag.ToString(), plugin.Name);
             pbLogo.Load(plugin.LogoUrl ?? "https://raw.githubusercontent.com/wiki/MscrmTools/XrmToolBox/Images/unknown.png");
         }
 
