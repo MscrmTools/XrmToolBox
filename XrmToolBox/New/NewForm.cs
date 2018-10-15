@@ -674,7 +674,7 @@ namespace XrmToolBox.New
                              && x.Date > DateTime.Now))
                     {
                         var dialog = new NewPluginVersion(updatedPlugin);
-                        if (dialog.ShowDialog(this) == DialogResult.OK)
+                        if (dialog.ShowDialog(this) == DialogResult.Yes)
                         {
                             var pu = ((StoreFromPortal)store).PrepareInstallationPackages(new List<XtbPlugin> { updatedPlugin });
                             if (pu.Plugins.Any(p => p.RequireRestart))
@@ -691,30 +691,28 @@ namespace XrmToolBox.New
 
                             return;
                         }
-                        else
+
+                        var existing = Options.Instance.PluginsUpdateSkip.FirstOrDefault(
+                            x => x.Name == updatedPlugin.Name);
+
+                        if (existing != null)
                         {
-                            var existing = Options.Instance.PluginsUpdateSkip.FirstOrDefault(
-                                x => x.Name == updatedPlugin.Name);
-
-                            if (existing != null)
-                            {
-                                Options.Instance.PluginsUpdateSkip.Remove(existing);
-                            }
-
-                            var nextDate = DateTime.Now.AddDays(dialog.NumberOfDaysToSkip);
-                            if (dialog.IsVersionSkipped)
-                            {
-                                nextDate = DateTime.Now.AddYears(10);
-                            }
-
-                            Options.Instance.PluginsUpdateSkip.Add(new PluginUpdateSkip
-                            {
-                                Name = updatedPlugin.Name,
-                                Version = updatedPlugin.Version,
-                                Date = nextDate
-                            });
-                            Options.Instance.Save();
+                            Options.Instance.PluginsUpdateSkip.Remove(existing);
                         }
+
+                        var nextDate = DateTime.Now.AddDays(dialog.NumberOfDaysToSkip);
+                        if (dialog.IsVersionSkipped)
+                        {
+                            nextDate = DateTime.Now.AddYears(10);
+                        }
+
+                        Options.Instance.PluginsUpdateSkip.Add(new PluginUpdateSkip
+                        {
+                            Name = updatedPlugin.Name,
+                            Version = updatedPlugin.Version,
+                            Date = nextDate
+                        });
+                        Options.Instance.Save();
                     }
                 }
             }
