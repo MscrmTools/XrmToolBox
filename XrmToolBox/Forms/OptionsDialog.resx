@@ -117,6 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label6.Text" xml:space="preserve">
+    <value>In order to understand how XrmToolBox is used and what plugins are installed and used, we are collecting anonymous data that are sent to Application Insights
+
+What is collected ?
+
+We collect only the following information:
+- Version of XrmToolBox
+- Name of opened plugin
+- Version of opened plugin
+- Your location (deducted by Application Insights, we do not collect it explicitly)
+
+Therefore, the following url is used to send data : https://dc.services.visualstudio.com/v2/track
+</value>
+  </data>
   <data name="lblChangePathDescription.Text" xml:space="preserve">
     <value>The current root path is '{0}'
 

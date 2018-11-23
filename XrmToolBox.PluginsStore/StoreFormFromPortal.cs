@@ -14,8 +14,11 @@ namespace XrmToolBox.PluginsStore
 {
     public partial class StoreFormFromPortal : Form, IStoreForm
     {
+        private const string AiEndpoint = "https://dc.services.visualstudio.com/v2/track";
+        private const string AiKey = "77a2080e-f82c-4b2f-bb77-eb407236b729";
         private readonly List<string> selectedPackagesId;
         private readonly StoreFromPortal store;
+        private AppInsights ai = new AppInsights(new AiConfig(AiEndpoint, AiKey));
         private int newPlugin, updatePlugin, allPlugins;
         private Thread searchThread;
         private int sortedColumnIndex = -1;
@@ -714,6 +717,11 @@ namespace XrmToolBox.PluginsStore
             tsMain.Enabled = false;
             lvPlugins.Enabled = false;
 
+            foreach (var p in packages)
+            {
+                ai.WritePluginEvent(p.Name, p.Version, "Plugin-Install");
+            }
+
             var bw = new BackgroundWorker { WorkerReportsProgress = true };
             bw.DoWork += (sbw, evt) =>
             {
@@ -809,6 +817,11 @@ namespace XrmToolBox.PluginsStore
             else
             {
                 store.PerformUninstallation(pluginsToDelete);
+            }
+
+            foreach (var p in packages)
+            {
+                ai.WritePluginEvent(p.Name, p.Version, "Plugin-Uninstall");
             }
         }
 

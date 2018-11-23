@@ -36,7 +36,6 @@ namespace XrmToolBox.Forms
 
             rdbToolsListLarge.Checked = option.DisplayLargeIcons;
             rdbToolsListSmall.Checked = !option.DisplayLargeIcons;
-            chkAllowUsageStatistics.Checked = option.AllowLogUsage.HasValue && option.AllowLogUsage.Value;
             chkCloseEachPluginSilently.Checked = option.CloseEachPluginSilently;
             chkClosePluginsSilently.Checked = option.CloseOpenedPluginsSilently;
             chkDisplayPluginsStoreOnStartup.Checked = option.DisplayPluginsStoreOnStartup;
@@ -64,7 +63,6 @@ namespace XrmToolBox.Forms
 
         private void BtnOkClick(object sender, EventArgs e)
         {
-            option.AllowLogUsage = chkAllowUsageStatistics.Checked;
             option.DisplayLargeIcons = rdbToolsListLarge.Checked;
             option.CloseEachPluginSilently = chkCloseEachPluginSilently.Checked;
             option.CloseOpenedPluginsSilently = chkClosePluginsSilently.Checked;

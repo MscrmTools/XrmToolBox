@@ -150,6 +150,6 @@ namespace XrmToolBox.PluginsStore.DTO
         public string OdataMetadata { get; set; }
 
         [DataMember(Name = "value")]
-        public List<XtbPlugin> Plugins { get; set; }
+        public List<XtbPlugin> Plugins { get; set; } = new List<XtbPlugin>();
     }
 }
