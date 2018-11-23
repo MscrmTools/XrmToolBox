@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
@@ -16,6 +17,8 @@ namespace XrmToolBox
 {
     internal static class Program
     {
+        private static int uninstalltries = 0;
+
         public static void RedirectAssembly(string shortName)
         {
             var targetAssemblyName = Assembly.Load(shortName).GetName();
@@ -294,6 +297,7 @@ namespace XrmToolBox
 
         private static void RemovePlugins()
         {
+            uninstalltries++;
             var updateFile = Path.Combine(Paths.XrmToolBoxPath, "Deletion.xml");
 
             if (!File.Exists(updateFile))
@@ -338,9 +342,17 @@ namespace XrmToolBox
             }
             catch (Exception error)
             {
-                MessageBox.Show(
-                    $"An error occured when trying to delete some plugins: {error.Message}.\n\nPlease start XrmToolBox again to fix this problem.",
-                    @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (uninstalltries > 3)
+                {
+                    MessageBox.Show(
+                                  $"An error occured when trying to delete some plugins: {error.Message}.\n\nPlease start XrmToolBox again to fix this problem.",
+                                  @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    Thread.Sleep(500);
+                    RemovePlugins();
+                }
             }
         }
     }
