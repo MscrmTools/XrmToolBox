@@ -404,26 +404,31 @@ namespace XrmToolBox.PluginsStore
             }
         }
 
-        private T GetContent<T>(string url)
+        private T GetContent<T>(string url) where T : new () 
         {
-            var request = WebRequest.CreateHttp(url);
-            var response = request.GetResponse();
-            using (Stream dataStream = response.GetResponseStream())
+            try
             {
-                if (dataStream != null)
+                var request = WebRequest.CreateHttp(url);
+                var response = request.GetResponse();
+                using (Stream dataStream = response.GetResponseStream())
                 {
-                    var serializer = new DataContractJsonSerializer(typeof(T),
-                        new DataContractJsonSerializerSettings
-                        {
-                            UseSimpleDictionaryFormat = true,
-                            DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ss", new DateTimeFormatInfo { FullDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss" })
-                        });
+                    if (dataStream != null)
+                    {
+                        var serializer = new DataContractJsonSerializer(typeof(T),
+                            new DataContractJsonSerializerSettings
+                            {
+                                UseSimpleDictionaryFormat = true,
+                                DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ss", new DateTimeFormatInfo { FullDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss" })
+                            });
 
-                    return (T)serializer.ReadObject(dataStream);
+                        return (T)serializer.ReadObject(dataStream);
+                    }
                 }
             }
-
-            return default(T);
+            catch
+            {
+            }
+            return new T();
         }
 
         private long GetDirectorySize(string path)

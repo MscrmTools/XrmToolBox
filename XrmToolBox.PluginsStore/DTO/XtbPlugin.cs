@@ -146,6 +146,10 @@ namespace XrmToolBox.PluginsStore.DTO
     [DataContract]
     public class XtbPlugins
     {
+        public XtbPlugins()
+        {
+        }
+
         [DataMember(Name = "odata.metadata")]
         public string OdataMetadata { get; set; }
 
