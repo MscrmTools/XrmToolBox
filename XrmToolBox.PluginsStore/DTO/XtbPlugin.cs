@@ -148,6 +148,7 @@ namespace XrmToolBox.PluginsStore.DTO
     {
         public XtbPlugins()
         {
+            Plugins = new List<XtbPlugin>();
         }
 
         [DataMember(Name = "odata.metadata")]
