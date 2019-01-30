@@ -404,7 +404,7 @@ namespace XrmToolBox.PluginsStore
             }
         }
 
-        private T GetContent<T>(string url)
+        private T GetContent<T>(string url) where T : new () 
         {
             try
             {
@@ -418,20 +418,17 @@ namespace XrmToolBox.PluginsStore
                             new DataContractJsonSerializerSettings
                             {
                                 UseSimpleDictionaryFormat = true,
-                                DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ss",
-                                    new DateTimeFormatInfo { FullDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss" })
+                                DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ss", new DateTimeFormatInfo { FullDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss" });
                             });
 
                         return (T)serializer.ReadObject(dataStream);
                     }
                 }
-
-                return default(T);
             }
             catch
             {
-                return default(T);
             }
+            return new T();
         }
 
         private long GetDirectorySize(string path)
