@@ -36,6 +36,10 @@ namespace XrmToolBox.New
         {
             InitializeComponent();
 
+            // Set drawing optimizations
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+
             pluginsModels = new List<PluginModel>();
 
             pluginsManager = new PluginManagerExtended(this) { IsWatchingForNewPlugins = true };
