@@ -67,5 +67,10 @@ namespace XrmToolBox.Forms
         {
             pbLogo.Location = new Point((Width - pbLogo.Width) / 2, 0);
         }
+
+        private void rtbReleaseNotes_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(e.LinkText);
+        }
     }
 }
