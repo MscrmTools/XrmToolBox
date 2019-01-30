@@ -69,6 +69,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.cbbProxyUsage = new System.Windows.Forms.ComboBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.chkDisplayPluginsUpdatePanel = new System.Windows.Forms.CheckBox();
             this.chkReuseConnections = new System.Windows.Forms.CheckBox();
             this.chkRememberSession = new System.Windows.Forms.CheckBox();
             this.chkDisplayPluginsStoreOnlyIfUpdates = new System.Windows.Forms.CheckBox();
@@ -76,7 +77,6 @@
             this.chkCloseEachPluginSilently = new System.Windows.Forms.CheckBox();
             this.chkDisplayPluginsStoreOnStartup = new System.Windows.Forms.CheckBox();
             this.chkClosePluginsSilently = new System.Windows.Forms.CheckBox();
-            this.chkAllowUsageStatistics = new System.Windows.Forms.CheckBox();
             this.tpPaths = new System.Windows.Forms.TabPage();
             this.lblChangePathDescription = new System.Windows.Forms.Label();
             this.lblChangePathTitle = new System.Windows.Forms.Label();
@@ -88,7 +88,8 @@
             this.lblDoNotRememberNotConnected = new System.Windows.Forms.Label();
             this.nudMruItemsToDisplay = new System.Windows.Forms.NumericUpDown();
             this.lblNumberOfMruToDisplay = new System.Windows.Forms.Label();
-            this.chkDisplayPluginsUpdatePanel = new System.Windows.Forms.CheckBox();
+            this.tbDataCollect = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -103,6 +104,7 @@
             this.tpPaths.SuspendLayout();
             this.tpStartPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMruItemsToDisplay)).BeginInit();
+            this.tbDataCollect.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -111,7 +113,7 @@
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 917);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(974, 63);
             this.panel1.TabIndex = 5;
@@ -120,7 +122,7 @@
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOk.Location = new System.Drawing.Point(673, 15);
-            this.btnOk.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(6);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(138, 42);
             this.btnOk.TabIndex = 5;
@@ -133,7 +135,7 @@
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(821, 15);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(6);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(138, 42);
             this.btnCancel.TabIndex = 4;
@@ -148,7 +150,7 @@
             this.pnlHeader.Controls.Add(this.lblTitle);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlHeader.Location = new System.Drawing.Point(0, 0);
-            this.pnlHeader.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlHeader.Margin = new System.Windows.Forms.Padding(4);
             this.pnlHeader.Name = "pnlHeader";
             this.pnlHeader.Size = new System.Drawing.Size(974, 140);
             this.pnlHeader.TabIndex = 6;
@@ -181,9 +183,10 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tpPaths);
             this.tabControl1.Controls.Add(this.tpStartPage);
+            this.tabControl1.Controls.Add(this.tbDataCollect);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 140);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(974, 777);
@@ -200,9 +203,9 @@
             this.tbDisplay.Controls.Add(this.panel4);
             this.tbDisplay.Controls.Add(this.groupBox3);
             this.tbDisplay.Location = new System.Drawing.Point(4, 33);
-            this.tbDisplay.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbDisplay.Margin = new System.Windows.Forms.Padding(4);
             this.tbDisplay.Name = "tbDisplay";
-            this.tbDisplay.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbDisplay.Padding = new System.Windows.Forms.Padding(4);
             this.tbDisplay.Size = new System.Drawing.Size(966, 740);
             this.tbDisplay.TabIndex = 0;
             this.tbDisplay.Text = "Display";
@@ -233,7 +236,7 @@
             this.cbbTheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbbTheme.FormattingEnabled = true;
             this.cbbTheme.Location = new System.Drawing.Point(207, 48);
-            this.cbbTheme.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbbTheme.Margin = new System.Windows.Forms.Padding(4);
             this.cbbTheme.Name = "cbbTheme";
             this.cbbTheme.Size = new System.Drawing.Size(347, 32);
             this.cbbTheme.TabIndex = 10;
@@ -257,7 +260,7 @@
             "Most used",
             "Recently updated"});
             this.cbbDisplayOrder.Location = new System.Drawing.Point(207, 105);
-            this.cbbDisplayOrder.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbbDisplayOrder.Margin = new System.Windows.Forms.Padding(4);
             this.cbbDisplayOrder.Name = "cbbDisplayOrder";
             this.cbbDisplayOrder.Size = new System.Drawing.Size(347, 32);
             this.cbbDisplayOrder.TabIndex = 8;
@@ -282,7 +285,7 @@
             this.panel4.Controls.Add(this.rdbToolsListSmall);
             this.panel4.Controls.Add(this.rdbToolsListLarge);
             this.panel4.Location = new System.Drawing.Point(0, 0);
-            this.panel4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel4.Margin = new System.Windows.Forms.Padding(4);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(944, 42);
             this.panel4.TabIndex = 5;
@@ -301,7 +304,7 @@
             // 
             this.rdbToolsListSmall.AutoSize = true;
             this.rdbToolsListSmall.Location = new System.Drawing.Point(270, 7);
-            this.rdbToolsListSmall.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.rdbToolsListSmall.Margin = new System.Windows.Forms.Padding(6);
             this.rdbToolsListSmall.Name = "rdbToolsListSmall";
             this.rdbToolsListSmall.Size = new System.Drawing.Size(137, 29);
             this.rdbToolsListSmall.TabIndex = 1;
@@ -313,7 +316,7 @@
             this.rdbToolsListLarge.AutoSize = true;
             this.rdbToolsListLarge.Checked = true;
             this.rdbToolsListLarge.Location = new System.Drawing.Point(110, 7);
-            this.rdbToolsListLarge.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.rdbToolsListLarge.Margin = new System.Windows.Forms.Padding(6);
             this.rdbToolsListLarge.Name = "rdbToolsListLarge";
             this.rdbToolsListLarge.Size = new System.Drawing.Size(138, 29);
             this.rdbToolsListLarge.TabIndex = 0;
@@ -328,9 +331,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.lvPlugins);
             this.groupBox3.Location = new System.Drawing.Point(7, 234);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(4);
             this.groupBox3.Size = new System.Drawing.Size(946, 471);
             this.groupBox3.TabIndex = 4;
             this.groupBox3.TabStop = false;
@@ -346,7 +349,7 @@
             this.lvPlugins.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvPlugins.FullRowSelect = true;
             this.lvPlugins.Location = new System.Drawing.Point(4, 26);
-            this.lvPlugins.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lvPlugins.Margin = new System.Windows.Forms.Padding(4);
             this.lvPlugins.Name = "lvPlugins";
             this.lvPlugins.Size = new System.Drawing.Size(938, 441);
             this.lvPlugins.Sorting = System.Windows.Forms.SortOrder.Ascending;
@@ -374,9 +377,9 @@
             this.tbProxy.Controls.Add(this.gbCustomProxy);
             this.tbProxy.Controls.Add(this.cbbProxyUsage);
             this.tbProxy.Location = new System.Drawing.Point(4, 33);
-            this.tbProxy.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbProxy.Margin = new System.Windows.Forms.Padding(4);
             this.tbProxy.Name = "tbProxy";
-            this.tbProxy.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tbProxy.Padding = new System.Windows.Forms.Padding(4);
             this.tbProxy.Size = new System.Drawing.Size(966, 740);
             this.tbProxy.TabIndex = 1;
             this.tbProxy.Text = "Proxy";
@@ -392,9 +395,9 @@
             this.gbCustomProxy.Controls.Add(this.panel2);
             this.gbCustomProxy.Dock = System.Windows.Forms.DockStyle.Top;
             this.gbCustomProxy.Location = new System.Drawing.Point(4, 36);
-            this.gbCustomProxy.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbCustomProxy.Margin = new System.Windows.Forms.Padding(4);
             this.gbCustomProxy.Name = "gbCustomProxy";
-            this.gbCustomProxy.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbCustomProxy.Padding = new System.Windows.Forms.Padding(4);
             this.gbCustomProxy.Size = new System.Drawing.Size(958, 258);
             this.gbCustomProxy.TabIndex = 15;
             this.gbCustomProxy.TabStop = false;
@@ -407,7 +410,7 @@
             this.panel3.Controls.Add(this.lblProxyUser);
             this.panel3.Controls.Add(this.lblProxyPassword);
             this.panel3.Location = new System.Drawing.Point(0, 114);
-            this.panel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel3.Margin = new System.Windows.Forms.Padding(4);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(961, 81);
             this.panel3.TabIndex = 14;
@@ -418,7 +421,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtProxyUser.Enabled = false;
             this.txtProxyUser.Location = new System.Drawing.Point(240, 4);
-            this.txtProxyUser.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtProxyUser.Margin = new System.Windows.Forms.Padding(4);
             this.txtProxyUser.Name = "txtProxyUser";
             this.txtProxyUser.Size = new System.Drawing.Size(715, 29);
             this.txtProxyUser.TabIndex = 5;
@@ -429,7 +432,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtProxyPassword.Enabled = false;
             this.txtProxyPassword.Location = new System.Drawing.Point(240, 42);
-            this.txtProxyPassword.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtProxyPassword.Margin = new System.Windows.Forms.Padding(4);
             this.txtProxyPassword.Name = "txtProxyPassword";
             this.txtProxyPassword.PasswordChar = '*';
             this.txtProxyPassword.Size = new System.Drawing.Size(715, 29);
@@ -461,7 +464,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtProxyAddress.Enabled = false;
             this.txtProxyAddress.Location = new System.Drawing.Point(237, 30);
-            this.txtProxyAddress.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtProxyAddress.Margin = new System.Windows.Forms.Padding(4);
             this.txtProxyAddress.Name = "txtProxyAddress";
             this.txtProxyAddress.Size = new System.Drawing.Size(720, 29);
             this.txtProxyAddress.TabIndex = 4;
@@ -491,7 +494,7 @@
             this.chkByPassProxyOnLocal.AutoSize = true;
             this.chkByPassProxyOnLocal.Enabled = false;
             this.chkByPassProxyOnLocal.Location = new System.Drawing.Point(237, 203);
-            this.chkByPassProxyOnLocal.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkByPassProxyOnLocal.Margin = new System.Windows.Forms.Padding(4);
             this.chkByPassProxyOnLocal.Name = "chkByPassProxyOnLocal";
             this.chkByPassProxyOnLocal.Size = new System.Drawing.Size(22, 21);
             this.chkByPassProxyOnLocal.TabIndex = 9;
@@ -503,7 +506,7 @@
             this.panel2.Controls.Add(this.rbCustomAuthNo);
             this.panel2.Controls.Add(this.label5);
             this.panel2.Location = new System.Drawing.Point(0, 68);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel2.Margin = new System.Windows.Forms.Padding(4);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(961, 39);
             this.panel2.TabIndex = 13;
@@ -513,7 +516,7 @@
             this.rbCustomAuthYes.AutoSize = true;
             this.rbCustomAuthYes.Enabled = false;
             this.rbCustomAuthYes.Location = new System.Drawing.Point(237, 4);
-            this.rbCustomAuthYes.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rbCustomAuthYes.Margin = new System.Windows.Forms.Padding(4);
             this.rbCustomAuthYes.Name = "rbCustomAuthYes";
             this.rbCustomAuthYes.Size = new System.Drawing.Size(71, 29);
             this.rbCustomAuthYes.TabIndex = 0;
@@ -527,7 +530,7 @@
             this.rbCustomAuthNo.Checked = true;
             this.rbCustomAuthNo.Enabled = false;
             this.rbCustomAuthNo.Location = new System.Drawing.Point(319, 4);
-            this.rbCustomAuthNo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rbCustomAuthNo.Margin = new System.Windows.Forms.Padding(4);
             this.rbCustomAuthNo.Name = "rbCustomAuthNo";
             this.rbCustomAuthNo.Size = new System.Drawing.Size(62, 29);
             this.rbCustomAuthNo.TabIndex = 2;
@@ -555,7 +558,7 @@
             "Use Internet Explorer configured proxy",
             "Use custom proxy"});
             this.cbbProxyUsage.Location = new System.Drawing.Point(4, 4);
-            this.cbbProxyUsage.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbbProxyUsage.Margin = new System.Windows.Forms.Padding(4);
             this.cbbProxyUsage.Name = "cbbProxyUsage";
             this.cbbProxyUsage.Size = new System.Drawing.Size(958, 32);
             this.cbbProxyUsage.TabIndex = 14;
@@ -571,21 +574,31 @@
             this.tabPage1.Controls.Add(this.chkCloseEachPluginSilently);
             this.tabPage1.Controls.Add(this.chkDisplayPluginsStoreOnStartup);
             this.tabPage1.Controls.Add(this.chkClosePluginsSilently);
-            this.tabPage1.Controls.Add(this.chkAllowUsageStatistics);
             this.tabPage1.Location = new System.Drawing.Point(4, 33);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
             this.tabPage1.Size = new System.Drawing.Size(966, 740);
             this.tabPage1.TabIndex = 2;
             this.tabPage1.Text = "Miscellaneous";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // chkDisplayPluginsUpdatePanel
+            // 
+            this.chkDisplayPluginsUpdatePanel.AutoSize = true;
+            this.chkDisplayPluginsUpdatePanel.Location = new System.Drawing.Point(9, 156);
+            this.chkDisplayPluginsUpdatePanel.Margin = new System.Windows.Forms.Padding(4);
+            this.chkDisplayPluginsUpdatePanel.Name = "chkDisplayPluginsUpdatePanel";
+            this.chkDisplayPluginsUpdatePanel.Size = new System.Drawing.Size(659, 29);
+            this.chkDisplayPluginsUpdatePanel.TabIndex = 9;
+            this.chkDisplayPluginsUpdatePanel.Text = "Display panel to notify plugins update available when XrmToolBox starts";
+            this.chkDisplayPluginsUpdatePanel.UseVisualStyleBackColor = true;
+            // 
             // chkReuseConnections
             // 
             this.chkReuseConnections.AutoSize = true;
-            this.chkReuseConnections.Location = new System.Drawing.Point(18, 332);
-            this.chkReuseConnections.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chkReuseConnections.Location = new System.Drawing.Point(9, 277);
+            this.chkReuseConnections.Margin = new System.Windows.Forms.Padding(2);
             this.chkReuseConnections.Name = "chkReuseConnections";
             this.chkReuseConnections.Size = new System.Drawing.Size(368, 29);
             this.chkReuseConnections.TabIndex = 8;
@@ -595,8 +608,8 @@
             // chkRememberSession
             // 
             this.chkRememberSession.AutoSize = true;
-            this.chkRememberSession.Location = new System.Drawing.Point(18, 297);
-            this.chkRememberSession.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chkRememberSession.Location = new System.Drawing.Point(9, 242);
+            this.chkRememberSession.Margin = new System.Windows.Forms.Padding(2);
             this.chkRememberSession.Name = "chkRememberSession";
             this.chkRememberSession.Size = new System.Drawing.Size(205, 29);
             this.chkRememberSession.TabIndex = 7;
@@ -607,8 +620,8 @@
             // 
             this.chkDisplayPluginsStoreOnlyIfUpdates.AutoSize = true;
             this.chkDisplayPluginsStoreOnlyIfUpdates.Enabled = false;
-            this.chkDisplayPluginsStoreOnlyIfUpdates.Location = new System.Drawing.Point(51, 174);
-            this.chkDisplayPluginsStoreOnlyIfUpdates.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkDisplayPluginsStoreOnlyIfUpdates.Location = new System.Drawing.Point(42, 119);
+            this.chkDisplayPluginsStoreOnlyIfUpdates.Margin = new System.Windows.Forms.Padding(4);
             this.chkDisplayPluginsStoreOnlyIfUpdates.Name = "chkDisplayPluginsStoreOnlyIfUpdates";
             this.chkDisplayPluginsStoreOnlyIfUpdates.Size = new System.Drawing.Size(340, 29);
             this.chkDisplayPluginsStoreOnlyIfUpdates.TabIndex = 6;
@@ -618,8 +631,8 @@
             // chkDoNotCheckForUpdate
             // 
             this.chkDoNotCheckForUpdate.AutoSize = true;
-            this.chkDoNotCheckForUpdate.Location = new System.Drawing.Point(18, 255);
-            this.chkDoNotCheckForUpdate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkDoNotCheckForUpdate.Location = new System.Drawing.Point(9, 200);
+            this.chkDoNotCheckForUpdate.Margin = new System.Windows.Forms.Padding(4);
             this.chkDoNotCheckForUpdate.Name = "chkDoNotCheckForUpdate";
             this.chkDoNotCheckForUpdate.Size = new System.Drawing.Size(254, 29);
             this.chkDoNotCheckForUpdate.TabIndex = 5;
@@ -629,8 +642,8 @@
             // chkCloseEachPluginSilently
             // 
             this.chkCloseEachPluginSilently.AutoSize = true;
-            this.chkCloseEachPluginSilently.Location = new System.Drawing.Point(18, 63);
-            this.chkCloseEachPluginSilently.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkCloseEachPluginSilently.Location = new System.Drawing.Point(9, 8);
+            this.chkCloseEachPluginSilently.Margin = new System.Windows.Forms.Padding(4);
             this.chkCloseEachPluginSilently.Name = "chkCloseEachPluginSilently";
             this.chkCloseEachPluginSilently.Size = new System.Drawing.Size(345, 29);
             this.chkCloseEachPluginSilently.TabIndex = 2;
@@ -641,8 +654,8 @@
             // chkDisplayPluginsStoreOnStartup
             // 
             this.chkDisplayPluginsStoreOnStartup.AutoSize = true;
-            this.chkDisplayPluginsStoreOnStartup.Location = new System.Drawing.Point(18, 137);
-            this.chkDisplayPluginsStoreOnStartup.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkDisplayPluginsStoreOnStartup.Location = new System.Drawing.Point(9, 82);
+            this.chkDisplayPluginsStoreOnStartup.Margin = new System.Windows.Forms.Padding(4);
             this.chkDisplayPluginsStoreOnStartup.Name = "chkDisplayPluginsStoreOnStartup";
             this.chkDisplayPluginsStoreOnStartup.Size = new System.Drawing.Size(422, 29);
             this.chkDisplayPluginsStoreOnStartup.TabIndex = 4;
@@ -653,24 +666,13 @@
             // chkClosePluginsSilently
             // 
             this.chkClosePluginsSilently.AutoSize = true;
-            this.chkClosePluginsSilently.Location = new System.Drawing.Point(18, 100);
-            this.chkClosePluginsSilently.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkClosePluginsSilently.Location = new System.Drawing.Point(9, 45);
+            this.chkClosePluginsSilently.Margin = new System.Windows.Forms.Padding(4);
             this.chkClosePluginsSilently.Name = "chkClosePluginsSilently";
             this.chkClosePluginsSilently.Size = new System.Drawing.Size(632, 29);
             this.chkClosePluginsSilently.TabIndex = 3;
             this.chkClosePluginsSilently.Text = "Do not prompt on exit when plugins are opened, close plugins silently";
             this.chkClosePluginsSilently.UseVisualStyleBackColor = true;
-            // 
-            // chkAllowUsageStatistics
-            // 
-            this.chkAllowUsageStatistics.AutoSize = true;
-            this.chkAllowUsageStatistics.Location = new System.Drawing.Point(18, 26);
-            this.chkAllowUsageStatistics.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.chkAllowUsageStatistics.Name = "chkAllowUsageStatistics";
-            this.chkAllowUsageStatistics.Size = new System.Drawing.Size(677, 29);
-            this.chkAllowUsageStatistics.TabIndex = 1;
-            this.chkAllowUsageStatistics.Text = "Allow to send usage statistics (only anonymous data : plugin usage count)";
-            this.chkAllowUsageStatistics.UseVisualStyleBackColor = true;
             // 
             // tpPaths
             // 
@@ -679,9 +681,9 @@
             this.tpPaths.Controls.Add(this.llOpenStorageFolder);
             this.tpPaths.Controls.Add(this.llOpenRootFolder);
             this.tpPaths.Location = new System.Drawing.Point(4, 33);
-            this.tpPaths.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tpPaths.Margin = new System.Windows.Forms.Padding(6);
             this.tpPaths.Name = "tpPaths";
-            this.tpPaths.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tpPaths.Padding = new System.Windows.Forms.Padding(6);
             this.tpPaths.Size = new System.Drawing.Size(966, 740);
             this.tpPaths.TabIndex = 3;
             this.tpPaths.Text = "Paths";
@@ -741,9 +743,9 @@
             this.tpStartPage.Controls.Add(this.nudMruItemsToDisplay);
             this.tpStartPage.Controls.Add(this.lblNumberOfMruToDisplay);
             this.tpStartPage.Location = new System.Drawing.Point(4, 33);
-            this.tpStartPage.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tpStartPage.Margin = new System.Windows.Forms.Padding(6);
             this.tpStartPage.Name = "tpStartPage";
-            this.tpStartPage.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tpStartPage.Padding = new System.Windows.Forms.Padding(6);
             this.tpStartPage.Size = new System.Drawing.Size(966, 740);
             this.tpStartPage.TabIndex = 4;
             this.tpStartPage.Text = "Start page";
@@ -755,7 +757,7 @@
             this.chkDoNotShowAtStartup.BackColor = System.Drawing.Color.White;
             this.chkDoNotShowAtStartup.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkDoNotShowAtStartup.Location = new System.Drawing.Point(15, 11);
-            this.chkDoNotShowAtStartup.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.chkDoNotShowAtStartup.Margin = new System.Windows.Forms.Padding(6);
             this.chkDoNotShowAtStartup.Name = "chkDoNotShowAtStartup";
             this.chkDoNotShowAtStartup.Size = new System.Drawing.Size(448, 29);
             this.chkDoNotShowAtStartup.TabIndex = 6;
@@ -767,7 +769,7 @@
             // 
             this.chkDoNotRememberPluginsNotConnected.AutoSize = true;
             this.chkDoNotRememberPluginsNotConnected.Location = new System.Drawing.Point(495, 137);
-            this.chkDoNotRememberPluginsNotConnected.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.chkDoNotRememberPluginsNotConnected.Margin = new System.Windows.Forms.Padding(6);
             this.chkDoNotRememberPluginsNotConnected.Name = "chkDoNotRememberPluginsNotConnected";
             this.chkDoNotRememberPluginsNotConnected.Size = new System.Drawing.Size(22, 21);
             this.chkDoNotRememberPluginsNotConnected.TabIndex = 3;
@@ -786,7 +788,7 @@
             // nudMruItemsToDisplay
             // 
             this.nudMruItemsToDisplay.Location = new System.Drawing.Point(402, 74);
-            this.nudMruItemsToDisplay.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.nudMruItemsToDisplay.Margin = new System.Windows.Forms.Padding(6);
             this.nudMruItemsToDisplay.Minimum = new decimal(new int[] {
             5,
             0,
@@ -811,16 +813,25 @@
             this.lblNumberOfMruToDisplay.TabIndex = 0;
             this.lblNumberOfMruToDisplay.Text = "Number of recently used plugins to display";
             // 
-            // chkDisplayPluginsUpdatePanel
+            // tbDataCollect
             // 
-            this.chkDisplayPluginsUpdatePanel.AutoSize = true;
-            this.chkDisplayPluginsUpdatePanel.Location = new System.Drawing.Point(18, 211);
-            this.chkDisplayPluginsUpdatePanel.Margin = new System.Windows.Forms.Padding(4);
-            this.chkDisplayPluginsUpdatePanel.Name = "chkDisplayPluginsUpdatePanel";
-            this.chkDisplayPluginsUpdatePanel.Size = new System.Drawing.Size(659, 29);
-            this.chkDisplayPluginsUpdatePanel.TabIndex = 9;
-            this.chkDisplayPluginsUpdatePanel.Text = "Display panel to notify plugins update available when XrmToolBox starts";
-            this.chkDisplayPluginsUpdatePanel.UseVisualStyleBackColor = true;
+            this.tbDataCollect.Controls.Add(this.label6);
+            this.tbDataCollect.Location = new System.Drawing.Point(4, 33);
+            this.tbDataCollect.Name = "tbDataCollect";
+            this.tbDataCollect.Padding = new System.Windows.Forms.Padding(3);
+            this.tbDataCollect.Size = new System.Drawing.Size(966, 740);
+            this.tbDataCollect.TabIndex = 5;
+            this.tbDataCollect.Text = "Data collect";
+            this.tbDataCollect.UseVisualStyleBackColor = true;
+            // 
+            // label6
+            // 
+            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label6.Location = new System.Drawing.Point(3, 3);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(960, 734);
+            this.label6.TabIndex = 1;
+            this.label6.Text = resources.GetString("label6.Text");
             // 
             // OptionsDialog
             // 
@@ -832,7 +843,7 @@
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.pnlHeader);
             this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "OptionsDialog";
@@ -861,6 +872,7 @@
             this.tpStartPage.ResumeLayout(false);
             this.tpStartPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMruItemsToDisplay)).EndInit();
+            this.tbDataCollect.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -900,7 +912,6 @@
         private System.Windows.Forms.GroupBox gbCustomProxy;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.CheckBox chkAllowUsageStatistics;
         private System.Windows.Forms.CheckBox chkClosePluginsSilently;
         private System.Windows.Forms.CheckBox chkDisplayPluginsStoreOnStartup;
         private System.Windows.Forms.CheckBox chkCloseEachPluginSilently;
@@ -927,5 +938,7 @@
         private System.Windows.Forms.ComboBox cbbTheme;
         private System.Windows.Forms.Label lblRestartRequired;
         private System.Windows.Forms.CheckBox chkDisplayPluginsUpdatePanel;
+        private System.Windows.Forms.TabPage tbDataCollect;
+        private System.Windows.Forms.Label label6;
     }
 }

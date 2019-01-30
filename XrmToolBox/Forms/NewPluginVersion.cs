@@ -43,13 +43,24 @@ namespace XrmToolBox.Forms
                     break;
             }
 
+            DialogResult = DialogResult.No;
             Close();
+        }
+
+        private void llDoNotUpdate_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.DrawRectangle(new Pen(Color.Red), new Rectangle(0, 0, ((LinkLabel)sender).Width - 2, ((LinkLabel)sender).Height - 2));
         }
 
         private void llUpdateNow_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            DialogResult = DialogResult.OK;
+            DialogResult = DialogResult.Yes;
             Close();
+        }
+
+        private void llUpdateNow_Paint(object sender, PaintEventArgs e)
+        {
+            e.Graphics.DrawRectangle(new Pen(Color.Green), new Rectangle(0, 0, ((LinkLabel)sender).Width - 2, ((LinkLabel)sender).Height - 2));
         }
 
         private void NewPluginVersion_Resize(object sender, System.EventArgs e)

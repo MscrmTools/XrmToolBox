@@ -83,11 +83,30 @@ namespace XrmToolBox.AutoUpdater
 
             args.RemoveAt(0);
             args.RemoveAt(0);
+            var xtbPath = String.Empty;
 
-            var xtbPath = args.First();
-
-            if (!xtbPath.StartsWith("\""))
+            /* if path is already quoted */
+            if (args[0].StartsWith("\""))
             {
+                xtbPath = args.First();
+            }
+            else
+            {
+                /* handle case where there is at leat one space in the path of the exe */
+               
+                foreach (var arg in args)
+                {
+                    xtbPath = xtbPath + arg + " ";
+                    /* the path is complete */
+                    if (arg.ToLower().EndsWith("toolbox.exe"))
+                    {
+                        break;
+                    }
+
+                }
+
+                /* remove extra spaces */
+                xtbPath = xtbPath.Trim();
                 xtbPath = $"\"{xtbPath}\"";
             }
 

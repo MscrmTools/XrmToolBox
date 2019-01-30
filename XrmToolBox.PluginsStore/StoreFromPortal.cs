@@ -418,7 +418,7 @@ namespace XrmToolBox.PluginsStore
                             new DataContractJsonSerializerSettings
                             {
                                 UseSimpleDictionaryFormat = true,
-                                DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ss", new DateTimeFormatInfo { FullDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss" })
+                                DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ss", new DateTimeFormatInfo { FullDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss" });
                             });
 
                         return (T)serializer.ReadObject(dataStream);
