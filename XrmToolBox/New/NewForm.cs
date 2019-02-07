@@ -478,7 +478,7 @@ namespace XrmToolBox.New
                 }
 
                 ((IXrmToolBoxPluginControl)pluginControl).OnRequestConnection += NewForm_OnRequestConnection;
-                ((IXrmToolBoxPluginControl)pluginControl).OnCloseTool += NewForm_OnCloseTool;
+                //((IXrmToolBoxPluginControl)pluginControl).OnCloseTool += NewForm_OnCloseTool;
                 ((IXrmToolBoxPluginControl)pluginControl).OnWorkAsync += (sender, e) =>
                 {
                     var bw = new BackgroundWorker();

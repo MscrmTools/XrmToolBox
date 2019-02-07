@@ -99,6 +99,7 @@ namespace XrmToolBox
         public bool CheckUpdateOnStartup { get; set; }
         public bool CloseEachPluginSilently { get; set; }
         public bool CloseOpenedPluginsSilently { get; set; }
+        public bool ClosePluginsSilentlyOnWindowsShutdown { get; set; } = true;
         public bool DisplayLargeIcons { get; set; }
         public bool DisplayMostUsedFirst { get; set; }
         public string DisplayOrder { get; set; }
@@ -200,6 +201,7 @@ namespace XrmToolBox
                 LastUpdateCheck = LastUpdateCheck,
                 AllowLogUsage = AllowLogUsage,
                 CloseOpenedPluginsSilently = CloseOpenedPluginsSilently,
+                ClosePluginsSilentlyOnWindowsShutdown = ClosePluginsSilentlyOnWindowsShutdown,
                 DisplayPluginsStoreOnStartup = DisplayPluginsStoreOnStartup,
                 DisplayPluginsStoreOnlyIfUpdates = DisplayPluginsStoreOnlyIfUpdates,
                 DoNotCheckForUpdates = DoNotCheckForUpdates,

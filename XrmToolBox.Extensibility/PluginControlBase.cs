@@ -42,10 +42,7 @@ namespace XrmToolBox.Extensibility
 
         public void CloseTool()
         {
-            if (OnCloseTool != null)
-            {
-                OnCloseTool(this, null);
-            }
+            OnCloseTool?.Invoke(this, null);
         }
 
         [Obsolete("This has been renamed to CloseTool.  Call that method instead, and if there is any required logic for Closing override the ClosingPlugin Method", true)]

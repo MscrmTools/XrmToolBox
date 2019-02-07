@@ -38,6 +38,7 @@ namespace XrmToolBox.Forms
             rdbToolsListSmall.Checked = !option.DisplayLargeIcons;
             chkCloseEachPluginSilently.Checked = option.CloseEachPluginSilently;
             chkClosePluginsSilently.Checked = option.CloseOpenedPluginsSilently;
+            chkDoNotPromptOnWindowsShutdown.Checked = option.ClosePluginsSilentlyOnWindowsShutdown;
             chkDisplayPluginsStoreOnStartup.Checked = option.DisplayPluginsStoreOnStartup;
             chkDisplayPluginsStoreOnlyIfUpdates.Checked = option.DisplayPluginsStoreOnlyIfUpdates;
             chkDoNotCheckForUpdate.Checked = option.DoNotCheckForUpdates;
@@ -66,6 +67,7 @@ namespace XrmToolBox.Forms
             option.DisplayLargeIcons = rdbToolsListLarge.Checked;
             option.CloseEachPluginSilently = chkCloseEachPluginSilently.Checked;
             option.CloseOpenedPluginsSilently = chkClosePluginsSilently.Checked;
+            option.ClosePluginsSilentlyOnWindowsShutdown = chkDoNotPromptOnWindowsShutdown.Checked;
             option.DisplayPluginsStoreOnStartup = chkDisplayPluginsStoreOnStartup.Checked;
             option.DisplayPluginsStoreOnlyIfUpdates = chkDisplayPluginsStoreOnlyIfUpdates.Checked;
             option.DoNotCheckForUpdates = chkDoNotCheckForUpdate.Checked;
