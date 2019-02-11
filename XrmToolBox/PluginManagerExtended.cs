@@ -5,7 +5,6 @@ using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
@@ -18,30 +17,21 @@ namespace XrmToolBox
         //private static readonly string PluginPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "Plugins");
         private static readonly string PluginPath = Paths.PluginsPath;
 
+        private static PluginManagerExtended instance;
         private CompositionContainer container;
         private DirectoryCatalog directoryCatalog;
 
-        public PluginManagerExtended(Form parentForm)
+        private PluginManagerExtended()
         {
             if (!Directory.Exists(PluginPath))
             {
                 Directory.CreateDirectory(PluginPath);
             }
-
-            var watcher = new FileSystemWatcher(PluginPath)
-            {
-                EnableRaisingEvents = true,
-                Filter = "*.dll",
-                NotifyFilter = NotifyFilters.FileName,
-                SynchronizingObject = parentForm
-            };
-            watcher.Created += watcher_EventRaised;
         }
 
         public event EventHandler PluginsListUpdated;
 
-        public Dictionary<string, string> ValidationErrors { get; set; }
-
+        public static PluginManagerExtended Instance => instance ?? (instance = new PluginManagerExtended());
         public bool IsWatchingForNewPlugins { get; set; }
 
         [ImportMany(AllowRecomposition = true)]
@@ -52,9 +42,20 @@ namespace XrmToolBox
             get { return Plugins?.Where(p => !ValidationErrors.ContainsKey(p.Metadata.Name)); }
         }
 
-        public void Initialize()
+        public Dictionary<string, string> ValidationErrors { get; set; }
+
+        public void Initialize(Form parentForm)
         {
             ValidationErrors = new Dictionary<string, string>();
+
+            var watcher = new FileSystemWatcher(PluginPath)
+            {
+                EnableRaisingEvents = true,
+                Filter = "*.dll",
+                NotifyFilter = NotifyFilters.FileName,
+                SynchronizingObject = parentForm
+            };
+            watcher.Created += watcher_EventRaised;
 
             try
             {

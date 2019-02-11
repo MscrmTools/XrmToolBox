@@ -316,23 +316,23 @@ namespace XrmToolBox.New
         {
             if (Options.Instance.Theme != null)
             {
-                switch (Options.Instance.Theme)
+                switch (Options.Instance.ThemeValue)
                 {
-                    case "Blue theme":
+                    case ThemeName.Blue:
                         {
                             var theme = new VS2015BlueTheme();
                             dpMain.Theme = theme;
                         }
                         break;
 
-                    case "Light theme":
+                    case ThemeName.Light:
                         {
                             var theme = new VS2015LightTheme();
                             dpMain.Theme = theme;
                         }
                         break;
 
-                    case "Dark theme":
+                    case ThemeName.Dark:
                         {
                             var theme = new VS2015DarkTheme();
                             dpMain.Theme = theme;
@@ -1339,14 +1339,13 @@ namespace XrmToolBox.New
             }
             else if (e.ClickedItem == settingsToolStripMenuItem)
             {
-                var oDialog = new OptionsDialog(Options.Instance, pluginsForm.PluginManager);
+                var oDialog = new OptionsDialog(Options.Instance);
                 if (oDialog.ShowDialog(this) == DialogResult.OK)
                 {
-                    bool reinitDisplay = Options.Instance.DisplayMostUsedFirst != oDialog.Option.DisplayMostUsedFirst
-                                         || Options.Instance.MostUsedList.Count != oDialog.Option.MostUsedList.Count
-                                         || Options.Instance.DisplayLargeIcons != oDialog.Option.DisplayLargeIcons
+                    bool reinitDisplay = Options.Instance.MostUsedList.Count != oDialog.Option.MostUsedList.Count
+                                         || Options.Instance.IconDisplayMode != oDialog.Option.IconDisplayMode
                                          || !oDialog.Option.HiddenPlugins.SequenceEqual(Options.Instance.HiddenPlugins)
-                                         || Options.Instance.DisplayOrder != oDialog.Option.DisplayOrder;
+                                         || Options.Instance.PluginsDisplayOrder != oDialog.Option.PluginsDisplayOrder;
 
                     if (Options.Instance.DoNotRememberPluginsWithoutConnection != oDialog.Option.DoNotRememberPluginsWithoutConnection
                         && oDialog.Option.DoNotRememberPluginsWithoutConnection)

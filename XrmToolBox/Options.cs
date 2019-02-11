@@ -1,16 +1,70 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Design;
+using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
 using System.Xml;
 using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Forms;
 
 namespace XrmToolBox
 {
+    public enum DisplayIcons
+    {
+        [Description("Large")]
+        Large,
+
+        [Description("Small")]
+        Small
+    }
+
+    public enum DisplayOrder
+    {
+        [Description("Alphabetically")]
+        Alphabetically,
+
+        [Description("Most used")]
+        MostUsed,
+
+        [Description("Recently updated")]
+        RecentlyUpdated
+    }
+
+    public enum DisplayPluginsStoreOnStartup
+    {
+        [Description("Always")]
+        Always,
+
+        [Description("Only if updates")]
+        OnlyIfUpdates,
+
+        [Description("Never")]
+        Never
+    }
+
+    public enum ThemeName
+    {
+        [Description("Classic theme")]
+        Classic,
+
+        [Description("Blue theme")]
+        Blue,
+
+        [Description("Light theme")]
+        Light,
+
+        [Description("Dark theme")]
+        Dark
+    }
+
     public class FormSize
     {
         public Size CurrentSize
@@ -69,7 +123,7 @@ namespace XrmToolBox
         public Options()
         {
             CheckUpdateOnStartup = true;
-            DisplayLargeIcons = true;
+            IconDisplayMode = DisplayIcons.Large;
             DisplayMostUsedFirst = false;
             DisplayRecentlyUpdatedFirst = false;
             Size = new FormSize();
@@ -95,47 +149,248 @@ namespace XrmToolBox
             }
         }
 
-        public bool? AllowLogUsage { get; set; }
-        public bool CheckUpdateOnStartup { get; set; }
+        [Browsable(false)] public bool? AllowLogUsage { get; set; }
+
+        [Category("Startup")]
+        [DisplayName("Check for update")]
+        [Description("Check if update is available for XrmToolBox application")]
+        public bool CheckUpdateOnStartup
+        {
+            get => !DoNotCheckForUpdates;
+            set => DoNotCheckForUpdates = !value;
+        }
+
+        [Category("Close behavior")]
+        [DisplayName("Close plugin silently")]
+        [Description("When closing an individual plugin, do not prompt to confirm plugin close")]
         public bool CloseEachPluginSilently { get; set; }
+
+        [Category("Close behavior")]
+        [DisplayName("Close XrmToolBox silently")]
+        [Description("When closing XrmToolBox, do not prompt to confirm opened plugins close")]
         public bool CloseOpenedPluginsSilently { get; set; }
+
+        [Category("Close behavior")]
+        [DisplayName("Shutdown silently")]
+        [Description("When Windows shuts down and XrmToolBox have opened plugins, do not prompt to confirm opened plugins close")]
         public bool ClosePluginsSilentlyOnWindowsShutdown { get; set; } = true;
-        public bool DisplayLargeIcons { get; set; }
+
+        [Browsable(false)]
+        public bool DisplayLargeIcons
+        {
+            get => IconDisplayMode == DisplayIcons.Large;
+            set => IconDisplayMode = value ? DisplayIcons.Large : DisplayIcons.Small;
+        }
+
+        [Browsable(false)]
+        [Obsolete]
         public bool DisplayMostUsedFirst { get; set; }
-        public string DisplayOrder { get; set; }
+
+        [Browsable(false)]
+        public string DisplayOrder
+        {
+            get
+            {
+                switch (PluginsDisplayOrder)
+                {
+                    case XrmToolBox.DisplayOrder.Alphabetically:
+                        return "Alphabetically";
+
+                    case XrmToolBox.DisplayOrder.MostUsed:
+                        return "Most used";
+
+                    case XrmToolBox.DisplayOrder.RecentlyUpdated:
+                        return "Recently updated";
+                }
+
+                return string.Empty;
+            }
+            set => PluginsDisplayOrder = value == "Alphabetically"
+                ? XrmToolBox.DisplayOrder.Alphabetically
+                : value == "Most used"
+                    ? XrmToolBox.DisplayOrder.MostUsed
+                    : XrmToolBox.DisplayOrder.RecentlyUpdated;
+        }
+
+        [Browsable(false)]
+        [Category("Startup")]
+        [DisplayName("Open Plugins Store only if updates are available")]
         public bool DisplayPluginsStoreOnlyIfUpdates { get; set; }
+
+        [Browsable(false)]
+        [Category("Startup")]
+        [DisplayName("Open Plugins Store")]
         public bool DisplayPluginsStoreOnStartup { get; set; }
+
+        [Browsable(false)]
         public bool DisplayRecentlyUpdatedFirst { get; set; }
 
+        [Category("Startup")]
+        [DisplayName("Open Plugins Store")]
+        [Description("Indicates when Plugins Store should be opened when XrmToolBox starts")]
+        [TypeConverter(typeof(CustomEnumConverter))]
+        [XmlIgnore]
+        public DisplayPluginsStoreOnStartup DisplayStoreOnStartup
+        {
+            get
+            {
+                if (DisplayPluginsStoreOnStartup && DisplayPluginsStoreOnlyIfUpdates)
+                    return XrmToolBox.DisplayPluginsStoreOnStartup.OnlyIfUpdates;
+                if (DisplayPluginsStoreOnStartup && !DisplayPluginsStoreOnlyIfUpdates)
+                    return XrmToolBox.DisplayPluginsStoreOnStartup.Always;
+
+                return XrmToolBox.DisplayPluginsStoreOnStartup.Never;
+            }
+            set
+            {
+                switch (value)
+                {
+                    case XrmToolBox.DisplayPluginsStoreOnStartup.Always:
+                        DisplayPluginsStoreOnStartup = true;
+                        DisplayPluginsStoreOnlyIfUpdates = false;
+                        break;
+
+                    case XrmToolBox.DisplayPluginsStoreOnStartup.OnlyIfUpdates:
+                        DisplayPluginsStoreOnStartup = true;
+                        DisplayPluginsStoreOnlyIfUpdates = true;
+                        break;
+
+                    case XrmToolBox.DisplayPluginsStoreOnStartup.Never:
+                        DisplayPluginsStoreOnStartup = false;
+                        DisplayPluginsStoreOnlyIfUpdates = false;
+                        break;
+                }
+            }
+        }
+
+        [Browsable(false)]
         public bool DoNotCheckForUpdates { get; set; }
+
+        [Category("Start Page")]
+        [DisplayName("Forget plugins without connection")]
+        [Description("Do not remember plugins opened without connection in Most Recently Used plugins")]
         public bool DoNotRememberPluginsWithoutConnection { get; set; }
+
+        [Category("Start Page")]
+        [DisplayName("Show at startup")]
+        [Description("Indicates if Start page should be opened when XrmToolBox starts up")]
         public bool DoNotShowStartPage { get; set; }
+
+        [Category("Plugins list display")]
+        [DisplayName("Hidden plugins")]
+        [Description("Defines the installed plugins that should not be displayed in the plugins list")]
+        [Editor(typeof(HiddenPluginsEditor), typeof(UITypeEditor))]
         public List<string> HiddenPlugins { get; set; }
+
+        [Category("Plugins list display")]
+        [DisplayName("Icons size")]
+        [TypeConverter(typeof(CustomEnumConverter))]
+        [XmlIgnore]
+        public DisplayIcons IconDisplayMode { get; set; }
+
+        [Browsable(false)]
         public DateTime LastAdvertisementDisplay { get; set; }
+
+        [Browsable(false)]
         public string LastConnection { get; set; }
+
+        [Browsable(false)]
         public string LastPlugin { get; set; }
+
+        [Browsable(false)]
         public DateTime LastUpdateCheck { get; set; }
+
+        [Category("Connections")]
+        [DisplayName("Display all connections")]
+        [Description("Indicates if bottom left connection control should display all connections regardless the connection files they come from")]
         public bool MergeConnectionFiles { get; set; }
+
+        [Browsable(false)]
         public List<PluginUseCount> MostUsedList { get; set; }
+
+        [Category("Start Page")]
+        [DisplayName("Plugins to display")]
+        [Description("Indicates number of plugins to display in Moste Recently Used items section of Start Page")]
         public int MruItemsToDisplay { get; set; } = 10;
+
+        [Category("Plugins list display")]
+        [DisplayName("Order")]
+        [TypeConverter(typeof(CustomEnumConverter))]
+        [XmlIgnore]
+        public DisplayOrder PluginsDisplayOrder { get; set; }
+
+        [Browsable(false)]
         public DockState PluginsListDocking { get; set; } = DockState.Document;
+
+        [Browsable(false)]
         public bool PluginsListIsHidden { get; set; } = false;
+
+        [Browsable(false)]
         public bool? PluginsStoreShowIncompatible { get; set; }
+
+        [Browsable(false)]
         public bool? PluginsStoreShowInstalled { get; set; }
+
+        [Browsable(false)]
         public bool? PluginsStoreShowNew { get; set; }
+
+        [Browsable(false)]
         public bool? PluginsStoreShowUpdates { get; set; }
 
+        [Browsable(false)]
         public List<PluginUpdateSkip> PluginsUpdateSkip { get; set; } = new List<PluginUpdateSkip>();
+
+        [Category("Session")]
+        [DisplayName("Remember session")]
+        [Description("Indicates if the current session must be saved to be reused at the next XrmToolBox startup")]
         public bool RememberSession { get; set; }
 
+        [Category("Connections")]
+        [DisplayName("Reuse connections")]
+        [Description("Indicates if connecting to an already connected organization should instanciate a new connection or use the existing one")]
         public bool ReuseConnections { get; set; }
 
+        [Category("Startup")]
+        [DisplayName("Show plugins update notification")]
+        [Description("Indicates if a notification should be displayed when updates are present for installed plugins")]
         public bool ShowPluginUpdatesPanelAtStartup { get; set; } = true;
 
         [XmlElement("FormSize")]
+        [Browsable(false)]
         public FormSize Size { get; set; }
 
+        [Browsable(false)]
         public string Theme { get; set; } = "Light theme";
+
+        [Category("Display")]
+        [DisplayName("Theme")]
+        [Description("Indicates the theme to use with XrmToolBox (restart required)")]
+        [TypeConverter(typeof(CustomEnumConverter))]
+        [XmlIgnore]
+        public ThemeName ThemeValue
+        {
+            get
+            {
+                if (Theme == "Light theme")
+                    return ThemeName.Light;
+                if (Theme == "Dark theme")
+                    return ThemeName.Dark;
+                if (Theme == "Blue theme")
+                    return ThemeName.Blue;
+                return ThemeName.Classic;
+            }
+            set
+            {
+                if (value == ThemeName.Light)
+                    Theme = "Light theme";
+                else if (value == ThemeName.Dark)
+                    Theme = "Dark theme";
+                else if (value == ThemeName.Blue)
+                    Theme = "Blue theme";
+                else
+                    Theme = "Classic theme";
+            }
+        }
 
         public static bool Load(out Options options, out string errorMessage)
         {
@@ -156,22 +411,6 @@ namespace XrmToolBox
                     document.Load(settingsFile);
 
                     options = (Options)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(Options));
-
-                    if (options.DisplayOrder == null)
-                    {
-                        if (options.DisplayMostUsedFirst)
-                        {
-                            options.DisplayOrder = "Most used";
-                        }
-                        else if (options.DisplayRecentlyUpdatedFirst)
-                        {
-                            options.DisplayOrder = "Recently updated";
-                        }
-                        else
-                        {
-                            options.DisplayOrder = "Alphabetically";
-                        }
-                    }
 
                     return true;
                 }
@@ -235,6 +474,76 @@ namespace XrmToolBox
             var settingsFile = Path.Combine(Paths.SettingsPath, "XrmToolBox.Settings.xml");
 
             XmlSerializerHelper.SerializeToFile(this, settingsFile);
+        }
+    }
+
+    internal class CustomEnumConverter : EnumConverter
+    {
+        private Type enumType;
+
+        public CustomEnumConverter(Type type) : base(type)
+        {
+            enumType = type;
+        }
+
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type srcType)
+        {
+            return srcType == typeof(string);
+        }
+
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destType)
+        {
+            return destType == typeof(string);
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture,
+            object value)
+        {
+            foreach (FieldInfo fi in enumType.GetFields())
+            {
+                DescriptionAttribute dna = (DescriptionAttribute)Attribute.GetCustomAttribute(fi,
+                    typeof(DescriptionAttribute));
+                if ((dna != null) && ((string)value == dna.Description))
+                    return Enum.Parse(enumType, fi.Name);
+            }
+            return Enum.Parse(enumType, (string)value);
+        }
+
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture,
+                    object value, Type destType)
+        {
+            FieldInfo fi = enumType.GetField(Enum.GetName(enumType, value));
+            DescriptionAttribute dna = (DescriptionAttribute)Attribute.GetCustomAttribute(fi,
+                typeof(DescriptionAttribute));
+            if (dna != null)
+                return dna.Description;
+            else
+                return value.ToString();
+        }
+    }
+
+    internal class HiddenPluginsEditor : UITypeEditor
+    {
+        public override object EditValue(ITypeDescriptorContext context, System.IServiceProvider provider, object value)
+        {
+            if (provider?.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService svc)
+            {
+                var option = (Options)context?.Instance;
+
+                using (HiddenPluginsDialog form = new HiddenPluginsDialog(option.HiddenPlugins))
+                {
+                    if (svc.ShowDialog(form) == DialogResult.OK)
+                    {
+                        value = form.HiddenPlugins; // update object
+                    }
+                }
+            }
+            return value; // can also replace the wrapper object here
+        }
+
+        public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
+        {
+            return UITypeEditorEditStyle.Modal;
         }
     }
 }

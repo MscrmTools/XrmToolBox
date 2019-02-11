@@ -42,8 +42,9 @@ namespace XrmToolBox.New
 
             pluginsModels = new List<PluginModel>();
 
-            pluginsManager = new PluginManagerExtended(this) { IsWatchingForNewPlugins = true };
-            pluginsManager.Initialize();
+            pluginsManager = PluginManagerExtended.Instance;
+            pluginsManager.IsWatchingForNewPlugins = true;
+            pluginsManager.Initialize(this);
             pluginsManager.PluginsListUpdated += pManager_PluginsListUpdated;
 
             MouseWheel += (sender, e) => pnlPlugins.Focus();
@@ -319,7 +320,7 @@ namespace XrmToolBox.New
 
         private void DisplayOnePlugin(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count = -1)
         {
-            if (Options.Instance.DisplayLargeIcons)
+            if (Options.Instance.IconDisplayMode == DisplayIcons.Large)
             {
                 CreateModel<LargePluginModel>(plugin, ref top, width, count);
             }
@@ -373,7 +374,7 @@ namespace XrmToolBox.New
                     || p.Value.GetType().GetCompany().ToLower().Contains(filter.ToString().ToLower()))
                 : pluginsManager.ValidatedPlugins).OrderBy(p => p.Metadata.Name).ToList();
 
-            if (Options.Instance.DisplayOrder == "Most used")
+            if (Options.Instance.PluginsDisplayOrder == DisplayOrder.MostUsed)
             {
                 foreach (var item in Options.Instance.MostUsedList.OrderByDescending(i => i.Count).ThenBy(i => i.Name))
                 {
@@ -394,7 +395,7 @@ namespace XrmToolBox.New
                     }
                 }
             }
-            else if (Options.Instance.DisplayOrder == "Recently updated")
+            else if (Options.Instance.PluginsDisplayOrder == DisplayOrder.RecentlyUpdated)
             {
                 var pluginAssemblies = Directory.EnumerateFiles(Paths.PluginsPath, "*.dll")
                     .Select(d => new

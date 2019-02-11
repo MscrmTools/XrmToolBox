@@ -230,6 +230,12 @@
     <Compile Include="Controls\ConnectingControl.Designer.cs">
       <DependentUpon>ConnectingControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\HiddenPluginsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\HiddenPluginsDialog.Designer.cs">
+      <DependentUpon>HiddenPluginsDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\NewPluginVersion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -346,6 +352,9 @@
     <EmbeddedResource Include="Controls\ConnectingControl.resx">
       <DependentUpon>ConnectingControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\HiddenPluginsDialog.resx">
+      <DependentUpon>HiddenPluginsDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\NewPluginVersion.resx">
       <DependentUpon>NewPluginVersion.cs</DependentUpon>
     </EmbeddedResource>
@@ -460,7 +469,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
