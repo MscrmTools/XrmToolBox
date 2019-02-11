@@ -718,6 +718,7 @@ namespace XrmToolBox.New
             if (e.Plugin.Value is INoConnectionRequired)
             {
                 DisplayPluginControl(e.Plugin);
+                Cursor = Cursors.Default;
                 return;
             }
 
