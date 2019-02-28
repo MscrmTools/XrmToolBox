@@ -278,6 +278,8 @@ namespace XrmToolBox
                 RedirectAssembly("Microsoft.Xrm.Sdk.Workflow");
                 RedirectAssembly("Microsoft.Crm.Sdk.Proxy");
                 RedirectAssembly("Microsoft.Xrm.Tooling.Connector");
+                RedirectAssembly("Microsoft.Xrm.Tooling.Ui.Styles");
+                RedirectAssembly("Microsoft.Xrm.Tooling.CrmConnectControl");
                 RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory");
                 RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms");
                 RedirectAssembly("WeifenLuo.WinFormsUI.Docking");
