@@ -442,32 +442,36 @@ namespace XrmToolBox.New
                     mruItem.ConnectionId = connectionDetail.ConnectionId ?? Guid.Empty;
                     mruItem.ConnectionName = connectionDetail.ConnectionName;
 
-                    var crmSvcClient = connectionDetail.GetCrmServiceClient();
-
-                    var clonedService = crmSvcClient.OrganizationServiceProxy;
-                    var clonedWebClientService = crmSvcClient.OrganizationWebProxyClient;
-                    if (clonedService != null)
+                    if (connectionDetail.IsFromSdkLoginCtrl)
                     {
-                        clonedService.SdkClientVersion = connectionDetail.OrganizationVersion;
-                    }
-                    if (clonedWebClientService != null)
-                    {
-                        clonedWebClientService.SdkClientVersion = connectionDetail.OrganizationVersion;
-                    }
-
-                    // ReSharper disable once SuspiciousTypeConversion.Global
-                    if (pluginControl is IEarlyBoundProxy earlyBoundProxiedControl)
-                    {
-                        clonedService?.EnableProxyTypes(earlyBoundProxiedControl.GetEarlyBoundProxyAssembly());
-                    }
-
-                    if (clonedService != null)
-                    {
-                        ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService, connectionDetail);
+                        ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(service, connectionDetail);
                     }
                     else
                     {
-                        ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedWebClientService, connectionDetail);
+                        var crmSvcClient = connectionDetail.GetCrmServiceClient();
+
+                        var clonedService = crmSvcClient.OrganizationServiceProxy;
+                        var clonedWebClientService = crmSvcClient.OrganizationWebProxyClient;
+                        if (clonedService != null)
+                        {
+                            clonedService.SdkClientVersion = connectionDetail.OrganizationVersion;
+                        }
+
+                        if (clonedWebClientService != null)
+                        {
+                            clonedWebClientService.SdkClientVersion = connectionDetail.OrganizationVersion;
+                        }
+
+                        if (clonedService != null)
+                        {
+                            ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService,
+                                connectionDetail);
+                        }
+                        else
+                        {
+                            ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedWebClientService,
+                                connectionDetail);
+                        }
                     }
 
                     name = $"{plugin.Metadata.Name} ({connectionDetail?.ConnectionName ?? "Not connected"})";
