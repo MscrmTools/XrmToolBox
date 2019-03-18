@@ -88,6 +88,12 @@
     <Reference Include="Microsoft.Xrm.Tooling.Connector, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.CrmSdk.XrmTooling.CoreAssembly.9.0.2.12\lib\net462\Microsoft.Xrm.Tooling.Connector.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Xrm.Tooling.CrmConnectControl">
+      <HintPath>..\..\packages\Microsoft.CrmSdk.XrmTooling.WpfControls.9.0.2.12\lib\net462\Microsoft.Xrm.Tooling.CrmConnectControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xrm.Tooling.Ui.Styles">
+      <HintPath>..\..\packages\Microsoft.CrmSdk.XrmTooling.WpfControls.9.0.2.12\lib\net462\Microsoft.Xrm.Tooling.Ui.Styles.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -144,6 +150,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\XrmToolBox.CustomControls\XrmToolBox.CustomControls.csproj">
+      <Project>{ba210fdc-013d-421a-8194-1114730d7cf5}</Project>
+      <Name>XrmToolBox.CustomControls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\XrmToolBox.Extensibility\XrmToolBox.Extensibility.csproj">
       <Project>{df77aea3-43f7-403c-91af-3023a3bb06ec}</Project>
       <Name>XrmToolBox.Extensibility</Name>
@@ -159,7 +169,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y "$(TargetPath)" "$(SolutionDir)XrmToolBox\$(OutDir)Plugins\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /y "$(TargetPath)" "$(TargetDir)Plugins\"</PostBuildEvent>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

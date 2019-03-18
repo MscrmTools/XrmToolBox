@@ -6,6 +6,7 @@
 using Microsoft.Crm.Sdk.Messages;
 using System;
 using System.Windows.Forms;
+using XrmToolBox.CustomControls.Dialogs;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
@@ -212,5 +213,17 @@ namespace MsCrmTools.SampleTool
         }
 
         #endregion IAboutPlugin implementation
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var dialog = new SolutionPickerDialog(Service)
+            {
+                DisplayDefaultSolution = true,
+                DisplayManagedSolutions = false,
+                DialogTitle = "Test",
+                DisplaySearch = true
+            };
+            dialog.ShowDialog();
+        }
     }
 }
