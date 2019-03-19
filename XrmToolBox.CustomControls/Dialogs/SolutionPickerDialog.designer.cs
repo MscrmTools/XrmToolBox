@@ -31,10 +31,11 @@
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnValidate = new System.Windows.Forms.Button();
             this.pnlFooter = new System.Windows.Forms.Panel();
+            this.pnlHeader = new System.Windows.Forms.Panel();
+            this.lblHeader = new System.Windows.Forms.Label();
             this.tsMain = new System.Windows.Forms.ToolStrip();
             this.tsllFilter = new System.Windows.Forms.ToolStripLabel();
             this.tstFilter = new System.Windows.Forms.ToolStripTextBox();
-            this.pnlHeader = new System.Windows.Forms.Panel();
             this.pnlMain = new System.Windows.Forms.Panel();
             this.lvSolutions = new System.Windows.Forms.ListView();
             this.chDisplayName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -42,6 +43,7 @@
             this.chPublisher = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chTYpe = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pnlFooter.SuspendLayout();
+            this.pnlHeader.SuspendLayout();
             this.tsMain.SuspendLayout();
             this.pnlMain.SuspendLayout();
             this.SuspendLayout();
@@ -82,15 +84,38 @@
             this.pnlFooter.Size = new System.Drawing.Size(750, 46);
             this.pnlFooter.TabIndex = 6;
             // 
+            // pnlHeader
+            // 
+            this.pnlHeader.BackColor = System.Drawing.Color.White;
+            this.pnlHeader.Controls.Add(this.lblHeader);
+            this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlHeader.Location = new System.Drawing.Point(0, 0);
+            this.pnlHeader.Name = "pnlHeader";
+            this.pnlHeader.Size = new System.Drawing.Size(750, 77);
+            this.pnlHeader.TabIndex = 9;
+            this.pnlHeader.Visible = false;
+            // 
+            // lblHeader
+            // 
+            this.lblHeader.AutoEllipsis = true;
+            this.lblHeader.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblHeader.Font = new System.Drawing.Font("Segoe UI Light", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHeader.Location = new System.Drawing.Point(0, 0);
+            this.lblHeader.Name = "lblHeader";
+            this.lblHeader.Size = new System.Drawing.Size(750, 77);
+            this.lblHeader.TabIndex = 0;
+            this.lblHeader.Text = "Please select a solution";
+            // 
             // tsMain
             // 
+            this.tsMain.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.tsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsllFilter,
             this.tstFilter});
-            this.tsMain.Location = new System.Drawing.Point(0, 0);
+            this.tsMain.Location = new System.Drawing.Point(0, 77);
             this.tsMain.Name = "tsMain";
             this.tsMain.Size = new System.Drawing.Size(750, 31);
-            this.tsMain.TabIndex = 8;
+            this.tsMain.TabIndex = 11;
             this.tsMain.Text = "toolStrip1";
             // 
             // tsllFilter
@@ -106,15 +131,6 @@
             this.tstFilter.ToolTipText = "Filter by solution unique or display name";
             this.tstFilter.TextChanged += new System.EventHandler(this.tstFilter_TextChanged);
             // 
-            // pnlHeader
-            // 
-            this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlHeader.Location = new System.Drawing.Point(0, 31);
-            this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(750, 77);
-            this.pnlHeader.TabIndex = 9;
-            this.pnlHeader.Visible = false;
-            // 
             // pnlMain
             // 
             this.pnlMain.Controls.Add(this.lvSolutions);
@@ -122,7 +138,7 @@
             this.pnlMain.Location = new System.Drawing.Point(0, 108);
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(750, 281);
-            this.pnlMain.TabIndex = 10;
+            this.pnlMain.TabIndex = 12;
             // 
             // lvSolutions
             // 
@@ -142,9 +158,11 @@
             this.lvSolutions.Name = "lvSolutions";
             this.lvSolutions.Size = new System.Drawing.Size(750, 281);
             this.lvSolutions.Sorting = System.Windows.Forms.SortOrder.Ascending;
-            this.lvSolutions.TabIndex = 3;
+            this.lvSolutions.TabIndex = 4;
             this.lvSolutions.UseCompatibleStateImageBehavior = false;
             this.lvSolutions.View = System.Windows.Forms.View.Details;
+            this.lvSolutions.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lstSolutions_ColumnClick);
+            this.lvSolutions.DoubleClick += new System.EventHandler(this.lstSolutions_DoubleClick);
             // 
             // chDisplayName
             // 
@@ -172,8 +190,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(750, 435);
             this.Controls.Add(this.pnlMain);
-            this.Controls.Add(this.pnlHeader);
             this.Controls.Add(this.tsMain);
+            this.Controls.Add(this.pnlHeader);
             this.Controls.Add(this.pnlFooter);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
@@ -185,6 +203,7 @@
             this.Text = "Solution Picker";
             this.Load += new System.EventHandler(this.SolutionPicker_Load);
             this.pnlFooter.ResumeLayout(false);
+            this.pnlHeader.ResumeLayout(false);
             this.tsMain.ResumeLayout(false);
             this.tsMain.PerformLayout();
             this.pnlMain.ResumeLayout(false);
@@ -197,10 +216,11 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnValidate;
         private System.Windows.Forms.Panel pnlFooter;
+        private System.Windows.Forms.Panel pnlHeader;
+        private System.Windows.Forms.Label lblHeader;
         private System.Windows.Forms.ToolStrip tsMain;
         private System.Windows.Forms.ToolStripLabel tsllFilter;
         private System.Windows.Forms.ToolStripTextBox tstFilter;
-        private System.Windows.Forms.Panel pnlHeader;
         private System.Windows.Forms.Panel pnlMain;
         private System.Windows.Forms.ListView lvSolutions;
         private System.Windows.Forms.ColumnHeader chDisplayName;

@@ -36,6 +36,16 @@ namespace XrmToolBox.CustomControls.Dialogs
         public bool DisplaySearch { get; set; } = true;
 
         [Category("UI")]
+        [DisplayName("Display header")]
+        [Description("Indicates if a blank header with title should be displayed")]
+        public bool DisplayHeader { get; set; } = false;
+
+        [Category("UI")]
+        [DisplayName("Header text")]
+        [Description("Indicates if a blank header with title should be displayed")]
+        public string HeaderText { get; set; }
+
+        [Category("UI")]
         [DisplayName("Text")]
         [Description("Indicates the text to display on the dialog header")]
         public string DialogTitle { get; set; } = "Solution Picker";
@@ -130,6 +140,8 @@ namespace XrmToolBox.CustomControls.Dialogs
             tsMain.Visible = DisplaySearch;
             Text = DialogTitle;
             lvSolutions.MultiSelect = MultiSelect;
+            pnlHeader.Visible = DisplayHeader;
+            lblHeader.Text = string.IsNullOrEmpty(HeaderText) ? $"Please select {(MultiSelect ? "one or multiple solutions" : "a solution")}" : HeaderText;
 
             lvSolutions.Items.Clear();
 

@@ -220,8 +220,10 @@ namespace MsCrmTools.SampleTool
             {
                 DisplayDefaultSolution = true,
                 DisplayManagedSolutions = false,
-                DialogTitle = "Test",
-                DisplaySearch = true
+                DialogTitle = "My custom title for solution picker",
+                DisplaySearch = true,
+                DisplayHeader = true,
+                HeaderText = "My custom title"
             };
             dialog.ShowDialog();
         }
