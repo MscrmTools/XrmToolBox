@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using XrmToolBox;
 
 internal class AppInsights
 {
@@ -130,7 +131,7 @@ internal class AppInsights
         isDebug = true;
 #endif
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-        if (!isDebug)
+        if (!isDebug && Options.Instance.OptinForApplicationInsights)
         {
             result = await SendToAiSafe(json, handleresult);
         }
