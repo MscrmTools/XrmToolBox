@@ -5,7 +5,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/dp6r9n9vhcprpur6?svg=true)](https://ci.appveyor.com/project/MscrmTools/xrmtoolbox)
 
 
-XrmToolBox is an application that can connect to Microsoft Dynamics CRM 2011, 2013, 2015, 2016 and 365 (Online, On-Premises or IFD). It is shipped with more than 20 plugins to handle several administration, customization and configuration tasks.
+XrmToolBox is a Windows application that connects to the Common Data Service for Apps (CDS). Dynamics 365 Customer Engagement (CE) applications, like Dynamics 365 for Sales, Service or Talent also use the Common Data Service for Apps as their foundational data service. XrmToolBox, provides tools to ease customization, configuration and operation tasks for anything built on CDS, including Dynamics 365 CE (formerly CRM) and model-driven PowerApps. It is shipped with more than 30 plugins to make administration, customization or configuration tasks easier and less time consuming.
 
 One of the great points about XrmToolBox is its capability to welcome external plugins written by other developers, just by implementing specific parts of XrmToolBox code.
 
