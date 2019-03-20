@@ -218,6 +218,9 @@ namespace XrmToolBox
         public bool DisplayPluginsStoreOnlyIfUpdates { get; set; }
 
         [Browsable(false)]
+        public bool OptinForApplicationInsights { get; set; } = true;
+
+        [Browsable(false)]
         [Category("Startup")]
         [DisplayName("Open Plugins Store")]
         public bool DisplayPluginsStoreOnStartup { get; set; }
@@ -455,7 +458,8 @@ namespace XrmToolBox
                 DoNotRememberPluginsWithoutConnection = DoNotRememberPluginsWithoutConnection,
                 DoNotShowStartPage = DoNotShowStartPage,
                 Theme = Theme,
-                PluginsUpdateSkip = PluginsUpdateSkip
+                PluginsUpdateSkip = PluginsUpdateSkip,
+                OptinForApplicationInsights = OptinForApplicationInsights
             };
         }
 
