@@ -157,7 +157,7 @@ namespace XrmToolBox
             var currentPluginsPath = Path.Combine(currentDirectory, "Plugins");
             if (Directory.Exists(currentPluginsPath))
             {
-                if (Path.GetFullPath(currentPluginsPath) != Path.GetFullPath(Paths.PluginsPath))
+                if (Path.GetFullPath(currentPluginsPath).ToLowerInvariant() != Path.GetFullPath(Paths.PluginsPath).ToLowerInvariant())
                 {
                     foreach (FileInfo fi in new DirectoryInfo(currentPluginsPath).GetFiles())
                     {
