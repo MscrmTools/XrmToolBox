@@ -57,7 +57,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppCode\CharacterEncoder.cs" />
+    <Compile Include="AppCode\CommonCRMActions.cs" />
+    <Compile Include="AppCode\ConfigurationInfo.cs" />
+    <Compile Include="AppCode\CRMRecordEventArgs.cs" />
+    <Compile Include="AppCode\EntitySerializer.cs" />
+    <Compile Include="AppCode\IXrmToolboxControl.cs" />
+    <Compile Include="AppCode\ListDisplayItem.cs" />
+    <Compile Include="AppCode\ListViewColumnDef.cs" />
     <Compile Include="AppCode\ListViewItemComparer.cs" />
+    <Compile Include="AppCode\MetadataHelper.cs" />
+    <Compile Include="AppCode\Utility.cs" />
+    <Compile Include="AppCode\XMLViewerSettings.cs" />
     <Compile Include="Dialogs\SolutionPickerDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,10 +76,85 @@
       <DependentUpon>SolutionPickerDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\AttributeMetadataDropdownControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\AttributeMetadataDropdownControl.Designer.cs">
+      <DependentUpon>AttributeMetadataDropdownControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\AttributeMetadataListViewControlcs.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\AttributeMetadataListViewControlcs.Designer.cs">
+      <DependentUpon>AttributeMetadataListViewControlcs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\BoundDropdownControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\BoundDropdownControl.designer.cs">
+      <DependentUpon>BoundDropdownControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\BoundListViewControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\BoundListViewControl.designer.cs">
+      <DependentUpon>BoundListViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\CRMGridViewControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\CRMGridViewControl.designer.cs">
+      <DependentUpon>CRMGridViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EntityCollectionListViewControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\EntityCollectionListViewControl.designer.cs">
+      <DependentUpon>EntityCollectionListViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EntityMetadataDropdownControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\EntityMetadataDropdownControl.designer.cs">
+      <DependentUpon>EntityMetadataDropdownControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EntityMetadataListViewControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\EntityMetadataListViewControl.designer.cs">
+      <DependentUpon>EntityMetadataListViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\XMLViewerBaseControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserControls\XmlViewerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\XmlViewerControl.designer.cs">
+      <DependentUpon>XmlViewerControl.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Dialogs\SolutionPickerDialog.resx">
       <DependentUpon>SolutionPickerDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\AttributeMetadataDropdownControl.resx">
+      <DependentUpon>AttributeMetadataDropdownControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\BoundListViewControl.resx">
+      <DependentUpon>BoundListViewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CRMGridViewControl.resx">
+      <DependentUpon>CRMGridViewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\EntityMetadataListViewControl.resx">
+      <DependentUpon>EntityMetadataListViewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\XMLViewerBaseControl.resx">
+      <DependentUpon>XMLViewerBaseControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\XmlViewerControl.resx">
+      <DependentUpon>XmlViewerControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -79,4 +165,7 @@
     <Content Include="UserControls\Readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y "$(TargetPath)" "$(SolutionDir)\XrmToolBox\bin\Debug"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -3,7 +3,9 @@
 // CODEPLEX: http://xrmtoolbox.codeplex.com
 // BLOG: http://mscrmtools.blogspot.com
 
+using McTools.Xrm.Connection;
 using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk;
 using System;
 using System.Windows.Forms;
 using XrmToolBox.CustomControls.Dialogs;
@@ -32,7 +34,10 @@ namespace MsCrmTools.SampleTool
 
             if (SettingsManager.Instance.TryLoad(typeof(SampleTool), out settings2))
             {
-                MessageBox.Show("Settings found!");
+                // MessageBox.Show("Settings found!");
+
+                toolStripLabelMessages.Text = "Settings found!";
+
             }
 
             LogInfo("An information message");
@@ -44,7 +49,8 @@ namespace MsCrmTools.SampleTool
 
         public override void ClosingPlugin(PluginCloseInfo info)
         {
-            MessageBox.Show("Closing tool");
+            // MessageBox.Show("Closing tool");
+            toolStripLabelMessages.Text = "Closing tool";
 
             base.ClosingPlugin(info);
         }
@@ -202,6 +208,20 @@ namespace MsCrmTools.SampleTool
         private void SampleTool_Load(object sender, EventArgs e)
         {
             ShowInfoNotification("This is a notification that can lead to XrmToolBox repository", new Uri("http://github.com/MscrmTools/XrmToolBox"));
+            
+            EntCollListViewList.UpdateConnection(Service);
+            EntCollListViewFetch.UpdateConnection(Service);
+            EntityDropdownControl.UpdateConnection(Service);
+            AttribMetadataListView.UpdateConnection(Service);
+            EntityCollListViewLoadEntity.UpdateConnection(Service);
+            AttribMetadataDropdown.UpdateConnection(Service);
+
+            int width = (int)ClientSize.Width / 2;
+            splitterXmlViewer.SplitterDistance =
+            splitterXmlViewerControl.SplitterDistance = 
+            splitContainer1.SplitterDistance = width;
+
+            xmlViewerFetch.Process();
         }
 
         #region IAboutPlugin implementation
@@ -214,7 +234,7 @@ namespace MsCrmTools.SampleTool
 
         #endregion IAboutPlugin implementation
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnSolutionPickerDialog_Click(object sender, EventArgs e)
         {
             var dialog = new SolutionPickerDialog(Service)
             {
@@ -226,6 +246,64 @@ namespace MsCrmTools.SampleTool
                 HeaderText = "My custom title"
             };
             dialog.ShowDialog();
+
+            EntCollListViewList.LoadData(dialog.SelectedSolutions);
+        }
+
+        public override void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
+        {
+            EntCollListViewList.UpdateConnection(newService);
+            EntCollListViewFetch.UpdateConnection(newService);
+            EntityDropdownControl.UpdateConnection(newService);
+            AttribMetadataListView.UpdateConnection(newService);
+            EntityCollListViewLoadEntity.UpdateConnection(newService);
+            AttribMetadataDropdown.UpdateConnection(newService);
+
+            base.UpdateConnection(newService, detail, actionName, parameter);
+        }
+
+        private void btnLoadFetch_Click(object sender, EventArgs e)
+        {
+            var fetchXml = xmlViewerFetch.Text;
+
+            EntCollListViewFetch.LoadData(fetchXml);
+        }
+
+        private void EntCollListViewFetch_LoadDataComplete(object sender, EventArgs e)
+        {
+            var entitites = EntCollListViewFetch.AllEntities;
+
+            if (entitites.Count > 0) {
+                crmGridView1.DataSource = new EntityCollection(EntCollListViewFetch.AllEntities) {
+                    EntityName = entitites[0].LogicalName
+                };
+            }
+        }
+        private void buttonReloadEntities_Click(object sender, EventArgs e)
+        {
+            EntityDropdownControl.LoadData();
+        }
+
+        private void EntityDropdownControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // load the list of attributes
+            if (EntityDropdownControl.SelectedEntity != null)
+            {
+                AttribMetadataListView.ParentEntity = EntityDropdownControl.SelectedEntity;
+                AttribMetadataListView.LoadData();
+
+                AttribMetadataDropdown.ParentEntity = EntityDropdownControl.SelectedEntity;
+                AttribMetadataDropdown.LoadData();
+            }
+        }
+
+        private void buttonExecQuery_Click(object sender, EventArgs e)
+        {
+            var ent = EntityDropdownControl.SelectedEntity;
+            var attribs = AttribMetadataListView.CheckedAttributes;
+
+            EntityCollListViewLoadEntity.Columns.Clear();
+            EntityCollListViewLoadEntity.LoadData(ent.LogicalName, attribs.ConvertAll(a => a.LogicalName), (int)numericUpDown1.Value);
         }
     }
 }
