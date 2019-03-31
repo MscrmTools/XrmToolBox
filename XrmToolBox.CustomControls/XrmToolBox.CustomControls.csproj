@@ -82,11 +82,11 @@
     <Compile Include="UserControls\AttributeMetadataDropdownControl.Designer.cs">
       <DependentUpon>AttributeMetadataDropdownControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\AttributeMetadataListViewControlcs.cs">
+    <Compile Include="UserControls\AttributeMetadataListViewControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UserControls\AttributeMetadataListViewControlcs.Designer.cs">
-      <DependentUpon>AttributeMetadataListViewControlcs.cs</DependentUpon>
+    <Compile Include="UserControls\AttributeMetadataListViewControl.Designer.cs">
+      <DependentUpon>AttributeMetadataListViewControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\BoundDropdownControl.cs">
       <SubType>Component</SubType>
