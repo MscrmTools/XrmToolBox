@@ -272,8 +272,8 @@ namespace XrmToolBox
         public bool DoNotRememberPluginsWithoutConnection { get; set; }
 
         [Category("Start Page")]
-        [DisplayName("Show at startup")]
-        [Description("Indicates if Start page should be opened when XrmToolBox starts up")]
+        [DisplayName("Hide at startup")]
+        [Description("Indicates if Start page should be opened or not when XrmToolBox starts up")]
         public bool DoNotShowStartPage { get; set; }
 
         [Category("Plugins list display")]
