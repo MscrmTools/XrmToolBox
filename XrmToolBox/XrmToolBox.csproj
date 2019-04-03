@@ -137,6 +137,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.CrmSdk.CoreTools.9.0.2.11\content\bin\coretools\Microsoft.Xrm.Tooling.CrmConnectControl.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Xrm.Tooling.Ui.Styles">
+      <HintPath>..\packages\Microsoft.CrmSdk.XrmTooling.WpfControls.9.0.2.12\lib\net462\Microsoft.Xrm.Tooling.Ui.Styles.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -420,65 +423,11 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="app.manifest" />
-    <None Include="bin\coretools\CrmSvcUtil.exe.config" />
-    <None Include="bin\coretools\LicenseTerms.docx" />
-    <None Include="bin\coretools\SolutionPackager.exe.config" />
-    <None Include="bin\Debug\XrmToolBox.exe.config" />
-    <None Include="bin\Debug\XrmToolBox.Extensibility.dll.config" />
-    <None Include="bin\Debug\XrmToolBox.PluginsStore.dll.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\coretools\CrmSvcUtil.exe" />
-    <Content Include="bin\coretools\CrmSvcUtil.xml" />
-    <Content Include="bin\coretools\Microsoft.Crm.Sdk.Proxy.dll" />
-    <Content Include="bin\coretools\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" />
-    <Content Include="bin\coretools\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll" />
-    <Content Include="bin\coretools\Microsoft.Rest.ClientRuntime.dll" />
-    <Content Include="bin\coretools\Microsoft.Xrm.Sdk.Deployment.dll" />
-    <Content Include="bin\coretools\Microsoft.Xrm.Sdk.dll" />
-    <Content Include="bin\coretools\Microsoft.Xrm.Tooling.Connector.dll" />
-    <Content Include="bin\coretools\Microsoft.Xrm.Tooling.CrmConnectControl.dll" />
-    <Content Include="bin\coretools\Microsoft.Xrm.Tooling.Ui.Styles.dll" />
-    <Content Include="bin\coretools\Newtonsoft.Json.dll" />
-    <Content Include="bin\coretools\Other Redistributable.txt" />
-    <Content Include="bin\coretools\SolutionPackager.exe" />
-    <Content Include="bin\coretools\System.ValueTuple.dll" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.dll" />
-    <Content Include="bin\Debug\McTools.Xrm.Connection.WinForms.dll" />
-    <Content Include="bin\Debug\Microsoft.Crm.Sdk.Proxy.dll" />
-    <Content Include="bin\Debug\Microsoft.Crm.Sdk.Proxy.xml" />
-    <Content Include="bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.dll" />
-    <Content Include="bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms.dll" />
-    <Content Include="bin\Debug\Microsoft.IdentityModel.Clients.ActiveDirectory.xml" />
-    <Content Include="bin\Debug\Microsoft.IdentityModel.dll" />
-    <Content Include="bin\Debug\Microsoft.Rest.ClientRuntime.dll" />
-    <Content Include="bin\Debug\Microsoft.Web.XmlTransform.dll" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.Deployment.dll" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.Deployment.xml" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.dll" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.Workflow.dll" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.Workflow.xml" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Sdk.xml" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Tooling.Connector.dll" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Tooling.Connector.xml" />
-    <Content Include="bin\Debug\Microsoft.Xrm.Tooling.CrmConnectControl.dll" />
-    <Content Include="bin\Debug\Newtonsoft.Json.dll" />
-    <Content Include="bin\Debug\Newtonsoft.Json.pdb" />
-    <Content Include="bin\Debug\Newtonsoft.Json.xml" />
-    <Content Include="bin\Debug\NuGet.Core.dll" />
-    <Content Include="bin\Debug\WeifenLuo.WinFormsUI.Docking.dll" />
-    <Content Include="bin\Debug\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll" />
-    <Content Include="bin\Debug\XrmToolBox.AutoUpdater.exe" />
-    <Content Include="bin\Debug\XrmToolBox.exe" />
-    <Content Include="bin\Debug\XrmToolBox.Extensibility.dll" />
-    <Content Include="bin\Debug\XrmToolBox.Extensibility.pdb" />
-    <Content Include="bin\Debug\XrmToolBox.pdb" />
-    <Content Include="bin\Debug\XrmToolBox.PluginsStore.dll" />
-    <Content Include="bin\Debug\XrmToolBox.PluginsStore.pdb" />
-    <Content Include="bin\Release\XrmToolBox.exe" />
     <Content Include="favicon3Fr.ico" />
     <None Include="Resources\logo_0032.png" />
     <None Include="Resources\twitter.png" />

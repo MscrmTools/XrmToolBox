@@ -19,6 +19,7 @@ namespace XrmToolBox.Forms
 
             lblChangePathDescription.Text = string.Format(lblChangePathDescription.Text, Paths.XrmToolBoxPath);
             propertyGrid1.SelectedObject = Option;
+            chkOptinAI.Checked = Option.OptinForApplicationInsights;
         }
 
         public Options Option { get; private set; }
@@ -32,6 +33,7 @@ namespace XrmToolBox.Forms
         private void BtnOkClick(object sender, EventArgs e)
         {
             Option = (Options)propertyGrid1.SelectedObject;
+            Option.OptinForApplicationInsights = chkOptinAI.Checked;
 
             Option.Save();
 
