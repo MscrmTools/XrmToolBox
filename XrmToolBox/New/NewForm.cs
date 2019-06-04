@@ -900,6 +900,10 @@ namespace XrmToolBox.New
                     {
                         ApplyConnectionToTabs(e.ConnectionDetail);
                     }
+                    else if (dpMain.Contents.OfType<PluginForm>().Count() == 1)
+                    {
+                        UpdateTabConnection(dpMain.Contents.OfType<PluginForm>().First(), e.ConnectionDetail);
+                    }
 
                     StartPluginWithConnection();
 
