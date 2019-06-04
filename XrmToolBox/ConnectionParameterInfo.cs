@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using XrmToolBox.Controls;
+﻿using System.Windows.Forms;
 
 namespace XrmToolBox
 {
@@ -12,8 +7,7 @@ namespace XrmToolBox
     /// </summary>
     internal class ConnectionParameterInfo
     {
+        public UserControl ConnControl { get; set; }
         public object ConnectionParmater { get; set; }
-        public System.Windows.Forms.Panel InfoPanel { get; set; }
-        public ConnectingControl ConnControl { get; set; }
     }
 }

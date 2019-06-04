@@ -386,7 +386,15 @@ namespace XrmToolBox.New
                     {
                         var info = new ConnectionParameterInfo();
 
-                        var connectingControl = new ConnectingControl { Anchor = AnchorStyles.None };
+                        UserControl connectingControl;
+                        if (connectionDetail?.UseOnline ?? false)
+                        {
+                            connectingControl = new ConnectingCdsControl { Anchor = AnchorStyles.None };
+                        }
+                        else
+                        {
+                            connectingControl = new ConnectingControl { Anchor = AnchorStyles.None };
+                        }
                         connectingControl.Left = Width / 2 - connectingControl.Width / 2;
                         connectingControl.Top = Height / 2 - connectingControl.Height / 2;
                         Controls.Add(connectingControl);
@@ -794,15 +802,21 @@ namespace XrmToolBox.New
                 ConnectionParmater = connectionParameter
             };
 
-            fHelper.AskForConnection(info, () =>
+            fHelper.AskForConnection(info, details =>
             {
-                var connectingControl = new ConnectingControl { Anchor = AnchorStyles.None };
-                connectingControl.Left = Width / 2 - connectingControl.Width / 2;
-                connectingControl.Top = Height / 2 - connectingControl.Height / 2;
-                Controls.Add(connectingControl);
-                connectingControl.BringToFront();
+                if (details.Any(d => d.UseOnline == false))
+                {
+                    info.ConnControl = new ConnectingControl { Anchor = AnchorStyles.None };
+                }
+                else
+                {
+                    info.ConnControl = new ConnectingCdsControl { Anchor = AnchorStyles.None };
+                }
 
-                info.ConnControl = connectingControl;
+                info.ConnControl.Left = Width / 2 - info.ConnControl.Width / 2;
+                info.ConnControl.Top = Height / 2 - info.ConnControl.Height / 2;
+                Controls.Add(info.ConnControl);
+                info.ConnControl.BringToFront();
             });
         }
 
