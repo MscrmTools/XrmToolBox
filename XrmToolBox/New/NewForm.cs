@@ -450,28 +450,7 @@ namespace XrmToolBox.New
                     {
                         var crmSvcClient = connectionDetail.GetCrmServiceClient();
 
-                        var clonedService = crmSvcClient.OrganizationServiceProxy;
-                        var clonedWebClientService = crmSvcClient.OrganizationWebProxyClient;
-                        if (clonedService != null)
-                        {
-                            clonedService.SdkClientVersion = connectionDetail.OrganizationVersion;
-                        }
-
-                        if (clonedWebClientService != null)
-                        {
-                            clonedWebClientService.SdkClientVersion = connectionDetail.OrganizationVersion;
-                        }
-
-                        if (clonedService != null)
-                        {
-                            ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedService,
-                                connectionDetail);
-                        }
-                        else
-                        {
-                            ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(clonedWebClientService,
-                                connectionDetail);
-                        }
+                        ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(crmSvcClient, connectionDetail);
                     }
 
                     name = $"{plugin.Metadata.Name} ({connectionDetail?.ConnectionName ?? "Not connected"})";
