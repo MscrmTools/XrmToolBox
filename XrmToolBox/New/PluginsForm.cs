@@ -515,7 +515,7 @@ namespace XrmToolBox.New
         {
             DisplayPlugins();
 
-            txtSearch.AutoCompleteCustomSource.AddRange(PluginManager.Plugins.Select(p => p.Metadata.Name).ToArray());
+            txtSearch.AutoCompleteCustomSource.AddRange(PluginManager.Plugins.Where(p => !Options.Instance.HiddenPlugins.Contains(p.Metadata.Name)).Select(p => p.Metadata.Name).ToArray());
         }
 
         private void Pm_Clicked(object sender, MouseEventArgs e)

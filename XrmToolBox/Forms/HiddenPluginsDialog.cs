@@ -35,7 +35,7 @@ namespace XrmToolBox.Forms
             {
                 return lvPlugins.Items
                     .Cast<ListViewItem>()
-                    .Where(i => i.Checked == false)
+                    .Where(i => i.Checked)
                     .Select(i => i.Text)
                     .ToList();
             }
