@@ -387,7 +387,7 @@ namespace XrmToolBox.New
                         var info = new ConnectionParameterInfo();
 
                         UserControl connectingControl;
-                        if (connectionDetail?.UseOnline ?? false)
+                        if (connection.UseOnline)
                         {
                             connectingControl = new ConnectingCdsControl { Anchor = AnchorStyles.None };
                         }
