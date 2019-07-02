@@ -549,9 +549,9 @@ namespace XrmToolBox.PluginsStore
 
             if (lvPlugins.SelectedItems.Count == 0)
             {
-                splitContainer1.Panel2Collapsed = true;
                 return;
             }
+
             splitContainer1.Panel2Collapsed = false;
 
             var item = lvPlugins.SelectedItems[0];
