@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
@@ -105,6 +106,7 @@ namespace XrmToolBox.PluginsStore.DTO
             item.SubItems.Add(AverageFeedbackRating.ToString("N2"));
             item.SubItems.Add(packageVersion.ToString());
             item.SubItems.Add(CurrentVersion?.ToString());
+            item.SubItems.Add(LatestReleaseDate?.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern));
             item.SubItems.Add(Description);
             item.SubItems.Add(Authors);
             var actionItem = item.SubItems.Add("None");

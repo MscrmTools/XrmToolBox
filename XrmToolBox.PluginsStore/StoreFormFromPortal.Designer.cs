@@ -83,6 +83,7 @@ namespace XrmToolBox.PluginsStore
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.ilImages = new System.Windows.Forms.ImageList(this.components);
             this.ilImages24 = new System.Windows.Forms.ImageList(this.components);
+            this.colLatestDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tsMain.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.pnlReleaseNotes.SuspendLayout();
@@ -489,6 +490,7 @@ namespace XrmToolBox.PluginsStore
             this.colRating,
             this.colVersion,
             this.colCurrent,
+            this.colLatestDate,
             this.colDescription,
             this.colAuthor,
             this.colAction,
@@ -603,6 +605,11 @@ namespace XrmToolBox.PluginsStore
             this.ilImages24.TransparentColor = System.Drawing.Color.Transparent;
             this.ilImages24.Images.SetKeyName(0, "star24_5.png");
             // 
+            // colLatestDate
+            // 
+            this.colLatestDate.Text = "Release date";
+            this.colLatestDate.Width = 100;
+            // 
             // StoreFormFromPortal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -693,5 +700,6 @@ namespace XrmToolBox.PluginsStore
         private ImageList ilImages24;
         private Panel pnlReleaseNotesDetails;
         private Label lblNoRating;
+        private ColumnHeader colLatestDate;
     }
 }
