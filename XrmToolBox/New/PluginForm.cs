@@ -140,7 +140,6 @@ namespace XrmToolBox.New
 
         private void PluginControlBase_OnCloseTool(object sender, System.EventArgs e)
         {
-            FormClosing -= PluginForm_FormClosing;
             Close();
         }
 
