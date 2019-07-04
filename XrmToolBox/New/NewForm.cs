@@ -655,6 +655,8 @@ namespace XrmToolBox.New
                 var updatedPlugin = ((StoreFromPortal)store).GetPluginUpdateByFile(location);
                 if (updatedPlugin != null)
                 {
+                    var exitPluginUpdate = false;
+
                     if (!Options.Instance.PluginsUpdateSkip.Any(
                         x => x.Name == updatedPlugin.Name
                              && x.Version == updatedPlugin.Version
@@ -666,40 +668,51 @@ namespace XrmToolBox.New
                             var pu = ((StoreFromPortal)store).PrepareInstallationPackages(new List<XtbPlugin> { updatedPlugin });
                             if (pu.Plugins.Any(p => p.RequireRestart))
                             {
-                                if (DialogResult.Yes == MessageBox.Show(this,
-                                        @"This application needs to restart to install updated plugins (or new plugins that share some files with already installed plugins). Click Yes to restart this application now",
-                                        @"Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
+                                if (dialog.OnNextRestart)
                                 {
-                                    RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
                                     ((StoreFromPortal)store).PerformInstallation(pu, this);
-                                    Application.Restart();
+                                }
+                                else
+                                {
+                                    if (DialogResult.Yes == MessageBox.Show(this,
+                                            @"This application needs to restart to install updated plugins (or new plugins that share some files with already installed plugins). Click Yes to restart this application now",
+                                            @"Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
+                                    {
+                                        RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(),
+                                            new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
+                                        ((StoreFromPortal)store).PerformInstallation(pu, this);
+                                        Application.Restart();
+                                    }
                                 }
                             }
 
-                            return;
+                            exitPluginUpdate = true;
                         }
 
-                        var existing = Options.Instance.PluginsUpdateSkip.FirstOrDefault(
-                            x => x.Name == updatedPlugin.Name);
-
-                        if (existing != null)
+                        if (!exitPluginUpdate)
                         {
-                            Options.Instance.PluginsUpdateSkip.Remove(existing);
+                            var existing = Options.Instance.PluginsUpdateSkip.FirstOrDefault(
+                                x => x.Name == updatedPlugin.Name);
+
+                            if (existing != null)
+                            {
+                                Options.Instance.PluginsUpdateSkip.Remove(existing);
+                            }
+
+                            var nextDate = DateTime.Now.AddDays(dialog.NumberOfDaysToSkip);
+                            if (dialog.IsVersionSkipped)
+                            {
+                                nextDate = DateTime.Now.AddYears(10);
+                            }
+
+                            Options.Instance.PluginsUpdateSkip.Add(new PluginUpdateSkip
+                            {
+                                Name = updatedPlugin.Name,
+                                Version = updatedPlugin.Version,
+                                Date = nextDate
+                            });
+                            Options.Instance.Save();
                         }
-
-                        var nextDate = DateTime.Now.AddDays(dialog.NumberOfDaysToSkip);
-                        if (dialog.IsVersionSkipped)
-                        {
-                            nextDate = DateTime.Now.AddYears(10);
-                        }
-
-                        Options.Instance.PluginsUpdateSkip.Add(new PluginUpdateSkip
-                        {
-                            Name = updatedPlugin.Name,
-                            Version = updatedPlugin.Version,
-                            Date = nextDate
-                        });
-                        Options.Instance.Save();
                     }
                 }
             }

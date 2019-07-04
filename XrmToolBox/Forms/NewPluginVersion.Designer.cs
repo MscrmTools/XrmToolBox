@@ -39,6 +39,7 @@
             this.cbbReminder = new System.Windows.Forms.ComboBox();
             this.llDoNotUpdate = new System.Windows.Forms.LinkLabel();
             this.llUpdateNow = new System.Windows.Forms.LinkLabel();
+            this.llUpdateNextStart = new System.Windows.Forms.LinkLabel();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).BeginInit();
@@ -56,7 +57,7 @@
             this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(50, 48, 50, 48);
-            this.panel1.Size = new System.Drawing.Size(1280, 1018);
+            this.panel1.Size = new System.Drawing.Size(1280, 1097);
             this.panel1.TabIndex = 0;
             // 
             // rtbReleaseNotes
@@ -70,7 +71,7 @@
             this.rtbReleaseNotes.Name = "rtbReleaseNotes";
             this.rtbReleaseNotes.ReadOnly = true;
             this.rtbReleaseNotes.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.rtbReleaseNotes.Size = new System.Drawing.Size(1180, 511);
+            this.rtbReleaseNotes.Size = new System.Drawing.Size(1180, 552);
             this.rtbReleaseNotes.TabIndex = 15;
             this.rtbReleaseNotes.Text = "";
             this.rtbReleaseNotes.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtbReleaseNotes_LinkClicked);
@@ -140,14 +141,15 @@
             // 
             // pnlFooter
             // 
+            this.pnlFooter.Controls.Add(this.llUpdateNextStart);
             this.pnlFooter.Controls.Add(this.cbbReminder);
             this.pnlFooter.Controls.Add(this.llDoNotUpdate);
             this.pnlFooter.Controls.Add(this.llUpdateNow);
             this.pnlFooter.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlFooter.Location = new System.Drawing.Point(50, 852);
+            this.pnlFooter.Location = new System.Drawing.Point(50, 893);
             this.pnlFooter.Margin = new System.Windows.Forms.Padding(4);
             this.pnlFooter.Name = "pnlFooter";
-            this.pnlFooter.Size = new System.Drawing.Size(1180, 118);
+            this.pnlFooter.Size = new System.Drawing.Size(1180, 156);
             this.pnlFooter.TabIndex = 10;
             // 
             // cbbReminder
@@ -160,7 +162,7 @@
             "Don\'t remind me for 2 days",
             "Don\'t remind me for 3 days",
             "Don\'t remind me for this version"});
-            this.cbbReminder.Location = new System.Drawing.Point(802, 56);
+            this.cbbReminder.Location = new System.Drawing.Point(802, 37);
             this.cbbReminder.Margin = new System.Windows.Forms.Padding(4);
             this.cbbReminder.Name = "cbbReminder";
             this.cbbReminder.Size = new System.Drawing.Size(338, 33);
@@ -174,7 +176,7 @@
             this.llDoNotUpdate.ForeColor = System.Drawing.Color.Red;
             this.llDoNotUpdate.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
             this.llDoNotUpdate.LinkColor = System.Drawing.Color.Red;
-            this.llDoNotUpdate.Location = new System.Drawing.Point(570, 34);
+            this.llDoNotUpdate.Location = new System.Drawing.Point(570, 18);
             this.llDoNotUpdate.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.llDoNotUpdate.Name = "llDoNotUpdate";
             this.llDoNotUpdate.Size = new System.Drawing.Size(192, 71);
@@ -195,7 +197,7 @@
             this.llUpdateNow.ForeColor = System.Drawing.Color.Green;
             this.llUpdateNow.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
             this.llUpdateNow.LinkColor = System.Drawing.Color.Green;
-            this.llUpdateNow.Location = new System.Drawing.Point(32, 34);
+            this.llUpdateNow.Location = new System.Drawing.Point(47, 18);
             this.llUpdateNow.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.llUpdateNow.MinimumSize = new System.Drawing.Size(418, 2);
             this.llUpdateNow.Name = "llUpdateNow";
@@ -209,12 +211,32 @@
             this.llUpdateNow.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llUpdateNow_LinkClicked);
             this.llUpdateNow.Paint += new System.Windows.Forms.PaintEventHandler(this.llUpdateNow_Paint);
             // 
+            // llUpdateNextStart
+            // 
+            this.llUpdateNextStart.ActiveLinkColor = System.Drawing.Color.Green;
+            this.llUpdateNextStart.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.llUpdateNextStart.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Underline);
+            this.llUpdateNextStart.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.llUpdateNextStart.Location = new System.Drawing.Point(7, 98);
+            this.llUpdateNextStart.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.llUpdateNextStart.MinimumSize = new System.Drawing.Size(418, 2);
+            this.llUpdateNextStart.Name = "llUpdateNextStart";
+            this.llUpdateNextStart.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
+            this.llUpdateNextStart.Size = new System.Drawing.Size(499, 58);
+            this.llUpdateNextStart.TabIndex = 3;
+            this.llUpdateNextStart.TabStop = true;
+            this.llUpdateNextStart.Text = "Update on next XrmToolBox run";
+            this.llUpdateNextStart.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.llUpdateNextStart.VisitedLinkColor = System.Drawing.Color.Blue;
+            this.llUpdateNextStart.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llUpdateNextStart_LinkClicked);
+            // 
             // NewPluginVersion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1280, 1018);
+            this.ClientSize = new System.Drawing.Size(1280, 1097);
             this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
@@ -246,5 +268,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cbbReminder;
         private System.Windows.Forms.Label lblNewVersion;
+        private System.Windows.Forms.LinkLabel llUpdateNextStart;
     }
 }
