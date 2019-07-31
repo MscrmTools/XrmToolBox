@@ -671,6 +671,7 @@ namespace XrmToolBox.New
                                 if (dialog.OnNextRestart)
                                 {
                                     ((StoreFromPortal)store).PerformInstallation(pu, this);
+                                    UpdatePluginUpdateSkip(updatedPlugin, true, 1);
                                 }
                                 else
                                 {
@@ -691,27 +692,7 @@ namespace XrmToolBox.New
 
                         if (!exitPluginUpdate)
                         {
-                            var existing = Options.Instance.PluginsUpdateSkip.FirstOrDefault(
-                                x => x.Name == updatedPlugin.Name);
-
-                            if (existing != null)
-                            {
-                                Options.Instance.PluginsUpdateSkip.Remove(existing);
-                            }
-
-                            var nextDate = DateTime.Now.AddDays(dialog.NumberOfDaysToSkip);
-                            if (dialog.IsVersionSkipped)
-                            {
-                                nextDate = DateTime.Now.AddYears(10);
-                            }
-
-                            Options.Instance.PluginsUpdateSkip.Add(new PluginUpdateSkip
-                            {
-                                Name = updatedPlugin.Name,
-                                Version = updatedPlugin.Version,
-                                Date = nextDate
-                            });
-                            Options.Instance.Save();
+                            UpdatePluginUpdateSkip(updatedPlugin, dialog.IsVersionSkipped, dialog.NumberOfDaysToSkip);
                         }
                     }
                 }
@@ -780,6 +761,31 @@ namespace XrmToolBox.New
 
                 store.UninstallByFileName(fileName);
             }
+        }
+
+        private void UpdatePluginUpdateSkip(XtbPlugin updatedPlugin, bool isVersionSkipped, int nbDays)
+        {
+            var existing = Options.Instance.PluginsUpdateSkip.FirstOrDefault(
+                x => x.Name == updatedPlugin.Name);
+
+            if (existing != null)
+            {
+                Options.Instance.PluginsUpdateSkip.Remove(existing);
+            }
+
+            var nextDate = DateTime.Now.AddDays(nbDays);
+            if (isVersionSkipped)
+            {
+                nextDate = DateTime.Now.AddYears(10);
+            }
+
+            Options.Instance.PluginsUpdateSkip.Add(new PluginUpdateSkip
+            {
+                Name = updatedPlugin.Name,
+                Version = updatedPlugin.Version,
+                Date = nextDate
+            });
+            Options.Instance.Save();
         }
 
         #endregion Plugins Form events
