@@ -564,7 +564,7 @@ namespace XrmToolBox.PluginsStore
 
             if (!string.IsNullOrEmpty(releaseNotes))
             {
-                if (Uri.TryCreate(releaseNotes, UriKind.Absolute, out _))
+                if (releaseNotes.ToLower().StartsWith("http") && Uri.TryCreate(releaseNotes, UriKind.Absolute, out _))
                 {
                     var llbl = new LinkLabel { Text = releaseNotes };
                     llbl.Click += (s, evt) => { Process.Start(((LinkLabel)s).Text); };
