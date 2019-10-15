@@ -124,17 +124,17 @@ To change the storage path of XrmToolBox, create a shortcut to XrmToolBox.exe ap
 
 XrmToolBox.exe /overridepath:&lt;Your_new_path&gt;
 
-When using overridepath argument, all folder and files for XrmToolBox applications (plugins, settings, logs, etc.) are stored in sub folders for the specified path</value>
+When using overridepath argument, all folder and files for XrmToolBox applications (tools, settings, logs, etc.) are stored in sub folders for the specified path</value>
   </data>
   <data name="label6.Text" xml:space="preserve">
-    <value>In order to understand how XrmToolBox is used and what plugins are installed and used, we are collecting anonymous data that are sent to Application Insights
+    <value>In order to understand how XrmToolBox is used and what tools are installed and used, we are collecting anonymous data that are sent to Application Insights
 
 What is collected ?
 
 We collect only the following information:
 - Version of XrmToolBox
-- Name of opened plugin
-- Version of opened plugin
+- Name of opened tool
+- Version of opened tool
 - Your location (deducted by Application Insights, we do not collect it explicitly)
 
 Therefore, the following url is used to send data : https://dc.services.visualstudio.com/v2/track

@@ -331,7 +331,7 @@
             this.lblOpenPluginsStore.Name = "lblOpenPluginsStore";
             this.lblOpenPluginsStore.Size = new System.Drawing.Size(587, 74);
             this.lblOpenPluginsStore.TabIndex = 15;
-            this.lblOpenPluginsStore.Text = "       Open Plugins Store";
+            this.lblOpenPluginsStore.Text = "       Open Tool Library";
             this.lblOpenPluginsStore.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblOpenPluginsStore.Click += new System.EventHandler(this.LabelClick);
             this.lblOpenPluginsStore.MouseEnter += new System.EventHandler(this.LabelMouseEnter);
@@ -422,7 +422,7 @@
             this.lblRupTitle.Padding = new System.Windows.Forms.Padding(0, 30, 0, 0);
             this.lblRupTitle.Size = new System.Drawing.Size(671, 111);
             this.lblRupTitle.TabIndex = 2;
-            this.lblRupTitle.Text = "Recently Used Plugins";
+            this.lblRupTitle.Text = "Recently Used Tools";
             // 
             // lblFavTitle
             // 

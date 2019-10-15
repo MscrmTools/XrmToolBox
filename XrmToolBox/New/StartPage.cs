@@ -117,7 +117,7 @@ namespace XrmToolBox.New
 
         private void Ctrl_ClearMruRequested(object sender, System.EventArgs e)
         {
-            if (MessageBox.Show(this, @"Are you sure you want to clear the Most Recently Used plugins list?", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show(this, @"Are you sure you want to clear the Most Recently Used tools list?", @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 MostRecentlyUsedItems.Instance.Items.Clear();
                 MostRecentlyUsedItems.Instance.Save();

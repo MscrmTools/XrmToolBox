@@ -55,7 +55,7 @@
             this.lblSecurityFilter.Name = "lblSecurityFilter";
             this.lblSecurityFilter.Size = new System.Drawing.Size(670, 25);
             this.lblSecurityFilter.TabIndex = 1;
-            this.lblSecurityFilter.Text = "Plugins list filtered by your IT administrator(s). Some plugins may not appear be" +
+            this.lblSecurityFilter.Text = "Tools list filtered by your IT administrator(s). Some tools may not appear be" +
     "low\r\n";
             // 
             // pictureBox1

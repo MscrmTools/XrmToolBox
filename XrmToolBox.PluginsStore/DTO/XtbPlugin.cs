@@ -37,7 +37,7 @@ namespace XrmToolBox.PluginsStore.DTO
 
         public List<string> Files
         {
-            get { return FilesList.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).Where(f => f.ToLower().IndexOf("plugins/", StringComparison.Ordinal) >= 0).ToList(); }
+            get { return FilesList.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).Where(f => f.ToLower().IndexOf("plugins/", StringComparison.Ordinal) >= 0).ToList(); }
         }
 
         [DataMember(Name = "mctools_files")]
@@ -152,6 +152,9 @@ namespace XrmToolBox.PluginsStore.DTO
         {
             Plugins = new List<XtbPlugin>();
         }
+
+        [DataMember(Name = "odata.nextLink")]
+        public string NextLink { get; set; }
 
         [DataMember(Name = "odata.metadata")]
         public string OdataMetadata { get; set; }

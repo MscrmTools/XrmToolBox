@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
 using System.Web;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
@@ -9,6 +11,8 @@ namespace XrmToolBox.New
 {
     partial class NewForm
     {
+        private ComponentResourceManager resources = new ComponentResourceManager(typeof(NewForm));
+
         #region Events
 
         private void displayXrmToolBoxHelpToolStripMenuItem_Click(object sender, System.EventArgs e)
@@ -175,6 +179,87 @@ namespace XrmToolBox.New
                 tsmiAboutSelectedPlugin.Visible = false;
                 tsmiAbout.Click -= tsmiAbout_Click;
                 tsmiAbout.Click += tsmiAbout_Click;
+            }
+        }
+
+        private void ProcessMenuItemsForPlugin2()
+        {
+            var isPluginForm = dpMain.ActiveContent is PluginForm;
+            tsmiPluginAbout.Visible = false;
+            tsmiPluginDonate.Visible = false;
+            tsmiPluginFeedback.Visible = false;
+            tsmiPluginHelp.Visible = false;
+            tssHelp.Visible = false;
+            tssFeedback.Visible = isPluginForm;
+            //((System.Drawing.Image)(resources.GetObject("tsmiHelp.Image")))
+            if (!isPluginForm)
+            {
+                tsmiXtbHelp.Text = @"Help";
+                tsmiXtbHelp.Image = null;
+                tsmiXtbDonate.Text = @"Donate";
+                tsmiXtbDonate.Image = null;
+                tsmiXtbFeedback.Text = @"Feedback";
+                tsmiXtbFeedback.Image = null;
+                tsmiXtbAbout.Text = @"About";
+                tsmiXtbAbout.Image = null;
+
+                return;
+            }
+
+            tsmiXtbHelp.Text = @"Help for XrmToolBox";
+            tsmiXtbHelp.Image = (Image)resources.GetObject("tsmiHelpXrmToolBox.Image");
+            tsmiXtbDonate.Text = @"Donate for XrmToolBox";
+            tsmiXtbDonate.Image = (Image)resources.GetObject("tsmiHelpXrmToolBox.Image");
+            tsmiXtbFeedback.Text = @"Feedback for XrmToolBox";
+            tsmiXtbFeedback.Image = (Image)resources.GetObject("tsmiHelpXrmToolBox.Image");
+            tsmiXtbAbout.Text = @"About XrmToolBox";
+            tsmiXtbAbout.Image = (Image)resources.GetObject("tsmiHelpXrmToolBox.Image");
+
+            var currentPluginForm = (PluginForm)dpMain.ActiveContent;
+
+            if (currentPluginForm.Control is IHelpPlugin help)
+            {
+                tsmiPluginHelp.Visible = true;
+                tssHelp.Visible = true;
+                tsmiPluginHelp.Text = $@"Help for {currentPluginForm.PluginTitle}";
+                tsmiPluginHelp.Image = (help as PluginControlBase)?.TabIcon;
+            }
+            else
+            {
+                tsmiXtbHelp.Image = null;
+            }
+
+            if (currentPluginForm.Control is IPayPalPlugin paypal)
+            {
+                tsmiPluginDonate.Visible = true;
+                tsmiPluginDonate.Text = $@"Donate for {currentPluginForm.PluginTitle}";
+                tsmiPluginDonate.Image = (paypal as PluginControlBase)?.TabIcon;
+            }
+            else
+            {
+                tsmiXtbDonate.Image = null;
+            }
+
+            if (currentPluginForm.Control is IGitHubPlugin github)
+            {
+                tsmiPluginFeedback.Visible = true;
+                tsmiPluginFeedback.Text = $@"Feedback for {currentPluginForm.PluginTitle}";
+                tsmiPluginFeedback.Image = (github as PluginControlBase)?.TabIcon;
+            }
+            else
+            {
+                tsmiXtbFeedback.Image = null;
+            }
+
+            if (currentPluginForm.Control is IAboutPlugin aboutPlugin)
+            {
+                tsmiPluginAbout.Visible = true;
+                tsmiPluginAbout.Text = $@"About {currentPluginForm.PluginTitle}";
+                tsmiPluginAbout.Image = (aboutPlugin as PluginControlBase)?.TabIcon;
+            }
+            else
+            {
+                tsmiXtbAbout.Image = null;
             }
         }
 

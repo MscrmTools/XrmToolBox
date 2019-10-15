@@ -34,7 +34,7 @@ namespace XrmToolBox.Extensibility
 
         public ConnectionDetail ConnectionDetail { get; set; }
 
-        [Category("Plugin Control Properties")]
+        [Category("Tool Control Properties")]
         [Description("Icon")]
         public Icon PluginIcon { get; set; }
 

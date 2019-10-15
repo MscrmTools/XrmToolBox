@@ -112,7 +112,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "PluginForm";
             this.Padding = new System.Windows.Forms.Padding(11, 0, 11, 10);
-            this.Text = "Plugin Form";
+            this.Text = "Tool Form";
             this.DockStateChanged += new System.EventHandler(this.PluginForm_DockStateChanged);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PluginForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PluginForm_FormClosed);

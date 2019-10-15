@@ -59,7 +59,7 @@
             this.label1.Padding = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Size = new System.Drawing.Size(376, 36);
             this.label1.TabIndex = 1;
-            this.label1.Text = "The following plugin(s) require that you accept their license terms before instal" +
+            this.label1.Text = "The following tool(s) require that you accept their license terms before instal" +
     "ling.";
             // 
             // pnlBottom
@@ -104,7 +104,7 @@
             this.label2.Padding = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Size = new System.Drawing.Size(376, 55);
             this.label2.TabIndex = 2;
-            this.label2.Text = "By clicking \"I Accept\", you agree to the license terms for the plugin(s) listed a" +
+            this.label2.Text = "By clicking \"I Accept\", you agree to the license terms for the tool(s) listed a" +
     "bove. If you do not agree to the license terms, click \"I Decline\".";
             // 
             // pnlMain

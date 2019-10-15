@@ -38,7 +38,9 @@ namespace XrmToolBox.PluginsStore
             store = new StoreFromPortal();
             store.PluginsUpdated += (sender, e) => { PluginsUpdated?.Invoke(sender, e); };
             var size = store.CalculateCacheFolderSize();
-            tsbCleanCacheFolder.ToolTipText = $@"Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {size}MB";
+            tsbCleanCacheFolder.ToolTipText = $@"Clean XrmToolBox Tool Library cache folder
+
+Current cache folder size: {size}MB";
         }
 
         public event EventHandler PluginsClosingRequested;
@@ -61,7 +63,7 @@ namespace XrmToolBox.PluginsStore
             tstSearch.Enabled = false;
 
             lvPlugins.Items.Clear();
-            tssLabel.Text = @"Retrieving plugins from Nuget feed...";
+            tssLabel.Text = @"Retrieving tools from Nuget feed...";
             tssProgress.Style = ProgressBarStyle.Marquee;
             tssProgress.Visible = true;
             tssPluginsCount.Visible = false;
@@ -141,7 +143,7 @@ namespace XrmToolBox.PluginsStore
 
                 var items = (List<ListViewItem>)e.Result;
 
-                tssPluginsCount.Text = $@"Plugins: {allPlugins} / New: {newPlugin} / Updates: {updatePlugin}";
+                tssPluginsCount.Text = $@"Tools: {allPlugins} / New: {newPlugin} / Updates: {updatePlugin}";
                 tssPluginsCount.Visible = true;
 
                 lvPlugins.Items.AddRange(items.ToArray());
@@ -601,7 +603,7 @@ namespace XrmToolBox.PluginsStore
             {
                 case CompatibleState.DoesntFitMinimumVersion:
                     {
-                        lblNotif.Text = $@"This plugin has not been developed specificaly to support latest breaking change version of XrmToolBox. Contact plugin author to make him support at least version {Store.MinCompatibleVersion}";
+                        lblNotif.Text = $@"This tool has not been developed specificaly to support latest breaking change version of XrmToolBox. Contact tool author to make him support at least version {Store.MinCompatibleVersion}";
                         pbNotifIcon.Image = iiNotif.Images[2];
                         pnlNotif.Visible = true;
                     }
@@ -609,7 +611,7 @@ namespace XrmToolBox.PluginsStore
 
                 case CompatibleState.RequireNewVersionOfXtb:
                     {
-                        lblNotif.Text = @"This plugin implements features from latest version of XrmToolBox. Please update your XrmToolBox to latest version to be able to install this plugin version";
+                        lblNotif.Text = @"This tool implements features from latest version of XrmToolBox. Please update your XrmToolBox to latest version to be able to install this tool version";
                         pbNotifIcon.Image = iiNotif.Images[1];
                         pnlNotif.Visible = true;
                     }
@@ -617,7 +619,7 @@ namespace XrmToolBox.PluginsStore
 
                 case CompatibleState.Other:
                     {
-                        lblNotif.Text = @"Something is wrong with this plugin package and we can't validate it is compatible with this version of XrmToolBox. Please contact the author to make him review his package";
+                        lblNotif.Text = @"Something is wrong with this tool package and we can't validate it is compatible with this version of XrmToolBox. Please contact the author to make him review his package";
                         pbNotifIcon.Image = iiNotif.Images[2];
                         pnlNotif.Visible = true;
                     }
@@ -672,14 +674,16 @@ namespace XrmToolBox.PluginsStore
         private void tsbCleanCacheFolder_Click(object sender, EventArgs e)
         {
             if (DialogResult.No ==
-                MessageBox.Show(this, @"Are you sure you want to delete XrmToolBox Plugins Store cache?", @"Question",
+                MessageBox.Show(this, @"Are you sure you want to delete XrmToolBox Tool Library cache?", @"Question",
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question))
             {
                 return;
             }
 
             var size = store.CleanCacheFolder();
-            tsbCleanCacheFolder.ToolTipText = $@"Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {size}MB";
+            tsbCleanCacheFolder.ToolTipText = $@"Clean XrmToolBox Tool Library cache folder
+
+Current cache folder size: {size}MB";
             MessageBox.Show(this, @"Cache folder has been cleaned");
         }
 
@@ -754,7 +758,9 @@ namespace XrmToolBox.PluginsStore
                     MessageBox.Show(this, @"Installation done!", @"Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 var size = store.CalculateCacheFolderSize();
-                tsbCleanCacheFolder.ToolTipText = $@"Clean XrmToolBox Plugins Store cache folder\r\n\r\nCurrent cache folder size: {size}MB";
+                tsbCleanCacheFolder.ToolTipText = $@"Clean XrmToolBox Tool Library cache folder
+
+Current cache folder size: {size}MB";
             };
             bw.RunWorkerAsync(packages);
         }
@@ -805,7 +811,7 @@ namespace XrmToolBox.PluginsStore
             if (conflicts.Count > 0)
             {
                 var result = MessageBox.Show(this,
-                    @"Some plugins will be partially removed since they share files with other plugins.\n\nDo you want to continue anyway?",
+                    @"Some tools will be partially removed since they share files with other tools.\n\nDo you want to continue anyway?",
                     @"Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (result == DialogResult.No)
                 {

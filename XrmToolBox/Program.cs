@@ -125,7 +125,7 @@ namespace XrmToolBox
             catch (Exception error)
             {
                 MessageBox.Show(
-                    $"An error occured when trying to update some plugins: {error.Message}\n\nPlease start XrmToolBox again to fix this problem",
+                    $"An error occured when trying to update some tools: {error.Message}\n\nPlease start XrmToolBox again to fix this problem",
                     @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -347,7 +347,7 @@ namespace XrmToolBox
                 if (uninstalltries > 3)
                 {
                     MessageBox.Show(
-                                  $"An error occured when trying to delete some plugins: {error.Message}.\n\nPlease start XrmToolBox again to fix this problem.",
+                                  $"An error occured when trying to delete some tools: {error.Message}.\n\nPlease start XrmToolBox again to fix this problem.",
                                   @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else

@@ -126,7 +126,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(770, 43);
             this.label2.TabIndex = 1;
-            this.label2.Text = "This dialog helps you to control how plugins are displayed in the application. Yo" +
+            this.label2.Text = "This dialog helps you to control how tools are displayed in the application. Yo" +
     "u can also define how to use XrmToolBox with a proxy";
             // 
             // lblTitle

@@ -86,7 +86,7 @@
             this.label1.Padding = new System.Windows.Forms.Padding(0, 48, 0, 0);
             this.label1.Size = new System.Drawing.Size(1180, 111);
             this.label1.TabIndex = 14;
-            this.label1.Tag = "A new version of the plugin {0} is available in the Plugins Store.";
+            this.label1.Tag = "A new version of the tool {0} is available in the Tool Library.";
             this.label1.Text = "What\'s new";
             // 
             // panel2
@@ -113,7 +113,7 @@
             this.lblPluginTitle.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
             this.lblPluginTitle.Size = new System.Drawing.Size(992, 114);
             this.lblPluginTitle.TabIndex = 1;
-            this.lblPluginTitle.Text = "[Plugin Title]";
+            this.lblPluginTitle.Text = "[Tool Title]";
             this.lblPluginTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblNewVersion

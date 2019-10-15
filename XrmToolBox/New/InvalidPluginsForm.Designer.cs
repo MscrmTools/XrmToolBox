@@ -65,7 +65,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(433, 28);
             this.label1.TabIndex = 1;
-            this.label1.Text = "These plugins failed to load during plugins analysis";
+            this.label1.Text = "These tools failed to load during tools analysis";
             // 
             // lblHeader
             // 
@@ -75,7 +75,7 @@
             this.lblHeader.Name = "lblHeader";
             this.lblHeader.Size = new System.Drawing.Size(271, 45);
             this.lblHeader.TabIndex = 0;
-            this.lblHeader.Text = "Plugins not loaded";
+            this.lblHeader.Text = "Tools not loaded";
             // 
             // splitContainer
             // 
@@ -146,7 +146,7 @@
             // 
             // chName
             // 
-            this.chName.Text = "Plugin";
+            this.chName.Text = "Tool";
             this.chName.Width = 400;
             // 
             // llShortcut
@@ -157,7 +157,7 @@
             this.llShortcut.Size = new System.Drawing.Size(753, 32);
             this.llShortcut.TabIndex = 0;
             this.llShortcut.TabStop = true;
-            this.llShortcut.Text = "Click here to open Plugins folder so you can delete faulting plugins";
+            this.llShortcut.Text = "Click here to open Tools folder so you can delete faulting tools";
             this.llShortcut.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.llShortcut.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llShortcut_LinkClicked);
             // 

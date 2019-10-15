@@ -161,18 +161,18 @@ namespace XrmToolBox
         }
 
         [Category("Close behavior")]
-        [DisplayName("Close plugin silently")]
-        [Description("When closing an individual plugin, do not prompt to confirm plugin close")]
+        [DisplayName("Close tool silently")]
+        [Description("When closing an individual plugin, do not prompt to confirm tool close")]
         public bool CloseEachPluginSilently { get; set; }
 
         [Category("Close behavior")]
         [DisplayName("Close XrmToolBox silently")]
-        [Description("When closing XrmToolBox, do not prompt to confirm opened plugins close")]
+        [Description("When closing XrmToolBox, do not prompt to confirm opened tools close")]
         public bool CloseOpenedPluginsSilently { get; set; }
 
         [Category("Close behavior")]
         [DisplayName("Shutdown silently")]
-        [Description("When Windows shuts down and XrmToolBox have opened plugins, do not prompt to confirm opened plugins close")]
+        [Description("When Windows shuts down and XrmToolBox have opened tools, do not prompt to confirm opened tools close")]
         public bool ClosePluginsSilentlyOnWindowsShutdown { get; set; } = true;
 
         [Browsable(false)]
@@ -214,23 +214,20 @@ namespace XrmToolBox
 
         [Browsable(false)]
         [Category("Startup")]
-        [DisplayName("Open Plugins Store only if updates are available")]
+        [DisplayName("Open Tool Library only if updates are available")]
         public bool DisplayPluginsStoreOnlyIfUpdates { get; set; }
 
         [Browsable(false)]
-        public bool OptinForApplicationInsights { get; set; } = true;
-
-        [Browsable(false)]
         [Category("Startup")]
-        [DisplayName("Open Plugins Store")]
+        [DisplayName("Open Tool Library")]
         public bool DisplayPluginsStoreOnStartup { get; set; }
 
         [Browsable(false)]
         public bool DisplayRecentlyUpdatedFirst { get; set; }
 
         [Category("Startup")]
-        [DisplayName("Open Plugins Store")]
-        [Description("Indicates when Plugins Store should be opened when XrmToolBox starts")]
+        [DisplayName("Open Tool Library")]
+        [Description("Indicates when Tool Library should be opened when XrmToolBox starts")]
         [TypeConverter(typeof(CustomEnumConverter))]
         [XmlIgnore]
         public DisplayPluginsStoreOnStartup DisplayStoreOnStartup
@@ -270,8 +267,8 @@ namespace XrmToolBox
         public bool DoNotCheckForUpdates { get; set; }
 
         [Category("Start Page")]
-        [DisplayName("Forget plugins without connection")]
-        [Description("Do not remember plugins opened without connection in Most Recently Used plugins")]
+        [DisplayName("Forget tools without connection")]
+        [Description("Do not remember tools opened without connection in Most Recently Used tools")]
         public bool DoNotRememberPluginsWithoutConnection { get; set; }
 
         [Category("Start Page")]
@@ -279,13 +276,13 @@ namespace XrmToolBox
         [Description("Indicates if Start page should be opened or not when XrmToolBox starts up")]
         public bool DoNotShowStartPage { get; set; }
 
-        [Category("Plugins list display")]
-        [DisplayName("Hidden plugins")]
-        [Description("Defines the installed plugins that should not be displayed in the plugins list")]
+        [Category("Tools list display")]
+        [DisplayName("Hidden tools")]
+        [Description("Defines the installed tools that should not be displayed in the tools list")]
         [Editor(typeof(HiddenPluginsEditor), typeof(UITypeEditor))]
         public List<string> HiddenPlugins { get; set; }
 
-        [Category("Plugins list display")]
+        [Category("Tools list display")]
         [DisplayName("Icons size")]
         [TypeConverter(typeof(CustomEnumConverter))]
         [XmlIgnore]
@@ -312,11 +309,14 @@ namespace XrmToolBox
         public List<PluginUseCount> MostUsedList { get; set; }
 
         [Category("Start Page")]
-        [DisplayName("Plugins to display")]
-        [Description("Indicates number of plugins to display in Moste Recently Used items section of Start Page")]
+        [DisplayName("Tools to display")]
+        [Description("Indicates number of tools to display in Moste Recently Used items section of Start Page")]
         public int MruItemsToDisplay { get; set; } = 10;
 
-        [Category("Plugins list display")]
+        [Browsable(false)]
+        public bool OptinForApplicationInsights { get; set; } = true;
+
+        [Category("Tools list display")]
         [DisplayName("Order")]
         [TypeConverter(typeof(CustomEnumConverter))]
         [XmlIgnore]
@@ -354,8 +354,8 @@ namespace XrmToolBox
         public bool ReuseConnections { get; set; }
 
         [Category("Startup")]
-        [DisplayName("Show plugins update notification")]
-        [Description("Indicates if a notification should be displayed when updates are present for installed plugins")]
+        [DisplayName("Show tools update notification")]
+        [Description("Indicates if a notification should be displayed when updates are present for installed tools")]
         public bool ShowPluginUpdatesPanelAtStartup { get; set; } = true;
 
         [XmlElement("FormSize")]

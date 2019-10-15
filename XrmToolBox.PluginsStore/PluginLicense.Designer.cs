@@ -65,7 +65,7 @@
             this.lblPluginName.Name = "lblPluginName";
             this.lblPluginName.Size = new System.Drawing.Size(83, 13);
             this.lblPluginName.TabIndex = 0;
-            this.lblPluginName.Text = "[plugin name]";
+            this.lblPluginName.Text = "[tool name]";
             this.lblPluginName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblAuthors

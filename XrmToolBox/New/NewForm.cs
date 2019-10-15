@@ -70,7 +70,7 @@ namespace XrmToolBox.New
             ManageConnectionControl();
             ccsb.MergeConnectionsFiles = Options.Instance.MergeConnectionFiles;
 
-            WelcomeDialog.SetStatus("Loading plugins...");
+            WelcomeDialog.SetStatus("Loading tools...");
             try
             {
                 pluginsForm = new PluginsForm();
@@ -96,7 +96,7 @@ namespace XrmToolBox.New
                 pluginsForm.Show(dpMain, Options.Instance.PluginsListDocking);
                 pluginsForm.IsHidden = Options.Instance.PluginsListIsHidden;
 
-                ProcessMenuItemsForPlugin();
+                ProcessMenuItemsForPlugin2();
 
                 // Restore session management
                 if (Options.Instance.RememberSession)
@@ -576,7 +576,7 @@ namespace XrmToolBox.New
             {
                 Invoke(new Action(() =>
                 {
-                    MessageBox.Show(this, $@"An error occured when trying to display this plugin: {error.Message}", @"Error",
+                    MessageBox.Show(this, $@"An error occured when trying to display this tool: {error.Message}", @"Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                     if (pnlConnectLoading.Visible)
@@ -614,7 +614,7 @@ namespace XrmToolBox.New
                 type = e.Plugin?.Value?.GetType();
                 if (type == null)
                 {
-                    MessageBox.Show(this, @"Unable to determine plugin location on disk");
+                    MessageBox.Show(this, @"Unable to determine tool location on disk");
                     return;
                 }
             }
@@ -627,7 +627,7 @@ namespace XrmToolBox.New
                 if (store == null)
                 {
                     MessageBox.Show(this,
-                        @"The Plugins Store is not initialized so we cannot find the project url",
+                        @"The Tool Library is not initialized so we cannot find the project url",
                         @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
@@ -640,7 +640,7 @@ namespace XrmToolBox.New
                 else
                 {
                     MessageBox.Show(this,
-                        @"This plugin is not on the Plugins Store or its Project Url is not defined. Therefore, we cannot lead you to the project page",
+                        @"This tool is not on the Tool Library or its Project Url is not defined. Therefore, we cannot lead you to the project page",
                         @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
@@ -676,7 +676,7 @@ namespace XrmToolBox.New
                                 else
                                 {
                                     if (DialogResult.Yes == MessageBox.Show(this,
-                                            @"This application needs to restart to install updated plugins (or new plugins that share some files with already installed plugins). Click Yes to restart this application now",
+                                            @"This application needs to restart to install updated tools (or new tools that share some files with already installed tools). Click Yes to restart this application now",
                                             @"Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
                                     {
                                         RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(),
@@ -740,7 +740,7 @@ namespace XrmToolBox.New
         private void PluginsForm_UninstallPluginRequested(object sender, PluginEventArgs e)
         {
             if (DialogResult.No == MessageBox.Show(this,
-                    @"Are you sure you want to uninstall this plugin?",
+                    @"Are you sure you want to uninstall this tool?",
                     @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question))
             {
                 return;
@@ -754,7 +754,7 @@ namespace XrmToolBox.New
                 if (store == null)
                 {
                     MessageBox.Show(this,
-                        @"The Plugins Store is not initialized so we cannot find files to uninstall",
+                        @"The Tool Library is not initialized so we cannot find files to uninstall",
                         @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
@@ -1059,7 +1059,7 @@ namespace XrmToolBox.New
             content = GetPluginByName(message.TargetPlugin);
             if (content == null)
             {
-                MessageBox.Show($@"Cannot switch to plugin {message.TargetPlugin}.", message.SourcePlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($@"Cannot switch to tool {message.TargetPlugin}.", message.SourcePlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             content.Show(dpMain, content.DockState);
@@ -1189,7 +1189,7 @@ namespace XrmToolBox.New
             {
                 currentContent = dpMain.ActiveContent;
 
-                ProcessMenuItemsForPlugin();
+                ProcessMenuItemsForPlugin2();
 
                 if (dpMain.ActiveContent is StartPage sp)
                 {

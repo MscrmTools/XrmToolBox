@@ -207,7 +207,7 @@ namespace MsCrmTools.SampleTool
 
         public void ShowAboutDialog()
         {
-            MessageBox.Show(@"This is a sample plugin", @"About Sample Plugin", MessageBoxButtons.OK,
+            MessageBox.Show(@"This is a sample tool", @"About Sample Tool", MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
         }
 

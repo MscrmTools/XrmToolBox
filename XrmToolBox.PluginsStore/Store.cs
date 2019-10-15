@@ -149,7 +149,7 @@ namespace XrmToolBox.PluginsStore
                 XmlSerializerHelper.SerializeToFile(updates, Path.Combine(Paths.XrmToolBoxPath, "Update.xml"));
 
                 if (DialogResult.Yes == MessageBox.Show(
-                    "This application needs to restart to install updated plugins (or new plugins that share some files with already installed plugins). Click Yes to restart this application now",
+                    "This application needs to restart to install updated tools (or new tools that share some files with already installed tools). Click Yes to restart this application now",
                     "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
                 {
                     Application.Restart();
@@ -203,7 +203,7 @@ namespace XrmToolBox.PluginsStore
             XmlSerializerHelper.SerializeToFile(deletions, filePath);
 
             if (DialogResult.Yes == MessageBox.Show(
-                "This application needs to restart to remove plugins. Click Yes to restart this application now",
+                "This application needs to restart to remove tools. Click Yes to restart this application now",
                 "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
             {
                 Application.Restart();
@@ -224,7 +224,7 @@ namespace XrmToolBox.PluginsStore
                         if (DialogResult.Yes ==
                             MessageBox.Show(
                                 $"{xtbPackage.Package.Title}\nis incompatible with this version of XrmToolBox.\nOpen project URL?",
-                                "Incompatible plugin", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
+                                "Incompatible tool", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
                         {
                             Process.Start(xtbPackage.Package.ProjectUrl.ToString());
                         }
@@ -233,7 +233,7 @@ namespace XrmToolBox.PluginsStore
                     {
                         MessageBox.Show(
                             $"{xtbPackage.Package.Title}\nis incompatible with this version of XrmToolBox.",
-                            "Incompatible plugin", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            "Incompatible tool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                     continue;
                 }

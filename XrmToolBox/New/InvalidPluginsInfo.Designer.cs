@@ -55,7 +55,7 @@
             this.lblSecurityFilter.Name = "lblSecurityFilter";
             this.lblSecurityFilter.Size = new System.Drawing.Size(532, 25);
             this.lblSecurityFilter.TabIndex = 1;
-            this.lblSecurityFilter.Text = "One or more plugins failed to load. Click here to see more details";
+            this.lblSecurityFilter.Text = "One or more tools failed to load. Click here to see more details";
             this.lblSecurityFilter.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lblSecurityFilter_MouseClick);
             // 
             // pictureBox1

@@ -49,7 +49,7 @@
             this.lblPlugin.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
             this.lblPlugin.Size = new System.Drawing.Size(754, 62);
             this.lblPlugin.TabIndex = 1;
-            this.lblPlugin.Text = "[Plugin Name]";
+            this.lblPlugin.Text = "[Tool Name]";
             // 
             // toolTip
             // 

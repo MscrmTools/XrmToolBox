@@ -82,7 +82,7 @@ namespace XrmToolBox.New
             var plugin = pluginsManager.ValidatedPlugins.FirstOrDefault(p => p.Metadata.Name == pluginName);
             if (plugin == null)
             {
-                var message = $"Plugin '{pluginName}' was not found.\n\nYou can install it from the Plugins Store";
+                var message = $"Tool '{pluginName}' was not found.\n\nYou can install it from the Tool Library";
                 MessageBox.Show(this, message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }

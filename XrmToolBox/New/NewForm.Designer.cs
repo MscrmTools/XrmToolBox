@@ -1,4 +1,6 @@
-﻿namespace XrmToolBox.New
+﻿using System.Windows.Forms;
+
+namespace XrmToolBox.New
 {
     partial class NewForm
     {
@@ -92,6 +94,20 @@
             this.cmsMainCloseThis = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsMainCloseExceptThis = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsMainCloseAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsddbHelp = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsmiXtbHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPluginHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssHelp = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiXtbFeedback = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPluginFeedback = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssFeedback = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiXtbDonate = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPluginDonate = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssUpdate = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiCheckForUpdate = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiXtbAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.tssDonate = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiPluginAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.tsMain.SuspendLayout();
             this.pnlSupport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -110,7 +126,8 @@
             this.tsbManageWindows,
             this.toolStripSeparator1,
             this.tsddbTools,
-            this.toolStripDropDownButton2,
+            //this.toolStripDropDownButton2,,
+            this.tsddbHelp,
             this.tssOpenOrg,
             this.tsbOpenOrg});
             this.tsMain.Location = new System.Drawing.Point(0, 0);
@@ -165,7 +182,7 @@
             this.closeAllWindowsExceptActiveToolStripMenuItem.Name = "closeAllWindowsExceptActiveToolStripMenuItem";
             this.closeAllWindowsExceptActiveToolStripMenuItem.Size = new System.Drawing.Size(385, 34);
             this.closeAllWindowsExceptActiveToolStripMenuItem.Text = "Close all except active window";
-            this.closeAllWindowsExceptActiveToolStripMenuItem.ToolTipText = "Only applies to Plugin pages";
+            this.closeAllWindowsExceptActiveToolStripMenuItem.ToolTipText = "Only applies to Tool pages";
             // 
             // tssWindows
             // 
@@ -194,7 +211,7 @@
             this.tsddbTools.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbTools.Name = "tsddbTools";
             this.tsddbTools.Size = new System.Drawing.Size(109, 34);
-            this.tsddbTools.Text = "Tools";
+            this.tsddbTools.Text = "Configuration";
             this.tsddbTools.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsddbTools_DropDownItemClicked);
             // 
             // manageConnectionsToolStripMenuItem
@@ -214,7 +231,7 @@
             this.pluginsStoreToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pluginsStoreToolStripMenuItem.Image")));
             this.pluginsStoreToolStripMenuItem.Name = "pluginsStoreToolStripMenuItem";
             this.pluginsStoreToolStripMenuItem.Size = new System.Drawing.Size(298, 34);
-            this.pluginsStoreToolStripMenuItem.Text = "Plugins Store";
+            this.pluginsStoreToolStripMenuItem.Text = "Tool Library";
             // 
             // settingsToolStripMenuItem
             // 
@@ -264,7 +281,7 @@
             this.tsmiHelpSelectedPlugin.Name = "tsmiHelpSelectedPlugin";
             this.tsmiHelpSelectedPlugin.Size = new System.Drawing.Size(332, 34);
             this.tsmiHelpSelectedPlugin.Tag = "Display {0} help";
-            this.tsmiHelpSelectedPlugin.Text = "Selected Plugin";
+            this.tsmiHelpSelectedPlugin.Text = "Selected Tool";
             this.tsmiHelpSelectedPlugin.Click += new System.EventHandler(this.HelpSelectedPluginToolStripMenuItem_Click);
             // 
             // tsmiFeedback
@@ -351,7 +368,7 @@
             this.tsmiDonateGbpSelectedPlugin});
             this.tsmiDonateSelectedPlugin.Name = "tsmiDonateSelectedPlugin";
             this.tsmiDonateSelectedPlugin.Size = new System.Drawing.Size(296, 34);
-            this.tsmiDonateSelectedPlugin.Text = "SelectedPlugin";
+            this.tsmiDonateSelectedPlugin.Text = "Selected Tool";
             // 
             // tsmiDonateUsdSelectedPlugin
             // 
@@ -389,6 +406,7 @@
             this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(362, 34);
             this.checkForUpdateToolStripMenuItem.Text = "Check for update";
             this.checkForUpdateToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdateToolStripMenuItem_Click);
+            this.tsmiCheckForUpdate.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
             // 
             // toolStripSeparator13
             // 
@@ -417,7 +435,7 @@
             // 
             this.tsmiAboutSelectedPlugin.Name = "tsmiAboutSelectedPlugin";
             this.tsmiAboutSelectedPlugin.Size = new System.Drawing.Size(276, 34);
-            this.tsmiAboutSelectedPlugin.Text = "Selected plugin";
+            this.tsmiAboutSelectedPlugin.Text = "Selected tool";
             this.tsmiAboutSelectedPlugin.Click += new System.EventHandler(this.tsmiAboutSelectedPlugin_Click);
             // 
             // tssOpenOrg
@@ -575,7 +593,7 @@
             this.label1.Size = new System.Drawing.Size(269, 50);
             this.label1.TabIndex = 13;
             this.label1.Tag = "";
-            this.label1.Text = "Open Plugins Store";
+            this.label1.Text = "Open Tool Library";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.label1.Click += new System.EventHandler(this.openPluginsStoreButton_Click);
             // 
@@ -616,8 +634,8 @@
             this.lblPluginsUpdateAvailable.Name = "lblPluginsUpdateAvailable";
             this.lblPluginsUpdateAvailable.Size = new System.Drawing.Size(724, 50);
             this.lblPluginsUpdateAvailable.TabIndex = 10;
-            this.lblPluginsUpdateAvailable.Tag = "{0} Update{1} {2} available for your plugins";
-            this.lblPluginsUpdateAvailable.Text = "X Updates are available for your plugins";
+            this.lblPluginsUpdateAvailable.Tag = "{0} Update{1} {2} available for your tools";
+            this.lblPluginsUpdateAvailable.Text = "X Updates are available for your tools";
             // 
             // pnlBottom
             // 
@@ -715,6 +733,129 @@
             this.cmsMainCloseAll.Size = new System.Drawing.Size(275, 34);
             this.cmsMainCloseAll.Text = "Close all";
             // 
+            // tsddbHelp
+            // 
+            this.tsddbHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiXtbHelp,
+            this.tsmiPluginHelp,
+            this.tssHelp,
+            this.tsmiXtbFeedback,
+            this.tsmiPluginFeedback,
+            this.tssFeedback,
+            this.tsmiXtbDonate,
+            this.tsmiPluginDonate,
+            this.tssDonate,
+            this.tsmiCheckForUpdate,
+            this.tssUpdate,
+            this.tsmiXtbAbout,
+            this.tsmiPluginAbout});
+            this.tsddbHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsmiHelp.Image")));
+
+         //   this.tsddbHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsddbHelp.Image")));
+            this.tsddbHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsddbHelp.Name = "tsddbHelp";
+            this.tsddbHelp.Size = new System.Drawing.Size(119, 36);
+            this.tsddbHelp.Text = "Help";
+            // 
+            // tsmiXtbHelp
+            // 
+            this.tsmiXtbHelp.Name = "tsmiXtbHelp";
+            this.tsmiXtbHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsmiHelpXrmToolBox.Image")));
+            this.tsmiXtbHelp.Size = new System.Drawing.Size(386, 38);
+            this.tsmiXtbHelp.Text = "XrmToolBox help";
+            this.tsmiXtbHelp.Click += helpToolStripMenuItem_Click;
+            // 
+            // tsmiPluginHelp
+            // 
+            this.tsmiPluginHelp.Name = "tsmiPluginHelp";
+            this.tsmiPluginHelp.Size = new System.Drawing.Size(386, 38);
+            this.tsmiPluginHelp.Text = "Plugin help";
+            this.tsmiPluginHelp.Click += HelpSelectedPluginToolStripMenuItem_Click;
+            // 
+            // tssHelp
+            // 
+            this.tssHelp.Name = "tssHelp";
+            this.tssHelp.Size = new System.Drawing.Size(383, 6);
+            // 
+            // tsmiXtbFeedback
+            // 
+            this.tsmiXtbFeedback.Name = "tsmiXtbFeedback";
+            this.tsmiXtbHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsmiHelpXrmToolBox.Image")));
+            this.tsmiXtbFeedback.Size = new System.Drawing.Size(386, 38);
+            this.tsmiXtbFeedback.Text = "Feedback for XrmToolBox";
+            this.tsmiXtbFeedback.Click += GithubXrmToolBoxMenuItem_Click;
+            // 
+            // tsmiPluginFeedback
+            // 
+            this.tsmiPluginFeedback.Name = "tsmiPluginFeedback";
+            this.tsmiPluginFeedback.Size = new System.Drawing.Size(386, 38);
+            this.tsmiPluginFeedback.Text = "Feedback for Plugin";
+            this.tsmiPluginFeedback.Click += githubPluginMenuItem_Click;
+            // 
+            // tssFeedback
+            // 
+            this.tssFeedback.Name = "tssFeedback";
+            this.tssFeedback.Size = new System.Drawing.Size(383, 6);
+            // 
+            // tsmiXtbDonate
+            // 
+            this.tsmiXtbDonate.Name = "tsmiXtbDonate";
+            this.tsmiXtbHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsmiHelpXrmToolBox.Image")));
+            this.tsmiXtbDonate.Size = new System.Drawing.Size(386, 38);
+            this.tsmiXtbDonate.Text = "Donate for XrmToolBox";
+            this.tsmiXtbDonate.DropDownItems.AddRange(new ToolStripItem[]
+            {
+                this.tsmiDonateEurXrmToolBox,
+                this.tsmiDonateUsdXrmToolBox,
+                this.tsmiDonateGbpXrmToolBox
+            });
+            // 
+            // tsmiPluginDonate
+            // 
+            this.tsmiPluginDonate.Name = "tsmiPluginDonate";
+            this.tsmiPluginDonate.Size = new System.Drawing.Size(386, 38);
+            this.tsmiPluginDonate.Text = "Donate for Plugin";
+            this.tsmiPluginDonate.DropDownItems.AddRange(new ToolStripItem[]
+            {
+                this.tsmiDonateEurSelectedPlugin,
+                this.tsmiDonateUsdSelectedPlugin,
+                this.tsmiDonateGbpSelectedPlugin
+            });
+            // 
+            // tssUpdate
+            // 
+            this.tssUpdate.Name = "tssUpdate";
+            this.tssUpdate.Size = new System.Drawing.Size(383, 6);
+            // 
+            // tsmiCheckForUpdate
+            // 
+            this.tsmiCheckForUpdate.Name = "tsmiCheckForUpdate";
+            this.tsmiCheckForUpdate.Image = ((System.Drawing.Image)(resources.GetObject("checkForUpdateToolStripMenuItem.Image")));
+            this.tsmiCheckForUpdate.Size = new System.Drawing.Size(386, 38);
+            this.tsmiCheckForUpdate.Text = "Check for update";
+            this.tsmiCheckForUpdate.Click += checkForUpdateToolStripMenuItem_Click;
+            this.tsmiCheckForUpdate.DisplayStyle = ToolStripItemDisplayStyle.ImageAndText;
+            // 
+            // tsmiXtbAbout
+            // 
+            this.tsmiXtbAbout.Name = "tsmiXtbAbout";
+            this.tsmiXtbAbout.Size = new System.Drawing.Size(386, 38);
+            this.tsmiXtbAbout.Text = "About XrmToolBox";
+            this.tsmiXtbAbout.Click += tsmiAboutXrmToolBox_Click;
+            // 
+            // tssDonate
+            // 
+            this.tssDonate.Name = "tssDonate";
+            this.tssDonate.Size = new System.Drawing.Size(383, 6);
+            // 
+            // tsmiPluginAbout
+            // 
+            this.tsmiPluginAbout.Name = "tsmiPluginAbout";
+            this.tsmiXtbHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsmiHelpXrmToolBox.Image")));
+            this.tsmiPluginAbout.Size = new System.Drawing.Size(386, 38);
+            this.tsmiPluginAbout.Text = "About Plugin";
+            this.tsmiPluginAbout.Click += tsmiAboutSelectedPlugin_Click;
+            // 
             // NewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
@@ -734,7 +875,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "NewForm";
             this.Opacity = 0D;
-            this.Text = "XrmToolBox for Microsoft Dynamics 365 for CE and PowerApps Common Data Service" ;
+            this.Text = "XrmToolBox for Microsoft Dynamics 365 for CE and PowerApps Common Data Service";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.NewForm_FormClosing);
             this.Load += new System.EventHandler(this.NewForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.NewForm_KeyDown);
@@ -820,5 +961,19 @@
         private System.Windows.Forms.PictureBox pbOpenPluginsStore;
         private System.Windows.Forms.LinkLabel llClosePluginsUpdatePanel;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripDropDownButton tsddbHelp;
+        private System.Windows.Forms.ToolStripMenuItem tsmiXtbHelp;
+        private System.Windows.Forms.ToolStripMenuItem tsmiPluginHelp;
+        private System.Windows.Forms.ToolStripSeparator tssHelp;
+        private System.Windows.Forms.ToolStripMenuItem tsmiXtbFeedback;
+        private System.Windows.Forms.ToolStripMenuItem tsmiPluginFeedback;
+        private System.Windows.Forms.ToolStripSeparator tssFeedback;
+        private System.Windows.Forms.ToolStripMenuItem tsmiXtbDonate;
+        private System.Windows.Forms.ToolStripMenuItem tsmiPluginDonate;
+        private System.Windows.Forms.ToolStripSeparator tssDonate;
+        private System.Windows.Forms.ToolStripMenuItem tsmiCheckForUpdate;
+        private System.Windows.Forms.ToolStripSeparator tssUpdate;
+        private System.Windows.Forms.ToolStripMenuItem tsmiXtbAbout;
+        private System.Windows.Forms.ToolStripMenuItem tsmiPluginAbout;
     }
 }

@@ -89,7 +89,7 @@
             // 
             // columnHeader1
             // 
-            this.columnHeader1.Text = "Plugin name";
+            this.columnHeader1.Text = "Tool name";
             this.columnHeader1.Width = 200;
             // 
             // columnHeader2
@@ -138,7 +138,7 @@
             this.Controls.Add(this.pnlHeader);
             this.Name = "HiddenPluginsDialog";
             this.ShowIcon = false;
-            this.Text = "Plugins to hide";
+            this.Text = "Tools to hide";
             this.pnlFooter.ResumeLayout(false);
             this.pnlMain.ResumeLayout(false);
             this.ResumeLayout(false);

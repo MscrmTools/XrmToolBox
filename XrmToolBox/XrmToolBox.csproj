@@ -215,7 +215,6 @@
     <Compile Include="AppCode\DockExtensions.cs" />
     <Compile Include="AppCode\Extensions.cs" />
     <Compile Include="AppCode\ListViewItemComparer.cs" />
-    <Compile Include="AppCode\LogUsage.cs" />
     <Compile Include="AppCode\Favorites.cs" />
     <Compile Include="AppCode\MostRecentlyUsedItems.cs" />
     <Compile Include="AppCode\PluginControlStatus.cs" />
@@ -390,6 +389,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\OptionsDialog.resx">
       <DependentUpon>OptionsDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\WelcomeDialog.resx">
       <DependentUpon>WelcomeDialog.cs</DependentUpon>
@@ -433,6 +433,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="New\PluginsForm.resx">
       <DependentUpon>PluginsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="New\StartPage.resx">
       <DependentUpon>StartPage.cs</DependentUpon>
@@ -500,6 +501,7 @@
     <None Include="Resources\PluginsStore64.png" />
     <None Include="Resources\appInsights.png" />
     <None Include="Resources\connectingCds1.gif" />
+    <None Include="Resources\OpenToolsLibrary.png" />
     <Content Include="XrmToolBox201512.ico" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />
@@ -540,7 +542,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

@@ -111,8 +111,14 @@ namespace XrmToolBox.PluginsStore
         public void LoadNugetPackages()
         {
             plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
-
-            XrmToolBoxPlugins = GetContent<XtbPlugins>("https://www.xrmtoolbox.com/_odata/plugins");
+            XrmToolBoxPlugins = new XtbPlugins();
+            string url = "https://www.xrmtoolbox.com/_odata/plugins";
+            do
+            {
+                var tmpPlugins = GetContent<XtbPlugins>(url);
+                XrmToolBoxPlugins.Plugins.AddRange(tmpPlugins.Plugins);
+                url = tmpPlugins.NextLink;
+            } while (url != null);
 
             foreach (var plugin in XrmToolBoxPlugins.Plugins)
             {
@@ -132,7 +138,7 @@ namespace XrmToolBox.PluginsStore
                     form.Invoke(new Action(() =>
                     {
                         if (DialogResult.Yes == MessageBox.Show(form,
-                                @"This application needs to restart to install updated plugins (or new plugins that share some files with already installed plugins). Click Yes to restart this application now",
+                                @"This application needs to restart to install updated tools (or new tools that share some files with already installed tools). Click Yes to restart this application now",
                                 @"Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
                         {
                             storeForm.AskForPluginsClosing();
@@ -190,7 +196,7 @@ namespace XrmToolBox.PluginsStore
             XmlSerializerHelper.SerializeToFile(deletions, filePath);
 
             if (DialogResult.Yes == MessageBox.Show(
-                "This application needs to restart to remove plugins. Click Yes to restart this application now",
+                "This application needs to restart to remove tools. Click Yes to restart this application now",
                 "Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
             {
                 Application.Restart();
@@ -220,7 +226,7 @@ namespace XrmToolBox.PluginsStore
                     {
                         var message =
                             $"{plugin.Name} is incompatible with this version of XrmToolBox.\nOpen project URL?";
-                        if (DialogResult.Yes == MessageBox.Show(message, "Incompatible plugin", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
+                        if (DialogResult.Yes == MessageBox.Show(message, "Incompatible tool", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation))
                         {
                             Process.Start(plugin.ProjectUrl);
                         }
@@ -229,7 +235,7 @@ namespace XrmToolBox.PluginsStore
                     {
                         MessageBox.Show(
                             $"{plugin.Name} is incompatible with this version of XrmToolBox.",
-                            "Incompatible plugin", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                            "Incompatible tool", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                     continue;
                 }
@@ -334,6 +340,9 @@ namespace XrmToolBox.PluginsStore
 
             foreach (var file in files)
             {
+                if (Path.GetFileName(file).Length == 0)
+                    continue;
+
                 var directoryName = Path.GetDirectoryName(file);
                 if (directoryName == null)
                 {

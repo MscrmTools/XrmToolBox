@@ -52,7 +52,7 @@
             this.lblPlugin.Padding = new System.Windows.Forms.Padding(18, 0, 0, 0);
             this.lblPlugin.Size = new System.Drawing.Size(754, 62);
             this.lblPlugin.TabIndex = 1;
-            this.lblPlugin.Text = "[Plugin Name]";
+            this.lblPlugin.Text = "[Tool Name]";
             // 
             // lblConnectionName
             // 
@@ -71,7 +71,7 @@
             // toolTip
             // 
             this.toolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.toolTip.ToolTipTitle = "Plugin used";
+            this.toolTip.ToolTipTitle = "Tool used";
             // 
             // cmsMru
             // 
@@ -101,7 +101,7 @@
             this.tsmiRemoveAll.Image = global::XrmToolBox.Properties.Resources.Clear_16;
             this.tsmiRemoveAll.Name = "tsmiRemoveAll";
             this.tsmiRemoveAll.Size = new System.Drawing.Size(439, 34);
-            this.tsmiRemoveAll.Text = "Clear Most Recently Used plugins list";
+            this.tsmiRemoveAll.Text = "Clear Most Recently Used tools list";
             // 
             // pbLogo
             // 

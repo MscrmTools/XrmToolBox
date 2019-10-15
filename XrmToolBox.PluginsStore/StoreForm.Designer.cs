@@ -213,7 +213,7 @@ namespace XrmToolBox.PluginsStore
             this.tsmiShowPluginsNotCompatible.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tsmiShowPluginsNotCompatible.Name = "tsmiShowPluginsNotCompatible";
             this.tsmiShowPluginsNotCompatible.Size = new System.Drawing.Size(229, 22);
-            this.tsmiShowPluginsNotCompatible.Text = "Show plugins not compatible";
+            this.tsmiShowPluginsNotCompatible.Text = "Show tools not compatible";
             this.tsmiShowPluginsNotCompatible.Click += new System.EventHandler(this.tsmiPluginDisplayOption_Click);
             // 
             // tsmiShowNewPlugins
@@ -223,7 +223,7 @@ namespace XrmToolBox.PluginsStore
             this.tsmiShowNewPlugins.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tsmiShowNewPlugins.Name = "tsmiShowNewPlugins";
             this.tsmiShowNewPlugins.Size = new System.Drawing.Size(229, 22);
-            this.tsmiShowNewPlugins.Text = "Show new plugins";
+            this.tsmiShowNewPlugins.Text = "Show new tools";
             this.tsmiShowNewPlugins.Click += new System.EventHandler(this.tsmiPluginDisplayOption_Click);
             // 
             // tsmiShowPluginsUpdate
@@ -233,7 +233,7 @@ namespace XrmToolBox.PluginsStore
             this.tsmiShowPluginsUpdate.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tsmiShowPluginsUpdate.Name = "tsmiShowPluginsUpdate";
             this.tsmiShowPluginsUpdate.Size = new System.Drawing.Size(229, 22);
-            this.tsmiShowPluginsUpdate.Text = "Show plugins update";
+            this.tsmiShowPluginsUpdate.Text = "Show tools update";
             this.tsmiShowPluginsUpdate.Click += new System.EventHandler(this.tsmiPluginDisplayOption_Click);
             // 
             // tsmiShowInstalledPlugins
@@ -243,7 +243,7 @@ namespace XrmToolBox.PluginsStore
             this.tsmiShowInstalledPlugins.CheckState = System.Windows.Forms.CheckState.Checked;
             this.tsmiShowInstalledPlugins.Name = "tsmiShowInstalledPlugins";
             this.tsmiShowInstalledPlugins.Size = new System.Drawing.Size(229, 22);
-            this.tsmiShowInstalledPlugins.Text = "Show installed plugins";
+            this.tsmiShowInstalledPlugins.Text = "Show installed tools";
             this.tsmiShowInstalledPlugins.Click += new System.EventHandler(this.tsmiPluginDisplayOption_Click);
             // 
             // toolStripSeparator5
@@ -355,7 +355,7 @@ namespace XrmToolBox.PluginsStore
             this.lblProperties.Name = "lblProperties";
             this.lblProperties.Size = new System.Drawing.Size(500, 16);
             this.lblProperties.TabIndex = 1;
-            this.lblProperties.Text = "Plugin properties";
+            this.lblProperties.Text = "Tool properties";
             // 
             // pnlReleaseNotesDetails
             // 
@@ -534,7 +534,7 @@ namespace XrmToolBox.PluginsStore
             this.Name = "StoreForm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "XrmToolBox Plugins Store";
+            this.Text = "XrmToolBox Tool Library";
             this.Load += new System.EventHandler(this.PluginsChecker_Load);
             this.tsMain.ResumeLayout(false);
             this.tsMain.PerformLayout();
