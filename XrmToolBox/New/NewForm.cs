@@ -43,7 +43,7 @@ namespace XrmToolBox.New
         private FormHelper fHelper;
         private string initialConnectionName;
         private string initialPluginName;
-        private int numberOfConnectionReceived = 0;
+        private int numberOfConnectionReceived;
         private IOrganizationService service;
         private StartPage startPage;
         private IStore store;
@@ -469,13 +469,12 @@ namespace XrmToolBox.New
                 }
 
                 ((IXrmToolBoxPluginControl)pluginControl).OnRequestConnection += NewForm_OnRequestConnection;
-                //((IXrmToolBoxPluginControl)pluginControl).OnCloseTool += NewForm_OnCloseTool;
                 ((IXrmToolBoxPluginControl)pluginControl).OnWorkAsync += (sender, e) =>
                 {
-                    var bw = new BackgroundWorker();
-                    bw.DoWork += (s, evt) => { evt.Result = AnnouncementManager.GetItemToDisplay(); };
-                    bw.RunWorkerCompleted += (s, evt) => { AnnouncementManager.Display(evt.Result as AnnouncementItem); };
-                    bw.RunWorkerAsync();
+                    //var bw = new BackgroundWorker();
+                    //bw.DoWork += (s, evt) => { evt.Result = AnnouncementManager.GetItemToDisplay(); };
+                    //bw.RunWorkerCompleted += (s, evt) => { AnnouncementManager.Display(evt.Result as AnnouncementItem); };
+                    //bw.RunWorkerAsync();
                 };
 
                 if (pnlConnectLoading.Visible)
@@ -585,14 +584,6 @@ namespace XrmToolBox.New
                         pnlConnectLoading.Visible = false;
                     }
                 }));
-            }
-        }
-
-        private void NewForm_OnCloseTool(object sender, System.EventArgs e)
-        {
-            if (dpMain.ActiveContent is PluginForm pluginForm)
-            {
-                RequestCloseTab(pluginForm, new PluginCloseInfo(ToolBoxCloseReason.PluginRequest), Options.Instance.CloseEachPluginSilently);
             }
         }
 
