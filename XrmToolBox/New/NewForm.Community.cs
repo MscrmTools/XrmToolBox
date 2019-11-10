@@ -17,7 +17,7 @@ namespace XrmToolBox.New
 
         private void displayXrmToolBoxHelpToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            Process.Start("https://github.com/MscrmTools/XrmToolBox/wiki");
+            Process.Start("https://www.xrmtoolbox.com/documentation/");
         }
 
         private void donateDollarPluginMenuItem_Click(object sender, System.EventArgs e)
