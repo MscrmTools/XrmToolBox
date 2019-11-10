@@ -281,7 +281,6 @@ namespace XrmToolBox
                 RedirectAssembly("Microsoft.Xrm.Tooling.Ui.Styles");
                 RedirectAssembly("Microsoft.Xrm.Tooling.CrmConnectControl");
                 RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory");
-                RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory.WindowsForms");
                 RedirectAssembly("WeifenLuo.WinFormsUI.Docking");
                 RedirectAssembly("WeifenLuo.WinFormsUI.Docking.ThemeVS2015");
 
