@@ -503,6 +503,8 @@
     <None Include="Resources\appInsights.png" />
     <None Include="Resources\connectingCds1.gif" />
     <None Include="Resources\OpenToolsLibrary.png" />
+    <None Include="Resources\LogoDyn365.png" />
+    <None Include="Resources\powerapps16.png" />
     <Content Include="XrmToolBox201512.ico" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />

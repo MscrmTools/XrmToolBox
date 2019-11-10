@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -864,6 +865,19 @@ namespace XrmToolBox.New
                 {
                     ccsb.SetConnectionStatus(true, e.ConnectionDetail);
                     ccsb.SetMessage(string.Empty);
+
+                    if (e.ConnectionDetail.UseOnline)
+                    {
+                        tsbOpenOrg.Text = @"Open environment";
+                        tsbOpenOrg.ToolTipText = @"Open the connected environment in your web browser";
+                        tsbOpenOrg.Image = new Bitmap(Properties.Resources.powerapps16);
+                    }
+                    else
+                    {
+                        tsbOpenOrg.Text = @"Open organization";
+                        tsbOpenOrg.ToolTipText = @"Open the connected organization in your web browser";
+                        tsbOpenOrg.Image = new Bitmap(Properties.Resources.LogoDyn365);
+                    }
 
                     if (parameter != null)
                     {

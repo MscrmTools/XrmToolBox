@@ -123,6 +123,16 @@ namespace XrmToolBox.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap LogoDyn365 {
+            get {
+                object obj = ResourceManager.GetObject("LogoDyn365", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap OpenToolsLibrary {
             get {
                 object obj = ResourceManager.GetObject("OpenToolsLibrary", resourceCulture);
@@ -146,6 +156,16 @@ namespace XrmToolBox.Properties {
         internal static System.Drawing.Bitmap PluginsStore64 {
             get {
                 object obj = ResourceManager.GetObject("PluginsStore64", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap powerapps16 {
+            get {
+                object obj = ResourceManager.GetObject("powerapps16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
