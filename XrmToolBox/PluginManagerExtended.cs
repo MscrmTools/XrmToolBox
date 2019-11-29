@@ -74,9 +74,19 @@ namespace XrmToolBox
                 foreach (var exception in ex.LoaderExceptions)
                 {
                     var assemblies = ex.Types.Select(t => t?.Assembly.FullName ?? "").Distinct();
-                    foreach (var assembly in assemblies)
+                    foreach (var assembly in assemblies.Select(a => string.IsNullOrWhiteSpace(a) ? "unknown" : a))
                     {
-                        ValidationErrors.Add(assembly, exception.Message);
+                        if (ValidationErrors.ContainsKey(assembly) && ValidationErrors[assembly] == exception.Message)
+                        {   // Don't repeat exact same assembly/error
+                            continue;
+                        }
+                        var i = 0;
+                        var assemblykey = assembly;
+                        while (ValidationErrors.ContainsKey(assemblykey))
+                        {   // Don't try to add same assembly name, dictionary will explode
+                            assemblykey = $"{assembly} ({++i})";
+                        }
+                        ValidationErrors.Add(assemblykey, exception.Message);
                     }
                 }
 
