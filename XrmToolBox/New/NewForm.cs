@@ -1,6 +1,7 @@
 ﻿using McTools.Xrm.Connection;
 using McTools.Xrm.Connection.WinForms;
 using Microsoft.Xrm.Sdk;
+using Microsoft.Xrm.Sdk.Client;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -136,6 +137,27 @@ namespace XrmToolBox.New
             set => base.Text = value;
         }
 
+        private void CheckForEarlyBoundEntities()
+        {
+            var assemblies = (from a in AppDomain.CurrentDomain.GetAssemblies()
+                              where a.CustomAttributes.Any(ca => ca.AttributeType == typeof(ProxyTypesAssemblyAttribute))
+                                    && !a.GetName().Name.StartsWith("Microsoft.")
+                              select a).ToList();
+
+            if (assemblies.Any())
+            {
+                string message = $@"The following files are not respecting XrmToolBox development best practices:
+
+{string.Join(Environment.NewLine, assemblies.Select(a => "- " + a.GetName().Name))}
+
+They can impact the behavior of XrmToolBox or its tools.
+
+We recommend that you remove the corresponding files from XrmToolBox Plugins folder";
+
+                MessageBox.Show(this, message, @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
         #region Form management
 
         private void BringToTop()
@@ -265,6 +287,8 @@ namespace XrmToolBox.New
             {
                 Opacity = 100;
                 BringToTop();
+
+                CheckForEarlyBoundEntities();
             }));
 
             if (store == null)
