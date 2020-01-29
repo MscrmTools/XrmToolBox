@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Reflection;
 using System.Web;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
@@ -78,14 +79,43 @@ namespace XrmToolBox.New
             GithubXrmToolBoxMenuItem_Click(sender, e);
         }
 
+        private string GetAdditionalInfo()
+        {
+            var additionalInfo = "";
+            if (connectionDetail != null)
+            {
+                additionalInfo +=
+                    $"-%20Deployment:%20{(connectionDetail.WebApplicationUrl.ToLower().Contains("dynamics.com") ? "Online" : "OnPremise")}%0A";
+
+                additionalInfo += $"-%20DB%20Version:%20{connectionDetail.OrganizationVersion}%0A";
+            }
+
+            additionalInfo += $"-%20XTB%20Version:%20{Assembly.GetExecutingAssembly().GetName().Version}%0A";
+            additionalInfo = "?body=[Write your comment/feedback/issue here]%0A%0A---%0A" + additionalInfo;
+
+            return additionalInfo;
+        }
+
         private void githubPluginMenuItem_Click(object sender, System.EventArgs e)
         {
-            Process.Start(GetGithubBaseUrl("issues/new"));
+            var url = GetGithubBaseUrl("issues/new");
+
+            var additionalInfo = GetAdditionalInfo();
+
+            if (currentContent is PluginForm pf)
+            {
+                additionalInfo += $"-%20Tool%20Version:%20{pf.Control.GetType().Assembly.GetName().Version}%0A";
+            }
+
+            Process.Start(url + additionalInfo);
         }
 
         private void GithubXrmToolBoxMenuItem_Click(object sender, System.EventArgs e)
         {
-            Process.Start("https://github.com/MscrmTools/XrmToolBox/issues/new");
+            var url = "https://github.com/MscrmTools/XrmToolBox/issues/new";
+            var additionalInfo = GetAdditionalInfo();
+
+            Process.Start(url + additionalInfo);
         }
 
         private void HelpSelectedPluginToolStripMenuItem_Click(object sender, System.EventArgs e)
