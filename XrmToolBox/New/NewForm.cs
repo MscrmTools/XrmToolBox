@@ -1035,11 +1035,13 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
         #region Message broker
 
-        private PluginForm GetPluginByName(string name)
+        private PluginForm GetPluginByName(string name, Guid connectionDetailId)
         {
             return dpMain.Contents
                 .OfType<PluginForm>()
-                .FirstOrDefault(c => c.PluginName == name);
+                .FirstOrDefault(c => c.PluginName == name
+                                     && ((PluginControlBase)c.Control).ConnectionDetail.ConnectionId ==
+                                     connectionDetailId);
         }
 
         private bool IsMessageValid(object sender, MessageBusEventArgs message)
@@ -1079,13 +1081,15 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 return;
             }
 
-            var content = GetPluginByName(message.TargetPlugin);
+            var sourceDetail = ((PluginControlBase)sender).ConnectionDetail;
+
+            var content = GetPluginByName(message.TargetPlugin, sourceDetail.ConnectionId ?? Guid.Empty);
             if (content == null || message.NewInstance)
             {
                 pluginsForm.OpenPlugin(message.TargetPlugin);
             }
 
-            content = GetPluginByName(message.TargetPlugin);
+            content = GetPluginByName(message.TargetPlugin, sourceDetail.ConnectionId ?? Guid.Empty);
             if (content == null)
             {
                 MessageBox.Show($@"Cannot switch to tool {message.TargetPlugin}.", message.SourcePlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
