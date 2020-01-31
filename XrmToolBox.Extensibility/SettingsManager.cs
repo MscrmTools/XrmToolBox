@@ -110,7 +110,7 @@ namespace XrmToolBox.Extensibility
                 return true;
             }
 
-            settingsObject = default;
+            settingsObject = default(T);
             return false;
         }
 
