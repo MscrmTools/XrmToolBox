@@ -508,7 +508,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     pnlConnectLoading.Visible = false;
                 }
 
-                var pluginForm = new PluginForm(pluginControl, name);
+                var pluginForm = new PluginForm(pluginControl, name, plugin.Metadata.Name);
                 pluginForm.PluginName = plugin.Metadata.Name;
                 pluginForm.Show(dpMain, DockState.Document);
                 pluginForm.SendMessageToStatusBar += StatusBarMessenger_SendMessageToStatusBar;

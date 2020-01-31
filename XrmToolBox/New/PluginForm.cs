@@ -14,15 +14,15 @@ namespace XrmToolBox.New
     public partial class PluginForm : DockContent, IStatusBarMessenger
     {
         private readonly PluginControlBase pluginControlBase;
-
         private StatusBarMessageEventArgs lastStatusEventArgs;
 
-        public PluginForm(UserControl control, string name)
+        public PluginForm(UserControl control, string name, string pluginName)
         {
             InitializeComponent();
 
             Tag = control.Tag;
             Text = name;
+            PluginTitle = pluginName;
 
             control.Dock = DockStyle.Fill;
             panel1.Controls.Add(control);
@@ -51,7 +51,7 @@ namespace XrmToolBox.New
 
         public string PluginName { get; internal set; }
 
-        public string PluginTitle => pluginControlBase.GetType().GetTitle();
+        public string PluginTitle { get; }
 
         public sealed override string Text
         {
