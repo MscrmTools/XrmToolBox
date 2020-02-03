@@ -11,18 +11,12 @@ namespace XrmToolBox.Forms
 {
     public partial class WelcomeDialog : Form
     {
+        private static string currentStatus;
         private static WelcomeDialog innerForm;
         private static Thread thread;
-        private static string currentStatus;
         private static Timer timer;
 
         #region Static methods to control Splashscreen
-
-        public static void ShowForm()
-        {
-            innerForm = new WelcomeDialog();
-            Application.Run(innerForm);
-        }
 
         public static void CloseForm()
         {
@@ -40,6 +34,21 @@ namespace XrmToolBox.Forms
             innerForm = null;
         }
 
+        // A static method to set the status.
+        public static void SetStatus(string newStatus)
+        {
+            if (innerForm == null)
+                return;
+
+            currentStatus = newStatus;
+        }
+
+        public static void ShowForm()
+        {
+            innerForm = new WelcomeDialog();
+            Application.Run(innerForm);
+        }
+
         public static void ShowSplashScreen()
         {
             // Make sure it is only launched once.
@@ -48,15 +57,6 @@ namespace XrmToolBox.Forms
             thread = new Thread(ShowForm) { IsBackground = true };
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
-        }
-
-        // A static method to set the status.
-        public static void SetStatus(string newStatus)
-        {
-            if (innerForm == null)
-                return;
-
-            currentStatus = newStatus;
         }
 
         #endregion Static methods to control Splashscreen
@@ -106,11 +106,16 @@ namespace XrmToolBox.Forms
                     var type = Assembly.LoadFile(stopAdvertisementLocation).GetType("McTools.StopAdvertisement.LicenseManager");
                     if (type == null)
                     {
+                        Height = Height - 100;
                         return;
                     }
 
                     var methodInfo = type.GetMethod("IsValid");
-                    if (methodInfo == null) { return; }
+                    if (methodInfo == null)
+                    {
+                        Height = Height - 100;
+                        return;
+                    }
 
                     object classInstance = Activator.CreateInstance(type, null);
 
@@ -127,6 +132,10 @@ namespace XrmToolBox.Forms
                             orgName.Length > 0 && orgName != userName ? string.Format(" ({0})", orgName) : "");
 
                         pnlSupport.Visible = true;
+                    }
+                    else
+                    {
+                        Height = Height - 100;
                     }
                 }
             }
