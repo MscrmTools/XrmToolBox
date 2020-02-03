@@ -120,24 +120,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppInsights\AiBaseData.cs" />
-    <Compile Include="AppInsights\AiConfig.cs" />
-    <Compile Include="AppInsights\AiData.cs" />
-    <Compile Include="AppInsights\AiDataPoint.cs" />
-    <Compile Include="AppInsights\AiException.cs" />
-    <Compile Include="AppInsights\AiLogRequest.cs" />
-    <Compile Include="AppInsights\AiMeasurements.cs" />
-    <Compile Include="AppInsights\AiParsedStack.cs" />
-    <Compile Include="AppInsights\AiProperties.cs" />
-    <Compile Include="AppInsights\AiTags.cs" />
     <Compile Include="AppInsights\AppInsights.cs" />
-    <Compile Include="AppInsights\Enums\AiDataPointType.cs" />
-    <Compile Include="AppInsights\Enums\AiExceptionSeverity.cs" />
-    <Compile Include="AppInsights\Enums\AiTraceSeverity.cs" />
-    <Compile Include="AppInsights\ExceptionHelper.cs" />
-    <Compile Include="AppInsights\HttpHelper.cs" />
-    <Compile Include="AppInsights\LogHelper.cs" />
-    <Compile Include="AppInsights\Serialization.cs" />
     <Compile Include="DTO\XtbPlugin.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="IStore.cs" />

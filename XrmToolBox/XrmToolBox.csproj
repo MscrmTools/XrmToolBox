@@ -231,24 +231,6 @@
     <Compile Include="AppCode\PluginUpdateSkip.cs" />
     <Compile Include="AppCode\ReleasesDTO.cs" />
     <Compile Include="AppCode\WebProxyHelper.cs" />
-    <Compile Include="AppInsights\AiBaseData.cs" />
-    <Compile Include="AppInsights\AiConfig.cs" />
-    <Compile Include="AppInsights\AiData.cs" />
-    <Compile Include="AppInsights\AiDataPoint.cs" />
-    <Compile Include="AppInsights\AiException.cs" />
-    <Compile Include="AppInsights\AiLogRequest.cs" />
-    <Compile Include="AppInsights\AiMeasurements.cs" />
-    <Compile Include="AppInsights\AiParsedStack.cs" />
-    <Compile Include="AppInsights\AiProperties.cs" />
-    <Compile Include="AppInsights\AiTags.cs" />
-    <Compile Include="AppInsights\AppInsights.cs" />
-    <Compile Include="AppInsights\Enums\AiDataPointType.cs" />
-    <Compile Include="AppInsights\Enums\AiExceptionSeverity.cs" />
-    <Compile Include="AppInsights\Enums\AiTraceSeverity.cs" />
-    <Compile Include="AppInsights\ExceptionHelper.cs" />
-    <Compile Include="AppInsights\HttpHelper.cs" />
-    <Compile Include="AppInsights\LogHelper.cs" />
-    <Compile Include="AppInsights\Serialization.cs" />
     <Compile Include="ConnectionParameterInfo.cs" />
     <Compile Include="Controls\ConnectingCdsControl.cs">
       <SubType>UserControl</SubType>
@@ -552,7 +534,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
