@@ -283,6 +283,7 @@ namespace XrmToolBox
                 RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory");
                 RedirectAssembly("WeifenLuo.WinFormsUI.Docking");
                 RedirectAssembly("WeifenLuo.WinFormsUI.Docking.ThemeVS2015");
+                RedirectAssembly("ScintillaNET");
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
