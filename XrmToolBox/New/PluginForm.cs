@@ -123,9 +123,9 @@ namespace XrmToolBox.New
         {
             if (detail?.IsEnvironmentHighlightSet ?? false)
             {
-                BackColor = detail?.EnvironmentColor ?? DefaultBackColor;
-                lblEnvInfo.ForeColor = detail?.EnvironmentTextColor ?? DefaultForeColor;
-                lblEnvInfo.Text = detail.EnvironmentText;
+                BackColor = detail.EnvironmentHighlightingInfo?.Color ?? DefaultBackColor;
+                lblEnvInfo.ForeColor = detail.EnvironmentHighlightingInfo?.TextColor ?? DefaultForeColor;
+                lblEnvInfo.Text = detail.EnvironmentHighlightingInfo?.Text ?? "";
                 lblEnvInfo.Visible = true;
                 Padding = new Padding(10, 0, 10, 10);
             }
