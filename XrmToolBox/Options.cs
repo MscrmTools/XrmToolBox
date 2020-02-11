@@ -442,6 +442,7 @@ namespace XrmToolBox
                 HiddenPlugins = HiddenPlugins,
                 LastUpdateCheck = LastUpdateCheck,
                 AllowLogUsage = AllowLogUsage,
+                CloseEachPluginSilently = CloseEachPluginSilently,
                 CloseOpenedPluginsSilently = CloseOpenedPluginsSilently,
                 ClosePluginsSilentlyOnWindowsShutdown = ClosePluginsSilentlyOnWindowsShutdown,
                 DisplayPluginsStoreOnStartup = DisplayPluginsStoreOnStartup,
