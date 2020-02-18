@@ -6,38 +6,34 @@ namespace XrmToolBox.Extensibility
     public static class Paths
     {
         private static string rootPath;
-      
+        private static string userApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
         public static string PluginsPath
         {
             get
             {
-                var userApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
-                return Path.Combine(rootPath?? Path.Combine(userApplicationDataFolder, "MscrmTools", "XrmToolBox"), "Plugins");
+                return Path.Combine(rootPath?? XrmToolBoxPath, "Plugins");
             }
         }
         public static string LogsPath
         {
             get
             {
-                var userApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                return Path.Combine(rootPath ?? Path.Combine(userApplicationDataFolder, "MscrmTools", "XrmToolBox"), "Logs");
+                return Path.Combine(rootPath ?? XrmToolBoxPath, "Logs");
             }
         }
         public static string SettingsPath
         {
             get
             {
-                var userApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                return Path.Combine(rootPath ?? Path.Combine(userApplicationDataFolder, "MscrmTools", "XrmToolBox"), "Settings");
+                return Path.Combine(rootPath ?? XrmToolBoxPath, "Settings");
             }
         }
         public static string ConnectionsPath
         {
             get
             {
-                var userApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                return Path.Combine(rootPath ?? Path.Combine(userApplicationDataFolder, "MscrmTools", "XrmToolBox"), "Connections");
+                return Path.Combine(rootPath ?? XrmToolBoxPath, "Connections");
             }
         }
 
@@ -45,14 +41,13 @@ namespace XrmToolBox.Extensibility
         {
             get
             {
-                var userApplicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
                 return Path.Combine(rootPath ?? Path.Combine(userApplicationDataFolder, "MscrmTools", "XrmToolBox"));
             }
         }
 
         public static void OverrideRootPath(string newRootPath)
         {
-            if(!Directory.Exists(newRootPath))
+            if(!Directory.Exists(Path.GetFullPath(Environment.ExpandEnvironmentVariables(newRootPath))))
                 throw new DirectoryNotFoundException(newRootPath);
 
             rootPath = newRootPath;
