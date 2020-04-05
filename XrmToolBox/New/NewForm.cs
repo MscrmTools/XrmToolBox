@@ -882,14 +882,8 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     parameter.ConnControl.Dispose();
                 }
 
-                connectionDetail = e.ConnectionDetail;
-                service = e.OrganizationService;
-
                 Invoke(new Action(() =>
                 {
-                    ccsb.SetConnectionStatus(true, e.ConnectionDetail);
-                    ccsb.SetMessage(string.Empty);
-
                     if (e.ConnectionDetail.UseOnline)
                     {
                         tsbOpenOrg.Text = @"Open environment";
@@ -911,6 +905,11 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
                         if (us != null)
                         {
+                            ccsb.SetConnectionStatus(true, e.ConnectionDetail);
+                            ccsb.SetMessage(string.Empty);
+                            connectionDetail = e.ConnectionDetail;
+                            service = e.OrganizationService;
+
                             if (!(us.Tag is Lazy<IXrmToolBoxPlugin, IPluginMetadata> pluginModel))
                             {
                                 // Actual Plugin was passed, Just update the plugin's Tab.
@@ -923,34 +922,76 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                         }
                         else if (p != null)
                         {
+                            ccsb.SetConnectionStatus(true, e.ConnectionDetail);
+                            ccsb.SetMessage(string.Empty);
+                            connectionDetail = e.ConnectionDetail;
+                            service = e.OrganizationService;
+
                             DisplayPluginControl(p);
                         }
                         else if (parameter.ConnectionParmater?.ToString() == "ApplyConnectionToTabs" && dpMain.Contents.OfType<PluginForm>().Any())
                         {
+                            ccsb.SetConnectionStatus(true, e.ConnectionDetail);
+                            ccsb.SetMessage(string.Empty);
+                            connectionDetail = e.ConnectionDetail;
+                            service = e.OrganizationService;
+
                             ApplyConnectionToTabs(e.ConnectionDetail);
                         }
                         else if (rcea != null)
                         {
                             var userControl = (UserControl)rcea.Control;
 
-                            rcea.Control.UpdateConnection(e.OrganizationService, connectionDetail, rcea.ActionName, rcea.Parameter);
-
-                            if (userControl.ParentForm != null)
+                            if (rcea.ActionName != "AdditionalOrganization")
                             {
-                                var indexOfParenthesis = userControl.ParentForm?.Text?.IndexOf("(") ?? -1;
-                                var pluginName = userControl.ParentForm?.Text?.Substring(0, indexOfParenthesis - 1) ?? "N/A";
+                                ccsb.SetConnectionStatus(true, e.ConnectionDetail);
+                                ccsb.SetMessage(string.Empty);
+                                connectionDetail = e.ConnectionDetail;
+                                service = e.OrganizationService;
 
-                                userControl.ParentForm.Text = $@"{pluginName} ({e.ConnectionDetail.ConnectionName})";
+                                if (userControl.ParentForm != null)
+                                {
+                                    var indexOfParenthesis = userControl.ParentForm?.Text?.IndexOf("(") ?? -1;
+                                    var pluginName = userControl.ParentForm?.Text?.Substring(0, indexOfParenthesis - 1) ?? "N/A";
+
+                                    userControl.ParentForm.Text = $@"{pluginName} ({e.ConnectionDetail.ConnectionName})";
+                                }
                             }
+
+                            rcea.Control.UpdateConnection(e.OrganizationService, e.ConnectionDetail, rcea.ActionName, rcea.Parameter);
+                        }
+                        else
+                        {
+                            ccsb.SetConnectionStatus(true, e.ConnectionDetail);
+                            ccsb.SetMessage(string.Empty);
+                            connectionDetail = e.ConnectionDetail;
+                            service = e.OrganizationService;
                         }
                     }
                     else if (dpMain.Contents.OfType<PluginForm>().Count() > 1)
                     {
+                        ccsb.SetConnectionStatus(true, e.ConnectionDetail);
+                        ccsb.SetMessage(string.Empty);
+                        connectionDetail = e.ConnectionDetail;
+                        service = e.OrganizationService;
+
                         ApplyConnectionToTabs(e.ConnectionDetail);
                     }
                     else if (dpMain.Contents.OfType<PluginForm>().Count() == 1)
                     {
+                        ccsb.SetConnectionStatus(true, e.ConnectionDetail);
+                        ccsb.SetMessage(string.Empty);
+                        connectionDetail = e.ConnectionDetail;
+                        service = e.OrganizationService;
+
                         UpdateTabConnection(dpMain.Contents.OfType<PluginForm>().First(), e.ConnectionDetail);
+                    }
+                    else
+                    {
+                        ccsb.SetConnectionStatus(true, e.ConnectionDetail);
+                        ccsb.SetMessage(string.Empty);
+                        connectionDetail = e.ConnectionDetail;
+                        service = e.OrganizationService;
                     }
 
                     StartPluginWithConnection();
