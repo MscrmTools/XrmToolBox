@@ -2,11 +2,13 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 namespace XrmToolBox.Extensibility
 {
     public class LogManager
     {
+        private static ReaderWriterLockSlim _readWriteLock = new ReaderWriterLockSlim();
         private readonly string _filePath;
         private ConnectionDetail _connection;
 
@@ -114,16 +116,23 @@ namespace XrmToolBox.Extensibility
                 Directory.CreateDirectory(parentFolder);
             }
 
+            _readWriteLock.EnterWriteLock();
+
             try
             {
                 using (StreamWriter writer = new StreamWriter(_filePath, true))
                 {
-                    writer.WriteLine("{0}\t{1}\t{2}\t{3}", DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss.fff tt"), _connection?.ConnectionName, level, message);
+                    writer.WriteLine("{0:yyyy-MM-dd hh:mm:ss.fff tt}\t{1}\t{2}\t{3}", DateTime.Now,
+                        _connection?.ConnectionName, level, message);
                 }
             }
             catch (Exception error)
             {
                 throw new Exception("Unable to write log for the following reason: " + error.Message, error);
+            }
+            finally
+            {
+                _readWriteLock.ExitWriteLock();
             }
         }
     }
