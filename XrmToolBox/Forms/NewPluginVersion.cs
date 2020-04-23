@@ -12,16 +12,30 @@ namespace XrmToolBox.Forms
 
             cbbReminder.SelectedIndex = 0;
             lblPluginTitle.Text = plugin.Name;
-            lblNewVersion.Text = $"New version: {plugin.Version}";
+            lblNewVersion.Text = $@"New version: {plugin.Version}";
             rtbReleaseNotes.Text = plugin.LatestReleaseNote;
             rtbReleaseNotes.BackColor = Color.White;
             rtbReleaseNotes.Padding = new Padding(10);
-            pbLogo.Load(plugin.LogoUrl ?? "https://raw.githubusercontent.com/wiki/MscrmTools/XrmToolBox/Images/unknown.png");
+            try
+            {
+                if (!string.IsNullOrEmpty(plugin.LogoUrl))
+                {
+                    pbLogo.Load(plugin.LogoUrl);
+                }
+                else
+                {
+                    pbLogo.Visible = false;
+                }
+            }
+            catch
+            {
+                pbLogo.Visible = false;
+            }
         }
 
         public bool IsVersionSkipped { get; private set; }
         public int NumberOfDaysToSkip { get; private set; }
-        public bool OnNextRestart { get; private set; } = false;
+        public bool OnNextRestart { get; private set; }
 
         private void llDoNotUpdate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
