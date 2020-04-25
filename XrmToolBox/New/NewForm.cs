@@ -296,7 +296,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 store = new StoreFromPortal();
                 if (store.PluginsCount == 0)
                 {
-                    store.LoadNugetPackages();
+                    store.LoadNugetPackages(false);
                 }
 
                 if (Options.Instance.ShowPluginUpdatesPanelAtStartup)
@@ -322,7 +322,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 {
                     if (store.PluginsCount == 0)
                     {
-                        store.LoadNugetPackages();
+                        store.LoadNugetPackages(false);
                     }
 
                     if (store.HasUpdates)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -35,7 +34,7 @@ namespace XrmToolBox.PluginsStore
             }
             catch (Exception error)
             {
-                var lm = new LogManager(typeof(Store));
+                var lm = new LogManager(typeof(StoreFromPortal));
                 lm.LogError($"Unable to check if {fi.Name} is implementing interface IXrmToolBoxPlugin: {error.Message}");
                 return false;
             }

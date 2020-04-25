@@ -108,14 +108,14 @@ namespace XrmToolBox.PluginsStore
             return null;
         }
 
-        public void LoadNugetPackages()
+        public void LoadNugetPackages(bool fromStorePortal = true)
         {
             plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
             XrmToolBoxPlugins = new XtbPlugins();
             string url = "https://www.xrmtoolbox.com/_odata/plugins";
             do
             {
-                var tmpPlugins = GetContent<XtbPlugins>(url);
+                var tmpPlugins = GetContent<XtbPlugins>(url, fromStorePortal);
                 XrmToolBoxPlugins.Plugins.AddRange(tmpPlugins.Plugins);
                 url = tmpPlugins.NextLink;
             } while (url != null);
@@ -413,7 +413,7 @@ namespace XrmToolBox.PluginsStore
             }
         }
 
-        private T GetContent<T>(string url) where T : new()
+        private T GetContent<T>(string url, bool fromStoreFromPortalForm) where T : new()
         {
             try
             {
@@ -434,8 +434,15 @@ namespace XrmToolBox.PluginsStore
                     }
                 }
             }
-            catch
+            catch (WebException error)
             {
+                if (fromStoreFromPortalForm &&
+                    (error.Status == WebExceptionStatus.ConnectFailure
+                    || error.Status == WebExceptionStatus.NameResolutionFailure
+                    || error.Status == WebExceptionStatus.ProxyNameResolutionFailure))
+                {
+                    throw new Exception($"Unable to connect to {url}. Please check your network settings", error);
+                }
             }
             return new T();
         }

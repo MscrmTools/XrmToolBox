@@ -1,22 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace XrmToolBox.PluginsStore
 {
     public interface IStore
     {
-        void LoadNugetPackages();
+        event EventHandler PluginsUpdated;
+
+        bool HasUpdates { get; }
+
+        int PluginsCount { get; }
 
         string GetPluginProjectUrlByFileName(string fileName);
 
+        void LoadNugetPackages(bool fromPluginStoreForm);
+
         void UninstallByFileName(string fileName);
-
-        int PluginsCount { get; }
-        bool HasUpdates { get; }
-
-        event EventHandler PluginsUpdated;
     }
 }

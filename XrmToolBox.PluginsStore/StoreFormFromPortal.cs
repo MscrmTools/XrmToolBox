@@ -12,6 +12,14 @@ using Message = System.Windows.Forms.Message;
 
 namespace XrmToolBox.PluginsStore
 {
+    public enum PackageInstallAction
+    {
+        None,
+        Install,
+        Update,
+        Unavailable
+    }
+
     public partial class StoreFormFromPortal : Form, IStoreForm
     {
         private const string AiEndpoint = "https://dc.services.visualstudio.com/v2/track";
@@ -63,7 +71,7 @@ Current cache folder size: {size}MB";
             tstSearch.Enabled = false;
 
             lvPlugins.Items.Clear();
-            tssLabel.Text = @"Retrieving tools from Nuget feed...";
+            tssLabel.Text = @"Retrieving tools from XrmToolBox portal...";
             tssProgress.Style = ProgressBarStyle.Marquee;
             tssProgress.Visible = true;
             tssPluginsCount.Visible = false;
@@ -137,7 +145,7 @@ Current cache folder size: {size}MB";
 
                 if (e.Error != null)
                 {
-                    MessageBox.Show(e.Error.Message);
+                    MessageBox.Show(this, $@"An error occured when refreshing list: {e.Error.Message}", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -603,7 +611,7 @@ Current cache folder size: {size}MB";
             {
                 case CompatibleState.DoesntFitMinimumVersion:
                     {
-                        lblNotif.Text = $@"This tool has not been developed specificaly to support latest breaking change version of XrmToolBox. Contact tool author to make him support at least version {Store.MinCompatibleVersion}";
+                        lblNotif.Text = $@"This tool has not been developed specificaly to support latest breaking change version of XrmToolBox. Contact tool author to make him support at least version {StoreFromPortal.MinCompatibleVersion}";
                         pbNotifIcon.Image = iiNotif.Images[2];
                         pnlNotif.Visible = true;
                     }
@@ -750,6 +758,12 @@ Current cache folder size: {size}MB";
                 lvPlugins.Enabled = true;
                 tssProgress.Visible = false;
                 tssLabel.Text = string.Empty;
+
+                if (evt.Error != null)
+                {
+                    MessageBox.Show(this, $@"An error occured: {evt.Error.Message}", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
                 if ((bool)evt.Result)
                 {
