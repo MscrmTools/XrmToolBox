@@ -31,11 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="McTools.Xrm.Connection, Version=1.2020.4.31, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
-      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2020.4.31\lib\net462\McTools.Xrm.Connection.dll</HintPath>
+    <Reference Include="McTools.Xrm.Connection, Version=1.2020.4.32, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
+      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2020.4.32\lib\net462\McTools.Xrm.Connection.dll</HintPath>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2020.4.31, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
-      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2020.4.31\lib\net462\McTools.Xrm.Connection.WinForms.dll</HintPath>
+    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2020.4.32, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
+      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2020.4.32\lib\net462\McTools.Xrm.Connection.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Crm.Sdk.Proxy, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.9.0.2.24\lib\net462\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
@@ -152,13 +152,6 @@
       <DependentUpon>StoreFormFromPortal.cs</DependentUpon>
     </Compile>
     <Compile Include="StoreFromPortal.cs" />
-    <Compile Include="Store.cs" />
-    <Compile Include="StoreForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="StoreForm.Designer.cs">
-      <DependentUpon>StoreForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="PluginUpdates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProxySettingsHelper.cs" />
@@ -178,9 +171,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StoreFormFromPortal.resx">
       <DependentUpon>StoreFormFromPortal.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StoreForm.resx">
-      <DependentUpon>StoreForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
