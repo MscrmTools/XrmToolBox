@@ -7,7 +7,7 @@
  * Simplifies logging to Azure Application Insights from XrmToolBox tools.
  *
  * Sample from tool constructor:
- *    ai = new AppInsights(new AiConfig("https://dc.services.visualstudio.com/v2/track", "[a guid that is the key to your appinsights resource]"));
+ *    ai = new AppInsights("https://dc.services.visualstudio.com/v2/track", "[a guid that is the key to your appinsights resource]", Assembly.GetExecutingAssembly(), "[my custom tool name]");
  * Sample call:
  *    ai.WriteEvent(action, count, duration, HandleAIResult);
  * Sample HandleAIResult:
@@ -20,7 +20,9 @@
  * **********************************************************/
 
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -37,18 +39,32 @@ public static class Extensions
 
 public class AiConfig
 {
-    public AiConfig(string endpoint, string ikey)
+    /// <summary>
+    /// Initializes Application Insights configuration.
+    /// When called from a tool, make sure to pass Assembly.GetExecutingAssembly() as loggingassembly parameter!!
+    /// </summary>
+    /// <param name="endpoint">AppInsights endpoint, usually https://dc.services.visualstudio.com/v2/track</param>
+    /// <param name="ikey">Instrumentation Key for the AppInsights instance in the Azure portal</param>
+    /// <param name="loggingassembly">Assembly info to include in logging, usually pass Assembly.GetExecutingAssembly()</param>
+    /// <param name="toolname">Override name of the tool, defaults to last part of the logging assembly name</param>
+    public AiConfig(string endpoint, string ikey, Assembly loggingassembly = null, string toolname = null)
     {
         AiEndpoint = endpoint;
         InstrumentationKey = ikey;
+        LoggingAssembly = loggingassembly ?? Assembly.GetExecutingAssembly();
+        PluginName = toolname ?? GetLastDotPart(LoggingAssembly.GetName().Name);
+        PluginVersion = LoggingAssembly.GetName().Version.PaddedVersion(1, 4, 2, 2);
+        // This will disable logging if the calling assembly is compiled with debug configuration
+        LogEvents = !LoggingAssembly.GetCustomAttributes<DebuggableAttribute>().Any(d => d.IsJITTrackingEnabled);
     }
 
+    public Assembly LoggingAssembly { get; }
     public string AiEndpoint { get; }
     public string InstrumentationKey { get; }
     public bool LogEvents { get; set; } = true;
     public string OperationName { get; set; }
-    public string PluginName { get; set; } = GetLastDotPart(Assembly.GetExecutingAssembly().GetName().Name);
-    public string PluginVersion { get; set; } = Assembly.GetExecutingAssembly().GetName().Version.PaddedVersion(1, 4, 2, 2);
+    public string PluginName { get; set; }
+    public string PluginVersion { get; set; }
     public Guid SessionId { get; } = Guid.NewGuid();
     public string XTBVersion { get; set; } = GetLastDotPart(Assembly.GetEntryAssembly().GetName().Name) + " " + Assembly.GetEntryAssembly().GetName().Version.PaddedVersion(1, 4, 2, 2);
 
@@ -63,6 +79,24 @@ public class AppInsights
     private readonly AiConfig _aiConfig;
     private int seq = 1;
 
+    /// <summary>
+    /// Initializes Application Insights instance.
+    /// When called from a tool, make sure to pass Assembly.GetExecutingAssembly() as loggingassembly parameter!!
+    /// </summary>
+    /// <param name="endpoint">AppInsights endpoint, usually https://dc.services.visualstudio.com/v2/track</param>
+    /// <param name="ikey">Instrumentation Key for the AppInsights instance in the Azure portal</param>
+    /// <param name="loggingassembly">Assembly info to include in logging, usually pass Assembly.GetExecutingAssembly()</param>
+    /// <param name="toolname">Override name of the tool, defaults to last part of the logging assembly name</param>
+    public AppInsights(string endpoint, string ikey, Assembly loggingassembly, string toolname = null)
+    {
+        _aiConfig = new AiConfig(endpoint, ikey, loggingassembly, toolname);
+    }
+
+    /// <summary>
+    /// Obsolete constructor
+    /// </summary>
+    /// <param name="aiConfig">Application Insights configuration</param>
+    [Obsolete("Use constructor accepting parameters endpoint, ikey, loggingassembly and toolname instead.", false)]
     public AppInsights(AiConfig aiConfig)
     {
         _aiConfig = aiConfig;
