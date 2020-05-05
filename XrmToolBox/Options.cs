@@ -175,6 +175,17 @@ namespace XrmToolBox
         [Description("When Windows shuts down and XrmToolBox have opened tools, do not prompt to confirm opened tools close")]
         public bool ClosePluginsSilentlyOnWindowsShutdown { get; set; } = true;
 
+        [Category("Connection controls")]
+        [DisplayName("Search pre release updates")]
+        [Description("Allow XrmToolBox to search pre release update (alpha, beta, etc.) of connection controls")]
+        public bool ConnectionControlsAllowPreReleaseUpdates { get; set; }
+
+        [ReadOnly(true)]
+        [Category("Connection controls")]
+        [DisplayName("Version")]
+        [Description("Current version of connection controls")]
+        public string ConnectionControlsVersion { get; set; }
+
         [Browsable(false)]
         public bool DisplayLargeIcons
         {
@@ -460,7 +471,9 @@ namespace XrmToolBox
                 DoNotShowStartPage = DoNotShowStartPage,
                 Theme = Theme,
                 PluginsUpdateSkip = PluginsUpdateSkip,
-                OptinForApplicationInsights = OptinForApplicationInsights
+                OptinForApplicationInsights = OptinForApplicationInsights,
+                ConnectionControlsVersion = ConnectionControlsVersion,
+                ConnectionControlsAllowPreReleaseUpdates = ConnectionControlsAllowPreReleaseUpdates
             };
         }
 

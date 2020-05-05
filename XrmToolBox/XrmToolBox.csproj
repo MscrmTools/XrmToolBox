@@ -253,6 +253,12 @@
     <Compile Include="Forms\HiddenPluginsDialog.Designer.cs">
       <DependentUpon>HiddenPluginsDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\NewConnectionVersion.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\NewConnectionVersion.Designer.cs">
+      <DependentUpon>NewConnectionVersion.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\NewPluginVersion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -374,6 +380,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\HiddenPluginsDialog.resx">
       <DependentUpon>HiddenPluginsDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\NewConnectionVersion.resx">
+      <DependentUpon>NewConnectionVersion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\NewPluginVersion.resx">
       <DependentUpon>NewPluginVersion.cs</DependentUpon>
@@ -497,6 +506,7 @@
     <None Include="Resources\OpenToolsLibrary.png" />
     <None Include="Resources\LogoDyn365.png" />
     <None Include="Resources\powerapps16.png" />
+    <None Include="Resources\logo_0400.png" />
     <Content Include="XrmToolBox201512.ico" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />
@@ -537,7 +547,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

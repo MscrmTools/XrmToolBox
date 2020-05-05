@@ -125,7 +125,9 @@ namespace XrmToolBox
             catch (Exception error)
             {
                 MessageBox.Show(
-                    $"An error occured when trying to update some tools: {error.Message}\n\nPlease start XrmToolBox again to fix this problem",
+                    $@"An error occured when trying to update files: {error.Message}
+
+Please start XrmToolBox again to fix this problem",
                     @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

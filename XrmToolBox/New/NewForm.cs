@@ -48,7 +48,7 @@ namespace XrmToolBox.New
         private int numberOfConnectionReceived;
         private IOrganizationService service;
         private StartPage startPage;
-        private IStore store;
+        private StoreFromPortal store;
 
         public NewForm(string[] args)
         {
@@ -293,7 +293,38 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
             if (store == null)
             {
-                store = new StoreFromPortal();
+                store = new StoreFromPortal(Options.Instance.ConnectionControlsAllowPreReleaseUpdates);
+
+                if (store.IsConnectionControlsUpdateAvailable(out string version, out string releasenotes, Options.Instance.ConnectionControlsVersion))
+                {
+                    Options.Instance.ConnectionControlsVersion = version;
+                    Options.Instance.Save();
+
+                    if (!Options.Instance.PluginsUpdateSkip.Any(
+                        x => x.Name == "McTools.Xrm.ConnectionControls"
+                             && x.Version == version
+                             && x.Date > DateTime.Now))
+                    {
+                        var dialog = new NewConnectionVersion(version, releasenotes);
+                        if (dialog.ShowDialog(this) == DialogResult.Yes)
+                        {
+                            var restartNow = store.PrepareConnectionControlsUpdate(this, dialog.OnNextRestart,
+                                out string versionToStore);
+
+                            Options.Instance.ConnectionControlsVersion = versionToStore;
+                            Options.Instance.Save();
+                            if (restartNow)
+                            {
+                                Application.Restart();
+                            }
+                        }
+                        else
+                        {
+                            UpdatePluginUpdateSkip("McTools.Xrm.ConnectionControls", version, dialog.IsVersionSkipped, dialog.NumberOfDaysToSkip);
+                        }
+                    }
+                }
+
                 if (store.PluginsCount == 0)
                 {
                     store.LoadNugetPackages(false);
@@ -301,7 +332,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
                 if (Options.Instance.ShowPluginUpdatesPanelAtStartup)
                 {
-                    var count = ((StoreFromPortal)store).XrmToolBoxPlugins.Plugins
+                    var count = store.XrmToolBoxPlugins.Plugins
                         .Where(p => p.Action == PackageInstallAction.Update)
                         .ToList().Count;
 
@@ -687,7 +718,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                                 if (dialog.OnNextRestart)
                                 {
                                     ((StoreFromPortal)store).PerformInstallation(pu, this);
-                                    UpdatePluginUpdateSkip(updatedPlugin, true, 1);
+                                    UpdatePluginUpdateSkip(updatedPlugin.Name, updatedPlugin.Version, true, 1);
                                 }
                                 else
                                 {
@@ -708,7 +739,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
                         if (!exitPluginUpdate)
                         {
-                            UpdatePluginUpdateSkip(updatedPlugin, dialog.IsVersionSkipped, dialog.NumberOfDaysToSkip);
+                            UpdatePluginUpdateSkip(updatedPlugin.Name, updatedPlugin.Version, dialog.IsVersionSkipped, dialog.NumberOfDaysToSkip);
                         }
                     }
                 }
@@ -779,10 +810,10 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
             }
         }
 
-        private void UpdatePluginUpdateSkip(XtbPlugin updatedPlugin, bool isVersionSkipped, int nbDays)
+        private void UpdatePluginUpdateSkip(string name, string version, bool isVersionSkipped, int nbDays)
         {
             var existing = Options.Instance.PluginsUpdateSkip.FirstOrDefault(
-                x => x.Name == updatedPlugin.Name);
+                x => x.Name == name);
 
             if (existing != null)
             {
@@ -797,8 +828,8 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
             Options.Instance.PluginsUpdateSkip.Add(new PluginUpdateSkip
             {
-                Name = updatedPlugin.Name,
-                Version = updatedPlugin.Version,
+                Name = name,
+                Version = version,
                 Date = nextDate
             });
             Options.Instance.Save();
@@ -1410,7 +1441,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     PluginsStore.Options.Instance.IsInitialized = true;
                 }
 
-                IStoreForm form = new StoreFormFromPortal();
+                IStoreForm form = new StoreFormFromPortal(Options.Instance.ConnectionControlsAllowPreReleaseUpdates);
                 ((StoreFormFromPortal)form).PluginsClosingRequested += (s, evt) =>
                 {
                     RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
@@ -1441,6 +1472,34 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                                          || Options.Instance.IconDisplayMode != oDialog.Option.IconDisplayMode
                                          || !oDialog.Option.HiddenPlugins.SequenceEqual(Options.Instance.HiddenPlugins)
                                          || Options.Instance.PluginsDisplayOrder != oDialog.Option.PluginsDisplayOrder;
+
+                    if (Options.Instance.ConnectionControlsAllowPreReleaseUpdates !=
+                        oDialog.Option.ConnectionControlsAllowPreReleaseUpdates)
+                    {
+                        store.AllowConnectionControlPreRelease = oDialog.Option.ConnectionControlsAllowPreReleaseUpdates;
+                        Options.Instance.Save();
+
+                        if (store.AllowConnectionControlPreRelease == false)
+                        {
+                            var message =
+                                @"You asked to not use Connection Controls pre release anymore.
+
+Would you like to reinstall last stable release of connection controls?";
+
+                            if (MessageBox.Show(this, message, @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                            {
+                                var restartNow = store.PrepareConnectionControlsUpdate(this, false, out string versionToStore);
+
+                                Options.Instance.ConnectionControlsVersion = versionToStore;
+                                Options.Instance.ConnectionControlsAllowPreReleaseUpdates = false;
+                                Options.Instance.Save();
+                                if (restartNow)
+                                {
+                                    Application.Restart();
+                                }
+                            }
+                        }
+                    }
 
                     if (Options.Instance.DoNotRememberPluginsWithoutConnection != oDialog.Option.DoNotRememberPluginsWithoutConnection
                         && oDialog.Option.DoNotRememberPluginsWithoutConnection)

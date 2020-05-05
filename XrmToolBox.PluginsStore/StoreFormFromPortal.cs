@@ -31,7 +31,7 @@ namespace XrmToolBox.PluginsStore
         private Thread searchThread;
         private int sortedColumnIndex = -1;
 
-        public StoreFormFromPortal()
+        public StoreFormFromPortal(bool allowConnectionControlPrerelease)
         {
             InitializeComponent();
 
@@ -43,7 +43,7 @@ namespace XrmToolBox.PluginsStore
 
             selectedPackagesId = new List<string>();
 
-            store = new StoreFromPortal();
+            store = new StoreFromPortal(allowConnectionControlPrerelease);
             store.PluginsUpdated += (sender, e) => { PluginsUpdated?.Invoke(sender, e); };
             var size = store.CalculateCacheFolderSize();
             tsbCleanCacheFolder.ToolTipText = $@"Clean XrmToolBox Tool Library cache folder
