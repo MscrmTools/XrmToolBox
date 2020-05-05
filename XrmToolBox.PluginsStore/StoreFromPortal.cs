@@ -118,9 +118,13 @@ namespace XrmToolBox.PluginsStore
 
             releasenotes = nugetPlugin.ReleaseNotes;
             version = nugetPlugin.Version.Version + (!string.IsNullOrEmpty(nugetPlugin.Version.SpecialVersion) ? "-" + nugetPlugin.Version.SpecialVersion : "");
+            // initial run, curr stored version may be null
+            var currStoredVer = (currentStoredVersion != null) ? new Version(currentStoredVersion.Split('-')[0]) : null;
 
             return ca.GetName().Version < nugetPlugin.Version.Version
-                   || ca.GetName().Version == nugetPlugin.Version.Version && new Version(version) == new Version(currentStoredVersion.Split('-')[0]) && version != currentStoredVersion;
+                   || ca.GetName().Version == nugetPlugin.Version.Version && 
+                   new Version(version) == currStoredVer && 
+                   version != currentStoredVersion;
         }
 
         public void LoadNugetPackages(bool fromStorePortal = true)
