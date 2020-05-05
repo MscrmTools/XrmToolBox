@@ -123,7 +123,7 @@ namespace XrmToolBox.PluginsStore
 
             return ca.GetName().Version < nugetPlugin.Version.Version
                    || ca.GetName().Version == nugetPlugin.Version.Version && 
-                   new Version(version) == currStoredVer && 
+                   new Version(version.Split('-')[0]) == currStoredVer && 
                    version != currentStoredVersion;
         }
 
