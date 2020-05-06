@@ -5,7 +5,11 @@
 
 using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
 using System.Windows.Forms;
+using XrmToolBox.Extensibility.Interfaces;
+using TimeSpan = System.TimeSpan;
 
 namespace XrmToolBox.Extensibility.UserControls
 {
@@ -19,14 +23,19 @@ namespace XrmToolBox.Extensibility.UserControls
 
         #region Constructors
 
-        public SmallPluginModel()
+        public SmallPluginModel(int daysToShowNewRibbon)
         {
             InitializeComponent();
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            numberOfDaysToShowNewRibbon = daysToShowNewRibbon;
         }
 
-        public SmallPluginModel(Image image, string title, string description, string company, string version, Color backColor, Color primaryColor, Color secondaryColor, int count)
+        public SmallPluginModel(Image image, string title, string description, string company, string version, Color backColor, Color primaryColor, Color secondaryColor, int count, int daysToShowNewRibbon)
         {
             InitializeComponent();
+
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            numberOfDaysToShowNewRibbon = daysToShowNewRibbon;
 
             picture.Image = image;
             lblTitle.PrimaryFontColor = primaryColor;
@@ -59,8 +68,35 @@ namespace XrmToolBox.Extensibility.UserControls
 
         private new void MouseClick(object sender, MouseEventArgs e)
         {
-            if (Clicked != null)
-                Clicked(this, e);
+            Clicked?.Invoke(this, e);
+        }
+
+        private void SmallPluginModel_Paint(object sender, PaintEventArgs e)
+        {
+            var time = new FileInfo(((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)Tag).Value.GetType().Assembly.Location)
+                .LastWriteTime;
+
+            if (DateTime.Now - time < new TimeSpan(numberOfDaysToShowNewRibbon, 0, 0, 0))
+            {
+                e.Graphics.FillPolygon(new SolidBrush(Color.Green), new[]
+                {
+                    new Point(Width, Height),
+                    new Point(Width - Height, 0),
+                    new Point(Width - Height + 20, 0),
+                    new Point(Width, Height - 20),
+                }, FillMode.Winding);
+
+                e.Graphics.DrawLine(new Pen(Color.White), new Point(Width, Height), new Point(Width - Height, 0));
+                e.Graphics.DrawLine(new Pen(Color.White), new Point(Width - Height + 20, 0), new Point(Width, Height - 20));
+
+                DrawRotatedTextAt(e.Graphics, 45, "NEW", Width - Height / 2, 5, new Font(new FontFamily("Segoe UI"), 8),
+                    new SolidBrush(Color.White));
+            }
+        }
+
+        private void SmallPluginModel_Resize(object sender, EventArgs e)
+        {
+            Invalidate();
         }
     }
 }

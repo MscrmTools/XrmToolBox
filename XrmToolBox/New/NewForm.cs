@@ -1471,7 +1471,8 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     bool reinitDisplay = Options.Instance.MostUsedList.Count != oDialog.Option.MostUsedList.Count
                                          || Options.Instance.IconDisplayMode != oDialog.Option.IconDisplayMode
                                          || !oDialog.Option.HiddenPlugins.SequenceEqual(Options.Instance.HiddenPlugins)
-                                         || Options.Instance.PluginsDisplayOrder != oDialog.Option.PluginsDisplayOrder;
+                                         || Options.Instance.PluginsDisplayOrder != oDialog.Option.PluginsDisplayOrder
+                                         || Options.Instance.NumberOfDaysToShowNewRibbon != oDialog.Option.NumberOfDaysToShowNewRibbon;
 
                     if (Options.Instance.ConnectionControlsAllowPreReleaseUpdates !=
                         oDialog.Option.ConnectionControlsAllowPreReleaseUpdates)

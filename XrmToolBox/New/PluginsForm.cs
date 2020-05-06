@@ -231,6 +231,7 @@ namespace XrmToolBox.New
                     typeof(Color),
                     typeof(Color),
                     typeof(Color),
+                    typeof(int),
                     typeof(int)
                 };
 
@@ -244,7 +245,8 @@ namespace XrmToolBox.New
                     backColor,
                     primaryColor,
                     secondaryColor,
-                    count
+                    count,
+                    Options.Instance.NumberOfDaysToShowNewRibbon
                 };
 
                 var ctor = typeof(T).GetConstructor(args);

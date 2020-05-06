@@ -324,6 +324,11 @@ namespace XrmToolBox
         [Description("Indicates number of tools to display in Moste Recently Used items section of Start Page")]
         public int MruItemsToDisplay { get; set; } = 10;
 
+        [Category("Tools list display")]
+        [DisplayName("New ribbon display duration")]
+        [Description("Number of days after having installed a tool a \"NEW\" ribbon is displayed on the tool")]
+        public int NumberOfDaysToShowNewRibbon { get; set; } = 7;
+
         [Browsable(false)]
         public bool OptinForApplicationInsights { get; set; } = true;
 
@@ -473,7 +478,8 @@ namespace XrmToolBox
                 PluginsUpdateSkip = PluginsUpdateSkip,
                 OptinForApplicationInsights = OptinForApplicationInsights,
                 ConnectionControlsVersion = ConnectionControlsVersion,
-                ConnectionControlsAllowPreReleaseUpdates = ConnectionControlsAllowPreReleaseUpdates
+                ConnectionControlsAllowPreReleaseUpdates = ConnectionControlsAllowPreReleaseUpdates,
+                NumberOfDaysToShowNewRibbon = NumberOfDaysToShowNewRibbon
             };
         }
 
