@@ -65,6 +65,8 @@ namespace XrmToolBox.New
             this.tsmiDonateEurSelectedPlugin = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDonateGbpSelectedPlugin = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiChangeTabConnection = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
@@ -710,7 +712,10 @@ namespace XrmToolBox.New
             this.cmsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmsMainCloseThis,
             this.cmsMainCloseExceptThis,
-            this.cmsMainCloseAll});
+            this.cmsMainCloseAll,
+            this.toolStripSeparator2,
+            this.tsmiChangeTabConnection
+            });
             this.cmsMain.Name = "cmsMain";
             this.cmsMain.Size = new System.Drawing.Size(276, 106);
             this.cmsMain.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsMain_ItemClicked);
@@ -856,6 +861,17 @@ namespace XrmToolBox.New
             this.tsmiPluginAbout.Text = "About Plugin";
             this.tsmiPluginAbout.Click += tsmiAboutSelectedPlugin_Click;
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(305, 6);
+            // 
+            // tsmiChangeTabConnection
+            // 
+            this.tsmiChangeTabConnection.Name = "tsmiChangeTabConnection";
+            this.tsmiChangeTabConnection.Size = new System.Drawing.Size(308, 38);
+            this.tsmiChangeTabConnection.Text = "Change connection";
+            // 
             // NewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
@@ -944,7 +960,10 @@ namespace XrmToolBox.New
         private System.Windows.Forms.ToolStripMenuItem tsmiDonateUsdSelectedPlugin;
         private System.Windows.Forms.ToolStripMenuItem tsmiDonateEurSelectedPlugin;
         private System.Windows.Forms.ToolStripMenuItem tsmiDonateGbpSelectedPlugin;
+        private System.Windows.Forms.ToolStripMenuItem tsmiChangeTabConnection;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        
         private System.Windows.Forms.ToolStripMenuItem checkForUpdateToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
         private System.Windows.Forms.ToolStripMenuItem tsmiAbout;
