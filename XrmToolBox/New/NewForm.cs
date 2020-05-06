@@ -1546,6 +1546,10 @@ Would you like to reinstall last stable release of connection controls?";
             {
                 RequestCloseTab((PluginForm)dpMain.ActiveContent, new PluginCloseInfo(ToolBoxCloseReason.CloseCurrent));
             }
+            else if (e.ClickedItem == cmsMainDuplicateTool)
+            {
+                pluginsForm.OpenPlugin(((PluginForm)dpMain.ActiveContent).PluginName);
+            }
             else if (e.ClickedItem == tsmiChangeTabConnection)
             {
                 ConnectUponApproval(new RequestConnectionEventArgs { ActionName = "", Control = ((PluginForm)dpMain.ActiveDocument).Control });

@@ -66,6 +66,7 @@ namespace XrmToolBox.New
             this.tsmiDonateGbpSelectedPlugin = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiChangeTabConnection = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
@@ -96,6 +97,7 @@ namespace XrmToolBox.New
             this.cmsMainCloseThis = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsMainCloseExceptThis = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsMainCloseAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsMainDuplicateTool = new System.Windows.Forms.ToolStripMenuItem();
             this.tsddbHelp = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiXtbHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiPluginHelp = new System.Windows.Forms.ToolStripMenuItem();
@@ -713,6 +715,8 @@ namespace XrmToolBox.New
             this.cmsMainCloseThis,
             this.cmsMainCloseExceptThis,
             this.cmsMainCloseAll,
+            this.toolStripSeparator3,
+            this.cmsMainDuplicateTool,
             this.toolStripSeparator2,
             this.tsmiChangeTabConnection
             });
@@ -737,6 +741,12 @@ namespace XrmToolBox.New
             this.cmsMainCloseAll.Name = "cmsMainCloseAll";
             this.cmsMainCloseAll.Size = new System.Drawing.Size(275, 34);
             this.cmsMainCloseAll.Text = "Close all";
+            // 
+            // cmsMainDuplicateTool
+            // 
+            this.cmsMainDuplicateTool.Name = "cmsMainDuplicateTool";
+            this.cmsMainDuplicateTool.Size = new System.Drawing.Size(275, 34);
+            this.cmsMainDuplicateTool.Text = "Duplicate Tool";
             // 
             // tsddbHelp
             // 
@@ -963,7 +973,8 @@ namespace XrmToolBox.New
         private System.Windows.Forms.ToolStripMenuItem tsmiChangeTabConnection;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+
         private System.Windows.Forms.ToolStripMenuItem checkForUpdateToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
         private System.Windows.Forms.ToolStripMenuItem tsmiAbout;
@@ -976,6 +987,7 @@ namespace XrmToolBox.New
         private System.Windows.Forms.ToolStripMenuItem cmsMainCloseThis;
         private System.Windows.Forms.ToolStripMenuItem cmsMainCloseExceptThis;
         private System.Windows.Forms.ToolStripMenuItem cmsMainCloseAll;
+        private System.Windows.Forms.ToolStripMenuItem cmsMainDuplicateTool;
         private System.Windows.Forms.Label lblPluginsUpdateAvailable;
         private System.Windows.Forms.PictureBox pbOpenPluginsStore;
         private System.Windows.Forms.LinkLabel llClosePluginsUpdatePanel;
