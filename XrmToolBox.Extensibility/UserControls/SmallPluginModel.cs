@@ -76,21 +76,24 @@ namespace XrmToolBox.Extensibility.UserControls
             var time = new FileInfo(((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)Tag).Value.GetType().Assembly.Location)
                 .LastWriteTime;
 
+            var ctrl = (Control)sender;
             if (DateTime.Now - time < new TimeSpan(numberOfDaysToShowNewRibbon, 0, 0, 0))
             {
                 e.Graphics.FillPolygon(new SolidBrush(Color.Green), new[]
                 {
-                    new Point(Width, Height),
-                    new Point(Width - Height, 0),
-                    new Point(Width - Height + 20, 0),
-                    new Point(Width, Height - 20),
+                    new Point(ctrl.Width, ctrl.Height),
+                    new Point(ctrl.Width - ctrl.Height, 0),
+                    new Point(ctrl.Width - ctrl.Height + 20, 0),
+                    new Point(ctrl.Width, ctrl.Height - 20),
                 }, FillMode.Winding);
 
-                e.Graphics.DrawLine(new Pen(Color.White), new Point(Width, Height), new Point(Width - Height, 0));
-                e.Graphics.DrawLine(new Pen(Color.White), new Point(Width - Height + 20, 0), new Point(Width, Height - 20));
+                e.Graphics.DrawLine(new Pen(Color.White), new Point(ctrl.Width, ctrl.Height), new Point(ctrl.Width - ctrl.Height, 0));
+                e.Graphics.DrawLine(new Pen(Color.White), new Point(ctrl.Width - ctrl.Height + 20, 0), new Point(ctrl.Width, ctrl.Height - 20));
 
-                DrawRotatedTextAt(e.Graphics, 45, "NEW", Width - Height / 2, 5, new Font(new FontFamily("Segoe UI"), 8),
+                DrawRotatedTextAt(e.Graphics, 45, "NEW", ctrl.Width - ctrl.Height / 2, 5, new Font(new FontFamily("Segoe UI"), 8),
                     new SolidBrush(Color.White));
+
+                lblCount.TextAlign = ContentAlignment.BottomLeft;
             }
         }
 

@@ -40,7 +40,7 @@
             // picture
             // 
             this.picture.Location = new System.Drawing.Point(18, 18);
-            this.picture.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.picture.Margin = new System.Windows.Forms.Padding(6);
             this.picture.Name = "picture";
             this.picture.Size = new System.Drawing.Size(160, 160);
             this.picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -97,16 +97,17 @@
             // 
             // lblCount
             // 
-            this.lblCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCount.AutoEllipsis = true;
+            this.lblCount.Dock = System.Windows.Forms.DockStyle.Right;
             this.lblCount.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCount.Location = new System.Drawing.Point(968, 4);
+            this.lblCount.Location = new System.Drawing.Point(868, 0);
             this.lblCount.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.lblCount.Name = "lblCount";
-            this.lblCount.Size = new System.Drawing.Size(92, 44);
+            this.lblCount.Size = new System.Drawing.Size(200, 200);
             this.lblCount.TabIndex = 5;
             this.lblCount.Text = "[NB]";
             this.lblCount.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.lblCount.Paint += new System.Windows.Forms.PaintEventHandler(this.LargePluginModel_Paint);
             this.lblCount.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MouseClick);
             // 
             // lblDescription
@@ -138,7 +139,7 @@
             this.Controls.Add(this.lblTitle);
             this.Controls.Add(this.picture);
             this.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "LargePluginModel";
             this.Size = new System.Drawing.Size(1068, 200);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.LargePluginModel_Paint);
