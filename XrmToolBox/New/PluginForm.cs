@@ -1,4 +1,5 @@
 ﻿using McTools.Xrm.Connection;
+using McTools.Xrm.Connection.AppCode;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.Drawing;
@@ -25,8 +26,8 @@ namespace XrmToolBox.New
             PluginTitle = pluginName;
 
             control.Dock = DockStyle.Fill;
-            panel1.Controls.Add(control);
-            panel1.Controls.SetChildIndex(control, 0);
+            pnlMain.Controls.Add(control);
+            pnlMain.Controls.SetChildIndex(control, 0);
             pluginControlBase = (PluginControlBase)control;
             pluginControlBase.OnCloseTool += PluginControlBase_OnCloseTool;
             Icon = pluginControlBase.PluginIcon;
@@ -36,6 +37,17 @@ namespace XrmToolBox.New
             if (pluginControlBase is IStatusBarMessenger statusBarMessenger)
             {
                 statusBarMessenger.SendMessageToStatusBar += StatusBarMessager_SendMessageToStatusBar;
+            }
+
+            if (pluginControlBase.ConnectionDetail != null)
+            {
+                pluginControlBase.ConnectionDetail.OnImpersonate += Detail_OnImpersonate;
+                if (pluginControlBase.ConnectionDetail.ImpersonatedUserId != Guid.Empty)
+                {
+                    Detail_OnImpersonate(pluginControlBase.ConnectionDetail,
+                        new ImpersonationEventArgs(pluginControlBase.ConnectionDetail.ImpersonatedUserId,
+                            pluginControlBase.ConnectionDetail.ImpersonatedUserName));
+                }
             }
         }
 
@@ -87,6 +99,13 @@ namespace XrmToolBox.New
         public void UpdateConnection(IOrganizationService newService, ConnectionDetail detail, string actionName, object parameter)
         {
             pluginControlBase.UpdateConnection(newService, detail, actionName, parameter);
+            detail.OnImpersonate += Detail_OnImpersonate;
+
+            if (detail.ImpersonatedUserId != Guid.Empty)
+            {
+                Detail_OnImpersonate(detail, new ImpersonationEventArgs(detail.ImpersonatedUserId, detail.ImpersonatedUserName));
+            }
+
             DisplayHighlight(detail);
         }
 
@@ -117,6 +136,24 @@ namespace XrmToolBox.New
             }
 
             return true;
+        }
+
+        private void btnResetImpersonate_Click(object sender, System.EventArgs e)
+        {
+            pluginControlBase.ConnectionDetail.RemoveImpersonation();
+        }
+
+        private void Detail_OnImpersonate(object sender, ImpersonationEventArgs e)
+        {
+            if (e.UserId == Guid.Empty)
+            {
+                pnlImpersonate.Visible = false;
+            }
+            else
+            {
+                lblImpersonation.Text = string.Format(lblImpersonation.Tag.ToString(), e.UserName, e.UserId);
+                pnlImpersonate.Visible = true;
+            }
         }
 
         private void DisplayHighlight(ConnectionDetail detail)

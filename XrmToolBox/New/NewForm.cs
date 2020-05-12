@@ -182,6 +182,44 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
             }
         }
 
+        private void CheckForConnectionControlsUpdate(bool force = false)
+        {
+            if (store == null)
+                store = new StoreFromPortal(Options.Instance.ConnectionControlsAllowPreReleaseUpdates);
+
+            if (store.IsConnectionControlsUpdateAvailable(out string version, out string releasenotes,
+                Options.Instance.ConnectionControlsVersion))
+            {
+                Options.Instance.ConnectionControlsVersion = version;
+                Options.Instance.Save();
+
+                if (force || !Options.Instance.PluginsUpdateSkip.Any(
+                    x => x.Name == "McTools.Xrm.ConnectionControls"
+                         && x.Version == version
+                         && x.Date > DateTime.Now))
+                {
+                    var dialog = new NewConnectionVersion(version, releasenotes);
+                    if (dialog.ShowDialog(this) == DialogResult.Yes)
+                    {
+                        var restartNow = store.PrepareConnectionControlsUpdate(this, dialog.OnNextRestart,
+                            out string versionToStore);
+
+                        Options.Instance.ConnectionControlsVersion = versionToStore;
+                        Options.Instance.Save();
+                        if (restartNow)
+                        {
+                            Application.Restart();
+                        }
+                    }
+                    else
+                    {
+                        UpdatePluginUpdateSkip("McTools.Xrm.ConnectionControls", version, dialog.IsVersionSkipped,
+                            dialog.NumberOfDaysToSkip);
+                    }
+                }
+            }
+        }
+
         private string ExtractSwitchValue(string key, ref string[] args)
         {
             var name = string.Empty;
@@ -293,37 +331,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
             if (store == null)
             {
-                store = new StoreFromPortal(Options.Instance.ConnectionControlsAllowPreReleaseUpdates);
-
-                if (store.IsConnectionControlsUpdateAvailable(out string version, out string releasenotes, Options.Instance.ConnectionControlsVersion))
-                {
-                    Options.Instance.ConnectionControlsVersion = version;
-                    Options.Instance.Save();
-
-                    if (!Options.Instance.PluginsUpdateSkip.Any(
-                        x => x.Name == "McTools.Xrm.ConnectionControls"
-                             && x.Version == version
-                             && x.Date > DateTime.Now))
-                    {
-                        var dialog = new NewConnectionVersion(version, releasenotes);
-                        if (dialog.ShowDialog(this) == DialogResult.Yes)
-                        {
-                            var restartNow = store.PrepareConnectionControlsUpdate(this, dialog.OnNextRestart,
-                                out string versionToStore);
-
-                            Options.Instance.ConnectionControlsVersion = versionToStore;
-                            Options.Instance.Save();
-                            if (restartNow)
-                            {
-                                Application.Restart();
-                            }
-                        }
-                        else
-                        {
-                            UpdatePluginUpdateSkip("McTools.Xrm.ConnectionControls", version, dialog.IsVersionSkipped, dialog.NumberOfDaysToSkip);
-                        }
-                    }
-                }
+                CheckForConnectionControlsUpdate();
 
                 if (store.PluginsCount == 0)
                 {
@@ -562,6 +570,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 {
                     tssOpenOrg.Visible = false;
                     tsbOpenOrg.Visible = false;
+                    tsbImpersonate.Visible = false;
                 }
 
                 var pluginInOption = Options.Instance.MostUsedList.FirstOrDefault(i => i.Name == plugin.Value.GetType().FullName);
@@ -928,6 +937,9 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                         tsbOpenOrg.Image = new Bitmap(Properties.Resources.LogoDyn365);
                     }
 
+                    tsbImpersonate.Enabled = e.ConnectionDetail.CanImpersonate;
+                    tsbImpersonate.Visible = true;
+
                     if (parameter != null)
                     {
                         var us = parameter.ConnectionParmater as UserControl;
@@ -989,7 +1001,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                                 }
                             }
 
-                            rcea.Control.UpdateConnection(e.OrganizationService, e.ConnectionDetail, rcea.ActionName, rcea.Parameter);
+                            ((PluginForm)userControl.ParentForm).UpdateConnection(e.OrganizationService, e.ConnectionDetail, rcea.ActionName, rcea.Parameter);
                         }
                         else
                         {
@@ -1029,6 +1041,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
                     tssOpenOrg.Visible = true;
                     tsbOpenOrg.Visible = true;
+                    tsbImpersonate.Visible = true;
                 }));
             };
             cManager.ConnectionFailed += (sender, e) =>
@@ -1478,6 +1491,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                         oDialog.Option.ConnectionControlsAllowPreReleaseUpdates)
                     {
                         store.AllowConnectionControlPreRelease = oDialog.Option.ConnectionControlsAllowPreReleaseUpdates;
+                        Options.Instance.ConnectionControlsAllowPreReleaseUpdates = oDialog.Option.ConnectionControlsAllowPreReleaseUpdates;
                         Options.Instance.Save();
 
                         if (store.AllowConnectionControlPreRelease == false)
@@ -1492,13 +1506,17 @@ Would you like to reinstall last stable release of connection controls?";
                                 var restartNow = store.PrepareConnectionControlsUpdate(this, false, out string versionToStore);
 
                                 Options.Instance.ConnectionControlsVersion = versionToStore;
-                                Options.Instance.ConnectionControlsAllowPreReleaseUpdates = false;
                                 Options.Instance.Save();
+
                                 if (restartNow)
                                 {
                                     Application.Restart();
                                 }
                             }
+                        }
+                        else
+                        {
+                            CheckForConnectionControlsUpdate(true);
                         }
                     }
 
@@ -1711,6 +1729,15 @@ Would you like to reinstall last stable release of connection controls?";
         {
             pnlPluginsUpdate.Visible = false;
             tsddbTools_DropDownItemClicked(null, new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
+        }
+
+        private void tsbImpersonate_Click(object sender, System.EventArgs e)
+        {
+            var dialog = new UserSelectionDialog(connectionDetail.ServiceClient);
+            if (dialog.ShowDialog(this) == DialogResult.OK)
+            {
+                connectionDetail.Impersonate(dialog.SelectedUser.Id, dialog.SelectedUser.GetAttributeValue<string>("fullname"));
+            }
         }
     }
 }

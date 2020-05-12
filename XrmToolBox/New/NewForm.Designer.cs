@@ -112,6 +112,7 @@ namespace XrmToolBox.New
             this.tsmiXtbAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.tssDonate = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiPluginAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsbImpersonate = new System.Windows.Forms.ToolStripButton();
             this.tsMain.SuspendLayout();
             this.pnlSupport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -133,7 +134,9 @@ namespace XrmToolBox.New
             //this.toolStripDropDownButton2,,
             this.tsddbHelp,
             this.tssOpenOrg,
-            this.tsbOpenOrg});
+            this.tsbOpenOrg,
+            this.tsbImpersonate
+            });
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
             this.tsMain.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
@@ -771,6 +774,17 @@ namespace XrmToolBox.New
             this.tsddbHelp.Name = "tsddbHelp";
             this.tsddbHelp.Size = new System.Drawing.Size(119, 36);
             this.tsddbHelp.Text = "Help";
+
+            this.tsbImpersonate.Image = ((System.Drawing.Image)(resources.GetObject("tsbImpersonate.Image")));
+            this.tsbImpersonate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbImpersonate.Name = "tsbImpersonate";
+            this.tsbImpersonate.Size = new System.Drawing.Size(168, 36);
+            this.tsbImpersonate.Text = "Impersonate";
+            this.tsbImpersonate.Visible = false;
+            this.tsbImpersonate.ToolTipText = "Impersonate as another user in the organization/environment\n\nBe careful! If the current connection is already used by multiple tools, they will used this impersonation";
+            this.tsbImpersonate.Click += new System.EventHandler(this.tsbImpersonate_Click);
+
+
             // 
             // tsmiXtbHelp
             // 
@@ -1006,5 +1020,6 @@ namespace XrmToolBox.New
         private System.Windows.Forms.ToolStripSeparator tssUpdate;
         private System.Windows.Forms.ToolStripMenuItem tsmiXtbAbout;
         private System.Windows.Forms.ToolStripMenuItem tsmiPluginAbout;
+        private System.Windows.Forms.ToolStripButton tsbImpersonate;
     }
 }
