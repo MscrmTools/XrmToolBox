@@ -34,24 +34,14 @@ namespace XrmToolBox.Extensibility
         /// <param name="name">Name of the settings file<remarks>Optional parameter that completes the settings file name</remarks></param>
         public void Save(Type pluginType, object settings, string name = null)
         {
-            if (name != null)
-            {
-                name = CleanStringForFileName(name);
-            }
+            name = FormatName(name);
+            ConditionallyCreateSettingsDirectory();
 
-            if (!Directory.Exists(Paths.SettingsPath))
-            {
-                Directory.CreateDirectory(Paths.SettingsPath);
-            }
-
-            var filePath = Path.Combine(Paths.SettingsPath,
-                $"{pluginType.Assembly.FullName.Split(',')[0]}{(string.IsNullOrEmpty(name) ? "" : "_")}{name}.xml");
+            var filePath = GetPluginSettingsPath(pluginType, name);
 
             XmlSerializerHelper.SerializeToFile(settings, filePath);
 
-            // Fix file created before using Assembly name
-            filePath = Path.Combine(Paths.SettingsPath,
-               GetSafeFilename($"{pluginType.Name}{(string.IsNullOrEmpty(name) ? "" : "_")}{name}.xml"));
+            filePath = GetLegacyPluginSettingsPath(pluginType, name);
 
             if (File.Exists(filePath))
             {
@@ -73,45 +63,77 @@ namespace XrmToolBox.Extensibility
         /// </remarks>
         public bool TryLoad<T>(Type pluginType, out T settingsObject, string name = null)
         {
-            if (name != null)
-            {
-                name = CleanStringForFileName(name);
-            }
+            name = FormatName(name);
+            ConditionallyCreateSettingsDirectory();
 
-            if (!Directory.Exists(Paths.SettingsPath))
-            {
-                Directory.CreateDirectory(Paths.SettingsPath);
-            }
-
-            var filePath = Path.Combine(Paths.SettingsPath,
-               GetSafeFilename(
-                   $"{pluginType.Assembly.FullName.Split(',')[0]}{(string.IsNullOrEmpty(name) ? "" : "_")}{name}.xml"));
+            var filePath = GetPluginSettingsPath(pluginType, name);
 
             if (File.Exists(filePath))
             {
-                var document = new XmlDocument();
-                document.Load(filePath);
-
-                settingsObject = (T)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(T));
+                settingsObject = DeserializeXmlFile<T>(filePath);
                 return true;
             }
 
-            // Check again with a different name to handle settings files
-            // created before fixing the name used
-            filePath = Path.Combine(Paths.SettingsPath,
-                $"{pluginType.Name}{(string.IsNullOrEmpty(name) ? "" : "_")}{name}.xml");
+            filePath = GetLegacyPluginSettingsPath(pluginType, name);
 
             if (File.Exists(filePath))
             {
-                var document = new XmlDocument();
-                document.Load(filePath);
-
-                settingsObject = (T)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(T));
+                settingsObject = DeserializeXmlFile<T>(filePath);
                 return true;
             }
 
             settingsObject = default(T);
             return false;
+        }
+
+        /// <summary>
+        /// Settings used to be loaded by  Fix file created before using Assembly name
+        /// </summary>
+        /// <param name="pluginType"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        private string GetLegacyPluginSettingsPath(Type pluginType, string name)
+        {
+            return Path.Combine(Paths.SettingsPath,
+                GetSafeFilename(pluginType.Name + name));
+        }
+
+        private string GetPluginSettingsPath(Type pluginType, string name)
+        {
+            return Path.Combine(Paths.SettingsPath,
+                GetSafeFilename(pluginType.Assembly.FullName.Split(',')[0] + name));
+        }
+
+        private static void ConditionallyCreateSettingsDirectory()
+        {
+            if (!Directory.Exists(Paths.SettingsPath))
+            {
+                Directory.CreateDirectory(Paths.SettingsPath);
+            }
+        }
+
+        private static T DeserializeXmlFile<T>(string filePath)
+        {
+            try
+            {
+                var document = new XmlDocument();
+                document.Load(filePath);
+
+                var settingsObject = (T) XmlSerializerHelper.Deserialize(document.OuterXml, typeof(T));
+                return settingsObject;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error attempting to loading and deserializing file \"{filePath}\"", ex);
+            }
+        }
+
+        private string FormatName(string name)
+        {
+            name = string.IsNullOrEmpty(name)
+                ? string.Empty
+                : "_" + CleanStringForFileName(name);
+            return name + ".xml";
         }
 
         private string CleanStringForFileName(string text)
