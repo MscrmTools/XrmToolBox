@@ -98,6 +98,7 @@ namespace XrmToolBox.New
             this.cmsMainCloseExceptThis = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsMainCloseAll = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsMainDuplicateTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsMainDuplicateToolWithConnection = new System.Windows.Forms.ToolStripMenuItem();
             this.tsddbHelp = new System.Windows.Forms.ToolStripDropDownButton();
             this.tsmiXtbHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiPluginHelp = new System.Windows.Forms.ToolStripMenuItem();
@@ -720,6 +721,7 @@ namespace XrmToolBox.New
             this.cmsMainCloseAll,
             this.toolStripSeparator3,
             this.cmsMainDuplicateTool,
+            this.cmsMainDuplicateToolWithConnection,
             this.toolStripSeparator2,
             this.tsmiChangeTabConnection
             });
@@ -750,6 +752,12 @@ namespace XrmToolBox.New
             this.cmsMainDuplicateTool.Name = "cmsMainDuplicateTool";
             this.cmsMainDuplicateTool.Size = new System.Drawing.Size(275, 34);
             this.cmsMainDuplicateTool.Text = "Duplicate Tool";
+            // 
+            // cmsMainDuplicateToolWithConnection
+            // 
+            this.cmsMainDuplicateToolWithConnection.Name = "cmsMainDuplicateTool";
+            this.cmsMainDuplicateToolWithConnection.Size = new System.Drawing.Size(275, 34);
+            this.cmsMainDuplicateToolWithConnection.Text = "Duplicate Tool with new connection";
             // 
             // tsddbHelp
             // 
@@ -1002,6 +1010,7 @@ namespace XrmToolBox.New
         private System.Windows.Forms.ToolStripMenuItem cmsMainCloseExceptThis;
         private System.Windows.Forms.ToolStripMenuItem cmsMainCloseAll;
         private System.Windows.Forms.ToolStripMenuItem cmsMainDuplicateTool;
+        private System.Windows.Forms.ToolStripMenuItem cmsMainDuplicateToolWithConnection;
         private System.Windows.Forms.Label lblPluginsUpdateAvailable;
         private System.Windows.Forms.PictureBox pbOpenPluginsStore;
         private System.Windows.Forms.LinkLabel llClosePluginsUpdatePanel;
