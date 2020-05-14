@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using McTools.Xrm.Connection;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
@@ -90,7 +91,8 @@ namespace XrmToolBox.New
                 additionalInfo += $"-%20DB%20Version:%20{connectionDetail.OrganizationVersion}%0A";
             }
 
-            additionalInfo += $"-%20XTB%20Version:%20{Assembly.GetExecutingAssembly().GetName().Version}%0A";
+            additionalInfo += $"-%20Connection%20Controls%20Version:%20{typeof(ConnectionDetail).Assembly.GetName().Version}%0A";
+            additionalInfo += $"-%20XrmToolBox%20Version:%20{Assembly.GetExecutingAssembly().GetName().Version}%0A";
             additionalInfo = "?body=[Write your comment/feedback/issue here]%0A%0A---%0A" + additionalInfo;
 
             return additionalInfo;
