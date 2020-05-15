@@ -523,6 +523,10 @@
     <EmbeddedResource Include="Images\progress.gif" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\XrmToolBox.AutoUpdater\XrmToolBox.AutoUpdater.csproj">
+      <Project>{564c72c8-586e-4218-b6b3-f464f7c3903a}</Project>
+      <Name>XrmToolBox.AutoUpdater</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XrmToolBox.Extensibility\XrmToolBox.Extensibility.csproj">
       <Project>{df77aea3-43f7-403c-91af-3023a3bb06ec}</Project>
       <Name>XrmToolBox.Extensibility</Name>
@@ -557,7 +561,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
