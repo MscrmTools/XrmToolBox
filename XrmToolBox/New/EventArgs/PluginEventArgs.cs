@@ -39,5 +39,6 @@ namespace XrmToolBox.New.EventArgs
         public IXrmToolBoxPluginControl PluginControl { get; }
         public PluginModel PluginModel { get; }
         public string PluginName { get; }
+        public IDuplicatableTool SourceTool { get; set; }
     }
 }

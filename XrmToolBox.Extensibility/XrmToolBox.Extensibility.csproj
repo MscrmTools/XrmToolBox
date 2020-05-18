@@ -140,6 +140,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Args\DuplicateToolWithConnectionArgs.cs" />
     <Compile Include="Args\StatusBarMessageEventArgs.cs" />
     <Compile Include="Extensions.cs">
       <SubType>Code</SubType>
@@ -153,6 +154,7 @@
     <Compile Include="InformationPanel.cs" />
     <Compile Include="Interfaces\IAboutPlugin.cs" />
     <Compile Include="Interfaces\ICodePlexPlugin.cs" />
+    <Compile Include="Interfaces\IDuplicatableTool.cs" />
     <Compile Include="Interfaces\IEarlyBoundProxy.cs" />
     <Compile Include="Interfaces\IGitHubPlugin.cs" />
     <Compile Include="Interfaces\IHelpPlugin.cs" />

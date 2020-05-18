@@ -486,10 +486,10 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
         #region Plugins Form events
 
-        private void DisplayPluginControl(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, bool displayConnected = true)
+        private UserControl DisplayPluginControl(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, bool displayConnected = true)
         {
             Guid pluginControlInstanceId = Guid.NewGuid();
-
+            UserControl pluginControl = null;
             try
             {
                 var mruItem = new MostRecentlyUsedItem
@@ -498,7 +498,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     Date = DateTime.Now
                 };
 
-                var pluginControl = (UserControl)plugin.Value.GetControl();
+                pluginControl = (UserControl)plugin.Value.GetControl();
                 pluginControl.Tag = pluginControlInstanceId;
 
                 // ReSharper disable once SuspiciousTypeConversion.Global
@@ -534,12 +534,12 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
                 ((IXrmToolBoxPluginControl)pluginControl).OnRequestConnection += NewForm_OnRequestConnection;
                 ((IXrmToolBoxPluginControl)pluginControl).OnWorkAsync += (sender, e) =>
-                {
-                    //var bw = new BackgroundWorker();
-                    //bw.DoWork += (s, evt) => { evt.Result = AnnouncementManager.GetItemToDisplay(); };
-                    //bw.RunWorkerCompleted += (s, evt) => { AnnouncementManager.Display(evt.Result as AnnouncementItem); };
-                    //bw.RunWorkerAsync();
-                };
+               {
+                   //var bw = new BackgroundWorker();
+                   //bw.DoWork += (s, evt) => { evt.Result = AnnouncementManager.GetItemToDisplay(); };
+                   //bw.RunWorkerCompleted += (s, evt) => { AnnouncementManager.Display(evt.Result as AnnouncementItem); };
+                   //bw.RunWorkerAsync();
+               };
 
                 if (pnlConnectLoading.Visible)
                 {
@@ -573,7 +573,8 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     tsbImpersonate.Visible = false;
                 }
 
-                var pluginInOption = Options.Instance.MostUsedList.FirstOrDefault(i => i.Name == plugin.Value.GetType().FullName);
+                var pluginInOption =
+                    Options.Instance.MostUsedList.FirstOrDefault(i => i.Name == plugin.Value.GetType().FullName);
                 if (pluginInOption == null)
                 {
                     pluginInOption = new PluginUseCount { Name = plugin.Value.GetType().FullName, Count = 0 };
@@ -589,8 +590,9 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     bool displayAdvertisement = true;
                     try
                     {
-                        var assembly = Assembly.LoadFile(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory +
-                                              "\\McTools.StopAdvertisement.dll");
+                        var assembly = Assembly.LoadFile(
+                            new FileInfo(Assembly.GetExecutingAssembly().Location).Directory +
+                            "\\McTools.StopAdvertisement.dll");
                         {
                             Type type = assembly.GetType("McTools.StopAdvertisement.LicenseManager");
                             if (type != null)
@@ -620,7 +622,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 }
 
                 var existingItem = MostRecentlyUsedItems.Instance.Items.FirstOrDefault(i
-                => i.PluginName == mruItem.PluginName && i.ConnectionId == mruItem.ConnectionId);
+                    => i.PluginName == mruItem.PluginName && i.ConnectionId == mruItem.ConnectionId);
                 if (existingItem == null)
                 {
                     MostRecentlyUsedItems.Instance.Items.Add(mruItem);
@@ -635,12 +637,15 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 ai.WritePageView(plugin.Metadata.Name, plugin.Value.GetVersion());
 
                 Options.Instance.Save();
+
+                return pluginControl;
             }
             catch (Exception error)
             {
                 Invoke(new Action(() =>
                 {
-                    MessageBox.Show(this, $@"An error occured when trying to display this tool: {error.Message}", @"Error",
+                    MessageBox.Show(this, $@"An error occured when trying to display this tool: {error.Message}",
+                        @"Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                     if (pnlConnectLoading.Visible)
@@ -649,6 +654,8 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                         pnlConnectLoading.Visible = false;
                     }
                 }));
+
+                return pluginControl;
             }
         }
 
@@ -758,7 +765,11 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
             if (e.Plugin.Value is INoConnectionRequired)
             {
-                DisplayPluginControl(e.Plugin);
+                var ctrl = DisplayPluginControl(e.Plugin);
+                if (ctrl is IDuplicatableTool dt && e.SourceTool != null)
+                {
+                    dt.ApplyState(e.SourceTool.GetState());
+                }
                 Cursor = Cursors.Default;
                 return;
             }
@@ -776,7 +787,11 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 {
                     if (e.Plugin != null)
                     {
-                        DisplayPluginControl(e.Plugin);
+                        var ctrl = DisplayPluginControl(e.Plugin);
+                        if (ctrl is IDuplicatableTool dt && e.SourceTool != null)
+                        {
+                            dt.ApplyState(e.SourceTool.GetState());
+                        }
                     }
                 }
             }
@@ -784,7 +799,11 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
             {
                 if (e.Plugin != null)
                 {
-                    DisplayPluginControl(e.Plugin, e.MruInfo == null || e.MruInfo.Item.ConnectionId != Guid.Empty);
+                    var ctrl = DisplayPluginControl(e.Plugin, e.MruInfo == null || e.MruInfo.Item.ConnectionId != Guid.Empty);
+                    if (ctrl is IDuplicatableTool dt && e.SourceTool != null)
+                    {
+                        dt.ApplyState(e.SourceTool.GetState());
+                    }
                 }
             }
 
@@ -945,6 +964,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                           var us = parameter.ConnectionParmater as UserControl;
                           var p = parameter.ConnectionParmater as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
                           var rcea = parameter.ConnectionParmater as RequestConnectionEventArgs;
+                          var dtwc = parameter.ConnectionParmater as DuplicateToolWithConnectionArgs;
 
                           if (us != null)
                           {
@@ -1018,6 +1038,17 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                                   ((PluginForm)userControl.ParentForm).UpdateConnection(e.OrganizationService,
                                       e.ConnectionDetail, rcea.ActionName, rcea.Parameter);
                               }
+                          }
+                          else if (dtwc != null)
+                          {
+                              ccsb.SetConnectionStatus(true, e.ConnectionDetail);
+                              ccsb.SetMessage(string.Empty);
+                              connectionDetail = e.ConnectionDetail;
+                              service = e.OrganizationService;
+
+                              var state = dtwc.SourceTool.GetState();
+                              var duplicatedTool = DisplayPluginControl(dtwc.Tool);
+                              ((IDuplicatableTool)duplicatedTool).ApplyState(state);
                           }
                           else
                           {
@@ -1583,14 +1614,29 @@ Would you like to reinstall last stable release of connection controls?";
             }
             else if (e.ClickedItem == cmsMainDuplicateTool)
             {
-                pluginsForm.OpenPlugin(((PluginForm)dpMain.ActiveContent).PluginName);
+                if (((PluginForm)dpMain.ActiveContent).Control is IDuplicatableTool dt)
+                {
+                    pluginsForm.DuplicateTool(((PluginForm)dpMain.ActiveContent).PluginName, dt);
+                }
+                else
+                {
+                    pluginsForm.OpenPlugin(((PluginForm)dpMain.ActiveContent).PluginName);
+                }
             }
             else if (e.ClickedItem == cmsMainDuplicateToolWithConnection)
             {
                 var pluginName = ((PluginForm)dpMain.ActiveContent).PluginName;
                 var plugin = pluginsForm.PluginManager.ValidatedPlugins.FirstOrDefault(p => p.Metadata.Name == pluginName);
 
-                ConnectUponApproval(new RequestConnectionEventArgs { ActionName = "", Control = ((PluginForm)dpMain.ActiveDocument).Control, Parameter = plugin });
+                if (((PluginForm)dpMain.ActiveContent).Control is IDuplicatableTool dt)
+                {
+                    ConnectUponApproval(new DuplicateToolWithConnectionArgs { SourceTool = dt, Tool = plugin });
+                }
+                else
+                {
+                    ConnectUponApproval(new RequestConnectionEventArgs
+                    { ActionName = "", Control = ((PluginForm)dpMain.ActiveDocument).Control, Parameter = plugin });
+                }
             }
             else if (e.ClickedItem == tsmiChangeTabConnection)
             {

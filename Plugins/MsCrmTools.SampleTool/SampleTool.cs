@@ -12,7 +12,7 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SampleTool
 {
-    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin
+    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin, IDuplicatableTool
     {
         #region Base tool implementation
 
@@ -197,6 +197,16 @@ namespace MsCrmTools.SampleTool
         }
 
         #endregion Shortcut Receiver implementation
+
+        public void ApplyState(object state)
+        {
+            txtState.Text = state.ToString();
+        }
+
+        public object GetState()
+        {
+            return txtState.Text;
+        }
 
         private void SampleTool_Load(object sender, EventArgs e)
         {

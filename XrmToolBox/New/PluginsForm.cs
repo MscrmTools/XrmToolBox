@@ -72,6 +72,24 @@ namespace XrmToolBox.New
 
         #endregion Events
 
+        public void DuplicateTool(string pluginName, IDuplicatableTool sourceTool, OpenMruPluginEventArgs e = null)
+        {
+            if (e != null)
+            {
+                pluginName = e.Item.PluginName;
+            }
+
+            var plugin = pluginsManager.ValidatedPlugins.FirstOrDefault(p => p.Metadata.Name == pluginName);
+            if (plugin == null)
+            {
+                var message = $"Tool '{pluginName}' was not found.\n\nYou can install it from the Tool Library";
+                MessageBox.Show(this, message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            OpenPluginRequested?.Invoke(this, e != null ? new PluginEventArgs(e, plugin) { SourceTool = sourceTool } : new PluginEventArgs(plugin) { SourceTool = sourceTool });
+        }
+
         public void OpenPlugin(string pluginName, OpenMruPluginEventArgs e = null)
         {
             if (e != null)
