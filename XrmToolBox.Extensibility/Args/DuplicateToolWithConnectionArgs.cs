@@ -7,6 +7,7 @@ namespace XrmToolBox.Extensibility.Args
     {
         public IDuplicatableTool SourceTool { get; set; }
 
+        public object State { get; set; }
         public Lazy<IXrmToolBoxPlugin, IPluginMetadata> Tool { get; set; }
     }
 }

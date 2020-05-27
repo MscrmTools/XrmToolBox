@@ -140,6 +140,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Args\DuplicateToolArgs.cs" />
     <Compile Include="Args\DuplicateToolWithConnectionArgs.cs" />
     <Compile Include="Args\StatusBarMessageEventArgs.cs" />
     <Compile Include="Extensions.cs">

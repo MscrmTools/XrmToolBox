@@ -547,6 +547,30 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     pnlConnectLoading.Visible = false;
                 }
 
+                if (pluginControl is IDuplicatableTool idt)
+                {
+                    idt.DuplicateRequested += (sender, e) =>
+                    {
+                        var pluginName = ((PluginForm)((PluginControlBase)sender).ParentForm).PluginName;
+                        if (e.NewConnection)
+                        {
+                            var pluginToDuplicate = pluginsForm.PluginManager.ValidatedPlugins.FirstOrDefault(p => p.Metadata.Name == pluginName);
+
+                            if (((PluginForm)dpMain.ActiveContent).Control is IDuplicatableTool dt)
+                            {
+                                ConnectUponApproval(new DuplicateToolWithConnectionArgs { SourceTool = dt, Tool = pluginToDuplicate, State = e.State });
+                            }
+                        }
+                        else
+                        {
+                            if (sender is IDuplicatableTool dt)
+                            {
+                                pluginsForm.DuplicateTool(((PluginForm)dpMain.ActiveContent).PluginName, dt, e.State);
+                            }
+                        }
+                    };
+                }
+
                 var pluginForm = new PluginForm(pluginControl, name, plugin.Metadata.Name);
                 pluginForm.PluginName = plugin.Metadata.Name;
                 pluginForm.Show(dpMain, DockState.Document);
@@ -1046,7 +1070,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                               connectionDetail = e.ConnectionDetail;
                               service = e.OrganizationService;
 
-                              var state = dtwc.SourceTool.GetState();
+                              var state = dtwc.State ?? dtwc.SourceTool.GetState();
                               var duplicatedTool = DisplayPluginControl(dtwc.Tool);
                               ((IDuplicatableTool)duplicatedTool).ApplyState(state);
                           }
@@ -1616,7 +1640,7 @@ Would you like to reinstall last stable release of connection controls?";
             {
                 if (((PluginForm)dpMain.ActiveContent).Control is IDuplicatableTool dt)
                 {
-                    pluginsForm.DuplicateTool(((PluginForm)dpMain.ActiveContent).PluginName, dt);
+                    pluginsForm.DuplicateTool(((PluginForm)dpMain.ActiveContent).PluginName, dt, null);
                 }
                 else
                 {

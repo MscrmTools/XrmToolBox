@@ -38,6 +38,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbCancel = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbDuplicate = new System.Windows.Forms.ToolStripButton();
             this.txtState = new System.Windows.Forms.TextBox();
             this.lblState = new System.Windows.Forms.Label();
             this.gbOptions.SuspendLayout();
@@ -75,10 +76,11 @@
             this.tsbWhoAmI,
             this.toolStripSeparator1,
             this.tsbCancel,
-            this.toolStripSeparator3});
+            this.toolStripSeparator3,
+            this.tsbDuplicate});
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
-            this.toolStripMenu.Size = new System.Drawing.Size(600, 42);
+            this.toolStripMenu.Size = new System.Drawing.Size(1420, 42);
             this.toolStripMenu.TabIndex = 4;
             this.toolStripMenu.Text = "toolStrip1";
             // 
@@ -128,6 +130,15 @@
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 42);
             // 
+            // tsbDuplicate
+            // 
+            this.tsbDuplicate.Image = ((System.Drawing.Image)(resources.GetObject("tsbDuplicate.Image")));
+            this.tsbDuplicate.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbDuplicate.Name = "tsbDuplicate";
+            this.tsbDuplicate.Size = new System.Drawing.Size(152, 36);
+            this.tsbDuplicate.Text = "Duplicate";
+            this.tsbDuplicate.Click += new System.EventHandler(this.tsbDuplicate_Click);
+            // 
             // txtState
             // 
             this.txtState.Location = new System.Drawing.Point(32, 246);
@@ -155,7 +166,7 @@
             this.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.Name = "SampleTool";
             this.PluginIcon = ((System.Drawing.Icon)(resources.GetObject("$this.PluginIcon")));
-            this.Size = new System.Drawing.Size(600, 577);
+            this.Size = new System.Drawing.Size(1420, 577);
             this.Load += new System.EventHandler(this.SampleTool_Load);
             this.gbOptions.ResumeLayout(false);
             this.gbOptions.PerformLayout();
@@ -178,5 +189,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.TextBox txtState;
         private System.Windows.Forms.Label lblState;
+        private System.Windows.Forms.ToolStripButton tsbDuplicate;
     }
 }

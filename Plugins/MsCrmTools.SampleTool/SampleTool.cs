@@ -198,6 +198,10 @@ namespace MsCrmTools.SampleTool
 
         #endregion Shortcut Receiver implementation
 
+        #region IDuplicatableTool implementation
+
+        public event EventHandler<DuplicateToolArgs> DuplicateRequested;
+
         public void ApplyState(object state)
         {
             txtState.Text = state.ToString();
@@ -207,6 +211,13 @@ namespace MsCrmTools.SampleTool
         {
             return txtState.Text;
         }
+
+        private void tsbDuplicate_Click(object sender, EventArgs e)
+        {
+            DuplicateRequested?.Invoke(this, new DuplicateToolArgs(txtState.Text, true));
+        }
+
+        #endregion IDuplicatableTool implementation
 
         private void SampleTool_Load(object sender, EventArgs e)
         {

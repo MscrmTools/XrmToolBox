@@ -72,7 +72,7 @@ namespace XrmToolBox.New
 
         #endregion Events
 
-        public void DuplicateTool(string pluginName, IDuplicatableTool sourceTool, OpenMruPluginEventArgs e = null)
+        public void DuplicateTool(string pluginName, IDuplicatableTool sourceTool, object state, OpenMruPluginEventArgs e = null)
         {
             if (e != null)
             {
@@ -87,7 +87,7 @@ namespace XrmToolBox.New
                 return;
             }
 
-            OpenPluginRequested?.Invoke(this, e != null ? new PluginEventArgs(e, plugin) { SourceTool = sourceTool } : new PluginEventArgs(plugin) { SourceTool = sourceTool });
+            OpenPluginRequested?.Invoke(this, e != null ? new PluginEventArgs(e, plugin) { SourceTool = sourceTool, State = state } : new PluginEventArgs(plugin) { SourceTool = sourceTool, State = state });
         }
 
         public void OpenPlugin(string pluginName, OpenMruPluginEventArgs e = null)
