@@ -792,7 +792,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 var ctrl = DisplayPluginControl(e.Plugin);
                 if (ctrl is IDuplicatableTool dt && e.SourceTool != null)
                 {
-                    dt.ApplyState(e.SourceTool.GetState());
+                    dt.ApplyState(e.State ?? e.SourceTool.GetState());
                 }
                 Cursor = Cursors.Default;
                 return;
@@ -814,7 +814,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                         var ctrl = DisplayPluginControl(e.Plugin);
                         if (ctrl is IDuplicatableTool dt && e.SourceTool != null)
                         {
-                            dt.ApplyState(e.SourceTool.GetState());
+                            dt.ApplyState(e.State ?? e.SourceTool.GetState());
                         }
                     }
                 }
@@ -826,7 +826,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     var ctrl = DisplayPluginControl(e.Plugin, e.MruInfo == null || e.MruInfo.Item.ConnectionId != Guid.Empty);
                     if (ctrl is IDuplicatableTool dt && e.SourceTool != null)
                     {
-                        dt.ApplyState(e.SourceTool.GetState());
+                        dt.ApplyState(e.State ?? e.SourceTool.GetState());
                     }
                 }
             }
