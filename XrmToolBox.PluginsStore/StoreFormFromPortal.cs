@@ -574,26 +574,41 @@ Current cache folder size: {size}MB";
 
             if (!string.IsNullOrEmpty(releaseNotes))
             {
-                if (releaseNotes.ToLower().StartsWith("http") && Uri.TryCreate(releaseNotes, UriKind.Absolute, out _))
+                var rtb = new RichTextBox
                 {
-                    var llbl = new LinkLabel { Text = releaseNotes };
-                    llbl.Click += (s, evt) => { Process.Start(((LinkLabel)s).Text); };
-                    llbl.AutoSize = false;
-                    llbl.Dock = DockStyle.Fill;
-
-                    pnlReleaseNotesDetails.Controls.Add(llbl);
-                }
-                else
+                    Dock = DockStyle.Fill,
+                    AutoSize = false,
+                    ReadOnly = true,
+                    BorderStyle = BorderStyle.None
+                };
+                rtb.LinkClicked += (richTextBox, evt) =>
                 {
-                    var lbl = new Label
-                    {
-                        Text = releaseNotes,
-                        Dock = DockStyle.Fill,
-                        AutoSize = false
-                    };
+                    Process.Start(evt.LinkText);
+                };
+                rtb.Text = releaseNotes;
 
-                    pnlReleaseNotesDetails.Controls.Add(lbl);
-                }
+                pnlReleaseNotesDetails.Controls.Add(rtb);
+
+                //if (releaseNotes.ToLower().StartsWith("http") && Uri.TryCreate(releaseNotes, UriKind.Absolute, out _))
+                //{
+                //    var llbl = new LinkLabel { Text = releaseNotes };
+                //    llbl.Click += (s, evt) => { Process.Start(((LinkLabel)s).Text); };
+                //    llbl.AutoSize = false;
+                //    llbl.Dock = DockStyle.Fill;
+
+                //    pnlReleaseNotesDetails.Controls.Add(llbl);
+                //}
+                //else
+                //{
+                //    var lbl = new Label
+                //    {
+                //        Text = releaseNotes,
+                //        Dock = DockStyle.Fill,
+                //        AutoSize = false
+                //    };
+
+                //    pnlReleaseNotesDetails.Controls.Add(lbl);
+                //}
             }
             else
             {
