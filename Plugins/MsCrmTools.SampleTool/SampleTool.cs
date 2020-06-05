@@ -214,7 +214,7 @@ namespace MsCrmTools.SampleTool
 
         private void tsbDuplicate_Click(object sender, EventArgs e)
         {
-            DuplicateRequested?.Invoke(this, new DuplicateToolArgs(txtState.Text, true));
+            DuplicateRequested?.Invoke(this, new DuplicateToolArgs("My custom state", true));
         }
 
         #endregion IDuplicatableTool implementation
