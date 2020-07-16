@@ -543,24 +543,25 @@ Current cache folder size: {size}MB";
             if (e.Item.Checked)
             {
                 selectedPackagesId.Add(((XtbPlugin)e.Item.Tag).Id);
+                ManageUninstallButtonDisplay(true);
             }
             else
             {
                 selectedPackagesId.Remove(((XtbPlugin)e.Item.Tag).Id);
             }
-
-            ManageUninstallButtonDisplay();
         }
 
         private void lvPlugins_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ManageUninstallButtonDisplay();
             pnlReleaseNotesDetails.Controls.Clear();
 
             if (lvPlugins.SelectedItems.Count == 0)
             {
+                tsbUninstall.Visible = false;
                 return;
             }
+
+            ManageUninstallButtonDisplay(false);
 
             splitContainer1.Panel2Collapsed = false;
 
@@ -656,22 +657,27 @@ Current cache folder size: {size}MB";
             }
         }
 
-        private void ManageUninstallButtonDisplay()
+        private void ManageUninstallButtonDisplay(bool isCheck)
         {
-            var packages =
-                lvPlugins.CheckedItems.Cast<ListViewItem>()
-                    .Where(l => l.Tag is XtbPlugin &&
-                   (((XtbPlugin)l.Tag).Action == PackageInstallAction.None
-                   || ((XtbPlugin)l.Tag).Action == PackageInstallAction.Update))
-                    .Select(l => (XtbPlugin)l.Tag)
-                    .ToList();
-            if (packages.Count == 0)
+            List<XtbPlugin> packages;
+
+            if (isCheck)
+            {
+                packages =
+                    lvPlugins.CheckedItems.Cast<ListViewItem>()
+                        .Where(l => l.Tag is XtbPlugin &&
+                                    (((XtbPlugin)l.Tag).Action == PackageInstallAction.None
+                                     || ((XtbPlugin)l.Tag).Action == PackageInstallAction.Update))
+                        .Select(l => (XtbPlugin)l.Tag)
+                        .ToList();
+            }
+            else
             {
                 packages =
                     lvPlugins.SelectedItems.Cast<ListViewItem>()
                         .Where(l => l.Tag is XtbPlugin &&
-                   (((XtbPlugin)l.Tag).Action == PackageInstallAction.None
-                   || ((XtbPlugin)l.Tag).Action == PackageInstallAction.Update))
+                                    (((XtbPlugin)l.Tag).Action == PackageInstallAction.None
+                                     || ((XtbPlugin)l.Tag).Action == PackageInstallAction.Update))
                         .Select(l => (XtbPlugin)l.Tag)
                         .ToList();
             }
