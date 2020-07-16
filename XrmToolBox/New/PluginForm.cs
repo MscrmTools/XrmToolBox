@@ -106,7 +106,8 @@ namespace XrmToolBox.New
                 Detail_OnImpersonate(detail, new ImpersonationEventArgs(detail.ImpersonatedUserId, detail.ImpersonatedUserName));
             }
 
-            DisplayHighlight(detail);
+            if (actionName != "AdditionalOrganization")
+                DisplayHighlight(detail);
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
