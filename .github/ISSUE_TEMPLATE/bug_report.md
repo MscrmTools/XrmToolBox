@@ -1,7 +1,27 @@
 ---
 name: Bug report
-about: Regarding XML error when opening latest version of Webresources Manager
+about: A template to report a bug
+title: "[BUG]"
+labels: bug
+assignees: ''
 
 ---
 
-If you get an issue when opening latest version of Webresources Manager for the first time, please delete existing settings file in c:\users\uour_profile\appData\roaming\mscrmtools\xrmtoolbox\settings
+**Describe the bug**
+A clear and concise description of what the bug is.
+
+**To Reproduce**
+Steps to reproduce the behavior
+
+**Expected behavior**
+A clear and concise description of what you expected to happen.
+
+**Screenshots**
+If applicable, add screenshots to help explain your problem.
+
+**Desktop (please complete the following information):**
+ - XrmToolbox Version
+ - Tool version
+
+**Additional context**
+Add any other context about the problem here.
