@@ -479,7 +479,8 @@ namespace XrmToolBox
                 OptinForApplicationInsights = OptinForApplicationInsights,
                 ConnectionControlsVersion = ConnectionControlsVersion,
                 ConnectionControlsAllowPreReleaseUpdates = ConnectionControlsAllowPreReleaseUpdates,
-                NumberOfDaysToShowNewRibbon = NumberOfDaysToShowNewRibbon
+                NumberOfDaysToShowNewRibbon = NumberOfDaysToShowNewRibbon,
+                RememberSession = RememberSession
             };
         }
 
