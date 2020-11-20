@@ -246,7 +246,7 @@
             this.lblSummary.TabIndex = 17;
             this.lblSummary.Tag = "A new version of the tool {0} is available in the Tool Library.";
             this.lblSummary.Text = "A new version of controls that allow to connect to your Microsoft Dynamics 365 an" +
-    "d Power Apps Common Data Service apps is available.";
+    "d Microsoft Dataverse is available.";
             // 
             // NewConnectionVersion
             // 

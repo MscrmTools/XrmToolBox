@@ -215,7 +215,7 @@
             this.lblWelcomeDescription.Size = new System.Drawing.Size(1528, 127);
             this.lblWelcomeDescription.TabIndex = 3;
             this.lblWelcomeDescription.Text = "This application will improve your productivity when customizing, developing and " +
-    "administering Dynamics 365 for Customer Engagement and Power Apps CDS.";
+    "administering Microsoft Dataverse and Microsoft Dynamics 365.";
             // 
             // label3
             // 

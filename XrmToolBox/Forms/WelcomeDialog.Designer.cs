@@ -135,8 +135,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(883, 355);
             this.label1.TabIndex = 13;
-            this.label1.Text = "The ultimate set of tools for Microsoft Power Apps \r\nCommon Data Service and Micr" +
-    "osoft Dynamics 365\r\n\r\nEmpowering Business analysts, Developers, Administrators a" +
+            this.label1.Text = "The ultimate set of tools for Microsoft Dataverse \r\nand Microsoft Dynamics 365\r\n\r\nEmpowering Business analysts, Developers, Administrators a" +
     "nd Users since 2012";
             this.label1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 

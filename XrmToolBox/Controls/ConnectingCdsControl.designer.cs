@@ -44,8 +44,7 @@
             this.lblConnecting.Size = new System.Drawing.Size(1067, 111);
             this.lblConnecting.TabIndex = 2;
             this.lblConnecting.Tag = "Please wait while XrmToolBox is connecting to {0}";
-            this.lblConnecting.Text = "Please wait while XrmToolBox is connecting to your \r\nCommon Data Service environm" +
-    "ent";
+            this.lblConnecting.Text = "Please wait while XrmToolBox is connecting to your \r\nMicrosoft Dataverse environment";
             this.lblConnecting.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // pbConnectionLoading
