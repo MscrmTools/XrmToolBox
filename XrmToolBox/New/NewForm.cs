@@ -1195,7 +1195,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
         {
             return dpMain.Contents
                 .OfType<PluginForm>()
-                .FirstOrDefault(c => c.PluginName == name
+                .LastOrDefault(c => c.PluginName == name
                                      && ((PluginControlBase)c.Control).ConnectionDetail.ConnectionId ==
                                      connectionDetailId);
         }
