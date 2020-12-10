@@ -1193,11 +1193,10 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
         private PluginForm GetPluginByName(string name, Guid connectionDetailId)
         {
-            if (Guid.TryParse(name, out Guid pluginId))
+            if (Guid.TryParse(name, out Guid pluginId) && !pluginId.Equals(Guid.Empty))
             {
                 var expectedPlugin = PluginManagerExtended.Instance.Plugins.FirstOrDefault(p =>
-                    p.Value is PluginBase pb && pb.GetId() == pluginId
-                );
+                    p.Value is PluginBase pb && pb.GetId().Equals(pluginId));
 
                 if (expectedPlugin != null)
                 {
@@ -1251,8 +1250,8 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
             var sourceDetail = ((PluginControlBase)sender).ConnectionDetail;
 
-            var content = GetPluginByName(message.TargetPlugin, sourceDetail.ConnectionId ?? Guid.Empty);
-            if (content == null || message.NewInstance)
+            var content = message.NewInstance ? null : GetPluginByName(message.TargetPlugin, sourceDetail.ConnectionId ?? Guid.Empty);
+            if (content == null)
             {
                 pluginsForm.OpenPlugin(message.TargetPlugin);
             }
