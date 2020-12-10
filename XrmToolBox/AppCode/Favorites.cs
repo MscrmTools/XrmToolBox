@@ -1,6 +1,8 @@
-﻿using System;
+﻿using McTools.Xrm.Connection;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using XrmToolBox.Extensibility;
@@ -78,7 +80,9 @@ namespace XrmToolBox.AppCode
                     var document = new XmlDocument();
                     document.Load(settingsFile);
 
-                    favorites = (Favorites)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(Favorites), "ArrayOfFavorite");
+                    var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(document.OuterXml));
+
+                    favorites = (Favorites)XmlSerializerHelper.Deserialize(memoryStream, typeof(Favorites));
 
                     return true;
                 }

@@ -1,12 +1,22 @@
-﻿using System;
+﻿using McTools.Xrm.Connection;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using XrmToolBox.Extensibility;
 
 namespace XrmToolBox.AppCode
 {
+    public class MostRecentlyUsedItem
+    {
+        public Guid ConnectionId { get; set; }
+        public string ConnectionName { get; set; }
+        public DateTime Date { get; set; }
+        public string PluginName { get; set; }
+    }
+
     [XmlRoot(ElementName = "ArrayOfMostRecentlyUsedItem", Namespace = "")]
     [XmlInclude(typeof(MostRecentlyUsedItem))]
     public class MostRecentlyUsedItems
@@ -35,6 +45,17 @@ namespace XrmToolBox.AppCode
 
         [XmlElement("MostRecentlyUsedItem")]
         public List<MostRecentlyUsedItem> Items { get; set; } = new List<MostRecentlyUsedItem>();
+
+        public void RemovePluginsWithNoConnection()
+        {
+            for (var i = Items.Count - 1; i >= 0; i--)
+            {
+                if (Items[i].ConnectionId == Guid.Empty)
+                {
+                    Items.Remove(Items[i]);
+                }
+            }
+        }
 
         public void Save()
         {
@@ -73,7 +94,9 @@ namespace XrmToolBox.AppCode
                     var document = new XmlDocument();
                     document.Load(settingsFile);
 
-                    mrus = (MostRecentlyUsedItems)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(MostRecentlyUsedItems), "ArrayOfMostRecentlyUsedItem");
+                    var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(document.OuterXml));
+
+                    mrus = (MostRecentlyUsedItems)XmlSerializerHelper.Deserialize(memoryStream, typeof(MostRecentlyUsedItems));
 
                     return true;
                 }
@@ -88,27 +111,5 @@ namespace XrmToolBox.AppCode
             mrus = new MostRecentlyUsedItems();
             return true;
         }
-
-        public void RemovePluginsWithNoConnection()
-        {
-            for (var i = Items.Count - 1; i >= 0; i--)
-            {
-                if (Items[i].ConnectionId == Guid.Empty)
-                {
-                    Items.Remove(Items[i]);
-                }
-            }
-        }
-    }
-
-    public class MostRecentlyUsedItem
-    {
-        public string PluginName { get; set; }
-
-        public Guid ConnectionId { get; set; }
-
-        public string ConnectionName { get; set; }
-
-        public DateTime Date { get; set; }
     }
 }

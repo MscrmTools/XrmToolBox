@@ -1,4 +1,5 @@
-﻿using System;
+﻿using McTools.Xrm.Connection;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
