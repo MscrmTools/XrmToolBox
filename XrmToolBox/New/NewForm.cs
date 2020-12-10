@@ -1193,6 +1193,18 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
         private PluginForm GetPluginByName(string name, Guid connectionDetailId)
         {
+            if (Guid.TryParse(name, out Guid pluginId))
+            {
+                var expectedPlugin = PluginManagerExtended.Instance.Plugins.FirstOrDefault(p =>
+                    p.Value is PluginBase pb && pb.GetId() == pluginId
+                );
+
+                if (expectedPlugin != null)
+                {
+                    name = expectedPlugin.Metadata.Name;
+                }
+            }
+
             return dpMain.Contents
                 .OfType<PluginForm>()
                 .FirstOrDefault(c => c.PluginName == name

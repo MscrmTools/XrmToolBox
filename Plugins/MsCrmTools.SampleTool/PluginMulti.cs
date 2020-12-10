@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
@@ -41,6 +42,11 @@ namespace MsCrmTools.SampleTool
         public override IXrmToolBoxPluginControl GetControl()
         {
             return new SampleToolMulti();
+        }
+
+        public override Guid GetId()
+        {
+            return Guid.Parse("{64A4E4E3-CAF9-4896-983A-341A297DEAF3}");
         }
     }
 }

@@ -5,7 +5,9 @@
 
 using Microsoft.Crm.Sdk.Messages;
 using System;
+using System.Linq;
 using System.Windows.Forms;
+using XrmToolBox;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
@@ -218,6 +220,15 @@ namespace MsCrmTools.SampleTool
         }
 
         #endregion IDuplicatableTool implementation
+
+        private void btnCheckMultiSample_Click(object sender, EventArgs e)
+        {
+            var expectedPlugin = PluginManagerExtended.Instance.Plugins.FirstOrDefault(p =>
+                p.Value is PluginBase pb && pb.GetId() == Guid.Parse("{64A4E4E3-CAF9-4896-983A-341A297DEAF3}")
+            );
+
+            MessageBox.Show(expectedPlugin == null ? "Tool is not installed" : "Tool is installed");
+        }
 
         private void SampleTool_Load(object sender, EventArgs e)
         {

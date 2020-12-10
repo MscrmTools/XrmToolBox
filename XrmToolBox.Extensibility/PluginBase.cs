@@ -5,6 +5,11 @@ namespace XrmToolBox.Extensibility
 {
     public abstract class PluginBase : IXrmToolBoxPlugin
     {
+        public string GetAssemblyQualifiedName()
+        {
+            return GetType().AssemblyQualifiedName;
+        }
+
         public string GetCompany()
         {
             return GetType().GetCompany();
@@ -12,11 +17,11 @@ namespace XrmToolBox.Extensibility
 
         public abstract IXrmToolBoxPluginControl GetControl();
 
-        public string GetAssemblyQualifiedName()
+        public virtual Guid GetId()
         {
-            return GetType().AssemblyQualifiedName;
+            return Guid.Empty;
         }
-        
+
         public string GetVersion()
         {
             return GetType().Assembly.GetName().Version.ToString();
