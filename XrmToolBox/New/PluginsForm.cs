@@ -96,8 +96,7 @@ namespace XrmToolBox.New
             {
                 pluginName = e.Item.PluginName;
             }
-
-            var plugin = pluginsManager.ValidatedPlugins.FirstOrDefault(p => p.Metadata.Name == pluginName);
+            var plugin = pluginsManager.ValidatedPlugins.FirstOrDefault(p => PluginFinderByIdOrName(p, pluginName));
             if (plugin == null)
             {
                 var message = $"Tool '{pluginName}' was not found.\n\nYou can install it from the Tool Library";
@@ -106,6 +105,15 @@ namespace XrmToolBox.New
             }
 
             OpenPluginRequested?.Invoke(this, e != null ? new PluginEventArgs(e, plugin) : new PluginEventArgs(plugin));
+        }
+
+        private static bool PluginFinderByIdOrName(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, string identifier)
+        {
+            if (Guid.TryParse(identifier, out Guid pluginid) && !pluginid.Equals(Guid.Empty))
+            {
+                return plugin.Value is PluginBase pb && pb.GetId().Equals(pluginid);
+            }
+            return plugin.Metadata.Name.Equals(identifier);
         }
 
         public void ReloadPluginsList()
