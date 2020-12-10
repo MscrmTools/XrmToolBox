@@ -14,7 +14,7 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SampleTool
 {
-    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin, IDuplicatableTool
+    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin, IDuplicatableTool, ISettingsPlugin
     {
         #region Base tool implementation
 
@@ -221,6 +221,25 @@ namespace MsCrmTools.SampleTool
 
         #endregion IDuplicatableTool implementation
 
+        #region ISettingsPlugin implementation
+
+        public void ShowSettings()
+        {
+            MessageBox.Show(@"Settings should be displayed instead of this dialog");
+        }
+
+        #endregion ISettingsPlugin implementation
+
+        #region IAboutPlugin implementation
+
+        public void ShowAboutDialog()
+        {
+            MessageBox.Show(@"This is a sample tool", @"About Sample Tool", MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+
+        #endregion IAboutPlugin implementation
+
         private void btnCheckMultiSample_Click(object sender, EventArgs e)
         {
             var expectedPlugin = PluginManagerExtended.Instance.Plugins.FirstOrDefault(p =>
@@ -234,15 +253,5 @@ namespace MsCrmTools.SampleTool
         {
             ShowInfoNotification("This is a notification that can lead to XrmToolBox repository", new Uri("http://github.com/MscrmTools/XrmToolBox"));
         }
-
-        #region IAboutPlugin implementation
-
-        public void ShowAboutDialog()
-        {
-            MessageBox.Show(@"This is a sample tool", @"About Sample Tool", MessageBoxButtons.OK,
-                MessageBoxIcon.Information);
-        }
-
-        #endregion IAboutPlugin implementation
     }
 }

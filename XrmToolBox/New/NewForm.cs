@@ -1559,7 +1559,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
             {
                 fHelper.DisplayConnectionsList(this);
             }
-            else if (e.ClickedItem == settingsToolStripMenuItem)
+            else if (e.ClickedItem == tsmiXtbSettings)
             {
                 var oDialog = new OptionsDialog(Options.Instance);
                 if (oDialog.ShowDialog(this) == DialogResult.OK)
@@ -1629,6 +1629,11 @@ Would you like to reinstall last stable release of connection controls?";
 
                     cManager.ReuseConnections = Options.Instance.ReuseConnections;
                 }
+            }
+            else if (e.ClickedItem == tsmiToolSettings)
+            {
+                var plugin = (ISettingsPlugin)((PluginForm)dpMain.ActiveContent).Control;
+                plugin.ShowSettings();
             }
         }
 

@@ -222,6 +222,7 @@ namespace XrmToolBox.New
             tsmiPluginFeedback.Visible = false;
             tsmiPluginHelp.Visible = false;
             tssHelp.Visible = false;
+            tsmiToolSettings.Visible = false;
             tssFeedback.Visible = isPluginForm;
             //((System.Drawing.Image)(resources.GetObject("tsmiHelp.Image")))
             if (!isPluginForm)
@@ -292,6 +293,17 @@ namespace XrmToolBox.New
             else
             {
                 tsmiXtbAbout.Image = null;
+            }
+
+            if (currentPluginForm.Control is ISettingsPlugin settingsPlugin)
+            {
+                tsmiToolSettings.Visible = true;
+                tsmiToolSettings.Text = $@"Settings for {currentPluginForm.PluginTitle}";
+                tsmiToolSettings.Image = (settingsPlugin as PluginControlBase)?.TabIcon;
+            }
+            else
+            {
+                tsmiToolSettings.Image = null;
             }
         }
 
