@@ -1207,8 +1207,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
             return dpMain.Contents
                 .OfType<PluginForm>()
                 .LastOrDefault(c => c.PluginName == name
-                                     && ((PluginControlBase)c.Control).ConnectionDetail.ConnectionId ==
-                                     connectionDetailId);
+                                     && (((PluginControlBase)c.Control).ConnectionDetail?.ConnectionId ?? Guid.Empty).Equals(connectionDetailId));
         }
 
         private bool IsMessageValid(object sender, MessageBusEventArgs message)
@@ -1250,13 +1249,13 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
             var sourceDetail = ((PluginControlBase)sender).ConnectionDetail;
 
-            var content = message.NewInstance ? null : GetPluginByName(message.TargetPlugin, sourceDetail.ConnectionId ?? Guid.Empty);
+            var content = message.NewInstance ? null : GetPluginByName(message.TargetPlugin, sourceDetail?.ConnectionId ?? Guid.Empty);
             if (content == null)
             {
                 pluginsForm.OpenPlugin(message.TargetPlugin);
             }
 
-            content = GetPluginByName(message.TargetPlugin, sourceDetail.ConnectionId ?? Guid.Empty);
+            content = GetPluginByName(message.TargetPlugin, sourceDetail?.ConnectionId ?? Guid.Empty);
             if (content == null)
             {
                 MessageBox.Show($@"Cannot switch to tool {message.TargetPlugin}.", message.SourcePlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
