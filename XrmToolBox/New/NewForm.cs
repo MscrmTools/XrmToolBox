@@ -1397,7 +1397,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
                 if (dpMain.ActiveContent is PluginForm pf)
                 {
-                    tsmiAbout.Click -= tsmiAbout_Click;
+                    //  tsmiAbout.Click -= tsmiAbout_Click;
 
                     if (pf.Control is PluginControlBase pcb)
                     {
@@ -1407,8 +1407,8 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 }
                 else
                 {
-                    tsmiAbout.Click -= tsmiAbout_Click;
-                    tsmiAbout.Click += tsmiAbout_Click;
+                    //tsmiAbout.Click -= tsmiAbout_Click;
+                    //tsmiAbout.Click += tsmiAbout_Click;
                 }
             }
         }
