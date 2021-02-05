@@ -658,7 +658,10 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     MostRecentlyUsedItems.Instance.Save();
                 }
 
-                ai.WritePageView(plugin.Metadata.Name, plugin.Value.GetVersion());
+                if (!(pluginControl is IPrivatePlugin))
+                {
+                    ai.WritePageView(plugin.Metadata.Name, plugin.Value.GetVersion());
+                }
 
                 Options.Instance.Save();
 
