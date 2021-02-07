@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.Composition;
-using System.IO;
+﻿using System.ComponentModel.Composition;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 
@@ -33,7 +31,7 @@ namespace MsCrmTools.SampleTool
     ExportMetadata("BackgroundColor", "Lavender"),
     ExportMetadata("PrimaryFontColor", "#000000"),
     ExportMetadata("SecondaryFontColor", "DarkGray")]
-    public class Plugin : PluginBase, INoConnectionRequired
+    public class Plugin : PluginBase, INoConnectionRequired, IPayPalPlugin
     {
         /// <summary>
         /// This method return the actual usercontrol that will
@@ -44,5 +42,8 @@ namespace MsCrmTools.SampleTool
         {
             return new SampleTool();
         }
+
+        public string DonationDescription => "Donation for this wonderful sample tool in XrmToolBox";
+        public string EmailAccount => "tanguy92@hotmail.com";
     }
 }

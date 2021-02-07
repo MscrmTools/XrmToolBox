@@ -4,7 +4,6 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -80,21 +79,6 @@ namespace XrmToolBox.Extensibility
                 Name = "InfoLabel"
             };
 
-            var hyperlink = new LinkLabel
-            {
-                Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-                AutoEllipsis = true,
-                AutoSize = false,
-                Text = "Support MscrmTools, Donate. Click here!",
-                TextAlign = ContentAlignment.MiddleCenter,
-                Width = panel.Width,
-                Location = new Point(0, panel.Height - 20),
-                Font = new Font("Segoe UI", 9F)
-            };
-
-            hyperlink.Click += hyperlink_Click;
-            panel.Controls.Add(hyperlink);
-
             var assembly = Assembly.GetExecutingAssembly();
             var file = assembly.GetManifestResourceStream("XrmToolBox.Extensibility.Images.progress.gif");
             if (file != null)
@@ -119,11 +103,6 @@ namespace XrmToolBox.Extensibility
             panel.BringToFront();
 
             return panel;
-        }
-
-        private static void hyperlink_Click(object sender, EventArgs e)
-        {
-            Process.Start("http://mscrmtools.blogspot.fr/p/xrmtoolbox-sponsoring.html");
         }
 
         /// <summary>

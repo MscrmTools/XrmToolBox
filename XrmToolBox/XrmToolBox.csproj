@@ -226,6 +226,12 @@
     <Compile Include="Controls\ConnectingControl.Designer.cs">
       <DependentUpon>ConnectingControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\DonationIntroForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DonationIntroForm.Designer.cs">
+      <DependentUpon>DonationIntroForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\HiddenPluginsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -362,6 +368,9 @@
     <EmbeddedResource Include="Controls\ConnectingControl.resx">
       <DependentUpon>ConnectingControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DonationIntroForm.resx">
+      <DependentUpon>DonationIntroForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\HiddenPluginsDialog.resx">
       <DependentUpon>HiddenPluginsDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -495,6 +504,9 @@
     <None Include="Resources\powerapps16.png" />
     <None Include="Resources\logo_0400.png" />
     <None Include="Resources\mask.png" />
+    <None Include="Resources\money_dollar.png" />
+    <None Include="Resources\money_euro.png" />
+    <None Include="Resources\money_pound.png" />
     <Content Include="XrmToolBox201512.ico" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />
@@ -539,7 +551,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

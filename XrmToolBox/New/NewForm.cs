@@ -1826,7 +1826,14 @@ Would you like to reinstall last stable release of connection controls?";
 
         private void llDonate_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("http://mscrmtools.blogspot.fr/p/xrmtoolbox-sponsoring.html");
+            string pluginName = null;
+            if (currentContent is PluginForm pf)
+            {
+                pluginName = pf.PluginName;
+            }
+
+            var form = new DonationIntroForm(pluginName);
+            form.ShowDialog(this);
         }
 
         #endregion Support panel
