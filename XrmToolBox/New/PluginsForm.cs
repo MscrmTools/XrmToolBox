@@ -505,11 +505,18 @@ namespace XrmToolBox.New
             // Replace by plugin logo if specified
             if (!string.IsNullOrEmpty(base64ImageContent))
             {
-                var bytes = Convert.FromBase64String(base64ImageContent);
-                var ms = new MemoryStream(bytes, 0, bytes.Length);
-                ms.Write(bytes, 0, bytes.Length);
-                logo = Image.FromStream(ms);
-                ms.Close();
+                try
+                {
+                    var bytes = Convert.FromBase64String(base64ImageContent);
+                    var ms = new MemoryStream(bytes, 0, bytes.Length);
+                    ms.Write(bytes, 0, bytes.Length);
+                    logo = Image.FromStream(ms);
+                    ms.Close();
+                }
+                catch (Exception)
+                {
+                    // Do nothing and keep the no logo image
+                }
             }
 
             return logo;
