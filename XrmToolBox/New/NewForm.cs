@@ -331,47 +331,56 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
             if (store == null)
             {
-                CheckForConnectionControlsUpdate();
-
-                if (store.PluginsCount == 0)
+                try
                 {
-                    store.LoadNugetPackages(false);
-                }
+                    CheckForConnectionControlsUpdate();
 
-                if (Options.Instance.ShowPluginUpdatesPanelAtStartup)
-                {
-                    var count = store.XrmToolBoxPlugins.Plugins
-                        .Where(p => p.Action == PackageInstallAction.Update)
-                        .ToList().Count;
-
-                    pnlPluginsUpdate.Visible = count > 0;
-                    if (count > 0)
-                    {
-                        lblPluginsUpdateAvailable.Text = string.Format(lblPluginsUpdateAvailable.Tag.ToString(),
-                            count,
-                            count > 1 ? "s" : "",
-                            count > 1 ? "are" : "is");
-                    }
-                }
-            }
-
-            if (Options.Instance.DisplayPluginsStoreOnStartup)
-            {
-                if (Options.Instance.DisplayPluginsStoreOnlyIfUpdates)
-                {
                     if (store.PluginsCount == 0)
                     {
                         store.LoadNugetPackages(false);
                     }
 
-                    if (store.HasUpdates)
+                    if (Options.Instance.ShowPluginUpdatesPanelAtStartup)
                     {
-                        tsddbTools_DropDownItemClicked(sender, new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
+                        var count = store.XrmToolBoxPlugins.Plugins
+                            .Where(p => p.Action == PackageInstallAction.Update)
+                            .ToList().Count;
+
+                        pnlPluginsUpdate.Visible = count > 0;
+                        if (count > 0)
+                        {
+                            lblPluginsUpdateAvailable.Text = string.Format(lblPluginsUpdateAvailable.Tag.ToString(),
+                                count,
+                                count > 1 ? "s" : "",
+                                count > 1 ? "are" : "is");
+                        }
+                    }
+
+                    if (Options.Instance.DisplayPluginsStoreOnStartup)
+                    {
+                        if (Options.Instance.DisplayPluginsStoreOnlyIfUpdates)
+                        {
+                            if (store.PluginsCount == 0)
+                            {
+                                store.LoadNugetPackages(false);
+                            }
+
+                            if (store.HasUpdates)
+                            {
+                                tsddbTools_DropDownItemClicked(sender,
+                                    new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
+                            }
+                        }
+                        else
+                        {
+                            tsddbTools_DropDownItemClicked(sender,
+                                new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
+                        }
                     }
                 }
-                else
+                catch
                 {
-                    tsddbTools_DropDownItemClicked(sender, new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
+                    // We avoid to make XrmToolBox crash if querying web services fail
                 }
             }
         }
