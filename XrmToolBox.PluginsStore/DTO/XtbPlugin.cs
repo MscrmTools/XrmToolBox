@@ -29,6 +29,9 @@ namespace XrmToolBox.PluginsStore.DTO
         [DataMember(Name = "mctools_description")]
         public string Description { get; set; }
 
+        [DataMember(Name = "mctools_categorieslist")]
+        public string CategoriesList { get; set; }
+
         [DataMember(Name = "mctools_downloadurl")]
         public string DownloadUrl { get; set; }
 

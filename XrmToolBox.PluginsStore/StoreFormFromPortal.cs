@@ -155,8 +155,29 @@ Current cache folder size: {size}MB";
                 tssPluginsCount.Visible = true;
 
                 lvPlugins.Items.AddRange(items.ToArray());
+
+                LoadCategories();
             };
             bw.RunWorkerAsync();
+        }
+
+        private void LoadCategories()
+        {
+            pnlCategories.Controls.Clear();
+
+            foreach (var category in store.Categories)
+            {
+                var cb = new CheckBox
+                {
+                    Name = $"cb{category}",
+                    Dock = DockStyle.Top,
+                    Text = category
+                };
+
+                cb.Click += tstSearch_TextChanged;
+
+                pnlCategories.Controls.Add(cb);
+            }
         }
 
         protected override void OnResizeBegin(EventArgs e)
@@ -299,12 +320,24 @@ Current cache folder size: {size}MB";
             var filter = text.ToString().ToLower();
             var options = Options.Instance;
             var lvic = new List<ListViewItem>();
-            foreach (var xtbPackage in store.XrmToolBoxPlugins.Plugins
-                .Where(p => filter.Length > 0 &&
-                            (p.Name.ToLower().Replace(" for xrmtoolbox", "").Contains(filter) ||
-                             p.Authors.ToLower().IndexOf(filter, StringComparison.Ordinal) >= 0)
-                            || p.Description.ToLower().Contains(filter)
-                            || filter.Length == 0)
+
+            var categories = pnlCategories.Controls.OfType<CheckBox>()
+                .Where(c => c.Checked)
+                .Select(c => c.Text)
+                .ToList();
+
+            var pluginsForCategory = store.XrmToolBoxPlugins.Plugins
+                .Where(p => categories.Count == 0 ||
+                             categories.All(c => p.CategoriesList?.Split(',').Contains(c) ?? false));
+
+            foreach (var xtbPackage in pluginsForCategory
+                .Where(p =>
+                            filter.Length > 0 &&
+
+                             (p.Name.ToLower().Replace(" for xrmtoolbox", "").Contains(filter) ||
+                              p.Authors.ToLower().IndexOf(filter, StringComparison.Ordinal) >= 0)
+                             || p.Description.ToLower().Contains(filter)
+                             || filter.Length == 0)
             )
             {
                 if (xtbPackage.Action == PackageInstallAction.Unavailable
@@ -903,7 +936,7 @@ Current cache folder size: {size}MB";
         {
             searchThread?.Abort();
             searchThread = new Thread(FilterPlugins);
-            searchThread.Start(tstSearch.Text);
+            searchThread.Start(tstSearch.Text == tstSearch.Tag?.ToString() ? string.Empty : tstSearch.Text);
         }
     }
 }

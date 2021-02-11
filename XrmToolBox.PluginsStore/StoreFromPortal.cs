@@ -49,6 +49,7 @@ namespace XrmToolBox.PluginsStore
         public bool HasUpdates => XrmToolBoxPlugins?.Plugins.Any(p => p.Action == PackageInstallAction.Update) ?? false;
         public int PluginsCount => XrmToolBoxPlugins?.Plugins.Count ?? 0;
         public XtbPlugins XrmToolBoxPlugins { get; set; }
+        public List<string> Categories { get; set; }
 
         public long CalculateCacheFolderSize()
         {
@@ -122,8 +123,8 @@ namespace XrmToolBox.PluginsStore
             var currStoredVer = (currentStoredVersion != null) ? new Version(currentStoredVersion.Split('-')[0]) : null;
 
             return ca.GetName().Version < nugetPlugin.Version.Version
-                   || ca.GetName().Version == nugetPlugin.Version.Version && 
-                   new Version(version.Split('-')[0]) == currStoredVer && 
+                   || ca.GetName().Version == nugetPlugin.Version.Version &&
+                   new Version(version.Split('-')[0]) == currStoredVer &&
                    version != currentStoredVersion;
         }
 
@@ -138,6 +139,13 @@ namespace XrmToolBox.PluginsStore
                 XrmToolBoxPlugins.Plugins.AddRange(tmpPlugins.Plugins);
                 url = tmpPlugins.NextLink;
             } while (url != null);
+
+            Categories = XrmToolBoxPlugins.Plugins
+                .Where(p => p.CategoriesList != null)
+                .SelectMany(p => p.CategoriesList?.Split(','))
+                .Distinct()
+                .OrderByDescending(s => s)
+                .ToList();
 
             foreach (var plugin in XrmToolBoxPlugins.Plugins)
             {
