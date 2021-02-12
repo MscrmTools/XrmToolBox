@@ -577,6 +577,8 @@ namespace XrmToolBox.New
             pluginsModels.Clear();
             DisplayPlugins(filterText);
 
+            txtSearch.AutoCompleteCustomSource.AddRange(PluginManager.Plugins.Where(p => !Options.Instance.HiddenPlugins.Contains(p.Metadata.Name)).Select(p => p.Metadata.Name).ToArray());
+
             if (pluginsManager.ValidationErrors.Count > 0)
             {
             }
