@@ -27,6 +27,7 @@ namespace XrmToolBox.New
         private string filterText;
         private Thread searchThread;
         private PluginModel selectedPluginModel;
+        private Dictionary<string, List<string>> categoriesList;
 
         #endregion Variables
 
@@ -71,6 +72,39 @@ namespace XrmToolBox.New
         public event EventHandler<PluginEventArgs> UninstallPluginRequested;
 
         #endregion Events
+
+        public void DisplayCategories(Dictionary<string, List<string>> categories)
+        {
+            pnlCategory.Controls.Clear();
+            categoriesList = categories;
+
+            foreach (var category in categories.Keys)
+            {
+                var last = pnlCategory.Controls.OfType<LinkLabel>().LastOrDefault();
+
+                var ll = new LinkLabel
+                {
+                    Name = category,
+                    Text = category,
+                    LinkColor = Color.Blue,
+                    Left = (last?.Left ?? 0) + (last?.Width ?? 0),
+                    Top = 0,
+                    Dock = DockStyle.Left
+                };
+
+                ll.Width = TextRenderer.MeasureText(category, ll.Font).Width;
+                ll.Height = 20;
+                ll.Click += (sender, args) =>
+                {
+                    var link = (LinkLabel)sender;
+                    link.LinkColor = link.LinkColor == Color.Blue ? Color.Red : Color.Blue;
+
+                    DisplayPlugins();
+                };
+
+                pnlCategory.Controls.Add(ll);
+            }
+        }
 
         public void DuplicateTool(string pluginName, IDuplicatableTool sourceTool, object state, OpenMruPluginEventArgs e = null)
         {
@@ -394,13 +428,32 @@ namespace XrmToolBox.New
             var top = 4;
             int lastWidth = pnlPlugins.Width - 28;
 
+            var categories = pnlCategory.Controls.OfType<LinkLabel>()
+                .Where(ll => ll.LinkColor == Color.Red)
+                .Select(ll => ll.Text)
+                .ToList();
+
+            var availablePlugins = pluginsManager.ValidatedPlugins;
+
+            var list = new List<Lazy<IXrmToolBoxPlugin, IPluginMetadata>>();
+            foreach (var category in categories)
+            {
+                var matchingPlugins = pluginsManager.ValidatedPlugins.Where(p => categoriesList
+                    .Where(c => category == c.Key)
+                    .SelectMany(c => c.Value)
+                    .ToList().Contains(p.Metadata.Name)
+                );
+
+                availablePlugins = availablePlugins.Intersect(matchingPlugins);
+            }
+
             // Search with filter defined
             var filteredPlugins = (filter != null && filter.ToString().Length > 0
-                ? pluginsManager.ValidatedPlugins.Where(p
+                ? availablePlugins.Where(p
                     => p.Metadata.Name.ToLower().Contains(filter.ToString().ToLower())
                     || p.Metadata.Description.ToLower().Contains(filter.ToString().ToLower())
                     || p.Value.GetType().GetCompany().ToLower().Contains(filter.ToString().ToLower()))
-                : pluginsManager.ValidatedPlugins).OrderBy(p => p.Metadata.Name).ToList();
+                : availablePlugins).OrderBy(p => p.Metadata.Name).ToList();
 
             if (Options.Instance.PluginsDisplayOrder == DisplayOrder.MostUsed)
             {
@@ -476,7 +529,9 @@ namespace XrmToolBox.New
 
                 if (!pluginsToDisplay.Any())
                 {
-                    lblPluginsNotFoundText.Text = string.Format(lblPluginsNotFoundText.Tag.ToString(), filter);
+                    var filterCategory = categories.Count == 0 ? "" : $" in categor{(categories.Count > 1 ? "ies" : "y")} {string.Join(", ", categories)}";
+
+                    lblPluginsNotFoundText.Text = string.Format(lblPluginsNotFoundText.Tag.ToString(), filterText, filterCategory);
                     pnlNoPluginFound.Visible = true;
                     pnlPlugins.Visible = false;
                 }
@@ -525,6 +580,8 @@ namespace XrmToolBox.New
         private void llResetSearchFilter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             txtSearch.Text = string.Empty;
+            DisplayCategories(categoriesList);
+            txtSearch_TextChanged(txtSearch, new System.EventArgs());
         }
 
         private void pbOpenPluginsStore_Click(object sender, System.EventArgs e)
@@ -619,6 +676,22 @@ namespace XrmToolBox.New
         private async Task WaitFileIsCopied()
         {
             await Task.Delay(1000);
+        }
+
+        private void pnlCategory_SizeChanged(object sender, System.EventArgs e)
+        {
+            var last = pnlCategory.Controls.OfType<LinkLabel>().FirstOrDefault();
+            if (last != null)
+            {
+                if (last.Left + last.Width > pnlCategory.Width)
+                {
+                    pnlCategory.Height = 36;
+                }
+                else
+                {
+                    pnlCategory.Height = 20;
+                }
+            }
         }
     }
 }

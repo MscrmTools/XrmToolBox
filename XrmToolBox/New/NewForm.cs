@@ -377,12 +377,48 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                                 new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
                         }
                     }
+
+                    // Prepare Categories
+                    PrepareCategories();
                 }
                 catch
                 {
                     // We avoid to make XrmToolBox crash if querying web services fail
                 }
             }
+        }
+
+        private void PrepareCategories()
+        {
+            var dico = new Dictionary<string, List<string>>();
+            foreach (var plugin in store.XrmToolBoxPlugins.Plugins)
+            {
+                if (plugin.CategoriesList == null) continue;
+
+                foreach (var category in plugin.CategoriesList.Split(','))
+                {
+                    if (!dico.ContainsKey(category))
+                    {
+                        dico.Add(category, new List<string>());
+                    }
+
+                    foreach (var file in plugin.Files)
+                    {
+                        foreach (var tool in PluginManagerExtended.Instance.Plugins)
+                        {
+                            var assemblyFile = Path.GetFileName(tool.Value.GetType().Assembly.Location);
+                            if (assemblyFile.ToLower() == Path.GetFileName(file).ToLower())
+                            {
+                                dico[category].Add(tool.Metadata.Name);
+                            }
+                        }
+                    }
+                }
+            }
+
+            dico = dico.OrderByDescending(obj => obj.Key).ToDictionary(obj => obj.Key, obj => obj.Value);
+
+            pluginsForm.DisplayCategories(dico);
         }
 
         private void SetTheme()
@@ -1558,6 +1594,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 ((Form)form).ShowDialog(this);
                 pluginsForm.PluginManager.IsWatchingForNewPlugins = true;
                 pluginsForm.ReloadPluginsList();
+                PrepareCategories();
 
                 // Apply option to show Plugins Store on startup on main options
                 if (Options.Instance.DisplayPluginsStoreOnStartup != PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup)
