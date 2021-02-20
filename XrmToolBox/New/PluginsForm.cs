@@ -75,6 +75,13 @@ namespace XrmToolBox.New
 
         public void DisplayCategories(Dictionary<string, List<string>> categories)
         {
+            if (categories == null)
+            {
+                pnlCategory.Visible = false;
+                return;
+            }
+
+            pnlCategory.Visible = true;
             pnlCategory.Controls.Clear();
             categoriesList = categories;
 

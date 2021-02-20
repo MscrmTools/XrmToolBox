@@ -384,12 +384,15 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 catch
                 {
                     // We avoid to make XrmToolBox crash if querying web services fail
+                    pluginsForm.DisplayCategories(null);
                 }
             }
         }
 
         private void PrepareCategories()
         {
+            if (store?.XrmToolBoxPlugins == null) return;
+
             var dico = new Dictionary<string, List<string>>();
             foreach (var plugin in store.XrmToolBoxPlugins.Plugins)
             {
