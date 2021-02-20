@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -20,8 +19,6 @@ namespace XrmToolBox.New
 
             this.version = version;
             this.downloadUrl = downloadUrl;
-
-            pictureBox1.BackColor = Color.Transparent;
         }
 
         private void NewVersionForm_Load(object sender, System.EventArgs e)
@@ -53,10 +50,10 @@ namespace XrmToolBox.New
 
                 var destinationFile = Path.Combine(destinationFolder, "XrmToolBox.AutoUpdater.exe");
 
-				if (!updaterFile.Equals(destinationFile, StringComparison.OrdinalIgnoreCase)) 
-				{
-					File.Copy(updaterFile, destinationFile, true);
-				}
+                if (!updaterFile.Equals(destinationFile, StringComparison.OrdinalIgnoreCase))
+                {
+                    File.Copy(updaterFile, destinationFile, true);
+                }
 
                 var args = Environment.GetCommandLineArgs().ToList();
 
