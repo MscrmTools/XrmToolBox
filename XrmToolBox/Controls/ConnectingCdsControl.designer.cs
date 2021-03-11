@@ -50,7 +50,7 @@
             // pbConnectionLoading
             // 
             this.pbConnectionLoading.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pbConnectionLoading.Image = global::XrmToolBox.Properties.Resources.connectingCds;
+            this.pbConnectionLoading.Image = global::XrmToolBox.Properties.Resources.ConnectingDataverse;
             this.pbConnectionLoading.Location = new System.Drawing.Point(265, 31);
             this.pbConnectionLoading.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.pbConnectionLoading.Name = "pbConnectionLoading";
@@ -63,7 +63,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Purple;
+            this.BackColor = System.Drawing.Color.Black;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.lblConnecting);
             this.Controls.Add(this.pbConnectionLoading);

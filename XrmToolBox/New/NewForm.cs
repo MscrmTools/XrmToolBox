@@ -1022,7 +1022,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                       {
                           tsbOpenOrg.Text = @"Open environment";
                           tsbOpenOrg.ToolTipText = @"Open the connected environment in your web browser";
-                          tsbOpenOrg.Image = new Bitmap(Properties.Resources.powerapps16);
+                          tsbOpenOrg.Image = new Bitmap(Properties.Resources.Dataverse_16x16);
                       }
                       else
                       {
