@@ -128,7 +128,7 @@ namespace XrmToolBox.New
 
         private void Ctrl_OpenFavoritePluginRequested(object sender, OpenFavoritePluginEventArgs e)
         {
-            OpenPluginRequested?.Invoke(this, new OpenFavoritePluginEventArgs(e.Item));
+            OpenPluginRequested?.Invoke(this, e);
         }
 
         private void Ctrl_OpenMruPluginRequested(object sender, OpenMruPluginEventArgs e)

@@ -38,6 +38,10 @@ namespace XrmToolBox.New
             {
                 RemoveFavoriteRequested?.Invoke(this, new System.EventArgs());
             }
+            else if (e.ClickedItem == tsmiOpenWithConnection)
+            {
+                OpenFavoritePluginRequested?.Invoke(this, new OpenFavoritePluginEventArgs(item, true));
+            }
         }
 
         private void MostRecentlyUsedItemControl_Load(object sender, System.EventArgs e)

@@ -131,7 +131,7 @@ namespace XrmToolBox.New
             OpenPluginRequested?.Invoke(this, e != null ? new PluginEventArgs(e, plugin) { SourceTool = sourceTool, State = state } : new PluginEventArgs(plugin) { SourceTool = sourceTool, State = state });
         }
 
-        public void OpenPlugin(string pluginName, OpenMruPluginEventArgs e = null)
+        public void OpenPlugin(string pluginName, OpenMruPluginEventArgs e = null, bool needNewConnection = false)
         {
             if (e != null)
             {
@@ -145,7 +145,7 @@ namespace XrmToolBox.New
                 return;
             }
 
-            OpenPluginRequested?.Invoke(this, e != null ? new PluginEventArgs(e, plugin) : new PluginEventArgs(plugin));
+            OpenPluginRequested?.Invoke(this, e != null ? new PluginEventArgs(e, plugin) { NeedNewConnection = needNewConnection } : new PluginEventArgs(plugin) { NeedNewConnection = needNewConnection });
         }
 
         public void ReloadPluginsList()
