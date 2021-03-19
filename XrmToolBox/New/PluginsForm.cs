@@ -24,10 +24,10 @@ namespace XrmToolBox.New
 
         private readonly PluginManagerExtended pluginsManager;
         private readonly List<PluginModel> pluginsModels;
+        private Dictionary<string, List<string>> categoriesList;
         private string filterText;
         private Thread searchThread;
         private PluginModel selectedPluginModel;
-        private Dictionary<string, List<string>> categoriesList;
 
         #endregion Variables
 
@@ -148,15 +148,6 @@ namespace XrmToolBox.New
             OpenPluginRequested?.Invoke(this, e != null ? new PluginEventArgs(e, plugin) : new PluginEventArgs(plugin));
         }
 
-        private static bool PluginFinderByIdOrName(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, string identifier)
-        {
-            if (Guid.TryParse(identifier, out Guid pluginid) && !pluginid.Equals(Guid.Empty))
-            {
-                return plugin.Value is PluginBase pb && pb.GetId().Equals(pluginid);
-            }
-            return plugin.Metadata.Name.Equals(identifier);
-        }
-
         public void ReloadPluginsList()
         {
             pluginsManager.Recompose();
@@ -201,6 +192,15 @@ namespace XrmToolBox.New
             return ctl.VerticalScroll.Visible ? ScrollBars.Vertical : ScrollBars.None;
         }
 
+        private static bool PluginFinderByIdOrName(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, string identifier)
+        {
+            if (Guid.TryParse(identifier, out Guid pluginid) && !pluginid.Equals(Guid.Empty))
+            {
+                return plugin.Value is PluginBase pb && pb.GetId().Equals(pluginid);
+            }
+            return plugin.Metadata.Name.Equals(identifier);
+        }
+
         private void AdaptPluginControlSize()
         {
             if (pnlPlugins == null) return;
@@ -238,6 +238,8 @@ namespace XrmToolBox.New
 
         private void cmsOnePlugin_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
+            var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
+
             if (e.ClickedItem == tsmiOpenProjectHomePage)
             {
                 OpenPluginProjectUrlRequested?.Invoke(this, new PluginEventArgs(selectedPluginModel));
@@ -248,24 +250,24 @@ namespace XrmToolBox.New
             }
             else if (e.ClickedItem == tsmiHidePlugin)
             {
-                var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
                 Options.Instance.HiddenPlugins.Add(plugin.Metadata.Name);
                 ReloadPluginsList();
             }
             else if (e.ClickedItem == tsmiShortcutTool)
             {
-                var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
                 CreateShortcut(plugin.Metadata.Name);
             }
             else if (e.ClickedItem == tsmiShortcutToolConnection)
             {
-                var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
                 CreateShortcut(plugin.Metadata.Name, ConnectionDetail?.ConnectionName);
             }
             else if (e.ClickedItem == tsmiAddToFavorites)
             {
-                var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
                 AddToFavorites(plugin.Metadata.Name);
+            }
+            else if (e.ClickedItem == tsmiOpenWithNewConection)
+            {
+                OpenPluginRequested?.Invoke(this, new PluginEventArgs(plugin) { NeedNewConnection = true });
             }
         }
 
@@ -648,6 +650,22 @@ namespace XrmToolBox.New
             }
         }
 
+        private void pnlCategory_SizeChanged(object sender, System.EventArgs e)
+        {
+            var last = pnlCategory.Controls.OfType<LinkLabel>().FirstOrDefault();
+            if (last != null)
+            {
+                if (last.Left + last.Width > pnlCategory.Width)
+                {
+                    pnlCategory.Height = 36;
+                }
+                else
+                {
+                    pnlCategory.Height = 20;
+                }
+            }
+        }
+
         private void pnlNoPluginFound_Resize(object sender, System.EventArgs e)
         {
             pbOpenPluginsStore.Location = new Point((pnlNoPluginFound.Width - pbOpenPluginsStore.Width) / 2, pbOpenPluginsStore.Location.Y);
@@ -683,22 +701,6 @@ namespace XrmToolBox.New
         private async Task WaitFileIsCopied()
         {
             await Task.Delay(1000);
-        }
-
-        private void pnlCategory_SizeChanged(object sender, System.EventArgs e)
-        {
-            var last = pnlCategory.Controls.OfType<LinkLabel>().FirstOrDefault();
-            if (last != null)
-            {
-                if (last.Left + last.Width > pnlCategory.Width)
-                {
-                    pnlCategory.Height = 36;
-                }
-                else
-                {
-                    pnlCategory.Height = 20;
-                }
-            }
         }
     }
 }

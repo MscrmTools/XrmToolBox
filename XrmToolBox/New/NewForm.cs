@@ -849,6 +849,13 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 return;
             }
 
+            if (e.NeedNewConnection)
+            {
+                ConnectUponApproval(e.Plugin);
+                Cursor = Cursors.Default;
+                return;
+            }
+
             if (service == null && e.MruInfo == null)
             {
                 var result = MessageBox.Show(new Form { TopMost = true }, @"Do you want to connect to an organization first?", $@"Opening {e.Plugin.Metadata.Name}",

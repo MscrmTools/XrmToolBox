@@ -35,6 +35,7 @@ namespace XrmToolBox.New.EventArgs
         }
 
         public OpenMruPluginEventArgs MruInfo { get; }
+        public bool NeedNewConnection { get; set; }
         public Lazy<IXrmToolBoxPlugin, IPluginMetadata> Plugin { get; }
         public IXrmToolBoxPluginControl PluginControl { get; }
         public PluginModel PluginModel { get; }

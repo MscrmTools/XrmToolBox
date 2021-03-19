@@ -296,6 +296,11 @@
     <Compile Include="Forms\TabConnectionUpdater.Designer.cs">
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ProxySettingsHelper.cs" />
     <Compile Include="New\EventArgs\OpenMruPluginEventArgs.cs" />
     <Compile Include="New\EventArgs\OpenPluginEventArgs.cs" />
@@ -397,14 +402,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <EmbeddedResource Include="Forms\TabConnectionUpdater.resx">
       <DependentUpon>TabConnectionUpdater.cs</DependentUpon>
     </EmbeddedResource>
@@ -508,7 +508,13 @@
     <None Include="Resources\money_pound.png" />
     <None Include="Resources\Dataverse_16x16.png" />
     <None Include="Resources\ConnectingDataverse.gif" />
+    <None Include="Resources\3.png" />
+    <None Include="Resources\lightning.png" />
+    <None Include="Resources\hide_detail.png" />
+    <None Include="Resources\star.png" />
+    <None Include="Resources\shortcut.png" />
     <Content Include="Resources\three_tags.png" />
+    <None Include="Resources\www_page.png" />
     <Content Include="XrmToolBox201512.ico" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />
