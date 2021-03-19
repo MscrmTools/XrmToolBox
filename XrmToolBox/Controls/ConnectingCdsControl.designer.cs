@@ -37,39 +37,39 @@
             // 
             this.lblConnecting.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblConnecting.Font = new System.Drawing.Font("Segoe UI Light", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblConnecting.ForeColor = System.Drawing.Color.White;
-            this.lblConnecting.Location = new System.Drawing.Point(-1, 162);
-            this.lblConnecting.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lblConnecting.ForeColor = System.Drawing.Color.Black;
+            this.lblConnecting.Location = new System.Drawing.Point(-1, 130);
+            this.lblConnecting.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblConnecting.Name = "lblConnecting";
-            this.lblConnecting.Size = new System.Drawing.Size(1067, 111);
+            this.lblConnecting.Size = new System.Drawing.Size(800, 89);
             this.lblConnecting.TabIndex = 2;
             this.lblConnecting.Tag = "Please wait while XrmToolBox is connecting to {0}";
-            this.lblConnecting.Text = "Please wait while XrmToolBox is connecting to your \r\nMicrosoft Dataverse environment";
+            this.lblConnecting.Text = "Please wait while XrmToolBox is connecting to your \r\nMicrosoft Dataverse environm" +
+    "ent";
             this.lblConnecting.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // pbConnectionLoading
             // 
             this.pbConnectionLoading.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pbConnectionLoading.Image = global::XrmToolBox.Properties.Resources.ConnectingDataverse;
-            this.pbConnectionLoading.Location = new System.Drawing.Point(265, 31);
-            this.pbConnectionLoading.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.pbConnectionLoading.Location = new System.Drawing.Point(199, 25);
+            this.pbConnectionLoading.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pbConnectionLoading.Name = "pbConnectionLoading";
-            this.pbConnectionLoading.Size = new System.Drawing.Size(533, 125);
+            this.pbConnectionLoading.Size = new System.Drawing.Size(400, 100);
             this.pbConnectionLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbConnectionLoading.TabIndex = 1;
             this.pbConnectionLoading.TabStop = false;
             // 
             // ConnectingCdsControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Black;
+            this.BackColor = System.Drawing.Color.Gainsboro;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.lblConnecting);
             this.Controls.Add(this.pbConnectionLoading);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "ConnectingCdsControl";
-            this.Size = new System.Drawing.Size(1064, 272);
+            this.Size = new System.Drawing.Size(798, 218);
             ((System.ComponentModel.ISupportInitialize)(this.pbConnectionLoading)).EndInit();
             this.ResumeLayout(false);
 

@@ -31,6 +31,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.rtbReleaseNotes = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.lblSummary = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lblPluginTitle = new System.Windows.Forms.Label();
             this.lblNewVersion = new System.Windows.Forms.Label();
@@ -40,7 +41,6 @@
             this.cbbReminder = new System.Windows.Forms.ComboBox();
             this.llDoNotUpdate = new System.Windows.Forms.LinkLabel();
             this.llUpdateNow = new System.Windows.Forms.LinkLabel();
-            this.lblSummary = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).BeginInit();
@@ -56,10 +56,9 @@
             this.panel1.Controls.Add(this.pnlFooter);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Padding = new System.Windows.Forms.Padding(50, 48, 50, 48);
-            this.panel1.Size = new System.Drawing.Size(1280, 1097);
+            this.panel1.Padding = new System.Windows.Forms.Padding(38, 38, 38, 38);
+            this.panel1.Size = new System.Drawing.Size(960, 878);
             this.panel1.TabIndex = 0;
             // 
             // rtbReleaseNotes
@@ -68,12 +67,11 @@
             this.rtbReleaseNotes.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.rtbReleaseNotes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbReleaseNotes.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.rtbReleaseNotes.Location = new System.Drawing.Point(50, 341);
-            this.rtbReleaseNotes.Margin = new System.Windows.Forms.Padding(4);
+            this.rtbReleaseNotes.Location = new System.Drawing.Point(38, 362);
             this.rtbReleaseNotes.Name = "rtbReleaseNotes";
             this.rtbReleaseNotes.ReadOnly = true;
             this.rtbReleaseNotes.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.rtbReleaseNotes.Size = new System.Drawing.Size(1180, 552);
+            this.rtbReleaseNotes.Size = new System.Drawing.Size(884, 353);
             this.rtbReleaseNotes.TabIndex = 15;
             this.rtbReleaseNotes.Text = "";
             this.rtbReleaseNotes.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtbReleaseNotes_LinkClicked);
@@ -82,14 +80,26 @@
             // 
             this.label1.Dock = System.Windows.Forms.DockStyle.Top;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(50, 230);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(38, 273);
             this.label1.Name = "label1";
-            this.label1.Padding = new System.Windows.Forms.Padding(0, 48, 0, 0);
-            this.label1.Size = new System.Drawing.Size(1180, 111);
+            this.label1.Padding = new System.Windows.Forms.Padding(0, 38, 0, 0);
+            this.label1.Size = new System.Drawing.Size(884, 89);
             this.label1.TabIndex = 14;
             this.label1.Tag = "A new version of the tool {0} is available in the Tool Library.";
             this.label1.Text = "What\'s new";
+            // 
+            // lblSummary
+            // 
+            this.lblSummary.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblSummary.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSummary.Location = new System.Drawing.Point(38, 184);
+            this.lblSummary.Name = "lblSummary";
+            this.lblSummary.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
+            this.lblSummary.Size = new System.Drawing.Size(884, 89);
+            this.lblSummary.TabIndex = 17;
+            this.lblSummary.Tag = "A new version of the tool {0} is available in the Tool Library.";
+            this.lblSummary.Text = "A new version of controls that allow to connect to your Microsoft Dynamics 365 an" +
+    "d Microsoft Dataverse is available.";
             // 
             // panel2
             // 
@@ -97,11 +107,10 @@
             this.panel2.Controls.Add(this.lblNewVersion);
             this.panel2.Controls.Add(this.pbLogo);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(50, 48);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4);
+            this.panel2.Location = new System.Drawing.Point(38, 38);
             this.panel2.Name = "panel2";
             this.panel2.Padding = new System.Windows.Forms.Padding(0, 2, 0, 0);
-            this.panel2.Size = new System.Drawing.Size(1180, 182);
+            this.panel2.Size = new System.Drawing.Size(884, 146);
             this.panel2.TabIndex = 8;
             // 
             // lblPluginTitle
@@ -109,11 +118,10 @@
             this.lblPluginTitle.AutoEllipsis = true;
             this.lblPluginTitle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblPluginTitle.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblPluginTitle.Location = new System.Drawing.Point(188, 2);
-            this.lblPluginTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblPluginTitle.Location = new System.Drawing.Point(141, 2);
             this.lblPluginTitle.Name = "lblPluginTitle";
-            this.lblPluginTitle.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.lblPluginTitle.Size = new System.Drawing.Size(992, 114);
+            this.lblPluginTitle.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblPluginTitle.Size = new System.Drawing.Size(743, 91);
             this.lblPluginTitle.TabIndex = 1;
             this.lblPluginTitle.Text = "XrmToolBox Connection controls";
             this.lblPluginTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -122,11 +130,11 @@
             // 
             this.lblNewVersion.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.lblNewVersion.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNewVersion.Location = new System.Drawing.Point(188, 116);
-            this.lblNewVersion.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.lblNewVersion.Location = new System.Drawing.Point(141, 93);
+            this.lblNewVersion.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblNewVersion.Name = "lblNewVersion";
-            this.lblNewVersion.Padding = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.lblNewVersion.Size = new System.Drawing.Size(992, 66);
+            this.lblNewVersion.Padding = new System.Windows.Forms.Padding(8, 0, 0, 0);
+            this.lblNewVersion.Size = new System.Drawing.Size(743, 53);
             this.lblNewVersion.TabIndex = 2;
             this.lblNewVersion.Text = "[new version]";
             // 
@@ -135,9 +143,8 @@
             this.pbLogo.Dock = System.Windows.Forms.DockStyle.Left;
             this.pbLogo.Image = global::XrmToolBox.Properties.Resources.logo_0400;
             this.pbLogo.Location = new System.Drawing.Point(0, 2);
-            this.pbLogo.Margin = new System.Windows.Forms.Padding(4);
             this.pbLogo.Name = "pbLogo";
-            this.pbLogo.Size = new System.Drawing.Size(188, 180);
+            this.pbLogo.Size = new System.Drawing.Size(141, 144);
             this.pbLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbLogo.TabIndex = 0;
             this.pbLogo.TabStop = false;
@@ -149,10 +156,9 @@
             this.pnlFooter.Controls.Add(this.llDoNotUpdate);
             this.pnlFooter.Controls.Add(this.llUpdateNow);
             this.pnlFooter.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlFooter.Location = new System.Drawing.Point(50, 893);
-            this.pnlFooter.Margin = new System.Windows.Forms.Padding(4);
+            this.pnlFooter.Location = new System.Drawing.Point(38, 715);
             this.pnlFooter.Name = "pnlFooter";
-            this.pnlFooter.Size = new System.Drawing.Size(1180, 156);
+            this.pnlFooter.Size = new System.Drawing.Size(884, 125);
             this.pnlFooter.TabIndex = 10;
             // 
             // llUpdateNextStart
@@ -162,12 +168,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.llUpdateNextStart.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Underline);
             this.llUpdateNextStart.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
-            this.llUpdateNextStart.Location = new System.Drawing.Point(7, 98);
-            this.llUpdateNextStart.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.llUpdateNextStart.MinimumSize = new System.Drawing.Size(418, 2);
+            this.llUpdateNextStart.Location = new System.Drawing.Point(5, 78);
+            this.llUpdateNextStart.MinimumSize = new System.Drawing.Size(314, 2);
             this.llUpdateNextStart.Name = "llUpdateNextStart";
-            this.llUpdateNextStart.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.llUpdateNextStart.Size = new System.Drawing.Size(499, 58);
+            this.llUpdateNextStart.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
+            this.llUpdateNextStart.Size = new System.Drawing.Size(373, 46);
             this.llUpdateNextStart.TabIndex = 3;
             this.llUpdateNextStart.TabStop = true;
             this.llUpdateNextStart.Text = "Update on next XrmToolBox run";
@@ -185,10 +190,9 @@
             "Don\'t remind me for 2 days",
             "Don\'t remind me for 3 days",
             "Don\'t remind me for this version"});
-            this.cbbReminder.Location = new System.Drawing.Point(802, 37);
-            this.cbbReminder.Margin = new System.Windows.Forms.Padding(4);
+            this.cbbReminder.Location = new System.Drawing.Point(601, 30);
             this.cbbReminder.Name = "cbbReminder";
-            this.cbbReminder.Size = new System.Drawing.Size(338, 33);
+            this.cbbReminder.Size = new System.Drawing.Size(254, 28);
             this.cbbReminder.TabIndex = 2;
             // 
             // llDoNotUpdate
@@ -199,10 +203,9 @@
             this.llDoNotUpdate.ForeColor = System.Drawing.Color.Red;
             this.llDoNotUpdate.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
             this.llDoNotUpdate.LinkColor = System.Drawing.Color.Red;
-            this.llDoNotUpdate.Location = new System.Drawing.Point(570, 18);
-            this.llDoNotUpdate.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.llDoNotUpdate.Location = new System.Drawing.Point(427, 14);
             this.llDoNotUpdate.Name = "llDoNotUpdate";
-            this.llDoNotUpdate.Size = new System.Drawing.Size(192, 71);
+            this.llDoNotUpdate.Size = new System.Drawing.Size(144, 57);
             this.llDoNotUpdate.TabIndex = 1;
             this.llDoNotUpdate.TabStop = true;
             this.llDoNotUpdate.Text = "No thanks";
@@ -220,12 +223,11 @@
             this.llUpdateNow.ForeColor = System.Drawing.Color.Green;
             this.llUpdateNow.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
             this.llUpdateNow.LinkColor = System.Drawing.Color.Green;
-            this.llUpdateNow.Location = new System.Drawing.Point(47, 18);
-            this.llUpdateNow.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.llUpdateNow.MinimumSize = new System.Drawing.Size(418, 2);
+            this.llUpdateNow.Location = new System.Drawing.Point(35, 14);
+            this.llUpdateNow.MinimumSize = new System.Drawing.Size(314, 2);
             this.llUpdateNow.Name = "llUpdateNow";
-            this.llUpdateNow.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.llUpdateNow.Size = new System.Drawing.Size(419, 71);
+            this.llUpdateNow.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
+            this.llUpdateNow.Size = new System.Drawing.Size(314, 57);
             this.llUpdateNow.TabIndex = 0;
             this.llUpdateNow.TabStop = true;
             this.llUpdateNow.Text = "Update Now";
@@ -234,31 +236,16 @@
             this.llUpdateNow.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llUpdateNow_LinkClicked);
             this.llUpdateNow.Paint += new System.Windows.Forms.PaintEventHandler(this.llUpdateNow_Paint);
             // 
-            // lblSummary
-            // 
-            this.lblSummary.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblSummary.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSummary.Location = new System.Drawing.Point(50, 341);
-            this.lblSummary.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblSummary.Name = "lblSummary";
-            this.lblSummary.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.lblSummary.Size = new System.Drawing.Size(1180, 111);
-            this.lblSummary.TabIndex = 17;
-            this.lblSummary.Tag = "A new version of the tool {0} is available in the Tool Library.";
-            this.lblSummary.Text = "A new version of controls that allow to connect to your Microsoft Dynamics 365 an" +
-    "d Microsoft Dataverse is available.";
-            // 
             // NewConnectionVersion
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1280, 1097);
+            this.ClientSize = new System.Drawing.Size(960, 878);
             this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(1183, 685);
+            this.MinimumSize = new System.Drawing.Size(893, 559);
             this.Name = "NewConnectionVersion";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
