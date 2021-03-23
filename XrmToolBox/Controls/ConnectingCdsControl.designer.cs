@@ -13,10 +13,16 @@
         /// <param name="disposing">true si les ressources managées doivent être supprimées ; sinon, false.</param>
         protected override void Dispose(bool disposing)
         {
+            t?.Stop();
+            pictureThread?.Abort();
+            t = null;
+            pictureThread = null;
+
             if (disposing && (components != null))
             {
                 components.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
@@ -51,7 +57,7 @@
             // pbConnectionLoading
             // 
             this.pbConnectionLoading.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pbConnectionLoading.Image = global::XrmToolBox.Properties.Resources.ConnectingDataverse;
+            this.pbConnectionLoading.Image = global::XrmToolBox.Properties.Resources.loading_dv0;
             this.pbConnectionLoading.Location = new System.Drawing.Point(199, 25);
             this.pbConnectionLoading.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pbConnectionLoading.Name = "pbConnectionLoading";
@@ -70,6 +76,7 @@
             this.Controls.Add(this.pbConnectionLoading);
             this.Name = "ConnectingCdsControl";
             this.Size = new System.Drawing.Size(798, 218);
+            this.Load += new System.EventHandler(this.ConnectingCdsControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pbConnectionLoading)).EndInit();
             this.ResumeLayout(false);
 

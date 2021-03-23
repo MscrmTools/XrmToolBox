@@ -513,6 +513,11 @@
     <None Include="Resources\hide_detail.png" />
     <None Include="Resources\star.png" />
     <None Include="Resources\shortcut.png" />
+    <None Include="Resources\loading_dv4.png" />
+    <None Include="Resources\loading_dv0.png" />
+    <None Include="Resources\loading_dv1.png" />
+    <None Include="Resources\loading_dv2.png" />
+    <None Include="Resources\loading_dv3.png" />
     <Content Include="Resources\three_tags.png" />
     <None Include="Resources\www_page.png" />
     <Content Include="XrmToolBox201512.ico" />
@@ -559,7 +564,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
