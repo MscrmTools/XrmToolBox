@@ -22,15 +22,17 @@ namespace XrmToolBox.PluginsStore.DTO
         [DataMember(Name = "mctools_averagefeedbackratingallversions")]
         public decimal AverageFeedbackRating { get; set; }
 
+        public List<string> Categories => CategoriesList?.Split(',').ToList() ?? new List<string>();
+
+        [DataMember(Name = "mctools_categorieslist")]
+        public string CategoriesList { get; set; }
+
         public CompatibleState Compatibilty { get; internal set; }
 
         public Version CurrentVersion { get; internal set; }
 
         [DataMember(Name = "mctools_description")]
         public string Description { get; set; }
-
-        [DataMember(Name = "mctools_categorieslist")]
-        public string CategoriesList { get; set; }
 
         [DataMember(Name = "mctools_downloadurl")]
         public string DownloadUrl { get; set; }
@@ -86,6 +88,8 @@ namespace XrmToolBox.PluginsStore.DTO
         public bool? RequireLicenseAcceptance { get; internal set; }
 
         public bool RequiresXtbRestart { get; internal set; }
+
+        public List<string> SearchedProperties => new List<string> { Name, Description, Authors };
 
         [DataMember(Name = "mctools_totaldownloadcount")]
         public int TotalDownloadCount { get; set; }

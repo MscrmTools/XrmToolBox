@@ -27,6 +27,7 @@ namespace XrmToolBox.PluginsStore
         private readonly List<string> selectedPackagesId;
         private readonly StoreFromPortal store;
         private AppInsights ai = new AppInsights(new AiConfig(AiEndpoint, AiKey));
+        private List<ListViewItem> lvic;
         private int newPlugin, updatePlugin, allPlugins;
         private Thread searchThread;
         private int sortedColumnIndex = -1;
@@ -64,10 +65,6 @@ Current cache folder size: {size}MB";
         {
             selectedPackagesId.Clear();
 
-            tstSearch.TextChanged -= tstSearch_TextChanged;
-            tstSearch.Text = @"Search by Title or Authors";
-            tstSearch.ForeColor = SystemColors.InactiveCaption;
-            tstSearch.TextChanged += tstSearch_TextChanged;
             tstSearch.Enabled = false;
 
             lvPlugins.Items.Clear();
@@ -92,50 +89,21 @@ Current cache folder size: {size}MB";
                 }
                 var xtbPackages = store.XrmToolBoxPlugins.Plugins.OrderBy(p => p.Name);
 
-                var lvic = new List<ListViewItem>();
+                lvic = new List<ListViewItem>();
                 foreach (var xtbPackage in xtbPackages)
                 {
                     allPlugins++;
-
-                    if (xtbPackage.Action == PackageInstallAction.Unavailable
-                        && options.PluginsStoreShowIncompatible.HasValue
-                        && options.PluginsStoreShowIncompatible.Value == false)
-                    {
-                        continue;
-                    }
+                    lvic.Add(xtbPackage.GetPluginsStoreItem());
 
                     if (xtbPackage.Action == PackageInstallAction.Install)
                     {
                         newPlugin++;
-
-                        if (options.PluginsStoreShowNew.HasValue
-                            && options.PluginsStoreShowNew.Value == false)
-                        {
-                            continue;
-                        }
                     }
-
-                    if (xtbPackage.Action == PackageInstallAction.Update)
+                    else if (xtbPackage.Action == PackageInstallAction.Update)
                     {
                         updatePlugin++;
-
-                        if (options.PluginsStoreShowUpdates.HasValue
-                            && options.PluginsStoreShowUpdates.Value == false)
-                        {
-                            continue;
-                        }
                     }
-
-                    if (xtbPackage.Action == PackageInstallAction.None
-                        && options.PluginsStoreShowInstalled.HasValue
-                        && options.PluginsStoreShowInstalled.Value == false)
-                    {
-                        continue;
-                    }
-
-                    lvic.Add(xtbPackage.GetPluginsStoreItem());
                 }
-                e.Result = lvic;
             };
             bw.RunWorkerCompleted += (sender, e) =>
             {
@@ -149,35 +117,13 @@ Current cache folder size: {size}MB";
                     return;
                 }
 
-                var items = (List<ListViewItem>)e.Result;
-
                 tssPluginsCount.Text = $@"Tools: {allPlugins} / New: {newPlugin} / Updates: {updatePlugin}";
                 tssPluginsCount.Visible = true;
 
-                lvPlugins.Items.AddRange(items.ToArray());
-
                 LoadCategories();
+                FilterPlugins(tstSearch.Text == tstSearch.Tag?.ToString() ? string.Empty : tstSearch.Text);
             };
             bw.RunWorkerAsync();
-        }
-
-        private void LoadCategories()
-        {
-            pnlCategories.Controls.Clear();
-
-            foreach (var category in store.Categories)
-            {
-                var cb = new CheckBox
-                {
-                    Name = $"cb{category}",
-                    Dock = DockStyle.Top,
-                    Text = category
-                };
-
-                cb.Click += tstSearch_TextChanged;
-
-                pnlCategories.Controls.Add(cb);
-            }
         }
 
         protected override void OnResizeBegin(EventArgs e)
@@ -300,6 +246,36 @@ Current cache folder size: {size}MB";
             }
         }
 
+        private void chkTools_Click(object sender, EventArgs e)
+        {
+            var options = Options.Instance;
+
+            if (sender == chkToolsInstalled)
+            {
+                options.PluginsStoreShowInstalled = chkToolsInstalled.Checked;
+                tsmiShowInstalledPlugins.Checked = chkToolsInstalled.Checked;
+            }
+            else if (sender == chkToolsNotInstalled)
+            {
+                options.PluginsStoreShowNew = chkToolsNotInstalled.Checked;
+                tsmiShowNewPlugins.Checked = chkToolsNotInstalled.Checked;
+            }
+            else if (sender == chkToolsNotCompatible)
+            {
+                options.PluginsStoreShowIncompatible = chkToolsNotCompatible.Checked;
+                tsmiShowPluginsNotCompatible.Checked = chkToolsNotCompatible.Checked;
+            }
+            else if (sender == chkToolsWithUpdate)
+            {
+                options.PluginsStoreShowUpdates = chkToolsWithUpdate.Checked;
+                tsmiShowPluginsUpdate.Checked = chkToolsWithUpdate.Checked;
+            }
+
+            options.Save();
+
+            FilterPlugins(tstSearch.Text == tstSearch.Tag?.ToString() ? string.Empty : tstSearch.Text);
+        }
+
         private void DisplayRatings(decimal rating, int numberOfRatings)
         {
             pbStar.Visible = false;
@@ -319,65 +295,44 @@ Current cache folder size: {size}MB";
         {
             var filter = text.ToString().ToLower();
             var options = Options.Instance;
-            var lvic = new List<ListViewItem>();
 
             var categories = pnlCategories.Controls.OfType<CheckBox>()
                 .Where(c => c.Checked)
                 .Select(c => c.Text)
                 .ToList();
 
-            var pluginsForCategory = store.XrmToolBoxPlugins.Plugins
-                .Where(p => categories.Count == 0 ||
-                             categories.All(c => p.CategoriesList?.Split(',').Contains(c) ?? false));
+            var currentList = new List<ListViewItem>();
 
-            foreach (var xtbPackage in pluginsForCategory
-                .Where(p =>
-                            filter.Length > 0 &&
-
-                             (p.Name.ToLower().Replace(" for xrmtoolbox", "").Contains(filter) ||
-                              p.Authors.ToLower().IndexOf(filter, StringComparison.Ordinal) >= 0)
-                             || p.Description.ToLower().Contains(filter)
-                             || filter.Length == 0)
-            )
+            foreach (var item in lvic)
             {
-                if (xtbPackage.Action == PackageInstallAction.Unavailable
-                    && options.PluginsStoreShowIncompatible.HasValue
-                    && options.PluginsStoreShowIncompatible.Value == false)
-                {
-                    continue;
-                }
+                var tool = (XtbPlugin)item.Tag;
 
-                if (xtbPackage.Action == PackageInstallAction.Install
-                    && options.PluginsStoreShowNew.HasValue
-                    && options.PluginsStoreShowNew.Value == false)
-                {
-                    continue;
-                }
+                var isValidForSelectedCategories = categories.Count == 0 || categories.All(c => tool.Categories.Contains(c));
+                var fitsSearchTerm = filter.Length == 0 || tool.SearchedProperties.Any(sp => sp.ToLower().IndexOf(filter, StringComparison.InvariantCultureIgnoreCase) >= 0);
+                var isValidForDisplayFilters = tool.Action == PackageInstallAction.Unavailable
+                                               && options.PluginsStoreShowIncompatible.HasValue
+                                               && options.PluginsStoreShowIncompatible.Value
+                                               ||
+                                               tool.Action == PackageInstallAction.Install
+                                               && options.PluginsStoreShowNew.HasValue
+                                               && options.PluginsStoreShowNew.Value
+                                               ||
+                                               tool.Action == PackageInstallAction.Update
+                                               && options.PluginsStoreShowUpdates.HasValue
+                                               && options.PluginsStoreShowUpdates.Value
+                                               ||
+                                               tool.Action == PackageInstallAction.None
+                                               && options.PluginsStoreShowInstalled.HasValue
+                                               && options.PluginsStoreShowInstalled.Value;
 
-                if (xtbPackage.Action == PackageInstallAction.Update
-                    && options.PluginsStoreShowUpdates.HasValue
-                    && options.PluginsStoreShowUpdates.Value == false)
-                {
-                    continue;
-                }
-
-                if (xtbPackage.Action == PackageInstallAction.None
-                    && options.PluginsStoreShowInstalled.HasValue
-                    && options.PluginsStoreShowInstalled.Value == false)
-                {
-                    continue;
-                }
-
-                lvic.Add(xtbPackage.GetPluginsStoreItem());
-
-                // Check item if it was checked
-                lvic.Last().Checked = selectedPackagesId.Contains(xtbPackage.Id);
+                if (isValidForSelectedCategories && fitsSearchTerm && isValidForDisplayFilters)
+                    currentList.Add(item);
             }
 
             Invoke(new Action(() =>
             {
                 lvPlugins.Items.Clear();
-                lvPlugins.Items.AddRange(lvic.ToArray());
+                lvPlugins.Items.AddRange(currentList.ToArray());
             }));
         }
 
@@ -437,6 +392,25 @@ Current cache folder size: {size}MB";
         {
             var plugin = (XtbPlugin)lvPlugins.SelectedItems[0].Tag;
             Process.Start($"https://www.xrmtoolbox.com/plugins/plugininfo/rating/?pvid={plugin.LatestReleaseId}&id={plugin.Id}");
+        }
+
+        private void LoadCategories()
+        {
+            pnlCategories.Controls.Clear();
+
+            foreach (var category in store.Categories)
+            {
+                var cb = new CheckBox
+                {
+                    Name = $"cb{category}",
+                    Dock = DockStyle.Top,
+                    Text = category
+                };
+
+                cb.Click += tstSearch_TextChanged;
+
+                pnlCategories.Controls.Add(cb);
+            }
         }
 
         private void lvPlugins_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -728,6 +702,11 @@ Current cache folder size: {size}MB";
             tsmiShowPluginsNotCompatible.Checked = options.PluginsStoreShowIncompatible ?? true;
             tsmiShowPluginsUpdate.Checked = options.PluginsStoreShowUpdates ?? true;
 
+            chkToolsInstalled.Checked = options.PluginsStoreShowNew ?? true;
+            chkToolsNotInstalled.Checked = options.PluginsStoreShowInstalled ?? true;
+            chkToolsNotCompatible.Checked = options.PluginsStoreShowIncompatible ?? true;
+            chkToolsWithUpdate.Checked = options.PluginsStoreShowUpdates ?? true;
+
             RefreshPluginsList();
 
             tstSearch.Focus();
@@ -907,29 +886,45 @@ Current cache folder size: {size}MB";
             if (item == tsmiShowInstalledPlugins)
             {
                 options.PluginsStoreShowInstalled = item.Checked;
+                chkToolsInstalled.Checked = item.Checked;
             }
             else if (item == tsmiShowNewPlugins)
             {
                 options.PluginsStoreShowNew = item.Checked;
+                chkToolsNotInstalled.Checked = item.Checked;
             }
             else if (item == tsmiShowPluginsNotCompatible)
             {
                 options.PluginsStoreShowIncompatible = item.Checked;
+                chkToolsNotCompatible.Checked = item.Checked;
             }
             else if (item == tsmiShowPluginsUpdate)
             {
                 options.PluginsStoreShowUpdates = item.Checked;
+                chkToolsWithUpdate.Checked = item.Checked;
             }
 
             options.Save();
 
-            RefreshPluginsList(false);
+            FilterPlugins(tstSearch.Text == tstSearch.Tag?.ToString() ? string.Empty : tstSearch.Text);
         }
 
         private void tstSearch_Enter(object sender, EventArgs e)
         {
-            tstSearch.Text = string.Empty;
+            var isSame = tstSearch.Text == @"Search by Title or Authors";
+            tstSearch.TextChanged -= tstSearch_TextChanged;
+            tstSearch.Text = isSame ? "" : tstSearch.Text;
+            tstSearch.TextChanged += tstSearch_TextChanged;
             tstSearch.ForeColor = SystemColors.WindowText;
+        }
+
+        private void tstSearch_Leave(object sender, EventArgs e)
+        {
+            var isEmpty = tstSearch.Text.Length == 0;
+            tstSearch.TextChanged -= tstSearch_TextChanged;
+            tstSearch.Text = isEmpty ? @"Search by Title or Authors" : tstSearch.Text;
+            tstSearch.TextChanged += tstSearch_TextChanged;
+            tstSearch.ForeColor = SystemColors.InactiveCaption;
         }
 
         private void tstSearch_TextChanged(object sender, EventArgs e)
@@ -937,6 +932,14 @@ Current cache folder size: {size}MB";
             searchThread?.Abort();
             searchThread = new Thread(FilterPlugins);
             searchThread.Start(tstSearch.Text == tstSearch.Tag?.ToString() ? string.Empty : tstSearch.Text);
+
+            if (tstSearch.Text?.Length == 0)
+            {
+                tstSearch.TextChanged -= tstSearch_TextChanged;
+                tstSearch.Text = @"Search by Title or Authors";
+                tstSearch.ForeColor = SystemColors.InactiveCaption;
+                tstSearch.TextChanged += tstSearch_TextChanged;
+            }
         }
     }
 }
