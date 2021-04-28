@@ -702,8 +702,8 @@ Current cache folder size: {size}MB";
             tsmiShowPluginsNotCompatible.Checked = options.PluginsStoreShowIncompatible ?? true;
             tsmiShowPluginsUpdate.Checked = options.PluginsStoreShowUpdates ?? true;
 
-            chkToolsInstalled.Checked = options.PluginsStoreShowNew ?? true;
-            chkToolsNotInstalled.Checked = options.PluginsStoreShowInstalled ?? true;
+            chkToolsInstalled.Checked = options.PluginsStoreShowInstalled ?? true;
+            chkToolsNotInstalled.Checked = options.PluginsStoreShowNew ?? true;
             chkToolsNotCompatible.Checked = options.PluginsStoreShowIncompatible ?? true;
             chkToolsWithUpdate.Checked = options.PluginsStoreShowUpdates ?? true;
 
