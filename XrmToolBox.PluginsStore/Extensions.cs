@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -37,14 +36,6 @@ namespace XrmToolBox.PluginsStore
                 var lm = new LogManager(typeof(StoreFromPortal));
                 lm.LogError($"Unable to check if {fi.Name} is implementing interface IXrmToolBoxPlugin: {error.Message}");
                 return false;
-            }
-        }
-
-        public static void ReportProgress(this BackgroundWorker worker, int progress, string message)
-        {
-            if (worker != null && worker.WorkerReportsProgress)
-            {
-                worker.ReportProgress(progress, message);
             }
         }
     }

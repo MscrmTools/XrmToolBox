@@ -8,6 +8,14 @@ using System.Windows.Forms;
 
 namespace XrmToolBox.PluginsStore.DTO
 {
+    public enum CompatibleState
+    {
+        Compatible,
+        RequireNewVersionOfXtb,
+        DoesntFitMinimumVersion,
+        Other
+    }
+
     [DataContract]
     public class XtbPlugin
     {

@@ -20,7 +20,7 @@ namespace XrmToolBox.PluginsStore
         Unavailable
     }
 
-    public partial class StoreFormFromPortal : Form, IStoreForm
+    public partial class StoreFormFromPortal : Form
     {
         private const string AiEndpoint = "https://dc.services.visualstudio.com/v2/track";
         private const string AiKey = "77a2080e-f82c-4b2f-bb77-eb407236b729";
@@ -45,6 +45,8 @@ namespace XrmToolBox.PluginsStore
             selectedPackagesId = new List<string>();
 
             store = new StoreFromPortal(allowConnectionControlPrerelease);
+            store.OnDownloadingTool += Store_OnDownloadingTool;
+            store.LoadNuget();
             store.PluginsUpdated += (sender, e) => { PluginsUpdated?.Invoke(sender, e); };
             var size = store.CalculateCacheFolderSize();
             tsbCleanCacheFolder.ToolTipText = $@"Clean XrmToolBox Tool Library cache folder
@@ -85,7 +87,7 @@ Current cache folder size: {size}MB";
 
                 if (reload)
                 {
-                    store.LoadNugetPackages();
+                    store.LoadToolsList();
                 }
                 var xtbPackages = store.XrmToolBoxPlugins.Plugins.OrderBy(p => p.Name);
 
@@ -712,6 +714,19 @@ Current cache folder size: {size}MB";
             tstSearch.Focus();
         }
 
+        private void Store_OnDownloadingTool(object sender, ToolInformationEventArgs e)
+        {
+            Invoke(new Action(() =>
+            {
+                tssProgress.Style = ProgressBarStyle.Continuous;
+                tssProgress.Visible = true;
+                tssProgress.Value = e.ProgressPercentage;
+                tssLabel.Visible = true;
+                tssLabel.Text = $@"Downloading {e.ToolName}...";
+                tssPluginsCount.Text = string.Empty;
+            }));
+        }
+
         private void tsbCleanCacheFolder_Click(object sender, EventArgs e)
         {
             if (DialogResult.No ==
@@ -728,7 +743,7 @@ Current cache folder size: {size}MB";
             MessageBox.Show(this, @"Cache folder has been cleaned");
         }
 
-        private void tsbInstall_Click(object sender, EventArgs e)
+        private async void tsbInstall_Click(object sender, EventArgs e)
         {
             var packages =
                 lvPlugins.CheckedItems.Cast<ListViewItem>()
@@ -767,38 +782,15 @@ Current cache folder size: {size}MB";
                 ai.WritePluginEvent(p.Name, p.Version, "Plugin-Install");
             }
 
-            var bw = new BackgroundWorker { WorkerReportsProgress = true };
-            bw.DoWork += (sbw, evt) =>
+            try
             {
-                var updates = store.PrepareInstallationPackages((List<XtbPlugin>)evt.Argument, (BackgroundWorker)sbw);
-                evt.Result = store.PerformInstallation(updates, this);
-            };
-            bw.ProgressChanged += (sbw, evt) =>
-            {
-                tssProgress.Style = ProgressBarStyle.Continuous;
-                tssProgress.Visible = true;
-                tssProgress.Value = evt.ProgressPercentage;
-                tssLabel.Visible = true;
-                tssLabel.Text = $@"Downloading {evt.UserState.ToString()}...";
-                tssPluginsCount.Text = string.Empty;
-            };
-            bw.RunWorkerCompleted += (sbw, evt) =>
-            {
+                var updates = await store.PrepareInstallationPackages(packages);
+                bool result = store.PerformInstallation(updates, this);
+
                 if (!Application.OpenForms.OfType<StoreFormFromPortal>().Any())
                     return;
 
-                tsMain.Enabled = true;
-                lvPlugins.Enabled = true;
-                tssProgress.Visible = false;
-                tssLabel.Text = string.Empty;
-
-                if (evt.Error != null)
-                {
-                    MessageBox.Show(this, $@"An error occured: {evt.Error.Message}", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                if ((bool)evt.Result)
+                if (result)
                 {
                     // Refresh plugins list when installation is done
                     RefreshPluginsList();
@@ -808,8 +800,18 @@ Current cache folder size: {size}MB";
                 tsbCleanCacheFolder.ToolTipText = $@"Clean XrmToolBox Tool Library cache folder
 
 Current cache folder size: {size}MB";
-            };
-            bw.RunWorkerAsync(packages);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(this, $@"An error occured: {error.Message}", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                tsMain.Enabled = true;
+                lvPlugins.Enabled = true;
+                tssProgress.Visible = false;
+                tssLabel.Text = string.Empty;
+            }
         }
 
         private void tsbLoadPlugins_Click(object sender, EventArgs e)
