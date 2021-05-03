@@ -312,20 +312,16 @@ Current cache folder size: {size}MB";
                 var isValidForSelectedCategories = categories.Count == 0 || categories.All(c => tool.Categories.Contains(c));
                 var fitsSearchTerm = filter.Length == 0 || tool.SearchedProperties.Any(sp => sp.ToLower().IndexOf(filter, StringComparison.InvariantCultureIgnoreCase) >= 0);
                 var isValidForDisplayFilters = tool.Action == PackageInstallAction.Unavailable
-                                               && options.PluginsStoreShowIncompatible.HasValue
-                                               && options.PluginsStoreShowIncompatible.Value
+                                               && (options.PluginsStoreShowIncompatible ?? false)
                                                ||
                                                tool.Action == PackageInstallAction.Install
-                                               && options.PluginsStoreShowNew.HasValue
-                                               && options.PluginsStoreShowNew.Value
+                                               && (options.PluginsStoreShowNew ?? true)
                                                ||
                                                tool.Action == PackageInstallAction.Update
-                                               && options.PluginsStoreShowUpdates.HasValue
-                                               && options.PluginsStoreShowUpdates.Value
+                                               && (options.PluginsStoreShowUpdates ?? true)
                                                ||
                                                tool.Action == PackageInstallAction.None
-                                               && options.PluginsStoreShowInstalled.HasValue
-                                               && options.PluginsStoreShowInstalled.Value;
+                                               && (options.PluginsStoreShowInstalled ?? true);
 
                 if (isValidForSelectedCategories && fitsSearchTerm && isValidForDisplayFilters)
                     currentList.Add(item);
