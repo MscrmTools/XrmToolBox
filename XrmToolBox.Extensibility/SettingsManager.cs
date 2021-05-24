@@ -70,20 +70,80 @@ namespace XrmToolBox.Extensibility
 
             if (File.Exists(filePath))
             {
-                settingsObject = DeserializeXmlFile<T>(filePath);
-                return true;
+                try
+                {
+                    settingsObject = DeserializeXmlFile<T>(filePath);
+                    return true;
+                }
+                catch
+                {
+                    settingsObject = default(T);
+                    return false;
+                }
             }
 
             filePath = GetLegacyPluginSettingsPath(pluginType, name);
 
             if (File.Exists(filePath))
             {
-                settingsObject = DeserializeXmlFile<T>(filePath);
-                return true;
+                try
+                {
+                    settingsObject = DeserializeXmlFile<T>(filePath);
+                    return true;
+                }
+                catch
+                {
+                    settingsObject = default(T);
+                    return false;
+                }
             }
 
             settingsObject = default(T);
             return false;
+        }
+
+        private static void ConditionallyCreateSettingsDirectory()
+        {
+            if (!Directory.Exists(Paths.SettingsPath))
+            {
+                Directory.CreateDirectory(Paths.SettingsPath);
+            }
+        }
+
+        private static T DeserializeXmlFile<T>(string filePath)
+        {
+            try
+            {
+                var document = new XmlDocument();
+                document.Load(filePath);
+
+                var settingsObject = (T)XmlSerializerHelper.Deserialize(document.OuterXml, typeof(T));
+                return settingsObject;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error attempting to loading and deserializing file \"{filePath}\"", ex);
+            }
+        }
+
+        private string CleanStringForFileName(string text)
+        {
+            var cleanedText = "";
+
+            foreach (var t in text)
+            {
+                cleanedText += IllegalChars.Contains(t) ? '_' : t;
+            }
+
+            return cleanedText;
+        }
+
+        private string FormatName(string name)
+        {
+            name = string.IsNullOrEmpty(name)
+                ? string.Empty
+                : "_" + CleanStringForFileName(name);
+            return name + ".xml";
         }
 
         /// <summary>
@@ -102,50 +162,6 @@ namespace XrmToolBox.Extensibility
         {
             return Path.Combine(Paths.SettingsPath,
                 GetSafeFilename(pluginType.Assembly.FullName.Split(',')[0] + name));
-        }
-
-        private static void ConditionallyCreateSettingsDirectory()
-        {
-            if (!Directory.Exists(Paths.SettingsPath))
-            {
-                Directory.CreateDirectory(Paths.SettingsPath);
-            }
-        }
-
-        private static T DeserializeXmlFile<T>(string filePath)
-        {
-            try
-            {
-                var document = new XmlDocument();
-                document.Load(filePath);
-
-                var settingsObject = (T) XmlSerializerHelper.Deserialize(document.OuterXml, typeof(T));
-                return settingsObject;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error attempting to loading and deserializing file \"{filePath}\"", ex);
-            }
-        }
-
-        private string FormatName(string name)
-        {
-            name = string.IsNullOrEmpty(name)
-                ? string.Empty
-                : "_" + CleanStringForFileName(name);
-            return name + ".xml";
-        }
-
-        private string CleanStringForFileName(string text)
-        {
-            var cleanedText = "";
-
-            foreach (var t in text)
-            {
-                cleanedText += IllegalChars.Contains(t) ? '_' : t;
-            }
-
-            return cleanedText;
         }
 
         private string GetSafeFilename(string filename)
