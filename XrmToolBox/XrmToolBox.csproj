@@ -75,7 +75,7 @@
     <Reference Include="McTools.StopAdvertisement">
       <HintPath>..\LicenseChecker\McTools.StopAdvertisement.dll</HintPath>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection, Version=1.2021.2.40, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
+       <Reference Include="McTools.Xrm.Connection, Version=1.2021.2.40, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
       <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2021.2.40\lib\net462\McTools.Xrm.Connection.dll</HintPath>
     </Reference>
     <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2021.2.40, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
@@ -514,6 +514,8 @@
     <None Include="Resources\loading_dv1.png" />
     <None Include="Resources\loading_dv2.png" />
     <None Include="Resources\loading_dv3.png" />
+    <None Include="Resources\Connect32.png" />
+    <None Include="Resources\Connect16.png" />
     <Content Include="Resources\three_tags.png" />
     <None Include="Resources\www_page.png" />
     <Content Include="XrmToolBox201512.ico" />
@@ -560,7 +562,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
