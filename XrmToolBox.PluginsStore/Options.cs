@@ -43,10 +43,10 @@ namespace XrmToolBox.PluginsStore
 
         public bool? DisplayPluginsStoreOnStartup { get; set; }
         public bool IsInitialized { get; set; }
-        public bool? PluginsStoreShowIncompatible { get; set; }
-        public bool? PluginsStoreShowInstalled { get; set; }
-        public bool? PluginsStoreShowNew { get; set; }
-        public bool? PluginsStoreShowUpdates { get; set; }
+        public bool? PluginsStoreShowIncompatible { get; set; } = false;
+        public bool? PluginsStoreShowInstalled { get; set; } = true;
+        public bool? PluginsStoreShowNew { get; set; } = true;
+        public bool? PluginsStoreShowUpdates { get; set; } = true;
         public bool? UseLegacy { get; set; }
 
         public object Clone()

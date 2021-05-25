@@ -8,6 +8,14 @@ using System.Windows.Forms;
 
 namespace XrmToolBox.PluginsStore.DTO
 {
+    public enum CompatibleState
+    {
+        Compatible,
+        RequireNewVersionOfXtb,
+        DoesntFitMinimumVersion,
+        Other
+    }
+
     [DataContract]
     public class XtbPlugin
     {
@@ -107,7 +115,7 @@ namespace XrmToolBox.PluginsStore.DTO
         {
             var packageVersion = new Version(Version);
 
-            var item = new ListViewItem(string.Empty) { Tag = this };
+            var item = new ListViewItem(Name) { Tag = this };
 
             item.SubItems.Add(Name);
             item.SubItems.Add(AverageFeedbackRating.ToString("N2"));

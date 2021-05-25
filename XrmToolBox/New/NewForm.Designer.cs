@@ -135,7 +135,7 @@ namespace XrmToolBox.New
             // 
             // tsbConnect
             // 
-            this.tsbConnect.Image = ((System.Drawing.Image)(resources.GetObject("tsbConnect.Image")));
+            this.tsbConnect.Image = global::XrmToolBox.Properties.Resources.Connect16;
             this.tsbConnect.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbConnect.Name = "tsbConnect";
             this.tsbConnect.Size = new System.Drawing.Size(97, 29);
@@ -207,7 +207,7 @@ namespace XrmToolBox.New
             this.tsddbTools.Image = ((System.Drawing.Image)(resources.GetObject("tsddbTools.Image")));
             this.tsddbTools.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbTools.Name = "tsddbTools";
-            this.tsddbTools.Size = new System.Drawing.Size(163, 29);
+            this.tsddbTools.Size = new System.Drawing.Size(155, 29);
             this.tsddbTools.Text = "Configuration";
             this.tsddbTools.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsddbTools_DropDownItemClicked);
             // 
@@ -263,7 +263,7 @@ namespace XrmToolBox.New
             this.tsddbHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsddbHelp.Image")));
             this.tsddbHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbHelp.Name = "tsddbHelp";
-            this.tsddbHelp.Size = new System.Drawing.Size(91, 29);
+            this.tsddbHelp.Size = new System.Drawing.Size(83, 29);
             this.tsddbHelp.Text = "Help";
             // 
             // tsmiXtbHelp
@@ -411,7 +411,7 @@ namespace XrmToolBox.New
             this.tsbOpenOrg.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpenOrg.Image")));
             this.tsbOpenOrg.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbOpenOrg.Name = "tsbOpenOrg";
-            this.tsbOpenOrg.Size = new System.Drawing.Size(188, 29);
+            this.tsbOpenOrg.Size = new System.Drawing.Size(180, 29);
             this.tsbOpenOrg.Text = "Open organization";
             this.tsbOpenOrg.ToolTipText = "Opens the connected organization in your web browser";
             this.tsbOpenOrg.Visible = false;
@@ -422,7 +422,7 @@ namespace XrmToolBox.New
             this.tsbImpersonate.Image = ((System.Drawing.Image)(resources.GetObject("tsbImpersonate.Image")));
             this.tsbImpersonate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbImpersonate.Name = "tsbImpersonate";
-            this.tsbImpersonate.Size = new System.Drawing.Size(140, 29);
+            this.tsbImpersonate.Size = new System.Drawing.Size(132, 29);
             this.tsbImpersonate.Text = "Impersonate";
             this.tsbImpersonate.ToolTipText = "Impersonate as another user in the organization/environment\n\nBe careful! If the c" +
     "urrent connection is already used by multiple tools, they will used this imperso" +

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
@@ -270,7 +271,9 @@ Please start XrmToolBox again to fix this problem",
                 CopyUpdatedPlugins();
                 RemovePlugins();
 
-                RedirectAssembly("NuGet.Core");
+                RedirectAssembly("NuGet.Common");
+                RedirectAssembly(" NuGet.Packaging");
+                RedirectAssembly("NuGet.Protocol");
                 RedirectAssembly("Newtonsoft.Json");
                 RedirectAssembly("McTools.Xrm.Connection");
                 RedirectAssembly("McTools.Xrm.Connection.WinForms");
@@ -287,6 +290,8 @@ Please start XrmToolBox again to fix this problem",
                 RedirectAssembly("WeifenLuo.WinFormsUI.Docking.ThemeVS2015");
                 RedirectAssembly("ScintillaNET");
 
+                OptimizeConnectionSettings();
+
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new NewForm(args));
@@ -297,6 +302,22 @@ Please start XrmToolBox again to fix this problem",
                 MessageBox.Show("An unexpected error occured: " + error + "\r\n\r\n" + lockedMessage, "Error", MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
             }
+        }
+
+        /// <summary>
+        /// Optimize Connection Settings
+        /// </summary>
+        /// <remarks>https://docs.microsoft.com/en-us/powerapps/developer/data-platform/xrm-tooling/sample-tpl-crmserviceclient</remarks>
+        private static void OptimizeConnectionSettings()
+        {
+            //Change max connections from .NET to a remote service default: 2
+            ServicePointManager.DefaultConnectionLimit = 65000;
+            //Bump up the min threads reserved for this app to ramp connections faster - minWorkerThreads defaults to 4, minIOCP defaults to 4
+            ThreadPool.SetMinThreads(100, 100);
+            //Turn off the Expect 100 to continue message - 'true' will cause the caller to wait until it round-trip confirms a connection to the server
+            ServicePointManager.Expect100Continue = false;
+            //Can decreas overall transmission overhead but can cause delay in data packet arrival
+            ServicePointManager.UseNagleAlgorithm = false;
         }
 
         private static void RemovePlugins()
