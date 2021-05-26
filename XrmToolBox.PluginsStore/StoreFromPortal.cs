@@ -344,13 +344,22 @@ namespace XrmToolBox.PluginsStore
                                     Directory.CreateDirectory(packageFolder);
                                 }
 
-                                using (var fileStream = File.OpenWrite(Path.Combine(packageFolder, Path.GetFileName(packageFile))))
+                                var relativeFilePath = packageFile.Remove(0, packageFile.IndexOf("/Plugins/") + 9);
+                                var filePath = Path.Combine(packageFolder, relativeFilePath);
+                                var fi = new FileInfo(filePath);
+
+                                if (!Directory.Exists(fi.Directory.FullName))
+                                {
+                                    Directory.CreateDirectory(fi.Directory.FullName);
+                                }
+
+                                using (var fileStream = File.OpenWrite(filePath))
                                 using (var stream = await packageReader.GetStreamAsync(packageFile, cancellationToken))
                                 {
                                     await stream.CopyToAsync(fileStream);
                                 }
 
-                                var destinationFile = Path.Combine(Paths.PluginsPath, Path.GetFileName(packageFile));
+                                var destinationFile = Path.Combine(Paths.PluginsPath, relativeFilePath);
 
                                 // XrmToolBox restart is required when a plugin has to be
                                 // updated or when a new plugin shares files with other
@@ -359,7 +368,7 @@ namespace XrmToolBox.PluginsStore
                                 {
                                     pus.Plugins.Add(new PluginUpdate
                                     {
-                                        Source = Path.Combine(packageFolder, Path.GetFileName(packageFile)),
+                                        Source = filePath,
                                         Destination = destinationFile,
                                         RequireRestart = true
                                     });
@@ -368,7 +377,7 @@ namespace XrmToolBox.PluginsStore
                                 {
                                     pus.Plugins.Add(new PluginUpdate
                                     {
-                                        Source = Path.Combine(packageFolder, Path.GetFileName(packageFile)),
+                                        Source = filePath,
                                         Destination = destinationFile,
                                         RequireRestart = false
                                     });
