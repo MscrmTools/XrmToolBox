@@ -272,7 +272,7 @@ Please start XrmToolBox again to fix this problem",
                 RemovePlugins();
 
                 RedirectAssembly("NuGet.Common");
-                RedirectAssembly(" NuGet.Packaging");
+                RedirectAssembly("NuGet.Packaging");
                 RedirectAssembly("NuGet.Protocol");
                 RedirectAssembly("Newtonsoft.Json");
                 RedirectAssembly("McTools.Xrm.Connection");
