@@ -21,6 +21,55 @@ using XrmToolBox.PluginsStore.DTO;
 
 namespace XrmToolBox.PluginsStore
 {
+    public class MyLogger : ILogger
+    {
+        public void Log(LogLevel level, string data)
+        {
+        }
+
+        public void Log(ILogMessage message)
+        {
+        }
+
+        public Task LogAsync(LogLevel level, string data)
+        {
+            return null;
+        }
+
+        public Task LogAsync(ILogMessage message)
+        {
+            return null;
+        }
+
+        public void LogDebug(string data)
+        {
+        }
+
+        public void LogError(string data)
+        {
+        }
+
+        public void LogInformation(string data)
+        {
+        }
+
+        public void LogInformationSummary(string data)
+        {
+        }
+
+        public void LogMinimal(string data)
+        {
+        }
+
+        public void LogVerbose(string data)
+        {
+        }
+
+        public void LogWarning(string data)
+        {
+        }
+    }
+
     public class StoreFromPortal
 
     {
@@ -122,11 +171,11 @@ namespace XrmToolBox.PluginsStore
             using (MemoryStream packageStream = new MemoryStream())
             {
                 if (!await findPackageById.CopyNupkgToStreamAsync(
-                        "mscrmtools.xrm.connection",
+                        "MscrmTools.Xrm.Connection",
                         nugetVersion,
                         packageStream,
                         cache,
-                        logger,
+                        new MyLogger(),
                         cancellationToken))
                 {
                     throw new Exception($"The Nuget package for connection controls ({nugetVersion.Version}) has not been found");
@@ -157,8 +206,8 @@ namespace XrmToolBox.PluginsStore
 
         public async Task<ConnectionControlsUpdateSettings> PrepareConnectionControlsUpdate(Control parentControl, bool installOnNextRestart)
         {
-            var metadata = (packageSearch.SearchAsync("mscrmtools.xrm.connection", new SearchFilter(AllowConnectionControlPreRelease, SearchFilterType.IsLatestVersion), 0, 1, logger, cancellationToken).GetAwaiter().GetResult()).FirstOrDefault();
-            var nugetVersion = (metadata.GetVersionsAsync().GetAwaiter().GetResult()).Max(v => v.Version);
+            var metadata = (await packageSearch.SearchAsync("mscrmtools.xrm.connection", new SearchFilter(AllowConnectionControlPreRelease, SearchFilterType.IsLatestVersion), 0, 1, logger, cancellationToken)).FirstOrDefault();
+            var nugetVersion = (await metadata.GetVersionsAsync()).Max(v => v.Version);
             var updates = new PluginUpdates { PreviousProcessId = Process.GetCurrentProcess().Id };
 
             using (MemoryStream packageStream = new MemoryStream())
@@ -177,6 +226,11 @@ namespace XrmToolBox.PluginsStore
                 var packageFolder = Path.Combine(nugetPluginsFolder, $"mscrmtools.xrm.connection.{nugetVersion.Version}");
                 var currentLocation = Assembly.GetExecutingAssembly().Location;
                 var folder = Path.GetDirectoryName(currentLocation);
+
+                if (!Directory.Exists(packageFolder))
+                {
+                    Directory.CreateDirectory(packageFolder);
+                }
 
                 using (PackageArchiveReader packageReader = new PackageArchiveReader(packageStream))
                 {

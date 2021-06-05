@@ -204,7 +204,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     var dialog = new NewConnectionVersion(result.Version, result.ReleaseNotes);
                     if (dialog.ShowDialog(this) == DialogResult.Yes)
                     {
-                        var ccSettings = store.PrepareConnectionControlsUpdate(this, dialog.OnNextRestart).Result;
+                        var ccSettings = await store.PrepareConnectionControlsUpdate(this, dialog.OnNextRestart);
 
                         Options.Instance.ConnectionControlsVersion = ccSettings.Version;
                         Options.Instance.Save();
