@@ -534,7 +534,7 @@ namespace XrmToolBox.New
                                    orderby s.AverageFeedbackRating descending
                                    select f).ToList();
 
-                foreach (var plugin in filteredList.OrderBy(p => p.Metadata.Name))
+                foreach (var plugin in filteredList)
                 {
                     if (Options.Instance.HiddenPlugins == null || !Options.Instance.HiddenPlugins.Contains(plugin.Metadata.Name))
                     {
