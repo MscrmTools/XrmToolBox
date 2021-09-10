@@ -531,7 +531,7 @@ namespace XrmToolBox.New
                 var filteredList = (from f in filteredPlugins
                                    join s in storePlugins
                                     on f.Metadata.Name equals s.Name
-                                   orderby s.AverageFeedbackRating descending
+                                   orderby (s.TotalFeedbackRating + 1000000 * s.AverageFeedbackRating) descending
                                    select f).ToList();
 
                 foreach (var plugin in filteredList)
