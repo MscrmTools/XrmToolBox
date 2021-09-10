@@ -15,6 +15,7 @@ using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.UserControls;
 using XrmToolBox.New.EventArgs;
+using XrmToolBox.PluginsStore;
 
 namespace XrmToolBox.New
 {
@@ -28,6 +29,7 @@ namespace XrmToolBox.New
         private string filterText;
         private Thread searchThread;
         private PluginModel selectedPluginModel;
+        private StoreFromPortal store;
 
         #endregion Variables
 
@@ -509,6 +511,35 @@ namespace XrmToolBox.New
                             if (isc.IsPluginAllowed(plugin.Value.GetType().FullName))
                                 DisplayOnePlugin(plugin, ref top, lastWidth);
                         }
+                    }
+                }
+            }
+            else if (Options.Instance.PluginsDisplayOrder == DisplayOrder.Rating)
+            {
+                if (store == null)
+                {
+                    store = new StoreFromPortal(Options.Instance.ConnectionControlsAllowPreReleaseUpdates);                    
+                }
+
+                if (store.XrmToolBoxPlugins == null)
+                {
+                    store.LoadToolsList();
+                }
+
+                var storePlugins = store.XrmToolBoxPlugins.Plugins;
+
+                var filteredList = (from f in filteredPlugins
+                                   join s in storePlugins
+                                    on f.Metadata.Name equals s.Name
+                                   orderby s.AverageFeedbackRating descending
+                                   select f).ToList();
+
+                foreach (var plugin in filteredList)
+                {
+                    if (Options.Instance.HiddenPlugins == null || !Options.Instance.HiddenPlugins.Contains(plugin.Metadata.Name))
+                    {
+                        if (isc.IsPluginAllowed(plugin.Value.GetType().FullName))
+                            DisplayOnePlugin(plugin, ref top, lastWidth);
                     }
                 }
             }
