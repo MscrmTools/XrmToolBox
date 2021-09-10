@@ -391,14 +391,14 @@ namespace XrmToolBox.PluginsStore
                     {
                         foreach (var packageFile in await packageReader.GetFilesAsync(cancellationToken))
                         {
-                            if (packageFile.ToLower().IndexOf("/plugins/") > 0)
+                            if (packageFile.ToLower().IndexOf("plugins/") >= 0)
                             {
                                 if (!Directory.Exists(packageFolder))
                                 {
                                     Directory.CreateDirectory(packageFolder);
                                 }
 
-                                var relativeFilePath = packageFile.Remove(0, packageFile.ToLower().IndexOf("/plugins/") + 9);
+                                var relativeFilePath = packageFile.Remove(0, packageFile.ToLower().IndexOf("plugins/") + 8);
                                 var filePath = Path.Combine(packageFolder, relativeFilePath);
                                 var fi = new FileInfo(filePath);
 
