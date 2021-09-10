@@ -118,7 +118,7 @@ namespace XrmToolBox.PluginsStore.DTO
             var item = new ListViewItem(Name) { Tag = this };
 
             item.SubItems.Add(Name);
-            item.SubItems.Add(AverageFeedbackRating.ToString("N2"));
+            item.SubItems.Add((TotalFeedbackRating + 1000000 * AverageFeedbackRating).ToString());
             item.SubItems.Add(packageVersion.ToString());
             item.SubItems.Add(CurrentVersion?.ToString());
             item.SubItems.Add(LatestReleaseDate?.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern));

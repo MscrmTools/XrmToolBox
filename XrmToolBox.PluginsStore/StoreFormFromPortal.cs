@@ -63,7 +63,7 @@ Current cache folder size: {size}MB";
             PluginsClosingRequested?.Invoke(this, new EventArgs());
         }
 
-        public void RefreshPluginsList(bool reload = true)
+        public void RefreshPluginsList(bool reload = true, bool isFromLoad = false)
         {
             selectedPackagesId.Clear();
 
@@ -124,6 +124,13 @@ Current cache folder size: {size}MB";
 
                 LoadCategories();
                 FilterPlugins(tstSearch.Text == tstSearch.Tag?.ToString() ? string.Empty : tstSearch.Text);
+
+                if (isFromLoad)
+                {
+                    lvPlugins.Sorting = Options.Instance.Order == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
+                    sortedColumnIndex = Options.Instance.OrderIndex;
+                    lvPlugins_ColumnClick(lvPlugins, new ColumnClickEventArgs(Options.Instance.OrderIndex));
+                }
             };
             bw.RunWorkerAsync();
         }
@@ -447,6 +454,10 @@ Current cache folder size: {size}MB";
                 lvPlugins.ListViewItemSorter = new ListViewItemComparer(e.Column, lvPlugins.Sorting);
                 sortedColumnIndex = e.Column;
             }
+
+            Options.Instance.OrderIndex = e.Column;
+            Options.Instance.Order = lvPlugins.Sorting;
+            Options.Instance.Save();
         }
 
         private void lvPlugins_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
@@ -485,7 +496,7 @@ Current cache folder size: {size}MB";
                     e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
                 }
 
-                var dValue = decimal.Parse(e.SubItem.Text);
+                var dValue = plugin.AverageFeedbackRating;
 
                 if (dValue > 0)
                 {
@@ -705,7 +716,7 @@ Current cache folder size: {size}MB";
             chkToolsNotCompatible.Checked = options.PluginsStoreShowIncompatible ?? true;
             chkToolsWithUpdate.Checked = options.PluginsStoreShowUpdates ?? true;
 
-            RefreshPluginsList();
+            RefreshPluginsList(true, true);
 
             tstSearch.Focus();
         }
