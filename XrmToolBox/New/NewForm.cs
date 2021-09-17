@@ -184,11 +184,8 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
         private async Task CheckForConnectionControlsUpdate(bool force = false)
         {
-            if (store == null)
-            {
-                store = new StoreFromPortal(Options.Instance.ConnectionControlsAllowPreReleaseUpdates);
-                await store.LoadNuget();
-            }
+            if (!await LoadStore()) return;
+
             var result = await store.IsConnectionControlsUpdateAvailable(Options.Instance.ConnectionControlsVersion);
 
             if (result.NewVersion)
@@ -238,6 +235,26 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
             return name;
         }
 
+        private async Task<bool> LoadStore()
+        {
+            try
+            {
+                if (store == null)
+                {
+                    store = new StoreFromPortal(Options.Instance.ConnectionControlsAllowPreReleaseUpdates);
+                    await store.LoadNuget();
+                }
+
+                return true;
+            }
+            catch
+            {
+                pnlNoNugetAccess.Visible = true;
+
+                return false;
+            }
+        }
+
         private void NewForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             var pci = new PluginCloseInfo(ToolBoxCloseReason.CloseAll);
@@ -275,11 +292,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
             WebProxyHelper.ApplyProxy();
 
-            if (store == null)
-            {
-                store = new StoreFromPortal(Options.Instance.ConnectionControlsAllowPreReleaseUpdates);
-                await store.LoadNuget();
-            }
+            await LoadStore();
 
             var tasks = new List<Task>
             {
@@ -392,6 +405,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
             {
                 // We avoid to make XrmToolBox crash if querying web services fail
                 pluginsForm.DisplayCategories(null);
+                pnlNoNugetAccess.Visible = true;
             }
         }
 
@@ -1898,6 +1912,11 @@ Would you like to reinstall last stable release of connection controls?";
         }
 
         #endregion Support panel
+
+        private void llCloseNugetNotAvailPanel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            pnlNoNugetAccess.Visible = false;
+        }
 
         private void llClosePluginsUpdatePanel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {

@@ -716,8 +716,15 @@ Current cache folder size: {size}MB";
             chkToolsNotCompatible.Checked = options.PluginsStoreShowIncompatible ?? true;
             chkToolsWithUpdate.Checked = options.PluginsStoreShowUpdates ?? true;
 
-            RefreshPluginsList(true, true);
-
+            try
+            {
+                RefreshPluginsList(true, true);
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(this, $"Error while loading tools: {error.Message}", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             tstSearch.Focus();
         }
 
