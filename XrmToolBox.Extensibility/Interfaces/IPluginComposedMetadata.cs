@@ -2,7 +2,7 @@
 
 namespace XrmToolBox.Extensibility.Interfaces
 {
-    public interface IPluginMetadata
+    public interface IPluginComposedMetadata
     {
         string BackgroundColor { get; }
         string BigImageBase64 { get; }
@@ -11,14 +11,5 @@ namespace XrmToolBox.Extensibility.Interfaces
         string PrimaryFontColor { get; }
         string SecondaryFontColor { get; }
         string SmallImageBase64 { get; }
-
-	    string Company { get; }
-	    string PluginType { get; }
-	    string Control { get; }
-	    string AssemblyQualifiedName { get; }
-	    string AssemblyFilename { get; }
-	    string Version { get; }
-	    Guid Id { get; }
-	    string[] Interfaces { get; }
     }
 }

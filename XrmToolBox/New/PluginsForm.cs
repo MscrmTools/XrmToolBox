@@ -198,7 +198,7 @@ namespace XrmToolBox.New
         {
             if (Guid.TryParse(identifier, out Guid pluginid) && !pluginid.Equals(Guid.Empty))
             {
-                return plugin.Value is PluginBase pb && pb.GetId().Equals(pluginid);
+                return plugin.Metadata.Id.Equals(pluginid);
             }
             return plugin.Metadata.Name.Equals(identifier);
         }
@@ -276,8 +276,8 @@ namespace XrmToolBox.New
         private void CreateModel<T>(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count)
           where T : PluginModel
         {
-            var name = plugin.Value.GetAssemblyQualifiedName();
-            var pm = (T)pluginsModels.FirstOrDefault(t => ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)t.Tag).Value.GetType().AssemblyQualifiedName == name && t is T);
+            var name = plugin.Metadata.AssemblyQualifiedName;
+            var pm = (T)pluginsModels.FirstOrDefault(t => ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)t.Tag).Metadata.AssemblyQualifiedName == name && t is T);
             var small = (typeof(T) == typeof(SmallPluginModel));
 
             if (pm == null)
@@ -285,8 +285,8 @@ namespace XrmToolBox.New
                 var title = plugin.Metadata.Name;
                 var desc = plugin.Metadata.Description;
 
-                var author = plugin.Value.GetCompany();
-                var version = plugin.Value.GetVersion();
+                var author = plugin.Metadata.Company;
+                var version = plugin.Metadata.Version;
 
                 var backColor = ColorTranslator.FromHtml(plugin.Metadata.BackgroundColor);
                 var primaryColor = ColorTranslator.FromHtml(plugin.Metadata.PrimaryFontColor);
@@ -463,26 +463,26 @@ namespace XrmToolBox.New
                 ? availablePlugins.Where(p
                     => p.Metadata.Name.ToLower().Contains(filter.ToString().ToLower())
                     || p.Metadata.Description.ToLower().Contains(filter.ToString().ToLower())
-                    || p.Value.GetType().GetCompany().ToLower().Contains(filter.ToString().ToLower()))
+                    || p.Metadata.Company.ToLower().Contains(filter.ToString().ToLower()))
                 : availablePlugins).OrderBy(p => p.Metadata.Name).ToList();
 
             if (Options.Instance.PluginsDisplayOrder == DisplayOrder.MostUsed)
             {
                 foreach (var item in Options.Instance.MostUsedList.OrderByDescending(i => i.Count).ThenBy(i => i.Name))
                 {
-                    var plugin = filteredPlugins.FirstOrDefault(x => x.Value.GetType().FullName == item.Name);
+                    var plugin = filteredPlugins.FirstOrDefault(x => x.Metadata.PluginType == item.Name);
                     if (plugin != null && (Options.Instance.HiddenPlugins == null || !Options.Instance.HiddenPlugins.Contains(plugin.Metadata.Name)))
                     {
-                        if (isc.IsPluginAllowed(plugin.Value.GetType().FullName))
+                        if (isc.IsPluginAllowed(plugin.Metadata.PluginType))
                             DisplayOnePlugin(plugin, ref top, lastWidth, item.Count);
                     }
                 }
 
                 foreach (var plugin in filteredPlugins.OrderBy(p => p.Metadata.Name))
                 {
-                    if (Options.Instance.MostUsedList.All(i => i.Name != plugin.Value.GetType().FullName) && (Options.Instance.HiddenPlugins == null || !Options.Instance.HiddenPlugins.Contains(plugin.Metadata.Name)))
+                    if (Options.Instance.MostUsedList.All(i => i.Name != plugin.Metadata.PluginType) && (Options.Instance.HiddenPlugins == null || !Options.Instance.HiddenPlugins.Contains(plugin.Metadata.Name)))
                     {
-                        if (isc.IsPluginAllowed(plugin.Value.GetType().FullName))
+                        if (isc.IsPluginAllowed(plugin.Metadata.PluginType))
                             DisplayOnePlugin(plugin, ref top, lastWidth);
                     }
                 }
@@ -500,7 +500,7 @@ namespace XrmToolBox.New
                 {
                     var plugins =
                         filteredPlugins.Where(
-                                x => $"{x.Value.GetAssemblyQualifiedName().Split(',')[1]}.dll".Trim()
+                                x => $"{x.Metadata.AssemblyQualifiedName.Split(',')[1]}.dll".Trim()
                                     .Equals(pluginAssembly.FileName, StringComparison.CurrentCultureIgnoreCase))
                             .ToList();
                     foreach (var plugin in plugins)
@@ -508,7 +508,7 @@ namespace XrmToolBox.New
                         if (Options.Instance.HiddenPlugins == null
                             || !Options.Instance.HiddenPlugins.Contains(plugin.Metadata.Name))
                         {
-                            if (isc.IsPluginAllowed(plugin.Value.GetType().FullName))
+                            if (isc.IsPluginAllowed(plugin.Metadata.PluginType))
                                 DisplayOnePlugin(plugin, ref top, lastWidth);
                         }
                     }
@@ -523,7 +523,7 @@ namespace XrmToolBox.New
 
                 if (store.XrmToolBoxPlugins == null)
                 {
-                    store.LoadToolsList();
+                    store.LoadToolsList().Wait();
                 }
 
                 var storePlugins = store.XrmToolBoxPlugins.Plugins;
@@ -538,7 +538,7 @@ namespace XrmToolBox.New
                 {
                     if (Options.Instance.HiddenPlugins == null || !Options.Instance.HiddenPlugins.Contains(plugin.Metadata.Name))
                     {
-                        if (isc.IsPluginAllowed(plugin.Value.GetType().FullName))
+                        if (isc.IsPluginAllowed(plugin.Metadata.PluginType))
                             DisplayOnePlugin(plugin, ref top, lastWidth);
                     }
                 }
@@ -549,7 +549,7 @@ namespace XrmToolBox.New
                 {
                     if (Options.Instance.HiddenPlugins == null || !Options.Instance.HiddenPlugins.Contains(plugin.Metadata.Name))
                     {
-                        if (isc.IsPluginAllowed(plugin.Value.GetType().FullName))
+                        if (isc.IsPluginAllowed(plugin.Metadata.PluginType))
                             DisplayOnePlugin(plugin, ref top, lastWidth);
                     }
                 }

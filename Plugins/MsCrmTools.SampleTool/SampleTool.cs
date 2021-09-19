@@ -243,7 +243,7 @@ namespace MsCrmTools.SampleTool
         private void btnCheckMultiSample_Click(object sender, EventArgs e)
         {
             var expectedPlugin = PluginManagerExtended.Instance.Plugins.FirstOrDefault(p =>
-                p.Value is PluginBase pb && pb.GetId() == Guid.Parse("{64A4E4E3-CAF9-4896-983A-341A297DEAF3}")
+                p.Metadata.Id == Guid.Parse("{64A4E4E3-CAF9-4896-983A-341A297DEAF3}")
             );
 
             MessageBox.Show(expectedPlugin == null ? "Tool is not installed" : "Tool is installed");

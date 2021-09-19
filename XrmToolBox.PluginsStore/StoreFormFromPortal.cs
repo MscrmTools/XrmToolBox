@@ -87,7 +87,7 @@ Current cache folder size: {size}MB";
 
                 if (reload)
                 {
-                    store.LoadToolsList();
+                    store.LoadToolsList().Wait();
                 }
                 var xtbPackages = store.XrmToolBoxPlugins.Plugins.OrderBy(p => p.Name);
 

@@ -21,7 +21,8 @@ namespace XrmToolBox.Forms
 
         private void DonationIntroForm_Load(object sender, EventArgs e)
         {
-            var plugins = PluginManagerExtended.Instance.Plugins.Where(p => p.Value is IPayPalPlugin);
+            var plugins = PluginManagerExtended.Instance.Plugins
+				.Where(p => p.Metadata.Interfaces.Contains(nameof(IPayPalPlugin)));
 
             cbbTools.Items.AddRange(plugins.Select(p => p.Metadata.Name).ToArray());
 
