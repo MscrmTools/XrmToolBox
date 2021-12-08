@@ -10,8 +10,8 @@ namespace XrmToolBox.New
 {
     public partial class NewVersionForm : DockContent
     {
-        private readonly string version;
         private readonly Uri downloadUrl;
+        private readonly string version;
 
         public NewVersionForm(string version, Uri downloadUrl)
         {
@@ -19,12 +19,6 @@ namespace XrmToolBox.New
 
             this.version = version;
             this.downloadUrl = downloadUrl;
-        }
-
-        private void NewVersionForm_Load(object sender, System.EventArgs e)
-        {
-            webBrowser1.Url = new Uri($"https://www.xrmtoolbox.com/new-version/?version={version}", UriKind.Absolute);
-            webBrowser1.ScriptErrorsSuppressed = true;
         }
 
         private void btnClose_Click(object sender, System.EventArgs e)
@@ -71,6 +65,11 @@ namespace XrmToolBox.New
                 }
                 Process.Start(downloadUrl.ToString());
             }
+        }
+
+        private void NewVersionForm_Load(object sender, System.EventArgs e)
+        {
+            webView21.Source = new Uri($"https://www.xrmtoolbox.com/new-version/?version={version}", UriKind.Absolute);
         }
     }
 }

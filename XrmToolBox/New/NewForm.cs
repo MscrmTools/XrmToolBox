@@ -547,7 +547,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
             if (!connectionFound)
             {
-                if (MessageBox.Show(this, "The connection specified cannot be found. Would you like to use another connection instead?", 
+                if (MessageBox.Show(this, "The connection specified cannot be found. Would you like to use another connection instead?",
                     "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     var plugin = pluginsForm.PluginManager.Plugins.First(p => p.Metadata.Name == e.Item.PluginName);
@@ -1424,7 +1424,6 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 }
 
                 WelcomeDialog.SetStatus("Checking for XrmToolBox update...");
-                // blackScreen.SetWorkingMessage("Checking for XrmToolBox update...");
 
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
                 try
@@ -1455,7 +1454,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                             Options.Instance.LastUpdateCheck.Date != DateTime.Now.Date)
                         {
                             var release =
-                                releases.Items.FirstOrDefault(r => r.Version == lastReleaseVersion.ToString());
+                            releases.Items.FirstOrDefault(r => r.Version == lastReleaseVersion.ToString());
 
                             Invoke(new Action(() =>
                             {
