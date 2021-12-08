@@ -131,7 +131,7 @@ namespace XrmToolBox.New
             }
         }
 
-        public sealed override string Text
+        public override sealed string Text
         {
             get => base.Text;
             set => base.Text = value;
@@ -505,12 +505,14 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 return;
             }
 
+            bool connectionFound = false;
             foreach (var file in ConnectionsList.Instance.Files)
             {
                 var cList = CrmConnections.LoadFromFile(file.Path);
                 var connection = cList.Connections.FirstOrDefault(c => c.ConnectionId == cid);
                 if (connection != null)
                 {
+                    connectionFound = true;
                     initialPluginName = e.Item.PluginName;
                     initialConnectionName = e.Item.ConnectionName;
 
@@ -540,6 +542,17 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     {
                         StartPluginWithConnection();
                     }
+                }
+            }
+
+            if (!connectionFound)
+            {
+                if (MessageBox.Show(this, "The connection specified cannot be found. Would you like to use another connection instead?", 
+                    "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    var plugin = pluginsForm.PluginManager.Plugins.First(p => p.Metadata.Name == e.Item.PluginName);
+
+                    ConnectUponApproval(new RequestConnectionEventArgs { Parameter = plugin });
                 }
             }
         }
