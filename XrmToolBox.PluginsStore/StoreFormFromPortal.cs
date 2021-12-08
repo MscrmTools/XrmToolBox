@@ -129,7 +129,7 @@ Current cache folder size: {size}MB";
                 {
                     lvPlugins.Sorting = Options.Instance.Order == SortOrder.Ascending ? SortOrder.Descending : SortOrder.Ascending;
                     sortedColumnIndex = Options.Instance.OrderIndex;
-                    lvPlugins_ColumnClick(lvPlugins, new ColumnClickEventArgs(Options.Instance.OrderIndex));
+                    lvPlugins_ColumnClick(lvPlugins, new ColumnClickEventArgs(Options.Instance.OrderIndex == 0 ? 1 : Options.Instance.OrderIndex));
                 }
             };
             bw.RunWorkerAsync();
