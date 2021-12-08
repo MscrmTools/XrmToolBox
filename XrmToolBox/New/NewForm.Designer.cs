@@ -844,6 +844,7 @@ namespace XrmToolBox.New
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1109, 528);
+            this.MinimumSize = new System.Drawing.Size(640, 480);
             this.Controls.Add(this.dpMain);
             this.Controls.Add(this.pnlBottom);
             this.Controls.Add(this.pnlSupport);
