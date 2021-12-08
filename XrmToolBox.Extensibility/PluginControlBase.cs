@@ -414,6 +414,11 @@ namespace XrmToolBox.Extensibility
 
         protected void HideNotification()
         {
+            if (Parent == null)
+            {
+                throw new Exception($"Cannot find the control parent. Try to use the method {nameof(HideNotification)} only when the control is loaded");
+            }
+
             var ctrls = Parent.Controls.Find("NotifPanel", false);
             if (ctrls.Length == 1)
             {
@@ -423,6 +428,11 @@ namespace XrmToolBox.Extensibility
 
         protected void ShowErrorNotification(string message, Uri moreInfoUri, int height = 32)
         {
+            if (Parent == null)
+            {
+                throw new Exception($"Cannot find the control parent. Try to use the method {nameof(ShowErrorNotification)} only when the control is loaded");
+            }
+
             var ctrls = Parent.Controls.Find("NotifPanel", false);
             if (ctrls.Length == 1)
             {
@@ -436,6 +446,11 @@ namespace XrmToolBox.Extensibility
 
         protected void ShowInfoNotification(string message, Uri moreInfoUri, int height = 32)
         {
+            if (Parent == null)
+            {
+                throw new Exception($"Cannot find the control parent. Try to use the method {nameof(ShowInfoNotification)} only when the control is loaded");
+            }
+
             var ctrls = Parent.Controls.Find("NotifPanel", false);
             if (ctrls.Length == 1)
             {
@@ -449,6 +464,11 @@ namespace XrmToolBox.Extensibility
 
         protected void ShowWarningNotification(string message, Uri moreInfoUri, int height = 32)
         {
+            if (Parent == null)
+            {
+                throw new Exception($"Cannot find the control parent. Try to use the method {nameof(ShowWarningNotification)} only when the control is loaded");
+            }
+
             var ctrls = Parent.Controls.Find("NotifPanel", false);
             if (ctrls.Length == 1)
             {
