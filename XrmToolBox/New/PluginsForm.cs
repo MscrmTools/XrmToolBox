@@ -103,13 +103,7 @@ namespace XrmToolBox.New
 
                 ll.Width = TextRenderer.MeasureText(category, ll.Font).Width;
                 ll.Height = 20;
-                ll.Click += (sender, args) =>
-                {
-                    var link = (LinkLabel)sender;
-                    link.LinkColor = link.LinkColor == Color.Blue ? Color.Red : Color.Blue;
-
-                    DisplayPlugins();
-                };
+                ll.Click += Ll_Click;
 
                 pnlCategory.Controls.Add(ll);
             }
@@ -518,7 +512,7 @@ namespace XrmToolBox.New
             {
                 if (store == null)
                 {
-                    store = new StoreFromPortal(Options.Instance.ConnectionControlsAllowPreReleaseUpdates);                    
+                    store = new StoreFromPortal(Options.Instance.ConnectionControlsAllowPreReleaseUpdates);
                 }
 
                 if (store.XrmToolBoxPlugins == null)
@@ -529,10 +523,10 @@ namespace XrmToolBox.New
                 var storePlugins = store.XrmToolBoxPlugins.Plugins;
 
                 var filteredList = (from f in filteredPlugins
-                                   join s in storePlugins
-                                    on f.Metadata.Name equals s.Name
-                                   orderby (s.TotalFeedbackRating + 1000000 * s.AverageFeedbackRating) descending
-                                   select f).ToList();
+                                    join s in storePlugins
+                                     on f.Metadata.Name equals s.Name
+                                    orderby (s.TotalFeedbackRating + 1000000 * s.AverageFeedbackRating) descending
+                                    select f).ToList();
 
                 foreach (var plugin in filteredList)
                 {
@@ -617,11 +611,34 @@ namespace XrmToolBox.New
             return logo;
         }
 
+        private void Ll_Click(object sender, System.EventArgs e)
+        {
+            var link = (LinkLabel)sender;
+            link.LinkColor = link.LinkColor == Color.Blue ? Color.Red : Color.Blue;
+
+            DisplayPlugins();
+        }
+
         private void llResetSearchFilter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             txtSearch.Text = string.Empty;
             DisplayCategories(categoriesList);
             txtSearch_TextChanged(txtSearch, new System.EventArgs());
+        }
+
+        private void pbClear_Click(object sender, System.EventArgs e)
+        {
+            foreach (var ll in pnlCategory.Controls.OfType<LinkLabel>())
+            {
+                ll.Click -= Ll_Click;
+                ll.LinkColor = Color.Blue;
+                ll.Click += Ll_Click;
+            }
+            txtSearch.TextChanged -= txtSearch_TextChanged;
+            txtSearch.Text = string.Empty;
+            txtSearch.TextChanged += txtSearch_TextChanged;
+
+            DisplayPlugins();
         }
 
         private void pbOpenPluginsStore_Click(object sender, System.EventArgs e)
