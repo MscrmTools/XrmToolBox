@@ -33,7 +33,7 @@ namespace XrmToolBox.Extensibility.Manifest
 		{
 			if (!File.Exists(ManifestFilename))
 			{
-				return null;
+				return CreateEmptyManifest();
 			}
 
 			if (File.GetLastWriteTime(ManifestFilename) == latestModifiedDate)
@@ -52,6 +52,11 @@ namespace XrmToolBox.Extensibility.Manifest
 		{
 			var s = JsonConvert.SerializeObject(manifest);
 			File.WriteAllText(ManifestFilename, s);
+		}
+
+		public static Manifest CreateEmptyManifest()
+		{
+			return new Manifest();
 		}
 
 		public static Manifest CreateManifest(IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginComposedMetadata>> composition,

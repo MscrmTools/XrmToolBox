@@ -407,24 +407,29 @@ namespace XrmToolBox.New
         {
             var isc = new ItSecurityChecker();
             isc.LoadAllowedPlugins();
-            Invoke(new Action(() =>
+
+            if (IsHandleCreated)
             {
-                pnlTop.Controls.Clear();
+	            Invoke(new Action(
+		            () =>
+					{
+						pnlTop.Controls.Clear();
 
-                if (isc.HasPluginsRestriction)
-                {
-                    var secInfo = new PluginsFilterInfo { Dock = DockStyle.Fill };
-                    pnlTop.Controls.Add(secInfo);
-                }
+						if (isc.HasPluginsRestriction)
+						{
+							var secInfo = new PluginsFilterInfo { Dock = DockStyle.Fill };
+							pnlTop.Controls.Add(secInfo);
+						}
 
-                if (pluginsManager.ValidationErrors?.Any() ?? false)
-                {
-                    var invalidInfo = new InvalidPluginsInfo(pluginsManager.ValidationErrors) { Dock = DockStyle.Fill };
-                    pnlTop.Controls.Add(invalidInfo);
-                }
+						if (pluginsManager.ValidationErrors?.Any() ?? false)
+						{
+							var invalidInfo = new InvalidPluginsInfo(pluginsManager.ValidationErrors) { Dock = DockStyle.Fill };
+							pnlTop.Controls.Add(invalidInfo);
+						}
 
-                pnlTop.Visible = pnlTop.Controls.Count > 0;
-            }));
+						pnlTop.Visible = pnlTop.Controls.Count > 0;
+					}));
+            }
 
             if (!pluginsManager.ValidatedPlugins?.Any() ?? false)
             {

@@ -73,14 +73,7 @@ namespace XrmToolBox.New
             ccsb.MergeConnectionsFiles = Options.Instance.MergeConnectionFiles;
 
             WelcomeDialog.SetStatus("Loading tools...");
-            try
-            {
-                pluginsForm = new PluginsForm();
-            }
-            catch
-            {
-                // do nothing
-            }
+            pluginsForm = new PluginsForm();
 
             if (pluginsForm != null)
             {

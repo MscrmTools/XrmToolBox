@@ -334,11 +334,15 @@ Current cache folder size: {size}MB";
                     currentList.Add(item);
             }
 
-            Invoke(new Action(() =>
-            {
-                lvPlugins.Items.Clear();
-                lvPlugins.Items.AddRange(currentList.ToArray());
-            }));
+	        if (IsHandleCreated)
+	        {
+		        Invoke(new Action(
+			        () =>
+					{
+						lvPlugins.Items.Clear();
+						lvPlugins.Items.AddRange(currentList.ToArray());
+					}));
+	        }
         }
 
         private Panel GetPropertiesPanelInformation(string label, object value)

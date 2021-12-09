@@ -69,7 +69,7 @@ namespace XrmToolBox
 
             try
             {
-	            RescanIfRequired(() => container.ComposeParts(this));
+	            RescanIfRequired();
             }
             catch (ReflectionTypeLoadException ex)
             {
@@ -102,7 +102,7 @@ namespace XrmToolBox
             }
         }
 
-	    private void RescanIfRequired(Action compositor)
+	    private void RescanIfRequired()
 	    {
 		    if (Manifest == null)
 		    {
@@ -136,26 +136,39 @@ namespace XrmToolBox
 
 		    if (isRequireScan)
 		    {
-			    LoadParts(compositor);
+			    LoadParts();
 		    }
 	    }
 
-	    private void LoadParts(Action compositor)
+	    private void LoadParts(bool isRetry = false)
 	    {
-		    compositor();
+			try
+			{
+				container.ComposeParts(this);
 
-		    Manifest = ManifestLoader.CreateManifest(PluginsX.ToArray(), directoryCatalog);
-		    ManifestLoader.SaveManifest(Manifest);
-		    Plugins = ManifestLoader.LoadPlugins(Manifest);
+				Manifest = ManifestLoader.CreateManifest(PluginsX.ToArray(), directoryCatalog);
+				ManifestLoader.SaveManifest(Manifest);
+				Plugins = ManifestLoader.LoadPlugins(Manifest);
 
-		    ValidatePlugins();
+				ValidatePlugins();
+			}
+			catch
+			{
+				if (isRetry)
+				{
+					throw;
+				}
+
+				// rarely, an 'empty stack' error is thrown; let's rescan
+				LoadParts(true);
+			}
 	    }
 
 	    public void Recompose()
         {
             try
             {
-                RescanIfRequired(() => container.ComposeParts(directoryCatalog.Parts));
+                RescanIfRequired();
             }
             catch (ReflectionTypeLoadException e)
             {
