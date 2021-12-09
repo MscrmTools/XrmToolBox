@@ -274,8 +274,8 @@ namespace XrmToolBox.New
         private void CreateModel<T>(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count)
           where T : PluginModel
         {
-            var name = plugin.Metadata.AssemblyQualifiedName;
-            var pm = (T)pluginsModels.FirstOrDefault(t => ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)t.Tag).Metadata.AssemblyQualifiedName == name && t is T);
+            var pluginType = plugin.Metadata.PluginType;
+            var pm = (T)pluginsModels.FirstOrDefault(t => ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)t.Tag).Metadata.PluginType == pluginType && t is T);
             var small = (typeof(T) == typeof(SmallPluginModel));
 
             if (pm == null)
