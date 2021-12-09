@@ -87,7 +87,7 @@ Current cache folder size: {size}MB";
 
                 if (reload)
                 {
-                    store.LoadToolsList();
+                    store.LoadToolsList().Wait();
                 }
                 var xtbPackages = store.XrmToolBoxPlugins.Plugins.OrderBy(p => p.Name);
 
@@ -334,11 +334,15 @@ Current cache folder size: {size}MB";
                     currentList.Add(item);
             }
 
-            Invoke(new Action(() =>
-            {
-                lvPlugins.Items.Clear();
-                lvPlugins.Items.AddRange(currentList.ToArray());
-            }));
+	        if (IsHandleCreated)
+	        {
+		        Invoke(new Action(
+			        () =>
+					{
+						lvPlugins.Items.Clear();
+						lvPlugins.Items.AddRange(currentList.ToArray());
+					}));
+	        }
         }
 
         private Panel GetPropertiesPanelInformation(string label, object value)

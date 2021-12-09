@@ -73,14 +73,7 @@ namespace XrmToolBox.New
             ccsb.MergeConnectionsFiles = Options.Instance.MergeConnectionFiles;
 
             WelcomeDialog.SetStatus("Loading tools...");
-            try
-            {
-                pluginsForm = new PluginsForm();
-            }
-            catch
-            {
-                // do nothing
-            }
+            pluginsForm = new PluginsForm();
 
             if (pluginsForm != null)
             {
@@ -357,7 +350,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
                 if (store.PluginsCount == 0)
                 {
-                    store.LoadToolsList(false);
+                    await store.LoadToolsList(false);
                 }
 
                 if (Options.Instance.ShowPluginUpdatesPanelAtStartup)
@@ -382,7 +375,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     {
                         if (store.PluginsCount == 0)
                         {
-                            store.LoadToolsList(false);
+                            await store.LoadToolsList(false);
                         }
 
                         if (store.HasUpdates)
@@ -429,7 +422,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     {
                         foreach (var tool in PluginManagerExtended.Instance.Plugins)
                         {
-                            var assemblyFile = Path.GetFileName(tool.Value.GetType().Assembly.Location);
+                            var assemblyFile = Path.GetFileName(tool.Metadata.AssemblyFilename);
                             if (assemblyFile.ToLower() == Path.GetFileName(file).ToLower())
                             {
                                 dico[category].Add(tool.Metadata.Name);
@@ -685,10 +678,10 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 }
 
                 var pluginInOption =
-                    Options.Instance.MostUsedList.FirstOrDefault(i => i.Name == plugin.Value.GetType().FullName);
+                    Options.Instance.MostUsedList.FirstOrDefault(i => i.Name == plugin.Metadata.PluginType);
                 if (pluginInOption == null)
                 {
-                    pluginInOption = new PluginUseCount { Name = plugin.Value.GetType().FullName, Count = 0 };
+                    pluginInOption = new PluginUseCount { Name = plugin.Metadata.PluginType, Count = 0 };
                     Options.Instance.MostUsedList.Add(pluginInOption);
                 }
 
@@ -747,7 +740,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
                 if (!(pluginControl is IPrivatePlugin))
                 {
-                    ai.WritePageView(plugin.Metadata.Name, plugin.Value.GetVersion());
+                    ai.WritePageView(plugin.Metadata.Name, plugin.Metadata.Version);
                 }
 
                 Options.Instance.Save();
@@ -786,9 +779,15 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
         private void PluginsForm_OpenPluginProjectUrlRequested(object sender, PluginEventArgs e)
         {
             var type = e.PluginControl?.GetType();
+
             if (type == null)
             {
-                type = e.Plugin?.Value?.GetType();
+	            type = e.Plugin == null
+		            ? null
+		            : AppDomain.CurrentDomain.GetAssemblies()
+			            .First(a => a.FullName == e.Plugin.Metadata.AssemblyQualifiedName)
+			            .GetType(e.Plugin.Metadata.PluginType);
+
                 if (type == null)
                 {
                     MessageBox.Show(this, @"Unable to determine tool location on disk");
@@ -827,7 +826,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
         {
             if (store != null && store.PluginsCount > 0)
             {
-                var location = e.Plugin.Value.GetType().Assembly.Location;
+                var location = e.Plugin.Metadata.AssemblyFilename;
 
                 var updatedPlugin = store.GetPluginUpdateByFile(location);
                 if (updatedPlugin != null)
@@ -884,7 +883,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 return;
             }
 
-            if (e.Plugin.Value is INoConnectionRequired)
+            if (e.Plugin.Metadata.Interfaces.Contains(nameof(INoConnectionRequired)))
             {
                 var ctrl = DisplayPluginControl(e.Plugin);
                 if (ctrl is IDuplicatableTool dt && e.SourceTool != null)
@@ -942,7 +941,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 return;
             }
 
-            var filePath = Assembly.GetAssembly(e.PluginControl?.GetType() ?? e.Plugin.Value.GetType()).Location;
+            var filePath = e.Plugin.Metadata.AssemblyFilename;
             if (File.Exists(filePath))
             {
                 var fileName = Path.GetFileName(filePath);
@@ -1293,7 +1292,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
             if (Guid.TryParse(name, out Guid pluginId) && !pluginId.Equals(Guid.Empty))
             {
                 var expectedPlugin = PluginManagerExtended.Instance.Plugins.FirstOrDefault(p =>
-                    p.Value is PluginBase pb && pb.GetId().Equals(pluginId));
+                    p.Metadata.Id.Equals(pluginId));
 
                 if (expectedPlugin != null)
                 {

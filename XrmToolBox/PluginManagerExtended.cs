@@ -6,8 +6,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
+using XrmToolBox.Extensibility.Manifest;
 using XrmToolBox.New;
 
 namespace XrmToolBox
@@ -35,7 +37,10 @@ namespace XrmToolBox
         public bool IsWatchingForNewPlugins { get; set; }
 
         [ImportMany(AllowRecomposition = true)]
-        public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> Plugins { get; set; }
+        public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginComposedMetadata>> PluginsX { get; set; }
+
+        public Manifest Manifest { get; set; }
+        public IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> Plugins { get; set; }
 
         public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> ValidatedPlugins
         {
@@ -57,15 +62,14 @@ namespace XrmToolBox
             };
             watcher.Created += watcher_EventRaised;
 
+	        directoryCatalog = new DirectoryCatalog(PluginPath);
+	        var catalog = new AggregateCatalog();
+	        catalog.Catalogs.Add(directoryCatalog);
+	        container = new CompositionContainer(catalog);
+
             try
             {
-                directoryCatalog = new DirectoryCatalog(PluginPath);
-
-                var catalog = new AggregateCatalog();
-                catalog.Catalogs.Add(directoryCatalog);
-                container = new CompositionContainer(catalog);
-                container.ComposeParts(this);
-                ValidatePlugins();
+	            RescanIfRequired();
             }
             catch (ReflectionTypeLoadException ex)
             {
@@ -98,13 +102,73 @@ namespace XrmToolBox
             }
         }
 
-        public void Recompose()
+	    private void RescanIfRequired()
+	    {
+		    if (Manifest == null)
+		    {
+			    Manifest = ManifestLoader.LoadDefaultManifest();
+			    Plugins = ManifestLoader.LoadPlugins(Manifest);
+		    }
+
+		    directoryCatalog.Refresh();
+
+		    var loadedFiles = directoryCatalog.LoadedFiles;
+		    var scannedFiles = Manifest?.ScannedAssemblies ?? Array.Empty<AssemblyInfo>();
+		    var isRequireScan = loadedFiles.Count != scannedFiles.Length;
+
+		    if (!isRequireScan)
+		    {
+			    for (var i = 0; i < loadedFiles.Count; i++)
+			    {
+				    var loadedFileName = loadedFiles[i].ToLower();
+				    var scannedFile = scannedFiles[i];
+
+				    var loadedVersion = AssemblyName.GetAssemblyName(loadedFileName).Version.ToString();
+				    var scannedVersion = scannedFile.Version;
+
+				    if (loadedFileName != scannedFile.Name.ToLower() || loadedVersion != scannedVersion)
+				    {
+					    isRequireScan = true;
+					    break;
+				    }
+			    }
+		    }
+
+		    if (isRequireScan)
+		    {
+			    LoadParts();
+		    }
+	    }
+
+	    private void LoadParts(bool isRetry = false)
+	    {
+			try
+			{
+				container.ComposeParts(this);
+
+				Manifest = ManifestLoader.CreateManifest(PluginsX.ToArray(), directoryCatalog);
+				ManifestLoader.SaveManifest(Manifest);
+				Plugins = ManifestLoader.LoadPlugins(Manifest);
+
+				ValidatePlugins();
+			}
+			catch
+			{
+				if (isRetry)
+				{
+					throw;
+				}
+
+				// rarely, an 'empty stack' error is thrown; let's rescan
+				LoadParts(true);
+			}
+	    }
+
+	    public void Recompose()
         {
             try
             {
-                directoryCatalog.Refresh();
-                container.ComposeParts(directoryCatalog.Parts);
-                ValidatePlugins();
+                RescanIfRequired();
             }
             catch (ReflectionTypeLoadException e)
             {
@@ -134,7 +198,7 @@ namespace XrmToolBox
                 try
                 {
                     // ReSharper disable once UnusedVariable
-                    var value = plugin.Value;
+                    //var value = plugin.Value; // TODO add validation somewhere!
                 }
                 catch (Exception e)
                 {

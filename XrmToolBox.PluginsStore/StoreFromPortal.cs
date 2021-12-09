@@ -17,6 +17,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Manifest;
 using XrmToolBox.PluginsStore.DTO;
 
 namespace XrmToolBox.PluginsStore
@@ -133,17 +134,23 @@ namespace XrmToolBox.PluginsStore
             findPackageById = await repository.GetResourceAsync<FindPackageByIdResource>();
         }
 
-        public void LoadToolsList(bool fromStorePortal = true)
+        public async Task LoadToolsList(bool fromStorePortal = true)
         {
             plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
             XrmToolBoxPlugins = new XtbPlugins();
-            string url = "https://www.xrmtoolbox.com/_odata/plugins";
-            do
-            {
-                var tmpPlugins = GetContent<XtbPlugins>(url, fromStorePortal);
-                XrmToolBoxPlugins.Plugins.AddRange(tmpPlugins.Plugins);
-                url = tmpPlugins.NextLink;
-            } while (url != null);
+
+	        await Task.Run(
+		        () =>
+				{
+					string url = "https://www.xrmtoolbox.com/_odata/plugins";
+					do
+					{
+						var tmpPlugins = GetContent<XtbPlugins>(url, fromStorePortal);
+						XrmToolBoxPlugins.Plugins.AddRange(tmpPlugins.Plugins);
+						url = tmpPlugins.NextLink;
+					}
+					while (url != null);
+				});
 
             Categories = XrmToolBoxPlugins.Plugins
                 .Where(p => p.CategoriesList != null)
@@ -152,11 +159,12 @@ namespace XrmToolBox.PluginsStore
                 .OrderByDescending(s => s)
                 .ToList();
 
-            foreach (var plugin in XrmToolBoxPlugins.Plugins)
-            {
-                AnalyzePackage(plugin);
-                plugin.Compatibilty = IsPluginDependencyCompatible(new Version(plugin.MinimalXrmToolBoxVersion));
-            }
+	        Parallel.ForEach(XrmToolBoxPlugins.Plugins,
+		        plugin =>
+				{
+					AnalyzePackage(plugin);
+					plugin.Compatibilty = IsPluginDependencyCompatible(new Version(plugin.MinimalXrmToolBoxVersion));
+				});
         }
 
         #region Connection controls installation
@@ -463,6 +471,8 @@ namespace XrmToolBox.PluginsStore
             var currentVersion = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);
             var currentVersionFound = false;
 
+	        var manifest = ManifestLoader.LoadDefaultManifest();
+
             foreach (var file in files)
             {
                 if (Path.GetFileName(file).Length == 0)
@@ -485,23 +495,25 @@ namespace XrmToolBox.PluginsStore
                     }
                     else
                     {
+	                    var pluginInfo = manifest.PluginMetadata
+							.FirstOrDefault(p => p.AssemblyFilename.ToLower() == existingPluginFile.FullName.ToLower());
+
                         // If a file is found, we check version only if the file
                         // contains classes that implement IXrmToolBoxPlugin
-                        if (!existingPluginFile.ImplementsXrmToolBoxPlugin())
+                        if (pluginInfo == null)
                         {
                             otherFilesFound = true;
                             continue;
                         }
 
-                        var fileVersionInfo = FileVersionInfo.GetVersionInfo(existingPluginFile.FullName);
-                        var fileVersion = new Version(fileVersionInfo.FileMajorPart, fileVersionInfo.FileMinorPart, fileVersionInfo.FileBuildPart, fileVersionInfo.FilePrivatePart);
+                        var existingFileVersion = new Version(pluginInfo.Version);
 
-                        var existingFileVersion = fileVersion;
                         if (existingFileVersion < currentVersion)
                         {
                             currentVersion = existingFileVersion;
                             currentVersionFound = true;
                         }
+
                         if (existingFileVersion < new Version(plugin.Version))
                         {
                             update = true;
@@ -715,7 +727,7 @@ namespace XrmToolBox.PluginsStore
         {
             if (XrmToolBoxPlugins == null)
             {
-                LoadToolsList();
+                LoadToolsList().Wait();
             }
 
             return XrmToolBoxPlugins.Plugins.FirstOrDefault(p => p.Files.Any(f => f.ToLower().IndexOf(filename.ToLower(), StringComparison.Ordinal) >= 0));
