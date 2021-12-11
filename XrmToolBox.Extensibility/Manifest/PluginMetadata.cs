@@ -2,9 +2,8 @@
 // Project / File: XrmToolBox / XrmToolBox.Extensibility / PluginMetadata.cs
 //         Author: Ahmed Elsawalhy (yagasoft.com)
 //   Contributors:
-//        Version: 1.2021.9.52
+//        Version: 1.2021.12.53
 //        Created: 2021 / 09 / 19
-//       Modified: 2021 / 09 / 19
 #endregion
 
 #region Imports
@@ -16,7 +15,7 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace XrmToolBox.Extensibility.Manifest
 {
-	public class PluginMetadata : IPluginMetadata
+	public class PluginMetadata : IPluginMetadataExt
 	{
 		public string Name { get; set; }
 		public string BackgroundColor { get; set; }

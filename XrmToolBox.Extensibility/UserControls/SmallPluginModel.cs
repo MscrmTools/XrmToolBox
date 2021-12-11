@@ -73,7 +73,7 @@ namespace XrmToolBox.Extensibility.UserControls
 
         private void SmallPluginModel_Paint(object sender, PaintEventArgs e)
         {
-            var time = new FileInfo(((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)Tag).Metadata.AssemblyFilename)
+            var time = new FileInfo(((Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)Tag).Metadata.AssemblyFilename)
                 .CreationTime;
 
             var ctrl = (Control)sender;

@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-using Newtonsoft.Json;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.Manifest;
@@ -36,15 +35,26 @@ namespace XrmToolBox
         public static PluginManagerExtended Instance => instance ?? (instance = new PluginManagerExtended());
         public bool IsWatchingForNewPlugins { get; set; }
 
-        [ImportMany(AllowRecomposition = true)]
-        public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginComposedMetadata>> PluginsX { get; set; }
+        /// <summary>
+        /// [DEPRECATED] This property should not be used anymore; it was replace by <see cref="PluginsExt"/>.
+        /// </summary>
+        [Obsolete]
+		[ImportMany(AllowRecomposition = true)]
+        public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> Plugins { get; set; }
 
+	    /// <summary>
+	    /// Contains all the info of plugins installed and the list of assemblies in the Plugins folder.
+	    /// </summary>
         public Manifest Manifest { get; set; }
-        public IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> Plugins { get; set; }
 
-        public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> ValidatedPlugins
+        /// <summary>
+        /// Contains all the info of plugins installed and a factory method to create each plugin when needed.
+        /// </summary>
+        public IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>> PluginsExt { get; set; }
+
+        public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>> ValidatedPlugins
         {
-            get { return Plugins?.Where(p => !ValidationErrors.ContainsKey(p.Metadata.Name)); }
+            get { return PluginsExt?.Where(p => !ValidationErrors.ContainsKey(p.Metadata.Name)); }
         }
 
         public Dictionary<string, string> ValidationErrors { get; set; }
@@ -107,7 +117,7 @@ namespace XrmToolBox
 		    if (Manifest == null)
 		    {
 			    Manifest = ManifestLoader.LoadDefaultManifest();
-			    Plugins = ManifestLoader.LoadPlugins(Manifest);
+			    PluginsExt = ManifestLoader.LoadPlugins(Manifest);
 		    }
 
 		    directoryCatalog.Refresh();
@@ -146,9 +156,9 @@ namespace XrmToolBox
 			{
 				container.ComposeParts(this);
 
-				Manifest = ManifestLoader.CreateManifest(PluginsX.ToArray(), directoryCatalog);
+				Manifest = ManifestLoader.CreateManifest(Plugins.ToArray(), directoryCatalog);
 				ManifestLoader.SaveManifest(Manifest);
-				Plugins = ManifestLoader.LoadPlugins(Manifest);
+				PluginsExt = ManifestLoader.LoadPlugins(Manifest);
 
 				ValidatePlugins();
 			}
@@ -193,7 +203,7 @@ namespace XrmToolBox
         {
             ValidationErrors = new Dictionary<string, string>();
 
-            foreach (var plugin in Plugins)
+            foreach (var plugin in PluginsExt)
             {
                 try
                 {

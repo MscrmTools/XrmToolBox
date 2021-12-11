@@ -42,7 +42,7 @@ namespace XrmToolBox.New
             {
                 foreach (var mru in MostRecentlyUsedItems.Instance.Items.OrderBy(i => i.Date))
                 {
-                    var plugin = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == mru.PluginName);
+                    var plugin = pManager.PluginsExt.FirstOrDefault(p => p.Metadata.Name == mru.PluginName);
                     if (plugin != null)
                     {
                         var ctrl = new MostRecentlyUsedItemControl(plugin.Metadata.BigImageBase64, mru);
@@ -64,7 +64,7 @@ namespace XrmToolBox.New
                 list.Clear();
                 foreach (var fav in Favorites.Instance.Items.OrderByDescending(i => i.PluginName))
                 {
-                    var plugin = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == fav.PluginName);
+                    var plugin = pManager.PluginsExt.FirstOrDefault(p => p.Metadata.Name == fav.PluginName);
                     if (plugin != null)
                     {
                         var ctrl = new FavoriteControl(plugin.Metadata.BigImageBase64, fav);

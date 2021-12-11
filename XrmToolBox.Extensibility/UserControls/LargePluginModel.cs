@@ -68,7 +68,7 @@ namespace XrmToolBox.Extensibility.UserControls
 
         private void LargePluginModel_Paint(object sender, PaintEventArgs e)
         {
-            var time = new FileInfo(((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)Tag).Metadata.AssemblyFilename).CreationTime;
+            var time = new FileInfo(((Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)Tag).Metadata.AssemblyFilename).CreationTime;
 
             var ctrl = (Control)sender;
             if (DateTime.Now - time < new TimeSpan(numberOfDaysToShowNewRibbon, 0, 0, 0))
