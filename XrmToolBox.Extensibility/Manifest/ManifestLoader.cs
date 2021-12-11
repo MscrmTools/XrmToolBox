@@ -94,16 +94,22 @@ namespace XrmToolBox.Extensibility.Manifest
         }
 
         public static IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>> LoadPlugins(Manifest manifest)
-        {
+		{
+            return LoadPlugins<IPluginMetadataExt>(manifest);
+        }
+
+        public static IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, TPluginsMetadata>> LoadPlugins<TPluginsMetadata>(Manifest manifest)
+			where TPluginsMetadata : IPluginMetadata
+		{
             return manifest?.PluginMetadata
                 .Select(p =>
-                    new Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>(
+                    new Lazy<IXrmToolBoxPlugin, TPluginsMetadata>(
                         () =>
                         {
                             return Activator.CreateInstance(AppDomain.CurrentDomain.GetAssemblies()
                                 .First(a => a.FullName == p.AssemblyQualifiedName).GetType(p.PluginType)) as IXrmToolBoxPlugin;
                         },
-                        p)).ToArray();
+                        (TPluginsMetadata)(object)p)).ToArray();
         }
 
         public static IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>> LoadPluginsDefault()

@@ -148,6 +148,11 @@ namespace XrmToolBox
 		    {
 			    LoadParts();
 		    }
+
+		    if (Plugins == null)
+		    {
+			    Plugins = ManifestLoader.LoadPlugins<IPluginMetadata>(Manifest);
+		    }
 	    }
 
 	    private void LoadParts(bool isRetry = false)
