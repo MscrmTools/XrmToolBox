@@ -3,9 +3,8 @@
 // Project / File: XrmToolBox / XrmToolBox.Extensibility / ManifestLoader.cs
 //         Author: Ahmed Elsawalhy (yagasoft.com)
 //   Contributors:
-//        Version: 1.2021.9.52
+//        Version: 1.2021.12.53
 //        Created: 2021 / 09 / 19
-//       Modified: 2021 / 09 / 19
 
 #endregion
 
@@ -36,9 +35,10 @@ namespace XrmToolBox.Extensibility.Manifest
             return new Manifest();
         }
 
-        public static Manifest CreateManifest(IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginComposedMetadata>> composition,
+        public static Manifest CreateManifest(IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> composition,
             DirectoryCatalog catalogue)
         {
+            // TODO - use a lightweight auto-mapper to quickly map similarly named properties without the need for maintaining this part of the code
             var pluginMetadata = composition.AsParallel()
                 .Select(p =>
                     new PluginMetadata
@@ -93,20 +93,26 @@ namespace XrmToolBox.Extensibility.Manifest
             return cachedManifest;
         }
 
-        public static IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> LoadPlugins(Manifest manifest)
-        {
+        public static IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>> LoadPlugins(Manifest manifest)
+		{
+            return LoadPlugins<IPluginMetadataExt>(manifest);
+        }
+
+        public static IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, TPluginsMetadata>> LoadPlugins<TPluginsMetadata>(Manifest manifest)
+			where TPluginsMetadata : IPluginMetadata
+		{
             return manifest?.PluginMetadata
                 .Select(p =>
-                    new Lazy<IXrmToolBoxPlugin, IPluginMetadata>(
+                    new Lazy<IXrmToolBoxPlugin, TPluginsMetadata>(
                         () =>
                         {
                             return Activator.CreateInstance(AppDomain.CurrentDomain.GetAssemblies()
                                 .First(a => a.FullName == p.AssemblyQualifiedName).GetType(p.PluginType)) as IXrmToolBoxPlugin;
                         },
-                        p)).ToArray();
+                        (TPluginsMetadata)(object)p)).ToArray();
         }
 
-        public static IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> LoadPluginsDefault()
+        public static IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>> LoadPluginsDefault()
         {
             return LoadPlugins(LoadDefaultManifest());
         }

@@ -21,7 +21,7 @@ namespace XrmToolBox.Forms
 
         private void DonationIntroForm_Load(object sender, EventArgs e)
         {
-            var plugins = PluginManagerExtended.Instance.Plugins
+            var plugins = PluginManagerExtended.Instance.PluginsExt
 				.Where(p => p.Metadata.Interfaces.Contains(nameof(IPayPalPlugin)));
 
             cbbTools.Items.AddRange(plugins.Select(p => p.Metadata.Name).ToArray());
@@ -56,7 +56,7 @@ namespace XrmToolBox.Forms
                     return;
                 }
 
-                var tool = PluginManagerExtended.Instance.Plugins.FirstOrDefault(
+                var tool = PluginManagerExtended.Instance.PluginsExt.FirstOrDefault(
                     p => p.Metadata.Name == item.ToString());
 
                 if (tool == null)

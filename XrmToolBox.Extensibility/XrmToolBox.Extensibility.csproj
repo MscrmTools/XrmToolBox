@@ -186,7 +186,7 @@
     <Compile Include="Interfaces\IHelpPlugin.cs" />
     <Compile Include="Interfaces\IMessageBusHost.cs" />
     <Compile Include="Interfaces\INoConnectionRequired.cs" />
-    <Compile Include="Interfaces\IPluginComposedMetadata.cs" />
+    <Compile Include="Interfaces\IPluginMetadata.cs" />
     <Compile Include="Interfaces\ISettingsPlugin.cs" />
     <Compile Include="Interfaces\IShortcutReceiver.cs" />
     <Compile Include="Interfaces\IPrivatePlugin.cs" />
@@ -194,7 +194,7 @@
     <Compile Include="Interfaces\IStatusBarMessager.cs" />
     <Compile Include="Interfaces\IXrmToolBoxPluginControl.cs" />
     <Compile Include="Interfaces\IPayPalPlugin.cs" />
-    <Compile Include="Interfaces\IPluginMetadata.cs" />
+    <Compile Include="Interfaces\IPluginMetadataExt.cs" />
     <Compile Include="Interfaces\IWorkerHost.cs" />
     <Compile Include="Interfaces\IXrmToolBoxPlugin.cs" />
     <Compile Include="Args\MessageBusEventArgs.cs" />

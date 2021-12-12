@@ -420,7 +420,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
                     foreach (var file in plugin.Files)
                     {
-                        foreach (var tool in PluginManagerExtended.Instance.Plugins)
+                        foreach (var tool in PluginManagerExtended.Instance.PluginsExt)
                         {
                             var assemblyFile = Path.GetFileName(tool.Metadata.AssemblyFilename);
                             if (assemblyFile.ToLower() == Path.GetFileName(file).ToLower())
@@ -543,7 +543,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 if (MessageBox.Show(this, "The connection specified cannot be found. Would you like to use another connection instead?",
                     "Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    var plugin = pluginsForm.PluginManager.Plugins.First(p => p.Metadata.Name == e.Item.PluginName);
+                    var plugin = pluginsForm.PluginManager.PluginsExt.First(p => p.Metadata.Name == e.Item.PluginName);
 
                     ConnectUponApproval(new RequestConnectionEventArgs { Parameter = plugin });
                 }
@@ -566,7 +566,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
         #region Plugins Form events
 
-        private UserControl DisplayPluginControl(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, bool displayConnected = true)
+        private UserControl DisplayPluginControl(Lazy<IXrmToolBoxPlugin, IPluginMetadataExt> plugin, bool displayConnected = true)
         {
             Guid pluginControlInstanceId = Guid.NewGuid();
             UserControl pluginControl = null;
@@ -1082,7 +1082,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                       if (parameter != null)
                       {
                           var us = parameter.ConnectionParmater as UserControl;
-                          var p = parameter.ConnectionParmater as Lazy<IXrmToolBoxPlugin, IPluginMetadata>;
+                          var p = parameter.ConnectionParmater as Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>;
                           var rcea = parameter.ConnectionParmater as RequestConnectionEventArgs;
                           var dtwc = parameter.ConnectionParmater as DuplicateToolWithConnectionArgs;
 
@@ -1093,7 +1093,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                               connectionDetail = e.ConnectionDetail;
                               service = e.OrganizationService;
 
-                              if (!(us.Tag is Lazy<IXrmToolBoxPlugin, IPluginMetadata> pluginModel))
+                              if (!(us.Tag is Lazy<IXrmToolBoxPlugin, IPluginMetadataExt> pluginModel))
                               {
                                   // Actual Plugin was passed, Just update the plugin's Tab.
                                   UpdateTabConnection((PluginForm)us.ParentForm, e.ConnectionDetail);
@@ -1123,7 +1123,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                           }
                           else if (rcea != null)
                           {
-                              if (rcea.Parameter is Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin)
+                              if (rcea.Parameter is Lazy<IXrmToolBoxPlugin, IPluginMetadataExt> plugin)
                               {
                                   ccsb.SetConnectionStatus(true, e.ConnectionDetail);
                                   ccsb.SetMessage(string.Empty);
@@ -1291,7 +1291,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
         {
             if (Guid.TryParse(name, out Guid pluginId) && !pluginId.Equals(Guid.Empty))
             {
-                var expectedPlugin = PluginManagerExtended.Instance.Plugins.FirstOrDefault(p =>
+                var expectedPlugin = PluginManagerExtended.Instance.PluginsExt.FirstOrDefault(p =>
                     p.Metadata.Id.Equals(pluginId));
 
                 if (expectedPlugin != null)

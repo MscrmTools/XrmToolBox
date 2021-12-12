@@ -242,7 +242,7 @@ namespace MsCrmTools.SampleTool
 
         private void btnCheckMultiSample_Click(object sender, EventArgs e)
         {
-            var expectedPlugin = PluginManagerExtended.Instance.Plugins.FirstOrDefault(p =>
+            var expectedPlugin = PluginManagerExtended.Instance.PluginsExt.FirstOrDefault(p =>
                 p.Metadata.Id == Guid.Parse("{64A4E4E3-CAF9-4896-983A-341A297DEAF3}")
             );
 

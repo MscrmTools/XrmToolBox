@@ -10,7 +10,7 @@ namespace XrmToolBox.Forms
         {
             InitializeComponent();
 
-            foreach (var plugin in PluginManagerExtended.Instance.Plugins)
+            foreach (var plugin in PluginManagerExtended.Instance.PluginsExt)
             {
                 try
                 {

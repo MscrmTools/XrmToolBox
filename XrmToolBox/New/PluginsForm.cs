@@ -150,7 +150,7 @@ namespace XrmToolBox.New
             pluginsModels.Clear();
 
             txtSearch.AutoCompleteCustomSource.Clear();
-            txtSearch.AutoCompleteCustomSource.AddRange(PluginManager.Plugins.Where(p => !Options.Instance.HiddenPlugins.Contains(p.Metadata.Name)).Select(p => p.Metadata.Name).ToArray());
+            txtSearch.AutoCompleteCustomSource.AddRange(PluginManager.PluginsExt.Where(p => !Options.Instance.HiddenPlugins.Contains(p.Metadata.Name)).Select(p => p.Metadata.Name).ToArray());
 
             DisplayPlugins(filterText);
         }
@@ -192,7 +192,7 @@ namespace XrmToolBox.New
             return ctl.VerticalScroll.Visible ? ScrollBars.Vertical : ScrollBars.None;
         }
 
-        private static bool PluginFinderByIdOrName(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, string identifier)
+        private static bool PluginFinderByIdOrName(Lazy<IXrmToolBoxPlugin, IPluginMetadataExt> plugin, string identifier)
         {
             if (Guid.TryParse(identifier, out Guid pluginid) && !pluginid.Equals(Guid.Empty))
             {
@@ -238,7 +238,7 @@ namespace XrmToolBox.New
 
         private void cmsOnePlugin_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)selectedPluginModel.Tag;
+            var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)selectedPluginModel.Tag;
 
             if (e.ClickedItem == tsmiOpenProjectHomePage)
             {
@@ -271,11 +271,11 @@ namespace XrmToolBox.New
             }
         }
 
-        private void CreateModel<T>(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count)
+        private void CreateModel<T>(Lazy<IXrmToolBoxPlugin, IPluginMetadataExt> plugin, ref int top, int width, int count)
           where T : PluginModel
         {
             var pluginType = plugin.Metadata.PluginType;
-            var pm = (T)pluginsModels.FirstOrDefault(t => ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)t.Tag).Metadata.PluginType == pluginType && t is T);
+            var pm = (T)pluginsModels.FirstOrDefault(t => ((Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)t.Tag).Metadata.PluginType == pluginType && t is T);
             var small = (typeof(T) == typeof(SmallPluginModel));
 
             if (pm == null)
@@ -389,7 +389,7 @@ namespace XrmToolBox.New
             }
         }
 
-        private void DisplayOnePlugin(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin, ref int top, int width, int count = -1)
+        private void DisplayOnePlugin(Lazy<IXrmToolBoxPlugin, IPluginMetadataExt> plugin, ref int top, int width, int count = -1)
         {
             if (Options.Instance.IconDisplayMode == DisplayIcons.Large)
             {
@@ -449,7 +449,7 @@ namespace XrmToolBox.New
 
             var availablePlugins = pluginsManager.ValidatedPlugins;
 
-            var list = new List<Lazy<IXrmToolBoxPlugin, IPluginMetadata>>();
+            var list = new List<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>>();
             foreach (var category in categories)
             {
                 var matchingPlugins = pluginsManager.ValidatedPlugins.Where(p => categoriesList
@@ -562,7 +562,7 @@ namespace XrmToolBox.New
             {
                 pnlPlugins.Controls.Clear();
 
-                var pluginsToDisplay = pluginsModels.Where(p => filteredPlugins.Contains((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)p.Tag)).ToList();
+                var pluginsToDisplay = pluginsModels.Where(p => filteredPlugins.Contains((Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)p.Tag)).ToList();
 
                 foreach (PluginModel ctrl in pluginsToDisplay)
                 {
@@ -673,7 +673,7 @@ namespace XrmToolBox.New
         {
             DisplayPlugins();
 
-            txtSearch.AutoCompleteCustomSource.AddRange(PluginManager.Plugins.Where(p => !Options.Instance.HiddenPlugins.Contains(p.Metadata.Name)).Select(p => p.Metadata.Name).ToArray());
+            txtSearch.AutoCompleteCustomSource.AddRange(PluginManager.PluginsExt.Where(p => !Options.Instance.HiddenPlugins.Contains(p.Metadata.Name)).Select(p => p.Metadata.Name).ToArray());
         }
 
         private void Pm_Clicked(object sender, MouseEventArgs e)
@@ -700,7 +700,7 @@ namespace XrmToolBox.New
             pluginsModels.Clear();
             DisplayPlugins(filterText);
 
-            txtSearch.AutoCompleteCustomSource.AddRange(PluginManager.Plugins.Where(p => !Options.Instance.HiddenPlugins.Contains(p.Metadata.Name)).Select(p => p.Metadata.Name).ToArray());
+            txtSearch.AutoCompleteCustomSource.AddRange(PluginManager.PluginsExt.Where(p => !Options.Instance.HiddenPlugins.Contains(p.Metadata.Name)).Select(p => p.Metadata.Name).ToArray());
 
             if (pluginsManager.ValidationErrors.Count > 0)
             {
