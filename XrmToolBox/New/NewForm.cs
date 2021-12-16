@@ -634,7 +634,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                         var pluginName = ((PluginForm)((PluginControlBase)sender).ParentForm).PluginName;
                         if (e.NewConnection)
                         {
-                            var pluginToDuplicate = pluginsForm.PluginManager.ValidatedPlugins.FirstOrDefault(p => p.Metadata.Name == pluginName);
+                            var pluginToDuplicate = pluginsForm.PluginManager.ValidatedPluginsExt.FirstOrDefault(p => p.Metadata.Name == pluginName);
 
                             if (((PluginForm)dpMain.ActiveContent).Control is IDuplicatableTool dt)
                             {
@@ -1754,7 +1754,7 @@ Would you like to reinstall last stable release of connection controls?";
             else if (e.ClickedItem == cmsMainDuplicateToolWithConnection)
             {
                 var pluginName = ((PluginForm)dpMain.ActiveContent).PluginName;
-                var plugin = pluginsForm.PluginManager.ValidatedPlugins.FirstOrDefault(p => p.Metadata.Name == pluginName);
+                var plugin = pluginsForm.PluginManager.ValidatedPluginsExt.FirstOrDefault(p => p.Metadata.Name == pluginName);
 
                 if (((PluginForm)dpMain.ActiveContent).Control is IDuplicatableTool dt)
                 {

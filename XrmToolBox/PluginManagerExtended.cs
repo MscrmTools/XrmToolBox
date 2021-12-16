@@ -52,7 +52,15 @@ namespace XrmToolBox
         /// </summary>
         public IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>> PluginsExt { get; set; }
 
-        public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>> ValidatedPlugins
+	    /// <summary>
+	    /// [DEPRECATED] This property should not be used anymore; it was replace by <see cref="ValidatedPluginsExt"/>.
+	    /// </summary>
+	    public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> ValidatedPlugins
+	    {
+		    get { return Plugins?.Where(p => !ValidationErrors.ContainsKey(p.Metadata.Name)); }
+	    }
+
+        public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>> ValidatedPluginsExt
         {
             get { return PluginsExt?.Where(p => !ValidationErrors.ContainsKey(p.Metadata.Name)); }
         }

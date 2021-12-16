@@ -116,7 +116,7 @@ namespace XrmToolBox.New
                 pluginName = e.Item.PluginName;
             }
 
-            var plugin = pluginsManager.ValidatedPlugins.FirstOrDefault(p => p.Metadata.Name == pluginName);
+            var plugin = pluginsManager.ValidatedPluginsExt.FirstOrDefault(p => p.Metadata.Name == pluginName);
             if (plugin == null)
             {
                 var message = $"Tool '{pluginName}' was not found.\n\nYou can install it from the Tool Library";
@@ -133,7 +133,7 @@ namespace XrmToolBox.New
             {
                 pluginName = e.Item.PluginName;
             }
-            var plugin = pluginsManager.ValidatedPlugins.FirstOrDefault(p => PluginFinderByIdOrName(p, pluginName));
+            var plugin = pluginsManager.ValidatedPluginsExt.FirstOrDefault(p => PluginFinderByIdOrName(p, pluginName));
             if (plugin == null)
             {
                 var message = $"Tool '{pluginName}' was not found.\n\nYou can install it from the Tool Library";
@@ -429,7 +429,7 @@ namespace XrmToolBox.New
 					}));
             }
 
-            if (!pluginsManager.ValidatedPlugins?.Any() ?? false)
+            if (!pluginsManager.ValidatedPluginsExt?.Any() ?? false)
             {
                 Invoke(new Action(() =>
                 {
@@ -447,12 +447,12 @@ namespace XrmToolBox.New
                 .Select(ll => ll.Text)
                 .ToList();
 
-            var availablePlugins = pluginsManager.ValidatedPlugins;
+            var availablePlugins = pluginsManager.ValidatedPluginsExt;
 
             var list = new List<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>>();
             foreach (var category in categories)
             {
-                var matchingPlugins = pluginsManager.ValidatedPlugins.Where(p => categoriesList
+                var matchingPlugins = pluginsManager.ValidatedPluginsExt.Where(p => categoriesList
                     .Where(c => category == c.Key)
                     .SelectMany(c => c.Value)
                     .ToList().Contains(p.Metadata.Name)
@@ -734,7 +734,7 @@ namespace XrmToolBox.New
             if (e.KeyData == Keys.Enter)
             {
                 var name = ((TextBox)sender).Text.ToLower();
-                var plugin = pluginsManager.ValidatedPlugins.FirstOrDefault(p => p.Metadata.Name.ToLower().Contains(name));
+                var plugin = pluginsManager.ValidatedPluginsExt.FirstOrDefault(p => p.Metadata.Name.ToLower().Contains(name));
 
                 if (plugin != null)
                 {
