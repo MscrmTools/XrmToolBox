@@ -4,9 +4,12 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Linq;
+using System.Web;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility.Interfaces;
 
@@ -66,6 +69,11 @@ namespace XrmToolBox.Extensibility.UserControls
             lblCount.Text = count.ToString();
         }
 
+        private void LargePluginModel_Load(object sender, EventArgs e)
+        {
+            SetPayPal();
+        }
+
         private void LargePluginModel_Paint(object sender, PaintEventArgs e)
         {
             var time = new FileInfo(((Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)Tag).Metadata.AssemblyFilename).CreationTime;
@@ -86,6 +94,12 @@ namespace XrmToolBox.Extensibility.UserControls
 
                 DrawRotatedTextAt(e.Graphics, 45, "NEW", ctrl.Width - ctrl.Height / 2, 15, new Font(new FontFamily("Segoe UI"), 12),
                     new SolidBrush(Color.White));
+
+                pbDonate.Location = new Point(ctrl.Parent.Width - 90, pbDonate.Location.Y);
+            }
+            else
+            {
+                pbDonate.Location = new Point(ctrl.Parent.Width - 40, pbDonate.Location.Y);
             }
         }
 
@@ -97,6 +111,35 @@ namespace XrmToolBox.Extensibility.UserControls
         private new void MouseClick(object sender, MouseEventArgs e)
         {
             Clicked?.Invoke(this, e);
+        }
+
+        private void pbDonate_Click(object sender, EventArgs e)
+        {
+            if (((Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)Tag).Value is IPayPalPlugin pp)
+            {
+                var url = string.Format(
+               "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business={0}&lc={1}&item_name={2}&currency_code={3}&bn=PP%2dDonationsBF",
+               pp.EmailAccount,
+               "EN",
+               HttpUtility.UrlEncode(pp.DonationDescription),
+               "USD");
+
+                Process.Start(url);
+            }
+        }
+
+        private void SetPayPal()
+        {
+            if (((Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)Tag).Metadata.Interfaces.Contains("IPayPalPlugin"))
+            {
+                pbDonate.Visible = true;
+                ToolTip tip = new ToolTip();
+                tip.SetToolTip(pbDonate, "Click here to donate to this tool developer!");
+            }
+            else
+            {
+                pbDonate.Visible = false;
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ namespace XrmToolBox.Extensibility.UserControls
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            Point drawPoint = new Point(0, 0);
+            Point drawPoint = new Point(0, 10);
 
             try
             {
@@ -43,8 +43,8 @@ namespace XrmToolBox.Extensibility.UserControls
                 Size normalSize2 = TextRenderer.MeasureText(thirdPart, normalFont);
 
                 Rectangle normalRect1 = new Rectangle(drawPoint, normalSize1);
-                Rectangle smallRect = new Rectangle(new Point(normalSize1.Width - 10, 5), smallSize);
-                Rectangle normalRect2 = new Rectangle(new Point(smallSize.Width + normalSize1.Width - 20, 0), normalSize2);
+                Rectangle smallRect = new Rectangle(new Point(normalSize1.Width - 10, 15), smallSize);
+                Rectangle normalRect2 = new Rectangle(new Point(smallSize.Width + normalSize1.Width - 20, 10), normalSize2);
 
                 TextRenderer.DrawText(e.Graphics, firstPart, normalFont, normalRect1, primaryFontColor); //ForeColor);
                 TextRenderer.DrawText(e.Graphics, secondPart, smallFont, smallRect, secondaryFontColor);//Color.Gray);

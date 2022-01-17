@@ -4,9 +4,12 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Linq;
+using System.Web;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility.Interfaces;
 using TimeSpan = System.TimeSpan;
@@ -71,8 +74,40 @@ namespace XrmToolBox.Extensibility.UserControls
             Clicked?.Invoke(this, e);
         }
 
+        private void PbDonate_Click(object sender, System.EventArgs e)
+        {
+            if (((Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)Tag).Value is IPayPalPlugin pp)
+            {
+                var url = string.Format(
+               "https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business={0}&lc={1}&item_name={2}&currency_code={3}&bn=PP%2dDonationsBF",
+               pp.EmailAccount,
+               "EN",
+               HttpUtility.UrlEncode(pp.DonationDescription),
+               "USD");
+
+                Process.Start(url);
+            }
+        }
+
+        private void SetPayPal()
+        {
+            if (((Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)Tag).Metadata.Interfaces.Contains("IPayPalPlugin"))
+            {
+                pnlDonate.Visible = true;
+                ToolTip tip = new ToolTip();
+                tip.SetToolTip(pbDonate, "Click here to donate to this tool developer!");
+            }
+        }
+
+        private void SmallPluginModel_Load(object sender, System.EventArgs e)
+        {
+            SetPayPal();
+        }
+
         private void SmallPluginModel_Paint(object sender, PaintEventArgs e)
         {
+            SetPayPal();
+
             var time = new FileInfo(((Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)Tag).Metadata.AssemblyFilename)
                 .CreationTime;
 

@@ -212,6 +212,11 @@
     <Compile Include="PluginNotFoundException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Args\RequestConnectionEventArgs.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SettingsManager.cs" />
     <Compile Include="AdditionalConnections.cs" />
     <Compile Include="UserControls\LargePluginModel.cs">
@@ -246,6 +251,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Icons.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\LargePluginModel.resx">
       <DependentUpon>LargePluginModel.cs</DependentUpon>
     </EmbeddedResource>
@@ -276,6 +285,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\notif_icn_info16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\paypal.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
