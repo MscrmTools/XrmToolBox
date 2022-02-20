@@ -16,23 +16,6 @@ namespace XrmToolBox.Extensibility.Forms
         private string extrainfo;
         private bool allownewissue;
 
-        /// <summary>
-        /// Generic Error Details show a dialog
-        /// </summary>
-        /// <param name="owner">The owner shall be the tool that calles it, usually `this`.</param>
-        /// <param name="exception">Exception or any descendants class</param>
-        /// <param name="heading">Title of the problem the tool want to show. Null = 'Error Detail'</param>
-        /// <param name="extrainfo">If the tool may have more information, this will be used to a new issue.</param>
-        /// <param name="allownewissue">If tool is `IGitHubPlugin` and send this as True new issues can be added by the user.</param>
-        public static void ShowDialog(PluginControlBase owner, Exception exception, string heading = null, string extrainfo = null, bool allownewissue = true)
-        {
-            if (owner == null || exception == null)
-            {
-                return;
-            }
-            new ErrorDetail(owner, exception, heading, extrainfo, allownewissue).ShowDialog(owner);
-        }
-
         public static void CreateNewIssueFromError(PluginControlBase tool, Exception error, string moreinfo)
             => CreateNewIssue(tool, "```\n" + ToTypeString(error) + ":\n" + error.Message + "\n" + error.StackTrace + "\n```", moreinfo);
 
@@ -59,7 +42,7 @@ namespace XrmToolBox.Extensibility.Forms
             Process.Start(url + additionalInfo);
         }
 
-        private ErrorDetail(PluginControlBase owner, Exception exception, string heading, string extrainfo, bool allownewissue)
+        internal ErrorDetail(PluginControlBase owner, Exception exception, string heading, string extrainfo, bool allownewissue)
         {
             this.owner = owner;
             this.exception = exception;

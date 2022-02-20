@@ -284,7 +284,7 @@ namespace MsCrmTools.SampleTool
                 {
                     if (args.Error != null)
                     {
-                        ErrorDetail.ShowDialog(this, args.Error, "Load Traces");
+                        ShowErrorDialog(args.Error, "Loading Accounts");
                     }
                     else
                     {
