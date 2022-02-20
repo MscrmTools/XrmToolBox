@@ -4,12 +4,14 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Linq;
 using System.Windows.Forms;
 using XrmToolBox;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
+using XrmToolBox.Extensibility.Forms;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SampleTool
@@ -269,5 +271,28 @@ namespace MsCrmTools.SampleTool
         }
 
         #endregion IMessageBusHost
+
+        private void btnDoSomethingWrong_Click(object sender, EventArgs e)
+        {
+            var asyncinfo = new WorkAsyncInfo()
+            {
+                Work = (a, args) =>
+                {
+                    args.Result = Service.RetrieveMultiple(new QueryExpression("account_oops"));
+                },
+                PostWorkCallBack = (args) =>
+                {
+                    if (args.Error != null)
+                    {
+                        ErrorDetail.ShowDialog(this, args.Error, "Load Traces");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Tada!");
+                    }
+                }
+            };
+            WorkAsync(asyncinfo);
+        }
     }
 }
