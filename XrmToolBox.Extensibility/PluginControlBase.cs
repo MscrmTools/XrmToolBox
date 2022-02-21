@@ -11,6 +11,7 @@ using System.ComponentModel.Composition;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
+using XrmToolBox.Extensibility.Forms;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.UserControls;
 
@@ -481,5 +482,25 @@ namespace XrmToolBox.Extensibility
         }
 
         #endregion Noticiation zone
+
+        #region Show Error Detail
+
+        /// <summary>
+        /// Generic Error Details show a dialog
+        /// </summary>
+        /// <param name="exception">Exception or any descendants class</param>
+        /// <param name="heading">Title of the problem the tool want to show. Null = 'Error Detail'</param>
+        /// <param name="extrainfo">If the tool may have more information, this will be used to a new issue.</param>
+        /// <param name="allownewissue">If tool is `IGitHubPlugin` and send this as True new issues can be added by the user.</param>
+        public void ShowErrorDialog(Exception exception, string heading = null, string extrainfo = null, bool allownewissue = true)
+        {
+            if (exception == null)
+            {
+                return;
+            }
+            new ErrorDetail(this, exception, heading, extrainfo, allownewissue).ShowDialog(this);
+        }
+
+        #endregion Show Error Detail
     }
 }
