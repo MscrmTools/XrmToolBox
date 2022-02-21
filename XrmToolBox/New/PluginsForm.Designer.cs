@@ -43,6 +43,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiAddToFavorites = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlSearch = new System.Windows.Forms.Panel();
+            this.pbClear = new System.Windows.Forms.PictureBox();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.lblSearch = new System.Windows.Forms.Label();
             this.pnlCategory = new System.Windows.Forms.Panel();
@@ -57,19 +58,17 @@
             this.pnlHelp = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.pbClear = new System.Windows.Forms.PictureBox();
             this.cmsOnePlugin.SuspendLayout();
             this.pnlSearch.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbClear)).BeginInit();
             this.pnlMain.SuspendLayout();
             this.pnlNoPluginFound.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbOpenPluginsStore)).BeginInit();
             this.pnlHelp.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbClear)).BeginInit();
             this.SuspendLayout();
             // 
             // cmsOnePlugin
             // 
-            this.cmsOnePlugin.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsOnePlugin.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiOpenWithNewConection,
             this.toolStripSeparator2,
@@ -83,76 +82,76 @@
             this.toolStripSeparator1,
             this.tsmiAddToFavorites});
             this.cmsOnePlugin.Name = "cmsOnePlugin";
-            this.cmsOnePlugin.Size = new System.Drawing.Size(391, 252);
+            this.cmsOnePlugin.Size = new System.Drawing.Size(460, 342);
             this.cmsOnePlugin.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsOnePlugin_ItemClicked);
             // 
             // tsmiOpenWithNewConection
             // 
             this.tsmiOpenWithNewConection.Image = global::XrmToolBox.Properties.Resources.lightning;
             this.tsmiOpenWithNewConection.Name = "tsmiOpenWithNewConection";
-            this.tsmiOpenWithNewConection.Size = new System.Drawing.Size(390, 32);
+            this.tsmiOpenWithNewConection.Size = new System.Drawing.Size(382, 32);
             this.tsmiOpenWithNewConection.Text = "Open Tool with new connection";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(387, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(456, 6);
             // 
             // tsmiOpenProjectHomePage
             // 
             this.tsmiOpenProjectHomePage.Image = global::XrmToolBox.Properties.Resources.www_page;
             this.tsmiOpenProjectHomePage.Name = "tsmiOpenProjectHomePage";
-            this.tsmiOpenProjectHomePage.Size = new System.Drawing.Size(390, 32);
+            this.tsmiOpenProjectHomePage.Size = new System.Drawing.Size(382, 32);
             this.tsmiOpenProjectHomePage.Text = "Open project home page";
             // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(387, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(456, 6);
             // 
             // tsmiShortcutTool
             // 
             this.tsmiShortcutTool.Image = global::XrmToolBox.Properties.Resources.shortcut;
             this.tsmiShortcutTool.Name = "tsmiShortcutTool";
-            this.tsmiShortcutTool.Size = new System.Drawing.Size(390, 32);
+            this.tsmiShortcutTool.Size = new System.Drawing.Size(382, 32);
             this.tsmiShortcutTool.Text = "Create shortcut (Tool)";
             // 
             // tsmiShortcutToolConnection
             // 
             this.tsmiShortcutToolConnection.Image = global::XrmToolBox.Properties.Resources.shortcut;
             this.tsmiShortcutToolConnection.Name = "tsmiShortcutToolConnection";
-            this.tsmiShortcutToolConnection.Size = new System.Drawing.Size(390, 32);
+            this.tsmiShortcutToolConnection.Size = new System.Drawing.Size(382, 32);
             this.tsmiShortcutToolConnection.Text = "Create shortcut (Tool and Connection)";
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(387, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(456, 6);
             // 
             // tsmiHidePlugin
             // 
             this.tsmiHidePlugin.Image = global::XrmToolBox.Properties.Resources.hide_detail;
             this.tsmiHidePlugin.Name = "tsmiHidePlugin";
-            this.tsmiHidePlugin.Size = new System.Drawing.Size(390, 32);
+            this.tsmiHidePlugin.Size = new System.Drawing.Size(382, 32);
             this.tsmiHidePlugin.Text = "Hide";
             // 
             // tsmiUninstallPlugin
             // 
             this.tsmiUninstallPlugin.Image = global::XrmToolBox.Properties.Resources.Clear_16;
             this.tsmiUninstallPlugin.Name = "tsmiUninstallPlugin";
-            this.tsmiUninstallPlugin.Size = new System.Drawing.Size(390, 32);
+            this.tsmiUninstallPlugin.Size = new System.Drawing.Size(382, 32);
             this.tsmiUninstallPlugin.Text = "Uninstall";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(387, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(456, 6);
             // 
             // tsmiAddToFavorites
             // 
             this.tsmiAddToFavorites.Image = global::XrmToolBox.Properties.Resources.star;
             this.tsmiAddToFavorites.Name = "tsmiAddToFavorites";
-            this.tsmiAddToFavorites.Size = new System.Drawing.Size(390, 32);
+            this.tsmiAddToFavorites.Size = new System.Drawing.Size(382, 32);
             this.tsmiAddToFavorites.Text = "Add to Favorites";
             // 
             // pnlSearch
@@ -167,6 +166,19 @@
             this.pnlSearch.Name = "pnlSearch";
             this.pnlSearch.Size = new System.Drawing.Size(1071, 47);
             this.pnlSearch.TabIndex = 11;
+            // 
+            // pbClear
+            // 
+            this.pbClear.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbClear.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pbClear.Image = global::XrmToolBox.Properties.Resources.Clear_16;
+            this.pbClear.Location = new System.Drawing.Point(75, 0);
+            this.pbClear.Name = "pbClear";
+            this.pbClear.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.pbClear.Size = new System.Drawing.Size(34, 47);
+            this.pbClear.TabIndex = 2;
+            this.pbClear.TabStop = false;
+            this.pbClear.Click += new System.EventHandler(this.pbClear_Click);
             // 
             // txtSearch
             // 
@@ -339,19 +351,6 @@
             this.label1.Text = "Oups... no tool found!";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // pbClear
-            // 
-            this.pbClear.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbClear.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pbClear.Image = global::XrmToolBox.Properties.Resources.Clear_16;
-            this.pbClear.Location = new System.Drawing.Point(75, 0);
-            this.pbClear.Name = "pbClear";
-            this.pbClear.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.pbClear.Size = new System.Drawing.Size(34, 47);
-            this.pbClear.TabIndex = 2;
-            this.pbClear.TabStop = false;
-            this.pbClear.Click += new System.EventHandler(this.pbClear_Click);
-            // 
             // PluginsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -371,12 +370,12 @@
             this.cmsOnePlugin.ResumeLayout(false);
             this.pnlSearch.ResumeLayout(false);
             this.pnlSearch.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbClear)).EndInit();
             this.pnlMain.ResumeLayout(false);
             this.pnlNoPluginFound.ResumeLayout(false);
             this.pnlNoPluginFound.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbOpenPluginsStore)).EndInit();
             this.pnlHelp.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbClear)).EndInit();
             this.ResumeLayout(false);
 
         }
