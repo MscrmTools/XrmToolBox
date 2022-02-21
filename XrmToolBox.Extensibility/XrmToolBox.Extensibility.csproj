@@ -172,6 +172,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ExternalMethodCallerInfo.cs" />
+    <Compile Include="Forms\ErrorDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ErrorDetail.designer.cs">
+      <DependentUpon>ErrorDetail.cs</DependentUpon>
+    </Compile>
     <Compile Include="Icons.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -247,6 +253,9 @@
     <Compile Include="WorkAsyncInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\ErrorDetail.resx">
+      <DependentUpon>ErrorDetail.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Icons.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Icons.Designer.cs</LastGenOutput>
