@@ -28,139 +28,100 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ErrorDetail));
-            this.txtInfo = new System.Windows.Forms.TextBox();
             this.panButton = new System.Windows.Forms.Panel();
             this.btnDetails = new System.Windows.Forms.Button();
-            this.btnIssue = new System.Windows.Forms.Button();
-            this.btnCopy = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.panInfo = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panDetails = new System.Windows.Forms.Panel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtMessage = new System.Windows.Forms.TextBox();
+            this.lblMessage = new System.Windows.Forms.Label();
             this.txtCallStack = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.lblCallStack = new System.Windows.Forms.Label();
             this.txtErrorCode = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lblErrorCode = new System.Windows.Forms.Label();
             this.txtException = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lblException = new System.Windows.Forms.Label();
+            this.txtMessage = new System.Windows.Forms.TextBox();
+            this.pnlIcon = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.lblHeader = new System.Windows.Forms.Label();
+            this.btnCopy = new System.Windows.Forms.Button();
+            this.btnIssue = new System.Windows.Forms.Button();
             this.panButton.SuspendLayout();
             this.panInfo.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.pnlIcon.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // txtInfo
-            // 
-            this.txtInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtInfo.BackColor = System.Drawing.SystemColors.Window;
-            this.txtInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtInfo.Location = new System.Drawing.Point(72, 29);
-            this.txtInfo.Multiline = true;
-            this.txtInfo.Name = "txtInfo";
-            this.txtInfo.ReadOnly = true;
-            this.txtInfo.Size = new System.Drawing.Size(476, 67);
-            this.txtInfo.TabIndex = 0;
-            this.txtInfo.Text = "Line 1\r\nLine 2\r\nLine 3";
             // 
             // panButton
             // 
-            this.panButton.Controls.Add(this.btnDetails);
             this.panButton.Controls.Add(this.btnIssue);
             this.panButton.Controls.Add(this.btnCopy);
+            this.panButton.Controls.Add(this.btnDetails);
             this.panButton.Controls.Add(this.btnClose);
             this.panButton.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panButton.Location = new System.Drawing.Point(0, 356);
+            this.panButton.Location = new System.Drawing.Point(0, 586);
+            this.panButton.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panButton.Name = "panButton";
-            this.panButton.Size = new System.Drawing.Size(577, 50);
+            this.panButton.Padding = new System.Windows.Forms.Padding(10);
+            this.panButton.Size = new System.Drawing.Size(1071, 67);
             this.panButton.TabIndex = 0;
             // 
             // btnDetails
             // 
+            this.btnDetails.Dock = System.Windows.Forms.DockStyle.Left;
             this.btnDetails.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnDetails.Location = new System.Drawing.Point(71, 15);
+            this.btnDetails.Location = new System.Drawing.Point(10, 10);
+            this.btnDetails.Margin = new System.Windows.Forms.Padding(4, 5, 10, 5);
             this.btnDetails.Name = "btnDetails";
-            this.btnDetails.Size = new System.Drawing.Size(93, 23);
+            this.btnDetails.Size = new System.Drawing.Size(168, 47);
             this.btnDetails.TabIndex = 1;
             this.btnDetails.Text = "Show Details";
             this.btnDetails.UseVisualStyleBackColor = true;
             this.btnDetails.Click += new System.EventHandler(this.btnDetails_Click);
             // 
-            // btnIssue
-            // 
-            this.btnIssue.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnIssue.Location = new System.Drawing.Point(269, 15);
-            this.btnIssue.Name = "btnIssue";
-            this.btnIssue.Size = new System.Drawing.Size(93, 23);
-            this.btnIssue.TabIndex = 3;
-            this.btnIssue.Text = "Create Issue";
-            this.btnIssue.UseVisualStyleBackColor = true;
-            this.btnIssue.Visible = false;
-            this.btnIssue.Click += new System.EventHandler(this.btnIssue_Click);
-            // 
-            // btnCopy
-            // 
-            this.btnCopy.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnCopy.Location = new System.Drawing.Point(170, 15);
-            this.btnCopy.Name = "btnCopy";
-            this.btnCopy.Size = new System.Drawing.Size(93, 23);
-            this.btnCopy.TabIndex = 2;
-            this.btnCopy.Text = "Copy Details";
-            this.btnCopy.UseVisualStyleBackColor = true;
-            this.btnCopy.Visible = false;
-            this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
-            // 
             // btnClose
             // 
-            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnClose.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnClose.Location = new System.Drawing.Point(402, 15);
+            this.btnClose.Location = new System.Drawing.Point(798, 10);
+            this.btnClose.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(146, 23);
+            this.btnClose.Size = new System.Drawing.Size(263, 47);
             this.btnClose.TabIndex = 0;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = false;
             // 
             // panInfo
             // 
-            this.panInfo.Controls.Add(this.pictureBox1);
-            this.panInfo.Controls.Add(this.txtInfo);
+            this.panInfo.Controls.Add(this.lblHeader);
+            this.panInfo.Controls.Add(this.pnlIcon);
             this.panInfo.Dock = System.Windows.Forms.DockStyle.Top;
             this.panInfo.Location = new System.Drawing.Point(0, 0);
+            this.panInfo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panInfo.Name = "panInfo";
-            this.panInfo.Size = new System.Drawing.Size(577, 104);
+            this.panInfo.Padding = new System.Windows.Forms.Padding(10);
+            this.panInfo.Size = new System.Drawing.Size(1071, 160);
             this.panInfo.TabIndex = 1;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(27, 29);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(35, 35);
-            this.pictureBox1.TabIndex = 1;
-            this.pictureBox1.TabStop = false;
             // 
             // panDetails
             // 
             this.panDetails.Controls.Add(this.splitContainer1);
             this.panDetails.Controls.Add(this.txtErrorCode);
-            this.panDetails.Controls.Add(this.label2);
+            this.panDetails.Controls.Add(this.lblErrorCode);
             this.panDetails.Controls.Add(this.txtException);
-            this.panDetails.Controls.Add(this.label1);
+            this.panDetails.Controls.Add(this.lblException);
             this.panDetails.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panDetails.Location = new System.Drawing.Point(0, 104);
+            this.panDetails.Location = new System.Drawing.Point(0, 160);
+            this.panDetails.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panDetails.Name = "panDetails";
-            this.panDetails.Size = new System.Drawing.Size(577, 252);
+            this.panDetails.Size = new System.Drawing.Size(1071, 426);
             this.panDetails.TabIndex = 2;
             this.panDetails.Visible = false;
             // 
@@ -170,125 +131,191 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 71);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 109);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.label3);
             this.splitContainer1.Panel1.Controls.Add(this.txtMessage);
+            this.splitContainer1.Panel1.Controls.Add(this.lblMessage);
+            this.splitContainer1.Panel1.Padding = new System.Windows.Forms.Padding(10);
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.txtCallStack);
-            this.splitContainer1.Panel2.Controls.Add(this.label5);
-            this.splitContainer1.Size = new System.Drawing.Size(577, 181);
+            this.splitContainer1.Panel2.Controls.Add(this.lblCallStack);
+            this.splitContainer1.Panel2.Padding = new System.Windows.Forms.Padding(10);
+            this.splitContainer1.Size = new System.Drawing.Size(1071, 316);
             this.splitContainer1.SplitterDistance = 76;
-            this.splitContainer1.SplitterWidth = 8;
+            this.splitContainer1.SplitterWidth = 12;
             this.splitContainer1.TabIndex = 8;
             // 
-            // label3
+            // lblMessage
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 7);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(50, 13);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Message";
-            // 
-            // txtMessage
-            // 
-            this.txtMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtMessage.BackColor = System.Drawing.SystemColors.Window;
-            this.txtMessage.Location = new System.Drawing.Point(72, 4);
-            this.txtMessage.Multiline = true;
-            this.txtMessage.Name = "txtMessage";
-            this.txtMessage.ReadOnly = true;
-            this.txtMessage.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtMessage.Size = new System.Drawing.Size(476, 69);
-            this.txtMessage.TabIndex = 5;
+            this.lblMessage.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblMessage.Location = new System.Drawing.Point(10, 10);
+            this.lblMessage.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblMessage.Name = "lblMessage";
+            this.lblMessage.Size = new System.Drawing.Size(102, 56);
+            this.lblMessage.TabIndex = 4;
+            this.lblMessage.Text = "Message";
             // 
             // txtCallStack
             // 
-            this.txtCallStack.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtCallStack.BackColor = System.Drawing.SystemColors.Window;
-            this.txtCallStack.Location = new System.Drawing.Point(71, 4);
+            this.txtCallStack.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCallStack.Location = new System.Drawing.Point(110, 10);
+            this.txtCallStack.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtCallStack.Multiline = true;
             this.txtCallStack.Name = "txtCallStack";
             this.txtCallStack.ReadOnly = true;
             this.txtCallStack.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtCallStack.Size = new System.Drawing.Size(476, 78);
+            this.txtCallStack.Size = new System.Drawing.Size(951, 208);
             this.txtCallStack.TabIndex = 6;
             this.txtCallStack.WordWrap = false;
             // 
-            // label5
+            // lblCallStack
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(13, 4);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(55, 13);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "Call Stack";
+            this.lblCallStack.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblCallStack.Location = new System.Drawing.Point(10, 10);
+            this.lblCallStack.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblCallStack.Name = "lblCallStack";
+            this.lblCallStack.Size = new System.Drawing.Size(100, 208);
+            this.lblCallStack.TabIndex = 0;
+            this.lblCallStack.Text = "Call Stack";
             // 
             // txtErrorCode
             // 
             this.txtErrorCode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtErrorCode.BackColor = System.Drawing.SystemColors.Window;
-            this.txtErrorCode.Location = new System.Drawing.Point(72, 45);
+            this.txtErrorCode.Location = new System.Drawing.Point(108, 69);
+            this.txtErrorCode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtErrorCode.Name = "txtErrorCode";
             this.txtErrorCode.ReadOnly = true;
-            this.txtErrorCode.Size = new System.Drawing.Size(476, 20);
+            this.txtErrorCode.Size = new System.Drawing.Size(953, 26);
             this.txtErrorCode.TabIndex = 3;
             // 
-            // label2
+            // lblErrorCode
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 48);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(57, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Error Code";
+            this.lblErrorCode.AutoSize = true;
+            this.lblErrorCode.Location = new System.Drawing.Point(11, 75);
+            this.lblErrorCode.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblErrorCode.Name = "lblErrorCode";
+            this.lblErrorCode.Size = new System.Drawing.Size(86, 20);
+            this.lblErrorCode.TabIndex = 2;
+            this.lblErrorCode.Text = "Error Code";
             // 
             // txtException
             // 
             this.txtException.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtException.BackColor = System.Drawing.SystemColors.Window;
-            this.txtException.Location = new System.Drawing.Point(72, 14);
+            this.txtException.Location = new System.Drawing.Point(108, 22);
+            this.txtException.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtException.Name = "txtException";
             this.txtException.ReadOnly = true;
-            this.txtException.Size = new System.Drawing.Size(476, 20);
+            this.txtException.Size = new System.Drawing.Size(950, 26);
             this.txtException.TabIndex = 1;
             // 
-            // label1
+            // lblException
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 17);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(54, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Exception";
+            this.lblException.AutoSize = true;
+            this.lblException.Location = new System.Drawing.Point(11, 25);
+            this.lblException.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblException.Name = "lblException";
+            this.lblException.Size = new System.Drawing.Size(79, 20);
+            this.lblException.TabIndex = 0;
+            this.lblException.Text = "Exception";
+            // 
+            // txtMessage
+            // 
+            this.txtMessage.BackColor = System.Drawing.SystemColors.Window;
+            this.txtMessage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtMessage.Location = new System.Drawing.Point(112, 10);
+            this.txtMessage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtMessage.Multiline = true;
+            this.txtMessage.Name = "txtMessage";
+            this.txtMessage.ReadOnly = true;
+            this.txtMessage.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtMessage.Size = new System.Drawing.Size(949, 56);
+            this.txtMessage.TabIndex = 6;
+            // 
+            // pnlIcon
+            // 
+            this.pnlIcon.Controls.Add(this.pictureBox1);
+            this.pnlIcon.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlIcon.Location = new System.Drawing.Point(10, 10);
+            this.pnlIcon.Name = "pnlIcon";
+            this.pnlIcon.Size = new System.Drawing.Size(130, 140);
+            this.pnlIcon.TabIndex = 3;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::XrmToolBox.Extensibility.Properties.Resources.error_52;
+            this.pictureBox1.Location = new System.Drawing.Point(35, 41);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(52, 54);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 2;
+            this.pictureBox1.TabStop = false;
+            // 
+            // lblHeader
+            // 
+            this.lblHeader.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblHeader.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHeader.Location = new System.Drawing.Point(140, 10);
+            this.lblHeader.Name = "lblHeader";
+            this.lblHeader.Size = new System.Drawing.Size(921, 140);
+            this.lblHeader.TabIndex = 4;
+            this.lblHeader.Text = "lblHeader";
+            this.lblHeader.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // btnCopy
+            // 
+            this.btnCopy.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnCopy.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnCopy.Location = new System.Drawing.Point(178, 10);
+            this.btnCopy.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnCopy.Name = "btnCopy";
+            this.btnCopy.Size = new System.Drawing.Size(168, 47);
+            this.btnCopy.TabIndex = 4;
+            this.btnCopy.Text = "Copy Details";
+            this.btnCopy.UseVisualStyleBackColor = true;
+            this.btnCopy.Visible = false;
+            this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
+            // 
+            // btnIssue
+            // 
+            this.btnIssue.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnIssue.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnIssue.Location = new System.Drawing.Point(346, 10);
+            this.btnIssue.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnIssue.Name = "btnIssue";
+            this.btnIssue.Padding = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.btnIssue.Size = new System.Drawing.Size(202, 47);
+            this.btnIssue.TabIndex = 5;
+            this.btnIssue.Text = "Create Issue";
+            this.btnIssue.UseVisualStyleBackColor = true;
+            this.btnIssue.Click += new System.EventHandler(this.btnIssue_Click);
             // 
             // ErrorDetail
             // 
             this.AcceptButton = this.btnClose;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.CancelButton = this.btnClose;
-            this.ClientSize = new System.Drawing.Size(577, 406);
+            this.ClientSize = new System.Drawing.Size(1071, 653);
             this.ControlBox = false;
             this.Controls.Add(this.panDetails);
             this.Controls.Add(this.panButton);
             this.Controls.Add(this.panInfo);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "ErrorDetail";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -296,8 +323,6 @@
             this.TopMost = true;
             this.panButton.ResumeLayout(false);
             this.panInfo.ResumeLayout(false);
-            this.panInfo.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panDetails.ResumeLayout(false);
             this.panDetails.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -306,28 +331,31 @@
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.pnlIcon.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.TextBox txtInfo;
         private System.Windows.Forms.Panel panButton;
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.Panel panInfo;
         private System.Windows.Forms.Panel panDetails;
-        private System.Windows.Forms.TextBox txtMessage;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label lblMessage;
         private System.Windows.Forms.TextBox txtErrorCode;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblErrorCode;
         private System.Windows.Forms.TextBox txtException;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblException;
         private System.Windows.Forms.Button btnDetails;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TextBox txtCallStack;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button btnCopy;
+        private System.Windows.Forms.Label lblCallStack;
+        private System.Windows.Forms.TextBox txtMessage;
+        private System.Windows.Forms.Label lblHeader;
+        private System.Windows.Forms.Panel pnlIcon;
+        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button btnIssue;
+        private System.Windows.Forms.Button btnCopy;
     }
 }
