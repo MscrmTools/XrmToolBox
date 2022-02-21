@@ -489,7 +489,17 @@ namespace XrmToolBox
                 ConnectionControlsVersion = ConnectionControlsVersion,
                 ConnectionControlsAllowPreReleaseUpdates = ConnectionControlsAllowPreReleaseUpdates,
                 NumberOfDaysToShowNewRibbon = NumberOfDaysToShowNewRibbon,
-                RememberSession = RememberSession
+                RememberSession = RememberSession,
+                DisplayStoreOnStartup = DisplayStoreOnStartup,
+                IconDisplayMode = IconDisplayMode,
+                LastConnection = LastConnection,
+                LastPlugin = LastPlugin,
+                PluginsDisplayOrder = PluginsDisplayOrder,
+                PluginsListDocking = PluginsListDocking,
+                PluginsListIsHidden = PluginsListIsHidden,
+                ReuseConnections = ReuseConnections,
+                Size = Size,
+                ThemeValue = ThemeValue
             };
         }
 
