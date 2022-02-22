@@ -27,7 +27,6 @@ using System.Net.Http;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
-using System.Text;
 
 public static class Extensions
 {
@@ -56,12 +55,15 @@ public class AiConfig
         PluginVersion = LoggingAssembly.GetName().Version.PaddedVersion(1, 4, 2, 2);
         // This will disable logging if the calling assembly is compiled with debug configuration
         LogEvents = !LoggingAssembly.GetCustomAttributes<DebuggableAttribute>().Any(d => d.IsJITTrackingEnabled);
+
+        var isc = new XrmToolBox.Extensibility.ItSecurityChecker();
+        LogEvents = LogEvents && isc.IsStatisticsCollectDisabled();
     }
 
-    public Assembly LoggingAssembly { get; }
     public string AiEndpoint { get; }
     public string InstrumentationKey { get; }
     public bool LogEvents { get; set; } = true;
+    public Assembly LoggingAssembly { get; }
     public string OperationName { get; set; }
     public string PluginName { get; set; }
     public string PluginVersion { get; set; }

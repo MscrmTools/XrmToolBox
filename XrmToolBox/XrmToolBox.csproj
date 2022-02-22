@@ -301,7 +301,6 @@
     <Compile Include="Forms\WelcomeDialog.Designer.cs">
       <DependentUpon>WelcomeDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="AppCode\ItSecurityChecker.cs" />
     <Compile Include="CrmExceptionHelper.cs" />
     <Compile Include="Forms\OptionsDialog.cs">
       <SubType>Form</SubType>
@@ -473,9 +472,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="app.manifest" />
-    <None Include="bin\Debug\XrmToolBox.exe.config" />
-    <None Include="bin\Debug\XrmToolBox.Extensibility.dll.config" />
-    <None Include="bin\Debug\XrmToolBox.PluginsStore.dll.config" />
   </ItemGroup>
   <ItemGroup>
     <!--<Content Include="bin\Debug\Connections\ConnectionsList.Default.xml" />
@@ -600,7 +596,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

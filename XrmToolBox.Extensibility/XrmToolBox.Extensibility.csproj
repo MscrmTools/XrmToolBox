@@ -204,6 +204,7 @@
     <Compile Include="Interfaces\IWorkerHost.cs" />
     <Compile Include="Interfaces\IXrmToolBoxPlugin.cs" />
     <Compile Include="Args\MessageBusEventArgs.cs" />
+    <Compile Include="ITSecurityChecker.cs" />
     <Compile Include="LogManager.cs" />
     <Compile Include="Manifest\Manifest.cs" />
     <Compile Include="Manifest\ManifestLoader.cs" />

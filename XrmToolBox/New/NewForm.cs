@@ -782,11 +782,11 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
             if (type == null)
             {
-	            type = e.Plugin == null
-		            ? null
-		            : AppDomain.CurrentDomain.GetAssemblies()
-			            .First(a => a.FullName == e.Plugin.Metadata.AssemblyQualifiedName)
-			            .GetType(e.Plugin.Metadata.PluginType);
+                type = e.Plugin == null
+                    ? null
+                    : AppDomain.CurrentDomain.GetAssemblies()
+                        .First(a => a.FullName == e.Plugin.Metadata.AssemblyQualifiedName)
+                        .GetType(e.Plugin.Metadata.PluginType);
 
                 if (type == null)
                 {
@@ -1417,7 +1417,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
         {
             return new Task(() =>
             {
-                if (Options.Instance.DoNotCheckForUpdates)
+                if (Options.Instance.DoNotCheckForUpdates || new ItSecurityChecker().IsCheckForUpdateDisabled())
                 {
                     return;
                 }
@@ -1527,6 +1527,12 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
         private void checkForUpdateToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
+            if (new ItSecurityChecker().IsCheckForUpdateDisabled())
+            {
+                MessageBox.Show(this, "Your company policy does not allow you to search for update.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             var worker = new BackgroundWorker();
             worker.DoWork += (s, evt) =>
             {
