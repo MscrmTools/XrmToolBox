@@ -7,6 +7,8 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using XrmToolBox.Extensibility.Forms;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace XrmToolBox.Extensibility.UserControls
 {
@@ -46,6 +48,15 @@ namespace XrmToolBox.Extensibility.UserControls
 
             // Restore the graphics state.
             gr.Restore(state);
+        }
+
+        protected void OpenPayPalDonationDialog()
+        {
+            if (((Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)Tag).Value is IPayPalPlugin pp)
+            {
+                var dialog = new CurrencySelectionDialog(pp);
+                dialog.ShowDialog(Parent);
+            }
         }
 
         private void InitializeComponent()

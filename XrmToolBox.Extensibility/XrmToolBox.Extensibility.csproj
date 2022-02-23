@@ -172,6 +172,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ExternalMethodCallerInfo.cs" />
+    <Compile Include="Forms\CurrencySelectionDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CurrencySelectionDialog.Designer.cs">
+      <DependentUpon>CurrencySelectionDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ErrorDetail.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -254,6 +260,9 @@
     <Compile Include="WorkAsyncInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\CurrencySelectionDialog.resx">
+      <DependentUpon>CurrencySelectionDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ErrorDetail.resx">
       <DependentUpon>ErrorDetail.cs</DependentUpon>
     </EmbeddedResource>
@@ -301,6 +310,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\error_52.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\money_dollar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\money_pound.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\money_euro.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
