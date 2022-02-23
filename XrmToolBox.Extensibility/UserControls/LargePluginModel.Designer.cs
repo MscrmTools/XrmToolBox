@@ -130,7 +130,7 @@
             // 
             // pbDonate
             // 
-            this.pbDonate.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.pbDonate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pbDonate.BackgroundImage = global::XrmToolBox.Extensibility.Properties.Resources.paypal;
             this.pbDonate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pbDonate.Location = new System.Drawing.Point(755, 92);

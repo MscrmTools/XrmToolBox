@@ -85,7 +85,7 @@ namespace XrmToolBox.Extensibility.Forms
             this.btnEuro.Location = new System.Drawing.Point(222, 13);
             this.btnEuro.Name = "btnEuro";
             this.btnEuro.Size = new System.Drawing.Size(209, 133);
-            this.btnEuro.TabIndex = 2;
+            this.btnEuro.TabIndex = 1;
             this.btnEuro.Text = "Euro";
             this.btnEuro.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnEuro.UseVisualStyleBackColor = true;
@@ -98,7 +98,7 @@ namespace XrmToolBox.Extensibility.Forms
             this.btnDollar.Location = new System.Drawing.Point(13, 13);
             this.btnDollar.Name = "btnDollar";
             this.btnDollar.Size = new System.Drawing.Size(203, 133);
-            this.btnDollar.TabIndex = 1;
+            this.btnDollar.TabIndex = 0;
             this.btnDollar.Text = "US Dollar";
             this.btnDollar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnDollar.UseVisualStyleBackColor = true;
@@ -111,7 +111,7 @@ namespace XrmToolBox.Extensibility.Forms
             this.btnPound.Location = new System.Drawing.Point(437, 13);
             this.btnPound.Name = "btnPound";
             this.btnPound.Size = new System.Drawing.Size(205, 133);
-            this.btnPound.TabIndex = 0;
+            this.btnPound.TabIndex = 2;
             this.btnPound.Text = "Great Britain Pound";
             this.btnPound.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnPound.UseVisualStyleBackColor = true;

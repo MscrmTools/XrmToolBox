@@ -131,6 +131,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "SmallPluginModel";
             this.Size = new System.Drawing.Size(625, 75);
+            this.Load += new System.EventHandler(this.SmallPluginModel_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.SmallPluginModel_Paint);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseClick);
             this.Resize += new System.EventHandler(this.SmallPluginModel_Resize);
