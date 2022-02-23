@@ -80,7 +80,7 @@ namespace XrmToolBox.PluginsStore
 
         private readonly string applicationPluginsFolder;
         private readonly string nugetPluginsFolder;
-        private SourceCacheContext cache = new SourceCacheContext();
+        private SourceCacheContext cache = new SourceCacheContext { DirectDownload = true, NoCache = true };
         private CancellationToken cancellationToken = CancellationToken.None;
         private FindPackageByIdResource findPackageById;
         private ILogger logger = NullLogger.Instance;
@@ -139,18 +139,18 @@ namespace XrmToolBox.PluginsStore
             plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
             XrmToolBoxPlugins = new XtbPlugins();
 
-	        await Task.Run(
-		        () =>
-				{
-					string url = "https://www.xrmtoolbox.com/_odata/plugins";
-					do
-					{
-						var tmpPlugins = GetContent<XtbPlugins>(url, fromStorePortal);
-						XrmToolBoxPlugins.Plugins.AddRange(tmpPlugins.Plugins);
-						url = tmpPlugins.NextLink;
-					}
-					while (url != null);
-				});
+            await Task.Run(
+                () =>
+                {
+                    string url = "https://www.xrmtoolbox.com/_odata/plugins";
+                    do
+                    {
+                        var tmpPlugins = GetContent<XtbPlugins>(url, fromStorePortal);
+                        XrmToolBoxPlugins.Plugins.AddRange(tmpPlugins.Plugins);
+                        url = tmpPlugins.NextLink;
+                    }
+                    while (url != null);
+                });
 
             Categories = XrmToolBoxPlugins.Plugins
                 .Where(p => p.CategoriesList != null)
@@ -159,12 +159,12 @@ namespace XrmToolBox.PluginsStore
                 .OrderByDescending(s => s)
                 .ToList();
 
-	        Parallel.ForEach(XrmToolBoxPlugins.Plugins,
-		        plugin =>
-				{
-					AnalyzePackage(plugin);
-					plugin.Compatibilty = IsPluginDependencyCompatible(new Version(plugin.MinimalXrmToolBoxVersion));
-				});
+            Parallel.ForEach(XrmToolBoxPlugins.Plugins,
+                plugin =>
+                {
+                    AnalyzePackage(plugin);
+                    plugin.Compatibilty = IsPluginDependencyCompatible(new Version(plugin.MinimalXrmToolBoxVersion));
+                });
         }
 
         #region Connection controls installation
@@ -471,7 +471,7 @@ namespace XrmToolBox.PluginsStore
             var currentVersion = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);
             var currentVersionFound = false;
 
-	        var manifest = ManifestLoader.LoadDefaultManifest();
+            var manifest = ManifestLoader.LoadDefaultManifest();
 
             foreach (var file in files)
             {
@@ -495,8 +495,8 @@ namespace XrmToolBox.PluginsStore
                     }
                     else
                     {
-	                    var pluginInfo = manifest.PluginMetadata
-							.FirstOrDefault(p => p.AssemblyFilename.ToLower() == existingPluginFile.FullName.ToLower());
+                        var pluginInfo = manifest.PluginMetadata
+                            .FirstOrDefault(p => p.AssemblyFilename.ToLower() == existingPluginFile.FullName.ToLower());
 
                         // If a file is found, we check version only if the file
                         // contains classes that implement IXrmToolBoxPlugin
