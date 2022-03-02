@@ -163,7 +163,6 @@ namespace XrmToolBox.PluginsStore
                 plugin =>
                 {
                     AnalyzePackage(plugin);
-                    plugin.Compatibilty = IsPluginDependencyCompatible(new Version(plugin.MinimalXrmToolBoxVersion));
                 });
         }
 
@@ -459,13 +458,15 @@ namespace XrmToolBox.PluginsStore
 
             bool install = false, update = false, otherFilesFound = false;
 
-            if (string.IsNullOrEmpty(plugin.MinimalXrmToolBoxVersion))
+            Version version;
+
+            if (string.IsNullOrEmpty(plugin.MinimalXrmToolBoxVersion) || !Version.TryParse(plugin.MinimalXrmToolBoxVersion, out version))
             {
                 plugin.Compatibilty = CompatibleState.Other;
             }
             else
             {
-                plugin.Compatibilty = IsPluginDependencyCompatible(new Version(plugin.MinimalXrmToolBoxVersion));
+                plugin.Compatibilty = IsPluginDependencyCompatible(version);
             }
 
             var currentVersion = new Version(int.MaxValue, int.MaxValue, int.MaxValue, int.MaxValue);

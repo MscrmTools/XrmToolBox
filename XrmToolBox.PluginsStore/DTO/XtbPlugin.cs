@@ -50,7 +50,7 @@ namespace XrmToolBox.PluginsStore.DTO
 
         public List<string> Files
         {
-            get { return FilesList.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).Where(f => f.ToLower().IndexOf("plugins/", StringComparison.Ordinal) >= 0).ToList(); }
+            get { return FilesList?.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).Where(f => f.ToLower().IndexOf("plugins/", StringComparison.Ordinal) >= 0).ToList() ?? new List<string>(); }
         }
 
         [DataMember(Name = "mctools_files")]
