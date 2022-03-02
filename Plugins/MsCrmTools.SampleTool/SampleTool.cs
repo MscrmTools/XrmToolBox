@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using XrmToolBox;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
-using XrmToolBox.Extensibility.Forms;
 using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SampleTool
@@ -251,27 +250,6 @@ namespace MsCrmTools.SampleTool
             MessageBox.Show(expectedPlugin == null ? "Tool is not installed" : "Tool is installed");
         }
 
-        private void SampleTool_Load(object sender, EventArgs e)
-        {
-            ShowInfoNotification("This is a notification that can lead to XrmToolBox repository", new Uri("http://github.com/MscrmTools/XrmToolBox"));
-        }
-
-        #region IMessageBusHost
-
-        public event EventHandler<MessageBusEventArgs> OnOutgoingMessage;
-
-        public void OnIncomingMessage(MessageBusEventArgs message)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void SendMessage(string message)
-        {
-            OnOutgoingMessage?.Invoke(this, new MessageBusEventArgs("targetPlugin", false));
-        }
-
-        #endregion IMessageBusHost
-
         private void btnDoSomethingWrong_Click(object sender, EventArgs e)
         {
             var asyncinfo = new WorkAsyncInfo()
@@ -294,5 +272,31 @@ namespace MsCrmTools.SampleTool
             };
             WorkAsync(asyncinfo);
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            throw new Exception("I wasn't expected this exception");
+        }
+
+        private void SampleTool_Load(object sender, EventArgs e)
+        {
+            ShowInfoNotification("This is a notification that can lead to XrmToolBox repository", new Uri("http://github.com/MscrmTools/XrmToolBox"));
+        }
+
+        #region IMessageBusHost
+
+        public event EventHandler<MessageBusEventArgs> OnOutgoingMessage;
+
+        public void OnIncomingMessage(MessageBusEventArgs message)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SendMessage(string message)
+        {
+            OnOutgoingMessage?.Invoke(this, new MessageBusEventArgs("targetPlugin", false));
+        }
+
+        #endregion IMessageBusHost
     }
 }

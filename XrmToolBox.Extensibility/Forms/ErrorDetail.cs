@@ -16,7 +16,7 @@ namespace XrmToolBox.Extensibility.Forms
         private PluginControlBase owner;
         private DateTime timestamp;
 
-        internal ErrorDetail(PluginControlBase owner, Exception exception, string heading, string extrainfo, bool allownewissue)
+        public ErrorDetail(PluginControlBase owner, Exception exception, string heading, string extrainfo, bool allownewissue)
         {
             this.owner = owner;
             this.exception = exception;
@@ -56,7 +56,7 @@ namespace XrmToolBox.Extensibility.Forms
         }
 
         public static void CreateNewIssueFromError(PluginControlBase tool, Exception error, string moreinfo)
-                            => CreateNewIssue(tool, "```\n" + ToTypeString(error) + ":\n" + error.Message + "\n" + error.StackTrace + "\n```", moreinfo);
+                            => CreateNewIssue(tool, "```\n" + ToTypeString(error) + ":\n" + error.Message + "\n" + error.Source + "\n" + error.StackTrace + "\n```", moreinfo);
 
         private static string ToTypeString(Exception ex)
         {
@@ -103,6 +103,7 @@ namespace XrmToolBox.Extensibility.Forms
                 txtException.Text = ToTypeString(error);
                 txtMessage.Text = error.Message;
                 txtCallStack.Text = error.StackTrace.Trim();
+                txtSource.Text = error.Source;
             }
             catch
             {
@@ -119,6 +120,7 @@ namespace XrmToolBox.Extensibility.Forms
                 details += $" ({txtErrorCode.Text})";
             }
             details += $"\n{txtMessage.Text}";
+            details += $"\n{txtSource.Text}";
             details += $"\n{txtCallStack.Text}";
             Clipboard.SetText(details);
             MessageBox.Show("Copied all details.", "Error Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
