@@ -73,6 +73,7 @@ namespace XrmToolBox.Extensibility.Forms
         {
             try
             {
+                var addedstack = "";
                 var msg = error.Message;
                 if (error is FaultException<OrganizationServiceFault> srcexc)
                 {
@@ -85,6 +86,18 @@ namespace XrmToolBox.Extensibility.Forms
                             msg = orgerr.InnerFault.Message;
                         }
                         txtErrorCode.Text = "0x" + orgerr.ErrorCode.ToString("X");
+                    }
+                }
+                if (msg.Contains("   at "))
+                {
+                    addedstack = "\r\n\r\nInner stack trace:\r\n" + msg.Substring(msg.IndexOf("   at "));
+                }
+                if (msg.Contains("Message: "))
+                {
+                    msg = msg.Substring(msg.IndexOf("Message: ") + 9);
+                    if (msg.Contains("\n"))
+                    {
+                        msg = msg.Substring(0, msg.IndexOf("\n"));
                     }
                 }
                 if (msg.StartsWith("System") && msg.Contains(": ") && msg.Split(':')[0].Length < 50)
@@ -103,7 +116,7 @@ namespace XrmToolBox.Extensibility.Forms
                 lblHeader.Text = msg;
                 txtException.Text = ToTypeString(error);
                 txtMessage.Text = error.Message;
-                txtCallStack.Text = error.StackTrace.Trim();
+                txtCallStack.Text = error.StackTrace.Trim() + addedstack;
                 txtSource.Text = error.Source;
             }
             catch
