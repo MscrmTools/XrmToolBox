@@ -44,7 +44,8 @@ namespace XrmToolBox.Extensibility.Forms
             {
                 additionalInfo += "\n```\n" + extrainfo + "\n```\n---\n";
             }
-            additionalInfo += $"- {tool.ProductName} Version: {Assembly.GetExecutingAssembly().GetName().Version}\n";
+            additionalInfo += $"- XrmToolBox Version: {Assembly.GetExecutingAssembly().GetName().Version}\n";
+            additionalInfo += $"- {tool.ProductName} Version: {tool.GetType().Assembly.GetName().Version}\n";
             if (tool.ConnectionDetail != null)
             {
                 additionalInfo += $"- DB Version: {tool.ConnectionDetail.OrganizationVersion}\n";
