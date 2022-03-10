@@ -1055,7 +1055,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
             {
                 numberOfConnectionReceived++;
                 var parameter = e.Parameter as ConnectionParameterInfo;
-                if (parameter != null && e.NumberOfConnectionsRequested == numberOfConnectionReceived)
+                if (parameter != null && e.NumberOfConnectionsRequested <= numberOfConnectionReceived)
                 {
                     Controls.Remove(parameter.ConnControl);
                     parameter.ConnControl.Dispose();
@@ -1063,6 +1063,8 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
                 _ = Invoke(new Action(() =>
                   {
+                      pluginsForm.ConnectionDetail = e.ConnectionDetail;
+
                       if (e.ConnectionDetail.UseOnline)
                       {
                           tsbOpenOrg.Text = @"Open environment";
@@ -1496,6 +1498,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     {
                         ccsb.SetConnectionStatus(pcb.ConnectionDetail != null, pcb.ConnectionDetail);
                         connectionDetail = pcb.ConnectionDetail;
+                        pluginsForm.ConnectionDetail = pcb.ConnectionDetail;
                     }
                 }
             }
