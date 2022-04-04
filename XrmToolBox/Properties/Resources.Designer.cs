@@ -343,6 +343,16 @@ namespace XrmToolBox.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap PowerApps_scalable {
+            get {
+                object obj = ResourceManager.GetObject("PowerApps_scalable", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap powerapps16 {
             get {
                 object obj = ResourceManager.GetObject("powerapps16", resourceCulture);

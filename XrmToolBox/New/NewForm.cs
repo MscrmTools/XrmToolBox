@@ -1070,12 +1070,14 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                           tsbOpenOrg.Text = @"Open environment";
                           tsbOpenOrg.ToolTipText = @"Open the connected environment in your web browser";
                           tsbOpenOrg.Image = new Bitmap(Properties.Resources.Dataverse_16x16);
+                          tsbOpenMaker.Visible = true;
                       }
                       else
                       {
                           tsbOpenOrg.Text = @"Open organization";
                           tsbOpenOrg.ToolTipText = @"Open the connected organization in your web browser";
                           tsbOpenOrg.Image = new Bitmap(Properties.Resources.LogoDyn365);
+                          tsbOpenMaker.Visible = false;
                       }
 
                       tsbImpersonate.Enabled = e.ConnectionDetail.CanImpersonate;
@@ -1157,7 +1159,14 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                                       }
                                   }
 
-                                  ((PluginForm)userControl.ParentForm).UpdateConnection(e.OrganizationService,
+                                  var pForm = ((PluginForm)userControl.ParentForm);
+
+                                  if (pluginConnections.ContainsKey(pForm))
+                                  { pluginConnections[pForm] = connectionDetail; }
+                                  else
+                                  { pluginConnections.Add(pForm, connectionDetail); }
+
+                                  pForm.UpdateConnection(e.OrganizationService,
                                       e.ConnectionDetail, rcea.ActionName, rcea.Parameter);
                               }
                           }
@@ -1279,7 +1288,9 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
             var pluginName = pluginForm.Text?.Substring(0, indexOfParenthesis - 1) ?? "N/A";
 
             if (pluginConnections.ContainsKey(pluginForm))
-                pluginConnections[pluginForm] = connectionDetail;
+            { pluginConnections[pluginForm] = connectionDetail; }
+            else
+            { pluginConnections.Add(pluginForm, connectionDetail); }
 
             pluginForm.UpdateConnection(service, detail, actionName, parameter);
             pluginForm.Text = $@"{pluginName} ({detail?.ConnectionName ?? "Not connected"})";
@@ -1590,6 +1601,37 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
             worker.RunWorkerAsync();
         }
 
+        private void tsbImpersonate_Click(object sender, System.EventArgs e)
+        {
+            var dialog = new UserSelectionDialog(connectionDetail.ServiceClient);
+            if (dialog.ShowDialog(this) == DialogResult.OK)
+            {
+                connectionDetail.Impersonate(dialog.SelectedUser.Id, dialog.SelectedUser.GetAttributeValue<string>("fullname"));
+            }
+        }
+
+        private void tsbOpenMaker_Click(object sender, System.EventArgs e)
+        {
+            var activeContent = dpMain.ActiveContent as PluginForm;
+            var url = "https://make.powerapps.com/environments/{0}/Home";
+            if (pluginConnections.ContainsKey(activeContent) && pluginConnections[activeContent] != null)
+            {
+                url = string.Format(url, connectionDetail.EnvironmentId);
+            }
+
+            if (url.Length > 0)
+            {
+                if (typeof(ConnectionDetail).GetMethods().Any(m => m.Name == "OpenUrlWithBrowserProfile"))
+                {
+                    connectionDetail.OpenUrlWithBrowserProfile(new Uri(url));
+                }
+                else
+                {
+                    Process.Start(url);
+                }
+            }
+        }
+
         private void tsbOpenOrg_Click(object sender, System.EventArgs e)
         {
             var activeContent = dpMain.ActiveContent as PluginForm;
@@ -1605,7 +1647,14 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
             if (url.Length > 0)
             {
-                Process.Start(url);
+                if (typeof(ConnectionDetail).GetMethods(BindingFlags.Public).Any(m => m.Name == "OpenUrlWithBrowserProfile"))
+                {
+                    connectionDetail.OpenUrlWithBrowserProfile(new Uri(url));
+                }
+                else
+                {
+                    Process.Start(url);
+                }
             }
         }
 
@@ -1947,15 +1996,6 @@ Would you like to reinstall last stable release of connection controls?";
         {
             pnlPluginsUpdate.Visible = false;
             tsddbTools_DropDownItemClicked(null, new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
-        }
-
-        private void tsbImpersonate_Click(object sender, System.EventArgs e)
-        {
-            var dialog = new UserSelectionDialog(connectionDetail.ServiceClient);
-            if (dialog.ShowDialog(this) == DialogResult.OK)
-            {
-                connectionDetail.Impersonate(dialog.SelectedUser.Id, dialog.SelectedUser.GetAttributeValue<string>("fullname"));
-            }
         }
     }
 }
