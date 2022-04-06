@@ -1612,11 +1612,14 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
         private void tsbOpenMaker_Click(object sender, System.EventArgs e)
         {
-            var activeContent = dpMain.ActiveContent as PluginForm;
-            var url = "https://make.powerapps.com/environments/{0}/Home";
-            if (pluginConnections.ContainsKey(activeContent) && pluginConnections[activeContent] != null)
+            string url;
+            if (connectionDetail.EnvironmentId == null)
             {
-                url = string.Format(url, connectionDetail.EnvironmentId);
+                url = "https://make.powerapps.com/";
+            }
+            else
+            {
+                url = string.Format("https://make.powerapps.com/environments/{0}/Home", connectionDetail.EnvironmentId);
             }
 
             if (url.Length > 0)
