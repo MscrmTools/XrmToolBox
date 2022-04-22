@@ -1492,26 +1492,37 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
         private void ApplyActiveContentDisplay()
         {
-            if (dpMain.ActiveContent != null && currentContent != dpMain.ActiveContent)
+            if (dpMain.ActiveContent != null)
             {
-                currentContent = dpMain.ActiveContent;
-
-                ProcessMenuItemsForPlugin2();
-
-                if (dpMain.ActiveContent is StartPage sp)
+                if (currentContent != dpMain.ActiveContent)
                 {
-                    sp.LoadMru();
-                }
+                    currentContent = dpMain.ActiveContent;
 
-                if (dpMain.ActiveContent is PluginForm pf)
-                {
-                    if (pf.Control is PluginControlBase pcb)
+                    ProcessMenuItemsForPlugin2();
+
+                    if (dpMain.ActiveContent is StartPage sp)
                     {
-                        ccsb.SetConnectionStatus(pcb.ConnectionDetail != null, pcb.ConnectionDetail);
-                        connectionDetail = pcb.ConnectionDetail;
-                        pluginsForm.ConnectionDetail = pcb.ConnectionDetail;
+                        sp.LoadMru();
+                    }
+
+                    if (dpMain.ActiveContent is PluginForm pf)
+                    {
+                        if (pf.Control is PluginControlBase pcb)
+                        {
+                            ccsb.SetConnectionStatus(pcb.ConnectionDetail != null, pcb.ConnectionDetail);
+                            connectionDetail = pcb.ConnectionDetail;
+                            pluginsForm.ConnectionDetail = pcb.ConnectionDetail;
+                        }
                     }
                 }
+                var activeContent = ((DockContent)dpMain.ActiveContent);
+
+                var isOnAdditionnalGroup = activeContent.Pane?.NestedDockingStatus?.NestedPanes?.Count > 1
+                    && (activeContent.Pane?.NestedDockingStatus?.NestedPanes?.Skip(1).Any(p => p.ActiveContent == activeContent) ?? false);
+
+                tsmiMoveToHorizontalGroup.Visible = !isOnAdditionnalGroup;
+                tsmiMoveToVerticalGroup.Visible = !isOnAdditionnalGroup;
+                tsmiMoveToOrigin.Visible = isOnAdditionnalGroup;
             }
         }
 
@@ -1533,6 +1544,27 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
         private void dpMain_DocumentDragged(object sender, System.EventArgs e)
         {
             ApplyActiveContentDisplay();
+        }
+
+        private void tsmiMoveToGroup_Click(object sender, System.EventArgs e)
+        {
+            if (dpMain.ActiveDocument != null)
+            {
+                if (sender == tsmiMoveToVerticalGroup)
+                {
+                    ((DockContent)dpMain.ActiveContent).Show(dpMain.Panes.First(), DockAlignment.Right, 0.5);
+                }
+                else if (sender == tsmiMoveToHorizontalGroup)
+                {
+                    ((DockContent)dpMain.ActiveContent).Show(dpMain.Panes.First(), DockAlignment.Bottom, 0.5);
+                }
+                else
+                {
+                    ((DockContent)dpMain.ActiveContent).DockTo(pluginsForm.Pane, DockStyle.Fill, dpMain.Contents.Count - 1);
+                }
+
+                ApplyActiveContentDisplay();
+            }
         }
 
         #endregion Change of active content
