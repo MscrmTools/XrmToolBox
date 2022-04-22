@@ -1675,14 +1675,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
             if (url.Length > 0)
             {
-                if (typeof(ConnectionDetail).GetMethods(BindingFlags.Public).Any(m => m.Name == "OpenUrlWithBrowserProfile"))
-                {
-                    connectionDetail.OpenUrlWithBrowserProfile(new Uri(url));
-                }
-                else
-                {
-                    Process.Start(url);
-                }
+                connectionDetail.OpenUrlWithBrowserProfile(new Uri(url));
             }
         }
 
