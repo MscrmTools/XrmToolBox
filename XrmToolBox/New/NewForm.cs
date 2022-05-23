@@ -568,6 +568,14 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
         private UserControl DisplayPluginControl(Lazy<IXrmToolBoxPlugin, IPluginMetadataExt> plugin, bool displayConnected = true)
         {
+            var isc = new ItSecurityChecker();
+            isc.LoadAllowedPlugins();
+            if (!isc.IsPluginAllowed(plugin.Metadata.PluginType))
+            {
+                MessageBox.Show(this, "This plugin is not allowed by your IT administrators. Please contact them", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return null;
+            }
+
             Guid pluginControlInstanceId = Guid.NewGuid();
             UserControl pluginControl = null;
             try
