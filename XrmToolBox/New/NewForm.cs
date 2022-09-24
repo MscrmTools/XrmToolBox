@@ -558,6 +558,16 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 pluginsForm.OpenPlugin(initialPluginName, null, true);
                 return;
             }
+            else if (e.Item.ConnectionId != Guid.Empty)
+            {
+                StartPage_OpenMruPluginRequested(sender, new OpenMruPluginEventArgs(new MostRecentlyUsedItem
+                {
+                    ConnectionId = e.Item.ConnectionId,
+                    ConnectionName = e.Item.ConnectionName,
+                    PluginName = e.Item.PluginName
+                }));
+                return;
+            }
 
             StartPluginWithoutConnection();
         }

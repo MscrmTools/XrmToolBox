@@ -227,11 +227,11 @@ namespace XrmToolBox.New
             }
         }
 
-        private void AddToFavorites(string pluginName)
+        private void AddToFavorites(string pluginName, bool withCurrentConnection = false)
         {
             if (Favorites.Instance.Items.All(i => i.PluginName != pluginName))
             {
-                Favorites.Instance.Items.Add(new Favorite { PluginName = pluginName });
+                Favorites.Instance.Items.Add(new Favorite { PluginName = pluginName, ConnectionId = withCurrentConnection ? ConnectionDetail.ConnectionId.Value : Guid.Empty, ConnectionName = withCurrentConnection ? ConnectionDetail.ConnectionName : "" });
                 Favorites.Instance.Save();
             }
         }
@@ -264,6 +264,10 @@ namespace XrmToolBox.New
             else if (e.ClickedItem == tsmiAddToFavorites)
             {
                 AddToFavorites(plugin.Metadata.Name);
+            }
+            else if (e.ClickedItem == addToFavoritesWithCurrentConnectionToolStripMenuItem)
+            {
+                AddToFavorites(plugin.Metadata.Name, true);
             }
             else if (e.ClickedItem == tsmiOpenWithNewConection)
             {
@@ -408,25 +412,25 @@ namespace XrmToolBox.New
 
             if (IsHandleCreated)
             {
-	            Invoke(new Action(
-		            () =>
-					{
-						pnlTop.Controls.Clear();
+                Invoke(new Action(
+                    () =>
+                    {
+                        pnlTop.Controls.Clear();
 
-						if (isc.HasPluginsRestriction)
-						{
-							var secInfo = new PluginsFilterInfo { Dock = DockStyle.Fill };
-							pnlTop.Controls.Add(secInfo);
-						}
+                        if (isc.HasPluginsRestriction)
+                        {
+                            var secInfo = new PluginsFilterInfo { Dock = DockStyle.Fill };
+                            pnlTop.Controls.Add(secInfo);
+                        }
 
-						if (pluginsManager.ValidationErrors?.Any() ?? false)
-						{
-							var invalidInfo = new InvalidPluginsInfo(pluginsManager.ValidationErrors) { Dock = DockStyle.Fill };
-							pnlTop.Controls.Add(invalidInfo);
-						}
+                        if (pluginsManager.ValidationErrors?.Any() ?? false)
+                        {
+                            var invalidInfo = new InvalidPluginsInfo(pluginsManager.ValidationErrors) { Dock = DockStyle.Fill };
+                            pnlTop.Controls.Add(invalidInfo);
+                        }
 
-						pnlTop.Visible = pnlTop.Controls.Count > 0;
-					}));
+                        pnlTop.Visible = pnlTop.Controls.Count > 0;
+                    }));
             }
 
             if (!pluginsManager.ValidatedPluginsExt?.Any() ?? false)
