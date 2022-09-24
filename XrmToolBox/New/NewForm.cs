@@ -671,7 +671,15 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
                 var pluginForm = new PluginForm(pluginControl, name, plugin.Metadata.Name);
                 pluginForm.PluginName = plugin.Metadata.Name;
-                pluginForm.Show(dpMain, DockState.Document);
+
+                if (pluginControl is ICompanion ic)
+                {
+                    pluginForm.Show(dpMain, ic.GetPosition() == RightOrLeft.Left ? DockState.DockLeft : DockState.DockRight);
+                }
+                else
+                {
+                    pluginForm.Show(dpMain, DockState.Document);
+                }
                 pluginForm.SendMessageToStatusBar += StatusBarMessenger_SendMessageToStatusBar;
                 pluginForm.TabPageContextMenuStrip = cmsMain;
                 pluginForm.FormClosed += (sender, e) =>
