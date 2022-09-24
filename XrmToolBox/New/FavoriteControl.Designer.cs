@@ -61,32 +61,31 @@
             // 
             // cmsMru
             // 
-            this.cmsMru.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsMru.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiOpenWithConnection,
             this.toolStripSeparator1,
             this.tsmiRemove});
             this.cmsMru.Name = "cmsMru";
-            this.cmsMru.Size = new System.Drawing.Size(342, 74);
+            this.cmsMru.Size = new System.Drawing.Size(334, 74);
             this.cmsMru.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsMru_ItemClicked);
             // 
             // tsmiOpenWithConnection
             // 
             this.tsmiOpenWithConnection.Image = global::XrmToolBox.Properties.Resources.lightning;
             this.tsmiOpenWithConnection.Name = "tsmiOpenWithConnection";
-            this.tsmiOpenWithConnection.Size = new System.Drawing.Size(341, 32);
+            this.tsmiOpenWithConnection.Size = new System.Drawing.Size(333, 32);
             this.tsmiOpenWithConnection.Text = "Open Tool with new connection";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(338, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(330, 6);
             // 
             // tsmiRemove
             // 
             this.tsmiRemove.Image = global::XrmToolBox.Properties.Resources.close;
             this.tsmiRemove.Name = "tsmiRemove";
-            this.tsmiRemove.Size = new System.Drawing.Size(341, 32);
+            this.tsmiRemove.Size = new System.Drawing.Size(333, 32);
             this.tsmiRemove.Text = "Remove from this list";
             this.tsmiRemove.ToolTipText = "Remove this item from the Most Recently Used items";
             // 

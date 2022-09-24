@@ -142,7 +142,7 @@ namespace XrmToolBox.New
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
             this.tsMain.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.tsMain.Size = new System.Drawing.Size(1927, 46);
+            this.tsMain.Size = new System.Drawing.Size(1606, 34);
             this.tsMain.TabIndex = 3;
             this.tsMain.Text = "tsMain";
             // 
@@ -151,14 +151,14 @@ namespace XrmToolBox.New
             this.tsbConnect.Image = global::XrmToolBox.Properties.Resources.Connect16;
             this.tsbConnect.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbConnect.Name = "tsbConnect";
-            this.tsbConnect.Size = new System.Drawing.Size(105, 29);
+            this.tsbConnect.Size = new System.Drawing.Size(105, 33);
             this.tsbConnect.Text = "Connect";
             this.tsbConnect.Click += new System.EventHandler(this.tsbConnect_Click);
             // 
             // tssSearch
             // 
             this.tssSearch.Name = "tssSearch";
-            this.tssSearch.Size = new System.Drawing.Size(6, 34);
+            this.tssSearch.Size = new System.Drawing.Size(6, 38);
             // 
             // tsbManageWindows
             // 
@@ -170,7 +170,7 @@ namespace XrmToolBox.New
             this.tsmiShowStartPage});
             this.tsbManageWindows.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbManageWindows.Name = "tsbManageWindows";
-            this.tsbManageWindows.Size = new System.Drawing.Size(104, 29);
+            this.tsbManageWindows.Size = new System.Drawing.Size(104, 33);
             this.tsbManageWindows.Text = "Windows";
             this.tsbManageWindows.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsbManageWindows_DropDownItemClicked);
             // 
@@ -207,7 +207,7 @@ namespace XrmToolBox.New
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 34);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 38);
             // 
             // tsddbTools
             // 
@@ -220,7 +220,7 @@ namespace XrmToolBox.New
             this.tsddbTools.Image = ((System.Drawing.Image)(resources.GetObject("tsddbTools.Image")));
             this.tsddbTools.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbTools.Name = "tsddbTools";
-            this.tsddbTools.Size = new System.Drawing.Size(163, 29);
+            this.tsddbTools.Size = new System.Drawing.Size(163, 33);
             this.tsddbTools.Text = "Configuration";
             this.tsddbTools.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsddbTools_DropDownItemClicked);
             // 
@@ -276,7 +276,7 @@ namespace XrmToolBox.New
             this.tsddbHelp.Image = ((System.Drawing.Image)(resources.GetObject("tsddbHelp.Image")));
             this.tsddbHelp.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddbHelp.Name = "tsddbHelp";
-            this.tsddbHelp.Size = new System.Drawing.Size(91, 29);
+            this.tsddbHelp.Size = new System.Drawing.Size(91, 33);
             this.tsddbHelp.Text = "Help";
             // 
             // tsmiXtbHelp
@@ -416,7 +416,7 @@ namespace XrmToolBox.New
             // tssOpenOrg
             // 
             this.tssOpenOrg.Name = "tssOpenOrg";
-            this.tssOpenOrg.Size = new System.Drawing.Size(6, 34);
+            this.tssOpenOrg.Size = new System.Drawing.Size(6, 38);
             this.tssOpenOrg.Visible = false;
             // 
             // tsbOpenOrg
@@ -424,7 +424,7 @@ namespace XrmToolBox.New
             this.tsbOpenOrg.Image = ((System.Drawing.Image)(resources.GetObject("tsbOpenOrg.Image")));
             this.tsbOpenOrg.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbOpenOrg.Name = "tsbOpenOrg";
-            this.tsbOpenOrg.Size = new System.Drawing.Size(188, 29);
+            this.tsbOpenOrg.Size = new System.Drawing.Size(188, 33);
             this.tsbOpenOrg.Text = "Open organization";
             this.tsbOpenOrg.ToolTipText = "Opens the connected organization in your web browser";
             this.tsbOpenOrg.Visible = false;
@@ -435,7 +435,7 @@ namespace XrmToolBox.New
             this.tsbOpenMaker.Image = global::XrmToolBox.Properties.Resources.PowerApps_scalable;
             this.tsbOpenMaker.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbOpenMaker.Name = "tsbOpenMaker";
-            this.tsbOpenMaker.Size = new System.Drawing.Size(138, 29);
+            this.tsbOpenMaker.Size = new System.Drawing.Size(138, 33);
             this.tsbOpenMaker.Text = "Open Maker";
             this.tsbOpenMaker.Visible = false;
             this.tsbOpenMaker.Click += new System.EventHandler(this.tsbOpenMaker_Click);
@@ -445,7 +445,7 @@ namespace XrmToolBox.New
             this.tsbImpersonate.Image = ((System.Drawing.Image)(resources.GetObject("tsbImpersonate.Image")));
             this.tsbImpersonate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbImpersonate.Name = "tsbImpersonate";
-            this.tsbImpersonate.Size = new System.Drawing.Size(140, 29);
+            this.tsbImpersonate.Size = new System.Drawing.Size(140, 33);
             this.tsbImpersonate.Text = "Impersonate";
             this.tsbImpersonate.ToolTipText = "Impersonate as another user in the organization/environment\n\nBe careful! If the c" +
     "urrent connection is already used by multiple tools, they will used this imperso" +
@@ -508,7 +508,7 @@ namespace XrmToolBox.New
             // 
             this.pnlTop.BackColor = System.Drawing.SystemColors.Info;
             this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlTop.Location = new System.Drawing.Point(0, 55);
+            this.pnlTop.Location = new System.Drawing.Point(0, 34);
             this.pnlTop.Name = "pnlTop";
             this.pnlTop.Size = new System.Drawing.Size(1606, 57);
             this.pnlTop.TabIndex = 4;
@@ -698,10 +698,10 @@ namespace XrmToolBox.New
             this.pnlConnectLoading.BackColor = System.Drawing.Color.Transparent;
             this.pnlConnectLoading.Controls.Add(this.lblConnecting);
             this.pnlConnectLoading.Controls.Add(this.pbConnectionLoading);
-            this.pnlConnectLoading.Location = new System.Drawing.Point(-135, -68);
+            this.pnlConnectLoading.Location = new System.Drawing.Point(500, 216);
             this.pnlConnectLoading.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.pnlConnectLoading.Name = "pnlConnectLoading";
-            this.pnlConnectLoading.Size = new System.Drawing.Size(1629, 792);
+            this.pnlConnectLoading.Size = new System.Drawing.Size(634, 310);
             this.pnlConnectLoading.TabIndex = 17;
             this.pnlConnectLoading.Visible = false;
             // 
@@ -709,23 +709,23 @@ namespace XrmToolBox.New
             // 
             this.lblConnecting.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblConnecting.Font = new System.Drawing.Font("Segoe UI Light", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblConnecting.Location = new System.Drawing.Point(152, 435);
+            this.lblConnecting.Location = new System.Drawing.Point(19, 202);
             this.lblConnecting.Name = "lblConnecting";
-            this.lblConnecting.Size = new System.Drawing.Size(1326, 43);
+            this.lblConnecting.Size = new System.Drawing.Size(597, 108);
             this.lblConnecting.TabIndex = 1;
             this.lblConnecting.Tag = "Please wait while XrmToolBox is connecting to {0}";
             this.lblConnecting.Text = "Please wait while XrmToolBox is connecting to {0}";
-            this.lblConnecting.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblConnecting.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // pbConnectionLoading
             // 
             this.pbConnectionLoading.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pbConnectionLoading.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.pbConnectionLoading.Image = ((System.Drawing.Image)(resources.GetObject("pbConnectionLoading.Image")));
-            this.pbConnectionLoading.Location = new System.Drawing.Point(152, 255);
+            this.pbConnectionLoading.Image = global::XrmToolBox.Properties.Resources.ConnectingDataverse;
+            this.pbConnectionLoading.Location = new System.Drawing.Point(19, 34);
             this.pbConnectionLoading.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.pbConnectionLoading.Name = "pbConnectionLoading";
-            this.pbConnectionLoading.Size = new System.Drawing.Size(1326, 163);
+            this.pbConnectionLoading.Size = new System.Drawing.Size(597, 163);
             this.pbConnectionLoading.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pbConnectionLoading.TabIndex = 0;
             this.pbConnectionLoading.TabStop = false;
@@ -735,9 +735,9 @@ namespace XrmToolBox.New
             this.dpMain.BackColor = System.Drawing.Color.White;
             this.dpMain.DefaultFloatWindowSize = new System.Drawing.Size(800, 600);
             this.dpMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dpMain.Location = new System.Drawing.Point(0, 124);
+            this.dpMain.Location = new System.Drawing.Point(0, 91);
             this.dpMain.Name = "dpMain";
-            this.dpMain.Size = new System.Drawing.Size(1927, 517);
+            this.dpMain.Size = new System.Drawing.Size(1606, 443);
             this.dpMain.TabIndex = 21;
             this.dpMain.ActiveDocumentChanged += new System.EventHandler(this.dpMain_ActiveDocumentChanged);
             this.dpMain.ActiveContentChanged += new System.EventHandler(this.dpMain_ActiveContentChanged);
@@ -760,7 +760,7 @@ namespace XrmToolBox.New
             this.toolStripSeparator2,
             this.tsmiChangeTabConnection});
             this.cmsMain.Name = "cmsMain";
-            this.cmsMain.Size = new System.Drawing.Size(364, 310);
+            this.cmsMain.Size = new System.Drawing.Size(364, 343);
             this.cmsMain.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsMain_ItemClicked);
             // 
             // cmsMainCloseThis
@@ -890,6 +890,7 @@ namespace XrmToolBox.New
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1606, 785);
+            this.Controls.Add(this.pnlConnectLoading);
             this.Controls.Add(this.dpMain);
             this.Controls.Add(this.pnlBottom);
             this.Controls.Add(this.pnlSupport);
@@ -897,7 +898,6 @@ namespace XrmToolBox.New
             this.Controls.Add(this.pnlPluginsUpdate);
             this.Controls.Add(this.pnlTop);
             this.Controls.Add(this.tsMain);
-            this.Controls.Add(this.pnlConnectLoading);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.IsMdiContainer = true;
             this.KeyPreview = true;

@@ -123,16 +123,6 @@ namespace XrmToolBox.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap connectingCds {
-            get {
-                object obj = ResourceManager.GetObject("connectingCds", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap ConnectingDataverse {
             get {
                 object obj = ResourceManager.GetObject("ConnectingDataverse", resourceCulture);
@@ -226,6 +216,16 @@ namespace XrmToolBox.Properties {
         internal static System.Drawing.Bitmap loading_dv4 {
             get {
                 object obj = ResourceManager.GetObject("loading_dv4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap LoadingConnection {
+            get {
+                object obj = ResourceManager.GetObject("LoadingConnection", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
