@@ -58,6 +58,7 @@
             this.pnlHelp = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.addToFavoritesWithCurrentConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsOnePlugin.SuspendLayout();
             this.pnlSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbClear)).BeginInit();
@@ -80,78 +81,79 @@
             this.tsmiHidePlugin,
             this.tsmiUninstallPlugin,
             this.toolStripSeparator1,
-            this.tsmiAddToFavorites});
+            this.tsmiAddToFavorites,
+            this.addToFavoritesWithCurrentConnectionToolStripMenuItem});
             this.cmsOnePlugin.Name = "cmsOnePlugin";
-            this.cmsOnePlugin.Size = new System.Drawing.Size(460, 342);
+            this.cmsOnePlugin.Size = new System.Drawing.Size(609, 476);
             this.cmsOnePlugin.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsOnePlugin_ItemClicked);
             // 
             // tsmiOpenWithNewConection
             // 
             this.tsmiOpenWithNewConection.Image = global::XrmToolBox.Properties.Resources.lightning;
             this.tsmiOpenWithNewConection.Name = "tsmiOpenWithNewConection";
-            this.tsmiOpenWithNewConection.Size = new System.Drawing.Size(382, 32);
+            this.tsmiOpenWithNewConection.Size = new System.Drawing.Size(405, 32);
             this.tsmiOpenWithNewConection.Text = "Open Tool with new connection";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(456, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(605, 6);
             // 
             // tsmiOpenProjectHomePage
             // 
             this.tsmiOpenProjectHomePage.Image = global::XrmToolBox.Properties.Resources.www_page;
             this.tsmiOpenProjectHomePage.Name = "tsmiOpenProjectHomePage";
-            this.tsmiOpenProjectHomePage.Size = new System.Drawing.Size(382, 32);
+            this.tsmiOpenProjectHomePage.Size = new System.Drawing.Size(405, 32);
             this.tsmiOpenProjectHomePage.Text = "Open project home page";
             // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(456, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(605, 6);
             // 
             // tsmiShortcutTool
             // 
             this.tsmiShortcutTool.Image = global::XrmToolBox.Properties.Resources.shortcut;
             this.tsmiShortcutTool.Name = "tsmiShortcutTool";
-            this.tsmiShortcutTool.Size = new System.Drawing.Size(382, 32);
+            this.tsmiShortcutTool.Size = new System.Drawing.Size(405, 32);
             this.tsmiShortcutTool.Text = "Create shortcut (Tool)";
             // 
             // tsmiShortcutToolConnection
             // 
             this.tsmiShortcutToolConnection.Image = global::XrmToolBox.Properties.Resources.shortcut;
             this.tsmiShortcutToolConnection.Name = "tsmiShortcutToolConnection";
-            this.tsmiShortcutToolConnection.Size = new System.Drawing.Size(382, 32);
+            this.tsmiShortcutToolConnection.Size = new System.Drawing.Size(405, 32);
             this.tsmiShortcutToolConnection.Text = "Create shortcut (Tool and Connection)";
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(456, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(605, 6);
             // 
             // tsmiHidePlugin
             // 
             this.tsmiHidePlugin.Image = global::XrmToolBox.Properties.Resources.hide_detail;
             this.tsmiHidePlugin.Name = "tsmiHidePlugin";
-            this.tsmiHidePlugin.Size = new System.Drawing.Size(382, 32);
+            this.tsmiHidePlugin.Size = new System.Drawing.Size(405, 32);
             this.tsmiHidePlugin.Text = "Hide";
             // 
             // tsmiUninstallPlugin
             // 
             this.tsmiUninstallPlugin.Image = global::XrmToolBox.Properties.Resources.Clear_16;
             this.tsmiUninstallPlugin.Name = "tsmiUninstallPlugin";
-            this.tsmiUninstallPlugin.Size = new System.Drawing.Size(382, 32);
+            this.tsmiUninstallPlugin.Size = new System.Drawing.Size(405, 32);
             this.tsmiUninstallPlugin.Text = "Uninstall";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(456, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(605, 6);
             // 
             // tsmiAddToFavorites
             // 
             this.tsmiAddToFavorites.Image = global::XrmToolBox.Properties.Resources.star;
             this.tsmiAddToFavorites.Name = "tsmiAddToFavorites";
-            this.tsmiAddToFavorites.Size = new System.Drawing.Size(382, 32);
+            this.tsmiAddToFavorites.Size = new System.Drawing.Size(405, 32);
             this.tsmiAddToFavorites.Text = "Add to Favorites";
             // 
             // pnlSearch
@@ -351,6 +353,12 @@
             this.label1.Text = "Oups... no tool found!";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // addToFavoritesWithCurrentConnectionToolStripMenuItem
+            // 
+            this.addToFavoritesWithCurrentConnectionToolStripMenuItem.Name = "addToFavoritesWithCurrentConnectionToolStripMenuItem";
+            this.addToFavoritesWithCurrentConnectionToolStripMenuItem.Size = new System.Drawing.Size(405, 32);
+            this.addToFavoritesWithCurrentConnectionToolStripMenuItem.Text = "Add to Favorites with current connection";
+            // 
             // PluginsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -409,5 +417,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenWithNewConection;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.PictureBox pbClear;
+        private System.Windows.Forms.ToolStripMenuItem addToFavoritesWithCurrentConnectionToolStripMenuItem;
     }
 }

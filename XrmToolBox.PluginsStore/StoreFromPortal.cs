@@ -213,63 +213,11 @@ namespace XrmToolBox.PluginsStore
 
         public async Task<ConnectionControlsUpdateSettings> PrepareConnectionControlsUpdate(Control parentControl, bool installOnNextRestart)
         {
-            var metadata = (await packageSearch.SearchAsync("mscrmtools.xrm.connection", new SearchFilter(AllowConnectionControlPreRelease, SearchFilterType.IsLatestVersion), 0, 1, logger, cancellationToken)).FirstOrDefault();
-            var nugetVersion = (await metadata.GetVersionsAsync()).Max(v => v.Version);
             var updates = new PluginUpdates { PreviousProcessId = Process.GetCurrentProcess().Id };
 
-            using (MemoryStream packageStream = new MemoryStream())
-            {
-                if (!await findPackageById.CopyNupkgToStreamAsync(
-                     "mscrmtools.xrm.connection",
-                     nugetVersion,
-                     packageStream,
-                     cache,
-                     logger,
-                     cancellationToken))
-                {
-                    throw new Exception($"The Nuget package for connection controls ({nugetVersion.Version}) has not been found");
-                }
-
-                var packageFolder = Path.Combine(nugetPluginsFolder, $"mscrmtools.xrm.connection.{nugetVersion.Version}");
-                var currentLocation = Assembly.GetExecutingAssembly().Location;
-                var folder = Path.GetDirectoryName(currentLocation);
-
-                if (!Directory.Exists(packageFolder))
-                {
-                    Directory.CreateDirectory(packageFolder);
-                }
-
-                using (PackageArchiveReader packageReader = new PackageArchiveReader(packageStream))
-                {
-                    packageReader.NuspecReader.GetReleaseNotes();
-
-                    foreach (var packageFile in await packageReader.GetFilesAsync(cancellationToken))
-                    {
-                        if (packageFile.ToLower().EndsWith("mctools.xrm.connection.dll")
-                            || packageFile.ToLower().EndsWith("mctools.xrm.connection.winforms.dll"))
-                        {
-                            using (var fileStream = File.OpenWrite(Path.Combine(packageFolder, Path.GetFileName(packageFile))))
-                            using (var stream = await packageReader.GetStreamAsync(packageFile, cancellationToken))
-                            {
-                                await stream.CopyToAsync(fileStream);
-                            }
-                        }
-                    }
-                }
-
-                updates.Plugins.Add(new PluginUpdate
-                {
-                    Source = Path.Combine(packageFolder, "McTools.Xrm.Connection.dll"),
-                    Destination = Path.Combine(folder, "McTools.Xrm.Connection.dll"),
-                    RequireRestart = true
-                });
-                updates.Plugins.Add(new PluginUpdate
-                {
-                    Source = Path.Combine(packageFolder, "McTools.Xrm.Connection.WinForms.dll"),
-                    Destination = Path.Combine(folder, "McTools.Xrm.Connection.WinForms.dll"),
-                    RequireRestart = true
-                });
-            }
+            var nugetVersion = (await AddPackageToInstall("mscrmtools.xrm.connection", updates));
+            await AddPackageToInstall("Microsoft.CrmSdk.XrmTooling.CoreAssembly", updates);
+            await AddPackageToInstall("Microsoft.CrmSdk.XrmTooling.WpfControls", updates);
 
             XmlSerializerHelper.SerializeToFile(updates, Path.Combine(Paths.XrmToolBoxPath, "Update.xml"));
 
@@ -289,6 +237,61 @@ namespace XrmToolBox.PluginsStore
                 RestartNow = returnedValue,
                 Version = nugetVersion.Version + (!string.IsNullOrEmpty(nugetVersion.Release) ? "-" + nugetVersion.Release : "")
             };
+        }
+
+        private async Task<NuGetVersion> AddPackageToInstall(string packageName, PluginUpdates updates)
+        {
+            var metadata = (await packageSearch.SearchAsync(packageName, new SearchFilter(AllowConnectionControlPreRelease, SearchFilterType.IsLatestVersion), 0, 1, logger, cancellationToken)).FirstOrDefault();
+            var nugetVersion = (await metadata.GetVersionsAsync()).Max(v => v.Version);
+
+            using (MemoryStream packageStream = new MemoryStream())
+            {
+                if (!await findPackageById.CopyNupkgToStreamAsync(
+                     packageName,
+                     nugetVersion,
+                     packageStream,
+                     cache,
+                     logger,
+                     cancellationToken))
+                {
+                    throw new Exception($"The Nuget package for {packageName} ({nugetVersion.Version}) has not been found");
+                }
+
+                var packageFolder = Path.Combine(nugetPluginsFolder, $"{packageName}.{nugetVersion.Version}");
+                var currentLocation = Assembly.GetExecutingAssembly().Location;
+                var folder = Path.GetDirectoryName(currentLocation);
+
+                if (!Directory.Exists(packageFolder))
+                {
+                    Directory.CreateDirectory(packageFolder);
+                }
+
+                using (PackageArchiveReader packageReader = new PackageArchiveReader(packageStream))
+                {
+                    packageReader.NuspecReader.GetReleaseNotes();
+
+                    foreach (var packageFile in await packageReader.GetFilesAsync(cancellationToken))
+                    {
+                        if (packageFile.ToLower().EndsWith(".dll"))
+                        {
+                            using (var fileStream = File.OpenWrite(Path.Combine(packageFolder, Path.GetFileName(packageFile))))
+                            using (var stream = await packageReader.GetStreamAsync(packageFile, cancellationToken))
+                            {
+                                await stream.CopyToAsync(fileStream);
+                            }
+
+                            updates.Plugins.Add(new PluginUpdate
+                            {
+                                Source = Path.Combine(packageFolder, Path.GetFileName(packageFile)),
+                                Destination = Path.Combine(folder, Path.GetFileName(packageFile)),
+                                RequireRestart = true
+                            });
+                        }
+                    }
+                }
+            }
+
+            return nugetVersion;
         }
 
         #endregion Connection controls installation

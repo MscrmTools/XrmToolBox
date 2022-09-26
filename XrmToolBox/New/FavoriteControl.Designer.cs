@@ -32,10 +32,11 @@
             this.lblPlugin = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.cmsMru = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmiOpenWithConnection = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiRemove = new System.Windows.Forms.ToolStripMenuItem();
             this.pbLogo = new System.Windows.Forms.PictureBox();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiOpenWithConnection = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblConnectionName = new System.Windows.Forms.Label();
             this.cmsMru.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).BeginInit();
             this.SuspendLayout();
@@ -65,14 +66,26 @@
             this.toolStripSeparator1,
             this.tsmiRemove});
             this.cmsMru.Name = "cmsMru";
-            this.cmsMru.Size = new System.Drawing.Size(334, 107);
+            this.cmsMru.Size = new System.Drawing.Size(334, 74);
             this.cmsMru.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsMru_ItemClicked);
+            // 
+            // tsmiOpenWithConnection
+            // 
+            this.tsmiOpenWithConnection.Image = global::XrmToolBox.Properties.Resources.lightning;
+            this.tsmiOpenWithConnection.Name = "tsmiOpenWithConnection";
+            this.tsmiOpenWithConnection.Size = new System.Drawing.Size(333, 32);
+            this.tsmiOpenWithConnection.Text = "Open Tool with new connection";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(330, 6);
             // 
             // tsmiRemove
             // 
             this.tsmiRemove.Image = global::XrmToolBox.Properties.Resources.close;
             this.tsmiRemove.Name = "tsmiRemove";
-            this.tsmiRemove.Size = new System.Drawing.Size(341, 32);
+            this.tsmiRemove.Size = new System.Drawing.Size(333, 32);
             this.tsmiRemove.Text = "Remove from this list";
             this.tsmiRemove.ToolTipText = "Remove this item from the Most Recently Used items";
             // 
@@ -88,17 +101,19 @@
             this.pbLogo.TabIndex = 0;
             this.pbLogo.TabStop = false;
             // 
-            // toolStripSeparator1
+            // lblConnectionName
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(338, 6);
-            // 
-            // tsmiOpenWithConnection
-            // 
-            this.tsmiOpenWithConnection.Image = global::XrmToolBox.Properties.Resources.lightning;
-            this.tsmiOpenWithConnection.Name = "tsmiOpenWithConnection";
-            this.tsmiOpenWithConnection.Size = new System.Drawing.Size(341, 32);
-            this.tsmiOpenWithConnection.Text = "Open Tool with new connection";
+            this.lblConnectionName.AutoEllipsis = true;
+            this.lblConnectionName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblConnectionName.Font = new System.Drawing.Font("Segoe UI Light", 11F);
+            this.lblConnectionName.ForeColor = System.Drawing.Color.Gray;
+            this.lblConnectionName.Location = new System.Drawing.Point(105, 59);
+            this.lblConnectionName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblConnectionName.Name = "lblConnectionName";
+            this.lblConnectionName.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
+            this.lblConnectionName.Size = new System.Drawing.Size(617, 52);
+            this.lblConnectionName.TabIndex = 2;
+            this.lblConnectionName.Text = "[Connection Name]";
             // 
             // FavoriteControl
             // 
@@ -106,9 +121,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ContextMenuStrip = this.cmsMru;
+            this.Controls.Add(this.lblConnectionName);
             this.Controls.Add(this.lblPlugin);
             this.Controls.Add(this.pbLogo);
-            this.Margin = new System.Windows.Forms.Padding(15, 15, 15, 15);
+            this.Margin = new System.Windows.Forms.Padding(15);
             this.Name = "FavoriteControl";
             this.Padding = new System.Windows.Forms.Padding(15, 7, 0, 7);
             this.Size = new System.Drawing.Size(722, 108);
@@ -128,5 +144,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiRemove;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenWithConnection;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.Label lblConnectionName;
     }
 }
