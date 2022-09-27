@@ -212,6 +212,7 @@
       <DependentUpon>LicenseAcceptanceForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ListViewItemComparer.cs" />
+    <Compile Include="InstallationInfo.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="PluginDeletions.cs" />
     <Compile Include="PluginLicense.cs">
