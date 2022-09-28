@@ -310,6 +310,7 @@ Please start XrmToolBox again to fix this problem",
             RedirectAssembly("WeifenLuo.WinFormsUI.Docking");
             RedirectAssembly("WeifenLuo.WinFormsUI.Docking.ThemeVS2015");
             RedirectAssembly("ScintillaNET");
+            RedirectAssembly("Microsoft.Web.WebView2.WinForms");
 
             OptimizeConnectionSettings();
 
