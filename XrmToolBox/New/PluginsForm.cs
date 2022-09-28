@@ -229,9 +229,9 @@ namespace XrmToolBox.New
 
         private void AddToFavorites(string pluginName, bool withCurrentConnection = false)
         {
-            if (Favorites.Instance.Items.All(i => i.PluginName != pluginName))
+            if (Favorites.Instance.Items.All(i => i.PluginName != pluginName || i.PluginName == pluginName && i.ConnectionId != (withCurrentConnection ? ConnectionDetail?.ConnectionId.Value ?? Guid.Empty : Guid.Empty)))
             {
-                Favorites.Instance.Items.Add(new Favorite { PluginName = pluginName, ConnectionId = withCurrentConnection ? ConnectionDetail.ConnectionId.Value : Guid.Empty, ConnectionName = withCurrentConnection ? ConnectionDetail.ConnectionName : "" });
+                Favorites.Instance.Items.Add(new Favorite { PluginName = pluginName, ConnectionId = withCurrentConnection ? ConnectionDetail?.ConnectionId.Value ?? Guid.Empty : Guid.Empty, ConnectionName = withCurrentConnection ? ConnectionDetail?.ConnectionName ?? "" : "" });
                 Favorites.Instance.Save();
             }
         }
