@@ -674,7 +674,23 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
                 if (pluginControl is ICompanion ic)
                 {
-                    pluginForm.Show(dpMain, ic.GetPosition() == RightOrLeft.Left ? DockState.DockLeft : DockState.DockRight);
+                    DockState position;
+                    switch (ic.GetPosition())
+                    {
+                        case RightOrLeft.Left:
+                            position = DockState.DockLeft;
+                            break;
+
+                        case RightOrLeft.Bottom:
+                            position = DockState.DockBottom;
+                            break;
+
+                        default:
+                            position = DockState.DockRight;
+                            break;
+                    }
+
+                    pluginForm.Show(dpMain, position);
                 }
                 else
                 {

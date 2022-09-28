@@ -5,7 +5,8 @@ namespace XrmToolBox.Extensibility.Interfaces
     public enum RightOrLeft
     {
         Left,
-        Right
+        Right,
+        Bottom
     }
 
     public interface ICompanion
