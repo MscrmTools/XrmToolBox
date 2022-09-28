@@ -1873,7 +1873,7 @@ Would you like to reinstall last stable release of connection controls?";
             }
             else if (e.ClickedItem == tsmiChangeTabConnection)
             {
-                ConnectUponApproval(new RequestConnectionEventArgs { ActionName = "", Control = ((PluginForm)dpMain.ActiveDocument).Control });
+                ConnectUponApproval(new RequestConnectionEventArgs { ActionName = "", Control = ((PluginForm)dpMain.ActiveContent).Control });
             }
         }
 
