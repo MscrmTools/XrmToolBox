@@ -1851,11 +1851,11 @@ Would you like to reinstall last stable release of connection controls?";
         {
             if (e.ClickedItem == cmsMainCloseAll)
             {
-                RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
+                RequestCloseTabs(dpMain.Contents.OfType<PluginForm>().Where(c => !(c.Control is ICompanion)), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
             }
             else if (e.ClickedItem == cmsMainCloseExceptThis)
             {
-                RequestCloseTabs(dpMain.Contents.OfType<PluginForm>().Where(p => dpMain.ActiveContent != p), new PluginCloseInfo(ToolBoxCloseReason.CloseAllExceptActive));
+                RequestCloseTabs(dpMain.Contents.OfType<PluginForm>().Where(p => dpMain.ActiveContent != p && !(p.Control is ICompanion)), new PluginCloseInfo(ToolBoxCloseReason.CloseAllExceptActive));
             }
             else if (e.ClickedItem == cmsMainCloseThis)
             {
@@ -1953,11 +1953,11 @@ Would you like to reinstall last stable release of connection controls?";
         {
             if (e.ClickedItem == closeAllWindowsToolStripMenuItem)
             {
-                RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
+                RequestCloseTabs(dpMain.Contents.OfType<PluginForm>().Where(c => !(c.Control is ICompanion)), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
             }
             else if (e.ClickedItem == closeAllWindowsExceptActiveToolStripMenuItem)
             {
-                RequestCloseTabs(dpMain.Contents.OfType<PluginForm>().Where(p => dpMain.ActiveContent != p), new PluginCloseInfo(ToolBoxCloseReason.CloseAllExceptActive));
+                RequestCloseTabs(dpMain.Contents.OfType<PluginForm>().Where(p => dpMain.ActiveContent != p && !(p.Control is ICompanion)), new PluginCloseInfo(ToolBoxCloseReason.CloseAllExceptActive));
             }
             else if (e.ClickedItem == closeCurrentWindowToolStripMenuItem)
             {
