@@ -65,6 +65,8 @@ namespace XrmToolBox.Controls
                     break;
             }
 
+            if (this.IsDisposed) return;
+
             Invoke(new Action(() =>
             {
                 pbConnectionLoading.Image = newImage;
