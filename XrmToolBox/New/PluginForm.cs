@@ -203,7 +203,7 @@ namespace XrmToolBox.New
             Padding = new Padding(0, 0, 0, 0);
             tlpHighlight.Visible = false;
 
-            if (detail?.IsEnvironmentHighlightSet ?? false)
+            if (detail?.IsEnvironmentHighlightSet ?? false && !(pluginControlBase is INoHighlightingPlugin))
             {
                 Padding = new Padding(10, 0, 10, 10);
                 tlpHighlight.Visible = true;
@@ -214,7 +214,7 @@ namespace XrmToolBox.New
             }
             else
             {
-                lblSourceConnection.Text = detail?.EnvironmentHighlightingInfo?.Text ?? detail?.ConnectionName ?? "(Unknow connection name)";
+                lblSourceConnection.Text = detail?.EnvironmentHighlightingInfo?.Text ?? detail?.ConnectionName ?? "(Unknown connection name)";
                 lblSourceConnection.ForeColor = Color.Black;
                 lblSourceConnection.BackColor = DefaultBackColor;
             }
@@ -222,28 +222,31 @@ namespace XrmToolBox.New
             var backColor = DefaultBackColor;
             var color = DefaultForeColor;
 
-            foreach (var td in targetDetails)
+            if (!(pluginControlBase is INoHighlightingPlugin))
             {
-                if (td?.IsEnvironmentHighlightSet ?? false)
+                foreach (var td in targetDetails)
                 {
-                    Padding = new Padding(10, 0, 10, 10);
-                    tlpHighlight.Visible = true;
+                    if (td?.IsEnvironmentHighlightSet ?? false)
+                    {
+                        Padding = new Padding(10, 0, 10, 10);
+                        tlpHighlight.Visible = true;
+                    }
+
+                    if (td?.EnvironmentHighlightingInfo != null)
+                    {
+                        backColor = td.EnvironmentHighlightingInfo.Color ?? DefaultBackColor;
+                        color = td.EnvironmentHighlightingInfo.TextColor ?? DefaultForeColor;
+                    }
                 }
 
-                if (td?.EnvironmentHighlightingInfo != null)
-                {
-                    backColor = td.EnvironmentHighlightingInfo.Color ?? DefaultBackColor;
-                    color = td.EnvironmentHighlightingInfo.TextColor ?? DefaultForeColor;
-                }
+                lblTargetConnections.Text = string.Join(", ", targetDetails.Select(c => c.EnvironmentHighlightingInfo?.Text ?? c.ConnectionName));
+                lblTargetConnections.ForeColor = color;
+                lblTargetConnections.BackColor = backColor;
+
+                tlpHighlight.Visible = true;
             }
 
-            lblTargetConnections.Text = string.Join(", ", targetDetails.Select(c => c.EnvironmentHighlightingInfo?.Text ?? c.ConnectionName));
-            lblTargetConnections.ForeColor = color;
-            lblTargetConnections.BackColor = backColor;
-
             BackColor = backColor;
-
-            tlpHighlight.Visible = true;
 
             Invalidate();
         }
