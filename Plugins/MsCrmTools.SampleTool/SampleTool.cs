@@ -4,6 +4,7 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -14,7 +15,7 @@ using XrmToolBox.Extensibility.Interfaces;
 
 namespace MsCrmTools.SampleTool
 {
-    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin, IDuplicatableTool, ISettingsPlugin
+    public partial class SampleTool : PluginControlBase, IGitHubPlugin, ICodePlexPlugin, IPayPalPlugin, IHelpPlugin, IStatusBarMessenger, IShortcutReceiver, IAboutPlugin, IDuplicatableTool, ISettingsPlugin, IPrivatePlugin, IMessageBusHost
     {
         #region Base tool implementation
 
@@ -242,16 +243,60 @@ namespace MsCrmTools.SampleTool
 
         private void btnCheckMultiSample_Click(object sender, EventArgs e)
         {
-            var expectedPlugin = PluginManagerExtended.Instance.Plugins.FirstOrDefault(p =>
-                p.Value is PluginBase pb && pb.GetId() == Guid.Parse("{64A4E4E3-CAF9-4896-983A-341A297DEAF3}")
+            var expectedPlugin = PluginManagerExtended.Instance.PluginsExt.FirstOrDefault(p =>
+                p.Metadata.Id == Guid.Parse("{64A4E4E3-CAF9-4896-983A-341A297DEAF3}")
             );
 
             MessageBox.Show(expectedPlugin == null ? "Tool is not installed" : "Tool is installed");
+        }
+
+        private void btnDoSomethingWrong_Click(object sender, EventArgs e)
+        {
+            var asyncinfo = new WorkAsyncInfo()
+            {
+                Work = (a, args) =>
+                {
+                    args.Result = Service.RetrieveMultiple(new QueryExpression("account_oops"));
+                },
+                PostWorkCallBack = (args) =>
+                {
+                    if (args.Error != null)
+                    {
+                        ShowErrorDialog(args.Error, "Loading Accounts");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Tada!");
+                    }
+                }
+            };
+            WorkAsync(asyncinfo);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            throw new Exception("I wasn't expected this exception");
         }
 
         private void SampleTool_Load(object sender, EventArgs e)
         {
             ShowInfoNotification("This is a notification that can lead to XrmToolBox repository", new Uri("http://github.com/MscrmTools/XrmToolBox"));
         }
+
+        #region IMessageBusHost
+
+        public event EventHandler<MessageBusEventArgs> OnOutgoingMessage;
+
+        public void OnIncomingMessage(MessageBusEventArgs message)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SendMessage(string message)
+        {
+            OnOutgoingMessage?.Invoke(this, new MessageBusEventArgs("targetPlugin", false));
+        }
+
+        #endregion IMessageBusHost
     }
 }

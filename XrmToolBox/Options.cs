@@ -36,7 +36,10 @@ namespace XrmToolBox
         MostUsed,
 
         [Description("Recently updated")]
-        RecentlyUpdated
+        RecentlyUpdated,
+
+        [Description("By Rating")]
+        Rating
     }
 
     public enum DisplayPluginsStoreOnStartup
@@ -213,14 +216,19 @@ namespace XrmToolBox
 
                     case XrmToolBox.DisplayOrder.RecentlyUpdated:
                         return "Recently updated";
+
+                    case XrmToolBox.DisplayOrder.Rating:
+                        return "Rating";
                 }
 
                 return string.Empty;
             }
             set => PluginsDisplayOrder = value == "Alphabetically"
-                ? XrmToolBox.DisplayOrder.Alphabetically
+                    ? XrmToolBox.DisplayOrder.Alphabetically
                 : value == "Most used"
                     ? XrmToolBox.DisplayOrder.MostUsed
+                : value == "Rating"
+                    ? XrmToolBox.DisplayOrder.Rating
                     : XrmToolBox.DisplayOrder.RecentlyUpdated;
         }
 
@@ -481,7 +489,17 @@ namespace XrmToolBox
                 ConnectionControlsVersion = ConnectionControlsVersion,
                 ConnectionControlsAllowPreReleaseUpdates = ConnectionControlsAllowPreReleaseUpdates,
                 NumberOfDaysToShowNewRibbon = NumberOfDaysToShowNewRibbon,
-                RememberSession = RememberSession
+                RememberSession = RememberSession,
+                DisplayStoreOnStartup = DisplayStoreOnStartup,
+                IconDisplayMode = IconDisplayMode,
+                LastConnection = LastConnection,
+                LastPlugin = LastPlugin,
+                PluginsDisplayOrder = PluginsDisplayOrder,
+                PluginsListDocking = PluginsListDocking,
+                PluginsListIsHidden = PluginsListIsHidden,
+                ReuseConnections = ReuseConnections,
+                Size = Size,
+                ThemeValue = ThemeValue
             };
         }
 

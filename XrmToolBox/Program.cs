@@ -4,11 +4,12 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
-using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Forms;
 using XrmToolBox.New;
 using XrmToolBox.PluginsStore;
 using PluginUpdates = XrmToolBox.AppCode.PluginUpdates;
@@ -49,6 +50,15 @@ namespace XrmToolBox
             };
 
             AppDomain.CurrentDomain.AssemblyResolve += handler;
+        }
+
+        public static void ShowErrorDialog(Exception exception, string heading = null, string extrainfo = null, bool allownewissue = true)
+        {
+            if (exception == null)
+            {
+                return;
+            }
+            new ErrorDetail(null, exception, heading, extrainfo, allownewissue).ShowDialog();
         }
 
         /// <summary>
@@ -129,6 +139,18 @@ namespace XrmToolBox
 
 Please start XrmToolBox again to fix this problem",
                     @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (e.ExceptionObject is Exception ex)
+            {
+                ShowErrorDialog(ex);
+            }
+            else
+            {
+                MessageBox.Show("Unhandled error:\n" + e.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -241,62 +263,75 @@ Please start XrmToolBox again to fix this problem",
         [STAThread]
         private static void Main(string[] args)
         {
-            try
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+            var isc = new ItSecurityChecker();
+            if (isc.IsDisabled())
             {
-                var isc = new ItSecurityChecker();
-                if (isc.IsDisabled())
-                {
-                    var message =
-                        "IT department restricted the access to XrmToolBox.\r\n\r\nPlease contact your administrators if you need access to XrmToolBox";
-                    MessageBox.Show(message, "XrmToolBox restriction detected!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                if (!CheckRequiredAssemblies())
-                {
-                    return;
-                }
-
-                foreach (var arg in args)
-                {
-                    if (arg.ToLower().StartsWith("/overridepath:"))
-                    {
-                        var parts = arg.Split(':');
-                        Paths.OverrideRootPath(string.Join(":", parts.Skip(1)));
-                    }
-                }
-
-                InitializePluginsFolder();
-                CopyUpdatedPlugins();
-                RemovePlugins();
-
-                RedirectAssembly("NuGet.Core");
-                RedirectAssembly("Newtonsoft.Json");
-                RedirectAssembly("McTools.Xrm.Connection");
-                RedirectAssembly("McTools.Xrm.Connection.WinForms");
-                RedirectAssembly("XrmToolBox.Extensibility");
-                RedirectAssembly("XrmToolBox.PluginsStore");
-                RedirectAssembly("Microsoft.Xrm.Sdk");
-                RedirectAssembly("Microsoft.Xrm.Sdk.Workflow");
-                RedirectAssembly("Microsoft.Crm.Sdk.Proxy");
-                RedirectAssembly("Microsoft.Xrm.Tooling.Connector");
-                RedirectAssembly("Microsoft.Xrm.Tooling.Ui.Styles");
-                RedirectAssembly("Microsoft.Xrm.Tooling.CrmConnectControl");
-                RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory");
-                RedirectAssembly("WeifenLuo.WinFormsUI.Docking");
-                RedirectAssembly("WeifenLuo.WinFormsUI.Docking.ThemeVS2015");
-                RedirectAssembly("ScintillaNET");
-
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new NewForm(args));
+                var message =
+                    "IT department restricted the access to XrmToolBox.\r\n\r\nPlease contact your administrators if you need access to XrmToolBox";
+                MessageBox.Show(message, "XrmToolBox restriction detected!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            catch (Exception error)
+
+            if (!CheckRequiredAssemblies())
             {
-                const string lockedMessage = "One reason can be that at least one file is locked by Windows. Please unblock each locked files or unlock XrmToolBox.zip before extracting its content";
-                MessageBox.Show("An unexpected error occured: " + error + "\r\n\r\n" + lockedMessage, "Error", MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
+                return;
             }
+
+            foreach (var arg in args)
+            {
+                if (arg.ToLower().StartsWith("/overridepath:"))
+                {
+                    var parts = arg.Split(':');
+                    Paths.OverrideRootPath(string.Join(":", parts.Skip(1)));
+                }
+            }
+
+            InitializePluginsFolder();
+            CopyUpdatedPlugins();
+            RemovePlugins();
+
+            RedirectAssembly("NuGet.Common");
+            RedirectAssembly("NuGet.Packaging");
+            RedirectAssembly("NuGet.Protocol");
+            RedirectAssembly("Newtonsoft.Json");
+            RedirectAssembly("McTools.Xrm.Connection");
+            RedirectAssembly("McTools.Xrm.Connection.WinForms");
+            RedirectAssembly("XrmToolBox.Extensibility");
+            RedirectAssembly("XrmToolBox.PluginsStore");
+            RedirectAssembly("Microsoft.Xrm.Sdk");
+            RedirectAssembly("Microsoft.Xrm.Sdk.Workflow");
+            RedirectAssembly("Microsoft.Crm.Sdk.Proxy");
+            RedirectAssembly("Microsoft.Xrm.Tooling.Connector");
+            RedirectAssembly("Microsoft.Xrm.Tooling.Ui.Styles");
+            RedirectAssembly("Microsoft.Xrm.Tooling.CrmConnectControl");
+            RedirectAssembly("Microsoft.IdentityModel.Clients.ActiveDirectory");
+            RedirectAssembly("WeifenLuo.WinFormsUI.Docking");
+            RedirectAssembly("WeifenLuo.WinFormsUI.Docking.ThemeVS2015");
+            RedirectAssembly("ScintillaNET");
+
+            OptimizeConnectionSettings();
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new NewForm(args));
+        }
+
+        /// <summary>
+        /// Optimize Connection Settings
+        /// </summary>
+        /// <remarks>https://docs.microsoft.com/en-us/powerapps/developer/data-platform/xrm-tooling/sample-tpl-crmserviceclient</remarks>
+        private static void OptimizeConnectionSettings()
+        {
+            //Change max connections from .NET to a remote service default: 2
+            ServicePointManager.DefaultConnectionLimit = 65000;
+            //Bump up the min threads reserved for this app to ramp connections faster - minWorkerThreads defaults to 4, minIOCP defaults to 4
+            ThreadPool.SetMinThreads(100, 100);
+            //Turn off the Expect 100 to continue message - 'true' will cause the caller to wait until it round-trip confirms a connection to the server
+            ServicePointManager.Expect100Continue = false;
+            //Can decreas overall transmission overhead but can cause delay in data packet arrival
+            ServicePointManager.UseNagleAlgorithm = false;
         }
 
         private static void RemovePlugins()

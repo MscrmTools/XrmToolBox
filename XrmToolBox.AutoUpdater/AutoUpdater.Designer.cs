@@ -39,18 +39,16 @@
             // 
             this.pbDownloadFile.Dock = System.Windows.Forms.DockStyle.Top;
             this.pbDownloadFile.Location = new System.Drawing.Point(0, 0);
-            this.pbDownloadFile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pbDownloadFile.Name = "pbDownloadFile";
-            this.pbDownloadFile.Size = new System.Drawing.Size(385, 16);
+            this.pbDownloadFile.Size = new System.Drawing.Size(578, 25);
             this.pbDownloadFile.TabIndex = 0;
             // 
             // lblProgress
             // 
             this.lblProgress.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblProgress.Location = new System.Drawing.Point(0, 16);
-            this.lblProgress.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblProgress.Location = new System.Drawing.Point(0, 25);
             this.lblProgress.Name = "lblProgress";
-            this.lblProgress.Size = new System.Drawing.Size(385, 16);
+            this.lblProgress.Size = new System.Drawing.Size(578, 25);
             this.lblProgress.TabIndex = 1;
             this.lblProgress.Text = "[Info]";
             this.lblProgress.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -58,19 +56,18 @@
             // lblEndInstructions
             // 
             this.lblEndInstructions.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblEndInstructions.Location = new System.Drawing.Point(0, 32);
-            this.lblEndInstructions.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblEndInstructions.Location = new System.Drawing.Point(0, 50);
             this.lblEndInstructions.Name = "lblEndInstructions";
-            this.lblEndInstructions.Size = new System.Drawing.Size(385, 45);
+            this.lblEndInstructions.Size = new System.Drawing.Size(578, 69);
             this.lblEndInstructions.TabIndex = 2;
+            this.lblEndInstructions.Tag = "Your existing installation has been backed up in the following directory: {0}";
             this.lblEndInstructions.Text = "Your existing installation has been backed up in the following directory: {0}";
             // 
             // btnLaunchXrmToolBox
             // 
-            this.btnLaunchXrmToolBox.Location = new System.Drawing.Point(249, 80);
-            this.btnLaunchXrmToolBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnLaunchXrmToolBox.Location = new System.Drawing.Point(374, 123);
             this.btnLaunchXrmToolBox.Name = "btnLaunchXrmToolBox";
-            this.btnLaunchXrmToolBox.Size = new System.Drawing.Size(133, 23);
+            this.btnLaunchXrmToolBox.Size = new System.Drawing.Size(200, 35);
             this.btnLaunchXrmToolBox.TabIndex = 3;
             this.btnLaunchXrmToolBox.Text = "Open XrmToolBox";
             this.btnLaunchXrmToolBox.UseVisualStyleBackColor = true;
@@ -78,15 +75,14 @@
             // 
             // AutoUpdater
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(385, 33);
+            this.ClientSize = new System.Drawing.Size(578, 51);
             this.Controls.Add(this.btnLaunchXrmToolBox);
             this.Controls.Add(this.lblEndInstructions);
             this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.pbDownloadFile);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "AutoUpdater";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "XrmToolBox AutoUpdater";

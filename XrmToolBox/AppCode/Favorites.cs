@@ -11,6 +11,8 @@ namespace XrmToolBox.AppCode
 {
     public class Favorite
     {
+        public Guid ConnectionId { get; set; }
+        public string ConnectionName { get; set; }
         public string PluginName { get; set; }
     }
 

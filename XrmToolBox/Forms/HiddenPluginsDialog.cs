@@ -10,13 +10,13 @@ namespace XrmToolBox.Forms
         {
             InitializeComponent();
 
-            foreach (var plugin in PluginManagerExtended.Instance.Plugins)
+            foreach (var plugin in PluginManagerExtended.Instance.PluginsExt)
             {
                 try
                 {
                     var title = plugin.Metadata.Name;
-                    var author = plugin.Value.GetCompany();
-                    var version = plugin.Value.GetVersion();
+                    var author = plugin.Metadata.Company;
+                    var version = plugin.Metadata.Version;
 
                     var item = new ListViewItem(title);
                     item.SubItems.Add(author);

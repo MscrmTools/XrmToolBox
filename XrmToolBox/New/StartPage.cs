@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.AppCode;
+using XrmToolBox.Forms;
 using XrmToolBox.New.EventArgs;
 
 namespace XrmToolBox.New
@@ -41,7 +42,7 @@ namespace XrmToolBox.New
             {
                 foreach (var mru in MostRecentlyUsedItems.Instance.Items.OrderBy(i => i.Date))
                 {
-                    var plugin = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == mru.PluginName);
+                    var plugin = pManager.PluginsExt.FirstOrDefault(p => p.Metadata.Name == mru.PluginName);
                     if (plugin != null)
                     {
                         var ctrl = new MostRecentlyUsedItemControl(plugin.Metadata.BigImageBase64, mru);
@@ -63,7 +64,7 @@ namespace XrmToolBox.New
                 list.Clear();
                 foreach (var fav in Favorites.Instance.Items.OrderByDescending(i => i.PluginName))
                 {
-                    var plugin = pManager.Plugins.FirstOrDefault(p => p.Metadata.Name == fav.PluginName);
+                    var plugin = pManager.PluginsExt.FirstOrDefault(p => p.Metadata.Name == fav.PluginName);
                     if (plugin != null)
                     {
                         var ctrl = new FavoriteControl(plugin.Metadata.BigImageBase64, fav);
@@ -127,7 +128,7 @@ namespace XrmToolBox.New
 
         private void Ctrl_OpenFavoritePluginRequested(object sender, OpenFavoritePluginEventArgs e)
         {
-            OpenPluginRequested?.Invoke(this, new OpenFavoritePluginEventArgs(e.Item));
+            OpenPluginRequested?.Invoke(this, e);
         }
 
         private void Ctrl_OpenMruPluginRequested(object sender, OpenMruPluginEventArgs e)
@@ -184,7 +185,8 @@ namespace XrmToolBox.New
             }
             else if (sender == lblDonatePayPal)
             {
-                Process.Start("https://www.paypal.com/cgi-bin/webscr?cmd=donations&business=tanguy92@hotmail.com&lc=EN&item_name=Donation%20for%20MSCRM%20Tools%20-%20XrmToolBox&currency_code=USD&bn=PP%2dDonationsBF");
+                var form = new DonationIntroForm();
+                form.ShowDialog(this);
             }
         }
 

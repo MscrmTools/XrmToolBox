@@ -1,7 +1,9 @@
 ﻿using McTools.Xrm.Connection;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
@@ -20,6 +22,8 @@ namespace XrmToolBox.Forms
             lblChangePathDescription.Text = string.Format(lblChangePathDescription.Text, Paths.XrmToolBoxPath);
             propertyGrid1.SelectedObject = Option;
             chkOptinAI.Checked = Option.OptinForApplicationInsights;
+
+            PopulateAssemblies();
         }
 
         public Options Option { get; private set; }
@@ -101,5 +105,45 @@ namespace XrmToolBox.Forms
             txtProxyPassword.Enabled = rbCustomAuthYes.Checked;
             txtProxyUser.Enabled = rbCustomAuthYes.Checked;
         }
+
+        #region Assembly
+
+        private static string assemblyPrioritizer(string assemblyName)
+        {
+            return
+                assemblyName.Equals("XrmToolBox") ? "AAAAAAAAAAAA" :
+                assemblyName.Contains("XrmToolBox") ? "AAAAAAAAAAAB" :
+                assemblyName.Equals(Assembly.GetExecutingAssembly().GetName().Name) ? "AAAAAAAAAAAC" :
+                assemblyName;
+        }
+
+        private ListViewItem GetListItem(AssemblyName a)
+        {
+            var assembly = Assembly.Load(a);
+            var fi = FileVersionInfo.GetVersionInfo(assembly.Location);
+
+            var item = new ListViewItem(a.Name);
+            item.SubItems.Add(fi.FileVersion.ToString());
+            return item;
+        }
+
+        private List<AssemblyName> GetReferencedAssemblies()
+        {
+            var names = Assembly.GetExecutingAssembly().GetReferencedAssemblies()
+                    .Where(a => !a.Name.Equals("mscorlib") && !a.Name.StartsWith("System") && !a.Name.Contains("CSharp")).ToList();
+            names.Add(Assembly.GetExecutingAssembly().GetName());
+            names = names.OrderBy(a => assemblyPrioritizer(a.Name)).ToList();
+            return names;
+        }
+
+        private void PopulateAssemblies()
+        {
+            var assemblies = GetReferencedAssemblies();
+            var items = assemblies.Select(a => GetListItem(a)).ToArray();
+            lvAssemblies.Items.Clear();
+            lvAssemblies.Items.AddRange(items);
+        }
+
+        #endregion Assembly
     }
 }

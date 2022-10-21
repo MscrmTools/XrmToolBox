@@ -8,6 +8,14 @@ using System.Windows.Forms;
 
 namespace XrmToolBox.PluginsStore.DTO
 {
+    public enum CompatibleState
+    {
+        Compatible,
+        RequireNewVersionOfXtb,
+        DoesntFitMinimumVersion,
+        Other
+    }
+
     [DataContract]
     public class XtbPlugin
     {
@@ -21,6 +29,11 @@ namespace XrmToolBox.PluginsStore.DTO
 
         [DataMember(Name = "mctools_averagefeedbackratingallversions")]
         public decimal AverageFeedbackRating { get; set; }
+
+        public List<string> Categories => CategoriesList?.Split(',').ToList() ?? new List<string>();
+
+        [DataMember(Name = "mctools_categorieslist")]
+        public string CategoriesList { get; set; }
 
         public CompatibleState Compatibilty { get; internal set; }
 
@@ -37,7 +50,7 @@ namespace XrmToolBox.PluginsStore.DTO
 
         public List<string> Files
         {
-            get { return FilesList.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).Where(f => f.ToLower().IndexOf("plugins/", StringComparison.Ordinal) >= 0).ToList(); }
+            get { return FilesList?.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).Where(f => f.ToLower().IndexOf("plugins/", StringComparison.Ordinal) >= 0).ToList() ?? new List<string>(); }
         }
 
         [DataMember(Name = "mctools_files")]
@@ -84,6 +97,8 @@ namespace XrmToolBox.PluginsStore.DTO
 
         public bool RequiresXtbRestart { get; internal set; }
 
+        public List<string> SearchedProperties => new List<string> { Name, Description, Authors };
+
         [DataMember(Name = "mctools_totaldownloadcount")]
         public int TotalDownloadCount { get; set; }
 
@@ -100,10 +115,10 @@ namespace XrmToolBox.PluginsStore.DTO
         {
             var packageVersion = new Version(Version);
 
-            var item = new ListViewItem(string.Empty) { Tag = this };
+            var item = new ListViewItem(Name) { Tag = this };
 
             item.SubItems.Add(Name);
-            item.SubItems.Add(AverageFeedbackRating.ToString("N2"));
+            item.SubItems.Add((TotalFeedbackRating + 1000000 * AverageFeedbackRating).ToString());
             item.SubItems.Add(packageVersion.ToString());
             item.SubItems.Add(CurrentVersion?.ToString());
             item.SubItems.Add(LatestReleaseDate?.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern));

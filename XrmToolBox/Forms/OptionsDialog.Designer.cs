@@ -60,8 +60,12 @@
             this.llOpenStorageFolder = new System.Windows.Forms.LinkLabel();
             this.llOpenRootFolder = new System.Windows.Forms.LinkLabel();
             this.tbDataCollect = new System.Windows.Forms.TabPage();
-            this.label6 = new System.Windows.Forms.Label();
             this.chkOptinAI = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.tpAssemblies = new System.Windows.Forms.TabPage();
+            this.lvAssemblies = new System.Windows.Forms.ListView();
+            this.chAssembly = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel1.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -72,6 +76,7 @@
             this.panel2.SuspendLayout();
             this.tpPaths.SuspendLayout();
             this.tbDataCollect.SuspendLayout();
+            this.tpAssemblies.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -88,7 +93,7 @@
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnOk.Location = new System.Drawing.Point(550, 13);
-            this.btnOk.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(5);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(113, 35);
             this.btnOk.TabIndex = 5;
@@ -101,7 +106,7 @@
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnCancel.Location = new System.Drawing.Point(672, 13);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(5);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(113, 35);
             this.btnCancel.TabIndex = 4;
@@ -126,8 +131,8 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(770, 43);
             this.label2.TabIndex = 1;
-            this.label2.Text = "This dialog helps you to control how tools are displayed in the application. Yo" +
-    "u can also define how to use XrmToolBox with a proxy";
+            this.label2.Text = "This dialog helps you to control how tools are displayed in the application. You " +
+    "can also define how to use XrmToolBox with a proxy";
             // 
             // lblTitle
             // 
@@ -145,6 +150,7 @@
             this.tabControl1.Controls.Add(this.tbProxy);
             this.tabControl1.Controls.Add(this.tpPaths);
             this.tabControl1.Controls.Add(this.tbDataCollect);
+            this.tabControl1.Controls.Add(this.tpAssemblies);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 117);
             this.tabControl1.Name = "tabControl1";
@@ -156,9 +162,9 @@
             // 
             this.tabPage2.Controls.Add(this.propertyGrid1);
             this.tabPage2.Location = new System.Drawing.Point(4, 29);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage2.Size = new System.Drawing.Size(789, 614);
             this.tabPage2.TabIndex = 6;
             this.tabPage2.Text = "General";
@@ -168,7 +174,7 @@
             // 
             this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.propertyGrid1.Location = new System.Drawing.Point(2, 2);
-            this.propertyGrid1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.propertyGrid1.Margin = new System.Windows.Forms.Padding(2);
             this.propertyGrid1.Name = "propertyGrid1";
             this.propertyGrid1.Size = new System.Drawing.Size(785, 610);
             this.propertyGrid1.TabIndex = 0;
@@ -179,7 +185,7 @@
             this.tbProxy.Controls.Add(this.cbbProxyUsage);
             this.tbProxy.Location = new System.Drawing.Point(4, 29);
             this.tbProxy.Name = "tbProxy";
-            this.tbProxy.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tbProxy.Padding = new System.Windows.Forms.Padding(3);
             this.tbProxy.Size = new System.Drawing.Size(789, 614);
             this.tbProxy.TabIndex = 1;
             this.tbProxy.Text = "Proxy";
@@ -355,9 +361,9 @@
             this.tpPaths.Controls.Add(this.llOpenStorageFolder);
             this.tpPaths.Controls.Add(this.llOpenRootFolder);
             this.tpPaths.Location = new System.Drawing.Point(4, 29);
-            this.tpPaths.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.tpPaths.Margin = new System.Windows.Forms.Padding(5);
             this.tpPaths.Name = "tpPaths";
-            this.tpPaths.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.tpPaths.Padding = new System.Windows.Forms.Padding(5);
             this.tpPaths.Size = new System.Drawing.Size(789, 614);
             this.tpPaths.TabIndex = 3;
             this.tpPaths.Text = "Paths";
@@ -414,23 +420,13 @@
             this.tbDataCollect.Controls.Add(this.chkOptinAI);
             this.tbDataCollect.Controls.Add(this.label6);
             this.tbDataCollect.Location = new System.Drawing.Point(4, 29);
-            this.tbDataCollect.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbDataCollect.Margin = new System.Windows.Forms.Padding(2);
             this.tbDataCollect.Name = "tbDataCollect";
-            this.tbDataCollect.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbDataCollect.Padding = new System.Windows.Forms.Padding(2);
             this.tbDataCollect.Size = new System.Drawing.Size(789, 614);
             this.tbDataCollect.TabIndex = 5;
             this.tbDataCollect.Text = "Data collect";
             this.tbDataCollect.UseVisualStyleBackColor = true;
-            // 
-            // label6
-            // 
-            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Location = new System.Drawing.Point(2, 2);
-            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(785, 610);
-            this.label6.TabIndex = 1;
-            this.label6.Text = resources.GetString("label6.Text");
             // 
             // chkOptinAI
             // 
@@ -446,6 +442,51 @@
             this.chkOptinAI.Text = "I allow XrmToolBox to send anonymous data for statistics usage only";
             this.chkOptinAI.UseVisualStyleBackColor = true;
             // 
+            // label6
+            // 
+            this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label6.Location = new System.Drawing.Point(2, 2);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(785, 610);
+            this.label6.TabIndex = 1;
+            this.label6.Text = resources.GetString("label6.Text");
+            // 
+            // tpAssemblies
+            // 
+            this.tpAssemblies.Controls.Add(this.lvAssemblies);
+            this.tpAssemblies.Location = new System.Drawing.Point(4, 29);
+            this.tpAssemblies.Name = "tpAssemblies";
+            this.tpAssemblies.Padding = new System.Windows.Forms.Padding(3);
+            this.tpAssemblies.Size = new System.Drawing.Size(789, 614);
+            this.tpAssemblies.TabIndex = 7;
+            this.tpAssemblies.Text = "Assemblies";
+            this.tpAssemblies.UseVisualStyleBackColor = true;
+            // 
+            // lvAssemblies
+            // 
+            this.lvAssemblies.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chAssembly,
+            this.chVersion});
+            this.lvAssemblies.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lvAssemblies.HideSelection = false;
+            this.lvAssemblies.Location = new System.Drawing.Point(4, 4);
+            this.lvAssemblies.Name = "lvAssemblies";
+            this.lvAssemblies.Size = new System.Drawing.Size(940, 730);
+            this.lvAssemblies.TabIndex = 0;
+            this.lvAssemblies.UseCompatibleStateImageBehavior = false;
+            this.lvAssemblies.View = System.Windows.Forms.View.Details;
+            // 
+            // chAssembly
+            // 
+            this.chAssembly.Text = "Assembly";
+            this.chAssembly.Width = 400;
+            // 
+            // chVersion
+            // 
+            this.chVersion.Text = "Version";
+            this.chVersion.Width = 150;
+            // 
             // OptionsDialog
             // 
             this.AcceptButton = this.btnOk;
@@ -456,7 +497,7 @@
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.pnlHeader);
             this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "OptionsDialog";
@@ -477,6 +518,7 @@
             this.tpPaths.ResumeLayout(false);
             this.tbDataCollect.ResumeLayout(false);
             this.tbDataCollect.PerformLayout();
+            this.tpAssemblies.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -516,5 +558,9 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.PropertyGrid propertyGrid1;
         private System.Windows.Forms.CheckBox chkOptinAI;
+        private System.Windows.Forms.TabPage tpAssemblies;
+        private System.Windows.Forms.ListView lvAssemblies;
+        private System.Windows.Forms.ColumnHeader chAssembly;
+        private System.Windows.Forms.ColumnHeader chVersion;
     }
 }

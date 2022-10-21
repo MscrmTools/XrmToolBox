@@ -39,10 +39,12 @@
             this.tsbCancel = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbDuplicate = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.txtState = new System.Windows.Forms.TextBox();
             this.lblState = new System.Windows.Forms.Label();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.btnCheckMultiSample = new System.Windows.Forms.Button();
+            this.btnDoSomethingWrong = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.gbOptions.SuspendLayout();
             this.toolStripMenu.SuspendLayout();
             this.SuspendLayout();
@@ -51,10 +53,10 @@
             // 
             this.gbOptions.Controls.Add(this.cbMultipleCalls);
             this.gbOptions.Location = new System.Drawing.Point(24, 66);
-            this.gbOptions.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.gbOptions.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.gbOptions.Name = "gbOptions";
-            this.gbOptions.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.gbOptions.Size = new System.Drawing.Size(243, 76);
+            this.gbOptions.Padding = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.gbOptions.Size = new System.Drawing.Size(243, 75);
             this.gbOptions.TabIndex = 3;
             this.gbOptions.TabStop = false;
             this.gbOptions.Text = "Options";
@@ -63,7 +65,7 @@
             // 
             this.cbMultipleCalls.AutoSize = true;
             this.cbMultipleCalls.Location = new System.Drawing.Point(20, 28);
-            this.cbMultipleCalls.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cbMultipleCalls.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.cbMultipleCalls.Name = "cbMultipleCalls";
             this.cbMultipleCalls.Size = new System.Drawing.Size(124, 24);
             this.cbMultipleCalls.TabIndex = 0;
@@ -72,6 +74,7 @@
             // 
             // toolStripMenu
             // 
+            this.toolStripMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbClose,
             this.toolStripSeparator2,
@@ -83,7 +86,8 @@
             this.toolStripSeparator4});
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
-            this.toolStripMenu.Size = new System.Drawing.Size(1598, 57);
+            this.toolStripMenu.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.toolStripMenu.Size = new System.Drawing.Size(1065, 34);
             this.toolStripMenu.TabIndex = 4;
             this.toolStripMenu.Text = "toolStrip1";
             // 
@@ -93,7 +97,7 @@
             this.tsbClose.Image = ((System.Drawing.Image)(resources.GetObject("tsbClose.Image")));
             this.tsbClose.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(34, 52);
+            this.tsbClose.Size = new System.Drawing.Size(34, 29);
             this.tsbClose.Text = "Close this tool";
             this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             // 
@@ -142,6 +146,11 @@
             this.tsbDuplicate.Text = "Duplicate";
             this.tsbDuplicate.Click += new System.EventHandler(this.tsbDuplicate_Click);
             // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 34);
+            // 
             // txtState
             // 
             this.txtState.Location = new System.Drawing.Point(24, 197);
@@ -153,32 +162,51 @@
             // lblState
             // 
             this.lblState.AutoSize = true;
-            this.lblState.Location = new System.Drawing.Point(20, 167);
+            this.lblState.Location = new System.Drawing.Point(20, 168);
             this.lblState.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblState.Name = "lblState";
             this.lblState.Size = new System.Drawing.Size(48, 20);
             this.lblState.TabIndex = 6;
             this.lblState.Text = "State";
             // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 34);
-            // 
             // btnCheckMultiSample
             // 
-            this.btnCheckMultiSample.Location = new System.Drawing.Point(401, 86);
+            this.btnCheckMultiSample.Location = new System.Drawing.Point(400, 86);
             this.btnCheckMultiSample.Name = "btnCheckMultiSample";
-            this.btnCheckMultiSample.Size = new System.Drawing.Size(433, 39);
+            this.btnCheckMultiSample.Size = new System.Drawing.Size(434, 38);
             this.btnCheckMultiSample.TabIndex = 7;
             this.btnCheckMultiSample.Text = "Is Sample Tool for multiconnection installed?";
             this.btnCheckMultiSample.UseVisualStyleBackColor = true;
             this.btnCheckMultiSample.Click += new System.EventHandler(this.btnCheckMultiSample_Click);
             // 
+            // btnDoSomethingWrong
+            // 
+            this.btnDoSomethingWrong.Location = new System.Drawing.Point(400, 191);
+            this.btnDoSomethingWrong.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnDoSomethingWrong.Name = "btnDoSomethingWrong";
+            this.btnDoSomethingWrong.Size = new System.Drawing.Size(434, 35);
+            this.btnDoSomethingWrong.TabIndex = 8;
+            this.btnDoSomethingWrong.Text = "Do something wrong";
+            this.btnDoSomethingWrong.UseVisualStyleBackColor = true;
+            this.btnDoSomethingWrong.Click += new System.EventHandler(this.btnDoSomethingWrong_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(400, 236);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(434, 35);
+            this.button1.TabIndex = 9;
+            this.button1.Text = "Do something wrong without catch";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // SampleTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnDoSomethingWrong);
             this.Controls.Add(this.btnCheckMultiSample);
             this.Controls.Add(this.lblState);
             this.Controls.Add(this.txtState);
@@ -213,5 +241,7 @@
         private System.Windows.Forms.ToolStripButton tsbDuplicate;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.Button btnCheckMultiSample;
+        private System.Windows.Forms.Button btnDoSomethingWrong;
+        private System.Windows.Forms.Button button1;
     }
 }

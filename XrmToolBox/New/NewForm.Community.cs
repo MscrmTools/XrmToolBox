@@ -65,21 +65,6 @@ namespace XrmToolBox.New
 
         #region Prepare Community items
 
-        private void AssignPayPalMenuItems(ToolStripItemCollection dropDownItems)
-        {
-            dropDownItems.AddRange(new ToolStripItem[]
-            {
-                tsmiDonateUsdXrmToolBox,
-                tsmiDonateEurXrmToolBox,
-                tsmiDonateGbpXrmToolBox
-            });
-        }
-
-        private void feedbackToolStripMenuItem_Click(object sender, System.EventArgs e)
-        {
-            GithubXrmToolBoxMenuItem_Click(sender, e);
-        }
-
         private string GetAdditionalInfo()
         {
             var additionalInfo = "";
@@ -131,89 +116,6 @@ namespace XrmToolBox.New
                 displayXrmToolBoxHelpToolStripMenuItem_Click(sender, e);
         }
 
-        private void ProcessMenuItemsForPlugin()
-        {
-            if (!(dpMain.ActiveContent is PluginForm)) // Home Screen
-            {
-                tsmiFeedbackXrmToolBox.Visible = false;
-                tsmiFeedbackSelectedPlugin.Visible = false;
-                tsmiDonateXrmToolBox.Visible = false;
-                tsmiDonateSelectedPlugin.Visible = false;
-                tsmiHelpXrmToolBox.Visible = false;
-                tsmiHelpSelectedPlugin.Visible = false;
-                tsmiAboutXrmToolBox.Visible = false;
-                tsmiAboutSelectedPlugin.Visible = false;
-                AssignPayPalMenuItems(tsmiDonate.DropDownItems);
-                return;
-            }
-
-            var pluginName = ((PluginForm)dpMain.ActiveContent).PluginTitle;
-
-            if (((PluginForm)dpMain.ActiveContent).Control is IHelpPlugin help)
-            {
-                tsmiHelpXrmToolBox.Visible = true;
-                tsmiHelpSelectedPlugin.Visible = true;
-                tsmiHelpSelectedPlugin.Text =
-                    string.Format(tsmiHelpSelectedPlugin.Tag.ToString(), pluginName);
-                tsmiHelpSelectedPlugin.Image = (help as PluginControlBase)?.TabIcon;
-                tsmiHelp.Click -= displayXrmToolBoxHelpToolStripMenuItem_Click;
-            }
-            else
-            {
-                tsmiHelpXrmToolBox.Visible = false;
-                tsmiHelpSelectedPlugin.Visible = false;
-                tsmiHelp.Click -= displayXrmToolBoxHelpToolStripMenuItem_Click;
-                tsmiHelp.Click += displayXrmToolBoxHelpToolStripMenuItem_Click;
-            }
-
-            if (((PluginForm)dpMain.ActiveContent).Control is IPayPalPlugin paypal)
-            {
-                tsmiDonateXrmToolBox.Visible = true;
-                tsmiDonateSelectedPlugin.Visible = true;
-                tsmiDonateSelectedPlugin.Text = pluginName;
-                tsmiDonateSelectedPlugin.Image = (paypal as PluginControlBase)?.TabIcon;
-                AssignPayPalMenuItems(tsmiDonateXrmToolBox.DropDownItems);
-            }
-            else
-            {
-                tsmiDonateXrmToolBox.Visible = false;
-                tsmiDonateSelectedPlugin.Visible = false;
-                AssignPayPalMenuItems(tsmiDonate.DropDownItems);
-            }
-
-            if (((PluginForm)dpMain.ActiveContent).Control is IGitHubPlugin github)
-            {
-                tsmiFeedbackXrmToolBox.Visible = true;
-                tsmiFeedbackSelectedPlugin.Visible = true;
-                tsmiFeedbackSelectedPlugin.Text = pluginName;
-                tsmiFeedbackSelectedPlugin.Image = (github as PluginControlBase)?.TabIcon;
-                tsmiFeedback.Click -= feedbackToolStripMenuItem_Click;
-            }
-            else
-            {
-                tsmiFeedbackXrmToolBox.Visible = false;
-                tsmiFeedbackSelectedPlugin.Visible = false;
-                tsmiFeedback.Click -= feedbackToolStripMenuItem_Click;
-                tsmiFeedback.Click += feedbackToolStripMenuItem_Click;
-            }
-
-            if (((PluginForm)dpMain.ActiveContent).Control is IAboutPlugin aboutPlugin)
-            {
-                tsmiAboutXrmToolBox.Visible = true;
-                tsmiAboutSelectedPlugin.Visible = true;
-                tsmiAboutSelectedPlugin.Text = pluginName;
-                tsmiAboutSelectedPlugin.Image = (aboutPlugin as PluginControlBase)?.TabIcon;
-                tsmiAbout.Click -= tsmiAbout_Click;
-            }
-            else
-            {
-                tsmiAboutXrmToolBox.Visible = false;
-                tsmiAboutSelectedPlugin.Visible = false;
-                tsmiAbout.Click -= tsmiAbout_Click;
-                tsmiAbout.Click += tsmiAbout_Click;
-            }
-        }
-
         private void ProcessMenuItemsForPlugin2()
         {
             var isPluginForm = dpMain.ActiveContent is PluginForm;
@@ -240,13 +142,13 @@ namespace XrmToolBox.New
             }
 
             tsmiXtbHelp.Text = @"Help for XrmToolBox";
-            tsmiXtbHelp.Image = (Image)resources.GetObject("tsmiHelpXrmToolBox.Image");
+            tsmiXtbHelp.Image = (Image)resources.GetObject("tsmiXtbHelp.Image");
             tsmiXtbDonate.Text = @"Donate for XrmToolBox";
-            tsmiXtbDonate.Image = (Image)resources.GetObject("tsmiHelpXrmToolBox.Image");
+            tsmiXtbDonate.Image = (Image)resources.GetObject("tsmiXtbHelp.Image");
             tsmiXtbFeedback.Text = @"Feedback for XrmToolBox";
-            tsmiXtbFeedback.Image = (Image)resources.GetObject("tsmiHelpXrmToolBox.Image");
+            tsmiXtbFeedback.Image = (Image)resources.GetObject("tsmiXtbHelp.Image");
             tsmiXtbAbout.Text = @"About XrmToolBox";
-            tsmiXtbAbout.Image = (Image)resources.GetObject("tsmiHelpXrmToolBox.Image");
+            tsmiXtbAbout.Image = (Image)resources.GetObject("tsmiXtbHelp.Image");
 
             var currentPluginForm = (PluginForm)dpMain.ActiveContent;
 
@@ -344,11 +246,6 @@ namespace XrmToolBox.New
         {
             var plugin = (IAboutPlugin)((PluginForm)dpMain.ActiveContent).Control;
             plugin.ShowAboutDialog();
-        }
-
-        private void tsmiAboutXrmToolBox_Click(object sender, System.EventArgs e)
-        {
-            tsmiAbout_Click(sender, e);
         }
     }
 }

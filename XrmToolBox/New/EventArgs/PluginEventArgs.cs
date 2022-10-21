@@ -9,7 +9,7 @@ namespace XrmToolBox.New.EventArgs
         public PluginEventArgs(PluginModel pluginModel)
         {
             PluginModel = pluginModel;
-            Plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadata>)pluginModel.Tag;
+            Plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)pluginModel.Tag;
         }
 
         public PluginEventArgs(string pluginName)
@@ -17,7 +17,7 @@ namespace XrmToolBox.New.EventArgs
             PluginName = pluginName;
         }
 
-        public PluginEventArgs(OpenMruPluginEventArgs mruInfo, Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin)
+        public PluginEventArgs(OpenMruPluginEventArgs mruInfo, Lazy<IXrmToolBoxPlugin, IPluginMetadataExt> plugin)
         {
             MruInfo = mruInfo;
             PluginName = mruInfo.Item.PluginName;
@@ -29,13 +29,14 @@ namespace XrmToolBox.New.EventArgs
             PluginControl = pluginControl;
         }
 
-        public PluginEventArgs(Lazy<IXrmToolBoxPlugin, IPluginMetadata> plugin)
+        public PluginEventArgs(Lazy<IXrmToolBoxPlugin, IPluginMetadataExt> plugin)
         {
             Plugin = plugin;
         }
 
         public OpenMruPluginEventArgs MruInfo { get; }
-        public Lazy<IXrmToolBoxPlugin, IPluginMetadata> Plugin { get; }
+        public bool NeedNewConnection { get; set; }
+        public Lazy<IXrmToolBoxPlugin, IPluginMetadataExt> Plugin { get; }
         public IXrmToolBoxPluginControl PluginControl { get; }
         public PluginModel PluginModel { get; }
         public string PluginName { get; }

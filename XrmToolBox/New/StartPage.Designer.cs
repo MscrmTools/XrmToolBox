@@ -44,18 +44,18 @@
             this.label3 = new System.Windows.Forms.Label();
             this.pnlRightActions = new System.Windows.Forms.Panel();
             this.pnlRightScrollable = new System.Windows.Forms.Panel();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.chkDoNotShowAtStartup = new System.Windows.Forms.CheckBox();
             this.lblDonatePayPal = new System.Windows.Forms.Label();
             this.lblChatGitter = new System.Windows.Forms.Label();
             this.lblFollowUsTwitter = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.lblDocsForDev = new System.Windows.Forms.Label();
             this.lblDocsForUsers = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
             this.lblVisitXrmToolBoxPortal = new System.Windows.Forms.Label();
             this.lblManageConnections = new System.Windows.Forms.Label();
             this.lblOpenPluginsStore = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.chkDoNotShowAtStartup = new System.Windows.Forms.CheckBox();
             this.pnlMain.SuspendLayout();
             this.pnlMruParent.SuspendLayout();
             this.pnlMru.SuspendLayout();
@@ -73,19 +73,19 @@
             this.pnlEmptyLeft.BackColor = System.Drawing.Color.DimGray;
             this.pnlEmptyLeft.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlEmptyLeft.Location = new System.Drawing.Point(0, 0);
-            this.pnlEmptyLeft.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.pnlEmptyLeft.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.pnlEmptyLeft.Name = "pnlEmptyLeft";
-            this.pnlEmptyLeft.Size = new System.Drawing.Size(100, 1273);
+            this.pnlEmptyLeft.Size = new System.Drawing.Size(75, 1018);
             this.pnlEmptyLeft.TabIndex = 0;
             // 
             // pnlEmptyRight
             // 
             this.pnlEmptyRight.BackColor = System.Drawing.Color.DimGray;
             this.pnlEmptyRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlEmptyRight.Location = new System.Drawing.Point(2268, 0);
-            this.pnlEmptyRight.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.pnlEmptyRight.Location = new System.Drawing.Point(1701, 0);
+            this.pnlEmptyRight.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.pnlEmptyRight.Name = "pnlEmptyRight";
-            this.pnlEmptyRight.Size = new System.Drawing.Size(100, 1273);
+            this.pnlEmptyRight.Size = new System.Drawing.Size(75, 1018);
             this.pnlEmptyRight.TabIndex = 1;
             // 
             // pnlMain
@@ -95,10 +95,10 @@
             this.pnlMain.Controls.Add(this.pnlWelcome);
             this.pnlMain.Controls.Add(this.pnlRightActions);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlMain.Location = new System.Drawing.Point(100, 0);
-            this.pnlMain.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.pnlMain.Location = new System.Drawing.Point(75, 0);
+            this.pnlMain.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(2168, 1273);
+            this.pnlMain.Size = new System.Drawing.Size(1626, 1018);
             this.pnlMain.TabIndex = 2;
             // 
             // pnlMruParent
@@ -106,10 +106,10 @@
             this.pnlMruParent.BackColor = System.Drawing.Color.LightGray;
             this.pnlMruParent.Controls.Add(this.pnlMru);
             this.pnlMruParent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlMruParent.Location = new System.Drawing.Point(0, 243);
-            this.pnlMruParent.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.pnlMruParent.Location = new System.Drawing.Point(0, 194);
+            this.pnlMruParent.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.pnlMruParent.Name = "pnlMruParent";
-            this.pnlMruParent.Size = new System.Drawing.Size(1528, 1030);
+            this.pnlMruParent.Size = new System.Drawing.Size(1146, 824);
             this.pnlMruParent.TabIndex = 17;
             // 
             // pnlMru
@@ -120,15 +120,16 @@
             this.pnlMru.Controls.Add(this.splitContainer1);
             this.pnlMru.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMru.Location = new System.Drawing.Point(0, 0);
-            this.pnlMru.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.pnlMru.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.pnlMru.Name = "pnlMru";
-            this.pnlMru.Size = new System.Drawing.Size(1528, 1030);
+            this.pnlMru.Size = new System.Drawing.Size(1146, 824);
             this.pnlMru.TabIndex = 2;
             // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -141,17 +142,19 @@
             this.splitContainer1.Panel2.AutoScroll = true;
             this.splitContainer1.Panel2.Controls.Add(this.pnlFavItems);
             this.splitContainer1.Panel2.Controls.Add(this.lblFavTitle);
-            this.splitContainer1.Size = new System.Drawing.Size(1528, 1030);
-            this.splitContainer1.SplitterDistance = 732;
+            this.splitContainer1.Size = new System.Drawing.Size(1375, 989);
+            this.splitContainer1.SplitterDistance = 658;
+            this.splitContainer1.SplitterWidth = 3;
             this.splitContainer1.TabIndex = 2;
             // 
             // pnlRupItems
             // 
             this.pnlRupItems.AutoScroll = true;
             this.pnlRupItems.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlRupItems.Location = new System.Drawing.Point(0, 116);
+            this.pnlRupItems.Location = new System.Drawing.Point(0, 112);
+            this.pnlRupItems.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pnlRupItems.Name = "pnlRupItems";
-            this.pnlRupItems.Size = new System.Drawing.Size(732, 914);
+            this.pnlRupItems.Size = new System.Drawing.Size(658, 877);
             this.pnlRupItems.TabIndex = 3;
             // 
             // lblRupTitle
@@ -161,10 +164,10 @@
             this.lblRupTitle.Font = new System.Drawing.Font("Segoe UI Light", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblRupTitle.ForeColor = System.Drawing.Color.SteelBlue;
             this.lblRupTitle.Location = new System.Drawing.Point(0, 0);
-            this.lblRupTitle.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.lblRupTitle.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblRupTitle.Name = "lblRupTitle";
-            this.lblRupTitle.Padding = new System.Windows.Forms.Padding(0, 31, 0, 0);
-            this.lblRupTitle.Size = new System.Drawing.Size(732, 116);
+            this.lblRupTitle.Padding = new System.Windows.Forms.Padding(0, 25, 0, 0);
+            this.lblRupTitle.Size = new System.Drawing.Size(658, 112);
             this.lblRupTitle.TabIndex = 2;
             this.lblRupTitle.Text = "Recently Used Tools";
             // 
@@ -172,9 +175,10 @@
             // 
             this.pnlFavItems.AutoScroll = true;
             this.pnlFavItems.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlFavItems.Location = new System.Drawing.Point(0, 116);
+            this.pnlFavItems.Location = new System.Drawing.Point(0, 94);
+            this.pnlFavItems.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pnlFavItems.Name = "pnlFavItems";
-            this.pnlFavItems.Size = new System.Drawing.Size(792, 914);
+            this.pnlFavItems.Size = new System.Drawing.Size(714, 895);
             this.pnlFavItems.TabIndex = 4;
             // 
             // lblFavTitle
@@ -184,10 +188,10 @@
             this.lblFavTitle.Font = new System.Drawing.Font("Segoe UI Light", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFavTitle.ForeColor = System.Drawing.Color.SteelBlue;
             this.lblFavTitle.Location = new System.Drawing.Point(0, 0);
-            this.lblFavTitle.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.lblFavTitle.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblFavTitle.Name = "lblFavTitle";
-            this.lblFavTitle.Padding = new System.Windows.Forms.Padding(0, 31, 0, 0);
-            this.lblFavTitle.Size = new System.Drawing.Size(792, 116);
+            this.lblFavTitle.Padding = new System.Windows.Forms.Padding(0, 25, 0, 0);
+            this.lblFavTitle.Size = new System.Drawing.Size(714, 94);
             this.lblFavTitle.TabIndex = 2;
             this.lblFavTitle.Text = "Favorites";
             // 
@@ -199,20 +203,20 @@
             this.pnlWelcome.Controls.Add(this.label3);
             this.pnlWelcome.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlWelcome.Location = new System.Drawing.Point(0, 0);
-            this.pnlWelcome.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.pnlWelcome.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.pnlWelcome.Name = "pnlWelcome";
-            this.pnlWelcome.Size = new System.Drawing.Size(1528, 243);
+            this.pnlWelcome.Size = new System.Drawing.Size(1146, 194);
             this.pnlWelcome.TabIndex = 16;
             // 
             // lblWelcomeDescription
             // 
             this.lblWelcomeDescription.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblWelcomeDescription.Font = new System.Drawing.Font("Segoe UI Light", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWelcomeDescription.Location = new System.Drawing.Point(0, 116);
-            this.lblWelcomeDescription.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.lblWelcomeDescription.Location = new System.Drawing.Point(0, 93);
+            this.lblWelcomeDescription.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblWelcomeDescription.Name = "lblWelcomeDescription";
-            this.lblWelcomeDescription.Padding = new System.Windows.Forms.Padding(0, 19, 0, 0);
-            this.lblWelcomeDescription.Size = new System.Drawing.Size(1528, 127);
+            this.lblWelcomeDescription.Padding = new System.Windows.Forms.Padding(0, 15, 0, 0);
+            this.lblWelcomeDescription.Size = new System.Drawing.Size(1146, 101);
             this.lblWelcomeDescription.TabIndex = 3;
             this.lblWelcomeDescription.Text = "This application will improve your productivity when customizing, developing and " +
     "administering Microsoft Dataverse and Microsoft Dynamics 365.";
@@ -223,10 +227,10 @@
             this.label3.Font = new System.Drawing.Font("Segoe UI Light", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.SteelBlue;
             this.label3.Location = new System.Drawing.Point(0, 0);
-            this.label3.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.label3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label3.Name = "label3";
-            this.label3.Padding = new System.Windows.Forms.Padding(0, 39, 0, 0);
-            this.label3.Size = new System.Drawing.Size(1528, 116);
+            this.label3.Padding = new System.Windows.Forms.Padding(0, 31, 0, 0);
+            this.label3.Size = new System.Drawing.Size(1146, 93);
             this.label3.TabIndex = 2;
             this.label3.Text = "Welcome to XrmToolBox!";
             // 
@@ -237,10 +241,10 @@
             this.pnlRightActions.Controls.Add(this.pnlRightScrollable);
             this.pnlRightActions.Controls.Add(this.label2);
             this.pnlRightActions.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pnlRightActions.Location = new System.Drawing.Point(1528, 0);
-            this.pnlRightActions.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.pnlRightActions.Location = new System.Drawing.Point(1146, 0);
+            this.pnlRightActions.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.pnlRightActions.Name = "pnlRightActions";
-            this.pnlRightActions.Size = new System.Drawing.Size(640, 1273);
+            this.pnlRightActions.Size = new System.Drawing.Size(480, 1018);
             this.pnlRightActions.TabIndex = 15;
             // 
             // pnlRightScrollable
@@ -259,11 +263,66 @@
             this.pnlRightScrollable.Controls.Add(this.lblManageConnections);
             this.pnlRightScrollable.Controls.Add(this.lblOpenPluginsStore);
             this.pnlRightScrollable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlRightScrollable.Location = new System.Drawing.Point(0, 116);
-            this.pnlRightScrollable.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.pnlRightScrollable.Location = new System.Drawing.Point(0, 113);
+            this.pnlRightScrollable.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.pnlRightScrollable.Name = "pnlRightScrollable";
-            this.pnlRightScrollable.Size = new System.Drawing.Size(640, 1157);
+            this.pnlRightScrollable.Size = new System.Drawing.Size(576, 1109);
             this.pnlRightScrollable.TabIndex = 24;
+            // 
+            // label9
+            // 
+            this.label9.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label9.Font = new System.Drawing.Font("Segoe UI Light", 20F);
+            this.label9.ForeColor = System.Drawing.Color.SteelBlue;
+            this.label9.Location = new System.Drawing.Point(0, 462);
+            this.label9.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label9.Name = "label9";
+            this.label9.Padding = new System.Windows.Forms.Padding(0, 15, 0, 0);
+            this.label9.Size = new System.Drawing.Size(576, 92);
+            this.label9.TabIndex = 21;
+            this.label9.Text = "Community";
+            // 
+            // label6
+            // 
+            this.label6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label6.Font = new System.Drawing.Font("Segoe UI Light", 20F);
+            this.label6.ForeColor = System.Drawing.Color.SteelBlue;
+            this.label6.Location = new System.Drawing.Point(0, 222);
+            this.label6.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label6.Name = "label6";
+            this.label6.Padding = new System.Windows.Forms.Padding(0, 15, 0, 0);
+            this.label6.Size = new System.Drawing.Size(576, 92);
+            this.label6.TabIndex = 18;
+            this.label6.Text = "Documentation";
+            // 
+            // label2
+            // 
+            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label2.Font = new System.Drawing.Font("Segoe UI Light", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.SteelBlue;
+            this.label2.Location = new System.Drawing.Point(0, 0);
+            this.label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label2.Name = "label2";
+            this.label2.Padding = new System.Windows.Forms.Padding(0, 31, 0, 0);
+            this.label2.Size = new System.Drawing.Size(576, 94);
+            this.label2.TabIndex = 13;
+            this.label2.Text = "Quick actions";
+            // 
+            // chkDoNotShowAtStartup
+            // 
+            this.chkDoNotShowAtStartup.AutoSize = true;
+            this.chkDoNotShowAtStartup.BackColor = System.Drawing.Color.White;
+            this.chkDoNotShowAtStartup.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkDoNotShowAtStartup.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkDoNotShowAtStartup.Location = new System.Drawing.Point(75, 0);
+            this.chkDoNotShowAtStartup.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.chkDoNotShowAtStartup.Name = "chkDoNotShowAtStartup";
+            this.chkDoNotShowAtStartup.Size = new System.Drawing.Size(1626, 24);
+            this.chkDoNotShowAtStartup.TabIndex = 5;
+            this.chkDoNotShowAtStartup.Text = "Do not show this page when XrmToolBox starts";
+            this.chkDoNotShowAtStartup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkDoNotShowAtStartup.UseVisualStyleBackColor = false;
+            this.chkDoNotShowAtStartup.CheckedChanged += new System.EventHandler(this.chkDoNotShowAtStartup_CheckedChanged);
             // 
             // lblDonatePayPal
             // 
@@ -271,10 +330,10 @@
             this.lblDonatePayPal.Font = new System.Drawing.Font("Segoe UI Light", 14F);
             this.lblDonatePayPal.Image = global::XrmToolBox.Properties.Resources.paypal;
             this.lblDonatePayPal.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblDonatePayPal.Location = new System.Drawing.Point(0, 731);
-            this.lblDonatePayPal.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.lblDonatePayPal.Location = new System.Drawing.Point(0, 702);
+            this.lblDonatePayPal.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblDonatePayPal.Name = "lblDonatePayPal";
-            this.lblDonatePayPal.Size = new System.Drawing.Size(640, 77);
+            this.lblDonatePayPal.Size = new System.Drawing.Size(576, 74);
             this.lblDonatePayPal.TabIndex = 24;
             this.lblDonatePayPal.Text = "       Donate with PayPal";
             this.lblDonatePayPal.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -288,10 +347,10 @@
             this.lblChatGitter.Font = new System.Drawing.Font("Segoe UI Light", 14F);
             this.lblChatGitter.Image = global::XrmToolBox.Properties.Resources.Gitter32;
             this.lblChatGitter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblChatGitter.Location = new System.Drawing.Point(0, 654);
-            this.lblChatGitter.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.lblChatGitter.Location = new System.Drawing.Point(0, 628);
+            this.lblChatGitter.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblChatGitter.Name = "lblChatGitter";
-            this.lblChatGitter.Size = new System.Drawing.Size(640, 77);
+            this.lblChatGitter.Size = new System.Drawing.Size(576, 74);
             this.lblChatGitter.TabIndex = 23;
             this.lblChatGitter.Text = "       Chat with us on Gitter";
             this.lblChatGitter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -305,10 +364,10 @@
             this.lblFollowUsTwitter.Font = new System.Drawing.Font("Segoe UI Light", 14F);
             this.lblFollowUsTwitter.Image = global::XrmToolBox.Properties.Resources.twitter;
             this.lblFollowUsTwitter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblFollowUsTwitter.Location = new System.Drawing.Point(0, 577);
-            this.lblFollowUsTwitter.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.lblFollowUsTwitter.Location = new System.Drawing.Point(0, 554);
+            this.lblFollowUsTwitter.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblFollowUsTwitter.Name = "lblFollowUsTwitter";
-            this.lblFollowUsTwitter.Size = new System.Drawing.Size(640, 77);
+            this.lblFollowUsTwitter.Size = new System.Drawing.Size(576, 74);
             this.lblFollowUsTwitter.TabIndex = 22;
             this.lblFollowUsTwitter.Text = "       Follow us on Twitter";
             this.lblFollowUsTwitter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -316,29 +375,16 @@
             this.lblFollowUsTwitter.MouseEnter += new System.EventHandler(this.LabelMouseEnter);
             this.lblFollowUsTwitter.MouseLeave += new System.EventHandler(this.LabelMouseLeave);
             // 
-            // label9
-            // 
-            this.label9.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label9.Font = new System.Drawing.Font("Segoe UI Light", 20F);
-            this.label9.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label9.Location = new System.Drawing.Point(0, 481);
-            this.label9.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
-            this.label9.Name = "label9";
-            this.label9.Padding = new System.Windows.Forms.Padding(0, 19, 0, 0);
-            this.label9.Size = new System.Drawing.Size(640, 96);
-            this.label9.TabIndex = 21;
-            this.label9.Text = "Community";
-            // 
             // lblDocsForDev
             // 
             this.lblDocsForDev.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblDocsForDev.Font = new System.Drawing.Font("Segoe UI Light", 14F);
             this.lblDocsForDev.Image = global::XrmToolBox.Properties.Resources.logo_0032;
             this.lblDocsForDev.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblDocsForDev.Location = new System.Drawing.Point(0, 404);
-            this.lblDocsForDev.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.lblDocsForDev.Location = new System.Drawing.Point(0, 388);
+            this.lblDocsForDev.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblDocsForDev.Name = "lblDocsForDev";
-            this.lblDocsForDev.Size = new System.Drawing.Size(640, 77);
+            this.lblDocsForDev.Size = new System.Drawing.Size(576, 74);
             this.lblDocsForDev.TabIndex = 20;
             this.lblDocsForDev.Text = "       Documentation for developers";
             this.lblDocsForDev.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -352,10 +398,10 @@
             this.lblDocsForUsers.Font = new System.Drawing.Font("Segoe UI Light", 14F);
             this.lblDocsForUsers.Image = global::XrmToolBox.Properties.Resources.logo_0032;
             this.lblDocsForUsers.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblDocsForUsers.Location = new System.Drawing.Point(0, 327);
-            this.lblDocsForUsers.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.lblDocsForUsers.Location = new System.Drawing.Point(0, 314);
+            this.lblDocsForUsers.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblDocsForUsers.Name = "lblDocsForUsers";
-            this.lblDocsForUsers.Size = new System.Drawing.Size(640, 77);
+            this.lblDocsForUsers.Size = new System.Drawing.Size(576, 74);
             this.lblDocsForUsers.TabIndex = 19;
             this.lblDocsForUsers.Text = "       Documentation for users";
             this.lblDocsForUsers.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -363,29 +409,16 @@
             this.lblDocsForUsers.MouseEnter += new System.EventHandler(this.LabelMouseEnter);
             this.lblDocsForUsers.MouseLeave += new System.EventHandler(this.LabelMouseLeave);
             // 
-            // label6
-            // 
-            this.label6.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label6.Font = new System.Drawing.Font("Segoe UI Light", 20F);
-            this.label6.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label6.Location = new System.Drawing.Point(0, 231);
-            this.label6.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
-            this.label6.Name = "label6";
-            this.label6.Padding = new System.Windows.Forms.Padding(0, 19, 0, 0);
-            this.label6.Size = new System.Drawing.Size(640, 96);
-            this.label6.TabIndex = 18;
-            this.label6.Text = "Documentation";
-            // 
             // lblVisitXrmToolBoxPortal
             // 
             this.lblVisitXrmToolBoxPortal.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblVisitXrmToolBoxPortal.Font = new System.Drawing.Font("Segoe UI Light", 14F);
             this.lblVisitXrmToolBoxPortal.Image = global::XrmToolBox.Properties.Resources.logo_0032;
             this.lblVisitXrmToolBoxPortal.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblVisitXrmToolBoxPortal.Location = new System.Drawing.Point(0, 154);
-            this.lblVisitXrmToolBoxPortal.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.lblVisitXrmToolBoxPortal.Location = new System.Drawing.Point(0, 148);
+            this.lblVisitXrmToolBoxPortal.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblVisitXrmToolBoxPortal.Name = "lblVisitXrmToolBoxPortal";
-            this.lblVisitXrmToolBoxPortal.Size = new System.Drawing.Size(640, 77);
+            this.lblVisitXrmToolBoxPortal.Size = new System.Drawing.Size(576, 74);
             this.lblVisitXrmToolBoxPortal.TabIndex = 17;
             this.lblVisitXrmToolBoxPortal.Text = "       Visit XrmToolBox portal";
             this.lblVisitXrmToolBoxPortal.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -397,12 +430,12 @@
             // 
             this.lblManageConnections.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblManageConnections.Font = new System.Drawing.Font("Segoe UI Light", 14F);
-            this.lblManageConnections.Image = ((System.Drawing.Image)(resources.GetObject("lblManageConnections.Image")));
+            this.lblManageConnections.Image = global::XrmToolBox.Properties.Resources.Connect32;
             this.lblManageConnections.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblManageConnections.Location = new System.Drawing.Point(0, 77);
-            this.lblManageConnections.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.lblManageConnections.Location = new System.Drawing.Point(0, 74);
+            this.lblManageConnections.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblManageConnections.Name = "lblManageConnections";
-            this.lblManageConnections.Size = new System.Drawing.Size(640, 77);
+            this.lblManageConnections.Size = new System.Drawing.Size(576, 74);
             this.lblManageConnections.TabIndex = 16;
             this.lblManageConnections.Text = "       Manage connections";
             this.lblManageConnections.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -417,9 +450,9 @@
             this.lblOpenPluginsStore.Image = ((System.Drawing.Image)(resources.GetObject("lblOpenPluginsStore.Image")));
             this.lblOpenPluginsStore.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblOpenPluginsStore.Location = new System.Drawing.Point(0, 0);
-            this.lblOpenPluginsStore.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.lblOpenPluginsStore.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblOpenPluginsStore.Name = "lblOpenPluginsStore";
-            this.lblOpenPluginsStore.Size = new System.Drawing.Size(640, 77);
+            this.lblOpenPluginsStore.Size = new System.Drawing.Size(576, 74);
             this.lblOpenPluginsStore.TabIndex = 15;
             this.lblOpenPluginsStore.Text = "       Open Tool Library";
             this.lblOpenPluginsStore.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -427,46 +460,17 @@
             this.lblOpenPluginsStore.MouseEnter += new System.EventHandler(this.LabelMouseEnter);
             this.lblOpenPluginsStore.MouseLeave += new System.EventHandler(this.LabelMouseLeave);
             // 
-            // label2
-            // 
-            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label2.Font = new System.Drawing.Font("Segoe UI Light", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label2.Location = new System.Drawing.Point(0, 0);
-            this.label2.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
-            this.label2.Name = "label2";
-            this.label2.Padding = new System.Windows.Forms.Padding(0, 39, 0, 0);
-            this.label2.Size = new System.Drawing.Size(640, 116);
-            this.label2.TabIndex = 13;
-            this.label2.Text = "Quick actions";
-            // 
-            // chkDoNotShowAtStartup
-            // 
-            this.chkDoNotShowAtStartup.AutoSize = true;
-            this.chkDoNotShowAtStartup.BackColor = System.Drawing.Color.White;
-            this.chkDoNotShowAtStartup.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkDoNotShowAtStartup.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkDoNotShowAtStartup.Location = new System.Drawing.Point(100, 0);
-            this.chkDoNotShowAtStartup.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.chkDoNotShowAtStartup.Name = "chkDoNotShowAtStartup";
-            this.chkDoNotShowAtStartup.Size = new System.Drawing.Size(2168, 29);
-            this.chkDoNotShowAtStartup.TabIndex = 5;
-            this.chkDoNotShowAtStartup.Text = "Do not show this page when XrmToolBox starts";
-            this.chkDoNotShowAtStartup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkDoNotShowAtStartup.UseVisualStyleBackColor = false;
-            this.chkDoNotShowAtStartup.CheckedChanged += new System.EventHandler(this.chkDoNotShowAtStartup_CheckedChanged);
-            // 
             // StartPage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2368, 1273);
+            this.ClientSize = new System.Drawing.Size(1776, 1018);
             this.Controls.Add(this.chkDoNotShowAtStartup);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlEmptyRight);
             this.Controls.Add(this.pnlEmptyLeft);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.Name = "StartPage";
             this.Text = "Start page";
             this.Resize += new System.EventHandler(this.StartPage_Resize);

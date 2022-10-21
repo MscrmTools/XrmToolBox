@@ -2,6 +2,7 @@
 using McTools.Xrm.Connection.AppCode;
 using Microsoft.Xrm.Sdk;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -32,6 +33,10 @@ namespace XrmToolBox.New
             pluginControlBase.OnCloseTool += PluginControlBase_OnCloseTool;
             Icon = pluginControlBase.PluginIcon;
 
+            if (pluginControlBase is MultipleConnectionsPluginControlBase mcp)
+            {
+                mcp.AdditionalConnectionDetails.CollectionChanged += AdditionalConnectionDetails_CollectionChanged;
+            }
             DisplayHighlight(pluginControlBase.ConnectionDetail);
 
             if (pluginControlBase is IStatusBarMessenger statusBarMessenger)
@@ -53,7 +58,7 @@ namespace XrmToolBox.New
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
 
-        public sealed override Color BackColor
+        public override sealed Color BackColor
         {
             get => base.BackColor;
             set => base.BackColor = value;
@@ -65,7 +70,7 @@ namespace XrmToolBox.New
 
         public string PluginTitle { get; }
 
-        public sealed override string Text
+        public override sealed string Text
         {
             get => base.Text;
             set => base.Text = value;
@@ -139,6 +144,20 @@ namespace XrmToolBox.New
             return true;
         }
 
+        private void AdditionalConnectionDetails_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            var targets = ((MultipleConnectionsPluginControlBase)pluginControlBase).AdditionalConnectionDetails.ToList();
+
+            if (targets.Count > 0)
+            {
+                DisplayHighlightForMultipleConnections(pluginControlBase.ConnectionDetail, targets);
+            }
+            else
+            {
+                DisplayHighlight(pluginControlBase.ConnectionDetail);
+            }
+        }
+
         private void btnResetImpersonate_Click(object sender, System.EventArgs e)
         {
             pluginControlBase.ConnectionDetail.RemoveImpersonation();
@@ -159,6 +178,8 @@ namespace XrmToolBox.New
 
         private void DisplayHighlight(ConnectionDetail detail)
         {
+            tlpHighlight.Visible = false;
+
             if (detail?.IsEnvironmentHighlightSet ?? false && !(pluginControlBase is INoHighlightingPlugin))
             {
                 BackColor = detail.EnvironmentHighlightingInfo?.Color ?? DefaultBackColor;
@@ -172,6 +193,57 @@ namespace XrmToolBox.New
                 Padding = new Padding(0, 0, 0, 0);
                 lblEnvInfo.Visible = false;
             }
+
+            Invalidate();
+        }
+
+        private void DisplayHighlightForMultipleConnections(ConnectionDetail detail, List<ConnectionDetail> targetDetails)
+        {
+            lblEnvInfo.Visible = false;
+            Padding = new Padding(0, 0, 0, 0);
+            tlpHighlight.Visible = false;
+
+            if (detail?.IsEnvironmentHighlightSet ?? false)
+            {
+                Padding = new Padding(10, 0, 10, 10);
+                tlpHighlight.Visible = true;
+
+                lblSourceConnection.Text = detail.EnvironmentHighlightingInfo.Text;
+                lblSourceConnection.ForeColor = detail.EnvironmentHighlightingInfo.TextColor ?? Color.Black;
+                lblSourceConnection.BackColor = detail.EnvironmentHighlightingInfo.Color ?? DefaultBackColor;
+            }
+            else
+            {
+                lblSourceConnection.Text = detail?.EnvironmentHighlightingInfo?.Text ?? detail?.ConnectionName ?? "(Unknow connection name)";
+                lblSourceConnection.ForeColor = Color.Black;
+                lblSourceConnection.BackColor = DefaultBackColor;
+            }
+
+            var backColor = DefaultBackColor;
+            var color = DefaultForeColor;
+
+            foreach (var td in targetDetails)
+            {
+                if (td?.IsEnvironmentHighlightSet ?? false)
+                {
+                    Padding = new Padding(10, 0, 10, 10);
+                    tlpHighlight.Visible = true;
+                }
+
+                if (td?.EnvironmentHighlightingInfo != null)
+                {
+                    backColor = td.EnvironmentHighlightingInfo.Color ?? DefaultBackColor;
+                    color = td.EnvironmentHighlightingInfo.TextColor ?? DefaultForeColor;
+                }
+            }
+
+            lblTargetConnections.Text = string.Join(", ", targetDetails.Select(c => c.EnvironmentHighlightingInfo?.Text ?? c.ConnectionName));
+            lblTargetConnections.ForeColor = color;
+            lblTargetConnections.BackColor = backColor;
+
+            BackColor = backColor;
+
+            tlpHighlight.Visible = true;
 
             Invalidate();
         }

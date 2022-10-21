@@ -1,4 +1,6 @@
-﻿namespace XrmToolBox.Extensibility.Interfaces
+﻿using System;
+
+namespace XrmToolBox.Extensibility.Interfaces
 {
     public interface IPluginMetadata
     {

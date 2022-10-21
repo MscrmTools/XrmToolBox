@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Windows;
+using System.Windows.Forms;
 using System.Xml;
 using XrmToolBox.Extensibility;
 
@@ -43,10 +43,12 @@ namespace XrmToolBox.PluginsStore
 
         public bool? DisplayPluginsStoreOnStartup { get; set; }
         public bool IsInitialized { get; set; }
-        public bool? PluginsStoreShowIncompatible { get; set; }
-        public bool? PluginsStoreShowInstalled { get; set; }
-        public bool? PluginsStoreShowNew { get; set; }
-        public bool? PluginsStoreShowUpdates { get; set; }
+        public SortOrder Order { get; set; }
+        public int OrderIndex { get; set; }
+        public bool? PluginsStoreShowIncompatible { get; set; } = false;
+        public bool? PluginsStoreShowInstalled { get; set; } = true;
+        public bool? PluginsStoreShowNew { get; set; } = true;
+        public bool? PluginsStoreShowUpdates { get; set; } = true;
         public bool? UseLegacy { get; set; }
 
         public object Clone()
@@ -58,7 +60,9 @@ namespace XrmToolBox.PluginsStore
                 PluginsStoreShowInstalled = PluginsStoreShowInstalled,
                 PluginsStoreShowNew = PluginsStoreShowNew,
                 PluginsStoreShowUpdates = PluginsStoreShowUpdates,
-                UseLegacy = UseLegacy
+                UseLegacy = UseLegacy,
+                Order = Order,
+                OrderIndex = OrderIndex
             };
         }
 

@@ -28,6 +28,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using XrmToolBox.PluginsStore;
 
 public static class Extensions
 {
@@ -54,19 +55,24 @@ public class AiConfig
         LoggingAssembly = loggingassembly ?? Assembly.GetExecutingAssembly();
         PluginName = toolname ?? GetLastDotPart(LoggingAssembly.GetName().Name);
         PluginVersion = LoggingAssembly.GetName().Version.PaddedVersion(1, 4, 2, 2);
+        InstallationId = InstallationInfo.Instance.InstallationId;
         // This will disable logging if the calling assembly is compiled with debug configuration
         LogEvents = !LoggingAssembly.GetCustomAttributes<DebuggableAttribute>().Any(d => d.IsJITTrackingEnabled);
+
+        var isc = new XrmToolBox.Extensibility.ItSecurityChecker();
+        LogEvents = LogEvents && !isc.IsStatisticsCollectDisabled();
     }
 
-    public Assembly LoggingAssembly { get; }
     public string AiEndpoint { get; }
     public string InstrumentationKey { get; }
     public bool LogEvents { get; set; } = true;
+    public Assembly LoggingAssembly { get; }
     public string OperationName { get; set; }
     public string PluginName { get; set; }
     public string PluginVersion { get; set; }
     public Guid SessionId { get; } = Guid.NewGuid();
     public string XTBVersion { get; set; } = GetLastDotPart(Assembly.GetEntryAssembly().GetName().Name) + " " + Assembly.GetEntryAssembly().GetName().Version.PaddedVersion(1, 4, 2, 2);
+    public Guid InstallationId { get; set; }
 
     private static string GetLastDotPart(string identifier)
     {
@@ -259,6 +265,7 @@ public class AiLogRequest
             OSVersion = aiConfig.XTBVersion,
             DeviceType = aiConfig.PluginName,
             ApplicationVersion = aiConfig.PluginVersion,
+            UserId = aiConfig.InstallationId.ToString(),
             SessionId = aiConfig.SessionId.ToString(),
             OperationName = aiConfig.OperationName
         };
@@ -325,6 +332,9 @@ public class AiTags
 
     [DataMember(Name = "ai.session.id")]
     public string SessionId { get; set; } = Guid.NewGuid().ToString();
+
+    [DataMember(Name = "ai.user.id")]
+    public string UserId { get; set; }
 }
 
 #endregion DataContracts

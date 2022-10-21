@@ -89,7 +89,7 @@ namespace XrmToolBox.Extensibility
 
         public static string GetPluginName(this TabPage page)
         {
-            return ((Lazy<IXrmToolBoxPlugin, IPluginMetadata>)page.Tag).Metadata.Name;
+            return ((Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)page.Tag).Metadata.Name;
         }
 
         public static string GetTitle(this Type pluginType)

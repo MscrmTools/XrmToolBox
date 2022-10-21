@@ -93,7 +93,7 @@ namespace XrmToolBox.AutoUpdater
             else
             {
                 /* handle case where there is at leat one space in the path of the exe */
-               
+
                 foreach (var arg in args)
                 {
                     xtbPath = xtbPath + arg + " ";
@@ -102,7 +102,6 @@ namespace XrmToolBox.AutoUpdater
                     {
                         break;
                     }
-
                 }
 
                 /* remove extra spaces */
@@ -173,7 +172,7 @@ namespace XrmToolBox.AutoUpdater
                 pbDownloadFile.Style = ProgressBarStyle.Continuous;
                 lblProgress.Text = "Operation completed";
 
-                lblEndInstructions.Text = string.Format(lblEndInstructions.Text, backupFolder);
+                lblEndInstructions.Text = string.Format(lblEndInstructions.Tag.ToString(), backupFolder);
                 Size = new Size(Size.Width, 180);
             };
             bw.RunWorkerAsync();
