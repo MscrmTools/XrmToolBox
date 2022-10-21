@@ -159,7 +159,7 @@ namespace XrmToolBox.New
 
         private void DisplayHighlight(ConnectionDetail detail)
         {
-            if (detail?.IsEnvironmentHighlightSet ?? false)
+            if (detail?.IsEnvironmentHighlightSet ?? false && !(pluginControlBase is INoHighlightingPlugin))
             {
                 BackColor = detail.EnvironmentHighlightingInfo?.Color ?? DefaultBackColor;
                 lblEnvInfo.ForeColor = detail.EnvironmentHighlightingInfo?.TextColor ?? DefaultForeColor;
