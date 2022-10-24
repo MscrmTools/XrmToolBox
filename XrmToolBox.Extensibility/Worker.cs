@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace XrmToolBox.Extensibility
@@ -33,20 +34,18 @@ namespace XrmToolBox.Extensibility
 
             if (host.Controls.Contains(_infoPanel))
             {
-                if (_infoPanel.Width != width || _infoPanel.Height != height)
+                host.Invoke(new Action(() =>
                 {
-                    _infoPanel.Dispose();
-                    host.Controls.Remove(_infoPanel);
-                    _infoPanel = InformationPanel.GetInformationPanel(host, message, width, height);
-                }
-                else
-                {
-                    InformationPanel.ChangeInformationPanelMessage(_infoPanel, message);
-                }
+                    _infoPanel.Width = width;
+                    _infoPanel.Height = height;
+                    var lbl = _infoPanel.Controls.OfType<Label>().FirstOrDefault();
+                    lbl.Text = message;
+                }));
             }
             else
             {
                 _infoPanel = InformationPanel.GetInformationPanel(host, message, width, height);
+                host.Controls.Add(_infoPanel);
             }
         }
 
@@ -76,11 +75,20 @@ namespace XrmToolBox.Extensibility
 
             _worker.RunWorkerCompleted += (s, e) =>
             {
+                _infoPanel.SendToBack();
+
                 if (info.Host.Controls.Contains(_infoPanel))
                 {
-                    _infoPanel.Dispose();
                     info.Host.Controls.Remove(_infoPanel);
                 }
+
+                if (_infoPanel.Tag is Control c && c.Controls.Contains(_infoPanel))
+                {
+                    c.Controls.Remove(_infoPanel);
+                }
+
+                _infoPanel.Dispose();
+
                 if (info.PostWorkCallBack != null)
                 {
                     info.PostWorkCallBack(e);

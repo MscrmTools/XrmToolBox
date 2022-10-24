@@ -63,7 +63,8 @@ namespace XrmToolBox.Extensibility
                                     (parentControl.Width - width) / 2,
                                     (parentControl.Height - height) / 2),
                 BackColor = Color.FromArgb(255, 255, 224),
-                BorderStyle = BorderStyle.FixedSingle
+                BorderStyle = BorderStyle.FixedSingle,
+                Tag = parentControl
             };
 
             var label = new Label
@@ -76,7 +77,8 @@ namespace XrmToolBox.Extensibility
                 Text = message,
                 Location = new Point(0, 10),
                 Font = new Font("Segoe UI", 10F),
-                Name = "InfoLabel"
+                Name = "InfoLabel",
+                Anchor = AnchorStyles.Left | AnchorStyles.Right
             };
 
             var assembly = Assembly.GetExecutingAssembly();
