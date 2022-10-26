@@ -367,14 +367,14 @@ namespace XrmToolBox.Extensibility
         /// <summary>
         /// Path for the log file
         /// </summary>
-        protected string LogFilePath => logManager?.FilePath;
+        public string LogFilePath => logManager?.FilePath;
 
         /// <summary>
         /// Writes an error message in the log
         /// </summary>
         /// <param name="message">Message</param>
         /// <param name="args">Message parameters</param>
-        protected void LogError(string message, params object[] args)
+        public void LogError(string message, params object[] args)
         {
             logManager.LogError(message, args);
         }
@@ -384,7 +384,7 @@ namespace XrmToolBox.Extensibility
         /// </summary>
         /// <param name="message">Message</param>
         /// <param name="args">Message parameters</param>
-        protected void LogInfo(string message, params object[] args)
+        public void LogInfo(string message, params object[] args)
         {
             logManager.LogInfo(message, args);
         }
@@ -394,7 +394,7 @@ namespace XrmToolBox.Extensibility
         /// </summary>
         /// <param name="message">Message</param>
         /// <param name="args">Message parameters</param>
-        protected void LogWarning(string message, params object[] args)
+        public void LogWarning(string message, params object[] args)
         {
             logManager.LogWarning(message, args);
         }
@@ -402,7 +402,7 @@ namespace XrmToolBox.Extensibility
         /// <summary>
         /// Opens the log file associated with the current plugin
         /// </summary>
-        protected void OpenLogFile()
+        public void OpenLogFile()
         {
             logManager.OpenLog();
         }
