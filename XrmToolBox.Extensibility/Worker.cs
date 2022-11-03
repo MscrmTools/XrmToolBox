@@ -75,19 +75,19 @@ namespace XrmToolBox.Extensibility
 
             _worker.RunWorkerCompleted += (s, e) =>
             {
-                _infoPanel.SendToBack();
+                _infoPanel?.SendToBack();
 
                 if (info.Host.Controls.Contains(_infoPanel))
                 {
                     info.Host.Controls.Remove(_infoPanel);
                 }
 
-                if (_infoPanel.Tag is Control c && c.Controls.Contains(_infoPanel))
+                if (_infoPanel?.Tag is Control c && c.Controls.Contains(_infoPanel))
                 {
                     c.Controls.Remove(_infoPanel);
                 }
 
-                _infoPanel.Dispose();
+                _infoPanel?.Dispose();
 
                 if (info.PostWorkCallBack != null)
                 {
