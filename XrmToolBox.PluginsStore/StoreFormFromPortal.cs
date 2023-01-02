@@ -334,15 +334,15 @@ Current cache folder size: {size}MB";
                     currentList.Add(item);
             }
 
-	        if (IsHandleCreated)
-	        {
-		        Invoke(new Action(
-			        () =>
-					{
-						lvPlugins.Items.Clear();
-						lvPlugins.Items.AddRange(currentList.ToArray());
-					}));
-	        }
+            if (IsHandleCreated)
+            {
+                Invoke(new Action(
+                    () =>
+                    {
+                        lvPlugins.Items.Clear();
+                        lvPlugins.Items.AddRange(currentList.ToArray());
+                    }));
+            }
         }
 
         private Panel GetPropertiesPanelInformation(string label, object value)
@@ -952,14 +952,6 @@ Current cache folder size: {size}MB";
             searchThread?.Abort();
             searchThread = new Thread(FilterPlugins);
             searchThread.Start(tstSearch.Text == tstSearch.Tag?.ToString() ? string.Empty : tstSearch.Text);
-
-            if (tstSearch.Text?.Length == 0)
-            {
-                tstSearch.TextChanged -= tstSearch_TextChanged;
-                tstSearch.Text = @"Search by Title or Authors";
-                tstSearch.ForeColor = SystemColors.InactiveCaption;
-                tstSearch.TextChanged += tstSearch_TextChanged;
-            }
         }
     }
 }
