@@ -31,6 +31,7 @@ namespace XrmToolBox.PluginsStore
         private int newPlugin, updatePlugin, allPlugins;
         private Thread searchThread;
         private int sortedColumnIndex = -1;
+        private ToolTip tooltip;
 
         public StoreFormFromPortal(bool allowConnectionControlPrerelease)
         {
@@ -52,6 +53,11 @@ namespace XrmToolBox.PluginsStore
             tsbCleanCacheFolder.ToolTipText = $@"Clean XrmToolBox Tool Library cache folder
 
 Current cache folder size: {size}MB";
+
+            tooltip = new ToolTip();
+            tooltip.ToolTipIcon = ToolTipIcon.Info;
+            tooltip.ToolTipTitle = "Why a tool does not show as open source?";
+            tooltip.SetToolTip(chkIsOpenSource, "The \"Is Open source\" property is handled manually. Please contact us if a tool does not show as Open source whereas it should");
         }
 
         public event EventHandler PluginsClosingRequested;
@@ -255,6 +261,13 @@ Current cache folder size: {size}MB";
             }
         }
 
+        private void ChkIsOpenSource_Click(object sender, EventArgs e)
+        {
+            searchThread?.Abort();
+            searchThread = new Thread(FilterPlugins);
+            searchThread.Start(tstSearch.Text == tstSearch.Tag?.ToString() ? string.Empty : tstSearch.Text);
+        }
+
         private void chkTools_Click(object sender, EventArgs e)
         {
             var options = Options.Instance;
@@ -329,8 +342,9 @@ Current cache folder size: {size}MB";
                                                ||
                                                tool.Action == PackageInstallAction.None
                                                && (options.PluginsStoreShowInstalled ?? true);
+                var isOpenSource = (tool.IsOpenSource ?? false) && chkIsOpenSource.Checked || !chkIsOpenSource.Checked;
 
-                if (isValidForSelectedCategories && fitsSearchTerm && isValidForDisplayFilters)
+                if (isValidForSelectedCategories && fitsSearchTerm && isValidForDisplayFilters && isOpenSource)
                     currentList.Add(item);
             }
 
@@ -944,7 +958,12 @@ Current cache folder size: {size}MB";
             tstSearch.TextChanged -= tstSearch_TextChanged;
             tstSearch.Text = isEmpty ? @"Search by Title or Authors" : tstSearch.Text;
             tstSearch.TextChanged += tstSearch_TextChanged;
-            tstSearch.ForeColor = SystemColors.InactiveCaption;
+
+            var isSame = tstSearch.Text == @"Search by Title or Authors";
+            if (isSame)
+            {
+                tstSearch.ForeColor = SystemColors.InactiveCaption;
+            }
         }
 
         private void tstSearch_TextChanged(object sender, EventArgs e)

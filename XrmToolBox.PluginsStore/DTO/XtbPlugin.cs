@@ -62,6 +62,9 @@ namespace XrmToolBox.PluginsStore.DTO
         [DataMember(Name = "mctools_pluginid")]
         public string Id { get; set; }
 
+        [DataMember(Name = "mctools_isopensource")]
+        public bool? IsOpenSource { get; set; }
+
         [DataMember(Name = "mctools_latestreleasedate")]
         public DateTime? LatestReleaseDate { get; internal set; }
 
