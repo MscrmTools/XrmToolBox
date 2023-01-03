@@ -156,6 +156,11 @@ namespace XrmToolBox
         [Browsable(false)] public bool? AllowLogUsage { get; set; }
 
         [Category("Startup")]
+        [DisplayName("Bring to top")]
+        [Description("Make XrmToolBox the top application when it successfuly started")]
+        public bool BringToTop { get; set; } = true;
+
+        [Category("Startup")]
         [DisplayName("Check for update")]
         [Description("Check if update is available for XrmToolBox application")]
         public bool CheckUpdateOnStartup
@@ -499,7 +504,8 @@ namespace XrmToolBox
                 PluginsListIsHidden = PluginsListIsHidden,
                 ReuseConnections = ReuseConnections,
                 Size = Size,
-                ThemeValue = ThemeValue
+                ThemeValue = ThemeValue,
+                BringToTop = BringToTop
             };
         }
 

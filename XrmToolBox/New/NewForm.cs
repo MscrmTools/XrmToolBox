@@ -155,6 +155,8 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
         private void BringToTop()
         {
+            if (!Options.Instance.BringToTop) return;
+
             //Checks if the method is called from UI thread or not
             if (InvokeRequired)
             {
