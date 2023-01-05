@@ -289,7 +289,7 @@ namespace MsCrmTools.SampleTool
 
         public void OnIncomingMessage(MessageBusEventArgs message)
         {
-            throw new NotImplementedException();
+            MessageBox.Show($"I received the following information:\n\n{message.TargetArgument}", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void SendMessage(string message)

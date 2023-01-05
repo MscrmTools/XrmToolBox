@@ -66,6 +66,15 @@
             this.lvAssemblies = new System.Windows.Forms.ListView();
             this.chAssembly = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tbAppProtocol = new System.Windows.Forms.TabPage();
+            this.pnlAppProtocolButton = new System.Windows.Forms.Panel();
+            this.btnAppProtocol = new System.Windows.Forms.Button();
+            this.pnlAppProtocolStatus = new System.Windows.Forms.Panel();
+            this.lblAppProtocolStatus = new System.Windows.Forms.Label();
+            this.pnlAppProtocolTop = new System.Windows.Forms.Panel();
+            this.lblAppProtocolSummary = new System.Windows.Forms.Label();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -77,6 +86,11 @@
             this.tpPaths.SuspendLayout();
             this.tbDataCollect.SuspendLayout();
             this.tpAssemblies.SuspendLayout();
+            this.tbAppProtocol.SuspendLayout();
+            this.pnlAppProtocolButton.SuspendLayout();
+            this.pnlAppProtocolStatus.SuspendLayout();
+            this.pnlAppProtocolTop.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -86,13 +100,13 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 764);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(797, 53);
+            this.panel1.Size = new System.Drawing.Size(860, 53);
             this.panel1.TabIndex = 5;
             // 
             // btnOk
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOk.Location = new System.Drawing.Point(550, 13);
+            this.btnOk.Location = new System.Drawing.Point(613, 13);
             this.btnOk.Margin = new System.Windows.Forms.Padding(5);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(113, 35);
@@ -105,7 +119,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(672, 13);
+            this.btnCancel.Location = new System.Drawing.Point(735, 13);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(5);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(113, 35);
@@ -122,7 +136,7 @@
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlHeader.Location = new System.Drawing.Point(0, 0);
             this.pnlHeader.Name = "pnlHeader";
-            this.pnlHeader.Size = new System.Drawing.Size(797, 117);
+            this.pnlHeader.Size = new System.Drawing.Size(860, 117);
             this.pnlHeader.TabIndex = 6;
             // 
             // label2
@@ -151,11 +165,12 @@
             this.tabControl1.Controls.Add(this.tpPaths);
             this.tabControl1.Controls.Add(this.tbDataCollect);
             this.tabControl1.Controls.Add(this.tpAssemblies);
+            this.tabControl1.Controls.Add(this.tbAppProtocol);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 117);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(797, 647);
+            this.tabControl1.Size = new System.Drawing.Size(860, 647);
             this.tabControl1.TabIndex = 7;
             // 
             // tabPage2
@@ -165,7 +180,7 @@
             this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage2.Size = new System.Drawing.Size(789, 614);
+            this.tabPage2.Size = new System.Drawing.Size(852, 614);
             this.tabPage2.TabIndex = 6;
             this.tabPage2.Text = "General";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -176,7 +191,7 @@
             this.propertyGrid1.Location = new System.Drawing.Point(2, 2);
             this.propertyGrid1.Margin = new System.Windows.Forms.Padding(2);
             this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(785, 610);
+            this.propertyGrid1.Size = new System.Drawing.Size(848, 610);
             this.propertyGrid1.TabIndex = 0;
             // 
             // tbProxy
@@ -186,7 +201,7 @@
             this.tbProxy.Location = new System.Drawing.Point(4, 29);
             this.tbProxy.Name = "tbProxy";
             this.tbProxy.Padding = new System.Windows.Forms.Padding(3);
-            this.tbProxy.Size = new System.Drawing.Size(789, 614);
+            this.tbProxy.Size = new System.Drawing.Size(852, 614);
             this.tbProxy.TabIndex = 1;
             this.tbProxy.Text = "Proxy";
             this.tbProxy.UseVisualStyleBackColor = true;
@@ -202,7 +217,7 @@
             this.gbCustomProxy.Dock = System.Windows.Forms.DockStyle.Top;
             this.gbCustomProxy.Location = new System.Drawing.Point(3, 31);
             this.gbCustomProxy.Name = "gbCustomProxy";
-            this.gbCustomProxy.Size = new System.Drawing.Size(783, 215);
+            this.gbCustomProxy.Size = new System.Drawing.Size(846, 215);
             this.gbCustomProxy.TabIndex = 15;
             this.gbCustomProxy.TabStop = false;
             this.gbCustomProxy.Text = "Custom proxy";
@@ -264,7 +279,7 @@
             this.txtProxyAddress.Enabled = false;
             this.txtProxyAddress.Location = new System.Drawing.Point(194, 25);
             this.txtProxyAddress.Name = "txtProxyAddress";
-            this.txtProxyAddress.Size = new System.Drawing.Size(589, 26);
+            this.txtProxyAddress.Size = new System.Drawing.Size(652, 26);
             this.txtProxyAddress.TabIndex = 4;
             // 
             // label4
@@ -350,7 +365,7 @@
             "Use custom proxy"});
             this.cbbProxyUsage.Location = new System.Drawing.Point(3, 3);
             this.cbbProxyUsage.Name = "cbbProxyUsage";
-            this.cbbProxyUsage.Size = new System.Drawing.Size(783, 28);
+            this.cbbProxyUsage.Size = new System.Drawing.Size(846, 28);
             this.cbbProxyUsage.TabIndex = 14;
             this.cbbProxyUsage.SelectedIndexChanged += new System.EventHandler(this.cbbProxyUsage_SelectedIndexChanged);
             // 
@@ -364,7 +379,7 @@
             this.tpPaths.Margin = new System.Windows.Forms.Padding(5);
             this.tpPaths.Name = "tpPaths";
             this.tpPaths.Padding = new System.Windows.Forms.Padding(5);
-            this.tpPaths.Size = new System.Drawing.Size(789, 614);
+            this.tpPaths.Size = new System.Drawing.Size(852, 614);
             this.tpPaths.TabIndex = 3;
             this.tpPaths.Text = "Paths";
             this.tpPaths.UseVisualStyleBackColor = true;
@@ -376,7 +391,7 @@
             this.lblChangePathDescription.Location = new System.Drawing.Point(5, 127);
             this.lblChangePathDescription.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblChangePathDescription.Name = "lblChangePathDescription";
-            this.lblChangePathDescription.Size = new System.Drawing.Size(779, 482);
+            this.lblChangePathDescription.Size = new System.Drawing.Size(842, 482);
             this.lblChangePathDescription.TabIndex = 4;
             this.lblChangePathDescription.Text = resources.GetString("lblChangePathDescription.Text");
             // 
@@ -387,7 +402,7 @@
             this.lblChangePathTitle.Location = new System.Drawing.Point(5, 85);
             this.lblChangePathTitle.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblChangePathTitle.Name = "lblChangePathTitle";
-            this.lblChangePathTitle.Size = new System.Drawing.Size(779, 42);
+            this.lblChangePathTitle.Size = new System.Drawing.Size(842, 42);
             this.lblChangePathTitle.TabIndex = 3;
             this.lblChangePathTitle.Text = "How to change XrmToolBox storage folder";
             // 
@@ -397,7 +412,7 @@
             this.llOpenStorageFolder.Location = new System.Drawing.Point(5, 45);
             this.llOpenStorageFolder.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.llOpenStorageFolder.Name = "llOpenStorageFolder";
-            this.llOpenStorageFolder.Size = new System.Drawing.Size(779, 40);
+            this.llOpenStorageFolder.Size = new System.Drawing.Size(842, 40);
             this.llOpenStorageFolder.TabIndex = 1;
             this.llOpenStorageFolder.TabStop = true;
             this.llOpenStorageFolder.Text = "Open XrmToolBox storage folder";
@@ -409,7 +424,7 @@
             this.llOpenRootFolder.Location = new System.Drawing.Point(5, 5);
             this.llOpenRootFolder.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.llOpenRootFolder.Name = "llOpenRootFolder";
-            this.llOpenRootFolder.Size = new System.Drawing.Size(779, 40);
+            this.llOpenRootFolder.Size = new System.Drawing.Size(842, 40);
             this.llOpenRootFolder.TabIndex = 0;
             this.llOpenRootFolder.TabStop = true;
             this.llOpenRootFolder.Text = "Open XrmToolBox folder";
@@ -423,7 +438,7 @@
             this.tbDataCollect.Margin = new System.Windows.Forms.Padding(2);
             this.tbDataCollect.Name = "tbDataCollect";
             this.tbDataCollect.Padding = new System.Windows.Forms.Padding(2);
-            this.tbDataCollect.Size = new System.Drawing.Size(789, 614);
+            this.tbDataCollect.Size = new System.Drawing.Size(852, 614);
             this.tbDataCollect.TabIndex = 5;
             this.tbDataCollect.Text = "Data collect";
             this.tbDataCollect.UseVisualStyleBackColor = true;
@@ -448,7 +463,7 @@
             this.label6.Location = new System.Drawing.Point(2, 2);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(785, 610);
+            this.label6.Size = new System.Drawing.Size(848, 610);
             this.label6.TabIndex = 1;
             this.label6.Text = resources.GetString("label6.Text");
             // 
@@ -458,7 +473,7 @@
             this.tpAssemblies.Location = new System.Drawing.Point(4, 29);
             this.tpAssemblies.Name = "tpAssemblies";
             this.tpAssemblies.Padding = new System.Windows.Forms.Padding(3);
-            this.tpAssemblies.Size = new System.Drawing.Size(789, 614);
+            this.tpAssemblies.Size = new System.Drawing.Size(852, 614);
             this.tpAssemblies.TabIndex = 7;
             this.tpAssemblies.Text = "Assemblies";
             this.tpAssemblies.UseVisualStyleBackColor = true;
@@ -470,9 +485,9 @@
             this.chVersion});
             this.lvAssemblies.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvAssemblies.HideSelection = false;
-            this.lvAssemblies.Location = new System.Drawing.Point(4, 4);
+            this.lvAssemblies.Location = new System.Drawing.Point(3, 3);
             this.lvAssemblies.Name = "lvAssemblies";
-            this.lvAssemblies.Size = new System.Drawing.Size(940, 730);
+            this.lvAssemblies.Size = new System.Drawing.Size(846, 608);
             this.lvAssemblies.TabIndex = 0;
             this.lvAssemblies.UseCompatibleStateImageBehavior = false;
             this.lvAssemblies.View = System.Windows.Forms.View.Details;
@@ -487,13 +502,108 @@
             this.chVersion.Text = "Version";
             this.chVersion.Width = 150;
             // 
+            // tbAppProtocol
+            // 
+            this.tbAppProtocol.Controls.Add(this.panel4);
+            this.tbAppProtocol.Controls.Add(this.pnlAppProtocolButton);
+            this.tbAppProtocol.Controls.Add(this.pnlAppProtocolStatus);
+            this.tbAppProtocol.Controls.Add(this.pnlAppProtocolTop);
+            this.tbAppProtocol.Location = new System.Drawing.Point(4, 29);
+            this.tbAppProtocol.Name = "tbAppProtocol";
+            this.tbAppProtocol.Padding = new System.Windows.Forms.Padding(3);
+            this.tbAppProtocol.Size = new System.Drawing.Size(852, 614);
+            this.tbAppProtocol.TabIndex = 8;
+            this.tbAppProtocol.Text = "Application protocol";
+            this.tbAppProtocol.UseVisualStyleBackColor = true;
+            // 
+            // pnlAppProtocolButton
+            // 
+            this.pnlAppProtocolButton.Controls.Add(this.btnAppProtocol);
+            this.pnlAppProtocolButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlAppProtocolButton.Location = new System.Drawing.Point(3, 181);
+            this.pnlAppProtocolButton.Name = "pnlAppProtocolButton";
+            this.pnlAppProtocolButton.Padding = new System.Windows.Forms.Padding(40);
+            this.pnlAppProtocolButton.Size = new System.Drawing.Size(846, 150);
+            this.pnlAppProtocolButton.TabIndex = 2;
+            // 
+            // btnAppProtocol
+            // 
+            this.btnAppProtocol.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnAppProtocol.Location = new System.Drawing.Point(40, 40);
+            this.btnAppProtocol.Name = "btnAppProtocol";
+            this.btnAppProtocol.Size = new System.Drawing.Size(766, 70);
+            this.btnAppProtocol.TabIndex = 0;
+            this.btnAppProtocol.Text = "Enable";
+            this.btnAppProtocol.UseVisualStyleBackColor = true;
+            this.btnAppProtocol.Click += new System.EventHandler(this.btnAppProtocol_Click);
+            // 
+            // pnlAppProtocolStatus
+            // 
+            this.pnlAppProtocolStatus.Controls.Add(this.lblAppProtocolStatus);
+            this.pnlAppProtocolStatus.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlAppProtocolStatus.Location = new System.Drawing.Point(3, 97);
+            this.pnlAppProtocolStatus.Name = "pnlAppProtocolStatus";
+            this.pnlAppProtocolStatus.Padding = new System.Windows.Forms.Padding(10);
+            this.pnlAppProtocolStatus.Size = new System.Drawing.Size(846, 84);
+            this.pnlAppProtocolStatus.TabIndex = 1;
+            // 
+            // lblAppProtocolStatus
+            // 
+            this.lblAppProtocolStatus.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblAppProtocolStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblAppProtocolStatus.Location = new System.Drawing.Point(10, 10);
+            this.lblAppProtocolStatus.Name = "lblAppProtocolStatus";
+            this.lblAppProtocolStatus.Size = new System.Drawing.Size(826, 64);
+            this.lblAppProtocolStatus.TabIndex = 0;
+            this.lblAppProtocolStatus.Tag = "Current Status : {0}";
+            this.lblAppProtocolStatus.Text = "Current Status";
+            this.lblAppProtocolStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // pnlAppProtocolTop
+            // 
+            this.pnlAppProtocolTop.Controls.Add(this.lblAppProtocolSummary);
+            this.pnlAppProtocolTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlAppProtocolTop.Location = new System.Drawing.Point(3, 3);
+            this.pnlAppProtocolTop.Name = "pnlAppProtocolTop";
+            this.pnlAppProtocolTop.Padding = new System.Windows.Forms.Padding(10);
+            this.pnlAppProtocolTop.Size = new System.Drawing.Size(846, 94);
+            this.pnlAppProtocolTop.TabIndex = 0;
+            // 
+            // lblAppProtocolSummary
+            // 
+            this.lblAppProtocolSummary.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblAppProtocolSummary.Location = new System.Drawing.Point(10, 10);
+            this.lblAppProtocolSummary.Name = "lblAppProtocolSummary";
+            this.lblAppProtocolSummary.Size = new System.Drawing.Size(826, 68);
+            this.lblAppProtocolSummary.TabIndex = 0;
+            this.lblAppProtocolSummary.Text = resources.GetString("lblAppProtocolSummary.Text");
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.label1);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel4.Location = new System.Drawing.Point(3, 331);
+            this.panel4.Name = "panel4";
+            this.panel4.Padding = new System.Windows.Forms.Padding(10);
+            this.panel4.Size = new System.Drawing.Size(846, 259);
+            this.panel4.TabIndex = 3;
+            // 
+            // label1
+            // 
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Location = new System.Drawing.Point(10, 10);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(826, 255);
+            this.label1.TabIndex = 0;
+            this.label1.Text = resources.GetString("label1.Text");
+            // 
             // OptionsDialog
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(797, 817);
+            this.ClientSize = new System.Drawing.Size(860, 817);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.pnlHeader);
             this.Controls.Add(this.panel1);
@@ -519,6 +629,11 @@
             this.tbDataCollect.ResumeLayout(false);
             this.tbDataCollect.PerformLayout();
             this.tpAssemblies.ResumeLayout(false);
+            this.tbAppProtocol.ResumeLayout(false);
+            this.pnlAppProtocolButton.ResumeLayout(false);
+            this.pnlAppProtocolStatus.ResumeLayout(false);
+            this.pnlAppProtocolTop.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -562,5 +677,14 @@
         private System.Windows.Forms.ListView lvAssemblies;
         private System.Windows.Forms.ColumnHeader chAssembly;
         private System.Windows.Forms.ColumnHeader chVersion;
+        private System.Windows.Forms.TabPage tbAppProtocol;
+        private System.Windows.Forms.Panel pnlAppProtocolStatus;
+        private System.Windows.Forms.Label lblAppProtocolStatus;
+        private System.Windows.Forms.Panel pnlAppProtocolTop;
+        private System.Windows.Forms.Label lblAppProtocolSummary;
+        private System.Windows.Forms.Panel pnlAppProtocolButton;
+        private System.Windows.Forms.Button btnAppProtocol;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.Label label1;
     }
 }

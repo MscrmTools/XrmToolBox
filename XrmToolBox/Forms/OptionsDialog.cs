@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -24,9 +25,32 @@ namespace XrmToolBox.Forms
             chkOptinAI.Checked = Option.OptinForApplicationInsights;
 
             PopulateAssemblies();
+
+            CheckAppProtocolStatus();
         }
 
         public Options Option { get; private set; }
+
+        private void btnAppProtocol_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (RegistryHelper.DoesXtbProtocolExist())
+                {
+                    RegistryHelper.RemoveXtbProtocol();
+                }
+                else
+                {
+                    RegistryHelper.AddXtbProtocol(Application.ExecutablePath, Paths.XrmToolBoxPath == "." ? new FileInfo(Application.ExecutablePath).DirectoryName : Paths.XrmToolBoxPath);
+                }
+
+                CheckAppProtocolStatus();
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(this, $"An error occured when setting application protocol: {error.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void BtnCancelClick(object sender, EventArgs e)
         {
@@ -88,6 +112,16 @@ namespace XrmToolBox.Forms
             chkByPassProxyOnLocal.Enabled = useCustomProxy;
             rbCustomAuthYes.Enabled = useCustomProxy;
             rbCustomAuthNo.Enabled = useCustomProxy;
+        }
+
+        private void CheckAppProtocolStatus()
+        {
+            var isEnabled = RegistryHelper.DoesXtbProtocolExist();
+
+            lblAppProtocolStatus.Text = string.Format(lblAppProtocolStatus.Tag.ToString(), isEnabled ? "Enabled" : "Disabled");
+            lblAppProtocolStatus.ForeColor = isEnabled ? Color.Green : Color.Red;
+
+            btnAppProtocol.Text = isEnabled ? "Disable" : "Enable";
         }
 
         private void llOpenRootFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

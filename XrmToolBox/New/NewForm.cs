@@ -14,7 +14,9 @@ using System.Net;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.Announcement;
@@ -44,6 +46,7 @@ namespace XrmToolBox.New
         private IDockContent currentContent;
         private FormHelper fHelper;
         private string initialConnectionName;
+        private string initialData;
         private string initialPluginName;
         private int numberOfConnectionReceived;
         private IOrganizationService service;
@@ -110,15 +113,40 @@ namespace XrmToolBox.New
                 // Read arguments to detect if a plugin should be displayed automatically
                 if (args.Length > 0)
                 {
-                    initialConnectionName = ExtractSwitchValue("/connection:", ref args);
-                    initialPluginName = ExtractSwitchValue("/plugin:", ref args);
-
-                    if (!string.IsNullOrEmpty(initialConnectionName))
+                    var protocolArg = args.FirstOrDefault(a => a.Contains("xrmtoolbox:"));
+                    if (protocolArg != null)
                     {
-                        pnlConnectLoading.BringToFront();
+                        var protocolArgs = HttpUtility.UrlDecode(protocolArg.Split(':')[1]);
 
-                        pnlConnectLoading.Visible = true;
-                        lblConnecting.Text = string.Format(lblConnecting.Tag.ToString(), initialConnectionName);
+                        var rg = new Regex(@"\/([a-zA-Z]*)\:\""(.*?)\""", RegexOptions.Multiline | RegexOptions.Singleline);
+
+                        var matches = rg.Matches(protocolArgs);
+
+                        foreach (Match match in matches)
+                        {
+                            if (match.Groups.Count == 3)
+                            {
+                                if (match.Groups[1].Value == "plugin")
+                                {
+                                    initialPluginName = match.Groups[2].Value;
+                                }
+
+                                if (match.Groups[1].Value == "connection")
+                                {
+                                    initialConnectionName = match.Groups[2].Value;
+                                }
+
+                                if (match.Groups[1].Value == "data")
+                                {
+                                    initialData = match.Groups[2].Value;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        initialConnectionName = ExtractSwitchValue("/connection:", ref args);
+                        initialPluginName = ExtractSwitchValue("/plugin:", ref args);
                     }
                 }
             }
@@ -402,6 +430,11 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                 pluginsForm.DisplayCategories(null);
                 pnlNoNugetAccess.Visible = true;
             }
+
+            var ctrls = Controls.OfType<ConnectingControl>();
+            if (ctrls.Any()) Controls.Remove(ctrls.First());
+            var ctrls2 = Controls.OfType<ConnectingCdsControl>();
+            if (ctrls2.Any()) Controls.Remove(ctrls2.First());
         }
 
         private void PrepareCategories()
@@ -789,6 +822,18 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
                 Options.Instance.Save();
 
+                if (pluginControl is IMessageBusHost host2)
+                {
+                    if (!string.IsNullOrEmpty(initialData))
+                    {
+                        host2.OnIncomingMessage(new MessageBusEventArgs("URL Protocol")
+                        {
+                            SourcePlugin = "URL Protocol",
+                            TargetArgument = initialData
+                        });
+                    }
+                }
+
                 return pluginControl;
             }
             catch (Exception error)
@@ -1080,6 +1125,22 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
         private Task LaunchInitialConnection(ConnectionDetail detail)
         {
+            var info = new ConnectionParameterInfo();
+
+            if (!detail.UseOnline)
+            {
+                info.ConnControl = new ConnectingControl { Anchor = AnchorStyles.None };
+            }
+            else
+            {
+                info.ConnControl = new ConnectingCdsControl { Anchor = AnchorStyles.None };
+            }
+
+            info.ConnControl.Left = Width / 2 - info.ConnControl.Width / 2;
+            info.ConnControl.Top = Height / 2 - info.ConnControl.Height / 2;
+            Controls.Add(info.ConnControl);
+            info.ConnControl.BringToFront();
+
             return new Task(() => ConnectionManager.Instance.ConnectToServer(new List<ConnectionDetail> { detail }));
         }
 
