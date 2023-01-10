@@ -25,9 +25,22 @@ namespace XrmToolBox.AppCode
             softwareKey.Dispose();
         }
 
-        public static bool DoesXtbProtocolExist()
+        public static string XtbProtocolPath()
         {
-            return Registry.ClassesRoot.OpenSubKey("xrmtoolbox") != null;
+            if (Registry.ClassesRoot.OpenSubKey("xrmtoolbox") is RegistryKey xtbKey &&
+                xtbKey.OpenSubKey("shell") is RegistryKey shellKey &&
+                shellKey.OpenSubKey("open") is RegistryKey openKey &&
+                openKey.OpenSubKey("command") is RegistryKey commandKey &&
+                commandKey.GetValue("") is string command)
+            {
+                if (command.Contains(" /overridepath"))
+                {
+                    command = command.Split(new string[] { " /overridepath" }, StringSplitOptions.None)[0].Trim();
+                }
+                command = command.Trim('"');
+                return command;
+            }
+            return null;
         }
 
         public static void RemoveXtbProtocol()
