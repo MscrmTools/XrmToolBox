@@ -35,7 +35,7 @@ namespace XrmToolBox.Forms
         {
             try
             {
-                if (RegistryHelper.DoesXtbProtocolExist())
+                if (!string.IsNullOrEmpty(RegistryHelper.XtbProtocolPath()))
                 {
                     RegistryHelper.RemoveXtbProtocol();
                 }
@@ -116,12 +116,16 @@ namespace XrmToolBox.Forms
 
         private void CheckAppProtocolStatus()
         {
-            var isEnabled = RegistryHelper.DoesXtbProtocolExist();
+            var protocolPath = RegistryHelper.XtbProtocolPath();
+            var isEnabled = !string.IsNullOrEmpty(protocolPath);
 
             lblAppProtocolStatus.Text = string.Format(lblAppProtocolStatus.Tag.ToString(), isEnabled ? "Enabled" : "Disabled");
             lblAppProtocolStatus.ForeColor = isEnabled ? Color.Green : Color.Red;
 
             btnAppProtocol.Text = isEnabled ? "Disable" : "Enable";
+
+            txtAppProtocolPath.Text = protocolPath;
+            txtAppProtocolPath.Visible = isEnabled;
         }
 
         private void llOpenRootFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
