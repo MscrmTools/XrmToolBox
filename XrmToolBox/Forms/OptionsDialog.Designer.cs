@@ -67,16 +67,16 @@
             this.chAssembly = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tbAppProtocol = new System.Windows.Forms.TabPage();
+            this.panel4 = new System.Windows.Forms.Panel();
             this.pnlAppProtocolButton = new System.Windows.Forms.Panel();
             this.btnAppProtocol = new System.Windows.Forms.Button();
+            this.pnlAppProtocolPath = new System.Windows.Forms.Panel();
+            this.lblAppProtocolPath = new System.Windows.Forms.Label();
             this.pnlAppProtocolStatus = new System.Windows.Forms.Panel();
             this.lblAppProtocolStatus = new System.Windows.Forms.Label();
             this.pnlAppProtocolTop = new System.Windows.Forms.Panel();
             this.lblAppProtocolSummary = new System.Windows.Forms.Label();
-            this.panel4 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtAppProtocolPath = new System.Windows.Forms.TextBox();
-            this.pnlAppProtocolPath = new System.Windows.Forms.Panel();
+            this.llProtocolDoc = new System.Windows.Forms.LinkLabel();
             this.panel1.SuspendLayout();
             this.pnlHeader.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -89,11 +89,11 @@
             this.tbDataCollect.SuspendLayout();
             this.tpAssemblies.SuspendLayout();
             this.tbAppProtocol.SuspendLayout();
+            this.panel4.SuspendLayout();
             this.pnlAppProtocolButton.SuspendLayout();
+            this.pnlAppProtocolPath.SuspendLayout();
             this.pnlAppProtocolStatus.SuspendLayout();
             this.pnlAppProtocolTop.SuspendLayout();
-            this.panel4.SuspendLayout();
-            this.pnlAppProtocolPath.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -520,14 +520,24 @@
             this.tbAppProtocol.Text = "Application protocol";
             this.tbAppProtocol.UseVisualStyleBackColor = true;
             // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.llProtocolDoc);
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel4.Location = new System.Drawing.Point(3, 325);
+            this.panel4.Name = "panel4";
+            this.panel4.Padding = new System.Windows.Forms.Padding(10);
+            this.panel4.Size = new System.Drawing.Size(846, 259);
+            this.panel4.TabIndex = 3;
+            // 
             // pnlAppProtocolButton
             // 
             this.pnlAppProtocolButton.Controls.Add(this.btnAppProtocol);
             this.pnlAppProtocolButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlAppProtocolButton.Location = new System.Drawing.Point(3, 181);
+            this.pnlAppProtocolButton.Location = new System.Drawing.Point(3, 177);
             this.pnlAppProtocolButton.Name = "pnlAppProtocolButton";
             this.pnlAppProtocolButton.Padding = new System.Windows.Forms.Padding(40);
-            this.pnlAppProtocolButton.Size = new System.Drawing.Size(846, 150);
+            this.pnlAppProtocolButton.Size = new System.Drawing.Size(846, 148);
             this.pnlAppProtocolButton.TabIndex = 2;
             // 
             // btnAppProtocol
@@ -535,11 +545,30 @@
             this.btnAppProtocol.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnAppProtocol.Location = new System.Drawing.Point(40, 40);
             this.btnAppProtocol.Name = "btnAppProtocol";
-            this.btnAppProtocol.Size = new System.Drawing.Size(766, 70);
+            this.btnAppProtocol.Size = new System.Drawing.Size(766, 68);
             this.btnAppProtocol.TabIndex = 0;
             this.btnAppProtocol.Text = "Enable";
             this.btnAppProtocol.UseVisualStyleBackColor = true;
             this.btnAppProtocol.Click += new System.EventHandler(this.btnAppProtocol_Click);
+            // 
+            // pnlAppProtocolPath
+            // 
+            this.pnlAppProtocolPath.Controls.Add(this.lblAppProtocolPath);
+            this.pnlAppProtocolPath.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlAppProtocolPath.Location = new System.Drawing.Point(3, 151);
+            this.pnlAppProtocolPath.Name = "pnlAppProtocolPath";
+            this.pnlAppProtocolPath.Padding = new System.Windows.Forms.Padding(27, 4, 27, 4);
+            this.pnlAppProtocolPath.Size = new System.Drawing.Size(846, 26);
+            this.pnlAppProtocolPath.TabIndex = 4;
+            // 
+            // lblAppProtocolPath
+            // 
+            this.lblAppProtocolPath.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblAppProtocolPath.Location = new System.Drawing.Point(27, 4);
+            this.lblAppProtocolPath.Name = "lblAppProtocolPath";
+            this.lblAppProtocolPath.Size = new System.Drawing.Size(792, 18);
+            this.lblAppProtocolPath.TabIndex = 1;
+            this.lblAppProtocolPath.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pnlAppProtocolStatus
             // 
@@ -557,7 +586,7 @@
             this.lblAppProtocolStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblAppProtocolStatus.Location = new System.Drawing.Point(10, 10);
             this.lblAppProtocolStatus.Name = "lblAppProtocolStatus";
-            this.lblAppProtocolStatus.Size = new System.Drawing.Size(826, 54);
+            this.lblAppProtocolStatus.Size = new System.Drawing.Size(826, 34);
             this.lblAppProtocolStatus.TabIndex = 0;
             this.lblAppProtocolStatus.Tag = "Current Status : {0}";
             this.lblAppProtocolStatus.Text = "Current Status";
@@ -582,45 +611,17 @@
             this.lblAppProtocolSummary.TabIndex = 0;
             this.lblAppProtocolSummary.Text = resources.GetString("lblAppProtocolSummary.Text");
             // 
-            // panel4
+            // llProtocolDoc
             // 
-            this.panel4.Controls.Add(this.label1);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel4.Location = new System.Drawing.Point(3, 331);
-            this.panel4.Name = "panel4";
-            this.panel4.Padding = new System.Windows.Forms.Padding(10);
-            this.panel4.Size = new System.Drawing.Size(846, 259);
-            this.panel4.TabIndex = 3;
-            // 
-            // label1
-            // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Location = new System.Drawing.Point(10, 10);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(826, 255);
-            this.label1.TabIndex = 0;
-            this.label1.Text = resources.GetString("label1.Text");
-            // 
-            // txtAppProtocolPath
-            // 
-            this.txtAppProtocolPath.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtAppProtocolPath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtAppProtocolPath.Location = new System.Drawing.Point(27, 4);
-            this.txtAppProtocolPath.Name = "txtAppProtocolPath";
-            this.txtAppProtocolPath.ReadOnly = true;
-            this.txtAppProtocolPath.Size = new System.Drawing.Size(507, 18);
-            this.txtAppProtocolPath.TabIndex = 1;
-            this.txtAppProtocolPath.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // pnlAppProtocolPath
-            // 
-            this.pnlAppProtocolPath.Controls.Add(this.txtAppProtocolPath);
-            this.pnlAppProtocolPath.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlAppProtocolPath.Location = new System.Drawing.Point(2, 118);
-            this.pnlAppProtocolPath.Name = "pnlAppProtocolPath";
-            this.pnlAppProtocolPath.Padding = new System.Windows.Forms.Padding(27, 4, 27, 4);
-            this.pnlAppProtocolPath.Size = new System.Drawing.Size(561, 26);
-            this.pnlAppProtocolPath.TabIndex = 4;
+            this.llProtocolDoc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.llProtocolDoc.AutoSize = true;
+            this.llProtocolDoc.Location = new System.Drawing.Point(280, 229);
+            this.llProtocolDoc.Name = "llProtocolDoc";
+            this.llProtocolDoc.Size = new System.Drawing.Size(556, 20);
+            this.llProtocolDoc.TabIndex = 0;
+            this.llProtocolDoc.TabStop = true;
+            this.llProtocolDoc.Text = "Click here to read documentation about how to implement application protocol";
+            this.llProtocolDoc.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llProtocolDoc_LinkClicked);
             // 
             // OptionsDialog
             // 
@@ -655,12 +656,12 @@
             this.tbDataCollect.PerformLayout();
             this.tpAssemblies.ResumeLayout(false);
             this.tbAppProtocol.ResumeLayout(false);
+            this.panel4.ResumeLayout(false);
+            this.panel4.PerformLayout();
             this.pnlAppProtocolButton.ResumeLayout(false);
+            this.pnlAppProtocolPath.ResumeLayout(false);
             this.pnlAppProtocolStatus.ResumeLayout(false);
             this.pnlAppProtocolTop.ResumeLayout(false);
-            this.panel4.ResumeLayout(false);
-            this.pnlAppProtocolPath.ResumeLayout(false);
-            this.pnlAppProtocolPath.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -712,8 +713,8 @@
         private System.Windows.Forms.Panel pnlAppProtocolButton;
         private System.Windows.Forms.Button btnAppProtocol;
         private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtAppProtocolPath;
+        private System.Windows.Forms.Label lblAppProtocolPath;
         private System.Windows.Forms.Panel pnlAppProtocolPath;
+        private System.Windows.Forms.LinkLabel llProtocolDoc;
     }
 }

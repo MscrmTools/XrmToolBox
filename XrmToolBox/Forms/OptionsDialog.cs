@@ -31,6 +31,15 @@ namespace XrmToolBox.Forms
 
         public Options Option { get; private set; }
 
+        private static string assemblyPrioritizer(string assemblyName)
+        {
+            return
+                assemblyName.Equals("XrmToolBox") ? "AAAAAAAAAAAA" :
+                assemblyName.Contains("XrmToolBox") ? "AAAAAAAAAAAB" :
+                assemblyName.Equals(Assembly.GetExecutingAssembly().GetName().Name) ? "AAAAAAAAAAAC" :
+                assemblyName;
+        }
+
         private void btnAppProtocol_Click(object sender, EventArgs e)
         {
             try
@@ -124,35 +133,8 @@ namespace XrmToolBox.Forms
 
             btnAppProtocol.Text = isEnabled ? "Disable" : "Enable";
 
-            txtAppProtocolPath.Text = protocolPath;
-            txtAppProtocolPath.Visible = isEnabled;
-        }
-
-        private void llOpenRootFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName);
-        }
-
-        private void llOpenStorageFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            Process.Start(Paths.XrmToolBoxPath);
-        }
-
-        private void rbCustomAuthYes_CheckedChanged(object sender, EventArgs e)
-        {
-            txtProxyPassword.Enabled = rbCustomAuthYes.Checked;
-            txtProxyUser.Enabled = rbCustomAuthYes.Checked;
-        }
-
-        #region Assembly
-
-        private static string assemblyPrioritizer(string assemblyName)
-        {
-            return
-                assemblyName.Equals("XrmToolBox") ? "AAAAAAAAAAAA" :
-                assemblyName.Contains("XrmToolBox") ? "AAAAAAAAAAAB" :
-                assemblyName.Equals(Assembly.GetExecutingAssembly().GetName().Name) ? "AAAAAAAAAAAC" :
-                assemblyName;
+            lblAppProtocolPath.Text = protocolPath;
+            lblAppProtocolPath.Visible = isEnabled;
         }
 
         private ListViewItem GetListItem(AssemblyName a)
@@ -174,6 +156,21 @@ namespace XrmToolBox.Forms
             return names;
         }
 
+        private void llOpenRootFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(new FileInfo(Assembly.GetExecutingAssembly().Location).Directory.FullName);
+        }
+
+        private void llOpenStorageFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(Paths.XrmToolBoxPath);
+        }
+
+        private void llProtocolDoc_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://www.xrmtoolbox.com/documentation/for-developers/implement-application-protocol/");
+        }
+
         private void PopulateAssemblies()
         {
             var assemblies = GetReferencedAssemblies();
@@ -182,6 +179,10 @@ namespace XrmToolBox.Forms
             lvAssemblies.Items.AddRange(items);
         }
 
-        #endregion Assembly
+        private void rbCustomAuthYes_CheckedChanged(object sender, EventArgs e)
+        {
+            txtProxyPassword.Enabled = rbCustomAuthYes.Checked;
+            txtProxyUser.Enabled = rbCustomAuthYes.Checked;
+        }
     }
 }
