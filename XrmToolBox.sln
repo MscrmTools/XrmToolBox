@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2015
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32002.261
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox", "XrmToolBox\XrmToolBox.csproj", "{328D55BE-8B9A-4087-A5C2-9FBAF623F54B}"
 EndProject
@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LicenseChecker", "LicenseCh
 	ProjectSection(SolutionItems) = preProject
 		LicenseChecker\McTools.StopAdvertisement.dll = LicenseChecker\McTools.StopAdvertisement.dll
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox.ToolLibrary", "XrmToolBox.ToolLibrary\XrmToolBox.ToolLibrary.csproj", "{626AEBA8-4315-4D82-B8B9-B94200FD7589}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,18 @@ Global
 		{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}.Release|x86.ActiveCfg = Release|Any CPU
 		{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}.Release|x86.Build.0 = Release|Any CPU
+		{626AEBA8-4315-4D82-B8B9-B94200FD7589}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{626AEBA8-4315-4D82-B8B9-B94200FD7589}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{626AEBA8-4315-4D82-B8B9-B94200FD7589}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{626AEBA8-4315-4D82-B8B9-B94200FD7589}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{626AEBA8-4315-4D82-B8B9-B94200FD7589}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{626AEBA8-4315-4D82-B8B9-B94200FD7589}.Debug|x86.Build.0 = Debug|Any CPU
+		{626AEBA8-4315-4D82-B8B9-B94200FD7589}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{626AEBA8-4315-4D82-B8B9-B94200FD7589}.Release|Any CPU.Build.0 = Release|Any CPU
+		{626AEBA8-4315-4D82-B8B9-B94200FD7589}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{626AEBA8-4315-4D82-B8B9-B94200FD7589}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{626AEBA8-4315-4D82-B8B9-B94200FD7589}.Release|x86.ActiveCfg = Release|Any CPU
+		{626AEBA8-4315-4D82-B8B9-B94200FD7589}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,8 +105,8 @@ Global
 		{5BF1E228-F898-40CF-B8FB-8412D8C81CFF} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {5CC3AFE2-F092-40F3-A540-539389A045B6}
 		BuildVersion_ConfigurationName = Release
+		SolutionGuid = {5CC3AFE2-F092-40F3-A540-539389A045B6}
 	EndGlobalSection
 	GlobalSection(CodealikeProperties) = postSolution
 		SolutionGuid = 2bf66b53-ea6f-433b-b455-00e70ee33cd0
