@@ -40,6 +40,7 @@ namespace XrmToolBox.Extensibility
         public Icon PluginIcon { get; set; }
 
         public Image TabIcon { get; set; }
+        public string ToolName { get; set; }
 
         public void CloseTool()
         {
@@ -496,6 +497,9 @@ namespace XrmToolBox.Extensibility
             {
                 return;
             }
+
+            exception.Source = ToolName;
+
             new ErrorDetail(this, exception, heading, extrainfo, allownewissue).ShowDialog(this);
         }
 
