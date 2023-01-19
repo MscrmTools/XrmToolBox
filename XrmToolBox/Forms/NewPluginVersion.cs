@@ -1,12 +1,12 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
-using XrmToolBox.PluginsStore.DTO;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace XrmToolBox.Forms
 {
     public partial class NewPluginVersion : Form
     {
-        public NewPluginVersion(XtbPlugin plugin)
+        public NewPluginVersion(IXrmToolBoxLibraryTool plugin)
         {
             InitializeComponent();
 

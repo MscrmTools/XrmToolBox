@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -58,6 +59,10 @@ Current cache folder size: {size}MB";
             tooltip.ToolTipIcon = ToolTipIcon.Info;
             tooltip.ToolTipTitle = "Why a tool does not show as open source?";
             tooltip.SetToolTip(chkIsOpenSource, "The \"Is Open source\" property is handled manually. Please contact us if a tool does not show as Open source whereas it should");
+
+            var leftColumnSize = TextRenderer.MeasureText(lblToolLabelDownloads.Text, lblToolLabelDownloads.Font);
+            tableLayoutPanel1.ColumnStyles[0].SizeType = SizeType.Absolute;
+            tableLayoutPanel1.ColumnStyles[0].Width = leftColumnSize.Width + 20;
         }
 
         public event EventHandler PluginsClosingRequested;
@@ -93,7 +98,7 @@ Current cache folder size: {size}MB";
 
                 if (reload)
                 {
-                    store.LoadToolsList().Wait();
+                    store.LoadTools().Wait();
                 }
                 var xtbPackages = store.XrmToolBoxPlugins.Plugins.OrderBy(p => p.Name);
 
@@ -161,104 +166,6 @@ Current cache folder size: {size}MB";
                 return true;
             }
             return base.ProcessCmdKey(ref msg, keyData);
-        }
-
-        private void BuildPropertiesPanel(XtbPlugin package)
-        {
-            scProperties.Panel1.Controls.Clear();
-
-            var bitmap = new PictureBox
-            {
-                Size = new Size(48, 48),
-                Dock = DockStyle.Left,
-                SizeMode = PictureBoxSizeMode.StretchImage
-            };
-
-            try
-            {
-                bitmap.Load(package.LogoUrl ?? "https://raw.githubusercontent.com/wiki/MscrmTools/XrmToolBox/Images/unknown.png");
-            }
-            catch
-            {
-                byte[] bytes = Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAA3NCSVQICAjb4U/gAAAACXBIWXMAAAFzAAABcwHEdCJ9AAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAVlQTFRF////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXF73CwAAAHJ0Uk5TAAEDBAUGBwsPEBEUFRYXGxwkJyorLjAxNzk+P0BBRkdKS01TVVlaW1xfYWJjZWhpbHBxcnZ3eHp8f4KGh4iJioyRkpOUnaOkpaaorrCxsrO2uLq7vsLDztLV2Nnc3d7f4+bn6Ort8fL09vf4+fr7/P3+Afu7TgAAAwJJREFUWMOtl+lbElEUxg+YImpkmZHaBm65oNJi4YZUSpFpOSgJpqYpiIL4+/8/9EHZvHNnxmc8n+ZyloeZ+77vOUdEY75wNJ5MZ/P5bDoZj4Z9civrmlgv0mTF9Ykup9mt09uVWmK5XHusbE23Okj3jOwBUDJikVAw4PEEgqFIzCgBsDfisct/kQE4SQ37m3/3D6dOADIvLNO7DYDckOlfbR3KARjd+vy+Q+BoqkXnb5k6Ag77dP6xMyjELC/MFyvA2Zipz7sM7PbYfaSeXWDZa5K/Bhgd9tfUYQBraoVlIOF1ghNvAlhW3h+YcQq1GeDGd+g7g4RzqCfgrOkuug/B8Dov4DXgsBEPBux23IZtHbtgNOAXCmb31z+/eXy8Od9vdpsFqKHak4GYGtO+UuXhSrvqjUGmyqwROFLxFzwAOD0FOAiqmDyCkWuS7MGUEtC2A+dzvS0tvXPnsNOmBEzB3hXppiGn8mcR9nuvHnv3YVFlVg6mRURkG4ZUYl9wOVA9DFxyoZJ4CLZFRLoqnKj8H4TV+mkVBlV9OKHSJSKTkFI/8gKM10/jsKDGpGBSRDZgWHX+hMf10xP4pcYMw4aIr0jJrzrfXG41nF7CVzXGX6Lok3ATJuv2oFF/P8I7kxgDwhI1ReEN0PxpwG0zGqMSh4hdgc/w24yrEYhLEkLW6Z0p4LmZJwRJSUPQSkM/fD8Gvpg6g5CWLAT0+U8BuHhr7g1AVvKULfrde6D045muj5bJ2xSYhW+d+kZcJm/zCrMwq/cGIGvzEa0LBCFtc43WBUKQtAGSdYEIxG2gPAqjem8MoloyXSvj0lKb3mtAWEdnJ3ZFZ42gOLErQdFImhO7ljRzUa2BTQ/Tqqiay3pVTXPZ1zpfVdY1jUVERO6fQ1HDhXpjMW9tVajBK3NfvbVpmquISOs/+HvPXCfrzVXX3kVEHn1KPNSisNbetQOGldQVmoTa7YjjfshyPea5HzTdj7ruh23X4777heMOVh73S5f7te8OFk/3q+8dLN+3W///A5bFM9Y/bySSAAAAAElFTkSuQmCC");
-
-                Image errorImage;
-                using (MemoryStream ms = new MemoryStream(bytes))
-                {
-                    errorImage = Image.FromStream(ms);
-                }
-                bitmap.ErrorImage = errorImage;
-            }
-
-            var lblTitle = new Label
-            {
-                Dock = DockStyle.Top,
-                Text = package.Name.Replace(" for XrmToolBox", ""),
-                Font = new Font("Microsoft Sans Serif", 20F),
-                Height = 32
-            };
-
-            var lblDescription = new Label
-            {
-                Dock = DockStyle.Fill,
-                Text = package.Description,
-                Height = 16
-            };
-
-            var pnlTitle = new Panel
-            {
-                Height = 48,
-                Dock = DockStyle.Top
-            };
-
-            if (lblDescription.Text.Contains("\n"))
-            {
-                pnlTitle.Controls.AddRange(new Control[] { lblTitle, bitmap });
-
-                var pnlDescription = new Panel
-                {
-                    AutoScroll = true,
-                    AutoScrollMinSize = new Size(0, 1000),
-                    Dock = DockStyle.Fill
-                };
-                pnlDescription.Controls.Add(lblDescription);
-
-                var lblDescriptionHeader = new Label
-                {
-                    Dock = DockStyle.Top,
-                    Text = @"Description",
-                    Font = new Font("Microsoft Sans Serif", 8, FontStyle.Bold | FontStyle.Underline, GraphicsUnit.Point),
-                    Height = 16
-                };
-
-                scProperties.Panel1.Controls.AddRange(new Control[]
-                {
-                pnlDescription,
-                lblDescriptionHeader,
-                GetPropertiesPanelInformation("Project Url", package.ProjectUrl),
-                GetPropertiesPanelInformation("Downloads count", package.TotalDownloadCount.ToString()),
-                GetPropertiesPanelInformation("Latest release",package.LatestReleaseDate?.ToString("yyyy/MM/dd")??"N/A"),
-                GetPropertiesPanelInformation("First release", package.FirstReleaseDate?.ToString("yyyy/MM/dd")??"N/A"),
-                GetPropertiesPanelInformation("Authors", string.Join(", ", package.Authors)),
-                GetPropertiesPanelInformation("Version", package.Version),
-                pnlTitle
-                });
-            }
-            else
-            {
-                pnlTitle.Controls.AddRange(new Control[] { lblDescription, lblTitle, bitmap });
-
-                scProperties.Panel1.Controls.AddRange(new Control[]
-                {
-                GetPropertiesPanelInformation("Project Url", package.ProjectUrl),
-                GetPropertiesPanelInformation("Downloads count", package.TotalDownloadCount.ToString()),
-                GetPropertiesPanelInformation("Latest release", package.LatestReleaseDate?.ToString("yyyy/MM/dd")??"N/A"),
-                GetPropertiesPanelInformation("First release", package.FirstReleaseDate?.ToString("yyyy/MM/dd")??"N/A"),
-                GetPropertiesPanelInformation("Authors", package.Authors),
-                GetPropertiesPanelInformation("Version", package.Version),
-                pnlTitle
-                });
-            }
         }
 
         private void ChkIsOpenSource_Click(object sender, EventArgs e)
@@ -359,56 +266,9 @@ Current cache folder size: {size}MB";
             }
         }
 
-        private Panel GetPropertiesPanelInformation(string label, object value)
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var lblLabel = new Label
-            {
-                Dock = DockStyle.Left,
-                Text = label,
-                Width = 100,
-                Height = 20
-            };
-
-            Control rightControl = null;
-            if (value is string stringValue)
-            {
-                rightControl = new Label
-                {
-                    Dock = DockStyle.Fill,
-                    Text = stringValue,
-                };
-            }
-
-            if (Uri.TryCreate(value?.ToString(), UriKind.Absolute, out var parsedUri))
-            {
-                rightControl = new LinkLabel
-                {
-                    Dock = DockStyle.Fill,
-                    Text = parsedUri.AbsoluteUri,
-                };
-                rightControl.Click += (sender, e) =>
-                {
-                    Process.Start(((LinkLabel)sender).Text);
-                };
-            }
-            else if (rightControl == null)
-            {
-                rightControl = new Label
-                {
-                    Dock = DockStyle.Fill,
-                    Text = @"N/A"
-                };
-            }
-
-            var pnl = new Panel
-            {
-                Height = 20,
-                Dock = DockStyle.Top
-            };
-
-            pnl.Controls.AddRange(new[] { rightControl, lblLabel });
-
-            return pnl;
+            Process.Start(llToolProjectUrl.Text);
         }
 
         private void llRatePlugin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -605,7 +465,30 @@ Current cache folder size: {size}MB";
 
             DisplayRatings(packageItem.AverageFeedbackRating, packageItem.TotalFeedbackRating);
 
-            BuildPropertiesPanel(packageItem);
+            try
+            {
+                pbToolImage.Load(packageItem.LogoUrl ?? "https://raw.githubusercontent.com/wiki/MscrmTools/XrmToolBox/Images/unknown.png");
+            }
+            catch
+            {
+                byte[] bytes = Convert.FromBase64String("iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAA3NCSVQICAjb4U/gAAAACXBIWXMAAAFzAAABcwHEdCJ9AAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAVlQTFRF////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXF73CwAAAHJ0Uk5TAAEDBAUGBwsPEBEUFRYXGxwkJyorLjAxNzk+P0BBRkdKS01TVVlaW1xfYWJjZWhpbHBxcnZ3eHp8f4KGh4iJioyRkpOUnaOkpaaorrCxsrO2uLq7vsLDztLV2Nnc3d7f4+bn6Ort8fL09vf4+fr7/P3+Afu7TgAAAwJJREFUWMOtl+lbElEUxg+YImpkmZHaBm65oNJi4YZUSpFpOSgJpqYpiIL4+/8/9EHZvHNnxmc8n+ZyloeZ+77vOUdEY75wNJ5MZ/P5bDoZj4Z9civrmlgv0mTF9Ykup9mt09uVWmK5XHusbE23Okj3jOwBUDJikVAw4PEEgqFIzCgBsDfisct/kQE4SQ37m3/3D6dOADIvLNO7DYDckOlfbR3KARjd+vy+Q+BoqkXnb5k6Ag77dP6xMyjELC/MFyvA2Zipz7sM7PbYfaSeXWDZa5K/Bhgd9tfUYQBraoVlIOF1ghNvAlhW3h+YcQq1GeDGd+g7g4RzqCfgrOkuug/B8Dov4DXgsBEPBux23IZtHbtgNOAXCmb31z+/eXy8Od9vdpsFqKHak4GYGtO+UuXhSrvqjUGmyqwROFLxFzwAOD0FOAiqmDyCkWuS7MGUEtC2A+dzvS0tvXPnsNOmBEzB3hXppiGn8mcR9nuvHnv3YVFlVg6mRURkG4ZUYl9wOVA9DFxyoZJ4CLZFRLoqnKj8H4TV+mkVBlV9OKHSJSKTkFI/8gKM10/jsKDGpGBSRDZgWHX+hMf10xP4pcYMw4aIr0jJrzrfXG41nF7CVzXGX6Lok3ATJuv2oFF/P8I7kxgDwhI1ReEN0PxpwG0zGqMSh4hdgc/w24yrEYhLEkLW6Z0p4LmZJwRJSUPQSkM/fD8Gvpg6g5CWLAT0+U8BuHhr7g1AVvKULfrde6D045muj5bJ2xSYhW+d+kZcJm/zCrMwq/cGIGvzEa0LBCFtc43WBUKQtAGSdYEIxG2gPAqjem8MoloyXSvj0lKb3mtAWEdnJ3ZFZ42gOLErQdFImhO7ljRzUa2BTQ/Tqqiay3pVTXPZ1zpfVdY1jUVERO6fQ1HDhXpjMW9tVajBK3NfvbVpmquISOs/+HvPXCfrzVXX3kVEHn1KPNSisNbetQOGldQVmoTa7YjjfshyPea5HzTdj7ruh23X4777heMOVh73S5f7te8OFk/3q+8dLN+3W///A5bFM9Y/bySSAAAAAElFTkSuQmCC");
+
+                Image errorImage;
+                using (MemoryStream ms = new MemoryStream(bytes))
+                {
+                    errorImage = Image.FromStream(ms);
+                }
+                pbToolImage.ErrorImage = errorImage;
+            }
+
+            lblToolTitle.Text = packageItem.Name.Replace(" for XrmToolBox", "");
+            lblToolDescription.Text = packageItem.Description;
+            lblToolVersion.Text = packageItem.Version;
+            lblToolAuthors.Text = packageItem.Authors;
+            lblToolFirstRelease.Text = packageItem.FirstReleaseDate.Value.ToString(CultureInfo.CurrentCulture.DateTimeFormat);
+            lblToolLatestRelease.Text = packageItem.LatestReleaseDate.Value.ToString(CultureInfo.CurrentCulture.DateTimeFormat);
+            lblToolDownloads.Text = packageItem.TotalDownloadCount.ToString(CultureInfo.CurrentCulture.NumberFormat);
+            llToolProjectUrl.Text = packageItem.ProjectUrl;
 
             if (!string.IsNullOrEmpty(releaseNotes))
             {
@@ -614,7 +497,8 @@ Current cache folder size: {size}MB";
                     Dock = DockStyle.Fill,
                     AutoSize = false,
                     ReadOnly = true,
-                    BorderStyle = BorderStyle.None
+                    BorderStyle = BorderStyle.None,
+                    ShortcutsEnabled = true
                 };
                 rtb.LinkClicked += (richTextBox, evt) =>
                 {
@@ -623,27 +507,6 @@ Current cache folder size: {size}MB";
                 rtb.Text = releaseNotes;
 
                 pnlReleaseNotesDetails.Controls.Add(rtb);
-
-                //if (releaseNotes.ToLower().StartsWith("http") && Uri.TryCreate(releaseNotes, UriKind.Absolute, out _))
-                //{
-                //    var llbl = new LinkLabel { Text = releaseNotes };
-                //    llbl.Click += (s, evt) => { Process.Start(((LinkLabel)s).Text); };
-                //    llbl.AutoSize = false;
-                //    llbl.Dock = DockStyle.Fill;
-
-                //    pnlReleaseNotesDetails.Controls.Add(llbl);
-                //}
-                //else
-                //{
-                //    var lbl = new Label
-                //    {
-                //        Text = releaseNotes,
-                //        Dock = DockStyle.Fill,
-                //        AutoSize = false
-                //    };
-
-                //    pnlReleaseNotesDetails.Controls.Add(lbl);
-                //}
             }
             else
             {

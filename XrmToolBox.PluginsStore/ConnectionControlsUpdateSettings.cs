@@ -1,6 +1,8 @@
-﻿namespace XrmToolBox.PluginsStore
+﻿using XrmToolBox.Extensibility.Interfaces;
+
+namespace XrmToolBox.PluginsStore
 {
-    public class ConnectionControlsUpdateSettings
+    public class ConnectionControlsUpdateSettings : IConnectionControlUpdateSettings
     {
         public bool NewVersion { get; set; }
         public string ReleaseNotes { get; set; }

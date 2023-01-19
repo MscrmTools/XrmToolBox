@@ -57,7 +57,24 @@ namespace XrmToolBox.PluginsStore
             this.tssPluginsCount = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlReleaseNotes = new System.Windows.Forms.Panel();
             this.scProperties = new System.Windows.Forms.SplitContainer();
-            this.lblProperties = new System.Windows.Forms.Label();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.lblToolLabelVersion = new System.Windows.Forms.Label();
+            this.lblToolLabelAuthors = new System.Windows.Forms.Label();
+            this.lblToolLabelFirstRelease = new System.Windows.Forms.Label();
+            this.lblToolLabelLatestRelease = new System.Windows.Forms.Label();
+            this.lblToolLabelDownloads = new System.Windows.Forms.Label();
+            this.lblToolLabelProjectUrl = new System.Windows.Forms.Label();
+            this.lblToolVersion = new System.Windows.Forms.Label();
+            this.lblToolAuthors = new System.Windows.Forms.Label();
+            this.lblToolFirstRelease = new System.Windows.Forms.Label();
+            this.lblToolLatestRelease = new System.Windows.Forms.Label();
+            this.lblToolDownloads = new System.Windows.Forms.Label();
+            this.llToolProjectUrl = new System.Windows.Forms.LinkLabel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.pnlToolHeader = new System.Windows.Forms.Panel();
+            this.lblToolTitle = new System.Windows.Forms.Label();
+            this.lblToolDescription = new System.Windows.Forms.Label();
+            this.pbToolImage = new System.Windows.Forms.PictureBox();
             this.pnlReleaseNotesDetails = new System.Windows.Forms.Panel();
             this.lblReleaseNotes = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -88,12 +105,12 @@ namespace XrmToolBox.PluginsStore
             this.pnlCategories = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.chkIsOpenSource = new System.Windows.Forms.CheckBox();
             this.chkToolsWithUpdate = new System.Windows.Forms.CheckBox();
             this.chkToolsInstalled = new System.Windows.Forms.CheckBox();
             this.chkToolsNotInstalled = new System.Windows.Forms.CheckBox();
             this.chkToolsNotCompatible = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.chkIsOpenSource = new System.Windows.Forms.CheckBox();
             this.tsMain.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.pnlReleaseNotes.SuspendLayout();
@@ -101,6 +118,10 @@ namespace XrmToolBox.PluginsStore
             this.scProperties.Panel1.SuspendLayout();
             this.scProperties.Panel2.SuspendLayout();
             this.scProperties.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.panel3.SuspendLayout();
+            this.pnlToolHeader.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbToolImage)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbStar)).BeginInit();
             this.pnlNotif.SuspendLayout();
@@ -118,6 +139,7 @@ namespace XrmToolBox.PluginsStore
             // 
             // tsMain
             // 
+            this.tsMain.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.tsMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbLoadPlugins,
             this.toolStripSeparator1,
@@ -135,7 +157,7 @@ namespace XrmToolBox.PluginsStore
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
             this.tsMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.tsMain.Size = new System.Drawing.Size(2264, 57);
+            this.tsMain.Size = new System.Drawing.Size(1669, 34);
             this.tsMain.TabIndex = 0;
             this.tsMain.Text = "toolStrip1";
             // 
@@ -144,7 +166,7 @@ namespace XrmToolBox.PluginsStore
             this.tsbLoadPlugins.Image = ((System.Drawing.Image)(resources.GetObject("tsbLoadPlugins.Image")));
             this.tsbLoadPlugins.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbLoadPlugins.Name = "tsbLoadPlugins";
-            this.tsbLoadPlugins.Size = new System.Drawing.Size(90, 52);
+            this.tsbLoadPlugins.Size = new System.Drawing.Size(98, 29);
             this.tsbLoadPlugins.Text = "Refresh";
             this.tsbLoadPlugins.Click += new System.EventHandler(this.tsbLoadPlugins_Click);
             // 
@@ -180,7 +202,6 @@ namespace XrmToolBox.PluginsStore
             // tstSearch
             // 
             this.tstSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.tstSearch.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.tstSearch.ForeColor = System.Drawing.SystemColors.InactiveCaption;
             this.tstSearch.Name = "tstSearch";
             this.tstSearch.Size = new System.Drawing.Size(250, 34);
@@ -293,14 +314,15 @@ namespace XrmToolBox.PluginsStore
             // 
             // statusStrip1
             // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tssProgress,
             this.tssLabel,
             this.tssPluginsCount});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 869);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 810);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 14, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(1509, 28);
+            this.statusStrip1.Size = new System.Drawing.Size(1669, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -333,7 +355,7 @@ namespace XrmToolBox.PluginsStore
             this.pnlReleaseNotes.Location = new System.Drawing.Point(0, 0);
             this.pnlReleaseNotes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlReleaseNotes.Name = "pnlReleaseNotes";
-            this.pnlReleaseNotes.Size = new System.Drawing.Size(2109, 589);
+            this.pnlReleaseNotes.Size = new System.Drawing.Size(1514, 375);
             this.pnlReleaseNotes.TabIndex = 4;
             // 
             // scProperties
@@ -347,7 +369,8 @@ namespace XrmToolBox.PluginsStore
             // scProperties.Panel1
             // 
             this.scProperties.Panel1.AutoScroll = true;
-            this.scProperties.Panel1.Controls.Add(this.lblProperties);
+            this.scProperties.Panel1.Controls.Add(this.tableLayoutPanel1);
+            this.scProperties.Panel1.Controls.Add(this.panel3);
             this.scProperties.Panel1MinSize = 500;
             // 
             // scProperties.Panel2
@@ -356,39 +379,220 @@ namespace XrmToolBox.PluginsStore
             this.scProperties.Panel2.Controls.Add(this.lblReleaseNotes);
             this.scProperties.Panel2.Controls.Add(this.panel1);
             this.scProperties.Panel2.Controls.Add(this.lblRating);
-            this.scProperties.Size = new System.Drawing.Size(2109, 558);
-            this.scProperties.SplitterDistance = 500;
+            this.scProperties.Size = new System.Drawing.Size(1514, 344);
+            this.scProperties.SplitterDistance = 700;
             this.scProperties.SplitterWidth = 5;
             this.scProperties.TabIndex = 7;
             // 
-            // lblProperties
+            // tableLayoutPanel1
             // 
-            this.lblProperties.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblProperties.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProperties.Location = new System.Drawing.Point(0, 0);
-            this.lblProperties.Name = "lblProperties";
-            this.lblProperties.Size = new System.Drawing.Size(500, 25);
-            this.lblProperties.TabIndex = 1;
-            this.lblProperties.Text = "Tool properties";
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.lblToolLabelVersion, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.lblToolLabelAuthors, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.lblToolLabelFirstRelease, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.lblToolLabelLatestRelease, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.lblToolLabelDownloads, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.lblToolLabelProjectUrl, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.lblToolVersion, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.lblToolAuthors, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.lblToolFirstRelease, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.lblToolLatestRelease, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.lblToolDownloads, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.llToolProjectUrl, 1, 5);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 80);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 7;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 264);
+            this.tableLayoutPanel1.TabIndex = 1;
+            // 
+            // lblToolLabelVersion
+            // 
+            this.lblToolLabelVersion.AutoSize = true;
+            this.lblToolLabelVersion.Location = new System.Drawing.Point(3, 0);
+            this.lblToolLabelVersion.Name = "lblToolLabelVersion";
+            this.lblToolLabelVersion.Size = new System.Drawing.Size(63, 20);
+            this.lblToolLabelVersion.TabIndex = 0;
+            this.lblToolLabelVersion.Text = "Version";
+            // 
+            // lblToolLabelAuthors
+            // 
+            this.lblToolLabelAuthors.AutoSize = true;
+            this.lblToolLabelAuthors.Location = new System.Drawing.Point(3, 30);
+            this.lblToolLabelAuthors.Name = "lblToolLabelAuthors";
+            this.lblToolLabelAuthors.Size = new System.Drawing.Size(65, 20);
+            this.lblToolLabelAuthors.TabIndex = 1;
+            this.lblToolLabelAuthors.Text = "Authors";
+            // 
+            // lblToolLabelFirstRelease
+            // 
+            this.lblToolLabelFirstRelease.AutoSize = true;
+            this.lblToolLabelFirstRelease.Location = new System.Drawing.Point(3, 60);
+            this.lblToolLabelFirstRelease.Name = "lblToolLabelFirstRelease";
+            this.lblToolLabelFirstRelease.Size = new System.Drawing.Size(96, 20);
+            this.lblToolLabelFirstRelease.TabIndex = 2;
+            this.lblToolLabelFirstRelease.Text = "First release";
+            // 
+            // lblToolLabelLatestRelease
+            // 
+            this.lblToolLabelLatestRelease.AutoSize = true;
+            this.lblToolLabelLatestRelease.Location = new System.Drawing.Point(3, 90);
+            this.lblToolLabelLatestRelease.Name = "lblToolLabelLatestRelease";
+            this.lblToolLabelLatestRelease.Size = new System.Drawing.Size(110, 20);
+            this.lblToolLabelLatestRelease.TabIndex = 3;
+            this.lblToolLabelLatestRelease.Text = "Latest release";
+            // 
+            // lblToolLabelDownloads
+            // 
+            this.lblToolLabelDownloads.AutoSize = true;
+            this.lblToolLabelDownloads.Location = new System.Drawing.Point(3, 120);
+            this.lblToolLabelDownloads.Name = "lblToolLabelDownloads";
+            this.lblToolLabelDownloads.Size = new System.Drawing.Size(132, 20);
+            this.lblToolLabelDownloads.TabIndex = 4;
+            this.lblToolLabelDownloads.Text = "Downloads count";
+            // 
+            // lblToolLabelProjectUrl
+            // 
+            this.lblToolLabelProjectUrl.AutoSize = true;
+            this.lblToolLabelProjectUrl.Location = new System.Drawing.Point(3, 150);
+            this.lblToolLabelProjectUrl.Name = "lblToolLabelProjectUrl";
+            this.lblToolLabelProjectUrl.Size = new System.Drawing.Size(82, 20);
+            this.lblToolLabelProjectUrl.TabIndex = 5;
+            this.lblToolLabelProjectUrl.Text = "Project Url";
+            // 
+            // lblToolVersion
+            // 
+            this.lblToolVersion.AutoSize = true;
+            this.lblToolVersion.Location = new System.Drawing.Point(403, 0);
+            this.lblToolVersion.Name = "lblToolVersion";
+            this.lblToolVersion.Size = new System.Drawing.Size(108, 20);
+            this.lblToolVersion.TabIndex = 6;
+            this.lblToolVersion.Text = "lblToolVersion";
+            // 
+            // lblToolAuthors
+            // 
+            this.lblToolAuthors.AutoSize = true;
+            this.lblToolAuthors.Location = new System.Drawing.Point(403, 30);
+            this.lblToolAuthors.Name = "lblToolAuthors";
+            this.lblToolAuthors.Size = new System.Drawing.Size(110, 20);
+            this.lblToolAuthors.TabIndex = 7;
+            this.lblToolAuthors.Text = "lblToolAuthors";
+            // 
+            // lblToolFirstRelease
+            // 
+            this.lblToolFirstRelease.AutoSize = true;
+            this.lblToolFirstRelease.Location = new System.Drawing.Point(403, 60);
+            this.lblToolFirstRelease.Name = "lblToolFirstRelease";
+            this.lblToolFirstRelease.Size = new System.Drawing.Size(144, 20);
+            this.lblToolFirstRelease.TabIndex = 8;
+            this.lblToolFirstRelease.Text = "lblToolFirstRelease";
+            // 
+            // lblToolLatestRelease
+            // 
+            this.lblToolLatestRelease.AutoSize = true;
+            this.lblToolLatestRelease.Location = new System.Drawing.Point(403, 90);
+            this.lblToolLatestRelease.Name = "lblToolLatestRelease";
+            this.lblToolLatestRelease.Size = new System.Drawing.Size(158, 20);
+            this.lblToolLatestRelease.TabIndex = 9;
+            this.lblToolLatestRelease.Text = "lblToolLatestRelease";
+            // 
+            // lblToolDownloads
+            // 
+            this.lblToolDownloads.AutoSize = true;
+            this.lblToolDownloads.Location = new System.Drawing.Point(403, 120);
+            this.lblToolDownloads.Name = "lblToolDownloads";
+            this.lblToolDownloads.Size = new System.Drawing.Size(133, 20);
+            this.lblToolDownloads.TabIndex = 10;
+            this.lblToolDownloads.Text = "lblToolDownloads";
+            // 
+            // llToolProjectUrl
+            // 
+            this.llToolProjectUrl.AutoSize = true;
+            this.llToolProjectUrl.Location = new System.Drawing.Point(403, 150);
+            this.llToolProjectUrl.Name = "llToolProjectUrl";
+            this.llToolProjectUrl.Size = new System.Drawing.Size(80, 20);
+            this.llToolProjectUrl.TabIndex = 11;
+            this.llToolProjectUrl.TabStop = true;
+            this.llToolProjectUrl.Text = "linkLabel1";
+            this.llToolProjectUrl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.pnlToolHeader);
+            this.panel3.Controls.Add(this.pbToolImage);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(0, 0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(800, 80);
+            this.panel3.TabIndex = 0;
+            // 
+            // pnlToolHeader
+            // 
+            this.pnlToolHeader.Controls.Add(this.lblToolTitle);
+            this.pnlToolHeader.Controls.Add(this.lblToolDescription);
+            this.pnlToolHeader.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlToolHeader.Location = new System.Drawing.Point(80, 0);
+            this.pnlToolHeader.Name = "pnlToolHeader";
+            this.pnlToolHeader.Size = new System.Drawing.Size(720, 80);
+            this.pnlToolHeader.TabIndex = 1;
+            // 
+            // lblToolTitle
+            // 
+            this.lblToolTitle.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblToolTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblToolTitle.Location = new System.Drawing.Point(0, 0);
+            this.lblToolTitle.Name = "lblToolTitle";
+            this.lblToolTitle.Size = new System.Drawing.Size(720, 60);
+            this.lblToolTitle.TabIndex = 1;
+            this.lblToolTitle.Text = "lblToolTitle";
+            // 
+            // lblToolDescription
+            // 
+            this.lblToolDescription.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.lblToolDescription.Location = new System.Drawing.Point(0, 60);
+            this.lblToolDescription.Name = "lblToolDescription";
+            this.lblToolDescription.Size = new System.Drawing.Size(720, 20);
+            this.lblToolDescription.TabIndex = 0;
+            this.lblToolDescription.Text = "lblToolDescription";
+            this.lblToolDescription.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // pbToolImage
+            // 
+            this.pbToolImage.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pbToolImage.Location = new System.Drawing.Point(0, 0);
+            this.pbToolImage.Name = "pbToolImage";
+            this.pbToolImage.Size = new System.Drawing.Size(80, 80);
+            this.pbToolImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbToolImage.TabIndex = 0;
+            this.pbToolImage.TabStop = false;
             // 
             // pnlReleaseNotesDetails
             // 
             this.pnlReleaseNotesDetails.AutoScroll = true;
             this.pnlReleaseNotesDetails.AutoScrollMinSize = new System.Drawing.Size(0, 1000);
             this.pnlReleaseNotesDetails.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlReleaseNotesDetails.Location = new System.Drawing.Point(0, 87);
+            this.pnlReleaseNotesDetails.Location = new System.Drawing.Point(0, 102);
             this.pnlReleaseNotesDetails.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlReleaseNotesDetails.Name = "pnlReleaseNotesDetails";
-            this.pnlReleaseNotesDetails.Size = new System.Drawing.Size(1604, 471);
+            this.pnlReleaseNotesDetails.Size = new System.Drawing.Size(709, 242);
             this.pnlReleaseNotesDetails.TabIndex = 16;
             // 
             // lblReleaseNotes
             // 
             this.lblReleaseNotes.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblReleaseNotes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblReleaseNotes.Location = new System.Drawing.Point(0, 62);
+            this.lblReleaseNotes.Location = new System.Drawing.Point(0, 72);
             this.lblReleaseNotes.Name = "lblReleaseNotes";
-            this.lblReleaseNotes.Size = new System.Drawing.Size(1604, 25);
+            this.lblReleaseNotes.Size = new System.Drawing.Size(709, 30);
             this.lblReleaseNotes.TabIndex = 15;
             this.lblReleaseNotes.Text = "Release notes";
             // 
@@ -399,10 +603,10 @@ namespace XrmToolBox.PluginsStore
             this.panel1.Controls.Add(this.llRatePlugin);
             this.panel1.Controls.Add(this.pbStar);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 25);
+            this.panel1.Location = new System.Drawing.Point(0, 29);
             this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1604, 37);
+            this.panel1.Size = new System.Drawing.Size(709, 43);
             this.panel1.TabIndex = 13;
             // 
             // lblNoRating
@@ -410,7 +614,7 @@ namespace XrmToolBox.PluginsStore
             this.lblNoRating.AutoSize = true;
             this.lblNoRating.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblNoRating.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNoRating.Location = new System.Drawing.Point(180, 0);
+            this.lblNoRating.Location = new System.Drawing.Point(142, 0);
             this.lblNoRating.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblNoRating.Name = "lblNoRating";
             this.lblNoRating.Size = new System.Drawing.Size(148, 29);
@@ -422,7 +626,7 @@ namespace XrmToolBox.PluginsStore
             // 
             this.llRatePlugin.AutoSize = true;
             this.llRatePlugin.Dock = System.Windows.Forms.DockStyle.Right;
-            this.llRatePlugin.Location = new System.Drawing.Point(1501, 0);
+            this.llRatePlugin.Location = new System.Drawing.Point(606, 0);
             this.llRatePlugin.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.llRatePlugin.Name = "llRatePlugin";
             this.llRatePlugin.Padding = new System.Windows.Forms.Padding(0, 6, 0, 0);
@@ -440,7 +644,7 @@ namespace XrmToolBox.PluginsStore
             this.pbStar.Location = new System.Drawing.Point(0, 0);
             this.pbStar.Margin = new System.Windows.Forms.Padding(5);
             this.pbStar.Name = "pbStar";
-            this.pbStar.Size = new System.Drawing.Size(180, 37);
+            this.pbStar.Size = new System.Drawing.Size(142, 43);
             this.pbStar.TabIndex = 0;
             this.pbStar.TabStop = false;
             this.pbStar.Visible = false;
@@ -451,7 +655,7 @@ namespace XrmToolBox.PluginsStore
             this.lblRating.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblRating.Location = new System.Drawing.Point(0, 0);
             this.lblRating.Name = "lblRating";
-            this.lblRating.Size = new System.Drawing.Size(1604, 25);
+            this.lblRating.Size = new System.Drawing.Size(709, 29);
             this.lblRating.TabIndex = 7;
             this.lblRating.Text = "Rating";
             // 
@@ -464,7 +668,7 @@ namespace XrmToolBox.PluginsStore
             this.pnlNotif.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlNotif.Location = new System.Drawing.Point(0, 0);
             this.pnlNotif.Name = "pnlNotif";
-            this.pnlNotif.Size = new System.Drawing.Size(2109, 31);
+            this.pnlNotif.Size = new System.Drawing.Size(1514, 31);
             this.pnlNotif.TabIndex = 3;
             this.pnlNotif.Visible = false;
             // 
@@ -514,7 +718,7 @@ namespace XrmToolBox.PluginsStore
             this.lvPlugins.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lvPlugins.Name = "lvPlugins";
             this.lvPlugins.OwnerDraw = true;
-            this.lvPlugins.Size = new System.Drawing.Size(2109, 624);
+            this.lvPlugins.Size = new System.Drawing.Size(1514, 396);
             this.lvPlugins.SmallImageList = this.iiNotif;
             this.lvPlugins.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvPlugins.TabIndex = 5;
@@ -604,8 +808,8 @@ namespace XrmToolBox.PluginsStore
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.pnlReleaseNotes);
-            this.splitContainer1.Size = new System.Drawing.Size(2109, 1218);
-            this.splitContainer1.SplitterDistance = 624;
+            this.splitContainer1.Size = new System.Drawing.Size(1514, 776);
+            this.splitContainer1.SplitterDistance = 396;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 6;
             // 
@@ -625,7 +829,7 @@ namespace XrmToolBox.PluginsStore
             // 
             this.splitContainerMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainerMain.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainerMain.Location = new System.Drawing.Point(0, 86);
+            this.splitContainerMain.Location = new System.Drawing.Point(0, 34);
             this.splitContainerMain.Name = "splitContainerMain";
             // 
             // splitContainerMain.Panel1
@@ -639,26 +843,26 @@ namespace XrmToolBox.PluginsStore
             // splitContainerMain.Panel2
             // 
             this.splitContainerMain.Panel2.Controls.Add(this.splitContainer1);
-            this.splitContainerMain.Size = new System.Drawing.Size(2264, 1218);
-            this.splitContainerMain.SplitterDistance = 151;
+            this.splitContainerMain.Size = new System.Drawing.Size(1669, 776);
+            this.splitContainerMain.SplitterDistance = 200;
             this.splitContainerMain.TabIndex = 7;
             // 
             // pnlCategories
             // 
             this.pnlCategories.AutoScroll = true;
             this.pnlCategories.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCategories.Location = new System.Drawing.Point(10, 211);
+            this.pnlCategories.Location = new System.Drawing.Point(10, 313);
             this.pnlCategories.Name = "pnlCategories";
-            this.pnlCategories.Size = new System.Drawing.Size(131, 997);
+            this.pnlCategories.Size = new System.Drawing.Size(131, 453);
             this.pnlCategories.TabIndex = 5;
             // 
             // label2
             // 
             this.label2.Dock = System.Windows.Forms.DockStyle.Top;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(10, 182);
+            this.label2.Location = new System.Drawing.Point(10, 269);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(131, 29);
+            this.label2.Size = new System.Drawing.Size(131, 44);
             this.label2.TabIndex = 4;
             this.label2.Text = "Categories";
             // 
@@ -670,10 +874,22 @@ namespace XrmToolBox.PluginsStore
             this.panel2.Controls.Add(this.chkToolsNotInstalled);
             this.panel2.Controls.Add(this.chkToolsNotCompatible);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(10, 39);
+            this.panel2.Location = new System.Drawing.Point(10, 54);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(131, 143);
+            this.panel2.Size = new System.Drawing.Size(131, 215);
             this.panel2.TabIndex = 2;
+            // 
+            // chkIsOpenSource
+            // 
+            this.chkIsOpenSource.AutoSize = true;
+            this.chkIsOpenSource.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkIsOpenSource.Location = new System.Drawing.Point(0, 96);
+            this.chkIsOpenSource.Name = "chkIsOpenSource";
+            this.chkIsOpenSource.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
+            this.chkIsOpenSource.Size = new System.Drawing.Size(131, 34);
+            this.chkIsOpenSource.TabIndex = 4;
+            this.chkIsOpenSource.Text = "Open Source only";
+            this.chkIsOpenSource.UseVisualStyleBackColor = true;
             // 
             // chkToolsWithUpdate
             // 
@@ -729,28 +945,15 @@ namespace XrmToolBox.PluginsStore
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(10, 10);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(131, 29);
+            this.label1.Size = new System.Drawing.Size(131, 44);
             this.label1.TabIndex = 0;
             this.label1.Text = "Display tools";
-            // 
-            // chkIsOpenSource
-            // 
-            this.chkIsOpenSource.AutoSize = true;
-            this.chkIsOpenSource.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkIsOpenSource.Location = new System.Drawing.Point(0, 96);
-            this.chkIsOpenSource.Name = "chkIsOpenSource";
-            this.chkIsOpenSource.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.chkIsOpenSource.Size = new System.Drawing.Size(197, 51);
-            this.chkIsOpenSource.TabIndex = 4;
-            this.chkIsOpenSource.Text = "Open Source only";
-            this.chkIsOpenSource.UseVisualStyleBackColor = true;
-            this.chkIsOpenSource.Click += ChkIsOpenSource_Click;
             // 
             // StoreFormFromPortal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1509, 897);
+            this.ClientSize = new System.Drawing.Size(1669, 832);
             this.Controls.Add(this.splitContainerMain);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tsMain);
@@ -769,6 +972,11 @@ namespace XrmToolBox.PluginsStore
             this.scProperties.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.scProperties)).EndInit();
             this.scProperties.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.pnlToolHeader.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbToolImage)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbStar)).EndInit();
@@ -829,7 +1037,6 @@ namespace XrmToolBox.PluginsStore
         private ColumnHeader colAverageDownloadCoun;
         private ToolStripStatusLabel tssPluginsCount;
         private SplitContainer scProperties;
-        private Label lblProperties;
         private Panel pnlNotif;
         private Label lblNotif;
         private PictureBox pbNotifIcon;
@@ -855,5 +1062,23 @@ namespace XrmToolBox.PluginsStore
         private CheckBox chkToolsNotInstalled;
         private CheckBox chkToolsNotCompatible;
         private CheckBox chkIsOpenSource;
+        private TableLayoutPanel tableLayoutPanel1;
+        private Panel panel3;
+        private Panel pnlToolHeader;
+        private Label lblToolTitle;
+        private Label lblToolDescription;
+        private PictureBox pbToolImage;
+        private Label lblToolLabelVersion;
+        private Label lblToolLabelAuthors;
+        private Label lblToolLabelFirstRelease;
+        private Label lblToolLabelLatestRelease;
+        private Label lblToolLabelDownloads;
+        private Label lblToolLabelProjectUrl;
+        private Label lblToolVersion;
+        private Label lblToolAuthors;
+        private Label lblToolFirstRelease;
+        private Label lblToolLatestRelease;
+        private Label lblToolDownloads;
+        private LinkLabel llToolProjectUrl;
     }
 }
