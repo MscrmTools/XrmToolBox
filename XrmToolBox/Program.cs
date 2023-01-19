@@ -104,42 +104,52 @@ namespace XrmToolBox
 
             if (!File.Exists(updateFile))
                 return;
-
-            try
+            int tries = 0;
+            do
             {
-                using (StreamReader reader = new StreamReader(updateFile))
+                try
                 {
-                    var pus = (PluginUpdates)XmlSerializerHelper.Deserialize(reader.ReadToEnd(),
-                        typeof(PluginUpdates));
-
-                    try
+                    using (StreamReader reader = new StreamReader(updateFile))
                     {
-                        var oldProcess = Process.GetProcessById(pus.PreviousProcessId);
-                        oldProcess.WaitForExit();
-                    }
-                    catch { }
+                        var pus = (PluginUpdates)XmlSerializerHelper.Deserialize(reader.ReadToEnd(),
+                            typeof(PluginUpdates));
 
-                    foreach (var pu in pus.Plugins)
-                    {
-                        if (!Directory.Exists(Path.GetDirectoryName(pu.Destination)))
+                        try
                         {
-                            Directory.CreateDirectory(Path.GetDirectoryName(pu.Destination));
+                            var oldProcess = Process.GetProcessById(pus.PreviousProcessId);
+                            oldProcess.WaitForExit();
                         }
+                        catch { }
 
-                        File.Copy(pu.Source, pu.Destination, true);
+                        foreach (var pu in pus.Plugins)
+                        {
+                            if (!Directory.Exists(Path.GetDirectoryName(pu.Destination)))
+                            {
+                                Directory.CreateDirectory(Path.GetDirectoryName(pu.Destination));
+                            }
+
+                            File.Copy(pu.Source, pu.Destination, true);
+                        }
                     }
-                }
 
-                File.Delete(updateFile);
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show(
-                    $@"An error occured when trying to update files: {error.Message}
+                    File.Delete(updateFile);
+                    break;
+                }
+                catch (Exception error)
+                {
+                    Thread.Sleep(200);
+                    tries++;
+                    if (tries == 2)
+                    {
+                        MessageBox.Show(
+                       $@"An error occured when trying to update files: {error.Message}
 
 Please start XrmToolBox again to fix this problem",
-                    @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                       @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
+            while (tries < 3);
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
