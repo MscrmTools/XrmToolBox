@@ -10,6 +10,7 @@ namespace XrmToolBox.Extensibility
         private List<string> plugins;
 
         public bool HasPluginsRestriction => plugins?.Count > 0 && plugins.All(p => p != "*");
+        public Dictionary<string, string> Repositories { get; private set; } = new Dictionary<string, string>();
 
         public bool IsCheckForUpdateDisabled()
         {
@@ -64,6 +65,46 @@ namespace XrmToolBox.Extensibility
                             if (registryKey.GetValueNames().Contains("AllowedPlugins"))
                             {
                                 plugins = new List<string>((string[])registryKey.GetValue("AllowedPlugins"));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void LoadRepositories()
+        {
+            using (RegistryKey hklm = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Default))
+            {
+                using (RegistryKey registryKey = hklm.OpenSubKey(@"SOFTWARE\MscrmTools\XrmToolBox\Repositories"))
+                {
+                    if (registryKey != null)
+                    {
+                        var repositories = registryKey.GetSubKeyNames();
+                        foreach (var repository in repositories)
+                        {
+                            var repoKey = registryKey.OpenSubKey(repository);
+
+                            Repositories.Add(repository, repoKey.GetValue("Path").ToString());
+                        }
+                    }
+                }
+            }
+
+            if (Repositories.Keys.Count == 0)
+            {
+                using (RegistryKey hklm = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Default))
+                {
+                    using (RegistryKey registryKey = hklm.OpenSubKey(@"SOFTWARE\MscrmTools\XrmToolBox\Repositories"))
+                    {
+                        if (registryKey != null)
+                        {
+                            var repositories = registryKey.GetSubKeyNames();
+                            foreach (var repository in repositories)
+                            {
+                                var repoKey = registryKey.OpenSubKey(repository);
+
+                                Repositories.Add(repository, repoKey.GetValue("Path").ToString());
                             }
                         }
                     }
