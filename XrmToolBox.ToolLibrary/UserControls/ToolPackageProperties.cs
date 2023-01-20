@@ -215,6 +215,8 @@ namespace XrmToolBox.ToolLibrary.UserControls
             rtbReleaseNotes.Text = releaseNotes;
             lblToolRating.Text = $"{plugin.AverageFeedbackRating:F2} ({plugin.TotalFeedbackRating:N0})";
 
+            llRateThisTool.Visible = !plugin.IsFromCustomRepo;
+
             toolTip.SetToolTip(llToolProjectUrl, plugin.ProjectUrl);
 
             var leftColumnSize = TextRenderer.MeasureText(lblTitleLatestRelease.Text, lblTitleLatestRelease.Font);
