@@ -208,7 +208,10 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
         private async Task CheckForConnectionControlsUpdate(bool force = false)
         {
-            if (!await LoadStore()) return;
+            if (store == null)
+            {
+                if (!await LoadStore()) return;
+            }
 
             IConnectionControlUpdateSettings result = await store.IsConnectionControlsUpdateAvailable(Options.Instance.ConnectionControlsVersion);
 

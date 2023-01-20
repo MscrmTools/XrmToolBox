@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -153,6 +154,12 @@ namespace XrmToolBox
                 return innerOptions;
             }
         }
+
+        [Category("Tool Library")]
+        [DisplayName("Additional repositories")]
+        [Description("Additional repositories where to find tools. One line per repository. Format: <repository name>|<repository path>")]
+        [Editor(typeof(MultilineStringEditor), typeof(UITypeEditor))]
+        public string AdditionalRepositories { get; set; }
 
         [Browsable(false)] public bool? AllowLogUsage { get; set; }
 
@@ -530,7 +537,8 @@ namespace XrmToolBox
                 UseLegacyToolLibrary = UseLegacyToolLibrary,
                 MostRatedMinNumberOfVotes = MostRatedMinNumberOfVotes,
                 MostRatedMinRatingAverage = MostRatedMinRatingAverage,
-                RepositoryUrl = RepositoryUrl
+                RepositoryUrl = RepositoryUrl,
+                AdditionalRepositories = AdditionalRepositories
             };
         }
 

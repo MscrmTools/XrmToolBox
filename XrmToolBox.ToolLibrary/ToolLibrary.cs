@@ -53,7 +53,21 @@ namespace XrmToolBox.ToolLibrary
             Repositories = repositories;
             if (Repositories.Count == 0)
             {
-                Repositories.Add("Default", "https://www.xrmtoolbox.com/_odata/plugins");
+                if (!string.IsNullOrEmpty(settings.RepositoryUrl))
+                {
+                    Repositories.Add("Default", settings.RepositoryUrl);
+                }
+
+                if (!string.IsNullOrEmpty(settings.AdditionalRepositories))
+                {
+                    foreach (var repository in settings.AdditionalRepositories.Split(Environment.NewLine.ToCharArray()))
+                    {
+                        var parts = repository.Split('|');
+                        if (parts.Length != 2) continue;
+
+                        Repositories.Add(parts[0], parts[1]);
+                    }
+                }
             }
 
             pendingUpdates = LoadPendingFile<PluginUpdates>("Update.xml") ?? new PluginUpdates();
@@ -396,19 +410,19 @@ namespace XrmToolBox.ToolLibrary
                 if (pathUri.Scheme == "http" || pathUri.Scheme == "https")
                 {
                     await Task.Run(() =>
-                   {
-                       do
-                       {
-                           var tmpPlugins = GetContent<XtbPlugins>(url, true);
-                           foreach (var plugin in tmpPlugins.Plugins)
-                           {
-                               plugin.SourceRepositoryName = repository;
-                           }
-                           XrmToolBoxPlugins.Plugins.AddRange(tmpPlugins.Plugins);
-                           url = tmpPlugins.NextLink;
-                       }
-                       while (url != null);
-                   });
+                    {
+                        do
+                        {
+                            var tmpPlugins = GetContent<XtbPlugins>(url, true);
+                            foreach (var plugin in tmpPlugins.Plugins)
+                            {
+                                plugin.SourceRepositoryName = repository;
+                            }
+                            XrmToolBoxPlugins.Plugins.AddRange(tmpPlugins.Plugins);
+                            url = tmpPlugins.NextLink;
+                        }
+                        while (url != null);
+                    });
                 }
                 else if (pathUri.Scheme == "file")
                 {
