@@ -191,8 +191,10 @@ namespace XrmToolBox.ToolLibrary.UserControls
         private void rtbDescription_ContentsResized(object sender, ContentsResizedEventArgs e)
         {
             var richTextBox = (RichTextBox)sender;
-            richTextBox.Height = e.NewRectangle.Height > 400 ? 400 : e.NewRectangle.Height;
-            richTextBox.Width = richTextBox.Parent.Width;
+            var maxAvailableHeight = richTextBox.Parent.ClientSize.Height - richTextBox.Parent.Controls.Cast<Control>().Except(new[] { richTextBox, rtbReleaseNotes }).Sum(c => c.Height) - 50;
+            if (maxAvailableHeight < 50)
+                maxAvailableHeight = 50;
+            richTextBox.ClientSize = new Size(richTextBox.Parent.Width, Math.Min(maxAvailableHeight, e.NewRectangle.Height) + 1);
         }
 
         private void rtbReleaseNotes_LinkClicked(object sender, LinkClickedEventArgs e)
@@ -225,11 +227,11 @@ namespace XrmToolBox.ToolLibrary.UserControls
 
             try
             {
-                pbLogo.Image = ResizeImage(plugin.Logo, 80, 80);
+                pbLogo.Image = ResizeImage(plugin.Logo, 60, 60);
             }
             catch (Exception error)
             {
-                pbLogo.Image = ResizeImage(Resource.NoLogo100, 80, 80);
+                pbLogo.Image = ResizeImage(Resource.NoLogo100, 60, 60);
 
                 toolTip.SetToolTip(pbLogo, $"Logo url:{plugin.LogoUrl}\r\nError:{error.Message}");
             }
