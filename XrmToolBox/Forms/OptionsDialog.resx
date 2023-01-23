@@ -117,16 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="label1.Text" xml:space="preserve">
-    <value>Use the following example to put a link to open XrmToolBox through application protocol
-
-&lt;html&gt;
-&lt;a href="xrmtoolbox:%2Fplugin%3A%22View%20Layout%20Replicator%22%20%2Fconnection%3A%22DEMO%22"&gt;Click here&lt;/a&gt;
-&lt;/html&gt;
-
-where the url encoded content (after xrmtoolbox:) must be:
-/plugin:"Name of the tool" /connection:"Name of the connection"</value>
-  </data>
   <data name="lblChangePathDescription.Text" xml:space="preserve">
     <value>The current root path is '{0}'
 
