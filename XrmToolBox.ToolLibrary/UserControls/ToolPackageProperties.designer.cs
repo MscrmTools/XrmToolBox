@@ -48,6 +48,9 @@
             this.lblToolDownload = new System.Windows.Forms.Label();
             this.llToolProjectUrl = new System.Windows.Forms.LinkLabel();
             this.cbbVersions = new System.Windows.Forms.ComboBox();
+            this.pnlRating = new System.Windows.Forms.Panel();
+            this.llRateThisTool = new System.Windows.Forms.LinkLabel();
+            this.lblToolRating = new System.Windows.Forms.Label();
             this.pnlSeparator1 = new System.Windows.Forms.Panel();
             this.lblIncompatibleReason = new System.Windows.Forms.Label();
             this.rtbDescription = new System.Windows.Forms.RichTextBox();
@@ -56,17 +59,14 @@
             this.tlpActions = new System.Windows.Forms.TableLayoutPanel();
             this.btnInstall = new System.Windows.Forms.Button();
             this.btnDelete = new System.Windows.Forms.Button();
-            this.pnlRating = new System.Windows.Forms.Panel();
-            this.lblToolRating = new System.Windows.Forms.Label();
-            this.llRateThisTool = new System.Windows.Forms.LinkLabel();
             this.pnlTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).BeginInit();
             this.pnlMain.SuspendLayout();
             this.tlpMain.SuspendLayout();
+            this.pnlRating.SuspendLayout();
             this.pnlSeparator1.SuspendLayout();
             this.pnlActions.SuspendLayout();
             this.tlpActions.SuspendLayout();
-            this.pnlRating.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlTop
@@ -76,17 +76,17 @@
             this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTop.Location = new System.Drawing.Point(20, 20);
             this.pnlTop.Name = "pnlTop";
-            this.pnlTop.Size = new System.Drawing.Size(921, 80);
+            this.pnlTop.Size = new System.Drawing.Size(921, 60);
             this.pnlTop.TabIndex = 0;
             // 
             // lblToolName
             // 
             this.lblToolName.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblToolName.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblToolName.Location = new System.Drawing.Point(80, 0);
+            this.lblToolName.Location = new System.Drawing.Point(60, 0);
             this.lblToolName.Name = "lblToolName";
             this.lblToolName.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.lblToolName.Size = new System.Drawing.Size(841, 80);
+            this.lblToolName.Size = new System.Drawing.Size(861, 60);
             this.lblToolName.TabIndex = 1;
             this.lblToolName.Text = "[Tool name]";
             this.lblToolName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -96,7 +96,7 @@
             this.pbLogo.Dock = System.Windows.Forms.DockStyle.Left;
             this.pbLogo.Location = new System.Drawing.Point(0, 0);
             this.pbLogo.Name = "pbLogo";
-            this.pbLogo.Size = new System.Drawing.Size(80, 80);
+            this.pbLogo.Size = new System.Drawing.Size(60, 60);
             this.pbLogo.TabIndex = 0;
             this.pbLogo.TabStop = false;
             // 
@@ -110,10 +110,10 @@
             this.pnlMain.Controls.Add(this.lblTitleDesc);
             this.pnlMain.Controls.Add(this.pnlActions);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlMain.Location = new System.Drawing.Point(20, 100);
+            this.pnlMain.Location = new System.Drawing.Point(20, 80);
             this.pnlMain.Margin = new System.Windows.Forms.Padding(3, 20, 3, 3);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(921, 729);
+            this.pnlMain.Size = new System.Drawing.Size(921, 749);
             this.pnlMain.TabIndex = 1;
             // 
             // rtbReleaseNotes
@@ -124,7 +124,7 @@
             this.rtbReleaseNotes.Name = "rtbReleaseNotes";
             this.rtbReleaseNotes.ReadOnly = true;
             this.rtbReleaseNotes.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.rtbReleaseNotes.Size = new System.Drawing.Size(921, 231);
+            this.rtbReleaseNotes.Size = new System.Drawing.Size(921, 251);
             this.rtbReleaseNotes.TabIndex = 6;
             this.rtbReleaseNotes.Text = "";
             this.rtbReleaseNotes.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.rtbReleaseNotes_LinkClicked);
@@ -163,14 +163,14 @@
             this.tlpMain.Location = new System.Drawing.Point(0, 212);
             this.tlpMain.Name = "tlpMain";
             this.tlpMain.RowCount = 8;
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tlpMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tlpMain.Size = new System.Drawing.Size(921, 239);
             this.tlpMain.TabIndex = 3;
             // 
@@ -180,7 +180,7 @@
             this.lblTitleVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitleVersion.Location = new System.Drawing.Point(3, 0);
             this.lblTitleVersion.Name = "lblTitleVersion";
-            this.lblTitleVersion.Size = new System.Drawing.Size(85, 20);
+            this.lblTitleVersion.Size = new System.Drawing.Size(61, 13);
             this.lblTitleVersion.TabIndex = 0;
             this.lblTitleVersion.Text = "Version : ";
             // 
@@ -188,9 +188,9 @@
             // 
             this.lblTitleAuthors.AutoSize = true;
             this.lblTitleAuthors.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitleAuthors.Location = new System.Drawing.Point(3, 34);
+            this.lblTitleAuthors.Location = new System.Drawing.Point(3, 32);
             this.lblTitleAuthors.Name = "lblTitleAuthors";
-            this.lblTitleAuthors.Size = new System.Drawing.Size(99, 20);
+            this.lblTitleAuthors.Size = new System.Drawing.Size(70, 13);
             this.lblTitleAuthors.TabIndex = 1;
             this.lblTitleAuthors.Text = "Author(s) : ";
             // 
@@ -198,9 +198,9 @@
             // 
             this.lblTitleFirstRelease.AutoSize = true;
             this.lblTitleFirstRelease.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitleFirstRelease.Location = new System.Drawing.Point(3, 68);
+            this.lblTitleFirstRelease.Location = new System.Drawing.Point(3, 64);
             this.lblTitleFirstRelease.Name = "lblTitleFirstRelease";
-            this.lblTitleFirstRelease.Size = new System.Drawing.Size(124, 20);
+            this.lblTitleFirstRelease.Size = new System.Drawing.Size(88, 13);
             this.lblTitleFirstRelease.TabIndex = 2;
             this.lblTitleFirstRelease.Text = "First release : ";
             // 
@@ -208,9 +208,9 @@
             // 
             this.lblTitleLatestRelease.AutoSize = true;
             this.lblTitleLatestRelease.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitleLatestRelease.Location = new System.Drawing.Point(3, 102);
+            this.lblTitleLatestRelease.Location = new System.Drawing.Point(3, 96);
             this.lblTitleLatestRelease.Name = "lblTitleLatestRelease";
-            this.lblTitleLatestRelease.Size = new System.Drawing.Size(139, 20);
+            this.lblTitleLatestRelease.Size = new System.Drawing.Size(99, 13);
             this.lblTitleLatestRelease.TabIndex = 3;
             this.lblTitleLatestRelease.Text = "Latest release : ";
             // 
@@ -218,19 +218,19 @@
             // 
             this.lblDownload.AutoSize = true;
             this.lblDownload.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDownload.Location = new System.Drawing.Point(3, 136);
+            this.lblDownload.Location = new System.Drawing.Point(3, 128);
             this.lblDownload.Name = "lblDownload";
-            this.lblDownload.Size = new System.Drawing.Size(103, 20);
+            this.lblDownload.Size = new System.Drawing.Size(81, 13);
             this.lblDownload.TabIndex = 4;
-            this.lblDownload.Text = "Download : ";
+            this.lblDownload.Text = "Downloads : ";
             // 
             // lblTitlePRojectUrl
             // 
             this.lblTitlePRojectUrl.AutoSize = true;
             this.lblTitlePRojectUrl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitlePRojectUrl.Location = new System.Drawing.Point(3, 170);
+            this.lblTitlePRojectUrl.Location = new System.Drawing.Point(3, 160);
             this.lblTitlePRojectUrl.Name = "lblTitlePRojectUrl";
-            this.lblTitlePRojectUrl.Size = new System.Drawing.Size(100, 20);
+            this.lblTitlePRojectUrl.Size = new System.Drawing.Size(73, 13);
             this.lblTitlePRojectUrl.TabIndex = 5;
             this.lblTitlePRojectUrl.Text = "Project url :";
             // 
@@ -238,54 +238,54 @@
             // 
             this.lblTitleRating.AutoSize = true;
             this.lblTitleRating.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitleRating.Location = new System.Drawing.Point(3, 204);
+            this.lblTitleRating.Location = new System.Drawing.Point(3, 192);
             this.lblTitleRating.Name = "lblTitleRating";
-            this.lblTitleRating.Size = new System.Drawing.Size(72, 20);
+            this.lblTitleRating.Size = new System.Drawing.Size(52, 13);
             this.lblTitleRating.TabIndex = 6;
             this.lblTitleRating.Text = "Rating :";
             // 
             // lblToolAuthors
             // 
             this.lblToolAuthors.AutoSize = true;
-            this.lblToolAuthors.Location = new System.Drawing.Point(204, 34);
+            this.lblToolAuthors.Location = new System.Drawing.Point(204, 32);
             this.lblToolAuthors.Name = "lblToolAuthors";
-            this.lblToolAuthors.Size = new System.Drawing.Size(73, 20);
+            this.lblToolAuthors.Size = new System.Drawing.Size(49, 13);
             this.lblToolAuthors.TabIndex = 8;
             this.lblToolAuthors.Text = "[Authors]";
             // 
             // lblToolFirstRelease
             // 
             this.lblToolFirstRelease.AutoSize = true;
-            this.lblToolFirstRelease.Location = new System.Drawing.Point(204, 68);
+            this.lblToolFirstRelease.Location = new System.Drawing.Point(204, 64);
             this.lblToolFirstRelease.Name = "lblToolFirstRelease";
-            this.lblToolFirstRelease.Size = new System.Drawing.Size(104, 20);
+            this.lblToolFirstRelease.Size = new System.Drawing.Size(69, 13);
             this.lblToolFirstRelease.TabIndex = 9;
             this.lblToolFirstRelease.Text = "[First release]";
             // 
             // lblToolLastRelease
             // 
             this.lblToolLastRelease.AutoSize = true;
-            this.lblToolLastRelease.Location = new System.Drawing.Point(204, 102);
+            this.lblToolLastRelease.Location = new System.Drawing.Point(204, 96);
             this.lblToolLastRelease.Name = "lblToolLastRelease";
-            this.lblToolLastRelease.Size = new System.Drawing.Size(104, 20);
+            this.lblToolLastRelease.Size = new System.Drawing.Size(70, 13);
             this.lblToolLastRelease.TabIndex = 10;
             this.lblToolLastRelease.Text = "[Last release]";
             // 
             // lblToolDownload
             // 
             this.lblToolDownload.AutoSize = true;
-            this.lblToolDownload.Location = new System.Drawing.Point(204, 136);
+            this.lblToolDownload.Location = new System.Drawing.Point(204, 128);
             this.lblToolDownload.Name = "lblToolDownload";
-            this.lblToolDownload.Size = new System.Drawing.Size(88, 20);
+            this.lblToolDownload.Size = new System.Drawing.Size(61, 13);
             this.lblToolDownload.TabIndex = 11;
             this.lblToolDownload.Text = "[Download]";
             // 
             // llToolProjectUrl
             // 
             this.llToolProjectUrl.AutoSize = true;
-            this.llToolProjectUrl.Location = new System.Drawing.Point(204, 170);
+            this.llToolProjectUrl.Location = new System.Drawing.Point(204, 160);
             this.llToolProjectUrl.Name = "llToolProjectUrl";
-            this.llToolProjectUrl.Size = new System.Drawing.Size(48, 20);
+            this.llToolProjectUrl.Size = new System.Drawing.Size(33, 13);
             this.llToolProjectUrl.TabIndex = 12;
             this.llToolProjectUrl.TabStop = true;
             this.llToolProjectUrl.Text = "Open";
@@ -300,9 +300,39 @@
             this.cbbVersions.FormattingEnabled = true;
             this.cbbVersions.Location = new System.Drawing.Point(204, 3);
             this.cbbVersions.Name = "cbbVersions";
-            this.cbbVersions.Size = new System.Drawing.Size(714, 28);
+            this.cbbVersions.Size = new System.Drawing.Size(714, 21);
             this.cbbVersions.TabIndex = 14;
             this.cbbVersions.SelectedIndexChanged += new System.EventHandler(this.cbbVersions_SelectedIndexChanged);
+            // 
+            // pnlRating
+            // 
+            this.pnlRating.Controls.Add(this.llRateThisTool);
+            this.pnlRating.Controls.Add(this.lblToolRating);
+            this.pnlRating.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlRating.Location = new System.Drawing.Point(204, 195);
+            this.pnlRating.Name = "pnlRating";
+            this.pnlRating.Size = new System.Drawing.Size(714, 26);
+            this.pnlRating.TabIndex = 15;
+            // 
+            // llRateThisTool
+            // 
+            this.llRateThisTool.Dock = System.Windows.Forms.DockStyle.Left;
+            this.llRateThisTool.Location = new System.Drawing.Point(88, 0);
+            this.llRateThisTool.Name = "llRateThisTool";
+            this.llRateThisTool.Size = new System.Drawing.Size(207, 26);
+            this.llRateThisTool.TabIndex = 20;
+            this.llRateThisTool.TabStop = true;
+            this.llRateThisTool.Text = "Rate this tool";
+            this.llRateThisTool.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llRateThisTool_LinkClicked);
+            // 
+            // lblToolRating
+            // 
+            this.lblToolRating.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblToolRating.Location = new System.Drawing.Point(0, 0);
+            this.lblToolRating.Name = "lblToolRating";
+            this.lblToolRating.Size = new System.Drawing.Size(88, 26);
+            this.lblToolRating.TabIndex = 19;
+            this.lblToolRating.Text = "[Rating]";
             // 
             // pnlSeparator1
             // 
@@ -394,39 +424,9 @@
             this.btnDelete.UseVisualStyleBackColor = true;
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
-            // pnlRating
-            // 
-            this.pnlRating.Controls.Add(this.llRateThisTool);
-            this.pnlRating.Controls.Add(this.lblToolRating);
-            this.pnlRating.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlRating.Location = new System.Drawing.Point(204, 207);
-            this.pnlRating.Name = "pnlRating";
-            this.pnlRating.Size = new System.Drawing.Size(714, 28);
-            this.pnlRating.TabIndex = 15;
-            // 
-            // lblToolRating
-            // 
-            this.lblToolRating.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lblToolRating.Location = new System.Drawing.Point(0, 0);
-            this.lblToolRating.Name = "lblToolRating";
-            this.lblToolRating.Size = new System.Drawing.Size(88, 28);
-            this.lblToolRating.TabIndex = 19;
-            this.lblToolRating.Text = "[Rating]";
-            // 
-            // llRateThisTool
-            // 
-            this.llRateThisTool.Dock = System.Windows.Forms.DockStyle.Left;
-            this.llRateThisTool.Location = new System.Drawing.Point(88, 0);
-            this.llRateThisTool.Name = "llRateThisTool";
-            this.llRateThisTool.Size = new System.Drawing.Size(207, 28);
-            this.llRateThisTool.TabIndex = 20;
-            this.llRateThisTool.TabStop = true;
-            this.llRateThisTool.Text = "Rate this tool";
-            this.llRateThisTool.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llRateThisTool_LinkClicked);
-            // 
             // ToolPackageCtrl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlTop);
@@ -438,10 +438,10 @@
             this.pnlMain.ResumeLayout(false);
             this.tlpMain.ResumeLayout(false);
             this.tlpMain.PerformLayout();
+            this.pnlRating.ResumeLayout(false);
             this.pnlSeparator1.ResumeLayout(false);
             this.pnlActions.ResumeLayout(false);
             this.tlpActions.ResumeLayout(false);
-            this.pnlRating.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

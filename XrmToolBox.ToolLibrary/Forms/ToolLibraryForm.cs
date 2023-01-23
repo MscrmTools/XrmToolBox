@@ -274,10 +274,14 @@ namespace XrmToolBox.ToolLibrary.Forms
                 {
                 }
 
+                lvTools.ItemChecked -= lvTools_ItemChecked;
+
                 lvTools.Columns[e.Column].Tag = !value;
                 foreach (ListViewItem item in lvTools.Items)
                     item.Checked = !value;
 
+                lvTools.ItemChecked += lvTools_ItemChecked;
+                lvTools_ItemChecked(lvTools, null);
                 lvTools.Invalidate();
             }
         }
