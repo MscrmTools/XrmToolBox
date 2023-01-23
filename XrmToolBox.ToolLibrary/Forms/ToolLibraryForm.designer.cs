@@ -464,7 +464,7 @@
             // 
             // toolStrip1
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbRefresh,
             this.tssRefresh,
@@ -556,7 +556,7 @@
             this.tsbRestart.Image = global::XrmToolBox.ToolLibrary.Resource.Restart;
             this.tsbRestart.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbRestart.Name = "tsbRestart";
-            this.tsbRestart.Size = new System.Drawing.Size(79, 36);
+            this.tsbRestart.Size = new System.Drawing.Size(71, 36);
             this.tsbRestart.Text = "Restart";
             this.tsbRestart.Visible = false;
             this.tsbRestart.Click += new System.EventHandler(this.tsbRestart_Click);
