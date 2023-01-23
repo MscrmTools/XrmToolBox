@@ -46,6 +46,14 @@ namespace XrmToolBox.ToolLibrary.Forms
             lblSeparator2.SetAutoWidth();
             lblLoading.Location = new Point(lblLoading.Parent.Width / 2 - lblLoading.Width / 2, lblLoading.Parent.Height / 2 - lblLoading.Height / 2);
 
+            foreach (var chk in pnlToolsTop.Controls.OfType<CheckBox>().Where(c => c.Image != null))
+            {
+                chk.Image = ResizeImage(chk.Image, 24, 24);
+                chk.Width = 48;
+            }
+
+            pnlToolsTop.Height = 34;
+
             ToolTip tt = new ToolTip();
             tt.SetToolTip(chkFilterMvp, "Show tools from Microsoft MVPs only");
             tt.SetToolTip(chkFilterNew, "Show new tools only\n\nFirst release date not older than a month");

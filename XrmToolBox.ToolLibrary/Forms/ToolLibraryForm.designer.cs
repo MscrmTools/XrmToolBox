@@ -125,6 +125,7 @@
             this.splitContainer1.Panel2MinSize = 400;
             this.splitContainer1.Size = new System.Drawing.Size(1624, 791);
             this.splitContainer1.SplitterDistance = 1180;
+            this.splitContainer1.SplitterWidth = 8;
             this.splitContainer1.TabIndex = 0;
             // 
             // pnlToolsMain
@@ -213,7 +214,7 @@
             this.pnlToolProperties.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlToolProperties.Location = new System.Drawing.Point(0, 0);
             this.pnlToolProperties.Name = "pnlToolProperties";
-            this.pnlToolProperties.Size = new System.Drawing.Size(440, 742);
+            this.pnlToolProperties.Size = new System.Drawing.Size(436, 742);
             this.pnlToolProperties.TabIndex = 2;
             // 
             // pnlCustomRepoWarning
@@ -223,7 +224,7 @@
             this.pnlCustomRepoWarning.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnlCustomRepoWarning.Location = new System.Drawing.Point(0, 742);
             this.pnlCustomRepoWarning.Name = "pnlCustomRepoWarning";
-            this.pnlCustomRepoWarning.Size = new System.Drawing.Size(440, 49);
+            this.pnlCustomRepoWarning.Size = new System.Drawing.Size(436, 49);
             this.pnlCustomRepoWarning.TabIndex = 1;
             this.pnlCustomRepoWarning.Visible = false;
             // 
@@ -232,7 +233,7 @@
             this.lblCustomRepoWarning.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblCustomRepoWarning.Location = new System.Drawing.Point(0, 0);
             this.lblCustomRepoWarning.Name = "lblCustomRepoWarning";
-            this.lblCustomRepoWarning.Size = new System.Drawing.Size(440, 49);
+            this.lblCustomRepoWarning.Size = new System.Drawing.Size(436, 49);
             this.lblCustomRepoWarning.TabIndex = 0;
             this.lblCustomRepoWarning.Text = "This tool comes from a custom repository. XrmToolBox cannot validate that the inf" +
     "ormation displayed are accurate.";
@@ -463,7 +464,7 @@
             // 
             // toolStrip1
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbRefresh,
             this.tssRefresh,
@@ -555,7 +556,7 @@
             this.tsbRestart.Image = global::XrmToolBox.ToolLibrary.Resource.Restart;
             this.tsbRestart.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbRestart.Name = "tsbRestart";
-            this.tsbRestart.Size = new System.Drawing.Size(79, 36);
+            this.tsbRestart.Size = new System.Drawing.Size(71, 36);
             this.tsbRestart.Text = "Restart";
             this.tsbRestart.Visible = false;
             this.tsbRestart.Click += new System.EventHandler(this.tsbRestart_Click);
