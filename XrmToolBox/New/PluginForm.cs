@@ -180,7 +180,7 @@ namespace XrmToolBox.New
         {
             tlpHighlight.Visible = false;
 
-            if (detail?.IsEnvironmentHighlightSet ?? false && !(pluginControlBase is INoHighlightingPlugin))
+            if ((detail?.IsEnvironmentHighlightSet ?? false) && !(pluginControlBase is INoHighlightingPlugin))
             {
                 BackColor = detail.EnvironmentHighlightingInfo?.Color ?? DefaultBackColor;
                 lblEnvInfo.ForeColor = detail.EnvironmentHighlightingInfo?.TextColor ?? DefaultForeColor;
