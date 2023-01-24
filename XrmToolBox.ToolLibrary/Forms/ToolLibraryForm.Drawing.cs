@@ -10,10 +10,10 @@ namespace XrmToolBox.ToolLibrary.Forms
 {
     public partial class ToolLibraryForm : DockContent
     {
-        const int listItemPadding = 4; // The space between each element in the list item
-        const int imageSize = 40; // The size of the main plugin image in the list item
-        const int overlayIconSize = 18; // The size of the overlay icons placed on top of the main image
-        const int iconSize = 16; // The size of the icons in the list item
+        private const int iconSize = 20; // The size of the icons in the list item
+        private const int imageSize = 40; // The size of the main plugin image in the list item
+        private const int listItemPadding = 4; // The space between each element in the list item
+        private const int overlayIconSize = 18; // The size of the overlay icons placed on top of the main image
 
         private Font boldFont;
         private Image githubImage;
@@ -21,6 +21,14 @@ namespace XrmToolBox.ToolLibrary.Forms
         private Image newImage;
         private Image noLogoImage;
         private Image StarImage;
+
+        private float GetBaseLine(Graphics g, Font font)
+        {
+            var lineSpace = font.FontFamily.GetLineSpacing(font.Style);
+            var ascent = font.FontFamily.GetCellAscent(font.Style);
+            var height = font.GetHeight(g);
+            return height * ascent / lineSpace;
+        }
 
         private void InitImages()
         {
@@ -162,14 +170,6 @@ namespace XrmToolBox.ToolLibrary.Forms
                 e.Graphics.DrawImage(newImage, rec.X + shift + listItemPadding, rec.Y, iconSize, iconSize);
                 shift += listItemPadding + iconSize;
             }
-        }
-
-        private float GetBaseLine(Graphics g, Font font)
-        {
-            var lineSpace = font.FontFamily.GetLineSpacing(font.Style);
-            var ascent = font.FontFamily.GetCellAscent(font.Style);
-            var height = font.GetHeight(g);
-            return height * ascent / lineSpace;
         }
 
         private Image ResizeImage(Image image, int width, int height)
