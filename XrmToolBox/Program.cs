@@ -293,8 +293,8 @@ Please start XrmToolBox again to fix this problem",
             {
                 if (arg.ToLower().StartsWith("/overridepath:"))
                 {
-                    var parts = arg.Split(':');
-                    Paths.OverrideRootPath(string.Join(":", parts.Skip(1)));
+                    var path = arg.Substring(14).Trim().Trim('"');
+                    Paths.OverrideRootPath(path);
                 }
             }
 
