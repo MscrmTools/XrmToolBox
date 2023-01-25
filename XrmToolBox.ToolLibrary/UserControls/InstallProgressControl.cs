@@ -18,7 +18,7 @@ namespace XrmToolBox.ToolLibrary.UserControls
         {
             var step = new ProgressStepControl($"Downloading {toolName}", Resource.Download512);
             step.Dock = DockStyle.Top;
-            step.Height = 60;
+            step.Height = 52;
 
             pnlMain.Controls.Add(step);
             pnlMain.Controls.SetChildIndex(step, 0);
@@ -30,7 +30,7 @@ namespace XrmToolBox.ToolLibrary.UserControls
         {
             var step = new ProgressStepControl($"Installing {toolName}", Resource.Install512);
             step.Dock = DockStyle.Top;
-            step.Height = 60;
+            step.Height = 52;
 
             pnlMain.Controls.Add(step);
             pnlMain.Controls.SetChildIndex(step, 0);

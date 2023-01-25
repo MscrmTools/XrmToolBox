@@ -17,6 +17,12 @@ namespace XrmToolBox.ToolLibrary.UserControls
             pbAction.Image = img;
             lblAction.SetAutoWidth();
             lblAction.Width += 40;
+
+            pbAction.Size = new Size(32, 32);
+            pbState.Size = new Size(32, 32);
+            Height = 52;
+            pnlAction.Size = new Size(52,52);
+            pnlState.Size = new Size(52,52);
         }
 
         public void SetFailure(string errorMessage)
