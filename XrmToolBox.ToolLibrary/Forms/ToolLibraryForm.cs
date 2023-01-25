@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -49,7 +50,7 @@ namespace XrmToolBox.ToolLibrary.Forms
             foreach (var chk in pnlToolsTop.Controls.OfType<CheckBox>().Where(c => c.Image != null))
             {
                 chk.Image = ResizeImage(chk.Image, 24, 24);
-                chk.Width = 48;
+                chk.Width = 54;
             }
 
             pnlToolsTop.Height = 34;
@@ -164,6 +165,11 @@ namespace XrmToolBox.ToolLibrary.Forms
                 size += GetDirectorySize(s);
 
             return size;
+        }
+
+        private void llRepoMoreInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://www.xrmtoolbox.com/documentation/for-it-administrators/set-your-own-tools-repositories-for-tool-library/");
         }
 
         private async Task MainLoad(bool isRefresh = false)
@@ -302,7 +308,7 @@ namespace XrmToolBox.ToolLibrary.Forms
 
         private void lvTools_Resize(object sender, EventArgs e)
         {
-            chContent.Width = lvTools.Width - chCheckbox.Width - 16;
+            chContent.Width = lvTools.Width - chCheckbox.Width - 26;
 
             lblLoading.Location = new Point(Width / 2 - lblLoading.Width / 2, lblLoading.Parent.Height / 2 - lblLoading.Height / 2);
         }
