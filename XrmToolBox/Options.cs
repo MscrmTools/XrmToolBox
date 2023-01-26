@@ -135,7 +135,7 @@ namespace XrmToolBox
             Size = new FormSize();
             MostUsedList = new List<PluginUseCount>();
             AllowLogUsage = null;
-            DisplayPluginsStoreOnStartup = true;
+            DisplayPluginsStoreOnStartup = false;
             HiddenPlugins = new List<string>();
         }
 
