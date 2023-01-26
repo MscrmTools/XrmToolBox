@@ -1804,7 +1804,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
                     if (showUpdateOnly)
                     {
-                        libraryForm.SetFilters(ToolLibrary.PackageInstallAction.Update);
+                        libraryForm.ShowUpdatesOnly();
                     }
                 }
 

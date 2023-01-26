@@ -21,6 +21,7 @@ namespace XrmToolBox.ToolLibrary.Forms
         public static readonly Version MinCompatibleVersion = new Version(1, 2015, 12, 20);
         private readonly ImageCache imageCache;
         private readonly ToolLibrary toolLibrary;
+        private bool isUpdateOnly;
         private List<ListViewItem> items = new List<ListViewItem>();
         private FileInfo[] plugins;
         private Thread searchThread;
@@ -45,6 +46,8 @@ namespace XrmToolBox.ToolLibrary.Forms
             lblFilterRepository.SetAutoWidth();
             lblSeparator1.SetAutoWidth();
             lblSeparator2.SetAutoWidth();
+            lblFilterUpdateInfo.SetAutoWidth();
+            llRepoMoreInfo.SetAutoWidth();
             lblLoading.Location = new Point(lblLoading.Parent.Width / 2 - lblLoading.Width / 2, lblLoading.Parent.Height / 2 - lblLoading.Height / 2);
 
             foreach (var chk in pnlToolsTop.Controls.OfType<CheckBox>().Where(c => c.Image != null))
@@ -94,6 +97,20 @@ namespace XrmToolBox.ToolLibrary.Forms
             chkShowInstalled.Checked = (filters & PackageInstallAction.None) == PackageInstallAction.None;
             chkShowUpdates.Checked = (filters & PackageInstallAction.Update) == PackageInstallAction.Update;
             chkToInstall.Checked = (filters & PackageInstallAction.Install) == PackageInstallAction.Install;
+        }
+
+        public void ShowUpdatesOnly()
+        {
+            isUpdateOnly = true;
+
+            foreach (var cb in pnlToolsTop.Controls.OfType<CheckBox>())
+            {
+                cb.CheckedChanged -= chkFilter_CheckedChanged;
+                cb.Checked = false;
+                cb.CheckedChanged += chkFilter_CheckedChanged;
+            }
+            chkShowUpdates.Checked = true;
+            pnlFilterUpdateInfo.Visible = true;
         }
 
         protected override void OnResizeBegin(EventArgs e)
@@ -167,6 +184,24 @@ namespace XrmToolBox.ToolLibrary.Forms
             return size;
         }
 
+        private void llApplyUserFilter_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            isUpdateOnly = false;
+
+            chkFilterMvp.Checked = settings.LibraryFilterMvp;
+            chkFilterOpenSource.Checked = settings.LibraryFilterOpenSource;
+            chkFilterTopRating.Checked = settings.LibraryFilterRating;
+            chkFilterNew.Checked = settings.LibraryFilterNew;
+            chkShowInstalled.Checked = settings.LibraryShowInstalled;
+            chkShowUpdates.Checked = settings.LibraryShowUpdates;
+            chkToInstall.Checked = settings.LibraryShowNotInstalled;
+            chkIncompatible.Checked = settings.LibraryShowIncompatible;
+
+            SetCheckboxEventForSettings();
+
+            pnlFilterUpdateInfo.Visible = false;
+        }
+
         private void llRepoMoreInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("https://www.xrmtoolbox.com/documentation/for-it-administrators/set-your-own-tools-repositories-for-tool-library/");
@@ -228,6 +263,11 @@ namespace XrmToolBox.ToolLibrary.Forms
                 cbbCategories.SelectedIndex = 0;
                 cbbCategories.SelectedIndexChanged += cbbCategories_SelectedIndexChanged;
 
+                cbbCategories.SetAutoWidth();
+                cbbRepositories.SetAutoWidth();
+                pnlFilterCategory.Width = cbbCategories.Width + 20;
+                pnlFilterRepository.Width = cbbRepositories.Width + 20;
+
                 items = toolLibrary.XrmToolBoxPlugins.Plugins.Select(p => new ListViewItem(p.CleanedName) { Text = p.CleanedName, SubItems = { new ListViewItem.ListViewSubItem { Text = p.Name } }, Tag = p }).ToList();
 
                 Filter();
@@ -271,6 +311,20 @@ namespace XrmToolBox.ToolLibrary.Forms
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            if (!isUpdateOnly)
+            {
+                chkFilterMvp.Checked = settings.LibraryFilterMvp;
+                chkFilterOpenSource.Checked = settings.LibraryFilterOpenSource;
+                chkFilterTopRating.Checked = settings.LibraryFilterRating;
+                chkFilterNew.Checked = settings.LibraryFilterNew;
+                chkShowInstalled.Checked = settings.LibraryShowInstalled;
+                chkShowUpdates.Checked = settings.LibraryShowUpdates;
+                chkToInstall.Checked = settings.LibraryShowNotInstalled;
+                chkIncompatible.Checked = settings.LibraryShowIncompatible;
+
+                SetCheckboxEventForSettings();
+            }
+
             MainLoad();
         }
 
@@ -335,6 +389,24 @@ namespace XrmToolBox.ToolLibrary.Forms
             ctrl.Dock = DockStyle.Fill;
             ctrl.OnToolOperationRequested += Ctrl_OnToolOperationRequested;
             pnlToolProperties.Controls.Add(ctrl);
+        }
+
+        private void SetCheckboxEventForSettings()
+        {
+            foreach (var cb in pnlToolsTop.Controls.OfType<CheckBox>())
+            {
+                cb.CheckedChanged += (sender, e) =>
+                {
+                    settings.LibraryFilterMvp = chkFilterMvp.Checked;
+                    settings.LibraryFilterOpenSource = chkFilterOpenSource.Checked;
+                    settings.LibraryFilterRating = chkFilterTopRating.Checked;
+                    settings.LibraryFilterNew = chkFilterNew.Checked;
+                    settings.LibraryShowInstalled = chkShowInstalled.Checked;
+                    settings.LibraryShowUpdates = chkShowUpdates.Checked;
+                    settings.LibraryShowNotInstalled = chkToInstall.Checked;
+                    settings.LibraryShowIncompatible = chkIncompatible.Checked;
+                };
+            }
         }
 
         private void tsbRefresh_Click(object sender, EventArgs e)

@@ -51,6 +51,7 @@
             this.cbbCategories = new System.Windows.Forms.ComboBox();
             this.lblSeparator1 = new System.Windows.Forms.Label();
             this.pnlToolsTop = new System.Windows.Forms.Panel();
+            this.llRepoMoreInfo = new System.Windows.Forms.LinkLabel();
             this.pnlFilterRepository = new System.Windows.Forms.Panel();
             this.cbbRepositories = new System.Windows.Forms.ComboBox();
             this.lblFilterRepository = new System.Windows.Forms.Label();
@@ -74,7 +75,9 @@
             this.tssClearPackageCache = new System.Windows.Forms.ToolStripMenuItem();
             this.tssSettings = new System.Windows.Forms.ToolStripSeparator();
             this.tsbRestart = new System.Windows.Forms.ToolStripButton();
-            this.llRepoMoreInfo = new System.Windows.Forms.LinkLabel();
+            this.pnlFilterUpdateInfo = new System.Windows.Forms.Panel();
+            this.llApplyUserFilter = new System.Windows.Forms.LinkLabel();
+            this.lblFilterUpdateInfo = new System.Windows.Forms.Label();
             this.pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -88,15 +91,16 @@
             this.pnlToolsTop.SuspendLayout();
             this.pnlFilterRepository.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.pnlFilterUpdateInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlBottom
             // 
             this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlBottom.Location = new System.Drawing.Point(0, 1342);
+            this.pnlBottom.Location = new System.Drawing.Point(0, 1336);
             this.pnlBottom.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pnlBottom.Name = "pnlBottom";
-            this.pnlBottom.Size = new System.Drawing.Size(2381, 86);
+            this.pnlBottom.Size = new System.Drawing.Size(2375, 86);
             this.pnlBottom.TabIndex = 1;
             this.pnlBottom.Visible = false;
             // 
@@ -104,10 +108,10 @@
             // 
             this.pnlMain.Controls.Add(this.splitContainer1);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlMain.Location = new System.Drawing.Point(0, 89);
+            this.pnlMain.Location = new System.Drawing.Point(0, 138);
             this.pnlMain.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(2381, 1253);
+            this.pnlMain.Size = new System.Drawing.Size(2375, 1198);
             this.pnlMain.TabIndex = 2;
             // 
             // splitContainer1
@@ -127,8 +131,8 @@
             this.splitContainer1.Panel2.Controls.Add(this.pnlToolProperties);
             this.splitContainer1.Panel2.Controls.Add(this.pnlCustomRepoWarning);
             this.splitContainer1.Panel2MinSize = 400;
-            this.splitContainer1.Size = new System.Drawing.Size(2381, 1253);
-            this.splitContainer1.SplitterDistance = 1729;
+            this.splitContainer1.Size = new System.Drawing.Size(2375, 1198);
+            this.splitContainer1.SplitterDistance = 1724;
             this.splitContainer1.SplitterWidth = 12;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -141,7 +145,7 @@
             this.pnlToolsMain.Location = new System.Drawing.Point(0, 0);
             this.pnlToolsMain.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pnlToolsMain.Name = "pnlToolsMain";
-            this.pnlToolsMain.Size = new System.Drawing.Size(1729, 1178);
+            this.pnlToolsMain.Size = new System.Drawing.Size(1724, 1123);
             this.pnlToolsMain.TabIndex = 2;
             // 
             // pnlLoading
@@ -179,7 +183,7 @@
             this.lvTools.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lvTools.Name = "lvTools";
             this.lvTools.OwnerDraw = true;
-            this.lvTools.Size = new System.Drawing.Size(1806, 1152);
+            this.lvTools.Size = new System.Drawing.Size(1806, 1097);
             this.lvTools.SmallImageList = this.imageList1;
             this.lvTools.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvTools.TabIndex = 3;
@@ -210,10 +214,10 @@
             // pnlToolsBottom
             // 
             this.pnlToolsBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlToolsBottom.Location = new System.Drawing.Point(0, 1178);
+            this.pnlToolsBottom.Location = new System.Drawing.Point(0, 1123);
             this.pnlToolsBottom.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pnlToolsBottom.Name = "pnlToolsBottom";
-            this.pnlToolsBottom.Size = new System.Drawing.Size(1729, 75);
+            this.pnlToolsBottom.Size = new System.Drawing.Size(1724, 75);
             this.pnlToolsBottom.TabIndex = 1;
             this.pnlToolsBottom.Visible = false;
             // 
@@ -224,7 +228,7 @@
             this.pnlToolProperties.Location = new System.Drawing.Point(0, 0);
             this.pnlToolProperties.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pnlToolProperties.Name = "pnlToolProperties";
-            this.pnlToolProperties.Size = new System.Drawing.Size(640, 1178);
+            this.pnlToolProperties.Size = new System.Drawing.Size(639, 1123);
             this.pnlToolProperties.TabIndex = 2;
             // 
             // pnlCustomRepoWarning
@@ -232,10 +236,10 @@
             this.pnlCustomRepoWarning.BackColor = System.Drawing.SystemColors.Info;
             this.pnlCustomRepoWarning.Controls.Add(this.lblCustomRepoWarning);
             this.pnlCustomRepoWarning.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlCustomRepoWarning.Location = new System.Drawing.Point(0, 1178);
+            this.pnlCustomRepoWarning.Location = new System.Drawing.Point(0, 1123);
             this.pnlCustomRepoWarning.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pnlCustomRepoWarning.Name = "pnlCustomRepoWarning";
-            this.pnlCustomRepoWarning.Size = new System.Drawing.Size(640, 75);
+            this.pnlCustomRepoWarning.Size = new System.Drawing.Size(639, 75);
             this.pnlCustomRepoWarning.TabIndex = 1;
             this.pnlCustomRepoWarning.Visible = false;
             // 
@@ -245,7 +249,7 @@
             this.lblCustomRepoWarning.Location = new System.Drawing.Point(0, 0);
             this.lblCustomRepoWarning.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblCustomRepoWarning.Name = "lblCustomRepoWarning";
-            this.lblCustomRepoWarning.Size = new System.Drawing.Size(640, 75);
+            this.lblCustomRepoWarning.Size = new System.Drawing.Size(639, 75);
             this.lblCustomRepoWarning.TabIndex = 0;
             this.lblCustomRepoWarning.Text = "This tool comes from a custom repository. XrmToolBox cannot validate that the inf" +
     "ormation displayed are accurate.";
@@ -345,11 +349,23 @@
             this.pnlToolsTop.Controls.Add(this.pnlToolsSearch);
             this.pnlToolsTop.Controls.Add(this.lblToolsSearch);
             this.pnlToolsTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlToolsTop.Location = new System.Drawing.Point(0, 34);
+            this.pnlToolsTop.Location = new System.Drawing.Point(0, 83);
             this.pnlToolsTop.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pnlToolsTop.Name = "pnlToolsTop";
-            this.pnlToolsTop.Size = new System.Drawing.Size(2381, 55);
+            this.pnlToolsTop.Size = new System.Drawing.Size(2375, 55);
             this.pnlToolsTop.TabIndex = 0;
+            // 
+            // llRepoMoreInfo
+            // 
+            this.llRepoMoreInfo.Dock = System.Windows.Forms.DockStyle.Left;
+            this.llRepoMoreInfo.Location = new System.Drawing.Point(1771, 0);
+            this.llRepoMoreInfo.Name = "llRepoMoreInfo";
+            this.llRepoMoreInfo.Size = new System.Drawing.Size(105, 55);
+            this.llRepoMoreInfo.TabIndex = 17;
+            this.llRepoMoreInfo.TabStop = true;
+            this.llRepoMoreInfo.Text = "More info";
+            this.llRepoMoreInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.llRepoMoreInfo.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llRepoMoreInfo_LinkClicked);
             // 
             // pnlFilterRepository
             // 
@@ -520,7 +536,7 @@
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.toolStrip1.Size = new System.Drawing.Size(2381, 34);
+            this.toolStrip1.Size = new System.Drawing.Size(2375, 34);
             this.toolStrip1.TabIndex = 4;
             this.toolStrip1.Text = "tsMain";
             // 
@@ -605,26 +621,51 @@
             this.tsbRestart.Visible = false;
             this.tsbRestart.Click += new System.EventHandler(this.tsbRestart_Click);
             // 
-            // llRepoMoreInfo
+            // pnlFilterUpdateInfo
             // 
-            this.llRepoMoreInfo.Dock = System.Windows.Forms.DockStyle.Left;
-            this.llRepoMoreInfo.Location = new System.Drawing.Point(1771, 0);
-            this.llRepoMoreInfo.Name = "llRepoMoreInfo";
-            this.llRepoMoreInfo.Size = new System.Drawing.Size(105, 55);
-            this.llRepoMoreInfo.TabIndex = 17;
-            this.llRepoMoreInfo.TabStop = true;
-            this.llRepoMoreInfo.Text = "More info";
-            this.llRepoMoreInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.llRepoMoreInfo.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llRepoMoreInfo_LinkClicked);
+            this.pnlFilterUpdateInfo.BackColor = System.Drawing.SystemColors.Info;
+            this.pnlFilterUpdateInfo.Controls.Add(this.llApplyUserFilter);
+            this.pnlFilterUpdateInfo.Controls.Add(this.lblFilterUpdateInfo);
+            this.pnlFilterUpdateInfo.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlFilterUpdateInfo.Location = new System.Drawing.Point(0, 34);
+            this.pnlFilterUpdateInfo.Name = "pnlFilterUpdateInfo";
+            this.pnlFilterUpdateInfo.Padding = new System.Windows.Forms.Padding(10);
+            this.pnlFilterUpdateInfo.Size = new System.Drawing.Size(2375, 49);
+            this.pnlFilterUpdateInfo.TabIndex = 5;
+            this.pnlFilterUpdateInfo.Visible = false;
+            // 
+            // llApplyUserFilter
+            // 
+            this.llApplyUserFilter.Dock = System.Windows.Forms.DockStyle.Left;
+            this.llApplyUserFilter.Location = new System.Drawing.Point(788, 10);
+            this.llApplyUserFilter.Name = "llApplyUserFilter";
+            this.llApplyUserFilter.Size = new System.Drawing.Size(507, 29);
+            this.llApplyUserFilter.TabIndex = 1;
+            this.llApplyUserFilter.TabStop = true;
+            this.llApplyUserFilter.Text = "Click here to apply your last filters";
+            this.llApplyUserFilter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.llApplyUserFilter.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llApplyUserFilter_LinkClicked);
+            // 
+            // lblFilterUpdateInfo
+            // 
+            this.lblFilterUpdateInfo.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblFilterUpdateInfo.Location = new System.Drawing.Point(10, 10);
+            this.lblFilterUpdateInfo.Name = "lblFilterUpdateInfo";
+            this.lblFilterUpdateInfo.Size = new System.Drawing.Size(778, 29);
+            this.lblFilterUpdateInfo.TabIndex = 0;
+            this.lblFilterUpdateInfo.Text = "Tool library is currently using a specific filter to show you only updates availa" +
+    "ble for your tools.";
+            this.lblFilterUpdateInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ToolLibraryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2381, 1428);
+            this.ClientSize = new System.Drawing.Size(2375, 1422);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlBottom);
             this.Controls.Add(this.pnlToolsTop);
+            this.Controls.Add(this.pnlFilterUpdateInfo);
             this.Controls.Add(this.toolStrip1);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "ToolLibraryForm";
@@ -645,6 +686,7 @@
             this.pnlFilterRepository.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.pnlFilterUpdateInfo.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -697,6 +739,9 @@
         private System.Windows.Forms.Panel pnlCustomRepoWarning;
         private System.Windows.Forms.Label lblCustomRepoWarning;
         private System.Windows.Forms.LinkLabel llRepoMoreInfo;
+        private System.Windows.Forms.Panel pnlFilterUpdateInfo;
+        private System.Windows.Forms.LinkLabel llApplyUserFilter;
+        private System.Windows.Forms.Label lblFilterUpdateInfo;
     }
 }
 

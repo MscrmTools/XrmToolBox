@@ -333,6 +333,15 @@ namespace XrmToolBox
         [Browsable(false)]
         public DateTime LastUpdateCheck { get; set; }
 
+        [Browsable(false)] public bool LibraryFilterMvp { get; set; }
+        [Browsable(false)] public bool LibraryFilterNew { get; set; }
+        [Browsable(false)] public bool LibraryFilterOpenSource { get; set; }
+        [Browsable(false)] public bool LibraryFilterRating { get; set; }
+        [Browsable(false)] public bool LibraryShowIncompatible { get; set; }
+        [Browsable(false)] public bool LibraryShowInstalled { get; set; } = true;
+        [Browsable(false)] public bool LibraryShowNotInstalled { get; set; } = true;
+        [Browsable(false)] public bool LibraryShowUpdates { get; set; } = true;
+
         [Category("Connections")]
         [DisplayName("Display all connections")]
         [Description("Indicates if bottom left connection control should display all connections regardless the connection files they come from")]
@@ -538,7 +547,15 @@ namespace XrmToolBox
                 MostRatedMinNumberOfVotes = MostRatedMinNumberOfVotes,
                 MostRatedMinRatingAverage = MostRatedMinRatingAverage,
                 RepositoryUrl = RepositoryUrl,
-                AdditionalRepositories = AdditionalRepositories
+                AdditionalRepositories = AdditionalRepositories,
+                LibraryFilterMvp = LibraryFilterMvp,
+                LibraryFilterNew = LibraryFilterNew,
+                LibraryFilterOpenSource = LibraryFilterOpenSource,
+                LibraryFilterRating = LibraryFilterRating,
+                LibraryShowIncompatible = LibraryShowIncompatible,
+                LibraryShowInstalled = LibraryShowInstalled,
+                LibraryShowNotInstalled = LibraryShowNotInstalled,
+                LibraryShowUpdates = LibraryShowUpdates
             };
         }
 
