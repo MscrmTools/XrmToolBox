@@ -67,8 +67,8 @@ namespace XrmToolBox.ToolLibrary.UserControls
             this.pbState.Image = global::XrmToolBox.ToolLibrary.Resource.progress;
             this.pbState.Location = new System.Drawing.Point(10, 10);
             this.pbState.Name = "pbState";
-            this.pbState.Size = new System.Drawing.Size(40, 40);
-            this.pbState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pbState.Size = new System.Drawing.Size(48, 60);
+            this.pbState.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pbState.TabIndex = 4;
             this.pbState.TabStop = false;
             // 
@@ -88,8 +88,8 @@ namespace XrmToolBox.ToolLibrary.UserControls
             this.pbAction.Image = global::XrmToolBox.ToolLibrary.Resource.Download512;
             this.pbAction.Location = new System.Drawing.Point(10, 10);
             this.pbAction.Name = "pbAction";
-            this.pbAction.Size = new System.Drawing.Size(43, 40);
-            this.pbAction.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbAction.Size = new System.Drawing.Size(768, 60);
+            this.pbAction.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pbAction.TabIndex = 1;
             this.pbAction.TabStop = false;
             // 
@@ -103,8 +103,10 @@ namespace XrmToolBox.ToolLibrary.UserControls
             this.Name = "ProgressStepControl";
             this.Size = new System.Drawing.Size(1046, 60);
             this.pnlState.ResumeLayout(false);
+            this.pnlState.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbState)).EndInit();
             this.pnlAction.ResumeLayout(false);
+            this.pnlAction.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbAction)).EndInit();
             this.ResumeLayout(false);
 

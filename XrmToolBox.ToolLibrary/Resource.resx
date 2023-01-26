@@ -121,8 +121,14 @@
   <data name="ClearCache" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\ClearCache.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Download32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Download32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Download512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Download512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Error32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Error32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Error512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Error512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -139,6 +145,9 @@
   <data name="Install" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Install.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Install32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Install32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Install512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Install512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -153,6 +162,9 @@
   </data>
   <data name="NoLogo100" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\NoLogo100.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Pending32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Pending32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Pending512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Pending512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -186,6 +198,9 @@
   </data>
   <data name="Success" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Success.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Success32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Success32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Success512" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Success512.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

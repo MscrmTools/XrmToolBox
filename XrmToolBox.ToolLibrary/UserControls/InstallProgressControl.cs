@@ -16,7 +16,7 @@ namespace XrmToolBox.ToolLibrary.UserControls
 
         public void AddDownloadStep(string toolName)
         {
-            var step = new ProgressStepControl($"Downloading {toolName}", Resource.Download512);
+            var step = new ProgressStepControl($"Downloading {toolName}", Resource.Download32);
             step.Dock = DockStyle.Top;
             step.Height = 52;
 
@@ -28,7 +28,7 @@ namespace XrmToolBox.ToolLibrary.UserControls
 
         public void AddInstallStep(string toolName)
         {
-            var step = new ProgressStepControl($"Installing {toolName}", Resource.Install512);
+            var step = new ProgressStepControl($"Installing {toolName}", Resource.Install32);
             step.Dock = DockStyle.Top;
             step.Height = 52;
 

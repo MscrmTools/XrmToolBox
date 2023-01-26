@@ -21,21 +21,19 @@ namespace XrmToolBox.ToolLibrary.UserControls
             pbAction.Size = new Size(32, 32);
             pbState.Size = new Size(32, 32);
             Height = 52;
-            pnlAction.Size = new Size(52,52);
-            pnlState.Size = new Size(52,52);
+            pnlAction.Size = new Size(52, 52);
+            pnlState.Size = new Size(52, 52);
         }
 
         public void SetFailure(string errorMessage)
         {
-            pbState.Image = Resource.Error512;
-            pbState.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbState.Image = Resource.Error32;
             tooltip.SetToolTip(pbState, errorMessage);
         }
 
         public void SetSuccess(bool pending = false)
         {
-            pbState.Image = pending ? Resource.Pending512 : Resource.Success512;
-            pbState.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbState.Image = pending ? Resource.Pending32 : Resource.Success32;
         }
     }
 }

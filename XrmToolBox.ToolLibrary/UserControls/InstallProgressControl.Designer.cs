@@ -32,9 +32,9 @@ namespace XrmToolBox.ToolLibrary.UserControls
             this.pnlTop = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.pnlBottom = new System.Windows.Forms.Panel();
+            this.btnRestart = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
             this.pnlMain = new System.Windows.Forms.Panel();
-            this.btnRestart = new System.Windows.Forms.Button();
             this.pbTitle = new System.Windows.Forms.PictureBox();
             this.pnlTop.SuspendLayout();
             this.pnlBottom.SuspendLayout();
@@ -73,6 +73,18 @@ namespace XrmToolBox.ToolLibrary.UserControls
             this.pnlBottom.Size = new System.Drawing.Size(1250, 68);
             this.pnlBottom.TabIndex = 1;
             // 
+            // btnRestart
+            // 
+            this.btnRestart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRestart.Location = new System.Drawing.Point(1003, 6);
+            this.btnRestart.Name = "btnRestart";
+            this.btnRestart.Size = new System.Drawing.Size(119, 54);
+            this.btnRestart.TabIndex = 1;
+            this.btnRestart.Text = "Restart";
+            this.btnRestart.UseVisualStyleBackColor = true;
+            this.btnRestart.Visible = false;
+            this.btnRestart.Click += new System.EventHandler(this.btnRestart_Click);
+            // 
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -95,22 +107,10 @@ namespace XrmToolBox.ToolLibrary.UserControls
             this.pnlMain.Size = new System.Drawing.Size(1250, 609);
             this.pnlMain.TabIndex = 2;
             // 
-            // btnRestart
-            // 
-            this.btnRestart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRestart.Location = new System.Drawing.Point(1003, 6);
-            this.btnRestart.Name = "btnRestart";
-            this.btnRestart.Size = new System.Drawing.Size(119, 54);
-            this.btnRestart.TabIndex = 1;
-            this.btnRestart.Text = "Restart";
-            this.btnRestart.UseVisualStyleBackColor = true;
-            this.btnRestart.Visible = false;
-            this.btnRestart.Click += new System.EventHandler(this.btnRestart_Click);
-            // 
             // pbTitle
             // 
             this.pbTitle.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pbTitle.Image = global::XrmToolBox.ToolLibrary.Resource.Install;
+            this.pbTitle.Image = global::XrmToolBox.ToolLibrary.Resource.Install32;
             this.pbTitle.Location = new System.Drawing.Point(10, 10);
             this.pbTitle.Name = "pbTitle";
             this.pbTitle.Size = new System.Drawing.Size(60, 61);

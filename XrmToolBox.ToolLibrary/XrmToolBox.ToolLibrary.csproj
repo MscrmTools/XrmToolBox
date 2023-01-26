@@ -317,6 +317,11 @@
     <None Include="Resources\NewToInstall.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Success32.png" />
+    <None Include="Resources\Pending32.png" />
+    <None Include="Resources\Download32.png" />
+    <None Include="Resources\Error32.png" />
+    <None Include="Resources\Install32.png" />
     <Content Include="Resources\mvp.png" />
     <None Include="Resources\Restart.png" />
   </ItemGroup>

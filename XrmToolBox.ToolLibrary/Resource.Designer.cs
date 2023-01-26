@@ -73,9 +73,29 @@ namespace XrmToolBox.ToolLibrary {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Download32 {
+            get {
+                object obj = ResourceManager.GetObject("Download32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Download512 {
             get {
                 object obj = ResourceManager.GetObject("Download512", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Error32 {
+            get {
+                object obj = ResourceManager.GetObject("Error32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,6 +153,16 @@ namespace XrmToolBox.ToolLibrary {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Install32 {
+            get {
+                object obj = ResourceManager.GetObject("Install32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Install512 {
             get {
                 object obj = ResourceManager.GetObject("Install512", resourceCulture);
@@ -176,6 +206,16 @@ namespace XrmToolBox.ToolLibrary {
         internal static System.Drawing.Bitmap NoLogo100 {
             get {
                 object obj = ResourceManager.GetObject("NoLogo100", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Pending32 {
+            get {
+                object obj = ResourceManager.GetObject("Pending32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -286,6 +326,16 @@ namespace XrmToolBox.ToolLibrary {
         internal static System.Drawing.Bitmap Success {
             get {
                 object obj = ResourceManager.GetObject("Success", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Success32 {
+            get {
+                object obj = ResourceManager.GetObject("Success32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
