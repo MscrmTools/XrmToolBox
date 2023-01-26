@@ -418,7 +418,7 @@ namespace XrmToolBox.ToolLibrary.Forms
                 ctrl.Dispose();
             }
 
-            MainLoad();
+            MainLoad(true);
         }
 
         private void tsddActions_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
