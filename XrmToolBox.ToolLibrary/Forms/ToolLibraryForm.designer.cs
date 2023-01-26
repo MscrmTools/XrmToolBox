@@ -653,7 +653,7 @@
             this.lblFilterUpdateInfo.Name = "lblFilterUpdateInfo";
             this.lblFilterUpdateInfo.Size = new System.Drawing.Size(778, 29);
             this.lblFilterUpdateInfo.TabIndex = 0;
-            this.lblFilterUpdateInfo.Text = "Tool library is currently using a specific filter to show you only updates availa" +
+            this.lblFilterUpdateInfo.Text = "Tool Library is currently using a specific filter to show you only updates availa" +
     "ble for your tools.";
             this.lblFilterUpdateInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
