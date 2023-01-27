@@ -278,13 +278,7 @@
     <None Include="Resources\github.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Hide.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Incompatible.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Install.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\New.png" />
@@ -294,24 +288,6 @@
       <Project>{df77aea3-43f7-403c-91af-3023a3bb06ec}</Project>
       <Name>XrmToolBox.Extensibility</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Success512.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Download512.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Install512.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Error512.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Pending512.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Success.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\NewToInstall.png" />

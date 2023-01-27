@@ -85,7 +85,7 @@ namespace XrmToolBox.ToolLibrary.UserControls
             // pbAction
             // 
             this.pbAction.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pbAction.Image = global::XrmToolBox.ToolLibrary.Resource.Download512;
+            this.pbAction.Image = global::XrmToolBox.ToolLibrary.Resource.Download32;
             this.pbAction.Location = new System.Drawing.Point(10, 10);
             this.pbAction.Name = "pbAction";
             this.pbAction.Size = new System.Drawing.Size(768, 60);

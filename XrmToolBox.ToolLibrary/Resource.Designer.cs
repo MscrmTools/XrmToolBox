@@ -83,29 +83,9 @@ namespace XrmToolBox.ToolLibrary {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Download512 {
-            get {
-                object obj = ResourceManager.GetObject("Download512", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Error32 {
             get {
                 object obj = ResourceManager.GetObject("Error32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Error512 {
-            get {
-                object obj = ResourceManager.GetObject("Error512", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,16 +103,6 @@ namespace XrmToolBox.ToolLibrary {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Hide {
-            get {
-                object obj = ResourceManager.GetObject("Hide", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Incompatible {
             get {
                 object obj = ResourceManager.GetObject("Incompatible", resourceCulture);
@@ -143,29 +113,9 @@ namespace XrmToolBox.ToolLibrary {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Install {
-            get {
-                object obj = ResourceManager.GetObject("Install", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Install32 {
             get {
                 object obj = ResourceManager.GetObject("Install32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Install512 {
-            get {
-                object obj = ResourceManager.GetObject("Install512", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -216,16 +166,6 @@ namespace XrmToolBox.ToolLibrary {
         internal static System.Drawing.Bitmap Pending32 {
             get {
                 object obj = ResourceManager.GetObject("Pending32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Pending512 {
-            get {
-                object obj = ResourceManager.GetObject("Pending512", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -323,29 +263,9 @@ namespace XrmToolBox.ToolLibrary {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Success {
-            get {
-                object obj = ResourceManager.GetObject("Success", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap Success32 {
             get {
                 object obj = ResourceManager.GetObject("Success32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap Success512 {
-            get {
-                object obj = ResourceManager.GetObject("Success512", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

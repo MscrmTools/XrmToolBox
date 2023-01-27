@@ -444,7 +444,7 @@
             this.chkShowInstalled.Checked = true;
             this.chkShowInstalled.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkShowInstalled.Dock = System.Windows.Forms.DockStyle.Left;
-            this.chkShowInstalled.Image = global::XrmToolBox.ToolLibrary.Resource.Success;
+            this.chkShowInstalled.Image = global::XrmToolBox.ToolLibrary.Resource.Success32;
             this.chkShowInstalled.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.chkShowInstalled.Location = new System.Drawing.Point(1194, 0);
             this.chkShowInstalled.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -557,7 +557,7 @@
             // tsbBulkInstall
             // 
             this.tsbBulkInstall.Enabled = false;
-            this.tsbBulkInstall.Image = global::XrmToolBox.ToolLibrary.Resource.Install;
+            this.tsbBulkInstall.Image = global::XrmToolBox.ToolLibrary.Resource.Install32;
             this.tsbBulkInstall.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbBulkInstall.Name = "tsbBulkInstall";
             this.tsbBulkInstall.Size = new System.Drawing.Size(86, 29);
