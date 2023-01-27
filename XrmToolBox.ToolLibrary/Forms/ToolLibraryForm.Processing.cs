@@ -61,6 +61,7 @@ namespace XrmToolBox.ToolLibrary.Forms
                         if ((bool)evt.Result)
                         {
                             e.Plugin.CurrentVersion = e.Version;
+                            toolLibrary.ScanInstalledTools();
                             toolLibrary.AnalyzePackage(e.Plugin);
                         }
                         else
@@ -161,6 +162,8 @@ namespace XrmToolBox.ToolLibrary.Forms
                 if ((bool)evt.Result)
                 {
                     plugins = new DirectoryInfo(Paths.PluginsPath).GetFiles();
+
+                    toolLibrary.ScanInstalledTools();
 
                     Parallel.ForEach(toolsToInstall,
                         plugin =>

@@ -108,7 +108,6 @@ namespace XrmToolBox.ToolLibrary
                 targetVersion = targetVersion.Simplify();
 
             plugins = new DirectoryInfo(Paths.PluginsPath).GetFiles();
-            OnToolsMetadataRefreshRequested?.Invoke(this, new EventArgs());
             var files = plugin.Files;
 
             bool install = false, update = false, otherFilesFound = false;
@@ -477,6 +476,8 @@ namespace XrmToolBox.ToolLibrary
                .OrderByDescending(s => s)
                .ToList();
 
+            OnToolsMetadataRefreshRequested?.Invoke(this, new EventArgs());
+
             Parallel.ForEach(XrmToolBoxPlugins.Plugins,
                plugin =>
                {
@@ -614,6 +615,11 @@ namespace XrmToolBox.ToolLibrary
                     });
                 }
             }
+        }
+
+        public void ScanInstalledTools()
+        {
+            OnToolsMetadataRefreshRequested?.Invoke(this, new EventArgs());
         }
 
         public void UninstallByFileName(string fileName)
