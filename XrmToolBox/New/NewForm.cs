@@ -53,6 +53,7 @@ namespace XrmToolBox.New
         private IOrganizationService service;
         private StartPage startPage;
         private IToolLibrary store;
+        private ToolTip toolTip = new ToolTip();
 
         public NewForm(string[] args)
         {
@@ -285,7 +286,7 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
             }
             catch (Exception error)
             {
-                pnlNoNugetAccess.Visible = true;
+                pnlNoToolLibraryAccess.Visible = true;
 
                 return false;
             }
@@ -434,7 +435,8 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
             {
                 // We avoid to make XrmToolBox crash if querying web services fail
                 pluginsForm.DisplayCategories(null);
-                pnlNoNugetAccess.Visible = true;
+                pnlNoToolLibraryAccess.Visible = true;
+                toolTip.SetToolTip(pbToolLibraryError, error.Message);
             }
 
             var ctrls = Controls.OfType<ConnectingControl>();
@@ -2148,12 +2150,27 @@ Would you like to reinstall last stable release of connection controls?";
 
         private void llCloseNugetNotAvailPanel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            pnlNoNugetAccess.Visible = false;
+            pnlNoToolLibraryAccess.Visible = false;
         }
 
         private void llClosePluginsUpdatePanel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             pnlPluginsUpdate.Visible = false;
+        }
+
+        private async void llRetryInitToolLibrary_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            pnlNoToolLibraryAccess.Visible = false;
+            try
+            {
+                await LoadStore();
+                await store.LoadTools(false);
+            }
+            catch (Exception error)
+            {
+                pnlNoToolLibraryAccess.Visible = true;
+                toolTip.SetToolTip(pbToolLibraryError, error.Message);
+            }
         }
 
         private void openPluginsStoreButton_Click(object sender, System.EventArgs e)

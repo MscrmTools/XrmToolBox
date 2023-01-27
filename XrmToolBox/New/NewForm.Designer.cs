@@ -109,11 +109,12 @@ namespace XrmToolBox.New
             this.tsmiMoveToOrigin = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsMainDuplicateTool = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsMainDuplicateToolWithConnection = new System.Windows.Forms.ToolStripMenuItem();
-            this.pnlNoNugetAccess = new System.Windows.Forms.Panel();
-            this.llCloseNugetNotAvailPanel = new System.Windows.Forms.LinkLabel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pnlNoToolLibraryAccess = new System.Windows.Forms.Panel();
+            this.llCloseToolLibraryNotAvailPanel = new System.Windows.Forms.LinkLabel();
+            this.lblNoToolLibraryAccess = new System.Windows.Forms.Label();
+            this.pbToolLibraryError = new System.Windows.Forms.PictureBox();
             this.checkForUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.llRetryInitToolLibrary = new LinkLabel();
             this.tsMain.SuspendLayout();
             this.pnlSupport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -122,8 +123,8 @@ namespace XrmToolBox.New
             this.pnlConnectLoading.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbConnectionLoading)).BeginInit();
             this.cmsMain.SuspendLayout();
-            this.pnlNoNugetAccess.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.pnlNoToolLibraryAccess.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbToolLibraryError)).BeginInit();
             this.SuspendLayout();
             // 
             // tsMain
@@ -822,59 +823,71 @@ namespace XrmToolBox.New
             // 
             // pnlNoNugetAccess
             // 
-            this.pnlNoNugetAccess.BackColor = System.Drawing.Color.MistyRose;
-            this.pnlNoNugetAccess.Controls.Add(this.llCloseNugetNotAvailPanel);
-            this.pnlNoNugetAccess.Controls.Add(this.label3);
-            this.pnlNoNugetAccess.Controls.Add(this.pictureBox1);
-            this.pnlNoNugetAccess.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlNoNugetAccess.Location = new System.Drawing.Point(0, 698);
-            this.pnlNoNugetAccess.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
-            this.pnlNoNugetAccess.Name = "pnlNoNugetAccess";
-            this.pnlNoNugetAccess.Size = new System.Drawing.Size(1606, 38);
-            this.pnlNoNugetAccess.TabIndex = 23;
-            this.pnlNoNugetAccess.Visible = false;
+            this.pnlNoToolLibraryAccess.BackColor = System.Drawing.Color.MistyRose;
+            this.pnlNoToolLibraryAccess.Controls.Add(this.lblNoToolLibraryAccess);
+            this.pnlNoToolLibraryAccess.Controls.Add(this.llRetryInitToolLibrary);
+            this.pnlNoToolLibraryAccess.Controls.Add(this.llCloseToolLibraryNotAvailPanel);
+            this.pnlNoToolLibraryAccess.Controls.Add(this.pbToolLibraryError);
+            this.pnlNoToolLibraryAccess.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlNoToolLibraryAccess.Location = new System.Drawing.Point(0, 698);
+            this.pnlNoToolLibraryAccess.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.pnlNoToolLibraryAccess.Name = "pnlNoNugetAccess";
+            this.pnlNoToolLibraryAccess.Size = new System.Drawing.Size(1606, 38);
+            this.pnlNoToolLibraryAccess.TabIndex = 23;
+            this.pnlNoToolLibraryAccess.Visible = false;
             // 
             // llCloseNugetNotAvailPanel
             // 
-            this.llCloseNugetNotAvailPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.llCloseNugetNotAvailPanel.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
-            this.llCloseNugetNotAvailPanel.LinkColor = System.Drawing.Color.Black;
-            this.llCloseNugetNotAvailPanel.Location = new System.Drawing.Point(1585, 0);
-            this.llCloseNugetNotAvailPanel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.llCloseNugetNotAvailPanel.Name = "llCloseNugetNotAvailPanel";
-            this.llCloseNugetNotAvailPanel.Size = new System.Drawing.Size(21, 38);
-            this.llCloseNugetNotAvailPanel.TabIndex = 14;
-            this.llCloseNugetNotAvailPanel.TabStop = true;
-            this.llCloseNugetNotAvailPanel.Text = "X";
-            this.llCloseNugetNotAvailPanel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.llCloseNugetNotAvailPanel.VisitedLinkColor = System.Drawing.Color.Black;
-            this.llCloseNugetNotAvailPanel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llCloseNugetNotAvailPanel_LinkClicked);
+            this.llCloseToolLibraryNotAvailPanel.Dock = System.Windows.Forms.DockStyle.Right;
+            this.llCloseToolLibraryNotAvailPanel.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.llCloseToolLibraryNotAvailPanel.LinkColor = System.Drawing.Color.Black;
+            this.llCloseToolLibraryNotAvailPanel.Location = new System.Drawing.Point(1585, 0);
+            this.llCloseToolLibraryNotAvailPanel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.llCloseToolLibraryNotAvailPanel.Name = "llCloseNugetNotAvailPanel";
+            this.llCloseToolLibraryNotAvailPanel.Size = new System.Drawing.Size(21, 38);
+            this.llCloseToolLibraryNotAvailPanel.TabIndex = 14;
+            this.llCloseToolLibraryNotAvailPanel.TabStop = true;
+            this.llCloseToolLibraryNotAvailPanel.Text = "X";
+            this.llCloseToolLibraryNotAvailPanel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.llCloseToolLibraryNotAvailPanel.VisitedLinkColor = System.Drawing.Color.Black;
+            this.llCloseToolLibraryNotAvailPanel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llCloseNugetNotAvailPanel_LinkClicked);
+            // lblNoNugetAccess
             // 
-            // label3
+            this.lblNoToolLibraryAccess.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblNoToolLibraryAccess.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.lblNoToolLibraryAccess.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.lblNoToolLibraryAccess.Location = new System.Drawing.Point(40, 0);
+            this.lblNoToolLibraryAccess.Name = "lblNoNugetAccess";
+            this.lblNoToolLibraryAccess.Size = new System.Drawing.Size(1502, 38);
+            this.lblNoToolLibraryAccess.TabIndex = 16;
+            this.lblNoToolLibraryAccess.Tag = "{0} Update{1} {2} available for your tools";
+            this.lblNoToolLibraryAccess.Text = "Tool Library initialization failed";
             // 
-            this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label3.Location = new System.Drawing.Point(32, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(1574, 38);
-            this.label3.TabIndex = 13;
-            this.label3.Tag = "{0} Update{1} {2} available for your tools";
-            this.label3.Text = "Cannot access XrmToolBox portal or Nuget feed. Tool library will not be functionn" +
-    "al";
+            // llRetryInitToolLibrary
+            // 
+            this.llRetryInitToolLibrary.Dock = System.Windows.Forms.DockStyle.Right;
+            this.llRetryInitToolLibrary.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.llRetryInitToolLibrary.Location = new System.Drawing.Point(1542, 0);
+            this.llRetryInitToolLibrary.Name = "llRetryInitToolLibrary";
+            this.llRetryInitToolLibrary.Size = new System.Drawing.Size(116, 38);
+            this.llRetryInitToolLibrary.TabIndex = 15;
+            this.llRetryInitToolLibrary.TabStop = true;
+            this.llRetryInitToolLibrary.Text = "retry";
+            this.llRetryInitToolLibrary.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.llRetryInitToolLibrary.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llRetryInitToolLibrary_LinkClicked);
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pictureBox1.Image = global::XrmToolBox.Properties.Resources.close1;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(32, 38);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 11;
-            this.pictureBox1.TabStop = false;
+            this.pbToolLibraryError.Cursor = System.Windows.Forms.Cursors.Default;
+            this.pbToolLibraryError.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pbToolLibraryError.Image = global::XrmToolBox.Properties.Resources.close1;
+            this.pbToolLibraryError.Location = new System.Drawing.Point(0, 0);
+            this.pbToolLibraryError.Margin = new System.Windows.Forms.Padding(2);
+            this.pbToolLibraryError.Name = "pictureBox1";
+            this.pbToolLibraryError.Size = new System.Drawing.Size(32, 38);
+            this.pbToolLibraryError.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbToolLibraryError.TabIndex = 11;
+            this.pbToolLibraryError.TabStop = false;
             // 
             // checkForUpdateToolStripMenuItem
             // 
@@ -894,7 +907,7 @@ namespace XrmToolBox.New
             this.Controls.Add(this.dpMain);
             this.Controls.Add(this.pnlBottom);
             this.Controls.Add(this.pnlSupport);
-            this.Controls.Add(this.pnlNoNugetAccess);
+            this.Controls.Add(this.pnlNoToolLibraryAccess);
             this.Controls.Add(this.pnlPluginsUpdate);
             this.Controls.Add(this.pnlTop);
             this.Controls.Add(this.tsMain);
@@ -921,8 +934,8 @@ namespace XrmToolBox.New
             this.pnlConnectLoading.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbConnectionLoading)).EndInit();
             this.cmsMain.ResumeLayout(false);
-            this.pnlNoNugetAccess.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.pnlNoToolLibraryAccess.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbToolLibraryError)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1005,10 +1018,11 @@ namespace XrmToolBox.New
         private System.Windows.Forms.ToolStripSeparator tssSearch;
         private System.Windows.Forms.ToolStripSeparator tssWindows;
         private WeifenLuo.WinFormsUI.Docking.DockPanel dpMain;
-        private Panel pnlNoNugetAccess;
-        private PictureBox pictureBox1;
-        private LinkLabel llCloseNugetNotAvailPanel;
-        private Label label3;
+        private Panel pnlNoToolLibraryAccess;
+        private PictureBox pbToolLibraryError;
+        private LinkLabel llCloseToolLibraryNotAvailPanel;
+        private LinkLabel llRetryInitToolLibrary;
+        private Label lblNoToolLibraryAccess;
         private ToolStripButton tsbOpenMaker;
         private ToolStripSeparator toolStripSeparator4;
         private ToolStripMenuItem tsmiMoveToVerticalGroup;
