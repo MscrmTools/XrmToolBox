@@ -83,7 +83,7 @@ namespace XrmToolBox.ToolLibrary.UserControls
 
             library.AnalyzePackage(plugin, version.Version);
 
-            btnInstall.Enabled = plugin.Action == PackageInstallAction.Install || !(plugin.CurrentVersion?.Equals(version.Version) ?? false);
+            btnInstall.Enabled = plugin.Action == PackageInstallAction.Install || !(plugin.CurrentVersion?.Simplify().Equals(version.Version.Simplify()) ?? false);
             btnDelete.Enabled = plugin.Action == PackageInstallAction.None || plugin.Action == PackageInstallAction.Update;
             lblIncompatibleReason.Text = version.GetIncompatibleReason();
         }
@@ -109,7 +109,7 @@ namespace XrmToolBox.ToolLibrary.UserControls
 
                     var version = new Version(catalogEntry["version"]?.ToString().Split('-')[0]);
                     var infoUrl = versionInfo["@id"]?.ToString();
-                    var isCurrentVersion = plugin.CurrentVersion?.ToString() == catalogEntry["version"]?.ToString();
+                    var isCurrentVersion = plugin.CurrentVersion?.Simplify().Equals(new Version(catalogEntry["version"]?.ToString() ?? "0.0.0.0").Simplify()) ?? false;
 
                     try
                     {

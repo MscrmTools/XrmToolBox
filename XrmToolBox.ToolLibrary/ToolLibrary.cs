@@ -105,7 +105,7 @@ namespace XrmToolBox.ToolLibrary
         public void AnalyzePackage(XtbPlugin plugin, Version targetVersion = null)
         {
             if (targetVersion != null)
-                targetVersion = SimplifyVersion(targetVersion);
+                targetVersion = targetVersion.Simplify();
 
             plugins = new DirectoryInfo(Paths.PluginsPath).GetFiles();
             OnToolsMetadataRefreshRequested?.Invoke(this, new EventArgs());
@@ -169,9 +169,9 @@ namespace XrmToolBox.ToolLibrary
                             currentVersionFound = true;
                         }
 
-                        existingFileVersion = SimplifyVersion(existingFileVersion);
+                        existingFileVersion = existingFileVersion.Simplify();
 
-                        if (targetVersion == null && !existingFileVersion.Equals(SimplifyVersion(new Version(plugin.Version)))
+                        if (targetVersion == null && !existingFileVersion.Equals(new Version(plugin.Version).Simplify())
                             || targetVersion != null && !existingFileVersion.Equals(targetVersion))
                         {
                             update = true;
@@ -206,18 +206,6 @@ namespace XrmToolBox.ToolLibrary
             {
                 plugin.Action = PackageInstallAction.None;
             }
-        }
-
-        private Version SimplifyVersion(Version version)
-        {
-            if (version.Revision != -1)
-                return version;
-
-            return new Version(
-                version.Major == -1 ? 0 : version.Major,
-                version.Minor == -1 ? 0 : version.Minor,
-                version.Build == -1 ? 0 : version.Build,
-                version.Revision == -1 ? 0 : version.Revision);
         }
 
         public void DownloadPackage(ToolOperationEventArgs e, PluginUpdates pus)
