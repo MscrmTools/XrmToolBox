@@ -139,7 +139,7 @@ namespace XrmToolBox
 		    {
 			    for (var i = 0; i < loadedFiles.Count; i++)
 			    {
-				    var loadedFileName = loadedFiles[i].ToLower(new CultureInfo("en-US", false));
+				    var loadedFileName = loadedFiles[i].ToLower(CultureInfo.InvariantCulture);
 				    var scannedFile = scannedFiles[i];
 
 				    var loadedVersion = AssemblyName.GetAssemblyName(loadedFileName).Version.ToString();
