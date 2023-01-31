@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
+using XrmToolBox.Extensibility.Interfaces;
 
 namespace XrmToolBox.PluginsStore.DTO
 {
@@ -17,7 +18,7 @@ namespace XrmToolBox.PluginsStore.DTO
     }
 
     [DataContract]
-    public class XtbPlugin
+    public class XtbPlugin : IXrmToolBoxLibraryTool
     {
         public PackageInstallAction Action { get; set; }
 

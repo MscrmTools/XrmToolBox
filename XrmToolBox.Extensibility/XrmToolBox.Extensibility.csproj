@@ -201,6 +201,7 @@
       <DependentUpon>Icons.resx</DependentUpon>
     </Compile>
     <Compile Include="InformationPanel.cs" />
+    <Compile Include="Interfaces\IConnectionControlUpdateSettings.cs" />
     <Compile Include="Interfaces\INoHighlightingPlugin.cs" />
     <Compile Include="Interfaces\IAboutPlugin.cs" />
     <Compile Include="Interfaces\ICodePlexPlugin.cs" />
@@ -217,6 +218,9 @@
     <Compile Include="Interfaces\IPrivatePlugin.cs" />
     <Compile Include="Interfaces\IStatusBarMessenger.cs" />
     <Compile Include="Interfaces\IStatusBarMessager.cs" />
+    <Compile Include="Interfaces\IToolLibrary.cs" />
+    <Compile Include="Interfaces\IToolLibrarySettings.cs" />
+    <Compile Include="Interfaces\IXrmToolBoxLibraryTool.cs" />
     <Compile Include="Interfaces\IXrmToolBoxPluginControl.cs" />
     <Compile Include="Interfaces\IPayPalPlugin.cs" />
     <Compile Include="Interfaces\IPluginMetadataExt.cs" />

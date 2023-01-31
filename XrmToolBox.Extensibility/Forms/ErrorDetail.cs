@@ -19,7 +19,7 @@ namespace XrmToolBox.Extensibility.Forms
         public ErrorDetail(PluginControlBase owner, Exception exception, string heading, string extrainfo, bool allownewissue)
         {
             this.owner = owner;
-            this.exception = exception;
+            this.exception = exception?.InnerException ?? exception;
             this.extrainfo = extrainfo;
             this.allownewissue = allownewissue && owner != null && owner is IGitHubPlugin;
             timestamp = DateTime.Now;
@@ -28,8 +28,8 @@ namespace XrmToolBox.Extensibility.Forms
             {
                 Text = heading;
             }
-            AddErrorInfo(exception);
-            Height = 200;
+            AddErrorInfo(this.exception);
+            Height = panButton.Height + panInfo.Height + (panDetails.Visible ? panDetails.Height : 0) + 50;
         }
 
         public static void CreateNewIssue(PluginControlBase tool, string addedtext, string extrainfo)
@@ -148,7 +148,6 @@ namespace XrmToolBox.Extensibility.Forms
                 panDetails.Visible = true;
                 btnCopy.Visible = true;
                 btnIssue.Visible = allownewissue;
-                Height = 550;
             }
             else
             {
@@ -156,7 +155,6 @@ namespace XrmToolBox.Extensibility.Forms
                 panDetails.Visible = false;
                 btnCopy.Visible = false;
                 btnIssue.Visible = false;
-                Height = 200;
             }
         }
 
@@ -164,6 +162,11 @@ namespace XrmToolBox.Extensibility.Forms
         {
             CreateNewIssueFromError(owner, exception, extrainfo);
             TopMost = false;
+        }
+
+        private void panDetails_VisibleChanged(object sender, EventArgs e)
+        {
+            Height = panButton.Height + panInfo.Height + (panDetails.Visible ? panDetails.Height : 0) + 50;
         }
     }
 }
