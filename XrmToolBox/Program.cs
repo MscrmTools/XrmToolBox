@@ -58,7 +58,10 @@ namespace XrmToolBox
             {
                 return;
             }
-            new ErrorDetail(null, exception, heading, extrainfo, allownewissue).ShowDialog();
+            using (var ed = new ErrorDetail(null, exception, heading, extrainfo, allownewissue))
+            {
+                ed.ShowDialog();
+            }
         }
 
         /// <summary>

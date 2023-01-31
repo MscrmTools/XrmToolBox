@@ -26,10 +26,12 @@ namespace XrmToolBox.ToolLibrary.Forms
             {
                 if (e.Plugin.RequireLicenseAcceptance ?? false)
                 {
-                    var licenseAcceptanceForm = new LicenseAcceptanceForm(new List<XtbPlugin> { e.Plugin });
-                    if (licenseAcceptanceForm.ShowDialog(this) != DialogResult.Yes)
+                    using (var licenseAcceptanceForm = new LicenseAcceptanceForm(new List<XtbPlugin> { e.Plugin }))
                     {
-                        return;
+                        if (licenseAcceptanceForm.ShowDialog(this) != DialogResult.Yes)
+                        {
+                            return;
+                        }
                     }
                 }
 
@@ -119,10 +121,12 @@ namespace XrmToolBox.ToolLibrary.Forms
             var licensedPlugins = toolsToInstall.Where(p => p.RequireLicenseAcceptance ?? false).ToList();
             if (licensedPlugins.Any())
             {
-                var licenseAcceptanceForm = new LicenseAcceptanceForm(licensedPlugins);
-                if (licenseAcceptanceForm.ShowDialog(this) != DialogResult.Yes)
+                using (var licenseAcceptanceForm = new LicenseAcceptanceForm(licensedPlugins))
                 {
-                    return;
+                    if (licenseAcceptanceForm.ShowDialog(this) != DialogResult.Yes)
+                    {
+                        return;
+                    }
                 }
             }
 

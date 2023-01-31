@@ -662,10 +662,12 @@ Current cache folder size: {size}MB";
             var licensedPlugins = packages.Where(p => p.RequireLicenseAcceptance ?? false).ToList();
             if (licensedPlugins.Any())
             {
-                var licenseAcceptanceForm = new LicenseAcceptanceForm(licensedPlugins);
-                if (licenseAcceptanceForm.ShowDialog(this) != DialogResult.Yes)
+                using (var licenseAcceptanceForm = new LicenseAcceptanceForm(licensedPlugins))
                 {
-                    return;
+                    if (licenseAcceptanceForm.ShowDialog(this) != DialogResult.Yes)
+                    {
+                        return;
+                    }
                 }
             }
 

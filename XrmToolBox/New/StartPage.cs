@@ -185,8 +185,10 @@ namespace XrmToolBox.New
             }
             else if (sender == lblDonatePayPal)
             {
-                var form = new DonationIntroForm();
-                form.ShowDialog(this);
+                using (var form = new DonationIntroForm())
+                {
+                    form.ShowDialog(this);
+                }
             }
         }
 

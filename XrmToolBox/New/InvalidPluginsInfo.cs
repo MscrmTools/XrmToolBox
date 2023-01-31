@@ -18,8 +18,10 @@ namespace XrmToolBox.New
         {
             if (e.Button == MouseButtons.Left)
             {
-                var ipForm = new InvalidPluginsForm(validationErrors);
-                ipForm.ShowDialog(ParentForm);
+                using (var ipForm = new InvalidPluginsForm(validationErrors))
+                {
+                    ipForm.ShowDialog(ParentForm);
+                }
             }
         }
     }

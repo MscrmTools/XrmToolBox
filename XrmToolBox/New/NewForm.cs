@@ -226,23 +226,25 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                          && x.Version == result.Version
                          && x.Date > DateTime.Now))
                 {
-                    var dialog = new NewConnectionVersion(result.Version, result.ReleaseNotes);
-                    if (dialog.ShowDialog(this) == DialogResult.Yes)
+                    using (var dialog = new NewConnectionVersion(result.Version, result.ReleaseNotes))
                     {
-                        result = await store.PrepareConnectionControlsUpdate(this, dialog.OnNextRestart);
-
-                        Options.Instance.ConnectionControlsVersion = result.Version;
-                        Options.Instance.Save();
-
-                        if (result.RestartNow)
+                        if (dialog.ShowDialog(this) == DialogResult.Yes)
                         {
-                            Application.Restart();
+                            result = await store.PrepareConnectionControlsUpdate(this, dialog.OnNextRestart);
+
+                            Options.Instance.ConnectionControlsVersion = result.Version;
+                            Options.Instance.Save();
+
+                            if (result.RestartNow)
+                            {
+                                Application.Restart();
+                            }
                         }
-                    }
-                    else
-                    {
-                        UpdatePluginUpdateSkip("McTools.Xrm.ConnectionControls", result.Version, dialog.IsVersionSkipped,
-                            dialog.NumberOfDaysToSkip);
+                        else
+                        {
+                            UpdatePluginUpdateSkip("McTools.Xrm.ConnectionControls", result.Version, dialog.IsVersionSkipped,
+                                dialog.NumberOfDaysToSkip);
+                        }
                     }
                 }
             }
@@ -938,15 +940,16 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                              && x.Version == updatedPlugin.Version
                              && x.Date > DateTime.Now))
                     {
-                        var dialog = new NewPluginVersion(updatedPlugin);
-                        if (dialog.ShowDialog(this) == DialogResult.Yes)
+                        using (var dialog = new NewPluginVersion(updatedPlugin))
                         {
-                            // TODO A remettre
-                            store.InstallOneToolUpdate(updatedPlugin, dialog.OnNextRestart, this);
-                        }
-                        else
-                        {
-                            UpdatePluginUpdateSkip(updatedPlugin.Name, updatedPlugin.Version, dialog.IsVersionSkipped, dialog.NumberOfDaysToSkip);
+                            if (dialog.ShowDialog(this) == DialogResult.Yes)
+                            {
+                                store.InstallOneToolUpdate(updatedPlugin, dialog.OnNextRestart, this);
+                            }
+                            else
+                            {
+                                UpdatePluginUpdateSkip(updatedPlugin.Name, updatedPlugin.Version, dialog.IsVersionSkipped, dialog.NumberOfDaysToSkip);
+                            }
                         }
                     }
                 }
@@ -1069,18 +1072,19 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
         {
             var pluginForms = dpMain.Contents.OfType<PluginForm>().ToList();
 
-            var tcu = new TabConnectionUpdater(pluginForms, detail) { StartPosition = FormStartPosition.CenterParent };
-
-            if (tcu.ShowDialog(this) == DialogResult.OK)
+            using (var tcu = new TabConnectionUpdater(pluginForms, detail) { StartPosition = FormStartPosition.CenterParent })
             {
-                foreach (PluginForm form in tcu.SelectedPluginForms)
+                if (tcu.ShowDialog(this) == DialogResult.OK)
                 {
-                    UpdateTabConnection(form, detail);
-                }
+                    foreach (PluginForm form in tcu.SelectedPluginForms)
+                    {
+                        UpdateTabConnection(form, detail);
+                    }
 
-                if (tcu.SelectedPluginForms.Any())
-                {
-                    FillPluginsListMenuDisplay();
+                    if (tcu.SelectedPluginForms.Any())
+                    {
+                        FillPluginsListMenuDisplay();
+                    }
                 }
             }
         }
@@ -1752,19 +1756,20 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     PluginsStore.Options.Instance.IsInitialized = true;
                 }
 
-                var form = new StoreFormFromPortal(Options.Instance.ConnectionControlsAllowPreReleaseUpdates);
-                form.PluginsClosingRequested += (s, evt) =>
+                using (var form = new StoreFormFromPortal(Options.Instance.ConnectionControlsAllowPreReleaseUpdates))
                 {
-                    RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
-                };
+                    form.PluginsClosingRequested += (s, evt) =>
+                    {
+                        RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
+                    };
 
-                // Avoid scanning for new files during Plugins Store usage.
-                pluginsForm.PluginManager.IsWatchingForNewPlugins = false;
-                ((Form)form).ShowDialog(this);
-                pluginsForm.PluginManager.IsWatchingForNewPlugins = true;
-                pluginsForm.ReloadPluginsList();
-                PrepareCategories();
-
+                    // Avoid scanning for new files during Plugins Store usage.
+                    pluginsForm.PluginManager.IsWatchingForNewPlugins = false;
+                    form.ShowDialog(this);
+                    pluginsForm.PluginManager.IsWatchingForNewPlugins = true;
+                    pluginsForm.ReloadPluginsList();
+                    PrepareCategories();
+                }
                 // Apply option to show Plugins Store on startup on main options
                 if (Options.Instance.DisplayPluginsStoreOnStartup != PluginsStore.Options.Instance.DisplayPluginsStoreOnStartup)
                 {
@@ -1816,10 +1821,12 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
 
         private void tsbImpersonate_Click(object sender, System.EventArgs e)
         {
-            var dialog = new UserSelectionDialog(connectionDetail.ServiceClient);
-            if (dialog.ShowDialog(this) == DialogResult.OK)
+            using (var dialog = new UserSelectionDialog(connectionDetail.ServiceClient))
             {
-                connectionDetail.Impersonate(dialog.SelectedUser.Id, dialog.SelectedUser.GetAttributeValue<string>("fullname"));
+                if (dialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    connectionDetail.Impersonate(dialog.SelectedUser.Id, dialog.SelectedUser.GetAttributeValue<string>("fullname"));
+                }
             }
         }
 
@@ -1872,73 +1879,75 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
             }
             else if (e.ClickedItem == tsmiXtbSettings)
             {
-                var oDialog = new OptionsDialog(Options.Instance);
-                if (oDialog.ShowDialog(this) == DialogResult.OK)
+                using (var oDialog = new OptionsDialog(Options.Instance))
                 {
-                    bool reinitDisplay = Options.Instance.MostUsedList.Count != oDialog.Option.MostUsedList.Count
-                                         || Options.Instance.IconDisplayMode != oDialog.Option.IconDisplayMode
-                                         || !oDialog.Option.HiddenPlugins.SequenceEqual(Options.Instance.HiddenPlugins)
-                                         || Options.Instance.PluginsDisplayOrder != oDialog.Option.PluginsDisplayOrder
-                                         || Options.Instance.NumberOfDaysToShowNewRibbon != oDialog.Option.NumberOfDaysToShowNewRibbon;
-
-                    if (Options.Instance.ConnectionControlsAllowPreReleaseUpdates !=
-                        oDialog.Option.ConnectionControlsAllowPreReleaseUpdates)
+                    if (oDialog.ShowDialog(this) == DialogResult.OK)
                     {
-                        store.AllowConnectionControlPreRelease = oDialog.Option.ConnectionControlsAllowPreReleaseUpdates;
-                        Options.Instance.ConnectionControlsAllowPreReleaseUpdates = oDialog.Option.ConnectionControlsAllowPreReleaseUpdates;
-                        Options.Instance.Save();
+                        bool reinitDisplay = Options.Instance.MostUsedList.Count != oDialog.Option.MostUsedList.Count
+                                             || Options.Instance.IconDisplayMode != oDialog.Option.IconDisplayMode
+                                             || !oDialog.Option.HiddenPlugins.SequenceEqual(Options.Instance.HiddenPlugins)
+                                             || Options.Instance.PluginsDisplayOrder != oDialog.Option.PluginsDisplayOrder
+                                             || Options.Instance.NumberOfDaysToShowNewRibbon != oDialog.Option.NumberOfDaysToShowNewRibbon;
 
-                        if (store.AllowConnectionControlPreRelease == false)
+                        if (Options.Instance.ConnectionControlsAllowPreReleaseUpdates !=
+                            oDialog.Option.ConnectionControlsAllowPreReleaseUpdates)
                         {
-                            var message =
-                                @"You asked to not use Connection Controls pre release anymore.
+                            store.AllowConnectionControlPreRelease = oDialog.Option.ConnectionControlsAllowPreReleaseUpdates;
+                            Options.Instance.ConnectionControlsAllowPreReleaseUpdates = oDialog.Option.ConnectionControlsAllowPreReleaseUpdates;
+                            Options.Instance.Save();
+
+                            if (store.AllowConnectionControlPreRelease == false)
+                            {
+                                var message =
+                                    @"You asked to not use Connection Controls pre release anymore.
 
 Would you like to reinstall last stable release of connection controls?";
 
-                            if (MessageBox.Show(this, message, @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                            {
-                                var ccSettings = store.PrepareConnectionControlsUpdate(this, false).GetAwaiter().GetResult();
-
-                                Options.Instance.ConnectionControlsVersion = ccSettings.Version;
-                                Options.Instance.Save();
-
-                                if (ccSettings.RestartNow)
+                                if (MessageBox.Show(this, message, @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                                 {
-                                    Application.Restart();
+                                    var ccSettings = store.PrepareConnectionControlsUpdate(this, false).GetAwaiter().GetResult();
+
+                                    Options.Instance.ConnectionControlsVersion = ccSettings.Version;
+                                    Options.Instance.Save();
+
+                                    if (ccSettings.RestartNow)
+                                    {
+                                        Application.Restart();
+                                    }
                                 }
                             }
+                            else
+                            {
+                                await CheckForConnectionControlsUpdate(true);
+                            }
                         }
-                        else
+
+                        if (Options.Instance.DoNotRememberPluginsWithoutConnection != oDialog.Option.DoNotRememberPluginsWithoutConnection
+                            && oDialog.Option.DoNotRememberPluginsWithoutConnection)
                         {
-                            await CheckForConnectionControlsUpdate(true);
+                            MostRecentlyUsedItems.Instance.RemovePluginsWithNoConnection();
+                            MostRecentlyUsedItems.Instance.Save();
                         }
+
+                        if (Options.Instance.MruItemsToDisplay != oDialog.Option.MruItemsToDisplay)
+                        {
+                            MostRecentlyUsedItems.Instance.Save();
+                        }
+
+                        if (Options.Instance.Theme != oDialog.Option.Theme)
+                        {
+                            SetTheme();
+                        }
+
+                        Options.Instance.Replace(oDialog.Option);
+
+                        if (reinitDisplay)
+                        {
+                            pluginsForm.ReloadPluginsList();
+                        }
+
+                        cManager.ReuseConnections = Options.Instance.ReuseConnections;
                     }
-
-                    if (Options.Instance.DoNotRememberPluginsWithoutConnection != oDialog.Option.DoNotRememberPluginsWithoutConnection
-                        && oDialog.Option.DoNotRememberPluginsWithoutConnection)
-                    {
-                        MostRecentlyUsedItems.Instance.RemovePluginsWithNoConnection();
-                        MostRecentlyUsedItems.Instance.Save();
-                    }
-
-                    if (Options.Instance.MruItemsToDisplay != oDialog.Option.MruItemsToDisplay)
-                    {
-                        MostRecentlyUsedItems.Instance.Save();
-                    }
-
-                    if (Options.Instance.Theme != oDialog.Option.Theme)
-                    {
-                        SetTheme();
-                    }
-
-                    Options.Instance.Replace(oDialog.Option);
-
-                    if (reinitDisplay)
-                    {
-                        pluginsForm.ReloadPluginsList();
-                    }
-
-                    cManager.ReuseConnections = Options.Instance.ReuseConnections;
                 }
             }
             else if (e.ClickedItem == tsmiToolSettings)
@@ -2142,8 +2151,10 @@ Would you like to reinstall last stable release of connection controls?";
                 pluginName = pf.PluginName;
             }
 
-            var form = new DonationIntroForm(pluginName);
-            form.ShowDialog(this);
+            using (var form = new DonationIntroForm(pluginName))
+            {
+                form.ShowDialog(this);
+            }
         }
 
         #endregion Support panel

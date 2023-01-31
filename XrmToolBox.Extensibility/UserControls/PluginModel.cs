@@ -54,8 +54,10 @@ namespace XrmToolBox.Extensibility.UserControls
         {
             if (((Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)Tag).Value is IPayPalPlugin pp)
             {
-                var dialog = new CurrencySelectionDialog(pp);
-                dialog.ShowDialog(Parent);
+                using (var dialog = new CurrencySelectionDialog(pp))
+                {
+                    dialog.ShowDialog(Parent);
+                }
             }
         }
 

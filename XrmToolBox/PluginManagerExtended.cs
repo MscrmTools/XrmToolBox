@@ -37,29 +37,29 @@ namespace XrmToolBox
         public bool IsWatchingForNewPlugins { get; set; }
 
         /// <summary>
+        /// Contains all the info of plugins installed and the list of assemblies in the Plugins folder.
+        /// </summary>
+        public Manifest Manifest { get; set; }
+
+        /// <summary>
         /// [DEPRECATED] This property should not be used anymore; it was replace by <see cref="PluginsExt"/>.
         /// </summary>
         [Obsolete]
-		[ImportMany(AllowRecomposition = true)]
+        [ImportMany(AllowRecomposition = true)]
         public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> Plugins { get; set; }
-
-	    /// <summary>
-	    /// Contains all the info of plugins installed and the list of assemblies in the Plugins folder.
-	    /// </summary>
-        public Manifest Manifest { get; set; }
 
         /// <summary>
         /// Contains all the info of plugins installed and a factory method to create each plugin when needed.
         /// </summary>
         public IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>> PluginsExt { get; set; }
 
-	    /// <summary>
-	    /// [DEPRECATED] This property should not be used anymore; it was replace by <see cref="ValidatedPluginsExt"/>.
-	    /// </summary>
-	    public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> ValidatedPlugins
-	    {
-		    get { return Plugins?.Where(p => !ValidationErrors.ContainsKey(p.Metadata.Name)); }
-	    }
+        /// <summary>
+        /// [DEPRECATED] This property should not be used anymore; it was replace by <see cref="ValidatedPluginsExt"/>.
+        /// </summary>
+        public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> ValidatedPlugins
+        {
+            get { return Plugins?.Where(p => !ValidationErrors.ContainsKey(p.Metadata.Name)); }
+        }
 
         public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>> ValidatedPluginsExt
         {
@@ -81,14 +81,14 @@ namespace XrmToolBox
             };
             watcher.Created += watcher_EventRaised;
 
-	        directoryCatalog = new DirectoryCatalog(PluginPath);
-	        var catalog = new AggregateCatalog();
-	        catalog.Catalogs.Add(directoryCatalog);
-	        container = new CompositionContainer(catalog);
+            directoryCatalog = new DirectoryCatalog(PluginPath);
+            var catalog = new AggregateCatalog();
+            catalog.Catalogs.Add(directoryCatalog);
+            container = new CompositionContainer(catalog);
 
             try
             {
-	            RescanIfRequired();
+                RescanIfRequired();
             }
             catch (ReflectionTypeLoadException ex)
             {
@@ -113,82 +113,16 @@ namespace XrmToolBox
                     }
                 }
 
-                var ipForm = new InvalidPluginsForm(ValidationErrors);
-                ipForm.TopMost = true;
-                ipForm.ShowDialog();
-
+                using (var ipForm = new InvalidPluginsForm(ValidationErrors))
+                {
+                    ipForm.TopMost = true;
+                    ipForm.ShowDialog();
+                }
                 throw;
             }
         }
 
-	    private void RescanIfRequired()
-	    {
-		    if (Manifest == null)
-		    {
-			    Manifest = ManifestLoader.LoadDefaultManifest();
-			    PluginsExt = ManifestLoader.LoadPlugins(Manifest);
-		    }
-
-		    directoryCatalog.Refresh();
-
-		    var loadedFiles = directoryCatalog.LoadedFiles;
-		    var scannedFiles = Manifest?.ScannedAssemblies ?? Array.Empty<AssemblyInfo>();
-		    var isRequireScan = loadedFiles.Count != scannedFiles.Length;
-
-		    if (!isRequireScan)
-		    {
-			    for (var i = 0; i < loadedFiles.Count; i++)
-			    {
-				    var loadedFileName = loadedFiles[i].ToLower(CultureInfo.InvariantCulture);
-				    var scannedFile = scannedFiles[i];
-
-				    var loadedVersion = AssemblyName.GetAssemblyName(loadedFileName).Version.ToString();
-				    var scannedVersion = scannedFile.Version;
-
-				    if (loadedFileName != scannedFile.Name.ToLower() || loadedVersion != scannedVersion)
-				    {
-					    isRequireScan = true;
-					    break;
-				    }
-			    }
-		    }
-
-		    if (isRequireScan)
-		    {
-			    LoadParts();
-		    }
-
-		    if (Plugins == null)
-		    {
-			    Plugins = ManifestLoader.LoadPlugins<IPluginMetadata>(Manifest);
-		    }
-	    }
-
-	    private void LoadParts(bool isRetry = false)
-	    {
-			try
-			{
-				container.ComposeParts(this);
-
-				Manifest = ManifestLoader.CreateManifest(Plugins.ToArray(), directoryCatalog);
-				ManifestLoader.SaveManifest(Manifest);
-				PluginsExt = ManifestLoader.LoadPlugins(Manifest);
-
-				ValidatePlugins();
-			}
-			catch
-			{
-				if (isRetry)
-				{
-					throw;
-				}
-
-				// rarely, an 'empty stack' error is thrown; let's rescan
-				LoadParts(true);
-			}
-	    }
-
-	    public void Recompose()
+        public void Recompose()
         {
             try
             {
@@ -228,6 +162,73 @@ namespace XrmToolBox
                 {
                     ValidationErrors.Add(plugin.Metadata.Name, e.Message);
                 }
+            }
+        }
+
+        private void LoadParts(bool isRetry = false)
+        {
+            try
+            {
+                container.ComposeParts(this);
+
+                Manifest = ManifestLoader.CreateManifest(Plugins.ToArray(), directoryCatalog);
+                ManifestLoader.SaveManifest(Manifest);
+                PluginsExt = ManifestLoader.LoadPlugins(Manifest);
+
+                ValidatePlugins();
+            }
+            catch
+            {
+                if (isRetry)
+                {
+                    throw;
+                }
+
+                // rarely, an 'empty stack' error is thrown; let's rescan
+                LoadParts(true);
+            }
+        }
+
+        private void RescanIfRequired()
+        {
+            if (Manifest == null)
+            {
+                Manifest = ManifestLoader.LoadDefaultManifest();
+                PluginsExt = ManifestLoader.LoadPlugins(Manifest);
+            }
+
+            directoryCatalog.Refresh();
+
+            var loadedFiles = directoryCatalog.LoadedFiles;
+            var scannedFiles = Manifest?.ScannedAssemblies ?? Array.Empty<AssemblyInfo>();
+            var isRequireScan = loadedFiles.Count != scannedFiles.Length;
+
+            if (!isRequireScan)
+            {
+                for (var i = 0; i < loadedFiles.Count; i++)
+                {
+                    var loadedFileName = loadedFiles[i].ToLower(CultureInfo.InvariantCulture);
+                    var scannedFile = scannedFiles[i];
+
+                    var loadedVersion = AssemblyName.GetAssemblyName(loadedFileName).Version.ToString();
+                    var scannedVersion = scannedFile.Version;
+
+                    if (loadedFileName != scannedFile.Name.ToLower() || loadedVersion != scannedVersion)
+                    {
+                        isRequireScan = true;
+                        break;
+                    }
+                }
+            }
+
+            if (isRequireScan)
+            {
+                LoadParts();
+            }
+
+            if (Plugins == null)
+            {
+                Plugins = ManifestLoader.LoadPlugins<IPluginMetadata>(Manifest);
             }
         }
 

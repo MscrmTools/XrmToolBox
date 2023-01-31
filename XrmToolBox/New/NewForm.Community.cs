@@ -11,7 +11,7 @@ using XrmToolBox.Forms;
 
 namespace XrmToolBox.New
 {
-    partial class NewForm
+    internal partial class NewForm
     {
         private ComponentResourceManager resources = new ComponentResourceManager(typeof(NewForm));
 
@@ -238,8 +238,10 @@ namespace XrmToolBox.New
 
         private void tsmiAbout_Click(object sender, System.EventArgs e)
         {
-            var aForm = new WelcomeDialog(false) { StartPosition = FormStartPosition.CenterParent };
-            aForm.ShowDialog(this);
+            using (var aForm = new WelcomeDialog(false) { StartPosition = FormStartPosition.CenterParent })
+            {
+                aForm.ShowDialog(this);
+            }
         }
 
         private void tsmiAboutSelectedPlugin_Click(object sender, System.EventArgs e)
