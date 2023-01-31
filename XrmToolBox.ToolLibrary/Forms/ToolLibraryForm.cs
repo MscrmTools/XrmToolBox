@@ -50,6 +50,10 @@ namespace XrmToolBox.ToolLibrary.Forms
             llRepoMoreInfo.SetAutoWidth();
             lblLoading.Location = new Point(lblLoading.Parent.Width / 2 - lblLoading.Width / 2, lblLoading.Parent.Height / 2 - lblLoading.Height / 2);
 
+            tsmiOpenToolLibraryAlways.Checked = settings.DisplayPluginsStoreOnStartup && !settings.DisplayPluginsStoreOnlyIfUpdates;
+            tsmiOpenToolLibraryOnlyIfUpdatesAreAvailable.Checked = settings.DisplayPluginsStoreOnStartup && settings.DisplayPluginsStoreOnlyIfUpdates;
+            tsmiOpenToolLibraryNever.Checked = !settings.DisplayPluginsStoreOnStartup && !settings.DisplayPluginsStoreOnlyIfUpdates;
+
             foreach (var chk in pnlToolsTop.Controls.OfType<CheckBox>().Where(c => c.Image != null))
             {
                 chk.Image = ResizeImage(chk.Image, 24, 24);
@@ -476,6 +480,34 @@ Current cache folder size: {0}MB";
                     SetState(false);
                 };
                 bw.RunWorkerAsync();
+            }
+        }
+
+        private void TsmiStartup_DropDownItemClicked(object sender, System.Windows.Forms.ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem == tsmiOpenToolLibraryAlways)
+            {
+                settings.DisplayPluginsStoreOnStartup = true;
+                settings.DisplayPluginsStoreOnlyIfUpdates = false;
+
+                tsmiOpenToolLibraryOnlyIfUpdatesAreAvailable.Checked = false;
+                tsmiOpenToolLibraryNever.Checked = false;
+            }
+            else if (e.ClickedItem == tsmiOpenToolLibraryOnlyIfUpdatesAreAvailable)
+            {
+                settings.DisplayPluginsStoreOnStartup = true;
+                settings.DisplayPluginsStoreOnlyIfUpdates = true;
+
+                tsmiOpenToolLibraryAlways.Checked = false;
+                tsmiOpenToolLibraryNever.Checked = false;
+            }
+            else
+            {
+                settings.DisplayPluginsStoreOnStartup = false;
+                settings.DisplayPluginsStoreOnlyIfUpdates = false;
+
+                tsmiOpenToolLibraryAlways.Checked = false;
+                tsmiOpenToolLibraryOnlyIfUpdatesAreAvailable.Checked = false;
             }
         }
 

@@ -5,6 +5,8 @@ namespace XrmToolBox.Extensibility.Interfaces
     public interface IToolLibrarySettings
     {
         string AdditionalRepositories { get; set; }
+        bool DisplayPluginsStoreOnlyIfUpdates { get; set; }
+        bool DisplayPluginsStoreOnStartup { get; set; }
         bool LibraryFilterMvp { get; set; }
         bool LibraryFilterNew { get; set; }
         bool LibraryFilterOpenSource { get; set; }

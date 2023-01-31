@@ -56,6 +56,13 @@
             this.cbbRepositories = new System.Windows.Forms.ComboBox();
             this.lblFilterRepository = new System.Windows.Forms.Label();
             this.lblSeparator2 = new System.Windows.Forms.Label();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tssRefresh = new System.Windows.Forms.ToolStripSeparator();
+            this.tssDelete = new System.Windows.Forms.ToolStripSeparator();
+            this.tssSettings = new System.Windows.Forms.ToolStripSeparator();
+            this.pnlFilterUpdateInfo = new System.Windows.Forms.Panel();
+            this.llApplyUserFilter = new System.Windows.Forms.LinkLabel();
+            this.lblFilterUpdateInfo = new System.Windows.Forms.Label();
             this.chkIncompatible = new System.Windows.Forms.CheckBox();
             this.chkShowUpdates = new System.Windows.Forms.CheckBox();
             this.chkShowInstalled = new System.Windows.Forms.CheckBox();
@@ -64,20 +71,17 @@
             this.chkFilterTopRating = new System.Windows.Forms.CheckBox();
             this.chkFilterMvp = new System.Windows.Forms.CheckBox();
             this.chkFilterOpenSource = new System.Windows.Forms.CheckBox();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbRefresh = new System.Windows.Forms.ToolStripButton();
-            this.tssRefresh = new System.Windows.Forms.ToolStripSeparator();
             this.tsbBulkInstall = new System.Windows.Forms.ToolStripButton();
             this.tsbBulkDelete = new System.Windows.Forms.ToolStripButton();
-            this.tssDelete = new System.Windows.Forms.ToolStripSeparator();
             this.tsddActions = new System.Windows.Forms.ToolStripDropDownButton();
             this.tssReloadImageCache = new System.Windows.Forms.ToolStripMenuItem();
             this.tssClearPackageCache = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssSettings = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiStartup = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiOpenToolLibraryAlways = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiOpenToolLibraryOnlyIfUpdatesAreAvailable = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiOpenToolLibraryNever = new System.Windows.Forms.ToolStripMenuItem();
             this.tsbRestart = new System.Windows.Forms.ToolStripButton();
-            this.pnlFilterUpdateInfo = new System.Windows.Forms.Panel();
-            this.llApplyUserFilter = new System.Windows.Forms.LinkLabel();
-            this.lblFilterUpdateInfo = new System.Windows.Forms.Label();
             this.pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -411,6 +415,77 @@
             this.lblSeparator2.Text = "| ";
             this.lblSeparator2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsbRefresh,
+            this.tssRefresh,
+            this.tsbBulkInstall,
+            this.tsbBulkDelete,
+            this.tssDelete,
+            this.tsddActions,
+            this.tssSettings,
+            this.tsbRestart});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.toolStrip1.Size = new System.Drawing.Size(2375, 34);
+            this.toolStrip1.TabIndex = 4;
+            this.toolStrip1.Text = "tsMain";
+            // 
+            // tssRefresh
+            // 
+            this.tssRefresh.Name = "tssRefresh";
+            this.tssRefresh.Size = new System.Drawing.Size(6, 34);
+            // 
+            // tssDelete
+            // 
+            this.tssDelete.Name = "tssDelete";
+            this.tssDelete.Size = new System.Drawing.Size(6, 34);
+            // 
+            // tssSettings
+            // 
+            this.tssSettings.Name = "tssSettings";
+            this.tssSettings.Size = new System.Drawing.Size(6, 34);
+            this.tssSettings.Visible = false;
+            // 
+            // pnlFilterUpdateInfo
+            // 
+            this.pnlFilterUpdateInfo.BackColor = System.Drawing.SystemColors.Info;
+            this.pnlFilterUpdateInfo.Controls.Add(this.llApplyUserFilter);
+            this.pnlFilterUpdateInfo.Controls.Add(this.lblFilterUpdateInfo);
+            this.pnlFilterUpdateInfo.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlFilterUpdateInfo.Location = new System.Drawing.Point(0, 34);
+            this.pnlFilterUpdateInfo.Name = "pnlFilterUpdateInfo";
+            this.pnlFilterUpdateInfo.Padding = new System.Windows.Forms.Padding(10);
+            this.pnlFilterUpdateInfo.Size = new System.Drawing.Size(2375, 49);
+            this.pnlFilterUpdateInfo.TabIndex = 5;
+            this.pnlFilterUpdateInfo.Visible = false;
+            // 
+            // llApplyUserFilter
+            // 
+            this.llApplyUserFilter.Dock = System.Windows.Forms.DockStyle.Left;
+            this.llApplyUserFilter.Location = new System.Drawing.Point(788, 10);
+            this.llApplyUserFilter.Name = "llApplyUserFilter";
+            this.llApplyUserFilter.Size = new System.Drawing.Size(507, 29);
+            this.llApplyUserFilter.TabIndex = 1;
+            this.llApplyUserFilter.TabStop = true;
+            this.llApplyUserFilter.Text = "Click here to apply your last filters";
+            this.llApplyUserFilter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.llApplyUserFilter.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llApplyUserFilter_LinkClicked);
+            // 
+            // lblFilterUpdateInfo
+            // 
+            this.lblFilterUpdateInfo.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblFilterUpdateInfo.Location = new System.Drawing.Point(10, 10);
+            this.lblFilterUpdateInfo.Name = "lblFilterUpdateInfo";
+            this.lblFilterUpdateInfo.Size = new System.Drawing.Size(778, 29);
+            this.lblFilterUpdateInfo.TabIndex = 0;
+            this.lblFilterUpdateInfo.Text = "Tool Library is currently using a specific filter to show you only updates availa" +
+    "ble for your tools.";
+            this.lblFilterUpdateInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // chkIncompatible
             // 
             this.chkIncompatible.Dock = System.Windows.Forms.DockStyle.Left;
@@ -521,25 +596,6 @@
             this.chkFilterOpenSource.UseVisualStyleBackColor = true;
             this.chkFilterOpenSource.CheckedChanged += new System.EventHandler(this.chkFilter_CheckedChanged);
             // 
-            // toolStrip1
-            // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsbRefresh,
-            this.tssRefresh,
-            this.tsbBulkInstall,
-            this.tsbBulkDelete,
-            this.tssDelete,
-            this.tsddActions,
-            this.tssSettings,
-            this.tsbRestart});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.toolStrip1.Size = new System.Drawing.Size(2375, 34);
-            this.toolStrip1.TabIndex = 4;
-            this.toolStrip1.Text = "tsMain";
-            // 
             // tsbRefresh
             // 
             this.tsbRefresh.Image = global::XrmToolBox.ToolLibrary.Resource.Refresh;
@@ -548,11 +604,6 @@
             this.tsbRefresh.Size = new System.Drawing.Size(98, 29);
             this.tsbRefresh.Text = "Refresh";
             this.tsbRefresh.Click += new System.EventHandler(this.tsbRefresh_Click);
-            // 
-            // tssRefresh
-            // 
-            this.tssRefresh.Name = "tssRefresh";
-            this.tssRefresh.Size = new System.Drawing.Size(6, 34);
             // 
             // tsbBulkInstall
             // 
@@ -574,16 +625,12 @@
             this.tsbBulkDelete.Text = "Uninstall";
             this.tsbBulkDelete.Click += new System.EventHandler(this.tsbBulkDelete_Click);
             // 
-            // tssDelete
-            // 
-            this.tssDelete.Name = "tssDelete";
-            this.tssDelete.Size = new System.Drawing.Size(6, 34);
-            // 
             // tsddActions
             // 
             this.tsddActions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tssReloadImageCache,
-            this.tssClearPackageCache});
+            this.tssClearPackageCache,
+            this.tsmiStartup});
             this.tsddActions.Image = global::XrmToolBox.ToolLibrary.Resource.Settings;
             this.tsddActions.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsddActions.Name = "tsddActions";
@@ -595,21 +642,52 @@
             // 
             this.tssReloadImageCache.Image = global::XrmToolBox.ToolLibrary.Resource.RefreshImages;
             this.tssReloadImageCache.Name = "tssReloadImageCache";
-            this.tssReloadImageCache.Size = new System.Drawing.Size(279, 34);
+            this.tssReloadImageCache.Size = new System.Drawing.Size(335, 34);
             this.tssReloadImageCache.Text = "Reload Image cache";
             // 
             // tssClearPackageCache
             // 
             this.tssClearPackageCache.Image = global::XrmToolBox.ToolLibrary.Resource.ClearCache;
             this.tssClearPackageCache.Name = "tssClearPackageCache";
-            this.tssClearPackageCache.Size = new System.Drawing.Size(279, 34);
+            this.tssClearPackageCache.Size = new System.Drawing.Size(335, 34);
             this.tssClearPackageCache.Text = "Clear Packages cache";
             // 
-            // tssSettings
+            // tsmiStartup
             // 
-            this.tssSettings.Name = "tssSettings";
-            this.tssSettings.Size = new System.Drawing.Size(6, 34);
-            this.tssSettings.Visible = false;
+            this.tsmiStartup.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiOpenToolLibraryAlways,
+            this.tsmiOpenToolLibraryOnlyIfUpdatesAreAvailable,
+            this.tsmiOpenToolLibraryNever});
+            this.tsmiStartup.Name = "tsmiStartup";
+            this.tsmiStartup.Size = new System.Drawing.Size(335, 34);
+            this.tsmiStartup.Text = "Open Tool Library at startup";
+            this.tsmiStartup.Image = global::XrmToolBox.ToolLibrary.Resource.PluginsStore32;
+            this.tsmiStartup.DropDownItemClicked += TsmiStartup_DropDownItemClicked;
+
+            // 
+            // alwaysToolStripMenuItem
+            // 
+            this.tsmiOpenToolLibraryAlways.CheckOnClick = true;
+            this.tsmiOpenToolLibraryAlways.Image = global::XrmToolBox.ToolLibrary.Resource.Success32;
+            this.tsmiOpenToolLibraryAlways.Name = "alwaysToolStripMenuItem";
+            this.tsmiOpenToolLibraryAlways.Size = new System.Drawing.Size(337, 34);
+            this.tsmiOpenToolLibraryAlways.Text = "Always";
+            // 
+            // onlyIfUpdatesAreAvailableToolStripMenuItem
+            // 
+            this.tsmiOpenToolLibraryOnlyIfUpdatesAreAvailable.CheckOnClick = true;
+            this.tsmiOpenToolLibraryOnlyIfUpdatesAreAvailable.Image = global::XrmToolBox.ToolLibrary.Resource.Update;
+            this.tsmiOpenToolLibraryOnlyIfUpdatesAreAvailable.Name = "onlyIfUpdatesAreAvailableToolStripMenuItem";
+            this.tsmiOpenToolLibraryOnlyIfUpdatesAreAvailable.Size = new System.Drawing.Size(337, 34);
+            this.tsmiOpenToolLibraryOnlyIfUpdatesAreAvailable.Text = "Only if updates are available";
+            // 
+            // neverToolStripMenuItem
+            // 
+            this.tsmiOpenToolLibraryNever.CheckOnClick = true;
+            this.tsmiOpenToolLibraryNever.Image = global::XrmToolBox.ToolLibrary.Resource.No32;
+            this.tsmiOpenToolLibraryNever.Name = "neverToolStripMenuItem";
+            this.tsmiOpenToolLibraryNever.Size = new System.Drawing.Size(337, 34);
+            this.tsmiOpenToolLibraryNever.Text = "Never";
             // 
             // tsbRestart
             // 
@@ -620,42 +698,6 @@
             this.tsbRestart.Text = "Restart";
             this.tsbRestart.Visible = false;
             this.tsbRestart.Click += new System.EventHandler(this.tsbRestart_Click);
-            // 
-            // pnlFilterUpdateInfo
-            // 
-            this.pnlFilterUpdateInfo.BackColor = System.Drawing.SystemColors.Info;
-            this.pnlFilterUpdateInfo.Controls.Add(this.llApplyUserFilter);
-            this.pnlFilterUpdateInfo.Controls.Add(this.lblFilterUpdateInfo);
-            this.pnlFilterUpdateInfo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlFilterUpdateInfo.Location = new System.Drawing.Point(0, 34);
-            this.pnlFilterUpdateInfo.Name = "pnlFilterUpdateInfo";
-            this.pnlFilterUpdateInfo.Padding = new System.Windows.Forms.Padding(10);
-            this.pnlFilterUpdateInfo.Size = new System.Drawing.Size(2375, 49);
-            this.pnlFilterUpdateInfo.TabIndex = 5;
-            this.pnlFilterUpdateInfo.Visible = false;
-            // 
-            // llApplyUserFilter
-            // 
-            this.llApplyUserFilter.Dock = System.Windows.Forms.DockStyle.Left;
-            this.llApplyUserFilter.Location = new System.Drawing.Point(788, 10);
-            this.llApplyUserFilter.Name = "llApplyUserFilter";
-            this.llApplyUserFilter.Size = new System.Drawing.Size(507, 29);
-            this.llApplyUserFilter.TabIndex = 1;
-            this.llApplyUserFilter.TabStop = true;
-            this.llApplyUserFilter.Text = "Click here to apply your last filters";
-            this.llApplyUserFilter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.llApplyUserFilter.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llApplyUserFilter_LinkClicked);
-            // 
-            // lblFilterUpdateInfo
-            // 
-            this.lblFilterUpdateInfo.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lblFilterUpdateInfo.Location = new System.Drawing.Point(10, 10);
-            this.lblFilterUpdateInfo.Name = "lblFilterUpdateInfo";
-            this.lblFilterUpdateInfo.Size = new System.Drawing.Size(778, 29);
-            this.lblFilterUpdateInfo.TabIndex = 0;
-            this.lblFilterUpdateInfo.Text = "Tool Library is currently using a specific filter to show you only updates availa" +
-    "ble for your tools.";
-            this.lblFilterUpdateInfo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ToolLibraryForm
             // 
@@ -691,6 +733,8 @@
             this.PerformLayout();
 
         }
+
+        
 
         #endregion
         private System.Windows.Forms.Panel pnlBottom;
@@ -742,6 +786,10 @@
         private System.Windows.Forms.Panel pnlFilterUpdateInfo;
         private System.Windows.Forms.LinkLabel llApplyUserFilter;
         private System.Windows.Forms.Label lblFilterUpdateInfo;
+        private System.Windows.Forms.ToolStripMenuItem tsmiStartup;
+        private System.Windows.Forms.ToolStripMenuItem tsmiOpenToolLibraryAlways;
+        private System.Windows.Forms.ToolStripMenuItem tsmiOpenToolLibraryOnlyIfUpdatesAreAvailable;
+        private System.Windows.Forms.ToolStripMenuItem tsmiOpenToolLibraryNever;
     }
 }
 

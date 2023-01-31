@@ -6,6 +6,8 @@ namespace XrmToolBox.ToolLibrary.AppCode
     public class ToolLibrarySettings : IToolLibrarySettings
     {
         public string AdditionalRepositories { get; set; }
+        public bool DisplayPluginsStoreOnlyIfUpdates { get; set; }
+        public bool DisplayPluginsStoreOnStartup { get; set; }
         public bool LibraryFilterMvp { get; set; }
         public bool LibraryFilterNew { get; set; }
         public bool LibraryFilterOpenSource { get; set; }

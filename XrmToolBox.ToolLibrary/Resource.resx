@@ -145,11 +145,17 @@
   <data name="NewToInstall" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\NewToInstall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="No32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\No32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="NoLogo100" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\NoLogo100.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Pending32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Pending32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PluginsStore32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\PluginsStore32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="progress" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\progress.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
