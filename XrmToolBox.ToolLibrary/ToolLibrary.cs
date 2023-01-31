@@ -516,8 +516,6 @@ namespace XrmToolBox.ToolLibrary
                 }
             }
 
-            PluginsUpdated?.Invoke(this, new EventArgs());
-
             if (updates.Plugins.Any(p => p.RequireRestart))
             {
                 XmlSerializerHelper.SerializeToFile(updates, Path.Combine(Paths.XrmToolBoxPath, "Update.xml"));
@@ -538,6 +536,10 @@ namespace XrmToolBox.ToolLibrary
                 }
 
                 return false;
+            }
+            else
+            {
+                PluginsUpdated?.Invoke(this, new EventArgs());
             }
 
             return true;
@@ -592,6 +594,7 @@ namespace XrmToolBox.ToolLibrary
             {
                 var conflicts = XrmToolBoxPlugins.Plugins.Where(p =>
                     p.Id != plugin.Id
+                    && p.NugetId.ToLower() != plugin.NugetId.ToLower()
                     && (p.Action == PackageInstallAction.None || p.Action == PackageInstallAction.Update)
                     && plugin.Files.Any(ff => p.Files.Contains(ff))).ToList();
 

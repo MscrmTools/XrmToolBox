@@ -149,10 +149,22 @@ namespace XrmToolBox.New
             pluginsManager.Recompose();
             pluginsModels.Clear();
 
-            txtSearch.AutoCompleteCustomSource.Clear();
-            txtSearch.AutoCompleteCustomSource.AddRange(PluginManager.PluginsExt.Where(p => !Options.Instance.HiddenPlugins.Contains(p.Metadata.Name)).Select(p => p.Metadata.Name).ToArray());
+            var mi = new MethodInvoker(() =>
+            {
+                txtSearch.AutoCompleteCustomSource.Clear();
+                txtSearch.AutoCompleteCustomSource.AddRange(PluginManager.PluginsExt.Where(p => !Options.Instance.HiddenPlugins.Contains(p.Metadata.Name)).Select(p => p.Metadata.Name).ToArray());
 
-            DisplayPlugins(filterText);
+                DisplayPlugins(filterText);
+            });
+
+            if (InvokeRequired)
+            {
+                Invoke(mi);
+            }
+            else
+            {
+                mi();
+            }
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
