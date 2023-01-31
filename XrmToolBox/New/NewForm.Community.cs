@@ -11,7 +11,7 @@ using XrmToolBox.Forms;
 
 namespace XrmToolBox.New
 {
-    internal partial class NewForm
+    public partial class NewForm
     {
         private ComponentResourceManager resources = new ComponentResourceManager(typeof(NewForm));
 
