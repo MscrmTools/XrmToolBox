@@ -93,12 +93,12 @@
             // 
             // picture
             // 
-            this.picture.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.picture.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picture.Location = new System.Drawing.Point(10, 10);
             this.picture.Margin = new System.Windows.Forms.Padding(4);
             this.picture.Name = "picture";
             this.picture.Size = new System.Drawing.Size(55, 55);
+            this.picture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.picture.TabIndex = 1;
             this.picture.TabStop = false;
             this.picture.MouseClick += new System.Windows.Forms.MouseEventHandler(this.MouseClick);

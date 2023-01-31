@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -138,7 +139,7 @@ namespace XrmToolBox
 		    {
 			    for (var i = 0; i < loadedFiles.Count; i++)
 			    {
-				    var loadedFileName = loadedFiles[i].ToLower();
+				    var loadedFileName = loadedFiles[i].ToLower(CultureInfo.InvariantCulture);
 				    var scannedFile = scannedFiles[i];
 
 				    var loadedVersion = AssemblyName.GetAssemblyName(loadedFileName).Version.ToString();

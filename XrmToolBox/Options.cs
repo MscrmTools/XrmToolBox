@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
@@ -14,6 +15,7 @@ using System.Xml.Serialization;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Forms;
 
 namespace XrmToolBox
@@ -120,7 +122,7 @@ namespace XrmToolBox
         }
     }
 
-    public class Options : ICloneable
+    public class Options : ICloneable, IToolLibrarySettings
     {
         private static Options innerOptions;
 
@@ -133,7 +135,7 @@ namespace XrmToolBox
             Size = new FormSize();
             MostUsedList = new List<PluginUseCount>();
             AllowLogUsage = null;
-            DisplayPluginsStoreOnStartup = true;
+            DisplayPluginsStoreOnStartup = false;
             HiddenPlugins = new List<string>();
         }
 
@@ -152,6 +154,12 @@ namespace XrmToolBox
                 return innerOptions;
             }
         }
+
+        [Category("Tool Library")]
+        [DisplayName("Additional repositories")]
+        [Description("Additional repositories where to find tools. One line per repository. Format: <repository name>|<repository path>")]
+        [Editor(typeof(MultilineStringEditor), typeof(UITypeEditor))]
+        public string AdditionalRepositories { get; set; }
 
         [Browsable(false)] public bool? AllowLogUsage { get; set; }
 
@@ -325,10 +333,29 @@ namespace XrmToolBox
         [Browsable(false)]
         public DateTime LastUpdateCheck { get; set; }
 
+        [Browsable(false)] public bool LibraryFilterMvp { get; set; }
+        [Browsable(false)] public bool LibraryFilterNew { get; set; }
+        [Browsable(false)] public bool LibraryFilterOpenSource { get; set; }
+        [Browsable(false)] public bool LibraryFilterRating { get; set; }
+        [Browsable(false)] public bool LibraryShowIncompatible { get; set; }
+        [Browsable(false)] public bool LibraryShowInstalled { get; set; } = true;
+        [Browsable(false)] public bool LibraryShowNotInstalled { get; set; } = true;
+        [Browsable(false)] public bool LibraryShowUpdates { get; set; } = true;
+
         [Category("Connections")]
         [DisplayName("Display all connections")]
         [Description("Indicates if bottom left connection control should display all connections regardless the connection files they come from")]
         public bool MergeConnectionFiles { get; set; }
+
+        [Category("Tool Library")]
+        [DisplayName("Most Rated - Minimum number of votes")]
+        [Description("Indicates the minimum number of votes for a tool to be considered as a most rated tool")]
+        public int MostRatedMinNumberOfVotes { get; set; } = 10;
+
+        [Category("Tool Library")]
+        [DisplayName("Most Rated - Minimum average rate")]
+        [Description("Indicates the minimum average rate for a tool to be considered as a most rated tool")]
+        public decimal MostRatedMinRatingAverage { get; set; } = (decimal)4.5;
 
         [Browsable(false)]
         public List<PluginUseCount> MostUsedList { get; set; }
@@ -378,6 +405,11 @@ namespace XrmToolBox
         [Description("Indicates if the current session must be saved to be reused at the next XrmToolBox startup")]
         public bool RememberSession { get; set; }
 
+        [Category("Tool Library")]
+        [DisplayName("Repository Url")]
+        [Description("Repository Url for tools list. You can use your own if needed")]
+        public string RepositoryUrl { get; set; } = "https://www.xrmtoolbox.com/_odata/plugins";
+
         [Category("Connections")]
         [DisplayName("Reuse connections")]
         [Description("Indicates if connecting to an already connected organization should instanciate a new connection or use the existing one")]
@@ -424,6 +456,11 @@ namespace XrmToolBox
                     Theme = "Classic theme";
             }
         }
+
+        [Category("Tool Library")]
+        [DisplayName("Use legacy Tool Library")]
+        [Description("True to use the previous version of Tool Library")]
+        public bool UseLegacyToolLibrary { get; set; }
 
         public static bool Load(out Options options, out string errorMessage)
         {
@@ -505,7 +542,20 @@ namespace XrmToolBox
                 ReuseConnections = ReuseConnections,
                 Size = Size,
                 ThemeValue = ThemeValue,
-                BringToTop = BringToTop
+                BringToTop = BringToTop,
+                UseLegacyToolLibrary = UseLegacyToolLibrary,
+                MostRatedMinNumberOfVotes = MostRatedMinNumberOfVotes,
+                MostRatedMinRatingAverage = MostRatedMinRatingAverage,
+                RepositoryUrl = RepositoryUrl,
+                AdditionalRepositories = AdditionalRepositories,
+                LibraryFilterMvp = LibraryFilterMvp,
+                LibraryFilterNew = LibraryFilterNew,
+                LibraryFilterOpenSource = LibraryFilterOpenSource,
+                LibraryFilterRating = LibraryFilterRating,
+                LibraryShowIncompatible = LibraryShowIncompatible,
+                LibraryShowInstalled = LibraryShowInstalled,
+                LibraryShowNotInstalled = LibraryShowNotInstalled,
+                LibraryShowUpdates = LibraryShowUpdates
             };
         }
 

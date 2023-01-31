@@ -310,7 +310,7 @@ namespace XrmToolBox.New
 
                 var vals = new object[]
                 {
-                    GetImage(small ? plugin.Metadata.SmallImageBase64 : plugin.Metadata.BigImageBase64, small),
+                    GetImage(small ? plugin.Metadata.BigImageBase64 : plugin.Metadata.BigImageBase64, small),
                     title,
                     desc,
                     author,
@@ -530,7 +530,7 @@ namespace XrmToolBox.New
 
                 if (store.XrmToolBoxPlugins == null)
                 {
-                    store.LoadToolsList().Wait();
+                    store.LoadTools().Wait();
                 }
 
                 var storePlugins = store.XrmToolBoxPlugins.Plugins;

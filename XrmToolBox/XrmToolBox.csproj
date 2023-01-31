@@ -582,6 +582,10 @@
       <Project>{ebcb3d22-03f2-40d2-b949-05cae575f2ea}</Project>
       <Name>XrmToolBox.PluginsStore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XrmToolBox.ToolLibrary\XrmToolBox.ToolLibrary.csproj">
+      <Project>{626aeba8-4315-4d82-b8b9-b94200fd7589}</Project>
+      <Name>XrmToolBox.ToolLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -608,7 +612,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

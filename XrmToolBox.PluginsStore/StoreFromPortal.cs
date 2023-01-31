@@ -17,6 +17,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.Manifest;
 using XrmToolBox.PluginsStore.DTO;
 
@@ -71,7 +72,7 @@ namespace XrmToolBox.PluginsStore
         }
     }
 
-    public class StoreFromPortal
+    public class StoreFromPortal : IToolLibrary
 
     {
         #region Variables
@@ -119,10 +120,11 @@ namespace XrmToolBox.PluginsStore
 
         public List<string> Categories { get; set; }
 
-        public bool HasUpdates => XrmToolBoxPlugins?.Plugins.Any(p => p.Action == PackageInstallAction.Update) ?? false;
-
         public int PluginsCount => XrmToolBoxPlugins?.Plugins.Count ?? 0;
+        public int PluginsUpdateCount => XrmToolBoxPlugins?.Plugins.Count(p => p.Action == PackageInstallAction.Update) ?? 0;
 
+        public int PluginsUpdatesCount => throw new NotImplementedException();
+        public List<IXrmToolBoxLibraryTool> Tools => XrmToolBoxPlugins.Plugins.Select(p => (IXrmToolBoxLibraryTool)p).ToList();
         public XtbPlugins XrmToolBoxPlugins { get; set; }
 
         #endregion Properties
@@ -134,7 +136,7 @@ namespace XrmToolBox.PluginsStore
             findPackageById = await repository.GetResourceAsync<FindPackageByIdResource>();
         }
 
-        public async Task LoadToolsList(bool fromStorePortal = true)
+        public async Task LoadTools(bool fromStorePortal = true)
         {
             plugins = new DirectoryInfo(applicationPluginsFolder).GetFiles();
             XrmToolBoxPlugins = new XtbPlugins();
@@ -663,6 +665,16 @@ namespace XrmToolBox.PluginsStore
             return 0;
         }
 
+        public XtbPlugin GetPluginByFileName(string filename)
+        {
+            if (XrmToolBoxPlugins == null)
+            {
+                LoadTools().Wait();
+            }
+
+            return XrmToolBoxPlugins.Plugins.FirstOrDefault(p => p.Files.Any(f => f.ToLower().IndexOf(filename.ToLower(), StringComparison.Ordinal) >= 0));
+        }
+
         public string GetPluginProjectUrlByFileName(string fileName)
         {
             XtbPlugin plugin = GetPluginByFileName(fileName);
@@ -679,6 +691,36 @@ namespace XrmToolBox.PluginsStore
             }
 
             return null;
+        }
+
+        IXrmToolBoxLibraryTool IToolLibrary.GetPluginUpdateByFile(string location)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InstallOneToolUpdate(IXrmToolBoxLibraryTool tool, bool onNextRestart, Form form)
+        {
+            PrepareInstallationPackages(new List<XtbPlugin> { (XtbPlugin)tool }).Wait();
+
+            if (!onNextRestart)
+            {
+                if (DialogResult.Yes == MessageBox.Show(form,
+                        @"This application needs to restart to install updated tools (or new tools that share some files with already installed tools). Click Yes to restart this application now",
+                        @"Information", MessageBoxButtons.YesNo, MessageBoxIcon.Information))
+                {
+                    Application.Restart();
+                }
+            }
+        }
+
+        Task<IConnectionControlUpdateSettings> IToolLibrary.IsConnectionControlsUpdateAvailable(string connectionControlsVersion)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IConnectionControlUpdateSettings> PrepareConnectionControlsUpdate(Form form, bool restart)
+        {
+            throw new NotImplementedException();
         }
 
         private T GetContent<T>(string url, bool fromStoreFromPortalForm) where T : new()
@@ -725,16 +767,6 @@ namespace XrmToolBox.PluginsStore
                 size += GetDirectorySize(s);
 
             return size;
-        }
-
-        private XtbPlugin GetPluginByFileName(string filename)
-        {
-            if (XrmToolBoxPlugins == null)
-            {
-                LoadToolsList().Wait();
-            }
-
-            return XrmToolBoxPlugins.Plugins.FirstOrDefault(p => p.Files.Any(f => f.ToLower().IndexOf(filename.ToLower(), StringComparison.Ordinal) >= 0));
         }
 
         /// <summary>

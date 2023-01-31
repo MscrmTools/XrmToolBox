@@ -83,21 +83,21 @@ namespace XrmToolBox.Extensibility.UserControls
                 {
                     new Point(ctrl.Width, ctrl.Height),
                     new Point(ctrl.Width - ctrl.Height, 0),
-                    new Point(ctrl.Width - ctrl.Height + 40, 0),
-                    new Point(ctrl.Width, ctrl.Height - 40),
+                    new Point(ctrl.Width - ctrl.Height + 60, 0),
+                    new Point(ctrl.Width, ctrl.Height - 60),
                 }, FillMode.Winding);
 
                 e.Graphics.DrawLine(new Pen(Color.White), new Point(ctrl.Width, ctrl.Height), new Point(ctrl.Width - ctrl.Height, 0));
-                e.Graphics.DrawLine(new Pen(Color.White), new Point(ctrl.Width - ctrl.Height + 40, 0), new Point(ctrl.Width, ctrl.Height - 40));
+                e.Graphics.DrawLine(new Pen(Color.White), new Point(ctrl.Width - ctrl.Height + 60, 0), new Point(ctrl.Width, ctrl.Height - 60));
 
-                DrawRotatedTextAt(e.Graphics, 45, "NEW", ctrl.Width - ctrl.Height / 2, 15, new Font(new FontFamily("Segoe UI"), 12),
+                DrawRotatedTextAt(e.Graphics, 45, "NEW", ctrl.Width - ctrl.Height / 2 + 5, 25, new Font(new FontFamily("Segoe UI"), 12),
                     new SolidBrush(Color.White));
 
-                pbDonate.Location = new Point(ctrl.Parent.Width - 90, pbDonate.Location.Y);
+                pbDonate.Location = new Point(ctrl.Parent.Width - 110, pbDonate.Location.Y);
             }
             else
             {
-                pbDonate.Location = new Point(ctrl.Parent.Width - 40, pbDonate.Location.Y);
+                pbDonate.Location = new Point(ctrl.Parent.Width - 60, pbDonate.Location.Y);
             }
         }
 
