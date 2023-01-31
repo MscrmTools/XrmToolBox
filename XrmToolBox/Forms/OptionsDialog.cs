@@ -184,5 +184,10 @@ namespace XrmToolBox.Forms
             txtProxyPassword.Enabled = rbCustomAuthYes.Checked;
             txtProxyUser.Enabled = rbCustomAuthYes.Checked;
         }
+
+        private void rtbCredits_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            Process.Start(e.LinkText);
+        }
     }
 }
