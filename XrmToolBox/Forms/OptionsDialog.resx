@@ -117,14 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="rtbCredits.Text" xml:space="preserve">
-    <value>Icons are from the following resources:
-- Fatcow icons : https://www.fatcow.com/free-icons
-- FreePik icons : https://www.flaticon.com/authors/freepik
-- hqrloveq icons : https://www.flaticon.com/authors/hqrloveq
-- kmg-design icons : https://www.flaticon.com/authors/kmg-design
-- nhor-phai icons : https://www.flaticon.com/authors/nhor-phai</value>
-  </data>
   <data name="lblChangePathDescription.Text" xml:space="preserve">
     <value>The current root path is '{0}'
 
@@ -150,5 +142,14 @@ Therefore, the following url is used to send data : https://dc.services.visualst
   </data>
   <data name="lblAppProtocolSummary.Text" xml:space="preserve">
     <value>Application protocol allows to open XrmToolBox with a specific connection for a specific tool. This integration is made through a registry key declaration. To enable the application protocol, use buttons below. </value>
+  </data>
+  <data name="rtbCredits.Text" xml:space="preserve">
+    <value>Icons are from the following resources:
+- Fatcow icons : https://www.fatcow.com/free-icons
+- FreePik icons : https://www.flaticon.com/authors/freepik
+- hqrloveq icons : https://www.flaticon.com/authors/hqrloveq
+- kmg-design icons : https://www.flaticon.com/authors/kmg-design
+- nhor-phai icons : https://www.flaticon.com/authors/nhor-phai
+- PixelPerfect icons : https://www.flaticon.com/authors/pixel-perfect</value>
   </data>
 </root>

@@ -151,6 +151,7 @@
     <Compile Include="AppCode\ConnectionControlsUpdateSettings.cs" />
     <Compile Include="AppCode\Extensions.cs" />
     <Compile Include="AppCode\ImageCache.cs" />
+    <Compile Include="AppCode\OpenPluginEventArgs.cs" />
     <Compile Include="AppCode\PackageVersion.cs" />
     <Compile Include="AppCode\PluginDeletions.cs" />
     <Compile Include="AppCode\PluginUpdates.cs" />
@@ -293,6 +294,8 @@
     <None Include="Resources\NewToInstall.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Open16.png" />
+    <None Include="Resources\Open32.png" />
     <None Include="Resources\PluginsStore32.png" />
     <None Include="Resources\No32.png" />
     <None Include="Resources\Success32.png" />

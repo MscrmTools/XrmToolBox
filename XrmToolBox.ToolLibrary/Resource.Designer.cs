@@ -173,6 +173,26 @@ namespace XrmToolBox.ToolLibrary {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Open16 {
+            get {
+                object obj = ResourceManager.GetObject("Open16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Open32 {
+            get {
+                object obj = ResourceManager.GetObject("Open32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Pending32 {
             get {
                 object obj = ResourceManager.GetObject("Pending32", resourceCulture);

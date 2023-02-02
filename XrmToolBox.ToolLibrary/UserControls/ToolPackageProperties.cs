@@ -39,6 +39,8 @@ namespace XrmToolBox.ToolLibrary.UserControls
             GetVersions();
         }
 
+        public event EventHandler OnToolOpenRequested;
+
         public event EventHandler<ToolOperationEventArgs> OnToolOperationRequested;
 
         private void btnDelete_Click(object sender, EventArgs e)
@@ -161,6 +163,11 @@ namespace XrmToolBox.ToolLibrary.UserControls
             Process.Start(llToolProjectUrl.Tag.ToString());
         }
 
+        private void pbOpenTool_Click(object sender, EventArgs e)
+        {
+            OnToolOpenRequested?.Invoke(this, new EventArgs());
+        }
+
         private Bitmap ResizeImage(Image image, int width, int height)
         {
             var destRect = new Rectangle(0, 0, width, height);
@@ -238,6 +245,10 @@ namespace XrmToolBox.ToolLibrary.UserControls
 
             btnInstall.Enabled = false;
             btnDelete.Enabled = false;
+
+            panel1.Size = new Size(16, 16);
+            pbOpenTool.Visible = plugin.Action == PackageInstallAction.None || plugin.Action == PackageInstallAction.Update;
+            toolTip.SetToolTip(pbOpenTool, "This tool is already installed. Click here to open it now");
         }
     }
 }

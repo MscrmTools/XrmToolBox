@@ -1799,6 +1799,22 @@ We recommend that you remove the corresponding files from XrmToolBox Plugins fol
                     {
                         RequestCloseTabs(dpMain.Contents.OfType<PluginForm>(), new PluginCloseInfo(ToolBoxCloseReason.CloseAll));
                     };
+                    libraryForm.PluginsOpeningRequested += (s, evt) =>
+                    {
+                        var plm = PluginManagerExtended.Instance.Manifest.PluginMetadata.FirstOrDefault(pm => evt.Plugin.Files.Any(f => Path.GetFileName(f).Equals(Path.GetFileName(pm.AssemblyFilename), StringComparison.InvariantCultureIgnoreCase)));
+                        if (plm == null)
+                        {
+                            MessageBox.Show(this, "Unable to find the tool metadata!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        var plugin = PluginManagerExtended.Instance.ValidatedPluginsExt.FirstOrDefault(p => p.Metadata.Name == plm.Name);
+                        if (plugin == null)
+                        {
+                            MessageBox.Show(this, "Unable to find the tool metadata!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+                        DisplayPluginControl(plugin);
+                    };
                     ((ToolLibrary.ToolLibrary)store).OnToolsMetadataRefreshRequested += (s, evt) =>
                     {
                         PluginManagerExtended.Instance.Recompose();

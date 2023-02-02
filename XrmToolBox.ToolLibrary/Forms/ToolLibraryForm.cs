@@ -85,6 +85,8 @@ namespace XrmToolBox.ToolLibrary.Forms
 
         public event EventHandler PluginsClosingRequested;
 
+        public event EventHandler<OpenPluginEventArgs> PluginsOpeningRequested;
+
         public long CalculateCacheFolderSize()
         {
             if (Directory.Exists(toolsPackagesCachePath))
@@ -313,6 +315,11 @@ namespace XrmToolBox.ToolLibrary.Forms
             searchThread.Start();
         }
 
+        private void Ctrl_OnToolOpenRequested(object sender, EventArgs e)
+        {
+            PluginsOpeningRequested?.Invoke(this, new OpenPluginEventArgs { Plugin = (XtbPlugin)lvTools.SelectedItems[0].Tag });
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             if (!isUpdateOnly)
@@ -392,6 +399,7 @@ namespace XrmToolBox.ToolLibrary.Forms
             var ctrl = new ToolPackageCtrl(tool, MinCompatibleVersion, toolLibrary);
             ctrl.Dock = DockStyle.Fill;
             ctrl.OnToolOperationRequested += Ctrl_OnToolOperationRequested;
+            ctrl.OnToolOpenRequested += Ctrl_OnToolOpenRequested;
             pnlToolProperties.Controls.Add(ctrl);
         }
 
