@@ -65,6 +65,7 @@ namespace XrmToolBox.ToolLibrary.Forms
                             e.Plugin.CurrentVersion = e.Version;
                             toolLibrary.ScanInstalledTools();
                             toolLibrary.AnalyzePackage(e.Plugin);
+                            toolLibrary.SendPluginsUpdatedEvent();
                         }
                         else
                         {
@@ -176,6 +177,8 @@ namespace XrmToolBox.ToolLibrary.Forms
                         });
 
                     lvTools.Invalidate();
+
+                    toolLibrary.SendPluginsUpdatedEvent();
                 }
                 else
                 {

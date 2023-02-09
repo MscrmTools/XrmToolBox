@@ -537,10 +537,6 @@ namespace XrmToolBox.ToolLibrary
 
                 return false;
             }
-            else
-            {
-                PluginsUpdated?.Invoke(this, new EventArgs());
-            }
 
             return true;
         }
@@ -623,6 +619,11 @@ namespace XrmToolBox.ToolLibrary
         public void ScanInstalledTools()
         {
             OnToolsMetadataRefreshRequested?.Invoke(this, new EventArgs());
+        }
+
+        public void SendPluginsUpdatedEvent()
+        {
+            PluginsUpdated?.Invoke(this, new EventArgs());
         }
 
         public void UninstallByFileName(string fileName)
