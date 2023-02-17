@@ -1,4 +1,5 @@
 ﻿using McTools.Xrm.Connection;
+using OrderedPropertyGrid;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -139,6 +140,8 @@ namespace XrmToolBox
             HiddenPlugins = new List<string>();
         }
 
+        public event EventHandler<SettingsPropertyEventArgs> OnSettingsChanged;
+
         public static Options Instance
         {
             get
@@ -159,6 +162,7 @@ namespace XrmToolBox
         [DisplayName("Additional repositories")]
         [Description("Additional repositories where to find tools. One line per repository. Format: <repository name>|<repository path>")]
         [Editor(typeof(MultilineStringEditor), typeof(UITypeEditor))]
+        [PropertyOrder(2)]
         public string AdditionalRepositories { get; set; }
 
         [Browsable(false)] public bool? AllowLogUsage { get; set; }
@@ -195,12 +199,14 @@ namespace XrmToolBox
         [Category("Connection controls")]
         [DisplayName("Search pre release updates")]
         [Description("Allow XrmToolBox to search pre release update (alpha, beta, etc.) of connection controls")]
+        [PropertyOrder(1)]
         public bool ConnectionControlsAllowPreReleaseUpdates { get; set; }
 
         [ReadOnly(true)]
         [Category("Connection controls")]
         [DisplayName("Version")]
         [Description("Current version of connection controls")]
+        [PropertyOrder(2)]
         public string ConnectionControlsVersion { get; set; }
 
         [Browsable(false)]
@@ -334,27 +340,39 @@ namespace XrmToolBox
         public DateTime LastUpdateCheck { get; set; }
 
         [Browsable(false)] public bool LibraryFilterMvp { get; set; }
+
         [Browsable(false)] public bool LibraryFilterNew { get; set; }
+
         [Browsable(false)] public bool LibraryFilterOpenSource { get; set; }
+
         [Browsable(false)] public bool LibraryFilterRating { get; set; }
+
         [Browsable(false)] public bool LibraryShowIncompatible { get; set; }
+
         [Browsable(false)] public bool LibraryShowInstalled { get; set; } = true;
+
         [Browsable(false)] public bool LibraryShowNotInstalled { get; set; } = true;
+
         [Browsable(false)] public bool LibraryShowUpdates { get; set; } = true;
 
-        [Category("Connections")]
+        [Category("Connection controls")]
         [DisplayName("Display all connections")]
         [Description("Indicates if bottom left connection control should display all connections regardless the connection files they come from")]
+        [PropertyOrder(4)]
         public bool MergeConnectionFiles { get; set; }
 
         [Category("Tool Library")]
         [DisplayName("Most Rated - Minimum number of votes")]
         [Description("Indicates the minimum number of votes for a tool to be considered as a most rated tool")]
+        [PropertyOrder(3)]
+
         public int MostRatedMinNumberOfVotes { get; set; } = 10;
 
         [Category("Tool Library")]
         [DisplayName("Most Rated - Minimum average rate")]
         [Description("Indicates the minimum average rate for a tool to be considered as a most rated tool")]
+        [PropertyOrder(4)]
+
         public decimal MostRatedMinRatingAverage { get; set; } = (decimal)4.5;
 
         [Browsable(false)]
@@ -372,6 +390,9 @@ namespace XrmToolBox
 
         [Browsable(false)]
         public bool OptinForApplicationInsights { get; set; } = true;
+
+        [Browsable(false)]
+        public List<string> OrderForSettingsTab { get; set; } = new List<string>();
 
         [Category("Tools list display")]
         [DisplayName("Order")]
@@ -408,11 +429,14 @@ namespace XrmToolBox
         [Category("Tool Library")]
         [DisplayName("Repository Url")]
         [Description("Repository Url for tools list. You can use your own if needed")]
+        [PropertyOrder(1)]
+
         public string RepositoryUrl { get; set; } = "https://www.xrmtoolbox.com/_odata/plugins";
 
-        [Category("Connections")]
+        [Category("Connection controls")]
         [DisplayName("Reuse connections")]
         [Description("Indicates if connecting to an already connected organization should instanciate a new connection or use the existing one")]
+        [PropertyOrder(3)]
         public bool ReuseConnections { get; set; }
 
         [Category("Startup")]
@@ -460,6 +484,8 @@ namespace XrmToolBox
         [Category("Tool Library")]
         [DisplayName("Use legacy Tool Library")]
         [Description("True to use the previous version of Tool Library")]
+        [PropertyOrder(5)]
+
         public bool UseLegacyToolLibrary { get; set; }
 
         public static bool Load(out Options options, out string errorMessage)
@@ -562,6 +588,12 @@ namespace XrmToolBox
         public void Replace(Options newOption)
         {
             innerOptions = newOption;
+        }
+
+        public void ReportSettingsChange(SettingsPropertyEventArgs e)
+        {
+            OnSettingsChanged?.Invoke(this, e);
+            Save();
         }
 
         public void Save()

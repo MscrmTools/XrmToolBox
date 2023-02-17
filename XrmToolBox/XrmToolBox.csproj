@@ -252,10 +252,31 @@
     <Compile Include="AppCode\PluginControlStatus.cs" />
     <Compile Include="AppCode\PluginUpdates.cs" />
     <Compile Include="AppCode\PluginUpdateSkip.cs" />
+    <Compile Include="AppCode\PropertySorter.cs" />
     <Compile Include="AppCode\RegistryHelper.cs" />
     <Compile Include="AppCode\ReleasesDTO.cs" />
+    <Compile Include="AppCode\SettingsPropertyEventArgs.cs" />
+    <Compile Include="AppCode\SettingsPropertyInfo.cs" />
     <Compile Include="AppCode\WebProxyHelper.cs" />
     <Compile Include="ConnectionParameterInfo.cs" />
+    <Compile Include="Controls\AdvancedControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\AdvancedControl.designer.cs">
+      <DependentUpon>AdvancedControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ApplicationProtocolControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ApplicationProtocolControl.Designer.cs">
+      <DependentUpon>ApplicationProtocolControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AssembliesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\AssembliesControl.Designer.cs">
+      <DependentUpon>AssembliesControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ConnectingCdsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -268,11 +289,66 @@
     <Compile Include="Controls\ConnectingControl.Designer.cs">
       <DependentUpon>ConnectingControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CreditsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\CreditsControl.Designer.cs">
+      <DependentUpon>CreditsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DropdownSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\DropdownSettingsControl.designer.cs">
+      <DependentUpon>DropdownSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ISettingsControl.cs" />
+    <Compile Include="Controls\NavLeftItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\NavLeftItem.designer.cs">
+      <DependentUpon>NavLeftItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PathsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PathsControl.Designer.cs">
+      <DependentUpon>PathsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProxyControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\ProxyControl.Designer.cs">
+      <DependentUpon>ProxyControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SwitchControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SwitchControl.designer.cs">
+      <DependentUpon>SwitchControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SwitchSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\SwitchSettingsControl.designer.cs">
+      <DependentUpon>SwitchSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\TextBoxSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TextBoxSettingsControl.designer.cs">
+      <DependentUpon>TextBoxSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\DonationIntroForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\DonationIntroForm.Designer.cs">
       <DependentUpon>DonationIntroForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SettingsForm.designer.cs">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\HiddenPluginsDialog.cs">
       <SubType>Form</SubType>
@@ -297,6 +373,12 @@
     </Compile>
     <Compile Include="Forms\NewVersionForm.Designer.cs">
       <DependentUpon>NewVersionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SuccessDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SuccessDialog.designer.cs">
+      <DependentUpon>SuccessDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\UserSelectionDialog.cs">
       <SubType>Form</SubType>
@@ -407,14 +489,50 @@
     <EmbeddedResource Include="Announcement\AnnouncementDialog.resx">
       <DependentUpon>AnnouncementDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\AdvancedControl.resx">
+      <DependentUpon>AdvancedControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ApplicationProtocolControl.resx">
+      <DependentUpon>ApplicationProtocolControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\AssembliesControl.resx">
+      <DependentUpon>AssembliesControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ConnectingCdsControl.resx">
       <DependentUpon>ConnectingCdsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ConnectingControl.resx">
       <DependentUpon>ConnectingControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\CreditsControl.resx">
+      <DependentUpon>CreditsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\DropdownSettingsControl.resx">
+      <DependentUpon>DropdownSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\NavLeftItem.resx">
+      <DependentUpon>NavLeftItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\PathsControl.resx">
+      <DependentUpon>PathsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ProxyControl.resx">
+      <DependentUpon>ProxyControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SwitchControl.resx">
+      <DependentUpon>SwitchControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\SwitchSettingsControl.resx">
+      <DependentUpon>SwitchSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TextBoxSettingsControl.resx">
+      <DependentUpon>TextBoxSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\DonationIntroForm.resx">
       <DependentUpon>DonationIntroForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SettingsForm.resx">
+      <DependentUpon>SettingsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\HiddenPluginsDialog.resx">
       <DependentUpon>HiddenPluginsDialog.cs</DependentUpon>
@@ -431,6 +549,9 @@
     <EmbeddedResource Include="Forms\OptionsDialog.resx">
       <DependentUpon>OptionsDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SuccessDialog.resx">
+      <DependentUpon>SuccessDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\UserSelectionDialog.resx">
       <DependentUpon>UserSelectionDialog.cs</DependentUpon>
@@ -559,10 +680,29 @@
     <None Include="Resources\Connect16.png" />
     <None Include="Resources\close1.png" />
     <None Include="Resources\PowerApps_scalable.png" />
+    <None Include="Resources\ApplicationProtocol32.png" />
+    <None Include="Resources\Assemblies32.png" />
+    <None Include="Resources\CloseBehavior32.png" />
     <Content Include="Resources\ConnectingDynamics.gif" />
     <None Include="Resources\LoadingConnection.gif" />
+    <None Include="Resources\ConnectionControls32.png" />
+    <None Include="Resources\Connections32.png" />
+    <None Include="Resources\Credits32.png" />
+    <None Include="Resources\DataCollect32.png" />
+    <None Include="Resources\Display32.png" />
+    <None Include="Resources\off-button.png" />
+    <None Include="Resources\on-button.png" />
+    <None Include="Resources\Paths32.png" />
+    <None Include="Resources\PluginsStore32.png" />
+    <None Include="Resources\ProxySettings32.png" />
+    <None Include="Resources\server.png" />
+    <None Include="Resources\Session32.png" />
+    <None Include="Resources\Settings32.png" />
+    <None Include="Resources\StartPage32.png" />
+    <None Include="Resources\Startup32.png" />
     <Content Include="Resources\three_tags.png" />
     <None Include="Resources\www_page.png" />
+    <None Include="Resources\ToolsListDisplay32.png" />
     <Content Include="XrmToolBox201512.ico" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />
@@ -611,7 +751,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

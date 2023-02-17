@@ -34,6 +34,8 @@ namespace XrmToolBox.New
 
         public event EventHandler OpenPluginsStoreRequested;
 
+        public event EventHandler OpenSettingsRequested;
+
         public void LoadMru()
         {
             var list = new List<Control>();
@@ -162,6 +164,10 @@ namespace XrmToolBox.New
             else if (sender == lblManageConnections)
             {
                 OpenConnectionsManagementRequested?.Invoke(this, new System.EventArgs());
+            }
+            else if (sender == lblOpenSettings)
+            {
+                OpenSettingsRequested?.Invoke(this, new System.EventArgs());
             }
             else if (sender == lblVisitXrmToolBoxPortal)
             {
