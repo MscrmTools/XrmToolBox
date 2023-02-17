@@ -87,7 +87,7 @@ namespace XrmToolBox.ToolLibrary
 
         #region Properties
 
-        public bool AllowConnectionControlPreRelease { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool AllowConnectionControlPreRelease { get; set; }
         public List<string> Categories { get; set; }
         public PluginDeletions PendingDeletions => pendingDeletions;
         public PluginUpdates PendingUpdates => pendingUpdates;
@@ -293,27 +293,16 @@ namespace XrmToolBox.ToolLibrary
             var jor = JObject.Parse(rData);
 
             var latestVersion = ((JArray)((JArray)jor["items"]).Last()["items"]).Last();
-            var content = await HttpClient.GetByteArrayAsync(latestVersion["packageContent"].ToString()).ConfigureAwait(false);
 
-            var versionInfoResponse = await HttpClient.GetAsync(latestVersion["@id"].ToString()).ConfigureAwait(false);
-            var versionInfoData = await versionInfoResponse.Content.ReadAsStringAsync();
-            var jov = JObject.Parse(versionInfoData);
+            var pv = await GetSpecificPackageVersion(packageName, latestVersion);
+            while (pv.IsPrerelease && !AllowConnectionControlPreRelease)
+            {
+                latestVersion = latestVersion.Previous;
 
-            var ceUrl = jov["catalogEntry"].ToString();
-            var ceResponse = await HttpClient.GetAsync(ceUrl).ConfigureAwait(false);
-            var ceData = await ceResponse.Content.ReadAsStringAsync();
-            var ceo = JObject.Parse(ceData);
+                pv = await GetSpecificPackageVersion(packageName, latestVersion);
+            }
 
-            var fullVersion = ceo["version"].ToString();
-
-            var nugetVersion = new Version(fullVersion.Split('-')[0]);
-            var release = fullVersion.IndexOf("-") > 0 ? fullVersion.Split('-')[1] : "";
-            var isPreRelease = (bool)ceo["isPrerelease"];
-            var releasenotes = ceo["releaseNotes"].ToString();
-
-            string version = fullVersion;
-
-            return new PackageVersion(packageName, version, releasenotes, content);
+            return pv;
         }
 
         public XtbPlugin GetPluginByFileName(string filename)
@@ -372,7 +361,9 @@ namespace XrmToolBox.ToolLibrary
             bool isNewVersion = ca.GetName().Version < connectionControlsPackage.Version
                    || ca.GetName().Version == connectionControlsPackage.Version &&
                    connectionControlsPackage.Version == currStoredVer &&
-                   connectionControlsPackage.ToString() != currentStoredVersion;
+                   connectionControlsPackage.ToString() != currentStoredVersion
+                   || connectionControlsPackage.ToString().IndexOf("-") > 0 && !AllowConnectionControlPreRelease
+                   ;
 
             return new ConnectionControlsUpdateSettings
             {
@@ -558,7 +549,6 @@ namespace XrmToolBox.ToolLibrary
         public async Task<IConnectionControlUpdateSettings> PrepareConnectionControlsUpdate(Form form, bool restart)
         {
             var updates = new PluginUpdates { PreviousProcessId = Process.GetCurrentProcess().Id };
-
             await AddPackageToInstall(connectionControlsPackage, updates);
             await AddPackageToInstall(await GetPackageVersion("Microsoft.CrmSdk.XrmTooling.CoreAssembly"), updates);
             await AddPackageToInstall(await GetPackageVersion("Microsoft.CrmSdk.XrmTooling.WpfControls"), updates);
@@ -734,6 +724,31 @@ namespace XrmToolBox.ToolLibrary
                 }
             }
             return new T();
+        }
+
+        private async Task<PackageVersion> GetSpecificPackageVersion(string packageName, JToken jo)
+        {
+            var content = await HttpClient.GetByteArrayAsync(jo["packageContent"].ToString()).ConfigureAwait(false);
+
+            var versionInfoResponse = await HttpClient.GetAsync(jo["@id"].ToString()).ConfigureAwait(false);
+            var versionInfoData = await versionInfoResponse.Content.ReadAsStringAsync();
+            var jov = JObject.Parse(versionInfoData);
+
+            var ceUrl = jov["catalogEntry"].ToString();
+            var ceResponse = await HttpClient.GetAsync(ceUrl).ConfigureAwait(false);
+            var ceData = await ceResponse.Content.ReadAsStringAsync();
+            var ceo = JObject.Parse(ceData);
+
+            var fullVersion = ceo["version"].ToString();
+
+            var nugetVersion = new Version(fullVersion.Split('-')[0]);
+            var release = fullVersion.IndexOf("-") > 0 ? fullVersion.Split('-')[1] : "";
+            var isPreRelease = (bool)ceo["isPrerelease"];
+            var releasenotes = ceo["releaseNotes"].ToString();
+
+            string version = fullVersion;
+
+            return new PackageVersion(packageName, version, releasenotes, content);
         }
 
         private CompatibleState IsPluginDependencyCompatible(Version xtbDependencyVersion)
