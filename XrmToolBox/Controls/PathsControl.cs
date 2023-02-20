@@ -48,6 +48,8 @@ namespace XrmToolBox.Controls
 
                 sizes.Add(subFolder.Split('\\').Last(), DirSize(new DirectoryInfo(subFolder)));
             }
+
+            lblChangePathDescription.Text = string.Format(lblChangePathDescription.Text, folder);
         }
 
         private static long DirSize(DirectoryInfo d)
