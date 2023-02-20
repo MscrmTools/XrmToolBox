@@ -1872,7 +1872,15 @@ Would you like to reinstall last stable release of connection controls?";
                             MessageBox.Show(this, "Unable to find the tool metadata!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return;
                         }
-                        DisplayPluginControl(plugin);
+
+                        if (service == null)
+                        {
+                            ConnectUponApproval(plugin);
+                        }
+                        else
+                        {
+                            DisplayPluginControl(plugin);
+                        }
                     };
                     ((ToolLibrary.ToolLibrary)store).OnToolsMetadataRefreshRequested += (s, evt) =>
                     {

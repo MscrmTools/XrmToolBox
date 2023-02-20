@@ -93,7 +93,7 @@
             this.lblToolName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblToolName.Name = "lblToolName";
             this.lblToolName.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.lblToolName.Size = new System.Drawing.Size(1283, 92);
+            this.lblToolName.Size = new System.Drawing.Size(1290, 92);
             this.lblToolName.TabIndex = 5;
             this.lblToolName.Text = "[Tool name]";
             this.lblToolName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -102,9 +102,9 @@
             // 
             this.panel1.Controls.Add(this.pbOpenTool);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel1.Location = new System.Drawing.Point(1373, 0);
+            this.panel1.Location = new System.Drawing.Point(1380, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(39, 92);
+            this.panel1.Size = new System.Drawing.Size(32, 92);
             this.panel1.TabIndex = 4;
             // 
             // pbOpenTool
@@ -114,10 +114,11 @@
             this.pbOpenTool.Image = global::XrmToolBox.ToolLibrary.Resource.Open16;
             this.pbOpenTool.Location = new System.Drawing.Point(0, 0);
             this.pbOpenTool.Name = "pbOpenTool";
-            this.pbOpenTool.Size = new System.Drawing.Size(39, 32);
+            this.pbOpenTool.Size = new System.Drawing.Size(32, 32);
             this.pbOpenTool.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbOpenTool.TabIndex = 3;
             this.pbOpenTool.TabStop = false;
+            this.pbOpenTool.Click += new System.EventHandler(this.pbOpenTool_Click);
             // 
             // pbLogo
             // 
