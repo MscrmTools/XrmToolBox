@@ -1921,7 +1921,7 @@ Would you like to reinstall last stable release of connection controls?";
 
                                 if (MessageBox.Show(this, message, @"Question", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                                 {
-                                    var ccSettings = store.PrepareConnectionControlsUpdate(this, false).GetAwaiter().GetResult();
+                                    var ccSettings = await store.PrepareConnectionControlsUpdate(this, false);
 
                                     Options.Instance.ConnectionControlsVersion = ccSettings.Version;
                                     Options.Instance.Save();
