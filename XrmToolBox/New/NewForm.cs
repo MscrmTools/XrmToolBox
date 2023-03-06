@@ -341,6 +341,7 @@ Would you like to reinstall last stable release of connection controls?";
             }
             catch (Exception error)
             {
+                toolTip.SetToolTip(pbToolLibraryError, error.Message);
                 pnlNoToolLibraryAccess.Visible = true;
 
                 return false;
