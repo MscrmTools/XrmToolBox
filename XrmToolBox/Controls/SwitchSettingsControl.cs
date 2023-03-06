@@ -11,13 +11,18 @@ namespace XrmToolBox.Controls
         public SwitchSettingsControl()
         {
             InitializeComponent();
+
+            Options.Instance.OnSettingsChanged += Instance_OnSettingsChanged;
         }
 
         public event EventHandler<SettingsPropertyEventArgs> OnSettingsPropertyChanged;
 
         public bool Checked { get; set; }
+
         public string Description { get; set; }
+
         public string PropertyName { get; set; }
+
         public string Title { get; set; }
 
         public void ApplyHeight()
@@ -35,6 +40,17 @@ namespace XrmToolBox.Controls
             }
 
             Height = lblTitle.Height + switchControl1.Height + lblDescription.Height + 40;
+        }
+
+        private void Instance_OnSettingsChanged(object sender, SettingsPropertyEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(PropertyName) && e.PropertyName == PropertyName)
+            {
+                Checked = (bool)e.Value;
+                switchControl1.OnCheckedChanged -= SwitchControl1_OnCheckedChanged;
+                switchControl1.Checked = Checked;
+                switchControl1.OnCheckedChanged += SwitchControl1_OnCheckedChanged;
+            }
         }
 
         private void SwitchControl1_OnCheckedChanged(object sender, EventArgs e)

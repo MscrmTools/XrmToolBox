@@ -1401,7 +1401,7 @@ Would you like to reinstall last stable release of connection controls?";
                 }));
             };
 
-            fHelper = new FormHelper(this);
+            fHelper = new FormHelper(this, Options.Instance);
             ccsb = new CrmConnectionStatusBar(fHelper) { Dock = DockStyle.Bottom };
             Controls.Add(ccsb);
             Controls.SetChildIndex(ccsb, Controls.Count - 1);

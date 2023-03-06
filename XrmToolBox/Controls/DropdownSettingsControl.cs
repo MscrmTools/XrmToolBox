@@ -14,13 +14,18 @@ namespace XrmToolBox.Controls
         public DropdownSettingsControl()
         {
             InitializeComponent();
+
+            Options.Instance.OnSettingsChanged += Instance_OnSettingsChanged;
         }
 
         public event EventHandler<SettingsPropertyEventArgs> OnSettingsPropertyChanged;
 
         public string Description { get; set; }
+
         public Type EnumType { get; set; }
+
         public string PropertyName { get; set; }
+
         public string Title { get; set; }
 
         [Browsable(false)]
@@ -55,6 +60,17 @@ namespace XrmToolBox.Controls
             }
 
             return value.ToString();
+        }
+
+        private void Instance_OnSettingsChanged(object sender, SettingsPropertyEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(PropertyName) && e.PropertyName == PropertyName)
+            {
+                string desc = GetEnumDescription((Enum)e.Value);
+                cbbList.SelectedIndexChanged -= cbbList_SelectedIndexChanged;
+                cbbList.SelectedItem = desc;
+                cbbList.SelectedIndexChanged += cbbList_SelectedIndexChanged;
+            }
         }
 
         private void SwitchSettingsControl_Load(object sender, EventArgs e)

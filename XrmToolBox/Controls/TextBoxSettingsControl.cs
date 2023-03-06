@@ -22,17 +22,33 @@ namespace XrmToolBox.Controls
         public TextBoxSettingsControl()
         {
             InitializeComponent();
+
+            Options.Instance.OnSettingsChanged += Instance_OnSettingsChanged;
         }
 
         public event EventHandler<SettingsPropertyEventArgs> OnSettingsPropertyChanged;
 
         public string Description { get; set; }
+
         public bool IsPassword { get; set; }
+
         public bool Multiline { get; set; }
+
         public string PropertyName { get; set; }
+
         public bool Readonly { get; set; }
+
         public string Title { get; set; }
+
         public string ValidationRegEx { get; set; }
+
+        private void Instance_OnSettingsChanged(object sender, SettingsPropertyEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(PropertyName) && e.PropertyName == PropertyName)
+            {
+                txtText.Text = e.Value?.ToString();
+            }
+        }
 
         private void SwitchSettingsControl_Load(object sender, EventArgs e)
         {
