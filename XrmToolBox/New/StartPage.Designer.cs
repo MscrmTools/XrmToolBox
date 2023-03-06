@@ -52,11 +52,11 @@
             this.lblDocsForUsers = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.lblVisitXrmToolBoxPortal = new System.Windows.Forms.Label();
+            this.lblOpenSettings = new System.Windows.Forms.Label();
             this.lblManageConnections = new System.Windows.Forms.Label();
             this.lblOpenPluginsStore = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.chkDoNotShowAtStartup = new System.Windows.Forms.CheckBox();
-            this.lblOpenSettings = new System.Windows.Forms.Label();
             this.pnlMain.SuspendLayout();
             this.pnlMruParent.SuspendLayout();
             this.pnlMru.SuspendLayout();
@@ -277,7 +277,7 @@
             this.lblDonatePayPal.Font = new System.Drawing.Font("Segoe UI Light", 14F);
             this.lblDonatePayPal.Image = global::XrmToolBox.Properties.Resources.paypal;
             this.lblDonatePayPal.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblDonatePayPal.Location = new System.Drawing.Point(0, 702);
+            this.lblDonatePayPal.Location = new System.Drawing.Point(0, 776);
             this.lblDonatePayPal.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblDonatePayPal.Name = "lblDonatePayPal";
             this.lblDonatePayPal.Size = new System.Drawing.Size(480, 74);
@@ -294,7 +294,7 @@
             this.lblChatGitter.Font = new System.Drawing.Font("Segoe UI Light", 14F);
             this.lblChatGitter.Image = global::XrmToolBox.Properties.Resources.Gitter32;
             this.lblChatGitter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblChatGitter.Location = new System.Drawing.Point(0, 628);
+            this.lblChatGitter.Location = new System.Drawing.Point(0, 702);
             this.lblChatGitter.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblChatGitter.Name = "lblChatGitter";
             this.lblChatGitter.Size = new System.Drawing.Size(480, 74);
@@ -311,7 +311,7 @@
             this.lblFollowUsTwitter.Font = new System.Drawing.Font("Segoe UI Light", 14F);
             this.lblFollowUsTwitter.Image = global::XrmToolBox.Properties.Resources.twitter;
             this.lblFollowUsTwitter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblFollowUsTwitter.Location = new System.Drawing.Point(0, 554);
+            this.lblFollowUsTwitter.Location = new System.Drawing.Point(0, 628);
             this.lblFollowUsTwitter.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblFollowUsTwitter.Name = "lblFollowUsTwitter";
             this.lblFollowUsTwitter.Size = new System.Drawing.Size(480, 74);
@@ -327,7 +327,7 @@
             this.label9.Dock = System.Windows.Forms.DockStyle.Top;
             this.label9.Font = new System.Drawing.Font("Segoe UI Light", 20F);
             this.label9.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label9.Location = new System.Drawing.Point(0, 462);
+            this.label9.Location = new System.Drawing.Point(0, 536);
             this.label9.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label9.Name = "label9";
             this.label9.Padding = new System.Windows.Forms.Padding(0, 15, 0, 0);
@@ -341,7 +341,7 @@
             this.lblDocsForDev.Font = new System.Drawing.Font("Segoe UI Light", 14F);
             this.lblDocsForDev.Image = global::XrmToolBox.Properties.Resources.logo_0032;
             this.lblDocsForDev.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblDocsForDev.Location = new System.Drawing.Point(0, 388);
+            this.lblDocsForDev.Location = new System.Drawing.Point(0, 462);
             this.lblDocsForDev.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblDocsForDev.Name = "lblDocsForDev";
             this.lblDocsForDev.Size = new System.Drawing.Size(480, 74);
@@ -358,7 +358,7 @@
             this.lblDocsForUsers.Font = new System.Drawing.Font("Segoe UI Light", 14F);
             this.lblDocsForUsers.Image = global::XrmToolBox.Properties.Resources.logo_0032;
             this.lblDocsForUsers.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblDocsForUsers.Location = new System.Drawing.Point(0, 314);
+            this.lblDocsForUsers.Location = new System.Drawing.Point(0, 388);
             this.lblDocsForUsers.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblDocsForUsers.Name = "lblDocsForUsers";
             this.lblDocsForUsers.Size = new System.Drawing.Size(480, 74);
@@ -374,7 +374,7 @@
             this.label6.Dock = System.Windows.Forms.DockStyle.Top;
             this.label6.Font = new System.Drawing.Font("Segoe UI Light", 20F);
             this.label6.ForeColor = System.Drawing.Color.SteelBlue;
-            this.label6.Location = new System.Drawing.Point(0, 222);
+            this.label6.Location = new System.Drawing.Point(0, 296);
             this.label6.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label6.Name = "label6";
             this.label6.Padding = new System.Windows.Forms.Padding(0, 15, 0, 0);
@@ -388,7 +388,7 @@
             this.lblVisitXrmToolBoxPortal.Font = new System.Drawing.Font("Segoe UI Light", 14F);
             this.lblVisitXrmToolBoxPortal.Image = global::XrmToolBox.Properties.Resources.logo_0032;
             this.lblVisitXrmToolBoxPortal.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblVisitXrmToolBoxPortal.Location = new System.Drawing.Point(0, 148);
+            this.lblVisitXrmToolBoxPortal.Location = new System.Drawing.Point(0, 222);
             this.lblVisitXrmToolBoxPortal.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblVisitXrmToolBoxPortal.Name = "lblVisitXrmToolBoxPortal";
             this.lblVisitXrmToolBoxPortal.Size = new System.Drawing.Size(480, 74);
@@ -398,6 +398,23 @@
             this.lblVisitXrmToolBoxPortal.Click += new System.EventHandler(this.LabelClick);
             this.lblVisitXrmToolBoxPortal.MouseEnter += new System.EventHandler(this.LabelMouseEnter);
             this.lblVisitXrmToolBoxPortal.MouseLeave += new System.EventHandler(this.LabelMouseLeave);
+            // 
+            // lblOpenSettings
+            // 
+            this.lblOpenSettings.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblOpenSettings.Font = new System.Drawing.Font("Segoe UI Light", 14F);
+            this.lblOpenSettings.Image = global::XrmToolBox.Properties.Resources.Settings32;
+            this.lblOpenSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblOpenSettings.Location = new System.Drawing.Point(0, 148);
+            this.lblOpenSettings.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lblOpenSettings.Name = "lblOpenSettings";
+            this.lblOpenSettings.Size = new System.Drawing.Size(480, 74);
+            this.lblOpenSettings.TabIndex = 25;
+            this.lblOpenSettings.Text = "       Open Settings";
+            this.lblOpenSettings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblOpenSettings.Click += new System.EventHandler(this.LabelClick);
+            this.lblOpenSettings.MouseEnter += new System.EventHandler(this.LabelMouseEnter);
+            this.lblOpenSettings.MouseHover += new System.EventHandler(this.LabelMouseLeave);
             // 
             // lblManageConnections
             // 
@@ -461,21 +478,6 @@
             this.chkDoNotShowAtStartup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.chkDoNotShowAtStartup.UseVisualStyleBackColor = false;
             this.chkDoNotShowAtStartup.CheckedChanged += new System.EventHandler(this.chkDoNotShowAtStartup_CheckedChanged);
-            // 
-            // lblOpenSettings
-            // 
-            this.lblOpenSettings.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblOpenSettings.Font = new System.Drawing.Font("Segoe UI Light", 14F);
-            this.lblOpenSettings.Image = global::XrmToolBox.Properties.Resources.Settings32;
-            this.lblOpenSettings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblOpenSettings.Location = new System.Drawing.Point(0, 776);
-            this.lblOpenSettings.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.lblOpenSettings.Name = "lblOpenSettings";
-            this.lblOpenSettings.Size = new System.Drawing.Size(480, 74);
-            this.lblOpenSettings.TabIndex = 25;
-            this.lblOpenSettings.Text = "       Open Settings";
-            this.lblOpenSettings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblOpenSettings.Click += new System.EventHandler(this.LabelClick);
             // 
             // StartPage
             // 
