@@ -229,13 +229,15 @@ namespace XrmToolBox
         }
 
         [Browsable(false)]
-        [Category("Startup")]
-        [DisplayName("Open Tool Library only if updates are available")]
+        //[Category("Startup")]
+        //[DisplayName("Open Tool Library only if updates are available")]
+        //[Description("Indicates wether Tool Library should be opened automatically when XrmToolBox starts, but only if updates are available for tools")]
         public bool DisplayPluginsStoreOnlyIfUpdates { get; set; }
 
         [Browsable(false)]
-        [Category("Startup")]
-        [DisplayName("Open Tool Library")]
+        //[Category("Startup")]
+        //[DisplayName("Open Tool Library")]
+        //[Description("Indicates wether Tool Library should be opened automatically when XrmToolBox starts")]
         public bool DisplayPluginsStoreOnStartup { get; set; }
 
         [Category("Startup")]
