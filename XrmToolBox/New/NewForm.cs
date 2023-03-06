@@ -1347,7 +1347,7 @@ Would you like to reinstall last stable release of connection controls?";
                               service = e.OrganizationService;
                           }
                       }
-                      else if (dpMain.Contents.OfType<PluginForm>().Count() > 1)
+                      else if (dpMain.Contents.OfType<PluginForm>().Any())
                       {
                           ccsb.SetConnectionStatus(true, e.ConnectionDetail);
                           ccsb.SetMessage(string.Empty);
@@ -1355,15 +1355,6 @@ Would you like to reinstall last stable release of connection controls?";
                           service = e.OrganizationService;
 
                           ApplyConnectionToTabs(e.ConnectionDetail);
-                      }
-                      else if (dpMain.Contents.OfType<PluginForm>().Count() == 1)
-                      {
-                          ccsb.SetConnectionStatus(true, e.ConnectionDetail);
-                          ccsb.SetMessage(string.Empty);
-                          connectionDetail = e.ConnectionDetail;
-                          service = e.OrganizationService;
-
-                          UpdateTabConnection(dpMain.Contents.OfType<PluginForm>().First(), e.ConnectionDetail);
                       }
                       else
                       {
