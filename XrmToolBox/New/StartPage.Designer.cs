@@ -414,7 +414,7 @@
             this.lblOpenSettings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.lblOpenSettings.Click += new System.EventHandler(this.LabelClick);
             this.lblOpenSettings.MouseEnter += new System.EventHandler(this.LabelMouseEnter);
-            this.lblOpenSettings.MouseHover += new System.EventHandler(this.LabelMouseLeave);
+            this.lblOpenSettings.MouseLeave += new System.EventHandler(this.LabelMouseLeave);
             // 
             // lblManageConnections
             // 
