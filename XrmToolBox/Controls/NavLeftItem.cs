@@ -13,14 +13,15 @@ namespace XrmToolBox.Controls
         {
             InitializeComponent();
 
-            Dock = DockStyle.Top;
+            Cursor = Cursors.Hand;
         }
 
         public event EventHandler OnSelectedChanged;
 
+        public int DisplayIndex { get; set; }
+        public bool Expanded { get; set; } = true;
         public Image Image { get; set; }
         public int Index { get; set; }
-
         public Panel Panel { get; set; }
 
         public bool Selected
@@ -36,7 +37,7 @@ namespace XrmToolBox.Controls
 
         private void NavLeftItem_Click(object sender, EventArgs e)
         {
-            Selected = true;
+            Selected = !Selected;
         }
 
         private void NavLeftItem_Paint(object sender, PaintEventArgs e)
@@ -51,22 +52,16 @@ namespace XrmToolBox.Controls
                 }
             }
 
-            // Draw string. Center the text.
-            using (SolidBrush brush = new SolidBrush(ForeColor))
+            if (Expanded)
             {
-                StringFormat _stringFlags = new StringFormat();
-                _stringFlags.Alignment = StringAlignment.Near;
-                _stringFlags.LineAlignment = StringAlignment.Center;
-                e.Graphics.DrawString(Text, Font, brush, new Point(50, 22), new StringFormat(_stringFlags));
+                using (SolidBrush brush = new SolidBrush(ForeColor))
+                {
+                    StringFormat _stringFlags = new StringFormat();
+                    _stringFlags.Alignment = StringAlignment.Near;
+                    _stringFlags.LineAlignment = StringAlignment.Center;
+                    e.Graphics.DrawString(Text, Font, brush, new Point(50, 22), new StringFormat(_stringFlags));
+                }
             }
-
-            //if (!_selected)
-            //{
-            //    using (Pen pen = new Pen(Color.Gray, 1))
-            //    {
-            //        e.Graphics.DrawLine(pen, e.ClipRectangle.X, e.ClipRectangle.Height - 1, e.ClipRectangle.Width, e.ClipRectangle.Height - 1);
-            //    }
-            //}
         }
     }
 }

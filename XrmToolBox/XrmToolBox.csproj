@@ -246,6 +246,7 @@
     <Compile Include="Announcement\AnnouncementSettings.cs" />
     <Compile Include="AppCode\DockExtensions.cs" />
     <Compile Include="AppCode\Extensions.cs" />
+    <Compile Include="AppCode\IToolsForm.cs" />
     <Compile Include="AppCode\ListViewItemComparer.cs" />
     <Compile Include="AppCode\Favorites.cs" />
     <Compile Include="AppCode\MostRecentlyUsedItems.cs" />
@@ -338,6 +339,9 @@
     <Compile Include="Controls\TextBoxSettingsControl.designer.cs">
       <DependentUpon>TextBoxSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TextBoxWithPlaceholder.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\DonationIntroForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -409,6 +413,13 @@
     <Compile Include="New\FavoriteControl.Designer.cs">
       <DependentUpon>FavoriteControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="New\PluginsForm2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="New\PluginsForm2.designer.cs">
+      <DependentUpon>PluginsForm2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="New\ToolInfo.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="PluginManagerExtended.cs" />
     <Compile Include="PluginUseCount.cs" />
@@ -562,6 +573,9 @@
     <EmbeddedResource Include="New\FavoriteControl.resx">
       <DependentUpon>FavoriteControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="New\PluginsForm2.resx">
+      <DependentUpon>PluginsForm2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -683,6 +697,9 @@
     <None Include="Resources\ApplicationProtocol32.png" />
     <None Include="Resources\Assemblies32.png" />
     <None Include="Resources\CloseBehavior32.png" />
+    <None Include="Resources\Comparison32.png" />
+    <None Include="Resources\Configuration32.png" />
+    <None Include="Resources\Connect24.png" />
     <Content Include="Resources\ConnectingDynamics.gif" />
     <None Include="Resources\LoadingConnection.gif" />
     <None Include="Resources\ConnectionControls32.png" />
@@ -700,9 +717,33 @@
     <None Include="Resources\Settings32.png" />
     <None Include="Resources\StartPage32.png" />
     <None Include="Resources\Startup32.png" />
+    <None Include="Resources\Migration32.png" />
+    <None Include="Resources\New32.png" />
+    <None Include="Resources\Plugins32.png" />
+    <None Include="Resources\PowerBI32.png" />
+    <None Include="Resources\PowerPages32.png" />
+    <None Include="Resources\Processes32.png" />
+    <None Include="Resources\Reporting32.png" />
+    <None Include="Resources\right-arrow.png" />
+    <None Include="Resources\Security32.png" />
+    <None Include="Resources\Shrink32.png" />
+    <None Include="Resources\Solutions32.png" />
+    <None Include="Resources\Customizations32.png" />
+    <None Include="Resources\Data32.png" />
+    <None Include="Resources\Development32.png" />
+    <None Include="Resources\Documentation32.png" />
+    <None Include="Resources\Expand32.png" />
+    <None Include="Resources\left-arrow.png" />
+    <None Include="Resources\Favorite24.png" />
+    <None Include="Resources\Hide24.png" />
+    <None Include="Resources\Shortcut24.png" />
     <Content Include="Resources\three_tags.png" />
     <None Include="Resources\www_page.png" />
     <None Include="Resources\ToolsListDisplay32.png" />
+    <None Include="Resources\Troubleshooting32.png" />
+    <None Include="Resources\UserInterface32.png" />
+    <None Include="Resources\Uninstall24.png" />
+    <None Include="Resources\Web24.png" />
     <Content Include="XrmToolBox201512.ico" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />

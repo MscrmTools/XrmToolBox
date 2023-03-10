@@ -19,7 +19,7 @@ using XrmToolBox.PluginsStore;
 
 namespace XrmToolBox.New
 {
-    public partial class PluginsForm : DockContent
+    public partial class PluginsForm : DockContent, IToolsForm
     {
         #region Variables
 

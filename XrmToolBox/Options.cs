@@ -229,15 +229,9 @@ namespace XrmToolBox
         }
 
         [Browsable(false)]
-        //[Category("Startup")]
-        //[DisplayName("Open Tool Library only if updates are available")]
-        //[Description("Indicates wether Tool Library should be opened automatically when XrmToolBox starts, but only if updates are available for tools")]
         public bool DisplayPluginsStoreOnlyIfUpdates { get; set; }
 
         [Browsable(false)]
-        //[Category("Startup")]
-        //[DisplayName("Open Tool Library")]
-        //[Description("Indicates wether Tool Library should be opened automatically when XrmToolBox starts")]
         public bool DisplayPluginsStoreOnStartup { get; set; }
 
         [Category("Startup")]
@@ -550,6 +544,11 @@ namespace XrmToolBox
         [XmlIgnore]
         public DisplayOrder PluginsDisplayOrder { get; set; }
 
+        [Category("Tools list display")]
+        [DisplayName("Use legacy Tools list")]
+        [Description("Indicates if tools list should be displayed using legacy layout or new layout (restart required)")]
+        public bool UseLegacyToolsList { get; set; }
+
         #endregion Tools list display
 
         #region Others
@@ -708,7 +707,8 @@ namespace XrmToolBox
                 LibraryShowIncompatible = LibraryShowIncompatible,
                 LibraryShowInstalled = LibraryShowInstalled,
                 LibraryShowNotInstalled = LibraryShowNotInstalled,
-                LibraryShowUpdates = LibraryShowUpdates
+                LibraryShowUpdates = LibraryShowUpdates,
+                UseLegacyToolsList = UseLegacyToolsList
             };
         }
 

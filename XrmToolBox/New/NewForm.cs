@@ -38,7 +38,7 @@ namespace XrmToolBox.New
         private const string AiKey = "77a2080e-f82c-4b2f-bb77-eb407236b729";
         private readonly Dictionary<PluginForm, ConnectionDetail> pluginConnections = new Dictionary<PluginForm, ConnectionDetail>();
         private readonly List<PluginControlStatus> pluginControlStatuses = new List<PluginControlStatus>();
-        private readonly PluginsForm pluginsForm;
+        private readonly IToolsForm pluginsForm;
         private AppInsights ai = new AppInsights(new AiConfig(AiEndpoint, AiKey));
         private CrmConnectionStatusBar ccsb;
         private ConnectionManager cManager;
@@ -79,7 +79,9 @@ namespace XrmToolBox.New
             ccsb.MergeConnectionsFiles = Options.Instance.MergeConnectionFiles;
 
             WelcomeDialog.SetStatus("Loading tools...");
-            pluginsForm = new PluginsForm();
+            if (Options.Instance.UseLegacyToolsList)
+                pluginsForm = new PluginsForm();
+            else pluginsForm = new PluginsForm2();
 
             if (pluginsForm != null)
             {
@@ -94,8 +96,8 @@ namespace XrmToolBox.New
                 pluginsForm.OpenPluginProjectUrlRequested += PluginsForm_OpenPluginProjectUrlRequested;
                 pluginsForm.UninstallPluginRequested += PluginsForm_UninstallPluginRequested;
                 pluginsForm.ActionRequested += PluginsForm_ActionRequested;
-                pluginsForm.Show(dpMain, Options.Instance.PluginsListDocking);
-                pluginsForm.IsHidden = Options.Instance.PluginsListIsHidden;
+                ((DockContent)pluginsForm).Show(dpMain, Options.Instance.PluginsListDocking);
+                ((DockContent)pluginsForm).IsHidden = Options.Instance.PluginsListIsHidden;
 
                 ProcessMenuItemsForPlugin2();
 
@@ -361,8 +363,8 @@ Would you like to reinstall last stable release of connection controls?";
             Options.Instance.Size.CurrentSize = Size;
             Options.Instance.Size.IsMaximized = WindowState == FormWindowState.Maximized;
             Options.Instance.LastConnection = connectionDetail?.ConnectionName;
-            Options.Instance.PluginsListDocking = pluginsForm?.DockState ?? DockState.Document;
-            Options.Instance.PluginsListIsHidden = pluginsForm?.IsHidden ?? false;
+            Options.Instance.PluginsListDocking = ((DockContent)pluginsForm)?.DockState ?? DockState.Document;
+            Options.Instance.PluginsListIsHidden = ((DockContent)pluginsForm)?.IsHidden ?? false;
 
             if (dpMain.ActiveContent is PluginForm pf)
             {
@@ -1709,7 +1711,7 @@ Would you like to reinstall last stable release of connection controls?";
                 }
                 else
                 {
-                    ((DockContent)dpMain.ActiveContent).DockTo(pluginsForm.Pane, DockStyle.Fill, dpMain.Contents.Count - 1);
+                    ((DockContent)dpMain.ActiveContent).DockTo(((DockContent)pluginsForm).Pane, DockStyle.Fill, dpMain.Contents.Count - 1);
                 }
 
                 ApplyActiveContentDisplay();
