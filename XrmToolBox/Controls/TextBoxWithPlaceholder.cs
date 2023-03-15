@@ -26,6 +26,17 @@ namespace XrmToolBox.Controls
             }
         }
 
+        public override string Text
+        {
+            get
+            {
+                if (base.Text == placeholder)
+                    return string.Empty;
+                return base.Text;
+            }
+            set => base.Text = value;
+        }
+
         protected override void OnTextChanged(EventArgs e)
         {
             if (!silent)

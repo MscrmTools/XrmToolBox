@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace XrmToolBox.Extensibility.Interfaces
 {
@@ -7,6 +8,7 @@ namespace XrmToolBox.Extensibility.Interfaces
         DateTime AddedOn { get; set; }
         string AssemblyFilename { get; }
         string AssemblyQualifiedName { get; }
+        List<string> Categories { get; }
         string Company { get; }
         string Control { get; }
         Guid Id { get; }

@@ -93,6 +93,16 @@ namespace XrmToolBox.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap CheckForUpdate24 {
+            get {
+                object obj = ResourceManager.GetObject("CheckForUpdate24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Clear_16 {
             get {
                 object obj = ResourceManager.GetObject("Clear_16", resourceCulture);
@@ -263,6 +273,16 @@ namespace XrmToolBox.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Dataverse24 {
+            get {
+                object obj = ResourceManager.GetObject("Dataverse24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Development32 {
             get {
                 object obj = ResourceManager.GetObject("Development32", resourceCulture);
@@ -286,6 +306,36 @@ namespace XrmToolBox.Properties {
         internal static System.Drawing.Bitmap Documentation32 {
             get {
                 object obj = ResourceManager.GetObject("Documentation32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Dollar24 {
+            get {
+                object obj = ResourceManager.GetObject("Dollar24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Dynamics365_24 {
+            get {
+                object obj = ResourceManager.GetObject("Dynamics365_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Euro24 {
+            get {
+                object obj = ResourceManager.GetObject("Euro24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -323,6 +373,16 @@ namespace XrmToolBox.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Help24 {
+            get {
+                object obj = ResourceManager.GetObject("Help24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap hide_detail {
             get {
                 object obj = ResourceManager.GetObject("hide_detail", resourceCulture);
@@ -336,6 +396,16 @@ namespace XrmToolBox.Properties {
         internal static System.Drawing.Bitmap Hide24 {
             get {
                 object obj = ResourceManager.GetObject("Hide24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Impersonate24 {
+            get {
+                object obj = ResourceManager.GetObject("Impersonate24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -456,6 +526,16 @@ namespace XrmToolBox.Properties {
         internal static System.Drawing.Bitmap LogoDyn365 {
             get {
                 object obj = ResourceManager.GetObject("LogoDyn365", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ManageConnections24 {
+            get {
+                object obj = ResourceManager.GetObject("ManageConnections24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -593,6 +673,16 @@ namespace XrmToolBox.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Pound24 {
+            get {
+                object obj = ResourceManager.GetObject("Pound24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap PowerApps_scalable {
             get {
                 object obj = ResourceManager.GetObject("PowerApps_scalable", resourceCulture);
@@ -606,6 +696,16 @@ namespace XrmToolBox.Properties {
         internal static System.Drawing.Bitmap powerapps16 {
             get {
                 object obj = ResourceManager.GetObject("powerapps16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap PowerApps24 {
+            get {
+                object obj = ResourceManager.GetObject("PowerApps24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -686,6 +786,16 @@ namespace XrmToolBox.Properties {
         internal static System.Drawing.Bitmap Session32 {
             get {
                 object obj = ResourceManager.GetObject("Session32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Settings24 {
+            get {
+                object obj = ResourceManager.GetObject("Settings24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -776,6 +886,16 @@ namespace XrmToolBox.Properties {
         internal static System.Drawing.Bitmap ToolLibrary32 {
             get {
                 object obj = ResourceManager.GetObject("ToolLibrary32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Tools24 {
+            get {
+                object obj = ResourceManager.GetObject("Tools24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

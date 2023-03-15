@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -337,6 +336,7 @@ Would you like to reinstall last stable release of connection controls?";
                     ItSecurityChecker isc = new ItSecurityChecker();
                     isc.LoadRepositories();
                     store = new ToolLibrary.ToolLibrary(Options.Instance, isc.Repositories);
+                    ((PluginsForm2)pluginsForm).Store = (ToolLibrary.ToolLibrary)store;
                 }
 
                 return true;
@@ -527,6 +527,9 @@ Would you like to reinstall last stable release of connection controls?";
                             if (assemblyFile.ToLower() == Path.GetFileName(file).ToLower())
                             {
                                 dico[category].Add(tool.Metadata.Name);
+
+                                tool.Metadata.Categories.Clear();
+                                tool.Metadata.Categories.AddRange(plugin.CategoriesList.Split(','));
                             }
                         }
                     }
@@ -1229,14 +1232,14 @@ Would you like to reinstall last stable release of connection controls?";
                       {
                           tsbOpenOrg.Text = @"Open environment";
                           tsbOpenOrg.ToolTipText = @"Open the connected environment in your web browser";
-                          tsbOpenOrg.Image = new Bitmap(Properties.Resources.Dataverse_16x16);
+                          tsbOpenOrg.Image = Properties.Resources.Dataverse24;
                           tsbOpenMaker.Visible = true;
                       }
                       else
                       {
                           tsbOpenOrg.Text = @"Open organization";
                           tsbOpenOrg.ToolTipText = @"Open the connected organization in your web browser";
-                          tsbOpenOrg.Image = new Bitmap(Properties.Resources.LogoDyn365);
+                          tsbOpenOrg.Image = Properties.Resources.Dynamics365_24;
                           tsbOpenMaker.Visible = false;
                       }
 

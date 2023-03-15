@@ -700,6 +700,7 @@
     <None Include="Resources\Comparison32.png" />
     <None Include="Resources\Configuration32.png" />
     <None Include="Resources\Connect24.png" />
+    <None Include="Resources\CheckForUpdate24.png" />
     <Content Include="Resources\ConnectingDynamics.gif" />
     <None Include="Resources\LoadingConnection.gif" />
     <None Include="Resources\ConnectionControls32.png" />
@@ -737,6 +738,16 @@
     <None Include="Resources\Favorite24.png" />
     <None Include="Resources\Hide24.png" />
     <None Include="Resources\Shortcut24.png" />
+    <None Include="Resources\Dollar24.png" />
+    <None Include="Resources\Euro24.png" />
+    <None Include="Resources\Help24.png" />
+    <None Include="Resources\ManageConnections24.png" />
+    <None Include="Resources\Settings24.png" />
+    <None Include="Resources\Impersonate24.png" />
+    <None Include="Resources\Pound24.png" />
+    <None Include="Resources\Dataverse24.png" />
+    <None Include="Resources\PowerApps24.png" />
+    <None Include="Resources\Dynamics365_24.png" />
     <Content Include="Resources\three_tags.png" />
     <None Include="Resources\www_page.png" />
     <None Include="Resources\ToolsListDisplay32.png" />
@@ -744,6 +755,7 @@
     <None Include="Resources\UserInterface32.png" />
     <None Include="Resources\Uninstall24.png" />
     <None Include="Resources\Web24.png" />
+    <None Include="Resources\Tools24.png" />
     <Content Include="XrmToolBox201512.ico" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />
@@ -792,7 +804,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

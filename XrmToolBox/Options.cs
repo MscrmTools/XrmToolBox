@@ -421,13 +421,6 @@ namespace XrmToolBox
         #region Display
 
         [Browsable(false)]
-        public bool DisplayLargeIcons
-        {
-            get => IconDisplayMode == DisplayIcons.Large;
-            set => IconDisplayMode = value ? DisplayIcons.Large : DisplayIcons.Small;
-        }
-
-        [Browsable(false)]
         [Obsolete]
         public bool DisplayMostUsedFirst { get; set; }
 
@@ -521,6 +514,19 @@ namespace XrmToolBox
 
         #region Tools list display
 
+        private bool showCategoriesExpanded;
+
+        [Browsable(false)]
+        public bool DisplayLargeIcons
+        {
+            get => IconDisplayMode == DisplayIcons.Large;
+            set
+            {
+                IconDisplayMode = value ? DisplayIcons.Large : DisplayIcons.Small;
+                OnSettingsChanged?.Invoke(this, new SettingsPropertyEventArgs(nameof(IconDisplayMode), IconDisplayMode));
+            }
+        }
+
         [Category("Tools list display")]
         [DisplayName("Hidden tools")]
         [Description("Defines the installed tools that should not be displayed in the tools list")]
@@ -543,6 +549,18 @@ namespace XrmToolBox
         [TypeConverter(typeof(CustomEnumConverter))]
         [XmlIgnore]
         public DisplayOrder PluginsDisplayOrder { get; set; }
+
+        [Category("Tools list display")]
+        [DisplayName("Show categories expanded")]
+        public bool ShowCategoriesExpanded
+        {
+            get => showCategoriesExpanded;
+            set
+            {
+                showCategoriesExpanded = value;
+                OnSettingsChanged?.Invoke(this, new SettingsPropertyEventArgs(nameof(ShowCategoriesExpanded), value));
+            }
+        }
 
         [Category("Tools list display")]
         [DisplayName("Use legacy Tools list")]
@@ -708,7 +726,8 @@ namespace XrmToolBox
                 LibraryShowInstalled = LibraryShowInstalled,
                 LibraryShowNotInstalled = LibraryShowNotInstalled,
                 LibraryShowUpdates = LibraryShowUpdates,
-                UseLegacyToolsList = UseLegacyToolsList
+                UseLegacyToolsList = UseLegacyToolsList,
+                ShowCategoriesExpanded = ShowCategoriesExpanded
             };
         }
 

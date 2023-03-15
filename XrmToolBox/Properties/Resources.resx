@@ -355,4 +355,40 @@
   <data name="Web24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Web24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="CheckForUpdate24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\CheckForUpdate24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Dataverse24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Dataverse24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Dollar24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Dollar24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Dynamics365_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Dynamics365_24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Euro24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Euro24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Help24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Help24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Impersonate24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Impersonate24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ManageConnections24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ManageConnections24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Pound24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Pound24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PowerApps24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\PowerApps24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Settings24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Settings24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Tools24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Tools24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

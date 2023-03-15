@@ -15,9 +15,9 @@ using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.AppCode;
 using XrmToolBox.Controls;
 using XrmToolBox.Extensibility;
+using XrmToolBox.Extensibility.Forms;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.New.EventArgs;
-using XrmToolBox.PluginsStore;
 using XrmToolBox.Properties;
 using XrmToolBox.ToolLibrary.AppCode;
 
@@ -32,15 +32,16 @@ namespace XrmToolBox.New
         private bool expanded = true;
         private string filterText;
         private List<NavLeftItem> items = new List<NavLeftItem>();
+        private NavLeftItem mainItem;
         private int menuWidth;
         private Thread searchThread;
-        private StoreFromPortal store;
-
+        private ToolLibrary.ToolLibrary store;
         private ToolTip tt = new ToolTip();
-
-        private bool useBigDisplay;
+        private bool userOrFilterOperatorForCategory;
 
         #endregion Variables
+
+        private Dictionary<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>, Rectangle> paypals = new Dictionary<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>, Rectangle>();
 
         public PluginsForm2()
         {
@@ -62,9 +63,12 @@ namespace XrmToolBox.New
             Options.Instance.OnSettingsChanged += Instance_OnSettingsChanged;
 
             pnlNavLeft.MouseWheel += PnlNavLeft_MouseWheel;
+            imageList1.ImageSize = new Size(imageList1.ImageSize.Width, Options.Instance.DisplayLargeIcons ? 100 : 50);
 
             DisplayCategories(null);
-            SetResizeButtonDisplay();
+            SetCategoriesBottomButtonsDisplay();
+            menuWidth = CalculateLeftMenuWidth();
+            SetCategoriesDisplay();
         }
 
         #region Properties
@@ -72,6 +76,8 @@ namespace XrmToolBox.New
         public ConnectionDetail ConnectionDetail { get; set; }
 
         public PluginManagerExtended PluginManager => pluginsManager;
+        public ToolLibrary.ToolLibrary Store
+        { set { store = value; } }
 
         #endregion Properties
 
@@ -111,11 +117,34 @@ namespace XrmToolBox.New
             if (categoriesList == null)
             {
                 categoriesList = categories;
+
+                int mw = CalculateLeftMenuWidth();
+                pnlNavLeft.Width = Options.Instance.ShowCategoriesExpanded ? mw : 46;
+                pnlNavLeftMain.Width = pnlNavLeft.Width;
+                menuWidth = mw;
             }
             else if (categoriesList.All(c => c.Value.Count == 0))
             {
                 categoriesList = categories;
-                pnlNavLeft.Enabled = true;
+
+                foreach (var category in categoriesList.Keys)
+                {
+                    var item = pnlNavLeft.Controls.OfType<NavLeftItem>().FirstOrDefault(nli => nli.Tag?.ToString() == category);
+                    if (item != null)
+                    {
+                        item.Text = $"{category} ({categoriesList[category].Count})";
+                        item.Invalidate();
+                    }
+                }
+
+                int mw = CalculateLeftMenuWidth();
+                pnlNavLeft.Width = Options.Instance.ShowCategoriesExpanded ? mw : 46;
+                pnlNavLeftMain.Width = pnlNavLeft.Width;
+                menuWidth = mw;
+
+                SetCategoriesDisplay();
+                DisplayPlugins(txtSearch.Text);
+
                 return;
             }
             else
@@ -123,51 +152,53 @@ namespace XrmToolBox.New
                 return;
             }
 
-            var main = new NavLeftItem { Text = "Categories", Index = 1, Height = 40, Image = Resources.left_arrow, Dock = DockStyle.Top };
-            main.OnSelectedChanged += Menu_OnSelectedChanged;
+            mainItem = new NavLeftItem { Text = "Categories", Index = 1, Height = 40, Image = Resources.left_arrow, Dock = DockStyle.Top, Expanded = Options.Instance.ShowCategoriesExpanded };
+            mainItem.OnSelectedChanged += Menu_OnSelectedChanged;
             pnlLeftNavTop.Height = 40;
-            pnlLeftNavTop.Controls.Add(main);
+            pnlLeftNavTop.Controls.Add(mainItem);
             pnlTopSearch.Height = 40;
-
-            string maxWidthText = "";
 
             int index = 0;
 
-            foreach (var category in categories.Keys)
-            {
-                if (maxWidthText.Length < category.Length)
-                {
-                    maxWidthText = category;
-                }
-            }
-            var textSize = TextRenderer.MeasureText(maxWidthText, pnlNavLeft.Font);
-
             foreach (var category in categories.Keys.OrderBy(k => k))
             {
-                var image = (Bitmap)Resources.ResourceManager.GetObject(category.Replace(" ", "") + "32");
+                var imageName = category.Replace(" ", "") + "32";
+                var image = (Bitmap)Resources.ResourceManager.GetObject(imageName);
                 if (image == null)
                 {
+                    var imagePath = Path.Combine(Paths.XrmToolBoxPath, "ToolLogoCache", $"{imageName}.png");
+
                     try
                     {
-                        using (WebClient wc = new WebClient())
-                        {
-                            using (Stream s = wc.OpenRead($"https://www.xrmtoolbox.com/{category.Replace(" ", "")}32.png"))
-                            {
-                                image = new Bitmap(s);
-                            }
-                        }
+                        image = new Bitmap(Image.FromFile(imagePath));
                     }
-                    catch (Exception error)
-                    { }
+                    catch
+                    {
+                        try
+                        {
+                            using (WebClient wc = new WebClient())
+                            {
+                                using (Stream s = wc.OpenRead($"https://www.xrmtoolbox.com/{imageName}.png"))
+                                {
+                                    image = new Bitmap(s);
+                                }
+                            }
+
+                            new Bitmap(image).Save(imagePath);
+                        }
+                        catch (Exception error)
+                        { }
+                    }
                 }
 
                 var item = new NavLeftItem
                 {
+                    Tag = category,
                     Text = category,
                     Index = index,
                     DisplayIndex = index,
                     Height = 40,
-                    Width = textSize.Width + 70,
+                    Width = 70,
                     Image = image,
                     Location = new Point(0, index * 40)
                 };
@@ -179,11 +210,12 @@ namespace XrmToolBox.New
             }
 
             pnlNavLeft.Controls.AddRange(items.ToArray());
-            pnlNavLeft.Width = textSize.Width + 70;
-            pnlNavLeftMain.Width = textSize.Width + 70;
+
+            int textSizeWidth = CalculateLeftMenuWidth();
+
             menuWidth = pnlNavLeftMain.Width;
 
-            Menu_OnSelectedChanged(main, new System.EventArgs());
+            SetCategoriesDisplay();
         }
 
         public void DuplicateTool(string pluginName, IDuplicatableTool sourceTool, object state, OpenMruPluginEventArgs e = null)
@@ -263,14 +295,41 @@ namespace XrmToolBox.New
 
         private void btnChangeSize_Click(object sender, System.EventArgs e)
         {
-            useBigDisplay = !useBigDisplay;
+            Options.Instance.DisplayLargeIcons = !Options.Instance.DisplayLargeIcons;
+            Options.Instance.Save();
 
-            imageList1.ImageSize = new Size(imageList1.ImageSize.Width, useBigDisplay ? 100 : 50);
+            imageList1.ImageSize = new Size(imageList1.ImageSize.Width, Options.Instance.DisplayLargeIcons ? 100 : 50);
             lvTools.Invalidate();
 
             lvTools_Resize(lvTools, new System.EventArgs());
 
-            SetResizeButtonDisplay();
+            SetCategoriesBottomButtonsDisplay();
+        }
+
+        private void btnFilterOperator_Click(object sender, System.EventArgs e)
+        {
+            userOrFilterOperatorForCategory = !userOrFilterOperatorForCategory;
+            SetCategoriesBottomButtonsDisplay();
+            if (pnlNavLeft.Controls.OfType<NavLeftItem>().Any(nli => nli.Selected))
+            {
+                DisplayPlugins(txtSearch.Text);
+            }
+        }
+
+        private int CalculateLeftMenuWidth()
+        {
+            string maxWidthText = "";
+            //foreach (var category in categoriesList.Keys)
+            foreach (var category in pnlNavLeft.Controls.OfType<NavLeftItem>().Select(nli => nli.Text))
+            {
+                if (maxWidthText.Length < category.Length)
+                {
+                    maxWidthText = category;
+                }
+            }
+            var textSize = TextRenderer.MeasureText(maxWidthText, pnlNavLeft.Font);
+
+            return textSize.Width;
         }
 
         private void cmsOnePlugin_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -404,10 +463,10 @@ namespace XrmToolBox.New
 
             var categories = pnlNavLeft.Controls.OfType<NavLeftItem>()
                 .Where(nli => nli.Selected)
-                .Select(nli => nli.Text)
+                .Select(nli => nli.Tag.ToString())
                 .ToList();
 
-            var availablePlugins = pluginsManager.ValidatedPluginsExt;
+            var availablePlugins = userOrFilterOperatorForCategory ? new List<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>>() : pluginsManager.ValidatedPluginsExt;
 
             var list = new List<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>>();
             foreach (var category in categories)
@@ -418,7 +477,14 @@ namespace XrmToolBox.New
                     .ToList().Contains(p.Metadata.Name)
                 );
 
-                availablePlugins = availablePlugins.Intersect(matchingPlugins);
+                if (userOrFilterOperatorForCategory)
+                {
+                    availablePlugins = availablePlugins.Union(matchingPlugins);
+                }
+                else
+                {
+                    availablePlugins = availablePlugins.Intersect(matchingPlugins);
+                }
             }
 
             // Search with filter defined
@@ -431,14 +497,13 @@ namespace XrmToolBox.New
                 .Where(p => isc.IsPluginAllowed(p.Metadata.PluginType))
                 .OrderBy(p => p.Metadata.Name).ToList();
 
+            foreach (var item in Options.Instance.MostUsedList.OrderByDescending(i => i.Count).ThenBy(i => i.Name))
+            {
+                var plugin = filteredPlugins.FirstOrDefault(x => x.Metadata.PluginType == item.Name);
+                if (plugin != null) plugin.Metadata.numberOfUse = item.Count;
+            }
             if (Options.Instance.PluginsDisplayOrder == DisplayOrder.MostUsed)
             {
-                foreach (var item in Options.Instance.MostUsedList.OrderByDescending(i => i.Count).ThenBy(i => i.Name))
-                {
-                    var plugin = filteredPlugins.FirstOrDefault(x => x.Metadata.PluginType == item.Name);
-                    if (plugin != null) plugin.Metadata.numberOfUse = item.Count;
-                }
-
                 filteredPlugins = filteredPlugins.OrderByDescending(p => p.Metadata.numberOfUse).ToList();
             }
             else if (Options.Instance.PluginsDisplayOrder == DisplayOrder.RecentlyUpdated)
@@ -446,7 +511,7 @@ namespace XrmToolBox.New
                 var pluginAssemblies = Directory.EnumerateFiles(Paths.PluginsPath, "*.dll")
                     .Select(d => new
                     {
-                        UpdatedOn = File.GetLastAccessTime(d),
+                        UpdatedOn = File.GetLastWriteTime(d),
                         FileName = d.Substring(d.LastIndexOf('\\') + 1)
                     })
                     .OrderByDescending(x => x.UpdatedOn);
@@ -468,17 +533,17 @@ namespace XrmToolBox.New
             {
                 if (store == null)
                 {
-                    store = new StoreFromPortal(Options.Instance.ConnectionControlsAllowPreReleaseUpdates);
+                    store = new ToolLibrary.ToolLibrary(Options.Instance, new Dictionary<string, string>());
                 }
 
                 if (store.XrmToolBoxPlugins == null)
                 {
-                    store.LoadTools().Wait();
+                    store.LoadTools();
                 }
 
-                var storePlugins = store.XrmToolBoxPlugins.Plugins;
+                var storePlugins = store.Tools;
 
-                foreach (var storePlugin in storePlugins)
+                foreach (XtbPlugin storePlugin in storePlugins.OfType<XtbPlugin>())
                 {
                     var tool = filteredPlugins.FirstOrDefault(fp => fp.Metadata.Name == storePlugin.Name);
                     if (tool != null)
@@ -493,9 +558,8 @@ namespace XrmToolBox.New
             Invoke(new Action(() =>
             {
                 lvTools.Items.Clear();
-                //lvTools.SelectedIndexChanged -= lvTools
                 lvTools.Items.AddRange(filteredPlugins.Select(
-                    fp => new ListViewItem(fp.Metadata.Name) { Tag = fp, ToolTipText = fp.Metadata.Description }
+                    fp => new ListViewItem(fp.Metadata.Name) { Tag = fp, ToolTipText = $"{fp.Metadata.Description}\r\n\r\nCategories: {string.Join(", ", fp.Metadata.Categories)}" }
                     ).ToArray());
 
                 if (!filteredPlugins.Any())
@@ -556,12 +620,26 @@ namespace XrmToolBox.New
         private void Instance_OnSettingsChanged(object sender, SettingsPropertyEventArgs e)
         {
             if (e.PropertyName == nameof(Options.Instance.IconDisplayMode)
+                || e.PropertyName == nameof(Options.Instance.ShowCategoriesExpanded)
                 || e.PropertyName == nameof(Options.Instance.PluginsDisplayOrder)
                 || e.PropertyName == nameof(Options.Instance.HiddenPlugins)
                 || e.PropertyName == nameof(Options.Instance.NumberOfDaysToShowNewRibbon)
                 || e.PropertyName == nameof(Options.Instance.MostUsedList))
             {
-                ReloadPluginsList();
+                if (e.PropertyName == nameof(Options.Instance.IconDisplayMode))
+                {
+                    imageList1.ImageSize = new Size(imageList1.ImageSize.Width, ((DisplayIcons)e.Value) == DisplayIcons.Large ? 100 : 50);
+                    SetCategoriesBottomButtonsDisplay();
+                }
+
+                if (e.PropertyName == nameof(Options.Instance.ShowCategoriesExpanded))
+                {
+                    mainItem.Expanded = (bool)e.Value;
+                    SetCategoriesDisplay();
+                    SetCategoriesBottomButtonsDisplay();
+                }
+
+                DisplayPlugins(filterText);
             }
         }
 
@@ -575,12 +653,12 @@ namespace XrmToolBox.New
         private void lvTools_DrawItem(object sender, DrawListViewItemEventArgs e)
         {
             var ti = (Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)e.Item.Tag;
-            var imageSize = useBigDisplay ? 64 : 32;
+            var imageSize = Options.Instance.DisplayLargeIcons ? 64 : 32;
 
             var backColor = ColorTranslator.FromHtml(ti.Metadata.BackgroundColor);
             var primaryColor = ColorTranslator.FromHtml(ti.Metadata.PrimaryFontColor);
             var secondaryColor = ColorTranslator.FromHtml(ti.Metadata.SecondaryFontColor);
-            var logo = GetImage(useBigDisplay ? ti.Metadata.BigImageBase64 : ti.Metadata.BigImageBase64, !useBigDisplay);
+            var logo = GetImage(Options.Instance.DisplayLargeIcons ? ti.Metadata.BigImageBase64 : ti.Metadata.BigImageBase64, !Options.Instance.DisplayLargeIcons);
             var time = new FileInfo(ti.Metadata.AssemblyFilename).CreationTime;
 
             int myOffSet = 0;
@@ -591,9 +669,9 @@ namespace XrmToolBox.New
 
             using (var colorBrush = new SolidBrush(primaryColor))
             {
-                using (var smallFont = new Font(e.Item.ListView.Font.FontFamily, e.Item.ListView.Font.Size - (useBigDisplay ? 2 : 4)))
+                using (var smallFont = new Font(e.Item.ListView.Font.FontFamily, e.Item.ListView.Font.Size - (Options.Instance.DisplayLargeIcons ? 2 : 4)))
                 {
-                    if (useBigDisplay)
+                    if (Options.Instance.DisplayLargeIcons)
                     {
                         e.Graphics.DrawString(ti.Metadata.Name, e.Item.ListView.Font, colorBrush, new Point(e.Bounds.X + myOffSet, e.Bounds.Y));
                         e.Graphics.DrawString(ti.Metadata.Version, smallFont, colorBrush, new Point(e.Bounds.X + myOffSet, e.Bounds.Y + 30));
@@ -611,6 +689,9 @@ namespace XrmToolBox.New
                         if (ti.Metadata.Interfaces.Contains("IPayPalPlugin"))
                         {
                             e.Graphics.DrawImage(Resources.paypal.ResizeImage(32, 32), new Point(e.Bounds.X + e.Bounds.Width - 80, e.Bounds.Y + e.Bounds.Height / 2 - 18));
+
+                            paypals.Remove(ti);
+                            paypals.Add(ti, new Rectangle(e.Bounds.X + e.Bounds.Width - 80, e.Bounds.Y + e.Bounds.Height / 2 - 18, 32, 32));
                         }
                     }
                     else
@@ -639,6 +720,8 @@ namespace XrmToolBox.New
                         if (ti.Metadata.Interfaces.Contains("IPayPalPlugin"))
                         {
                             e.Graphics.DrawImage(Resources.paypal.ResizeImage(32, 32), new Point(e.Bounds.X + e.Bounds.Width - 70, e.Bounds.Y + e.Bounds.Height / 2 - 18));
+                            paypals.Remove(ti);
+                            paypals.Add(ti, new Rectangle(e.Bounds.X + e.Bounds.Width - 70, e.Bounds.Y + e.Bounds.Height / 2 - 18, 32, 32));
                         }
                     }
                 }
@@ -652,14 +735,24 @@ namespace XrmToolBox.New
 
             if (e.Button == MouseButtons.Left)
             {
+                if (paypals.Values.Any(r => r.X < e.X - item.Position.X && r.X + r.Width > e.X - item.Position.X && r.Y < e.Y - item.Position.Y && r.Y + r.Height > e.Y - item.Position.Y))
+                {
+                    if (plugin.Value is IPayPalPlugin pp)
+                    {
+                        using (var dialog = new CurrencySelectionDialog(pp))
+                        {
+                            dialog.ShowDialog(Parent);
+                        }
+                        return;
+                    }
+                }
+
                 OpenPluginRequested?.Invoke(this, new PluginEventArgs(plugin));
             }
             else if (e.Button == MouseButtons.Right)
             {
                 cmsOnePlugin.Show(Cursor.Position);
             }
-
-            //MessageBox.Show(this, $"Vous avez sélectionné {item.Text}");
         }
 
         private void lvTools_Resize(object sender, System.EventArgs e)
@@ -674,10 +767,6 @@ namespace XrmToolBox.New
             }
         }
 
-        private void lvTools_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
-        }
-
         private void Menu_OnSelectedChanged(object sender, System.EventArgs e)
         {
             var item = (NavLeftItem)sender;
@@ -685,19 +774,11 @@ namespace XrmToolBox.New
             if (item.Text == "Categories")
             {
                 item.Expanded = !item.Expanded;
-                expanded = item.Expanded;
 
-                item.Image = item.Expanded ? Resources.left_arrow : Resources.right_arrow;
+                Options.Instance.ShowCategoriesExpanded = item.Expanded;
+                Options.Instance.Save();
 
-                pnlNavLeftMain.Width = item.Expanded ? menuWidth : 46;
-
-                foreach (var navItem in pnlNavLeft.Controls.OfType<NavLeftItem>())
-                {
-                    navItem.Expanded = item.Expanded;
-                    navItem.Invalidate();
-                }
-
-                SetResizeButtonDisplay();
+                SetCategoriesDisplay();
 
                 return;
             }
@@ -708,6 +789,20 @@ namespace XrmToolBox.New
         private void pbOpenPluginsStore_Click(object sender, System.EventArgs e)
         {
             ActionRequested?.Invoke(this, new PluginsListEventArgs(PluginsListAction.OpenPluginsStore));
+        }
+
+        private void PluginsForm2_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.ApplicationExitCall
+                || e.CloseReason == CloseReason.FormOwnerClosing
+                || e.CloseReason == CloseReason.MdiFormClosing
+                || e.CloseReason == CloseReason.TaskManagerClosing
+                || e.CloseReason == CloseReason.WindowsShutDown)
+            {
+                return;
+            }
+
+            e.Cancel = true;
         }
 
         private void PluginsForm2_Load(object sender, System.EventArgs e)
@@ -725,10 +820,6 @@ namespace XrmToolBox.New
             DisplayPlugins(filterText);
 
             txtSearch.AutoCompleteCustomSource.AddRange(PluginManager.PluginsExt.Where(p => !Options.Instance.HiddenPlugins.Contains(p.Metadata.Name)).Select(p => p.Metadata.Name).ToArray());
-
-            if (pluginsManager.ValidationErrors.Count > 0)
-            {
-            }
         }
 
         private void PnlNavLeft_MouseWheel(object sender, MouseEventArgs e)
@@ -761,7 +852,6 @@ namespace XrmToolBox.New
                         ctrl.Location = new Point(ctrl.Location.X, ctrl.Location.Y + 10);
                     }
 
-                    lastControlY = ctrls.FirstOrDefault()?.Location.Y + ctrls.FirstOrDefault()?.Height;
                     firstControlY = ctrls.LastOrDefault()?.Location.Y;
                 }
             }
@@ -775,14 +865,41 @@ namespace XrmToolBox.New
             }
         }
 
-        private void SetResizeButtonDisplay()
+        private void SetCategoriesBottomButtonsDisplay()
         {
-            pnlLeftBottom.Height = 50;
+            pnlLeftBottom.Height = 100;
+            btnChangeSize.Height = 40;
             btnChangeSize.ImageAlign = expanded ? ContentAlignment.MiddleLeft : ContentAlignment.MiddleCenter;
-            btnChangeSize.Text = expanded ? (useBigDisplay ? "Use small layout" : "Use big layout") : "";
-            btnChangeSize.Image = useBigDisplay ? Resources.Shrink32.ResizeImage(24, 24) : Resources.Expand32.ResizeImage(24, 24);
+            btnChangeSize.Text = expanded ? (Options.Instance.DisplayLargeIcons ? "Use small layout" : "Use big layout") : "";
+            btnChangeSize.Image = Options.Instance.DisplayLargeIcons ? Resources.Shrink32.ResizeImage(24, 24) : Resources.Expand32.ResizeImage(24, 24);
             btnChangeSize.FlatStyle = FlatStyle.Flat;
             btnChangeSize.FlatAppearance.BorderSize = 0;
+
+            btnFilterOperator.Height = 40;
+            btnFilterOperator.Font = new Font(btnFilterOperator.Font, expanded ? FontStyle.Regular : FontStyle.Bold);
+            btnFilterOperator.Text = expanded ? (userOrFilterOperatorForCategory ? "Use AND operator" : "Use OR operator") : (userOrFilterOperatorForCategory ? "& &" : "||");
+            btnFilterOperator.FlatStyle = FlatStyle.Flat;
+            btnFilterOperator.FlatAppearance.BorderSize = 0;
+            tt.SetToolTip(btnFilterOperator, userOrFilterOperatorForCategory ? "Use AND operator" : "Use OR operator");
+        }
+
+        private void SetCategoriesDisplay()
+        {
+            expanded = mainItem.Expanded;
+
+            mainItem.Image = mainItem.Expanded ? Resources.left_arrow : Resources.right_arrow;
+
+            pnlNavLeftMain.Width = mainItem.Expanded ? menuWidth + 70 : 46;
+            pnlNavLeft.Width = mainItem.Expanded ? menuWidth + 70 : 46;
+
+            foreach (var navItem in pnlNavLeft.Controls.OfType<NavLeftItem>())
+            {
+                navItem.Expanded = mainItem.Expanded;
+                navItem.Width = mainItem.Expanded ? menuWidth + 70 : 46;
+                navItem.Invalidate();
+            }
+
+            SetCategoriesBottomButtonsDisplay();
         }
 
         private void txtSearch_KeyDown(object sender, KeyEventArgs e)

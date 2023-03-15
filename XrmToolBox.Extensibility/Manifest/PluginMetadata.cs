@@ -11,6 +11,7 @@
 #region Imports
 
 using System;
+using System.Collections.Generic;
 using XrmToolBox.Extensibility.Interfaces;
 
 #endregion
@@ -24,6 +25,7 @@ namespace XrmToolBox.Extensibility.Manifest
         public string AssemblyQualifiedName { get; set; }
         public string BackgroundColor { get; set; }
         public string BigImageBase64 { get; set; }
+        public List<string> Categories { get; set; } = new List<string>();
         public string Company { get; set; }
         public string Control { get; set; }
         public string Description { get; set; }
