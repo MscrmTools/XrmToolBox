@@ -292,10 +292,17 @@ namespace XrmToolBox.ToolLibrary
 
             var jor = JObject.Parse(rData);
 
-            var latestVersion = ((JArray)((JArray)jor["items"]).Last()["items"]).Last();
+            var versions = new List<JToken>();
+            foreach (var item in (JArray)jor["items"])
+            {
+                foreach (var subItem in (JArray)item["items"])
+                    versions.Add(subItem);
+            }
+
+            var latestVersion = versions.OrderBy(t => DateTime.Parse(t["commitTimeStamp"].ToString())).Last();
 
             var pv = await GetSpecificPackageVersion(packageName, latestVersion);
-            while (pv.IsPrerelease && !AllowConnectionControlPreRelease)
+            while (pv.IsPrerelease && (!AllowConnectionControlPreRelease || packageName != "MscrmTools.Xrm.Connection"))
             {
                 latestVersion = latestVersion.Previous;
 

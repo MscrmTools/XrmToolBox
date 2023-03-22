@@ -336,6 +336,7 @@ Would you like to reinstall last stable release of connection controls?";
                     ItSecurityChecker isc = new ItSecurityChecker();
                     isc.LoadRepositories();
                     store = new ToolLibrary.ToolLibrary(Options.Instance, isc.Repositories);
+                    store.AllowConnectionControlPreRelease = Options.Instance.ConnectionControlsAllowPreReleaseUpdates;
                     ((PluginsForm2)pluginsForm).Store = (ToolLibrary.ToolLibrary)store;
                 }
 
