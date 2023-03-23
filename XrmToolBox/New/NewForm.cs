@@ -386,6 +386,11 @@ Would you like to reinstall last stable release of connection controls?";
                 startPage.EnsureVisible(dpMain, DockState.Document);
             }
 
+            if (Options.Instance.DisplayToolsListFirst)
+            {
+                ((DockContent)pluginsForm).Show(dpMain, DockState.Document);
+            }
+
             WebProxyHelper.ApplyProxy();
 
             await LoadStore();

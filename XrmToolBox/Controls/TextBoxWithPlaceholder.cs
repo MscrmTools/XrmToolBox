@@ -14,6 +14,8 @@ namespace XrmToolBox.Controls
             ForeColor = Color.LightGray;
             Enter += TextBoxWithPlaceholder_Enter;
             Leave += TextBoxWithPlaceholder_Leave;
+            GotFocus += TextBoxWithPlaceholder_GotFocus;
+            Tag = true;
         }
 
         public string Placeholder
@@ -22,7 +24,7 @@ namespace XrmToolBox.Controls
             set
             {
                 placeholder = value;
-                Text = value;
+                base.Text = value;
             }
         }
 
@@ -30,7 +32,7 @@ namespace XrmToolBox.Controls
         {
             get
             {
-                if (base.Text == placeholder)
+                if ((bool)Tag)
                     return string.Empty;
                 return base.Text;
             }
@@ -43,12 +45,15 @@ namespace XrmToolBox.Controls
             {
                 base.OnTextChanged(e);
             }
+
+            ForeColor = SystemColors.ControlText;
         }
 
         private void TextBoxWithPlaceholder_Enter(object sender, EventArgs e)
         {
-            if (Text == placeholder)
+            if ((bool)Tag)
             {
+                Tag = false;
                 silent = true;
                 Text = "";
                 ForeColor = SystemColors.ControlText;
@@ -56,10 +61,16 @@ namespace XrmToolBox.Controls
             }
         }
 
+        private void TextBoxWithPlaceholder_GotFocus(object sender, EventArgs e)
+        {
+            TextBoxWithPlaceholder_Enter(sender, e);
+        }
+
         private void TextBoxWithPlaceholder_Leave(object sender, EventArgs e)
         {
             if (Text.Length == 0)
             {
+                Tag = true;
                 silent = true;
                 Text = placeholder;
                 ForeColor = Color.LightGray;

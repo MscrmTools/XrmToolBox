@@ -62,6 +62,7 @@ namespace XrmToolBox.New
 
             Options.Instance.OnSettingsChanged += Instance_OnSettingsChanged;
 
+            lvTools.GotFocus += LvTools_GotFocus;
             pnlNavLeft.MouseWheel += PnlNavLeft_MouseWheel;
             imageList1.ImageSize = new Size(imageList1.ImageSize.Width, Options.Instance.DisplayLargeIcons ? 100 : 50);
 
@@ -70,28 +71,6 @@ namespace XrmToolBox.New
             menuWidth = CalculateLeftMenuWidth();
             SetCategoriesDisplay();
         }
-
-        #region Properties
-
-        public ConnectionDetail ConnectionDetail { get; set; }
-
-        public PluginManagerExtended PluginManager => pluginsManager;
-        public ToolLibrary.ToolLibrary Store
-        { set { store = value; } }
-
-        #endregion Properties
-
-        #region Events
-
-        public event EventHandler<PluginsListEventArgs> ActionRequested;
-
-        public event EventHandler<PluginEventArgs> OpenPluginProjectUrlRequested;
-
-        public event EventHandler<PluginEventArgs> OpenPluginRequested;
-
-        public event EventHandler<PluginEventArgs> UninstallPluginRequested;
-
-        #endregion Events
 
         public void DisplayCategories(Dictionary<string, List<string>> categories)
         {
@@ -559,7 +538,7 @@ namespace XrmToolBox.New
             {
                 lvTools.Items.Clear();
                 lvTools.Items.AddRange(filteredPlugins.Select(
-                    fp => new ListViewItem(fp.Metadata.Name) { Tag = fp, ToolTipText = $"{fp.Metadata.Description}\r\n\r\nCategories: {string.Join(", ", fp.Metadata.Categories)}" }
+                    fp => new ListViewItem(fp.Metadata.Name) { Tag = fp, ToolTipText = $"{fp.Metadata.Description}\r\n\r\nCategories: {string.Join(", ", fp.Metadata.Categories)}{(fp.Metadata.Interfaces.Contains("IPayPalPlugin") ? "\r\n\r\nThis tool's author accepts PayPal donation. Click on the PayPal logo to initiate a donation" : "")}" }
                     ).ToArray());
 
                 if (!filteredPlugins.Any())
@@ -624,7 +603,8 @@ namespace XrmToolBox.New
                 || e.PropertyName == nameof(Options.Instance.PluginsDisplayOrder)
                 || e.PropertyName == nameof(Options.Instance.HiddenPlugins)
                 || e.PropertyName == nameof(Options.Instance.NumberOfDaysToShowNewRibbon)
-                || e.PropertyName == nameof(Options.Instance.MostUsedList))
+                || e.PropertyName == nameof(Options.Instance.MostUsedList)
+                || e.PropertyName == nameof(Options.DoNotUseToolColors))
             {
                 if (e.PropertyName == nameof(Options.Instance.IconDisplayMode))
                 {
@@ -662,8 +642,36 @@ namespace XrmToolBox.New
             var time = new FileInfo(ti.Metadata.AssemblyFilename).CreationTime;
 
             int myOffSet = 0;
-            e.Graphics.FillRectangle(new SolidBrush(backColor), new Rectangle(new Point(e.Bounds.X, e.Bounds.Y), new Size(e.Bounds.Width, e.Bounds.Height - 4)));
+            if (e.Item.Selected)
+            {
+                if (Options.Instance.DoNotUseToolColors)
+                {
+                    e.Graphics.FillRectangle(SystemBrushes.Highlight, e.Bounds);
 
+                    primaryColor = Color.White;
+                    secondaryColor = Color.White;
+                }
+                else
+                {
+                    e.Graphics.FillRectangle(new SolidBrush(backColor), new Rectangle(new Point(e.Bounds.X, e.Bounds.Y), new Size(e.Bounds.Width, e.Bounds.Height - 4)));
+                    e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.Gray)), e.Bounds.X, e.Bounds.Y, e.Bounds.Width - 1, e.Bounds.Height - 4);
+                }
+            }
+            else
+            {
+                if (Options.Instance.DoNotUseToolColors)
+                {
+                    backColor = Color.White;
+                    primaryColor = Color.Black;
+                    secondaryColor = Color.Gray;
+                }
+                e.Graphics.FillRectangle(new SolidBrush(backColor), new Rectangle(new Point(e.Bounds.X, e.Bounds.Y), new Size(e.Bounds.Width, e.Bounds.Height - 4)));
+            }
+
+            if (Options.Instance.DoNotUseToolColors)
+            {
+                e.Graphics.DrawLine(new Pen(new SolidBrush(Color.LightGray)), e.Bounds.X, e.Bounds.Y + e.Bounds.Height - 1, e.Bounds.X + e.Bounds.Width, e.Bounds.Y + e.Bounds.Height - 1);
+            }
             e.Graphics.DrawImage(logo.ResizeImage(imageSize, imageSize), new Point(e.Bounds.X + 10, e.Bounds.Y + e.Bounds.Height / 2 - imageSize / 2));
             myOffSet += imageSize + 20;
 
@@ -725,6 +733,48 @@ namespace XrmToolBox.New
                         }
                     }
                 }
+            }
+        }
+
+        private void LvTools_GotFocus(object sender, System.EventArgs e)
+        {
+            if (lvTools.SelectedItems.Count == 0 && lvTools.Items.Count > 0)
+            {
+                lvTools.Items[0].Selected = true;
+            }
+        }
+
+        #region Properties
+
+        public ConnectionDetail ConnectionDetail { get; set; }
+
+        public PluginManagerExtended PluginManager => pluginsManager;
+
+        public ToolLibrary.ToolLibrary Store
+        { set { store = value; } }
+
+        #endregion Properties
+
+        #region Events
+
+        public event EventHandler<PluginsListEventArgs> ActionRequested;
+
+        public event EventHandler<PluginEventArgs> OpenPluginProjectUrlRequested;
+
+        public event EventHandler<PluginEventArgs> OpenPluginRequested;
+
+        public event EventHandler<PluginEventArgs> UninstallPluginRequested;
+
+        #endregion Events
+
+        private void lvTools_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (lvTools.SelectedItems.Count == 0) return;
+
+            if (e.KeyCode == Keys.Enter)
+            {
+                var plugin = (Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>)lvTools.SelectedItems[0].Tag;
+                OpenPluginRequested?.Invoke(this, new PluginEventArgs(plugin));
             }
         }
 
@@ -877,10 +927,11 @@ namespace XrmToolBox.New
 
             btnFilterOperator.Height = 40;
             btnFilterOperator.Font = new Font(btnFilterOperator.Font, expanded ? FontStyle.Regular : FontStyle.Bold);
-            btnFilterOperator.Text = expanded ? (userOrFilterOperatorForCategory ? "Use AND operator" : "Use OR operator") : (userOrFilterOperatorForCategory ? "& &" : "||");
+            btnFilterOperator.UseMnemonic = false;
+            btnFilterOperator.Text = expanded ? (userOrFilterOperatorForCategory ? "Use AND operator" : "Use OR operator") : (userOrFilterOperatorForCategory ? "&&" : "||");
             btnFilterOperator.FlatStyle = FlatStyle.Flat;
             btnFilterOperator.FlatAppearance.BorderSize = 0;
-            tt.SetToolTip(btnFilterOperator, userOrFilterOperatorForCategory ? "Use AND operator" : "Use OR operator");
+            tt.SetToolTip(btnFilterOperator, userOrFilterOperatorForCategory ? "Currently use OR operator\r\n\r\nClick to use AND operator" : "Currently use AND operator\r\n\r\nClick to use OR operator");
         }
 
         private void SetCategoriesDisplay()

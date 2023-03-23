@@ -272,6 +272,11 @@ namespace XrmToolBox
             }
         }
 
+        [Category("Startup")]
+        [DisplayName("Show tools list first")]
+        [Description("Indicates if tools list is displayed at startup")]
+        public bool DisplayToolsListFirst { get; set; }
+
         [Browsable(false)]
         public bool DoNotCheckForUpdates { get; set; }
 
@@ -514,6 +519,7 @@ namespace XrmToolBox
 
         #region Tools list display
 
+        private bool doNotUseToolColors;
         private bool showCategoriesExpanded;
 
         [Browsable(false)]
@@ -524,6 +530,19 @@ namespace XrmToolBox
             {
                 IconDisplayMode = value ? DisplayIcons.Large : DisplayIcons.Small;
                 OnSettingsChanged?.Invoke(this, new SettingsPropertyEventArgs(nameof(IconDisplayMode), IconDisplayMode));
+            }
+        }
+
+        [Category("Tools list display")]
+        [DisplayName("Do not use tools color")]
+        [Description("If enabled, Tools list will be displayed with homogeneous colors for all tools")]
+        public bool DoNotUseToolColors
+        {
+            get => doNotUseToolColors;
+            set
+            {
+                doNotUseToolColors = value;
+                OnSettingsChanged?.Invoke(this, new SettingsPropertyEventArgs(nameof(DoNotUseToolColors), value));
             }
         }
 
@@ -727,7 +746,8 @@ namespace XrmToolBox
                 LibraryShowNotInstalled = LibraryShowNotInstalled,
                 LibraryShowUpdates = LibraryShowUpdates,
                 UseLegacyToolsList = UseLegacyToolsList,
-                ShowCategoriesExpanded = ShowCategoriesExpanded
+                ShowCategoriesExpanded = ShowCategoriesExpanded,
+                DoNotUseToolColors = DoNotUseToolColors
             };
         }
 

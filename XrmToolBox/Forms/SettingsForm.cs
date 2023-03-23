@@ -71,8 +71,6 @@ namespace XrmToolBox.Forms
                 }
             };
             timer.Start();
-
-            // TODO Add save of options here
         }
 
         private void Menu_OnSelectedChanged(object sender, EventArgs e)
@@ -120,6 +118,7 @@ namespace XrmToolBox.Forms
                 Options.Instance.OrderForSettingsTab.AddRange(new[] { "Proxy", "Paths", "Credits", "Application Protocol", "Assemblies" });
             }
 
+            int index = 0;
             foreach (var category in Options.Instance.OrderForSettingsTab)
             {
                 if (items.All(i => i.Text != category))
@@ -131,7 +130,17 @@ namespace XrmToolBox.Forms
                         resourceName += part[0].ToString().ToUpper() + part.Remove(0, 1);
                     }
 
-                    var item = new NavLeftItem { Text = category, Index = 4, Height = 40, Image = (Bitmap)Resources.ResourceManager.GetObject(resourceName + "32"), Dock = DockStyle.Top };
+                    var item = new NavLeftItem
+                    {
+                        Text = category,
+                        Index = 4,
+                        TabIndex = index,
+                        Height = 40,
+                        Image = (Bitmap)Resources.ResourceManager.GetObject(resourceName + "32"),
+                        Dock = DockStyle.Top,
+                        SelectedOnFocus = true,
+                        UseCustomHighlightColor = true
+                    };
                     item.OnSelectedChanged += Menu_OnSelectedChanged;
                     items.Add(item);
 
@@ -146,6 +155,8 @@ namespace XrmToolBox.Forms
                     };
                     p.Controls.Add(title);
                     pnlNavMain.Controls.Add(p);
+
+                    index++;
                 }
 
                 if (maxWidthText.Length < category.Length)
@@ -158,9 +169,12 @@ namespace XrmToolBox.Forms
             {
                 Text = "Advanced",
                 Index = 4,
+                TabIndex = index,
                 Height = 40,
                 Image = (Bitmap)Resources.ResourceManager.GetObject("Settings32"),
-                Dock = DockStyle.Top
+                Dock = DockStyle.Top,
+                SelectedOnFocus = true,
+                UseCustomHighlightColor = true
             };
             spitem.OnSelectedChanged += Menu_OnSelectedChanged;
 
