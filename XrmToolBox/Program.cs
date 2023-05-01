@@ -8,10 +8,12 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Forms;
 using XrmToolBox.New;
 using XrmToolBox.PluginsStore;
+
 using PluginUpdates = XrmToolBox.AppCode.PluginUpdates;
 
 namespace XrmToolBox
@@ -117,12 +119,7 @@ namespace XrmToolBox
                         var pus = (PluginUpdates)XmlSerializerHelper.Deserialize(reader.ReadToEnd(),
                             typeof(PluginUpdates));
 
-                        try
-                        {
-                            var oldProcess = Process.GetProcessById(pus.PreviousProcessId);
-                            oldProcess.WaitForExit();
-                        }
-                        catch { }
+                        TryWaitingForOldProcess(pus.PreviousProcessId);
 
                         foreach (var pu in pus.Plugins)
                         {
@@ -153,6 +150,23 @@ Please start XrmToolBox again to fix this problem",
                 }
             }
             while (tries < 3);
+        }
+
+        private static void TryWaitingForOldProcess(int previousProcessId)
+        {
+            try
+            {
+                using (var currentProcess = Process.GetCurrentProcess())
+                using (var oldProcess = Process.GetProcessById(previousProcessId))
+                {
+                    // process IDs can be reused, so check the name
+                    if (oldProcess.ProcessName == currentProcess.ProcessName)
+                    {
+                        oldProcess.WaitForExit();
+                    }
+                }
+            }
+            catch { }
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -363,12 +377,7 @@ Please start XrmToolBox again to fix this problem",
                 {
                     var pds = (PluginDeletions)XmlSerializerHelper.Deserialize(reader.ReadToEnd(), typeof(PluginDeletions));
 
-                    try
-                    {
-                        var oldProcess = Process.GetProcessById(pds.PreviousProcessId);
-                        oldProcess.WaitForExit();
-                    }
-                    catch { }
+                    TryWaitingForOldProcess(pds.PreviousProcessId);
 
                     foreach (var pd in pds.Plugins)
                     {
