@@ -74,127 +74,134 @@ namespace XrmToolBox.New
 
         public void DisplayCategories(Dictionary<string, List<string>> categories)
         {
-            if (categories == null)
+            try
             {
-                var result = WebRequestHelper.MakeGet("https://www.xrmtoolbox.com/_odata/categories");
-                var data = JObject.Parse(result);
-                categories = new Dictionary<string, List<string>>();
-                foreach (JToken jo in (JArray)data["value"])
+                if (categories == null)
                 {
-                    categories.Add(jo["mctools_name"].ToString(), new List<string>());
+                    var result = WebRequestHelper.MakeGet("https://www.xrmtoolbox.com/_odata/categories");
+                    var data = JObject.Parse(result);
+                    categories = new Dictionary<string, List<string>>();
+                    foreach (JToken jo in (JArray)data["value"])
+                    {
+                        categories.Add(jo["mctools_name"].ToString(), new List<string>());
+                    }
+
+                    if (categories.Count == 0)
+                    {
+                        pnlNavLeftMain.Visible = false;
+                        return;
+                    }
                 }
 
-                if (categories.Count == 0)
+                pnlNavLeftMain.Visible = true;
+
+                if (categoriesList == null)
                 {
-                    pnlNavLeftMain.Visible = false;
+                    categoriesList = categories;
+
+                    int mw = CalculateLeftMenuWidth();
+                    pnlNavLeft.Width = Options.Instance.ShowCategoriesExpanded ? mw : 46;
+                    pnlNavLeftMain.Width = pnlNavLeft.Width;
+                    menuWidth = mw;
+                }
+                else if (categoriesList.All(c => c.Value.Count == 0))
+                {
+                    categoriesList = categories;
+
+                    foreach (var category in categoriesList.Keys)
+                    {
+                        var item = pnlNavLeft.Controls.OfType<NavLeftItem>().FirstOrDefault(nli => nli.Tag?.ToString() == category);
+                        if (item != null)
+                        {
+                            item.Text = $"{category} ({categoriesList[category].Count})";
+                            item.Invalidate();
+                        }
+                    }
+
+                    int mw = CalculateLeftMenuWidth();
+                    pnlNavLeft.Width = Options.Instance.ShowCategoriesExpanded ? mw : 46;
+                    pnlNavLeftMain.Width = pnlNavLeft.Width;
+                    menuWidth = mw;
+
+                    SetCategoriesDisplay();
+                    DisplayPlugins(txtSearch.Text);
+
                     return;
                 }
-            }
-
-            pnlNavLeftMain.Visible = true;
-
-            if (categoriesList == null)
-            {
-                categoriesList = categories;
-
-                int mw = CalculateLeftMenuWidth();
-                pnlNavLeft.Width = Options.Instance.ShowCategoriesExpanded ? mw : 46;
-                pnlNavLeftMain.Width = pnlNavLeft.Width;
-                menuWidth = mw;
-            }
-            else if (categoriesList.All(c => c.Value.Count == 0))
-            {
-                categoriesList = categories;
-
-                foreach (var category in categoriesList.Keys)
+                else
                 {
-                    var item = pnlNavLeft.Controls.OfType<NavLeftItem>().FirstOrDefault(nli => nli.Tag?.ToString() == category);
-                    if (item != null)
-                    {
-                        item.Text = $"{category} ({categoriesList[category].Count})";
-                        item.Invalidate();
-                    }
+                    return;
                 }
 
-                int mw = CalculateLeftMenuWidth();
-                pnlNavLeft.Width = Options.Instance.ShowCategoriesExpanded ? mw : 46;
-                pnlNavLeftMain.Width = pnlNavLeft.Width;
-                menuWidth = mw;
+                mainItem = new NavLeftItem { Text = "Categories", Index = 1, Height = 40, Image = Resources.left_arrow, Dock = DockStyle.Top, Expanded = Options.Instance.ShowCategoriesExpanded };
+                mainItem.OnSelectedChanged += Menu_OnSelectedChanged;
+                pnlLeftNavTop.Height = 40;
+                pnlLeftNavTop.Controls.Add(mainItem);
+                pnlTopSearch.Height = 40;
 
-                SetCategoriesDisplay();
-                DisplayPlugins(txtSearch.Text);
+                int index = 0;
 
-                return;
-            }
-            else
-            {
-                return;
-            }
-
-            mainItem = new NavLeftItem { Text = "Categories", Index = 1, Height = 40, Image = Resources.left_arrow, Dock = DockStyle.Top, Expanded = Options.Instance.ShowCategoriesExpanded };
-            mainItem.OnSelectedChanged += Menu_OnSelectedChanged;
-            pnlLeftNavTop.Height = 40;
-            pnlLeftNavTop.Controls.Add(mainItem);
-            pnlTopSearch.Height = 40;
-
-            int index = 0;
-
-            foreach (var category in categories.Keys.OrderBy(k => k))
-            {
-                var imageName = category.Replace(" ", "") + "32";
-                var image = (Bitmap)Resources.ResourceManager.GetObject(imageName);
-                if (image == null)
+                foreach (var category in categories.Keys.OrderBy(k => k))
                 {
-                    var imagePath = Path.Combine(Paths.XrmToolBoxPath, "ToolLogoCache", $"{imageName}.png");
+                    var imageName = category.Replace(" ", "") + "32";
+                    var image = (Bitmap)Resources.ResourceManager.GetObject(imageName);
+                    if (image == null)
+                    {
+                        var imagePath = Path.Combine(Paths.XrmToolBoxPath, "ToolLogoCache", $"{imageName}.png");
 
-                    try
-                    {
-                        image = new Bitmap(Image.FromFile(imagePath));
-                    }
-                    catch
-                    {
                         try
                         {
-                            using (WebClient wc = new WebClient())
-                            {
-                                using (Stream s = wc.OpenRead($"https://www.xrmtoolbox.com/{imageName}.png"))
-                                {
-                                    image = new Bitmap(s);
-                                }
-                            }
-
-                            new Bitmap(image).Save(imagePath);
+                            image = new Bitmap(Image.FromFile(imagePath));
                         }
-                        catch (Exception error)
-                        { }
+                        catch
+                        {
+                            try
+                            {
+                                using (WebClient wc = new WebClient())
+                                {
+                                    using (Stream s = wc.OpenRead($"https://www.xrmtoolbox.com/{imageName}.png"))
+                                    {
+                                        image = new Bitmap(s);
+                                    }
+                                }
+
+                                new Bitmap(image).Save(imagePath);
+                            }
+                            catch (Exception error)
+                            { }
+                        }
                     }
+
+                    var item = new NavLeftItem
+                    {
+                        Tag = category,
+                        Text = category,
+                        Index = index,
+                        DisplayIndex = index,
+                        Height = 40,
+                        Width = 70,
+                        Image = image,
+                        Location = new Point(0, index * 40)
+                    };
+                    item.OnSelectedChanged += Menu_OnSelectedChanged;
+                    items.Add(item);
+                    index++;
+
+                    tt.SetToolTip(item, category);
                 }
 
-                var item = new NavLeftItem
-                {
-                    Tag = category,
-                    Text = category,
-                    Index = index,
-                    DisplayIndex = index,
-                    Height = 40,
-                    Width = 70,
-                    Image = image,
-                    Location = new Point(0, index * 40)
-                };
-                item.OnSelectedChanged += Menu_OnSelectedChanged;
-                items.Add(item);
-                index++;
+                pnlNavLeft.Controls.AddRange(items.ToArray());
 
-                tt.SetToolTip(item, category);
+                int textSizeWidth = CalculateLeftMenuWidth();
+
+                menuWidth = pnlNavLeftMain.Width;
+
+                SetCategoriesDisplay();
             }
-
-            pnlNavLeft.Controls.AddRange(items.ToArray());
-
-            int textSizeWidth = CalculateLeftMenuWidth();
-
-            menuWidth = pnlNavLeftMain.Width;
-
-            SetCategoriesDisplay();
+            catch (Exception error)
+            {
+                pnlNavLeft.Visible = false;
+            }
         }
 
         public void DuplicateTool(string pluginName, IDuplicatableTool sourceTool, object state, OpenMruPluginEventArgs e = null)
@@ -314,6 +321,7 @@ namespace XrmToolBox.New
         private void cmsOnePlugin_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             if (lvTools.SelectedItems.Count == 0) return;
+            cmsOnePlugin.Close();
 
             var selectedPluginModel = lvTools.SelectedItems[0];
 
@@ -936,6 +944,8 @@ namespace XrmToolBox.New
 
         private void SetCategoriesDisplay()
         {
+            if (mainItem == null) return;
+
             expanded = mainItem.Expanded;
 
             mainItem.Image = mainItem.Expanded ? Resources.left_arrow : Resources.right_arrow;
