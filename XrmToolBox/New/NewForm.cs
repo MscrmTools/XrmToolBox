@@ -991,7 +991,7 @@ Would you like to reinstall last stable release of connection controls?";
                 else
                 {
                     MessageBox.Show(this,
-                        @"This tool is not on the Tool Library or its Project Url is not defined. Therefore, we cannot lead you to the project page",
+                        @"This tool is not on the Tool Library, its Project Url is not defined or it is not possible to connect to XrmToolBox portal to retrieve this information. Therefore, we cannot lead you to the project page",
                         @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
