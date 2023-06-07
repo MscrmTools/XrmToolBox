@@ -202,6 +202,7 @@ namespace XrmToolBox.New
             // 
             // tsmiShowStartPage
             // 
+            this.tsmiShowStartPage.Image = global::XrmToolBox.Properties.Resources.StartPage32;
             this.tsmiShowStartPage.Name = "tsmiShowStartPage";
             this.tsmiShowStartPage.Size = new System.Drawing.Size(352, 34);
             this.tsmiShowStartPage.Text = "Show Start Page";
@@ -526,7 +527,7 @@ namespace XrmToolBox.New
             this.pnlSupport.Controls.Add(this.lblTitle);
             this.pnlSupport.Controls.Add(this.llDismiss);
             this.pnlSupport.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlSupport.Location = new System.Drawing.Point(0, 1086);
+            this.pnlSupport.Location = new System.Drawing.Point(0, 1110);
             this.pnlSupport.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.pnlSupport.Name = "pnlSupport";
             this.pnlSupport.Size = new System.Drawing.Size(1906, 100);
@@ -619,7 +620,7 @@ namespace XrmToolBox.New
             this.pnlPluginsUpdate.Controls.Add(this.pbOpenPluginsStore);
             this.pnlPluginsUpdate.Controls.Add(this.lblPluginsUpdateAvailable);
             this.pnlPluginsUpdate.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlPluginsUpdate.Location = new System.Drawing.Point(0, 1256);
+            this.pnlPluginsUpdate.Location = new System.Drawing.Point(0, 1250);
             this.pnlPluginsUpdate.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.pnlPluginsUpdate.Name = "pnlPluginsUpdate";
             this.pnlPluginsUpdate.Size = new System.Drawing.Size(1906, 50);
@@ -649,7 +650,7 @@ namespace XrmToolBox.New
             this.llClosePluginsUpdatePanel.Location = new System.Drawing.Point(1885, 0);
             this.llClosePluginsUpdatePanel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.llClosePluginsUpdatePanel.Name = "llClosePluginsUpdatePanel";
-            this.llClosePluginsUpdatePanel.Size = new System.Drawing.Size(21, 44);
+            this.llClosePluginsUpdatePanel.Size = new System.Drawing.Size(21, 50);
             this.llClosePluginsUpdatePanel.TabIndex = 12;
             this.llClosePluginsUpdatePanel.TabStop = true;
             this.llClosePluginsUpdatePanel.Text = "X";
@@ -682,13 +683,12 @@ namespace XrmToolBox.New
             this.lblPluginsUpdateAvailable.Tag = "{0} Update{1} {2} available for your tools";
             this.lblPluginsUpdateAvailable.Text = "X Updates are available for your tools";
             this.lblPluginsUpdateAvailable.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-
             // 
             // pnlBottom
             // 
             this.pnlBottom.BackColor = System.Drawing.SystemColors.Info;
             this.pnlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlBottom.Location = new System.Drawing.Point(0, 993);
+            this.pnlBottom.Location = new System.Drawing.Point(0, 1017);
             this.pnlBottom.Name = "pnlBottom";
             this.pnlBottom.Size = new System.Drawing.Size(1906, 93);
             this.pnlBottom.TabIndex = 12;
@@ -741,7 +741,7 @@ namespace XrmToolBox.New
             this.dpMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dpMain.Location = new System.Drawing.Point(0, 120);
             this.dpMain.Name = "dpMain";
-            this.dpMain.Size = new System.Drawing.Size(1906, 873);
+            this.dpMain.Size = new System.Drawing.Size(1906, 897);
             this.dpMain.TabIndex = 21;
             this.dpMain.ActiveDocumentChanged += new System.EventHandler(this.dpMain_ActiveDocumentChanged);
             this.dpMain.ActiveContentChanged += new System.EventHandler(this.dpMain_ActiveContentChanged);
@@ -833,7 +833,7 @@ namespace XrmToolBox.New
             this.pnlNoToolLibraryAccess.Controls.Add(this.llCloseToolLibraryNotAvailPanel);
             this.pnlNoToolLibraryAccess.Controls.Add(this.pbToolLibraryError);
             this.pnlNoToolLibraryAccess.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlNoToolLibraryAccess.Location = new System.Drawing.Point(0, 1188);
+            this.pnlNoToolLibraryAccess.Location = new System.Drawing.Point(0, 1210);
             this.pnlNoToolLibraryAccess.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.pnlNoToolLibraryAccess.Name = "pnlNoToolLibraryAccess";
             this.pnlNoToolLibraryAccess.Size = new System.Drawing.Size(1906, 40);
@@ -847,7 +847,7 @@ namespace XrmToolBox.New
             this.lblNoToolLibraryAccess.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.lblNoToolLibraryAccess.Location = new System.Drawing.Point(32, 0);
             this.lblNoToolLibraryAccess.Name = "lblNoToolLibraryAccess";
-            this.lblNoToolLibraryAccess.Size = new System.Drawing.Size(1737, 68);
+            this.lblNoToolLibraryAccess.Size = new System.Drawing.Size(1737, 40);
             this.lblNoToolLibraryAccess.TabIndex = 16;
             this.lblNoToolLibraryAccess.Text = "Tool Library initialization failed";
             // 
@@ -857,7 +857,7 @@ namespace XrmToolBox.New
             this.llRetryInitToolLibrary.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.llRetryInitToolLibrary.Location = new System.Drawing.Point(1769, 0);
             this.llRetryInitToolLibrary.Name = "llRetryInitToolLibrary";
-            this.llRetryInitToolLibrary.Size = new System.Drawing.Size(116, 68);
+            this.llRetryInitToolLibrary.Size = new System.Drawing.Size(116, 40);
             this.llRetryInitToolLibrary.TabIndex = 15;
             this.llRetryInitToolLibrary.TabStop = true;
             this.llRetryInitToolLibrary.Text = "retry";
@@ -872,7 +872,7 @@ namespace XrmToolBox.New
             this.llCloseToolLibraryNotAvailPanel.Location = new System.Drawing.Point(1885, 0);
             this.llCloseToolLibraryNotAvailPanel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.llCloseToolLibraryNotAvailPanel.Name = "llCloseToolLibraryNotAvailPanel";
-            this.llCloseToolLibraryNotAvailPanel.Size = new System.Drawing.Size(21, 68);
+            this.llCloseToolLibraryNotAvailPanel.Size = new System.Drawing.Size(21, 40);
             this.llCloseToolLibraryNotAvailPanel.TabIndex = 14;
             this.llCloseToolLibraryNotAvailPanel.TabStop = true;
             this.llCloseToolLibraryNotAvailPanel.Text = "X";
@@ -888,7 +888,7 @@ namespace XrmToolBox.New
             this.pbToolLibraryError.Location = new System.Drawing.Point(0, 0);
             this.pbToolLibraryError.Margin = new System.Windows.Forms.Padding(2);
             this.pbToolLibraryError.Name = "pbToolLibraryError";
-            this.pbToolLibraryError.Size = new System.Drawing.Size(32, 68);
+            this.pbToolLibraryError.Size = new System.Drawing.Size(32, 40);
             this.pbToolLibraryError.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbToolLibraryError.TabIndex = 11;
             this.pbToolLibraryError.TabStop = false;
