@@ -338,6 +338,9 @@ namespace XrmToolBox
             get; set;
         }
 
+        [Browsable(false)]
+        public int DisplaySizeFactor { get; set; }
+
         [Category("Connection controls")]
         [DisplayName("Display all connections")]
         [Description("Indicates if bottom left connection control should display all connections regardless the connection files they come from")]
