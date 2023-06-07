@@ -54,6 +54,7 @@ namespace XrmToolBox.New
         private StartPage startPage;
         private IToolLibrary store;
         private ToolTip toolTip = new ToolTip();
+        private readonly string windowTitleSuffix;
 
         public NewForm(string[] args)
         {
@@ -61,7 +62,7 @@ namespace XrmToolBox.New
 
             ai.WriteEvent("XrmToolBox-Start");
 
-            Text = $@"{Text} (v{Assembly.GetExecutingAssembly().GetName().Version})";
+            Text = windowTitleSuffix = $@"{Text} (v{Assembly.GetExecutingAssembly().GetName().Version})";
 
             // Set drawing optimizations
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
@@ -2027,6 +2028,18 @@ Would you like to reinstall last stable release of connection controls?";
             }
         }
 
+        private void tsmiNameTopLevelWindow_TextChanged(object sender, System.EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(tsmiNameTopLevelWindow.Text))
+            {
+                Text = windowTitleSuffix;
+            }
+            else
+            {
+                Text = $"{tsmiNameTopLevelWindow.Text} - {windowTitleSuffix}";
+            }
+        }
+
         private void FillPluginsListMenuDisplay()
         {
             var staticItems = tsbManageWindows.DropDownItems.Cast<ToolStripItem>().Take(5).ToList();
@@ -2211,5 +2224,6 @@ Would you like to reinstall last stable release of connection controls?";
             pnlPluginsUpdate.Visible = false;
             OpenPluginsStore(true);
         }
+
     }
 }

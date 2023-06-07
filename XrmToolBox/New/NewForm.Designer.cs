@@ -36,6 +36,9 @@ namespace XrmToolBox.New
             this.tsbConnect = new System.Windows.Forms.ToolStripButton();
             this.tssSearch = new System.Windows.Forms.ToolStripSeparator();
             this.tsbManageWindows = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tsmiNameWindowLabel = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiNameTopLevelWindow = new System.Windows.Forms.ToolStripTextBox();
+            this.tssWindowsTopLevel = new System.Windows.Forms.ToolStripSeparator();
             this.closeCurrentWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeAllWindowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeAllWindowsExceptActiveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -165,6 +168,9 @@ namespace XrmToolBox.New
             // tsbManageWindows
             // 
             this.tsbManageWindows.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiNameWindowLabel,
+            this.tsmiNameTopLevelWindow,
+            this.tssWindowsTopLevel,
             this.closeCurrentWindowToolStripMenuItem,
             this.closeAllWindowsToolStripMenuItem,
             this.closeAllWindowsExceptActiveToolStripMenuItem,
@@ -175,6 +181,26 @@ namespace XrmToolBox.New
             this.tsbManageWindows.Size = new System.Drawing.Size(104, 29);
             this.tsbManageWindows.Text = "Windows";
             this.tsbManageWindows.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.tsbManageWindows_DropDownItemClicked);
+            // 
+            // tsmiNameWindowLabel
+            // 
+            this.tsmiNameWindowLabel.Enabled = false;
+            this.tsmiNameWindowLabel.Name = "tsmiNameWindowLabel";
+            this.tsmiNameWindowLabel.Size = new System.Drawing.Size(295, 22);
+            this.tsmiNameWindowLabel.Text = "Name top level window:";
+            // 
+            // tsmiNameTopLevelWindow
+            // 
+            this.tsmiNameTopLevelWindow.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.tsmiNameTopLevelWindow.MaxLength = 255;
+            this.tsmiNameTopLevelWindow.Name = "tsmiNameTopLevelWindow";
+            this.tsmiNameTopLevelWindow.Size = new System.Drawing.Size(235, 23);
+            this.tsmiNameTopLevelWindow.TextChanged += new System.EventHandler(this.tsmiNameTopLevelWindow_TextChanged);
+            // 
+            // tssWindowsTopLevel
+            // 
+            this.tssWindowsTopLevel.Name = "tssWindowsTopLevel";
+            this.tssWindowsTopLevel.Size = new System.Drawing.Size(292, 6);
             // 
             // closeCurrentWindowToolStripMenuItem
             // 
@@ -1032,5 +1058,8 @@ namespace XrmToolBox.New
         private ToolStripMenuItem tsmiMoveToVerticalGroup;
         private ToolStripMenuItem tsmiMoveToHorizontalGroup;
         private ToolStripMenuItem tsmiMoveToOrigin;
+        private ToolStripMenuItem tsmiNameWindowLabel;
+        private ToolStripTextBox tsmiNameTopLevelWindow;
+        private ToolStripSeparator tssWindowsTopLevel;
     }
 }
