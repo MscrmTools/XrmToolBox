@@ -197,11 +197,12 @@ namespace XrmToolBox.ToolLibrary.UserControls
 
         private void rtbDescription_ContentsResized(object sender, ContentsResizedEventArgs e)
         {
-            var richTextBox = (RichTextBox)sender;
-            var maxAvailableHeight = richTextBox.Parent.ClientSize.Height - richTextBox.Parent.Controls.Cast<Control>().Except(new[] { richTextBox, rtbReleaseNotes }).Sum(c => c.Height) - 50;
-            if (maxAvailableHeight < 50)
-                maxAvailableHeight = 50;
-            richTextBox.ClientSize = new Size(richTextBox.Parent.Width, Math.Min(maxAvailableHeight, e.NewRectangle.Height) + 1);
+            //var richTextBox = (RichTextBox)sender;
+            //var maxAvailableHeight = richTextBox.Parent.ClientSize.Height - richTextBox.Parent.Controls.Cast<Control>().Except(new[] { richTextBox, rtbReleaseNotes }).Sum(c => c.Height) - 50;
+            //if (maxAvailableHeight < 50)
+            //    maxAvailableHeight = 50;
+
+            //richTextBox.ClientSize = new Size(richTextBox.Parent.Width, Math.Min(maxAvailableHeight, e.NewRectangle.Height) + 1);
         }
 
         private void rtbReleaseNotes_LinkClicked(object sender, LinkClickedEventArgs e)
