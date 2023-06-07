@@ -1,4 +1,6 @@
 ﻿using McTools.Xrm.Connection;
+using McTools.Xrm.Connection.WinForms.AppCode;
+using OrderedPropertyGrid;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -122,7 +124,7 @@ namespace XrmToolBox
         }
     }
 
-    public class Options : ICloneable, IToolLibrarySettings
+    public class Options : ICloneable, IToolLibrarySettings, IConnectionControlSettings
     {
         private static Options innerOptions;
 
@@ -138,6 +140,8 @@ namespace XrmToolBox
             DisplayPluginsStoreOnStartup = false;
             HiddenPlugins = new List<string>();
         }
+
+        public event EventHandler<SettingsPropertyEventArgs> OnSettingsChanged;
 
         public static Options Instance
         {
@@ -155,13 +159,60 @@ namespace XrmToolBox
             }
         }
 
+        #region Properties
+
+        #region ToolLibrary
+
         [Category("Tool Library")]
         [DisplayName("Additional repositories")]
         [Description("Additional repositories where to find tools. One line per repository. Format: <repository name>|<repository path>")]
         [Editor(typeof(MultilineStringEditor), typeof(UITypeEditor))]
+        [PropertyOrder(2)]
         public string AdditionalRepositories { get; set; }
 
-        [Browsable(false)] public bool? AllowLogUsage { get; set; }
+        [Browsable(false)] public bool LibraryFilterMvp { get; set; }
+
+        [Browsable(false)] public bool LibraryFilterNew { get; set; }
+
+        [Browsable(false)] public bool LibraryFilterOpenSource { get; set; }
+
+        [Browsable(false)] public bool LibraryFilterRating { get; set; }
+
+        [Browsable(false)] public bool LibraryShowIncompatible { get; set; }
+
+        [Browsable(false)] public bool LibraryShowInstalled { get; set; } = true;
+
+        [Browsable(false)] public bool LibraryShowNotInstalled { get; set; } = true;
+
+        [Browsable(false)] public bool LibraryShowUpdates { get; set; } = true;
+
+        [Category("Tool Library")]
+        [DisplayName("Most Rated - Minimum number of votes")]
+        [Description("Indicates the minimum number of votes for a tool to be considered as a most rated tool")]
+        [PropertyOrder(3)]
+        public int MostRatedMinNumberOfVotes { get; set; } = 10;
+
+        [Category("Tool Library")]
+        [DisplayName("Most Rated - Minimum average rate")]
+        [Description("Indicates the minimum average rate for a tool to be considered as a most rated tool")]
+        [PropertyOrder(4)]
+        public decimal MostRatedMinRatingAverage { get; set; } = (decimal)4.5;
+
+        [Category("Tool Library")]
+        [DisplayName("Repository Url")]
+        [Description("Repository Url for tools list. You can use your own if needed")]
+        [PropertyOrder(1)]
+        public string RepositoryUrl { get; set; } = "https://www.xrmtoolbox.com/_odata/plugins";
+
+        [Category("Tool Library")]
+        [DisplayName("Use legacy Tool Library")]
+        [Description("True to use the previous version of Tool Library")]
+        [PropertyOrder(5)]
+        public bool UseLegacyToolLibrary { get; set; }
+
+        #endregion ToolLibrary
+
+        #region Startup
 
         [Category("Startup")]
         [DisplayName("Bring to top")]
@@ -177,86 +228,11 @@ namespace XrmToolBox
             set => DoNotCheckForUpdates = !value;
         }
 
-        [Category("Close behavior")]
-        [DisplayName("Close tool silently")]
-        [Description("When closing an individual plugin, do not prompt to confirm tool close")]
-        public bool CloseEachPluginSilently { get; set; }
-
-        [Category("Close behavior")]
-        [DisplayName("Close XrmToolBox silently")]
-        [Description("When closing XrmToolBox, do not prompt to confirm opened tools close")]
-        public bool CloseOpenedPluginsSilently { get; set; }
-
-        [Category("Close behavior")]
-        [DisplayName("Shutdown silently")]
-        [Description("When Windows shuts down and XrmToolBox have opened tools, do not prompt to confirm opened tools close")]
-        public bool ClosePluginsSilentlyOnWindowsShutdown { get; set; } = true;
-
-        [Category("Connection controls")]
-        [DisplayName("Search pre release updates")]
-        [Description("Allow XrmToolBox to search pre release update (alpha, beta, etc.) of connection controls")]
-        public bool ConnectionControlsAllowPreReleaseUpdates { get; set; }
-
-        [ReadOnly(true)]
-        [Category("Connection controls")]
-        [DisplayName("Version")]
-        [Description("Current version of connection controls")]
-        public string ConnectionControlsVersion { get; set; }
-
         [Browsable(false)]
-        public bool DisplayLargeIcons
-        {
-            get => IconDisplayMode == DisplayIcons.Large;
-            set => IconDisplayMode = value ? DisplayIcons.Large : DisplayIcons.Small;
-        }
-
-        [Browsable(false)]
-        [Obsolete]
-        public bool DisplayMostUsedFirst { get; set; }
-
-        [Browsable(false)]
-        public string DisplayOrder
-        {
-            get
-            {
-                switch (PluginsDisplayOrder)
-                {
-                    case XrmToolBox.DisplayOrder.Alphabetically:
-                        return "Alphabetically";
-
-                    case XrmToolBox.DisplayOrder.MostUsed:
-                        return "Most used";
-
-                    case XrmToolBox.DisplayOrder.RecentlyUpdated:
-                        return "Recently updated";
-
-                    case XrmToolBox.DisplayOrder.Rating:
-                        return "Rating";
-                }
-
-                return string.Empty;
-            }
-            set => PluginsDisplayOrder = value == "Alphabetically"
-                    ? XrmToolBox.DisplayOrder.Alphabetically
-                : value == "Most used"
-                    ? XrmToolBox.DisplayOrder.MostUsed
-                : value == "Rating"
-                    ? XrmToolBox.DisplayOrder.Rating
-                    : XrmToolBox.DisplayOrder.RecentlyUpdated;
-        }
-
-        [Browsable(false)]
-        [Category("Startup")]
-        [DisplayName("Open Tool Library only if updates are available")]
         public bool DisplayPluginsStoreOnlyIfUpdates { get; set; }
 
         [Browsable(false)]
-        [Category("Startup")]
-        [DisplayName("Open Tool Library")]
         public bool DisplayPluginsStoreOnStartup { get; set; }
-
-        [Browsable(false)]
-        public bool DisplayRecentlyUpdatedFirst { get; set; }
 
         [Category("Startup")]
         [DisplayName("Open Tool Library")]
@@ -296,133 +272,196 @@ namespace XrmToolBox
             }
         }
 
+        [Category("Startup")]
+        [DisplayName("Show tools list first")]
+        [Description("Indicates if tools list is displayed at startup")]
+        public bool DisplayToolsListFirst { get; set; }
+
         [Browsable(false)]
         public bool DoNotCheckForUpdates { get; set; }
-
-        [Category("Start Page")]
-        [DisplayName("Forget tools without connection")]
-        [Description("Do not remember tools opened without connection in Most Recently Used tools")]
-        public bool DoNotRememberPluginsWithoutConnection { get; set; }
-
-        [Category("Start Page")]
-        [DisplayName("Hide at startup")]
-        [Description("Indicates if Start page should be opened or not when XrmToolBox starts up")]
-        public bool DoNotShowStartPage { get; set; }
-
-        [Category("Tools list display")]
-        [DisplayName("Hidden tools")]
-        [Description("Defines the installed tools that should not be displayed in the tools list")]
-        [Editor(typeof(HiddenPluginsEditor), typeof(UITypeEditor))]
-        public List<string> HiddenPlugins { get; set; }
-
-        [Category("Tools list display")]
-        [DisplayName("Icons size")]
-        [TypeConverter(typeof(CustomEnumConverter))]
-        [XmlIgnore]
-        public DisplayIcons IconDisplayMode { get; set; }
-
-        [Browsable(false)]
-        public DateTime LastAdvertisementDisplay { get; set; }
-
-        [Browsable(false)]
-        public string LastConnection { get; set; }
-
-        [Browsable(false)]
-        public string LastPlugin { get; set; }
-
-        [Browsable(false)]
-        public DateTime LastUpdateCheck { get; set; }
-
-        [Browsable(false)] public bool LibraryFilterMvp { get; set; }
-        [Browsable(false)] public bool LibraryFilterNew { get; set; }
-        [Browsable(false)] public bool LibraryFilterOpenSource { get; set; }
-        [Browsable(false)] public bool LibraryFilterRating { get; set; }
-        [Browsable(false)] public bool LibraryShowIncompatible { get; set; }
-        [Browsable(false)] public bool LibraryShowInstalled { get; set; } = true;
-        [Browsable(false)] public bool LibraryShowNotInstalled { get; set; } = true;
-        [Browsable(false)] public bool LibraryShowUpdates { get; set; } = true;
-
-        [Category("Connections")]
-        [DisplayName("Display all connections")]
-        [Description("Indicates if bottom left connection control should display all connections regardless the connection files they come from")]
-        public bool MergeConnectionFiles { get; set; }
-
-        [Category("Tool Library")]
-        [DisplayName("Most Rated - Minimum number of votes")]
-        [Description("Indicates the minimum number of votes for a tool to be considered as a most rated tool")]
-        public int MostRatedMinNumberOfVotes { get; set; } = 10;
-
-        [Category("Tool Library")]
-        [DisplayName("Most Rated - Minimum average rate")]
-        [Description("Indicates the minimum average rate for a tool to be considered as a most rated tool")]
-        public decimal MostRatedMinRatingAverage { get; set; } = (decimal)4.5;
-
-        [Browsable(false)]
-        public List<PluginUseCount> MostUsedList { get; set; }
-
-        [Category("Start Page")]
-        [DisplayName("Tools to display")]
-        [Description("Indicates number of tools to display in Moste Recently Used items section of Start Page")]
-        public int MruItemsToDisplay { get; set; } = 10;
-
-        [Category("Tools list display")]
-        [DisplayName("New ribbon display duration")]
-        [Description("Number of days after having installed a tool a \"NEW\" ribbon is displayed on the tool")]
-        public int NumberOfDaysToShowNewRibbon { get; set; } = 7;
-
-        [Browsable(false)]
-        public bool OptinForApplicationInsights { get; set; } = true;
-
-        [Category("Tools list display")]
-        [DisplayName("Order")]
-        [TypeConverter(typeof(CustomEnumConverter))]
-        [XmlIgnore]
-        public DisplayOrder PluginsDisplayOrder { get; set; }
-
-        [Browsable(false)]
-        public DockState PluginsListDocking { get; set; } = DockState.Document;
-
-        [Browsable(false)]
-        public bool PluginsListIsHidden { get; set; } = false;
-
-        [Browsable(false)]
-        public bool? PluginsStoreShowIncompatible { get; set; }
-
-        [Browsable(false)]
-        public bool? PluginsStoreShowInstalled { get; set; }
-
-        [Browsable(false)]
-        public bool? PluginsStoreShowNew { get; set; }
-
-        [Browsable(false)]
-        public bool? PluginsStoreShowUpdates { get; set; }
-
-        [Browsable(false)]
-        public List<PluginUpdateSkip> PluginsUpdateSkip { get; set; } = new List<PluginUpdateSkip>();
-
-        [Category("Session")]
-        [DisplayName("Remember session")]
-        [Description("Indicates if the current session must be saved to be reused at the next XrmToolBox startup")]
-        public bool RememberSession { get; set; }
-
-        [Category("Tool Library")]
-        [DisplayName("Repository Url")]
-        [Description("Repository Url for tools list. You can use your own if needed")]
-        public string RepositoryUrl { get; set; } = "https://www.xrmtoolbox.com/_odata/plugins";
-
-        [Category("Connections")]
-        [DisplayName("Reuse connections")]
-        [Description("Indicates if connecting to an already connected organization should instanciate a new connection or use the existing one")]
-        public bool ReuseConnections { get; set; }
 
         [Category("Startup")]
         [DisplayName("Show tools update notification")]
         [Description("Indicates if a notification should be displayed when updates are present for installed tools")]
         public bool ShowPluginUpdatesPanelAtStartup { get; set; } = true;
 
-        [XmlElement("FormSize")]
+        #endregion Startup
+
+        #region Log usage
+
+        [Browsable(false)] public bool? AllowLogUsage { get; set; }
+
+        #endregion Log usage
+
+        #region Close Behavior
+
+        [Category("Close behavior")]
+        [DisplayName("Close tool silently")]
+        [Description("When closing an individual plugin, do not prompt to confirm tool close")]
+        public bool CloseEachPluginSilently { get; set; }
+
+        [Category("Close behavior")]
+        [DisplayName("Close XrmToolBox silently")]
+        [Description("When closing XrmToolBox, do not prompt to confirm opened tools close")]
+        public bool CloseOpenedPluginsSilently { get; set; }
+
+        [Category("Close behavior")]
+        [DisplayName("Shutdown silently")]
+        [Description("When Windows shuts down and XrmToolBox have opened tools, do not prompt to confirm opened tools close")]
+        public bool ClosePluginsSilentlyOnWindowsShutdown { get; set; } = true;
+
+        #endregion Close Behavior
+
+        #region Connection controls
+
+        private bool showMostRecentConnections;
+        private bool showSearchBarInCompactSelector;
+        private bool useDetailsViewForConnectionManager;
+        private bool useDetailsViewForConnectionSelector;
+
+        [Category("Connection controls")]
+        [DisplayName("Search pre release updates")]
+        [Description("Allow XrmToolBox to search pre release update (alpha, beta, etc.) of connection controls")]
+        [PropertyOrder(1)]
+        public bool ConnectionControlsAllowPreReleaseUpdates
+        {
+            get; set;
+        }
+
+        [ReadOnly(true)]
+        [Category("Connection controls")]
+        [DisplayName("Version")]
+        [Description("Current version of connection controls")]
+        [PropertyOrder(2)]
+        public string ConnectionControlsVersion
+        {
+            get; set;
+        }
+
+        [Category("Connection controls")]
+        [DisplayName("Display all connections")]
+        [Description("Indicates if bottom left connection control should display all connections regardless the connection files they come from")]
+        [PropertyOrder(4)]
+        public bool MergeConnectionFiles
+        {
+            get; set;
+        }
+
+        [Category("Connection controls")]
+        [DisplayName("Number of recent connections")]
+        [Description("Indicates number of connections to display when using the display mode \"Most recently used connections\" in Connection Selector")]
+        [PropertyOrder(5)]
+        public int NumberOfRecentConnectionsToDisplay
+        {
+            get; set;
+        } = 10;
+
+        [Category("Connection controls")]
+        [DisplayName("Reuse connections")]
+        [Description("Indicates if connecting to an already connected organization should instanciate a new connection or use the existing one")]
+        [PropertyOrder(3)]
+        public bool ReuseConnections
+        {
+            get; set;
+        }
+
+        [Category("Connection controls")]
+        [DisplayName("Show most recent connections")]
+        [Description("Indicates if connection selector should display \"Most recently used connections\" or all connections")]
+        [PropertyOrder(6)]
+        public bool ShowMostRecentConnections
+        {
+            get => showMostRecentConnections;
+            set
+            {
+                showMostRecentConnections = value;
+                OnSettingsChanged?.Invoke(this, new SettingsPropertyEventArgs(nameof(ShowMostRecentConnections), value));
+            }
+        }
+
+        [Category("Connection controls")]
+        [DisplayName("Show search bar")]
+        [Description("Indicates if search bar should be displayed in Connection Selector")]
+        [PropertyOrder(7)]
+        public bool ShowSearchBarInCompactSelector
+        {
+            get => showSearchBarInCompactSelector;
+            set
+            {
+                showSearchBarInCompactSelector = value;
+                OnSettingsChanged?.Invoke(this, new SettingsPropertyEventArgs(nameof(ShowSearchBarInCompactSelector), value));
+            }
+        }
+
+        [Category("Connection controls")]
+        [DisplayName("Use Details view for Connection Manager")]
+        [Description("Indicates if Connection Manager should display the details view of connections or the compact view")]
+        [PropertyOrder(8)]
+        public bool UseDetailsViewForConnectionManager
+        {
+            get => useDetailsViewForConnectionManager;
+            set
+            {
+                useDetailsViewForConnectionManager = value;
+                OnSettingsChanged?.Invoke(this, new SettingsPropertyEventArgs(nameof(UseDetailsViewForConnectionManager), value));
+            }
+        }
+
+        [Category("Connection controls")]
+        [DisplayName("Use Details view for Connection Selector")]
+        [Description("Indicates if Connection Selector should display the details view of connections or the compact view")]
+        [PropertyOrder(9)]
+        public bool UseDetailsViewForConnectionSelector
+        {
+            get => useDetailsViewForConnectionSelector;
+            set
+            {
+                useDetailsViewForConnectionSelector = value;
+                OnSettingsChanged?.Invoke(this, new SettingsPropertyEventArgs(nameof(UseDetailsViewForConnectionSelector), value));
+            }
+        }
+
+        #endregion Connection controls
+
+        #region Display
+
         [Browsable(false)]
-        public FormSize Size { get; set; }
+        [Obsolete]
+        public bool DisplayMostUsedFirst { get; set; }
+
+        [Browsable(false)]
+        public string DisplayOrder
+        {
+            get
+            {
+                switch (PluginsDisplayOrder)
+                {
+                    case XrmToolBox.DisplayOrder.Alphabetically:
+                        return "Alphabetically";
+
+                    case XrmToolBox.DisplayOrder.MostUsed:
+                        return "Most used";
+
+                    case XrmToolBox.DisplayOrder.RecentlyUpdated:
+                        return "Recently updated";
+
+                    case XrmToolBox.DisplayOrder.Rating:
+                        return "Rating";
+                }
+
+                return string.Empty;
+            }
+            set => PluginsDisplayOrder = value == "Alphabetically"
+                    ? XrmToolBox.DisplayOrder.Alphabetically
+                : value == "Most used"
+                    ? XrmToolBox.DisplayOrder.MostUsed
+                : value == "Rating"
+                    ? XrmToolBox.DisplayOrder.Rating
+                    : XrmToolBox.DisplayOrder.RecentlyUpdated;
+        }
+
+        [Browsable(false)]
+        public bool DisplayRecentlyUpdatedFirst { get; set; }
 
         [Browsable(false)]
         public string Theme { get; set; } = "Light theme";
@@ -457,10 +496,160 @@ namespace XrmToolBox
             }
         }
 
-        [Category("Tool Library")]
-        [DisplayName("Use legacy Tool Library")]
-        [Description("True to use the previous version of Tool Library")]
-        public bool UseLegacyToolLibrary { get; set; }
+        #endregion Display
+
+        #region Start Page
+
+        [Category("Start Page")]
+        [DisplayName("Forget tools without connection")]
+        [Description("Do not remember tools opened without connection in Most Recently Used tools")]
+        public bool DoNotRememberPluginsWithoutConnection { get; set; }
+
+        [Category("Start Page")]
+        [DisplayName("Hide at startup")]
+        [Description("Indicates if Start page should be opened or not when XrmToolBox starts up")]
+        public bool DoNotShowStartPage { get; set; }
+
+        [Category("Start Page")]
+        [DisplayName("Tools to display")]
+        [Description("Indicates number of tools to display in Moste Recently Used items section of Start Page")]
+        public int MruItemsToDisplay { get; set; } = 10;
+
+        #endregion Start Page
+
+        #region Tools list display
+
+        private bool doNotUseToolColors;
+        private bool showCategoriesExpanded;
+
+        [Browsable(false)]
+        public bool DisplayLargeIcons
+        {
+            get => IconDisplayMode == DisplayIcons.Large;
+            set
+            {
+                IconDisplayMode = value ? DisplayIcons.Large : DisplayIcons.Small;
+                OnSettingsChanged?.Invoke(this, new SettingsPropertyEventArgs(nameof(IconDisplayMode), IconDisplayMode));
+            }
+        }
+
+        [Category("Tools list display")]
+        [DisplayName("Do not use tools color")]
+        [Description("If enabled, Tools list will be displayed with homogeneous colors for all tools")]
+        public bool DoNotUseToolColors
+        {
+            get => doNotUseToolColors;
+            set
+            {
+                doNotUseToolColors = value;
+                OnSettingsChanged?.Invoke(this, new SettingsPropertyEventArgs(nameof(DoNotUseToolColors), value));
+            }
+        }
+
+        [Category("Tools list display")]
+        [DisplayName("Hidden tools")]
+        [Description("Defines the installed tools that should not be displayed in the tools list")]
+        [Editor(typeof(HiddenPluginsEditor), typeof(UITypeEditor))]
+        public List<string> HiddenPlugins { get; set; }
+
+        [Category("Tools list display")]
+        [DisplayName("Icons size")]
+        [TypeConverter(typeof(CustomEnumConverter))]
+        [XmlIgnore]
+        public DisplayIcons IconDisplayMode { get; set; }
+
+        [Category("Tools list display")]
+        [DisplayName("New ribbon display duration")]
+        [Description("Number of days after having installed a tool a \"NEW\" ribbon is displayed on the tool")]
+        public int NumberOfDaysToShowNewRibbon { get; set; } = 7;
+
+        [Category("Tools list display")]
+        [DisplayName("Order")]
+        [TypeConverter(typeof(CustomEnumConverter))]
+        [XmlIgnore]
+        public DisplayOrder PluginsDisplayOrder { get; set; }
+
+        [Category("Tools list display")]
+        [DisplayName("Show categories expanded")]
+        public bool ShowCategoriesExpanded
+        {
+            get => showCategoriesExpanded;
+            set
+            {
+                showCategoriesExpanded = value;
+                OnSettingsChanged?.Invoke(this, new SettingsPropertyEventArgs(nameof(ShowCategoriesExpanded), value));
+            }
+        }
+
+        [Category("Tools list display")]
+        [DisplayName("Use legacy Tools list")]
+        [Description("Indicates if tools list should be displayed using legacy layout or new layout (restart required)")]
+        public bool UseLegacyToolsList { get; set; }
+
+        #endregion Tools list display
+
+        #region Others
+
+        [Browsable(false)]
+        public DateTime LastAdvertisementDisplay { get; set; }
+
+        [Browsable(false)]
+        public string LastConnection { get; set; }
+
+        [Browsable(false)]
+        public string LastPlugin { get; set; }
+
+        [Browsable(false)]
+        public DateTime LastUpdateCheck { get; set; }
+
+        [Browsable(false)]
+        public List<PluginUseCount> MostUsedList { get; set; }
+
+        [Browsable(false)]
+        public bool OptinForApplicationInsights { get; set; } = true;
+
+        [Browsable(false)]
+        public List<string> OrderForSettingsTab { get; set; } = new List<string>();
+
+        [Browsable(false)]
+        public DockState PluginsListDocking { get; set; } = DockState.Document;
+
+        [Browsable(false)]
+        public bool PluginsListIsHidden { get; set; } = false;
+
+        [Browsable(false)]
+        public bool? PluginsStoreShowIncompatible { get; set; }
+
+        [Browsable(false)]
+        public bool? PluginsStoreShowInstalled { get; set; }
+
+        [Browsable(false)]
+        public bool? PluginsStoreShowNew { get; set; }
+
+        [Browsable(false)]
+        public bool? PluginsStoreShowUpdates { get; set; }
+
+        [Browsable(false)]
+        public List<PluginUpdateSkip> PluginsUpdateSkip { get; set; } = new List<PluginUpdateSkip>();
+
+        [XmlElement("FormSize")]
+        [Browsable(false)]
+        public FormSize Size { get; set; }
+
+        #endregion Others
+
+        #region Session
+
+        [Category("Session")]
+        [DisplayName("Remember session")]
+        [Description("Indicates if the current session must be saved to be reused at the next XrmToolBox startup")]
+        public bool RememberSession { get; set; }
+
+        #endregion Session
+
+        #endregion Properties
+
+        #region Methods
 
         public static bool Load(out Options options, out string errorMessage)
         {
@@ -555,13 +744,22 @@ namespace XrmToolBox
                 LibraryShowIncompatible = LibraryShowIncompatible,
                 LibraryShowInstalled = LibraryShowInstalled,
                 LibraryShowNotInstalled = LibraryShowNotInstalled,
-                LibraryShowUpdates = LibraryShowUpdates
+                LibraryShowUpdates = LibraryShowUpdates,
+                UseLegacyToolsList = UseLegacyToolsList,
+                ShowCategoriesExpanded = ShowCategoriesExpanded,
+                DoNotUseToolColors = DoNotUseToolColors
             };
         }
 
         public void Replace(Options newOption)
         {
             innerOptions = newOption;
+        }
+
+        public void ReportSettingsChange(SettingsPropertyEventArgs e)
+        {
+            OnSettingsChanged?.Invoke(this, e);
+            Save();
         }
 
         public void Save()
@@ -575,6 +773,8 @@ namespace XrmToolBox
 
             XmlSerializerHelper.SerializeToFile(this, settingsFile);
         }
+
+        #endregion Methods
     }
 
     internal class CustomEnumConverter : EnumConverter

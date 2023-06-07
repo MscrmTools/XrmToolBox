@@ -214,7 +214,7 @@ namespace XrmToolBox.ToolLibrary.UserControls
             var r = new Regex("([ ]{2,})");
             var releaseNotes = plugin.LatestReleaseNote != null ? r.Replace(plugin.LatestReleaseNote.Replace("\t", ""), "") : "";
 
-            lblToolName.Text = plugin.Name;
+            lblToolName.Text = $"{plugin.Name} {plugin.CurrentVersion}";
             lblToolAuthors.Text = plugin.Authors;
             rtbDescription.Text = plugin.Description;
             lblToolFirstRelease.Text = plugin.FirstReleaseDate.Value.ToString("d");

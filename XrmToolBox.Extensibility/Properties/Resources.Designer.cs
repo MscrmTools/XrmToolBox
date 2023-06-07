@@ -109,5 +109,15 @@ namespace XrmToolBox.Extensibility.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap progress_new {
+            get {
+                object obj = ResourceManager.GetObject("progress_new", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

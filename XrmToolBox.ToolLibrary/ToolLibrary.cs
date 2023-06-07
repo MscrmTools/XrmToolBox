@@ -75,6 +75,15 @@ namespace XrmToolBox.ToolLibrary
 
             pendingDeletions = LoadPendingFile<PluginDeletions>("Deletion.xml") ?? new PluginDeletions();
             pendingDeletions.PreviousProcessId = Process.GetCurrentProcess().Id;
+
+            try
+            {
+                WebRequestHelper.MakeGet("https://www.xrmtoolbox.com/_odata/categories");
+            }
+            catch
+            {
+                HasConnectivityToXrmToolBoxPortal = false;
+            }
         }
 
         #region Event Handlers
@@ -89,6 +98,7 @@ namespace XrmToolBox.ToolLibrary
 
         public bool AllowConnectionControlPreRelease { get; set; }
         public List<string> Categories { get; set; }
+        public bool HasConnectivityToXrmToolBoxPortal { get; set; } = true;
         public PluginDeletions PendingDeletions => pendingDeletions;
         public PluginUpdates PendingUpdates => pendingUpdates;
         public int PluginsCount => XrmToolBoxPlugins?.Plugins.Count ?? 0;
@@ -292,10 +302,17 @@ namespace XrmToolBox.ToolLibrary
 
             var jor = JObject.Parse(rData);
 
-            var latestVersion = ((JArray)((JArray)jor["items"]).Last()["items"]).Last();
+            var versions = new List<JToken>();
+            foreach (var item in (JArray)jor["items"])
+            {
+                foreach (var subItem in (JArray)item["items"])
+                    versions.Add(subItem);
+            }
+
+            var latestVersion = versions.OrderBy(t => DateTime.Parse(t["commitTimeStamp"].ToString())).Last();
 
             var pv = await GetSpecificPackageVersion(packageName, latestVersion);
-            while (pv.IsPrerelease && !AllowConnectionControlPreRelease)
+            while (pv.IsPrerelease && (!AllowConnectionControlPreRelease || packageName != "MscrmTools.Xrm.Connection"))
             {
                 latestVersion = latestVersion.Previous;
 
@@ -307,12 +324,12 @@ namespace XrmToolBox.ToolLibrary
 
         public XtbPlugin GetPluginByFileName(string filename)
         {
-            if (XrmToolBoxPlugins == null)
+            if (XrmToolBoxPlugins == null && HasConnectivityToXrmToolBoxPortal)
             {
                 LoadTools().Wait();
             }
 
-            return XrmToolBoxPlugins.Plugins.FirstOrDefault(p => p.Files.Any(f => f.ToLower().IndexOf(filename.ToLower(), StringComparison.Ordinal) >= 0));
+            return XrmToolBoxPlugins?.Plugins.FirstOrDefault(p => p.Files.Any(f => f.ToLower().IndexOf(filename.ToLower(), StringComparison.Ordinal) >= 0));
         }
 
         public string GetPluginProjectUrlByFileName(string fileName)
@@ -361,7 +378,9 @@ namespace XrmToolBox.ToolLibrary
             bool isNewVersion = ca.GetName().Version < connectionControlsPackage.Version
                    || ca.GetName().Version == connectionControlsPackage.Version &&
                    connectionControlsPackage.Version == currStoredVer &&
-                   connectionControlsPackage.ToString() != currentStoredVersion;
+                   connectionControlsPackage.ToString() != currentStoredVersion
+                   || connectionControlsPackage.ToString().IndexOf("-") > 0 && !AllowConnectionControlPreRelease
+                   ;
 
             return new ConnectionControlsUpdateSettings
             {
@@ -547,7 +566,6 @@ namespace XrmToolBox.ToolLibrary
         public async Task<IConnectionControlUpdateSettings> PrepareConnectionControlsUpdate(Form form, bool restart)
         {
             var updates = new PluginUpdates { PreviousProcessId = Process.GetCurrentProcess().Id };
-
             await AddPackageToInstall(connectionControlsPackage, updates);
             await AddPackageToInstall(await GetPackageVersion("Microsoft.CrmSdk.XrmTooling.CoreAssembly"), updates);
             await AddPackageToInstall(await GetPackageVersion("Microsoft.CrmSdk.XrmTooling.WpfControls"), updates);
@@ -623,6 +641,10 @@ namespace XrmToolBox.ToolLibrary
             {
                 PrepareUninstallPlugins(new List<XtbPlugin> { plugin }, pendingDeletions);
                 PerformUninstallation(pendingDeletions);
+            }
+            else if (!HasConnectivityToXrmToolBoxPortal)
+            {
+                MessageBox.Show("Unable to connect to XrmToolBox portal to determine files to delete. Please delete this tool manually", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

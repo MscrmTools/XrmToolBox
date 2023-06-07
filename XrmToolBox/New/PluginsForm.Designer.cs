@@ -42,6 +42,7 @@
             this.tsmiUninstallPlugin = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiAddToFavorites = new System.Windows.Forms.ToolStripMenuItem();
+            this.addToFavoritesWithCurrentConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlSearch = new System.Windows.Forms.Panel();
             this.pbClear = new System.Windows.Forms.PictureBox();
             this.txtSearch = new System.Windows.Forms.TextBox();
@@ -58,7 +59,6 @@
             this.pnlHelp = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.addToFavoritesWithCurrentConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsOnePlugin.SuspendLayout();
             this.pnlSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbClear)).BeginInit();
@@ -70,6 +70,7 @@
             // 
             // cmsOnePlugin
             // 
+            this.cmsOnePlugin.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsOnePlugin.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiOpenWithNewConection,
             this.toolStripSeparator2,
@@ -84,77 +85,83 @@
             this.tsmiAddToFavorites,
             this.addToFavoritesWithCurrentConnectionToolStripMenuItem});
             this.cmsOnePlugin.Name = "cmsOnePlugin";
-            this.cmsOnePlugin.Size = new System.Drawing.Size(609, 476);
+            this.cmsOnePlugin.Size = new System.Drawing.Size(414, 284);
             this.cmsOnePlugin.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsOnePlugin_ItemClicked);
             // 
             // tsmiOpenWithNewConection
             // 
             this.tsmiOpenWithNewConection.Image = global::XrmToolBox.Properties.Resources.lightning;
             this.tsmiOpenWithNewConection.Name = "tsmiOpenWithNewConection";
-            this.tsmiOpenWithNewConection.Size = new System.Drawing.Size(405, 32);
+            this.tsmiOpenWithNewConection.Size = new System.Drawing.Size(413, 32);
             this.tsmiOpenWithNewConection.Text = "Open Tool with new connection";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(605, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(410, 6);
             // 
             // tsmiOpenProjectHomePage
             // 
             this.tsmiOpenProjectHomePage.Image = global::XrmToolBox.Properties.Resources.www_page;
             this.tsmiOpenProjectHomePage.Name = "tsmiOpenProjectHomePage";
-            this.tsmiOpenProjectHomePage.Size = new System.Drawing.Size(405, 32);
+            this.tsmiOpenProjectHomePage.Size = new System.Drawing.Size(413, 32);
             this.tsmiOpenProjectHomePage.Text = "Open project home page";
             // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(605, 6);
+            this.toolStripSeparator9.Size = new System.Drawing.Size(410, 6);
             // 
             // tsmiShortcutTool
             // 
             this.tsmiShortcutTool.Image = global::XrmToolBox.Properties.Resources.shortcut;
             this.tsmiShortcutTool.Name = "tsmiShortcutTool";
-            this.tsmiShortcutTool.Size = new System.Drawing.Size(405, 32);
+            this.tsmiShortcutTool.Size = new System.Drawing.Size(413, 32);
             this.tsmiShortcutTool.Text = "Create shortcut (Tool)";
             // 
             // tsmiShortcutToolConnection
             // 
             this.tsmiShortcutToolConnection.Image = global::XrmToolBox.Properties.Resources.shortcut;
             this.tsmiShortcutToolConnection.Name = "tsmiShortcutToolConnection";
-            this.tsmiShortcutToolConnection.Size = new System.Drawing.Size(405, 32);
+            this.tsmiShortcutToolConnection.Size = new System.Drawing.Size(413, 32);
             this.tsmiShortcutToolConnection.Text = "Create shortcut (Tool and Connection)";
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(605, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(410, 6);
             // 
             // tsmiHidePlugin
             // 
             this.tsmiHidePlugin.Image = global::XrmToolBox.Properties.Resources.hide_detail;
             this.tsmiHidePlugin.Name = "tsmiHidePlugin";
-            this.tsmiHidePlugin.Size = new System.Drawing.Size(405, 32);
+            this.tsmiHidePlugin.Size = new System.Drawing.Size(413, 32);
             this.tsmiHidePlugin.Text = "Hide";
             // 
             // tsmiUninstallPlugin
             // 
             this.tsmiUninstallPlugin.Image = global::XrmToolBox.Properties.Resources.Clear_16;
             this.tsmiUninstallPlugin.Name = "tsmiUninstallPlugin";
-            this.tsmiUninstallPlugin.Size = new System.Drawing.Size(405, 32);
+            this.tsmiUninstallPlugin.Size = new System.Drawing.Size(413, 32);
             this.tsmiUninstallPlugin.Text = "Uninstall";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(605, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(410, 6);
             // 
             // tsmiAddToFavorites
             // 
             this.tsmiAddToFavorites.Image = global::XrmToolBox.Properties.Resources.star;
             this.tsmiAddToFavorites.Name = "tsmiAddToFavorites";
-            this.tsmiAddToFavorites.Size = new System.Drawing.Size(405, 32);
+            this.tsmiAddToFavorites.Size = new System.Drawing.Size(413, 32);
             this.tsmiAddToFavorites.Text = "Add to Favorites";
+            // 
+            // addToFavoritesWithCurrentConnectionToolStripMenuItem
+            // 
+            this.addToFavoritesWithCurrentConnectionToolStripMenuItem.Name = "addToFavoritesWithCurrentConnectionToolStripMenuItem";
+            this.addToFavoritesWithCurrentConnectionToolStripMenuItem.Size = new System.Drawing.Size(413, 32);
+            this.addToFavoritesWithCurrentConnectionToolStripMenuItem.Text = "Add to Favorites with current connection";
             // 
             // pnlSearch
             // 
@@ -166,7 +173,7 @@
             this.pnlSearch.Location = new System.Drawing.Point(0, 0);
             this.pnlSearch.Margin = new System.Windows.Forms.Padding(5);
             this.pnlSearch.Name = "pnlSearch";
-            this.pnlSearch.Size = new System.Drawing.Size(1071, 47);
+            this.pnlSearch.Size = new System.Drawing.Size(1114, 47);
             this.pnlSearch.TabIndex = 11;
             // 
             // pbClear
@@ -191,7 +198,7 @@
             this.txtSearch.Location = new System.Drawing.Point(117, 7);
             this.txtSearch.Margin = new System.Windows.Forms.Padding(5);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(948, 26);
+            this.txtSearch.Size = new System.Drawing.Size(991, 26);
             this.txtSearch.TabIndex = 1;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             this.txtSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSearch_KeyDown);
@@ -215,7 +222,7 @@
             this.pnlCategory.Location = new System.Drawing.Point(0, 47);
             this.pnlCategory.Margin = new System.Windows.Forms.Padding(5);
             this.pnlCategory.Name = "pnlCategory";
-            this.pnlCategory.Size = new System.Drawing.Size(1071, 35);
+            this.pnlCategory.Size = new System.Drawing.Size(1114, 35);
             this.pnlCategory.TabIndex = 12;
             this.pnlCategory.SizeChanged += new System.EventHandler(this.pnlCategory_SizeChanged);
             // 
@@ -224,7 +231,7 @@
             this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTop.Location = new System.Drawing.Point(0, 82);
             this.pnlTop.Name = "pnlTop";
-            this.pnlTop.Size = new System.Drawing.Size(1071, 60);
+            this.pnlTop.Size = new System.Drawing.Size(1114, 60);
             this.pnlTop.TabIndex = 16;
             // 
             // pnlMain
@@ -236,7 +243,7 @@
             this.pnlMain.Location = new System.Drawing.Point(0, 142);
             this.pnlMain.Margin = new System.Windows.Forms.Padding(5);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(1071, 620);
+            this.pnlMain.Size = new System.Drawing.Size(1114, 620);
             this.pnlMain.TabIndex = 20;
             // 
             // pnlNoPluginFound
@@ -250,7 +257,7 @@
             this.pnlNoPluginFound.Location = new System.Drawing.Point(0, 0);
             this.pnlNoPluginFound.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.pnlNoPluginFound.Name = "pnlNoPluginFound";
-            this.pnlNoPluginFound.Size = new System.Drawing.Size(1071, 620);
+            this.pnlNoPluginFound.Size = new System.Drawing.Size(1114, 620);
             this.pnlNoPluginFound.TabIndex = 21;
             this.pnlNoPluginFound.Visible = false;
             this.pnlNoPluginFound.Resize += new System.EventHandler(this.pnlNoPluginFound_Resize);
@@ -287,7 +294,7 @@
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(117)))), ((int)(((byte)(188)))));
             this.label3.Location = new System.Drawing.Point(0, 80);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(1071, 110);
+            this.label3.Size = new System.Drawing.Size(1114, 110);
             this.label3.TabIndex = 1;
             this.label3.Tag = "";
             this.label3.Text = "Please redefine the criteria, reset it, or download some new tools from our Tools" +
@@ -301,7 +308,7 @@
             this.lblPluginsNotFoundText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(117)))), ((int)(((byte)(188)))));
             this.lblPluginsNotFoundText.Location = new System.Drawing.Point(0, 0);
             this.lblPluginsNotFoundText.Name = "lblPluginsNotFoundText";
-            this.lblPluginsNotFoundText.Size = new System.Drawing.Size(1071, 80);
+            this.lblPluginsNotFoundText.Size = new System.Drawing.Size(1114, 80);
             this.lblPluginsNotFoundText.TabIndex = 0;
             this.lblPluginsNotFoundText.Tag = "Searching for \"{0}\"{1} did not match any tools installed";
             this.lblPluginsNotFoundText.Text = "Searching for \"{0}\"{1} did not match any tools installed";
@@ -314,7 +321,7 @@
             this.pnlPlugins.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlPlugins.Location = new System.Drawing.Point(0, 0);
             this.pnlPlugins.Name = "pnlPlugins";
-            this.pnlPlugins.Size = new System.Drawing.Size(1071, 620);
+            this.pnlPlugins.Size = new System.Drawing.Size(1114, 620);
             this.pnlPlugins.TabIndex = 20;
             // 
             // pnlHelp
@@ -326,7 +333,7 @@
             this.pnlHelp.Location = new System.Drawing.Point(0, 0);
             this.pnlHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.pnlHelp.Name = "pnlHelp";
-            this.pnlHelp.Size = new System.Drawing.Size(1071, 620);
+            this.pnlHelp.Size = new System.Drawing.Size(1114, 620);
             this.pnlHelp.TabIndex = 22;
             this.pnlHelp.Visible = false;
             // 
@@ -337,7 +344,7 @@
             this.label2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(0, 65);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(1059, 174);
+            this.label2.Size = new System.Drawing.Size(1102, 174);
             this.label2.TabIndex = 1;
             this.label2.Text = resources.GetString("label2.Text");
             // 
@@ -348,22 +355,16 @@
             this.label1.ForeColor = System.Drawing.Color.Red;
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(1071, 51);
+            this.label1.Size = new System.Drawing.Size(1114, 51);
             this.label1.TabIndex = 0;
             this.label1.Text = "Oups... no tool found!";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // addToFavoritesWithCurrentConnectionToolStripMenuItem
-            // 
-            this.addToFavoritesWithCurrentConnectionToolStripMenuItem.Name = "addToFavoritesWithCurrentConnectionToolStripMenuItem";
-            this.addToFavoritesWithCurrentConnectionToolStripMenuItem.Size = new System.Drawing.Size(405, 32);
-            this.addToFavoritesWithCurrentConnectionToolStripMenuItem.Text = "Add to Favorites with current connection";
             // 
             // PluginsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1071, 762);
+            this.ClientSize = new System.Drawing.Size(1114, 762);
             this.CloseButton = false;
             this.CloseButtonVisible = false;
             this.Controls.Add(this.pnlMain);

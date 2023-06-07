@@ -19,7 +19,7 @@ using XrmToolBox.PluginsStore;
 
 namespace XrmToolBox.New
 {
-    public partial class PluginsForm : DockContent
+    public partial class PluginsForm : DockContent, IToolsForm
     {
         #region Variables
 
@@ -51,6 +51,20 @@ namespace XrmToolBox.New
             pluginsManager.PluginsListUpdated += pManager_PluginsListUpdated;
 
             MouseWheel += (sender, e) => pnlPlugins.Focus();
+
+            Options.Instance.OnSettingsChanged += Instance_OnSettingsChanged;
+        }
+
+        private void Instance_OnSettingsChanged(object sender, SettingsPropertyEventArgs e)
+        {
+            if (e.PropertyName == nameof(Options.Instance.IconDisplayMode)
+                || e.PropertyName == nameof(Options.Instance.PluginsDisplayOrder)
+                || e.PropertyName == nameof(Options.Instance.HiddenPlugins)
+                || e.PropertyName == nameof(Options.Instance.NumberOfDaysToShowNewRibbon)
+                || e.PropertyName == nameof(Options.Instance.MostUsedList))
+            {
+                ReloadPluginsList();
+            }
         }
 
         #endregion Constructor
