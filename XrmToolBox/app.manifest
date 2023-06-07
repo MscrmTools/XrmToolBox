@@ -44,17 +44,6 @@
     </application>
   </compatibility>
 
-  <!-- Indique que l'application prend en charge DPI et qu'elle n'est pas automatiquement mise à l'échelle par Windows à un niveau de
-       DPI plus élevé. Les applications Windows Presentation Foundation (WPF) prennent automatiquement en charge DPI et n'ont pas besoin
-       d'opter pour ce choix. Les applications Windows Forms qui ciblent .NET Framework 4.6 et qui optent pour ce paramètre, doivent
-       également affecter la valeur 'true' au paramètre 'EnableWindowsFormsHighDpiAutoResizing' dans leur fichier app.config. -->
-
-  <application xmlns="urn:schemas-microsoft-com:asm.v3">
-    <windowsSettings>
-      <dpiAware xmlns="http://schemas.microsoft.com/SMI/2005/WindowsSettings">Per-monitor</dpiAware>
-    </windowsSettings>
-  </application>
-
   <!-- Activer les thèmes pour les contrôles et boîtes de dialogue communes de Windows (Windows XP et version ultérieure) -->
   <!--
   <dependency>

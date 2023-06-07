@@ -482,8 +482,8 @@
             // 
             // ToolPackageCtrl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlTop);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
