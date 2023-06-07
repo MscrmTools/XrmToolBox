@@ -127,7 +127,7 @@ namespace XrmToolBox.ToolLibrary.Forms
                 e.Graphics.DrawImage(Resource.StatusOK, e.Bounds.X + listItemPadding + imageSize - overlayIconSize, e.Bounds.Y + listItemPadding + imageSize - overlayIconSize, overlayIconSize, overlayIconSize);
             }
 
-            TextFormatFlags flags = TextFormatFlags.Left | TextFormatFlags.EndEllipsis | TextFormatFlags.SingleLine | TextFormatFlags.NoPrefix | TextFormatFlags.NoPadding;
+            TextFormatFlags flags = TextFormatFlags.Left | TextFormatFlags.SingleLine | TextFormatFlags.NoPrefix | TextFormatFlags.NoPadding | TextFormatFlags.EndEllipsis;
 
             Rectangle rec = new Rectangle(e.Bounds.X + listItemPadding + imageSize + listItemPadding, e.Bounds.Y + listItemPadding, e.Bounds.Width - listItemPadding - imageSize - listItemPadding, e.Bounds.Height - listItemPadding);
 
@@ -165,7 +165,7 @@ namespace XrmToolBox.ToolLibrary.Forms
                 shift += listItemPadding + iconSize;
             }
 
-            if (plugin.FirstReleaseDate.Value > DateTime.Now.AddDays(-10))
+            if (plugin.FirstReleaseDate.Value > DateTime.Now.AddMonths(-1))
             {
                 e.Graphics.DrawImage(newImage, rec.X + shift + listItemPadding, rec.Y, iconSize, iconSize);
                 shift += listItemPadding + iconSize;
