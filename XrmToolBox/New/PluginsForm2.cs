@@ -453,7 +453,7 @@ namespace XrmToolBox.New
                 .Select(nli => nli.Tag.ToString())
                 .ToList();
 
-            var availablePlugins = userOrFilterOperatorForCategory ? new List<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>>() : pluginsManager.ValidatedPluginsExt;
+            var availablePlugins = pluginsManager.ValidatedPluginsExt;
 
             var list = new List<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>>();
             foreach (var category in categories)
@@ -551,7 +551,7 @@ namespace XrmToolBox.New
 
                 if (!filteredPlugins.Any())
                 {
-                    var filterCategory = categories.Count == 0 ? "" : $" in categor{(categories.Count > 1 ? "ies" : "y")} {string.Join(", ", categories)}";
+                    var filterCategory = categories.Count == 0 ? "" : $" in categor{(categories.Count > 1 ? "ies" : "y")} {string.Join(userOrFilterOperatorForCategory ? " or " : " and ", categories)}";
 
                     lblPluginsNotFoundText.Text = string.Format(lblPluginsNotFoundText.Tag.ToString(), filterText, filterCategory);
                     pnlNoPluginFound.Visible = true;
