@@ -92,6 +92,8 @@ namespace XrmToolBox.Controls
             var blackBrush = new SolidBrush(Color.Black);
             foreach (var subFolder in subFolders)
             {
+                if (!sizes.ContainsKey(subFolder)) continue;
+
                 var text = $"{labels[subFolder]} ({sizes[subFolder] / 1024:G} KB)";
                 var textSize = TextRenderer.MeasureText(text, Font);
 
@@ -112,6 +114,8 @@ namespace XrmToolBox.Controls
             var x = (long)e.ClipRectangle.X;
             foreach (var subFolder in subFolders)
             {
+                if (!sizes.ContainsKey(subFolder)) continue;
+
                 var width = e.ClipRectangle.Width * sizes[subFolder] / total;
                 using (var brush = new SolidBrush(colors[subFolder]))
                 {
