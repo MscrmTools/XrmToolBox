@@ -302,6 +302,12 @@
     <Compile Include="Controls\DropdownSettingsControl.designer.cs">
       <DependentUpon>DropdownSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\HighlightItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\HighlightItem.Designer.cs">
+      <DependentUpon>HighlightItem.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ISettingsControl.cs" />
     <Compile Include="Controls\NavLeftItem.cs">
       <SubType>UserControl</SubType>
@@ -520,6 +526,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\DropdownSettingsControl.resx">
       <DependentUpon>DropdownSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\HighlightItem.resx">
+      <DependentUpon>HighlightItem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\NavLeftItem.resx">
       <DependentUpon>NavLeftItem.cs</DependentUpon>
@@ -804,7 +813,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

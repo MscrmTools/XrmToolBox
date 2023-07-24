@@ -38,6 +38,7 @@ namespace XrmToolBox.New
         private readonly Dictionary<PluginForm, ConnectionDetail> pluginConnections = new Dictionary<PluginForm, ConnectionDetail>();
         private readonly List<PluginControlStatus> pluginControlStatuses = new List<PluginControlStatus>();
         private readonly IToolsForm pluginsForm;
+        private readonly string windowTitleSuffix;
         private AppInsights ai = new AppInsights(new AiConfig(AiEndpoint, AiKey));
         private CrmConnectionStatusBar ccsb;
         private ConnectionManager cManager;
@@ -54,7 +55,6 @@ namespace XrmToolBox.New
         private StartPage startPage;
         private IToolLibrary store;
         private ToolTip toolTip = new ToolTip();
-        private readonly string windowTitleSuffix;
 
         public NewForm(string[] args)
         {
@@ -617,6 +617,7 @@ Would you like to reinstall last stable release of connection controls?";
                 var connection = cList.Connections.FirstOrDefault(c => c.ConnectionId == cid);
                 if (connection != null)
                 {
+                    connection.ParentConnectionFile = file;
                     connectionFound = true;
                     initialPluginName = e.Item.PluginName;
                     initialConnectionName = e.Item.ConnectionName;
@@ -2028,18 +2029,6 @@ Would you like to reinstall last stable release of connection controls?";
             }
         }
 
-        private void tsmiNameTopLevelWindow_TextChanged(object sender, System.EventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(tsmiNameTopLevelWindow.Text))
-            {
-                Text = windowTitleSuffix;
-            }
-            else
-            {
-                Text = $"{tsmiNameTopLevelWindow.Text} - {windowTitleSuffix}";
-            }
-        }
-
         private void FillPluginsListMenuDisplay()
         {
             var staticItems = tsbManageWindows.DropDownItems.Cast<ToolStripItem>().Take(5).ToList();
@@ -2127,6 +2116,18 @@ Would you like to reinstall last stable release of connection controls?";
             else if (e.ClickedItem.Tag is PluginForm pf)
             {
                 pf.EnsureVisible(dpMain, DockState.Document);
+            }
+        }
+
+        private void tsmiNameTopLevelWindow_TextChanged(object sender, System.EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(tsmiNameTopLevelWindow.Text))
+            {
+                Text = windowTitleSuffix;
+            }
+            else
+            {
+                Text = $"{tsmiNameTopLevelWindow.Text} - {windowTitleSuffix}";
             }
         }
 
@@ -2224,6 +2225,5 @@ Would you like to reinstall last stable release of connection controls?";
             pnlPluginsUpdate.Visible = false;
             OpenPluginsStore(true);
         }
-
     }
 }

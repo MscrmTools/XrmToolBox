@@ -4,9 +4,11 @@ using Microsoft.Xrm.Sdk;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using XrmToolBox.Controls;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
@@ -182,11 +184,45 @@ namespace XrmToolBox.New
 
             if ((detail?.IsEnvironmentHighlightSet ?? false) && !(pluginControlBase is INoHighlightingPlugin))
             {
+                pnlHighlight.Controls.Clear();
+
+                var ctrl = new HighlightItem(detail);
+                ctrl.Dock = DockStyle.Fill;
+                pnlHighlight.Controls.Add(ctrl);
+                pnlHighlight.Visible = true;
+                lblEnvInfo.Visible = false;
+                Padding = new Padding(0, 0, 0, 0);
+                return;
+
                 BackColor = detail.EnvironmentHighlightingInfo?.Color ?? DefaultBackColor;
                 lblEnvInfo.ForeColor = detail.EnvironmentHighlightingInfo?.TextColor ?? DefaultForeColor;
                 lblEnvInfo.Text = detail.EnvironmentHighlightingInfo?.Text ?? "";
                 lblEnvInfo.Visible = true;
                 Padding = new Padding(10, 0, 10, 10);
+
+                lblEnvInfo.Visible = false;
+
+                lblEnvName.ForeColor = detail.EnvironmentHighlightingInfo?.TextColor ?? DefaultForeColor;
+                lblEnvName.Text = ($"{detail.EnvironmentHighlightingInfo?.Text ?? ""}{(detail.EnvironmentHighlightingInfo != null ? " - " : "")}{detail.ConnectionName}");
+
+                if (detail.ParentConnectionFile != null)
+                {
+                    byte[] bytes = Convert.FromBase64String(detail.ParentConnectionFile.Base64Image);
+
+                    using (MemoryStream ms = new MemoryStream(bytes))
+                    {
+                        pbEnvLogo.Image = Image.FromStream(ms);
+                    }
+                }
+                else
+                {
+                    pbEnvLogo.Visible = false;
+                }
+                pbEnvLogo.SizeMode = PictureBoxSizeMode.StretchImage;
+                pbEnvLogo.Size = new Size(pnlHighlight.Height, pnlHighlight.Height);
+                pnlHighlight.BackColor = detail.EnvironmentHighlightingInfo?.Color ?? DefaultBackColor;
+                pnlHighlight.Visible = true;
+                Padding = new Padding(0, 0, 0, 0);
             }
             else
             {
@@ -199,6 +235,33 @@ namespace XrmToolBox.New
 
         private void DisplayHighlightForMultipleConnections(ConnectionDetail detail, List<ConnectionDetail> targetDetails)
         {
+            pnlHighlight.Controls.Clear();
+            var list = new List<HighlightItem>();
+
+            var ctrl = new HighlightItem(detail);
+            ctrl.Dock = DockStyle.Left;
+            pnlHighlight.BackColor = detail.EnvironmentHighlightingInfo?.Color ?? DefaultBackColor;
+
+            foreach (var td in targetDetails)
+            {
+                var tCtrl = new HighlightItem(td);
+                tCtrl.Dock = DockStyle.Right;
+                list.Add(tCtrl);
+            }
+
+            var iCtrl = new HighlightItem(ctrl.BackColor, list.First().BackColor);
+            iCtrl.Dock = DockStyle.Fill;
+
+            pnlHighlight.Controls.Add(iCtrl);
+            pnlHighlight.Controls.Add(ctrl);
+            pnlHighlight.Controls.AddRange(list.ToArray());
+
+            pnlHighlight.Visible = true;
+            lblEnvInfo.Visible = false;
+            Padding = new Padding(0, 0, 0, 0);
+
+            return;
+
             lblEnvInfo.Visible = false;
             Padding = new Padding(0, 0, 0, 0);
             tlpHighlight.Visible = false;
