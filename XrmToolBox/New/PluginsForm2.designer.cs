@@ -33,7 +33,6 @@ namespace XrmToolBox.New
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PluginsForm2));
             this.addToFavoritesWithCurrentConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnChangeSize = new System.Windows.Forms.Button();
             this.btnFilterOperator = new System.Windows.Forms.Button();
             this.ch1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cmsOnePlugin = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -55,27 +54,30 @@ namespace XrmToolBox.New
             this.lblToolsNotFoundExplanation = new System.Windows.Forms.Label();
             this.llResetSearchFilter = new System.Windows.Forms.LinkLabel();
             this.lvTools = new System.Windows.Forms.ListView();
-            this.pbOpenPluginsStore = new System.Windows.Forms.PictureBox();
             this.pnlHelp = new System.Windows.Forms.Panel();
             this.pnlLeftBottom = new System.Windows.Forms.Panel();
+            this.btnChangeSize = new System.Windows.Forms.Button();
             this.pnlLeftNavTop = new System.Windows.Forms.Panel();
             this.pnlNavLeft = new System.Windows.Forms.Panel();
             this.pnlNavLeftMain = new System.Windows.Forms.Panel();
             this.pnlNavMain = new System.Windows.Forms.Panel();
             this.pnlToolsList = new System.Windows.Forms.Panel();
             this.pnlNoPluginFound = new System.Windows.Forms.Panel();
+            this.pbOpenPluginsStore = new System.Windows.Forms.PictureBox();
             this.pnlTopSearch = new System.Windows.Forms.Panel();
             this.txtSearch = new XrmToolBox.Controls.TextBoxWithPlaceholder();
+            this.pbClearSearch = new System.Windows.Forms.PictureBox();
             this.pnlTop = new System.Windows.Forms.Panel();
             this.cmsOnePlugin.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbOpenPluginsStore)).BeginInit();
             this.pnlHelp.SuspendLayout();
             this.pnlLeftBottom.SuspendLayout();
             this.pnlNavLeftMain.SuspendLayout();
             this.pnlNavMain.SuspendLayout();
             this.pnlToolsList.SuspendLayout();
             this.pnlNoPluginFound.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbOpenPluginsStore)).BeginInit();
             this.pnlTopSearch.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbClearSearch)).BeginInit();
             this.SuspendLayout();
             // 
             // addToFavoritesWithCurrentConnectionToolStripMenuItem
@@ -84,21 +86,6 @@ namespace XrmToolBox.New
             this.addToFavoritesWithCurrentConnectionToolStripMenuItem.Size = new System.Drawing.Size(413, 32);
             this.addToFavoritesWithCurrentConnectionToolStripMenuItem.Text = "Add to Favorites with current connection";
             // 
-            // btnChangeSize
-            // 
-            this.btnChangeSize.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnChangeSize.FlatAppearance.BorderSize = 0;
-            this.btnChangeSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChangeSize.Image = global::XrmToolBox.Properties.Resources.Expand32;
-            this.btnChangeSize.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnChangeSize.Location = new System.Drawing.Point(4, -147);
-            this.btnChangeSize.Name = "btnChangeSize";
-            this.btnChangeSize.Size = new System.Drawing.Size(136, 2093);
-            this.btnChangeSize.TabIndex = 1;
-            this.btnChangeSize.Text = "Use big";
-            this.btnChangeSize.UseVisualStyleBackColor = true;
-            this.btnChangeSize.Click += new System.EventHandler(this.btnChangeSize_Click);
-            // 
             // btnFilterOperator
             // 
             this.btnFilterOperator.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -106,9 +93,9 @@ namespace XrmToolBox.New
             this.btnFilterOperator.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnFilterOperator.Font = new System.Drawing.Font("Segoe UI Variable Text", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFilterOperator.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnFilterOperator.Location = new System.Drawing.Point(4, -3125);
+            this.btnFilterOperator.Location = new System.Drawing.Point(4, -14193);
             this.btnFilterOperator.Name = "btnFilterOperator";
-            this.btnFilterOperator.Size = new System.Drawing.Size(136, 2978);
+            this.btnFilterOperator.Size = new System.Drawing.Size(136, 10052);
             this.btnFilterOperator.TabIndex = 0;
             this.btnFilterOperator.Text = "Use OR";
             this.btnFilterOperator.UseVisualStyleBackColor = true;
@@ -221,7 +208,7 @@ namespace XrmToolBox.New
             this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(117)))), ((int)(((byte)(188)))));
             this.label3.Location = new System.Drawing.Point(0, 80);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(1702, 110);
+            this.label3.Size = new System.Drawing.Size(1706, 110);
             this.label3.TabIndex = 1;
             this.label3.Tag = "";
             this.label3.Text = "Please redefine the criteria, reset it, or download some new tools from our Tools" +
@@ -235,7 +222,7 @@ namespace XrmToolBox.New
             this.lblPluginsNotFoundText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(117)))), ((int)(((byte)(188)))));
             this.lblPluginsNotFoundText.Location = new System.Drawing.Point(0, 0);
             this.lblPluginsNotFoundText.Name = "lblPluginsNotFoundText";
-            this.lblPluginsNotFoundText.Size = new System.Drawing.Size(1702, 80);
+            this.lblPluginsNotFoundText.Size = new System.Drawing.Size(1706, 80);
             this.lblPluginsNotFoundText.TabIndex = 0;
             this.lblPluginsNotFoundText.Tag = "Searching for \"{0}\"{1} did not match any tools installed";
             this.lblPluginsNotFoundText.Text = "Searching for \"{0}\"{1} did not match any tools installed";
@@ -248,7 +235,7 @@ namespace XrmToolBox.New
             this.lblToolsNotFound.ForeColor = System.Drawing.Color.Red;
             this.lblToolsNotFound.Location = new System.Drawing.Point(0, 0);
             this.lblToolsNotFound.Name = "lblToolsNotFound";
-            this.lblToolsNotFound.Size = new System.Drawing.Size(1702, 51);
+            this.lblToolsNotFound.Size = new System.Drawing.Size(1706, 51);
             this.lblToolsNotFound.TabIndex = 0;
             this.lblToolsNotFound.Text = "Oups... no tool found!";
             this.lblToolsNotFound.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -260,7 +247,7 @@ namespace XrmToolBox.New
             this.lblToolsNotFoundExplanation.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblToolsNotFoundExplanation.Location = new System.Drawing.Point(0, 65);
             this.lblToolsNotFoundExplanation.Name = "lblToolsNotFoundExplanation";
-            this.lblToolsNotFoundExplanation.Size = new System.Drawing.Size(1690, 174);
+            this.lblToolsNotFoundExplanation.Size = new System.Drawing.Size(1694, 174);
             this.lblToolsNotFoundExplanation.TabIndex = 1;
             this.lblToolsNotFoundExplanation.Text = resources.GetString("lblToolsNotFoundExplanation.Text");
             // 
@@ -271,7 +258,7 @@ namespace XrmToolBox.New
             this.llResetSearchFilter.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(117)))), ((int)(((byte)(188)))));
             this.llResetSearchFilter.Location = new System.Drawing.Point(0, 381);
             this.llResetSearchFilter.Name = "llResetSearchFilter";
-            this.llResetSearchFilter.Size = new System.Drawing.Size(1702, 32);
+            this.llResetSearchFilter.Size = new System.Drawing.Size(1706, 32);
             this.llResetSearchFilter.TabIndex = 3;
             this.llResetSearchFilter.TabStop = true;
             this.llResetSearchFilter.Text = "or reset the search filter";
@@ -296,7 +283,7 @@ namespace XrmToolBox.New
             this.lvTools.OwnerDraw = true;
             this.lvTools.ShowGroups = false;
             this.lvTools.ShowItemToolTips = true;
-            this.lvTools.Size = new System.Drawing.Size(1702, 888);
+            this.lvTools.Size = new System.Drawing.Size(1706, 888);
             this.lvTools.SmallImageList = this.imageList1;
             this.lvTools.TabIndex = 0;
             this.lvTools.UseCompatibleStateImageBehavior = false;
@@ -305,20 +292,6 @@ namespace XrmToolBox.New
             this.lvTools.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lvTools_KeyDown);
             this.lvTools.MouseClick += new System.Windows.Forms.MouseEventHandler(this.lvTools_MouseClick);
             this.lvTools.Resize += new System.EventHandler(this.lvTools_Resize);
-            // 
-            // pbOpenPluginsStore
-            // 
-            this.pbOpenPluginsStore.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.pbOpenPluginsStore.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbOpenPluginsStore.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pbOpenPluginsStore.Image = global::XrmToolBox.Properties.Resources.OpenToolsLibrary;
-            this.pbOpenPluginsStore.Location = new System.Drawing.Point(0, 190);
-            this.pbOpenPluginsStore.Name = "pbOpenPluginsStore";
-            this.pbOpenPluginsStore.Size = new System.Drawing.Size(1702, 191);
-            this.pbOpenPluginsStore.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.pbOpenPluginsStore.TabIndex = 2;
-            this.pbOpenPluginsStore.TabStop = false;
-            this.pbOpenPluginsStore.Click += new System.EventHandler(this.pbOpenPluginsStore_Click);
             // 
             // pnlHelp
             // 
@@ -329,7 +302,7 @@ namespace XrmToolBox.New
             this.pnlHelp.Location = new System.Drawing.Point(4, 4);
             this.pnlHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.pnlHelp.Name = "pnlHelp";
-            this.pnlHelp.Size = new System.Drawing.Size(1702, 888);
+            this.pnlHelp.Size = new System.Drawing.Size(1706, 888);
             this.pnlHelp.TabIndex = 25;
             this.pnlHelp.Visible = false;
             // 
@@ -341,8 +314,23 @@ namespace XrmToolBox.New
             this.pnlLeftBottom.Location = new System.Drawing.Point(0, 405);
             this.pnlLeftBottom.Name = "pnlLeftBottom";
             this.pnlLeftBottom.Padding = new System.Windows.Forms.Padding(4, 10, 4, 10);
-            this.pnlLeftBottom.Size = new System.Drawing.Size(144, 1956);
+            this.pnlLeftBottom.Size = new System.Drawing.Size(144, 2934);
             this.pnlLeftBottom.TabIndex = 2;
+            // 
+            // btnChangeSize
+            // 
+            this.btnChangeSize.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnChangeSize.FlatAppearance.BorderSize = 0;
+            this.btnChangeSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChangeSize.Image = global::XrmToolBox.Properties.Resources.Expand32;
+            this.btnChangeSize.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnChangeSize.Location = new System.Drawing.Point(4, -4141);
+            this.btnChangeSize.Name = "btnChangeSize";
+            this.btnChangeSize.Size = new System.Drawing.Size(136, 7065);
+            this.btnChangeSize.TabIndex = 1;
+            this.btnChangeSize.Text = "Use big";
+            this.btnChangeSize.UseVisualStyleBackColor = true;
+            this.btnChangeSize.Click += new System.EventHandler(this.btnChangeSize_Click);
             // 
             // pnlLeftNavTop
             // 
@@ -382,7 +370,7 @@ namespace XrmToolBox.New
             this.pnlNavMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlNavMain.Location = new System.Drawing.Point(170, 40);
             this.pnlNavMain.Name = "pnlNavMain";
-            this.pnlNavMain.Size = new System.Drawing.Size(1710, 949);
+            this.pnlNavMain.Size = new System.Drawing.Size(1714, 949);
             this.pnlNavMain.TabIndex = 0;
             // 
             // pnlToolsList
@@ -394,7 +382,7 @@ namespace XrmToolBox.New
             this.pnlToolsList.Location = new System.Drawing.Point(0, 53);
             this.pnlToolsList.Name = "pnlToolsList";
             this.pnlToolsList.Padding = new System.Windows.Forms.Padding(4);
-            this.pnlToolsList.Size = new System.Drawing.Size(1710, 896);
+            this.pnlToolsList.Size = new System.Drawing.Size(1714, 896);
             this.pnlToolsList.TabIndex = 1;
             // 
             // pnlNoPluginFound
@@ -408,19 +396,34 @@ namespace XrmToolBox.New
             this.pnlNoPluginFound.Location = new System.Drawing.Point(4, 4);
             this.pnlNoPluginFound.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.pnlNoPluginFound.Name = "pnlNoPluginFound";
-            this.pnlNoPluginFound.Size = new System.Drawing.Size(1702, 888);
+            this.pnlNoPluginFound.Size = new System.Drawing.Size(1706, 888);
             this.pnlNoPluginFound.TabIndex = 26;
             this.pnlNoPluginFound.Visible = false;
+            // 
+            // pbOpenPluginsStore
+            // 
+            this.pbOpenPluginsStore.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.pbOpenPluginsStore.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbOpenPluginsStore.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pbOpenPluginsStore.Image = global::XrmToolBox.Properties.Resources.OpenToolsLibrary;
+            this.pbOpenPluginsStore.Location = new System.Drawing.Point(0, 190);
+            this.pbOpenPluginsStore.Name = "pbOpenPluginsStore";
+            this.pbOpenPluginsStore.Size = new System.Drawing.Size(1706, 191);
+            this.pbOpenPluginsStore.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pbOpenPluginsStore.TabIndex = 2;
+            this.pbOpenPluginsStore.TabStop = false;
+            this.pbOpenPluginsStore.Click += new System.EventHandler(this.pbOpenPluginsStore_Click);
             // 
             // pnlTopSearch
             // 
             this.pnlTopSearch.BackColor = System.Drawing.Color.White;
             this.pnlTopSearch.Controls.Add(this.txtSearch);
+            this.pnlTopSearch.Controls.Add(this.pbClearSearch);
             this.pnlTopSearch.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTopSearch.Location = new System.Drawing.Point(0, 0);
             this.pnlTopSearch.Name = "pnlTopSearch";
             this.pnlTopSearch.Padding = new System.Windows.Forms.Padding(4);
-            this.pnlTopSearch.Size = new System.Drawing.Size(1710, 53);
+            this.pnlTopSearch.Size = new System.Drawing.Size(1714, 53);
             this.pnlTopSearch.TabIndex = 0;
             // 
             // txtSearch
@@ -430,21 +433,35 @@ namespace XrmToolBox.New
             this.txtSearch.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSearch.Font = new System.Drawing.Font("Segoe UI Variable Text", 12F);
             this.txtSearch.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.txtSearch.Location = new System.Drawing.Point(4, 4);
+            this.txtSearch.Location = new System.Drawing.Point(35, 4);
             this.txtSearch.Name = "txtSearch";
             this.txtSearch.Placeholder = "Search...";
-            this.txtSearch.Size = new System.Drawing.Size(1702, 39);
-            this.txtSearch.TabIndex = 0;
+            this.txtSearch.Size = new System.Drawing.Size(1675, 39);
+            this.txtSearch.TabIndex = 2;
             this.txtSearch.Tag = true;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             this.txtSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSearch_KeyDown);
+            // 
+            // pbClearSearch
+            // 
+            this.pbClearSearch.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbClearSearch.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pbClearSearch.Image = global::XrmToolBox.Properties.Resources.Eraser24;
+            this.pbClearSearch.Location = new System.Drawing.Point(4, 4);
+            this.pbClearSearch.Name = "pbClearSearch";
+            this.pbClearSearch.Size = new System.Drawing.Size(31, 45);
+            this.pbClearSearch.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pbClearSearch.TabIndex = 1;
+            this.pbClearSearch.TabStop = false;
+            this.pbClearSearch.Visible = false;
+            this.pbClearSearch.Click += new System.EventHandler(this.pbClearSearch_Click);
             // 
             // pnlTop
             // 
             this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTop.Location = new System.Drawing.Point(0, 0);
             this.pnlTop.Name = "pnlTop";
-            this.pnlTop.Size = new System.Drawing.Size(1880, 40);
+            this.pnlTop.Size = new System.Drawing.Size(1884, 40);
             this.pnlTop.TabIndex = 4;
             this.pnlTop.Visible = false;
             // 
@@ -452,7 +469,7 @@ namespace XrmToolBox.New
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1880, 989);
+            this.ClientSize = new System.Drawing.Size(1884, 989);
             this.Controls.Add(this.pnlNavMain);
             this.Controls.Add(this.pnlNavLeftMain);
             this.Controls.Add(this.pnlTop);
@@ -462,15 +479,16 @@ namespace XrmToolBox.New
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PluginsForm2_FormClosing);
             this.Load += new System.EventHandler(this.PluginsForm2_Load);
             this.cmsOnePlugin.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pbOpenPluginsStore)).EndInit();
             this.pnlHelp.ResumeLayout(false);
             this.pnlLeftBottom.ResumeLayout(false);
             this.pnlNavLeftMain.ResumeLayout(false);
             this.pnlNavMain.ResumeLayout(false);
             this.pnlToolsList.ResumeLayout(false);
             this.pnlNoPluginFound.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbOpenPluginsStore)).EndInit();
             this.pnlTopSearch.ResumeLayout(false);
             this.pnlTopSearch.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbClearSearch)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -481,7 +499,6 @@ namespace XrmToolBox.New
         private System.Windows.Forms.Panel pnlNavLeftMain;
         private System.Windows.Forms.Panel pnlLeftNavTop;
         private System.Windows.Forms.Panel pnlTopSearch;
-        private TextBoxWithPlaceholder txtSearch;
         private System.Windows.Forms.Panel pnlToolsList;
         private System.Windows.Forms.ListView lvTools;
         private System.Windows.Forms.ColumnHeader ch1;
@@ -512,6 +529,8 @@ namespace XrmToolBox.New
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label lblPluginsNotFoundText;
         private System.Windows.Forms.Button btnFilterOperator;
+        private TextBoxWithPlaceholder txtSearch;
+        private System.Windows.Forms.PictureBox pbClearSearch;
     }
 }
 

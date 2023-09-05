@@ -333,6 +333,16 @@ namespace XrmToolBox.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Eraser24 {
+            get {
+                object obj = ResourceManager.GetObject("Eraser24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Euro24 {
             get {
                 object obj = ResourceManager.GetObject("Euro24", resourceCulture);

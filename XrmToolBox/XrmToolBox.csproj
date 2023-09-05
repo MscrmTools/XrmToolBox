@@ -767,6 +767,7 @@
     <None Include="Resources\PowerApps24.png" />
     <None Include="Resources\Dynamics365_24.png" />
     <None Include="Resources\Hide32.png" />
+    <None Include="Resources\Eraser24.png" />
     <Content Include="Resources\three_tags.png" />
     <None Include="Resources\www_page.png" />
     <None Include="Resources\ToolsListDisplay32.png" />

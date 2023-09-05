@@ -846,6 +846,11 @@ namespace XrmToolBox.New
             ReloadPluginsList();
         }
 
+        private void pbClearSearch_Click(object sender, System.EventArgs e)
+        {
+            txtSearch.Text = string.Empty;
+        }
+
         private void pbOpenPluginsStore_Click(object sender, System.EventArgs e)
         {
             ActionRequested?.Invoke(this, new PluginsListEventArgs(PluginsListAction.OpenPluginsStore));
@@ -989,6 +994,8 @@ namespace XrmToolBox.New
             searchThread?.Abort();
             searchThread = new Thread(DisplayPlugins);
             searchThread.Start(filterText);
+
+            pbClearSearch.Visible = filterText.Length > 0;
         }
 
         private async Task WaitFileIsCopied()
