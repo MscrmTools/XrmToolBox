@@ -30,23 +30,26 @@
         {
             this.pnlNavMain = new System.Windows.Forms.Panel();
             this.pnlAdvanced = new System.Windows.Forms.Panel();
+            this.advancedControl1 = new XrmToolBox.Controls.AdvancedControl();
             this.pnlAssemblies = new System.Windows.Forms.Panel();
+            this.assembliesControl1 = new XrmToolBox.Controls.AssembliesControl();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlAppProtocol = new System.Windows.Forms.Panel();
+            this.applicationProtocolControl1 = new XrmToolBox.Controls.ApplicationProtocolControl();
             this.lblAppProtocolTitle = new System.Windows.Forms.Label();
             this.pnlCredits = new System.Windows.Forms.Panel();
+            this.creditsControl1 = new XrmToolBox.Controls.CreditsControl();
             this.lblCreditsTitle = new System.Windows.Forms.Label();
             this.pnlPaths = new System.Windows.Forms.Panel();
+            this.pathsControl1 = new XrmToolBox.Controls.PathsControl();
             this.lblPathsTitle = new System.Windows.Forms.Label();
             this.pnlProxy = new System.Windows.Forms.Panel();
-            this.pnlNavLeft = new System.Windows.Forms.Panel();
-            this.lblProxyTitle = new System.Windows.Forms.Label();
-            this.advancedControl1 = new XrmToolBox.Controls.AdvancedControl();
-            this.assembliesControl1 = new XrmToolBox.Controls.AssembliesControl();
-            this.applicationProtocolControl1 = new XrmToolBox.Controls.ApplicationProtocolControl();
-            this.creditsControl1 = new XrmToolBox.Controls.CreditsControl();
-            this.pathsControl1 = new XrmToolBox.Controls.PathsControl();
             this.proxyControl1 = new XrmToolBox.Controls.ProxyControl();
+            this.lblProxyTitle = new System.Windows.Forms.Label();
+            this.pnlNavLeft = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.lblHiddenTools = new System.Windows.Forms.Label();
+            this.hiddenToolsControl1 = new XrmToolBox.Controls.HiddenToolsControl();
             this.pnlNavMain.SuspendLayout();
             this.pnlAdvanced.SuspendLayout();
             this.pnlAssemblies.SuspendLayout();
@@ -54,11 +57,13 @@
             this.pnlCredits.SuspendLayout();
             this.pnlPaths.SuspendLayout();
             this.pnlProxy.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlNavMain
             // 
             this.pnlNavMain.BackColor = System.Drawing.Color.White;
+            this.pnlNavMain.Controls.Add(this.panel1);
             this.pnlNavMain.Controls.Add(this.pnlAdvanced);
             this.pnlNavMain.Controls.Add(this.pnlAssemblies);
             this.pnlNavMain.Controls.Add(this.pnlAppProtocol);
@@ -81,6 +86,16 @@
             this.pnlAdvanced.TabIndex = 6;
             this.pnlAdvanced.Tag = "Advanced";
             // 
+            // advancedControl1
+            // 
+            this.advancedControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.advancedControl1.Font = new System.Drawing.Font("Segoe UI Variable Text", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.advancedControl1.Location = new System.Drawing.Point(0, 0);
+            this.advancedControl1.Name = "advancedControl1";
+            this.advancedControl1.Size = new System.Drawing.Size(332, 190);
+            this.advancedControl1.TabIndex = 0;
+            this.advancedControl1.OnTabsOrderChanged += new System.EventHandler(this.advancedControl1_OnTabsOrderChanged);
+            // 
             // pnlAssemblies
             // 
             this.pnlAssemblies.Controls.Add(this.assembliesControl1);
@@ -90,6 +105,14 @@
             this.pnlAssemblies.Size = new System.Drawing.Size(403, 237);
             this.pnlAssemblies.TabIndex = 5;
             this.pnlAssemblies.Tag = "Assemblies";
+            // 
+            // assembliesControl1
+            // 
+            this.assembliesControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.assembliesControl1.Location = new System.Drawing.Point(0, 48);
+            this.assembliesControl1.Name = "assembliesControl1";
+            this.assembliesControl1.Size = new System.Drawing.Size(403, 189);
+            this.assembliesControl1.TabIndex = 1;
             // 
             // label1
             // 
@@ -113,6 +136,14 @@
             this.pnlAppProtocol.TabIndex = 4;
             this.pnlAppProtocol.Tag = "Application Protocol";
             // 
+            // applicationProtocolControl1
+            // 
+            this.applicationProtocolControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.applicationProtocolControl1.Location = new System.Drawing.Point(10, 40);
+            this.applicationProtocolControl1.Name = "applicationProtocolControl1";
+            this.applicationProtocolControl1.Size = new System.Drawing.Size(583, 251);
+            this.applicationProtocolControl1.TabIndex = 2;
+            // 
             // lblAppProtocolTitle
             // 
             this.lblAppProtocolTitle.Dock = System.Windows.Forms.DockStyle.Top;
@@ -134,6 +165,14 @@
             this.pnlCredits.Size = new System.Drawing.Size(391, 186);
             this.pnlCredits.TabIndex = 3;
             this.pnlCredits.Tag = "Credits";
+            // 
+            // creditsControl1
+            // 
+            this.creditsControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.creditsControl1.Location = new System.Drawing.Point(10, 41);
+            this.creditsControl1.Name = "creditsControl1";
+            this.creditsControl1.Size = new System.Drawing.Size(371, 145);
+            this.creditsControl1.TabIndex = 2;
             // 
             // lblCreditsTitle
             // 
@@ -157,6 +196,14 @@
             this.pnlPaths.TabIndex = 1;
             this.pnlPaths.Tag = "Paths";
             // 
+            // pathsControl1
+            // 
+            this.pathsControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pathsControl1.Location = new System.Drawing.Point(10, 40);
+            this.pathsControl1.Name = "pathsControl1";
+            this.pathsControl1.Size = new System.Drawing.Size(788, 430);
+            this.pathsControl1.TabIndex = 1;
+            // 
             // lblPathsTitle
             // 
             this.lblPathsTitle.Dock = System.Windows.Forms.DockStyle.Top;
@@ -179,14 +226,14 @@
             this.pnlProxy.TabIndex = 0;
             this.pnlProxy.Tag = "Proxy";
             // 
-            // pnlNavLeft
+            // proxyControl1
             // 
-            this.pnlNavLeft.AutoScroll = true;
-            this.pnlNavLeft.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnlNavLeft.Location = new System.Drawing.Point(0, 0);
-            this.pnlNavLeft.Name = "pnlNavLeft";
-            this.pnlNavLeft.Size = new System.Drawing.Size(308, 1022);
-            this.pnlNavLeft.TabIndex = 2;
+            this.proxyControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.proxyControl1.Location = new System.Drawing.Point(10, 60);
+            this.proxyControl1.Name = "proxyControl1";
+            this.proxyControl1.Padding = new System.Windows.Forms.Padding(10);
+            this.proxyControl1.Size = new System.Drawing.Size(502, 387);
+            this.proxyControl1.TabIndex = 4;
             // 
             // lblProxyTitle
             // 
@@ -199,55 +246,44 @@
             this.lblProxyTitle.Text = "Proxy";
             this.lblProxyTitle.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // advancedControl1
+            // pnlNavLeft
             // 
-            this.advancedControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.advancedControl1.Font = new System.Drawing.Font("Segoe UI Variable Text", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.advancedControl1.Location = new System.Drawing.Point(0, 0);
-            this.advancedControl1.Name = "advancedControl1";
-            this.advancedControl1.Size = new System.Drawing.Size(332, 190);
-            this.advancedControl1.TabIndex = 0;
-            this.advancedControl1.OnTabsOrderChanged += new System.EventHandler(this.advancedControl1_OnTabsOrderChanged);
+            this.pnlNavLeft.AutoScroll = true;
+            this.pnlNavLeft.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlNavLeft.Location = new System.Drawing.Point(0, 0);
+            this.pnlNavLeft.Name = "pnlNavLeft";
+            this.pnlNavLeft.Size = new System.Drawing.Size(308, 1022);
+            this.pnlNavLeft.TabIndex = 2;
             // 
-            // assembliesControl1
+            // panel1
             // 
-            this.assembliesControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.assembliesControl1.Location = new System.Drawing.Point(0, 48);
-            this.assembliesControl1.Name = "assembliesControl1";
-            this.assembliesControl1.Size = new System.Drawing.Size(403, 189);
-            this.assembliesControl1.TabIndex = 1;
+            this.panel1.Controls.Add(this.hiddenToolsControl1);
+            this.panel1.Controls.Add(this.lblHiddenTools);
+            this.panel1.Location = new System.Drawing.Point(37, 565);
+            this.panel1.Name = "panel1";
+            this.panel1.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.panel1.Size = new System.Drawing.Size(603, 291);
+            this.panel1.TabIndex = 7;
+            this.panel1.Tag = "Hidden Tools";
             // 
-            // applicationProtocolControl1
+            // lblHiddenTools
             // 
-            this.applicationProtocolControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.applicationProtocolControl1.Location = new System.Drawing.Point(10, 40);
-            this.applicationProtocolControl1.Name = "applicationProtocolControl1";
-            this.applicationProtocolControl1.Size = new System.Drawing.Size(583, 251);
-            this.applicationProtocolControl1.TabIndex = 2;
+            this.lblHiddenTools.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblHiddenTools.Font = new System.Drawing.Font("Segoe UI Variable Text", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHiddenTools.Location = new System.Drawing.Point(10, 0);
+            this.lblHiddenTools.Name = "lblHiddenTools";
+            this.lblHiddenTools.Size = new System.Drawing.Size(583, 40);
+            this.lblHiddenTools.TabIndex = 1;
+            this.lblHiddenTools.Text = "Hidden Tools";
+            this.lblHiddenTools.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // creditsControl1
+            // hiddenToolsControl1
             // 
-            this.creditsControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.creditsControl1.Location = new System.Drawing.Point(15, 62);
-            this.creditsControl1.Name = "creditsControl1";
-            this.creditsControl1.Size = new System.Drawing.Size(557, 218);
-            this.creditsControl1.TabIndex = 2;
-            // 
-            // pathsControl1
-            // 
-            this.pathsControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pathsControl1.Location = new System.Drawing.Point(10, 40);
-            this.pathsControl1.Name = "pathsControl1";
-            this.pathsControl1.Size = new System.Drawing.Size(788, 430);
-            this.pathsControl1.TabIndex = 1;
-            // 
-            // proxyControl1
-            // 
-            this.proxyControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.proxyControl1.Location = new System.Drawing.Point(10, 60);
-            this.proxyControl1.Name = "proxyControl1";
-            this.proxyControl1.Size = new System.Drawing.Size(502, 387);
-            this.proxyControl1.TabIndex = 4;
+            this.hiddenToolsControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hiddenToolsControl1.Location = new System.Drawing.Point(15, 60);
+            this.hiddenToolsControl1.Name = "hiddenToolsControl1";
+            this.hiddenToolsControl1.Size = new System.Drawing.Size(875, 377);
+            this.hiddenToolsControl1.TabIndex = 2;
             // 
             // SettingsForm
             // 
@@ -266,6 +302,7 @@
             this.pnlCredits.ResumeLayout(false);
             this.pnlPaths.ResumeLayout(false);
             this.pnlProxy.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -291,6 +328,9 @@
         private Controls.CreditsControl creditsControl1;
         private System.Windows.Forms.Label lblProxyTitle;
         private Controls.ProxyControl proxyControl1;
+        private System.Windows.Forms.Panel panel1;
+        private Controls.HiddenToolsControl hiddenToolsControl1;
+        private System.Windows.Forms.Label lblHiddenTools;
     }
 }
 

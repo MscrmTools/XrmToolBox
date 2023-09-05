@@ -479,9 +479,11 @@ namespace XrmToolBox.New
                 ? availablePlugins.Where(p
                     => p.Metadata.Name.ToLower().Contains(filter.ToString().ToLower())
                     || p.Metadata.Description.ToLower().Contains(filter.ToString().ToLower())
-                    || p.Metadata.Company.ToLower().Contains(filter.ToString().ToLower()))
+                    || p.Metadata.Company.ToLower().Contains(filter.ToString().ToLower())
+                    )
                 : availablePlugins)
                 .Where(p => isc.IsPluginAllowed(p.Metadata.PluginType))
+                .Where(p => !Options.Instance.HiddenPlugins.Contains(p.Metadata.Name))
                 .OrderBy(p => p.Metadata.Name).ToList();
 
             foreach (var item in Options.Instance.MostUsedList.OrderByDescending(i => i.Count).ThenBy(i => i.Name))

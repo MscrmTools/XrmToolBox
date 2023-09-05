@@ -105,18 +105,18 @@ namespace XrmToolBox.Forms
             var items = new List<NavLeftItem>();
             var type = typeof(Options);
 
-            if (Options.Instance.OrderForSettingsTab.Count == 0)
+            foreach (var pi in type.GetProperties())
             {
-                foreach (var pi in type.GetProperties())
-                {
-                    var a = pi.GetCustomAttributes(typeof(CategoryAttribute), true).FirstOrDefault() as CategoryAttribute;
-                    if (a == null) continue;
+                var a = pi.GetCustomAttributes(typeof(CategoryAttribute), true).FirstOrDefault() as CategoryAttribute;
+                if (a == null) continue;
 
+                if (!Options.Instance.OrderForSettingsTab.Contains(a.Category))
                     Options.Instance.OrderForSettingsTab.Add(a.Category);
-                }
-
-                Options.Instance.OrderForSettingsTab.AddRange(new[] { "Proxy", "Paths", "Credits", "Application Protocol", "Assemblies" });
             }
+
+            foreach (var category in new[] { "Proxy", "Paths", "Credits", "Application Protocol", "Assemblies", "Hidden Tools" })
+                if (!Options.Instance.OrderForSettingsTab.Contains(category))
+                    Options.Instance.OrderForSettingsTab.Add(category);
 
             int index = 0;
             foreach (var category in Options.Instance.OrderForSettingsTab)

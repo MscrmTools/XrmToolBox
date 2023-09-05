@@ -272,6 +272,12 @@
     <Compile Include="Controls\ApplicationProtocolControl.Designer.cs">
       <DependentUpon>ApplicationProtocolControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\HiddenToolsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\HiddenToolsControl.Designer.cs">
+      <DependentUpon>HiddenToolsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\AssembliesControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -511,6 +517,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\ApplicationProtocolControl.resx">
       <DependentUpon>ApplicationProtocolControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\HiddenToolsControl.resx">
+      <DependentUpon>HiddenToolsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\AssembliesControl.resx">
       <DependentUpon>AssembliesControl.cs</DependentUpon>
@@ -757,6 +766,7 @@
     <None Include="Resources\Dataverse24.png" />
     <None Include="Resources\PowerApps24.png" />
     <None Include="Resources\Dynamics365_24.png" />
+    <None Include="Resources\Hide32.png" />
     <Content Include="Resources\three_tags.png" />
     <None Include="Resources\www_page.png" />
     <None Include="Resources\ToolsListDisplay32.png" />
@@ -813,7 +823,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
