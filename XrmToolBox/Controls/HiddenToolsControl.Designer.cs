@@ -61,6 +61,7 @@ namespace XrmToolBox.Controls
             this.Controls.Add(this.lvAssemblies);
             this.Name = "HiddenToolsControl";
             this.Size = new System.Drawing.Size(1202, 712);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.HiddenToolsControl_Paint);
             this.ResumeLayout(false);
 
         }

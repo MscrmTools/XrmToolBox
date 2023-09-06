@@ -856,6 +856,11 @@ namespace XrmToolBox.New
             ActionRequested?.Invoke(this, new PluginsListEventArgs(PluginsListAction.OpenPluginsStore));
         }
 
+        private void pbRefreshList_Click(object sender, System.EventArgs e)
+        {
+            txtSearch_TextChanged(txtSearch, new System.EventArgs());
+        }
+
         private void PluginsForm2_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.ApplicationExitCall

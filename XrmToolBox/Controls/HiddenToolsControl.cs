@@ -21,6 +21,11 @@ namespace XrmToolBox.Controls
             return item;
         }
 
+        private void HiddenToolsControl_Paint(object sender, PaintEventArgs e)
+        {
+            PopulateTools();
+        }
+
         private void lvAssemblies_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
             if (e.Item.Checked)

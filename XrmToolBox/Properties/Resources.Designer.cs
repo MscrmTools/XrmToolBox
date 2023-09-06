@@ -773,6 +773,16 @@ namespace XrmToolBox.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Refresh24 {
+            get {
+                object obj = ResourceManager.GetObject("Refresh24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Reporting32 {
             get {
                 object obj = ResourceManager.GetObject("Reporting32", resourceCulture);
