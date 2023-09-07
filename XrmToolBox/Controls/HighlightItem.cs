@@ -56,7 +56,7 @@ namespace XrmToolBox.Controls
         {
             BackColor = detail.EnvironmentHighlightingInfo?.Color ?? DefaultBackColor;
             lblName.ForeColor = detail.EnvironmentHighlightingInfo?.TextColor ?? DefaultForeColor;
-            lblName.Text = $"{detail.EnvironmentHighlightingInfo?.Text ?? ""}{(detail.EnvironmentHighlightingInfo != null ? " - " : "")}{detail.ConnectionName}";
+            lblName.Text = detail.ConnectionName;
 
             if (detail.ParentConnectionFile?.Base64Image != null)
             {
