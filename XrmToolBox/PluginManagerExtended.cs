@@ -18,6 +18,7 @@ namespace XrmToolBox
     {
         //private static readonly string PluginPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "Plugins");
         private static readonly string PluginPath = Paths.PluginsPath;
+        private Dictionary<string, string> AssemblyTypesByPath { get; set; }
 
         private static PluginManagerExtended instance;
         private CompositionContainer container;
@@ -167,6 +168,11 @@ namespace XrmToolBox
 
         private void LoadParts(bool isRetry = false)
         {
+            if (!isRetry)
+            {
+                AppDomain.CurrentDomain.AssemblyResolve += LookupAssembly;
+            }
+
             try
             {
                 container.ComposeParts(this);
@@ -186,6 +192,10 @@ namespace XrmToolBox
 
                 // rarely, an 'empty stack' error is thrown; let's rescan
                 LoadParts(true);
+            }
+            finally
+            {
+                AppDomain.CurrentDomain.AssemblyResolve -= LookupAssembly;
             }
         }
 
@@ -232,6 +242,40 @@ namespace XrmToolBox
             }
         }
 
+        private Assembly LookupAssembly(object sender, ResolveEventArgs args)
+        {
+            if (AssemblyTypesByPath == null)
+            {
+                AssemblyTypesByPath = LoadAssemblyTypesByPath();
+            }
+
+            return AssemblyTypesByPath.TryGetValue(args.Name, out var path) ? Assembly.LoadFrom(path) : null;
+        }
+
+        private Dictionary<string, string> LoadAssemblyTypesByPath()
+        {
+            var assemblyTypesByPath = new Dictionary<string, string>();
+            var pluginDirectory = new DirectoryInfo(Paths.PluginsPath);
+
+            foreach (var subDirectory in pluginDirectory.EnumerateDirectories())
+            {
+                foreach (var file in subDirectory.GetFiles("*.dll"))
+                {
+                    try
+                    {
+                        var possibleAssembly = Assembly.ReflectionOnlyLoadFrom(file.FullName);
+                        assemblyTypesByPath[possibleAssembly.FullName] = file.FullName;
+                    }
+                    catch
+                    {
+                        // Not sure how to tell if the assembly is loaded.  Eat it for now.
+                    }
+                }
+            }
+
+            return assemblyTypesByPath;
+        }
+
         private void watcher_EventRaised(object sender, FileSystemEventArgs e)
         {
             try
@@ -240,6 +284,8 @@ namespace XrmToolBox
 
                 if (IsWatchingForNewPlugins)
                 {
+                    // Reset to load new plugins
+                    AssemblyTypesByPath = null;
                     PluginsListUpdated?.Invoke(this, new EventArgs());
                 }
             }
