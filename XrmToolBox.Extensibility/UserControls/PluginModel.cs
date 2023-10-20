@@ -15,7 +15,6 @@ namespace XrmToolBox.Extensibility.UserControls
     public class PluginModel : UserControl
     {
         protected int numberOfDaysToShowNewRibbon = 7;
-        private System.ComponentModel.IContainer components;
 
         #region Delegates
 

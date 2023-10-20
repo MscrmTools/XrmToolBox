@@ -213,7 +213,7 @@ namespace XrmToolBox.ToolLibrary.Forms
             Process.Start("https://www.xrmtoolbox.com/documentation/for-it-administrators/set-your-own-tools-repositories-for-tool-library/");
         }
 
-        private async Task MainLoad(bool isRefresh = false)
+        private void MainLoad(bool isRefresh = false)
         {
             lvTools.Visible = false;
             pnlLoading.Visible = true;
