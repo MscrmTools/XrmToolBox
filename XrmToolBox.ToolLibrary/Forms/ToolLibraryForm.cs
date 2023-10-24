@@ -375,6 +375,7 @@ namespace XrmToolBox.ToolLibrary.Forms
         {
             chContent.Width = lvTools.Width - chCheckbox.Width - 26;
 
+            if(lblLoading.Parent != null)
             lblLoading.Location = new Point(Width / 2 - lblLoading.Width / 2, lblLoading.Parent.Height / 2 - lblLoading.Height / 2);
         }
 
