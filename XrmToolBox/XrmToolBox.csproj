@@ -244,6 +244,8 @@
     </Compile>
     <Compile Include="Announcement\AnnouncementManager.cs" />
     <Compile Include="Announcement\AnnouncementSettings.cs" />
+    <Compile Include="AppCode\AppInsights\AppInsights.cs" />
+    <Compile Include="AppCode\AppInsights\InstallationInfo.cs" />
     <Compile Include="AppCode\DockExtensions.cs" />
     <Compile Include="AppCode\Extensions.cs" />
     <Compile Include="AppCode\IToolsForm.cs" />
@@ -777,6 +779,9 @@
     <None Include="Resources\Uninstall24.png" />
     <None Include="Resources\Web24.png" />
     <None Include="Resources\Tools24.png" />
+    <Content Include="Startup\NugetCleanup.Command.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="XrmToolBox201512.ico" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />
@@ -790,10 +795,6 @@
     <ProjectReference Include="..\XrmToolBox.Extensibility\XrmToolBox.Extensibility.csproj">
       <Project>{df77aea3-43f7-403c-91af-3023a3bb06ec}</Project>
       <Name>XrmToolBox.Extensibility</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\XrmToolBox.PluginsStore\XrmToolBox.PluginsStore.csproj">
-      <Project>{ebcb3d22-03f2-40d2-b949-05cae575f2ea}</Project>
-      <Name>XrmToolBox.PluginsStore</Name>
     </ProjectReference>
     <ProjectReference Include="..\XrmToolBox.ToolLibrary\XrmToolBox.ToolLibrary.csproj">
       <Project>{626aeba8-4315-4d82-b8b9-b94200fd7589}</Project>
@@ -825,12 +826,11 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
+      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>Copy "$(ProjectDir)Startup\*.Command.xml" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Microsoft.Web.WebView2.1.0.1518.46\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.1518.46\build\Microsoft.Web.WebView2.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
