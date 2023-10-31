@@ -29,6 +29,8 @@ namespace XrmToolBox.Forms
             PrepareTabsAndContent();
         }
 
+        public event EventHandler OnProxySettingsChanged;
+
         private void advancedControl1_OnTabsOrderChanged(object sender, EventArgs e)
         {
             var ctrls = new Control[pnlNavLeft.Controls.Count];
@@ -307,6 +309,11 @@ namespace XrmToolBox.Forms
                     }
                 }
             }
+        }
+
+        private void ProxyControl1_OnProxySettingsChanged(object sender, System.EventArgs e)
+        {
+            OnProxySettingsChanged?.Invoke(this, new EventArgs());
         }
     }
 }

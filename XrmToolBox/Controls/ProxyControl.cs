@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using System.Net.Http;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
 using XrmToolBox.Forms;
@@ -27,56 +28,81 @@ namespace XrmToolBox.Controls
             InitializeComponent();
 
             ddscSelection.EnumType = typeof(ProxySelection);
-            ddscSelection.Value = ConnectionManager.Instance.ConnectionsList.UseCustomProxy ? ProxySelection.UseCustomProxy :
-                ConnectionManager.Instance.ConnectionsList.UseInternetExplorerProxy ? ProxySelection.UserDefault : ProxySelection.NoProxy;
+            ddscSelection.Value = Options.Instance.UseCustomProxy ? ProxySelection.UseCustomProxy :
+                Options.Instance.UseInternetExplorerProxy ? ProxySelection.UserDefault : ProxySelection.NoProxy;
+
+            txtscCustomProxyAddress.Text = Options.Instance.ProxyAddress;
+            txtscUserName.Text = Options.Instance.UserName;
+            txtscPassword.Text = Options.Instance.Password;
         }
+
+        public event EventHandler OnProxySettingsChanged;
 
         private void btnApply_Click(object sender, EventArgs e)
         {
-            if (ddscSelection.Value == (Enum)ProxySelection.UseCustomProxy)
+            if (ddscSelection.Value.ToString() == ((Enum)ProxySelection.UseCustomProxy).ToString())
             {
-                ConnectionManager.Instance.ConnectionsList.UseCustomProxy = true;
-                ConnectionManager.Instance.ConnectionsList.UseInternetExplorerProxy = false;
-                ConnectionManager.Instance.ConnectionsList.ProxyAddress = txtscCustomProxyAddress.Text;
-                ConnectionManager.Instance.ConnectionsList.UserName = txtscUserName.Text;
-                ConnectionManager.Instance.ConnectionsList.Password = txtscPassword.Text;
-                ConnectionManager.Instance.ConnectionsList.ByPassProxyOnLocal = sscBypassLocal.Checked;
-                ConnectionManager.Instance.ConnectionsList.UseDefaultCredentials = !sscCustomAuth.Checked;
+                Options.Instance.UseCustomProxy = true;
+                Options.Instance.UseInternetExplorerProxy = false;
+                Options.Instance.ProxyAddress = txtscCustomProxyAddress.Text;
+                Options.Instance.UserName = txtscUserName.Text;
+                Options.Instance.Password = txtscPassword.Text;
+                Options.Instance.ByPassProxyOnLocal = sscBypassLocal.Checked;
+                Options.Instance.UseDefaultCredentials = !sscCustomAuth.Checked;
             }
             else
             {
-                ConnectionManager.Instance.ConnectionsList.UseInternetExplorerProxy = ddscSelection.Value == (Enum)ProxySelection.UserDefault;
-                ConnectionManager.Instance.ConnectionsList.UseCustomProxy = false;
-                ConnectionManager.Instance.ConnectionsList.ProxyAddress = null;
-                ConnectionManager.Instance.ConnectionsList.UserName = null;
-                ConnectionManager.Instance.ConnectionsList.Password = null;
-                ConnectionManager.Instance.ConnectionsList.ByPassProxyOnLocal = false;
-                ConnectionManager.Instance.ConnectionsList.UseDefaultCredentials = false;
+                Options.Instance.UseInternetExplorerProxy = ddscSelection.Value.ToString() == ((Enum)ProxySelection.UserDefault).ToString();
+                Options.Instance.UseCustomProxy = false;
+                Options.Instance.ProxyAddress = null;
+                Options.Instance.UserName = null;
+                Options.Instance.Password = null;
+                Options.Instance.ByPassProxyOnLocal = false;
+                Options.Instance.UseDefaultCredentials = false;
             }
 
             try
             {
                 WebProxyHelper.ApplyProxy();
 
-                ConnectionManager.Instance.SaveConnectionsFile();
-
-                var sd = new SuccessDialog();
-                sd.Location = new Point(TopLevelControl.Location.X + Parent.Parent.Parent.Controls[1].ClientRectangle.Width + 20, TopLevelControl.Location.Y + 90);
-                sd.Show();
-
-                var timer = new Timer();
-                timer.Interval = 200;
-                timer.Tick += (s, evt) =>
+                try
                 {
-                    sd.Opacity -= 0.05;
-                    if (sd.Opacity == 0)
+                    LblConnectivityTest.Text = "Testing access to XrmToolBox portal...";
+                    LblConnectivityTest.ForeColor = SystemColors.Control;
+
+                    var testClient = new HttpClient();
+                    testClient.GetAsync("https://www.xrmtoolbox.com").GetAwaiter().GetResult();
+
+                    LblConnectivityTest.Text = "Connection test succeeded!";
+                    LblConnectivityTest.ForeColor = Color.Green;
+
+                    Options.Instance.Save();
+
+                    OnProxySettingsChanged?.Invoke(this, new EventArgs());
+
+                    var sd = new SuccessDialog();
+                    sd.Location = new Point(TopLevelControl.Location.X + Parent.Parent.Parent.Controls[1].ClientRectangle.Width + 20, TopLevelControl.Location.Y + 90);
+                    sd.Show();
+
+                    var timer = new Timer();
+                    timer.Interval = 200;
+                    timer.Tick += (s, evt) =>
                     {
-                        sd.Close();
-                        sd.Dispose();
-                        timer.Stop();
-                    }
-                };
-                timer.Start();
+                        sd.Opacity -= 0.05;
+                        if (sd.Opacity == 0)
+                        {
+                            sd.Close();
+                            sd.Dispose();
+                            timer.Stop();
+                        }
+                    };
+                    timer.Start();
+                }
+                catch (Exception error)
+                {
+                    LblConnectivityTest.Text = "Connection test failed for the provided proxy information! " + (error.InnerException?.Message ?? error.Message);
+                    LblConnectivityTest.ForeColor = Color.Red;
+                }
             }
             catch (Exception error)
             {

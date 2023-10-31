@@ -18,5 +18,17 @@ namespace XrmToolBox.Extensibility.Interfaces
         int MostRatedMinNumberOfVotes { get; set; }
         decimal MostRatedMinRatingAverage { get; set; }
         string RepositoryUrl { get; set; }
+
+        #region Proxy
+
+        bool ByPassProxyOnLocal { get; set; }
+        string Password { get; set; }
+        string ProxyAddress { get; set; }
+        bool UseCustomProxy { get; set; }
+        bool UseDefaultCredentials { get; set; }
+        bool UseInternetExplorerProxy { get; set; }
+        string UserName { get; set; }
+
+        #endregion Proxy
     }
 }

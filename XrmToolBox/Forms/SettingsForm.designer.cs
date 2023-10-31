@@ -234,6 +234,7 @@
             this.proxyControl1.Padding = new System.Windows.Forms.Padding(10);
             this.proxyControl1.Size = new System.Drawing.Size(502, 387);
             this.proxyControl1.TabIndex = 4;
+            this.proxyControl1.OnProxySettingsChanged += ProxyControl1_OnProxySettingsChanged;
             // 
             // lblProxyTitle
             // 
@@ -306,6 +307,8 @@
             this.ResumeLayout(false);
 
         }
+
+    
 
         #endregion
 

@@ -419,19 +419,28 @@ namespace XrmToolBox.ToolLibrary
                 bool isCustomRepo = !url.StartsWith("https://www.xrmtoolbox.com/") && !url.StartsWith("https://xrmtoolboxdev.microsoftcrmportals.com/");
 
                 Uri pathUri = new Uri(url);
+
                 if (pathUri.Scheme == "http" || pathUri.Scheme == "https")
                 {
                     await Task.Run(() =>
                     {
                         do
                         {
-                            var tmpPlugins = GetContent<XtbPlugins>(url, true);
-                            foreach (var plugin in tmpPlugins.Plugins)
+                            try
                             {
-                                plugin.SourceRepositoryName = repository;
+                                var tmpPlugins = GetContent<XtbPlugins>(url, true);
+                                foreach (var plugin in tmpPlugins.Plugins)
+                                {
+                                    plugin.SourceRepositoryName = repository;
+                                }
+                                XrmToolBoxPlugins.Plugins.AddRange(tmpPlugins.Plugins);
+                                url = tmpPlugins.NextLink;
                             }
-                            XrmToolBoxPlugins.Plugins.AddRange(tmpPlugins.Plugins);
-                            url = tmpPlugins.NextLink;
+                            catch (Exception error)
+                            {
+                                MessageBox.Show($"An error occured when loading tools:\n\n{error.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                throw;
+                            }
                         }
                         while (url != null);
                     });
