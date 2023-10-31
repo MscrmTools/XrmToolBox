@@ -1,0 +1,19 @@
+<Commands>
+  <Command Processed="false">
+    <PreChecks>
+      <PreCheck type="FileExists">Nuget.Common.dll</PreCheck>
+      <PreCheck type="FileExists">XrmToolBox.PluginsStore.dll</PreCheck>
+    </PreChecks>
+    <Description>This version of XrmToolBox removes the legacy tool library. Nuget assemblies are not needed anymore and will be deleted.</Description>
+    <Actions>
+      <Action>IF EXIST "Nuget.Common.dll" (DEL "Nuget.Common.dll")</Action>
+      <Action>IF EXIST "Nuget.Configuration.dll" (DEL "Nuget.Configuration.dll")</Action>
+      <Action>IF EXIST "Nuget.Core.dll" (DEL "Nuget.Core.dll")</Action>
+      <Action>IF EXIST "Nuget.Frameworks.dll" (DEL "Nuget.Frameworks.dll")</Action>
+      <Action>IF EXIST "Nuget.Packaging.dll" (DEL "Nuget.Packaging.dll")</Action>
+      <Action>IF EXIST "Nuget.Protocol.dll" (DEL "Nuget.Protocol.dll")</Action>
+      <Action>IF EXIST "Nuget.Versioning.dll" (DEL "Nuget.Versioning.dll")</Action>
+      <Action>IF EXIST "XrmToolBox.PluginsStore.dll" (DEL "Nuget.Versioning.dll")</Action>
+    </Actions>
+  </Command>
+</Commands>

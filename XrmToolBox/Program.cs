@@ -8,12 +8,12 @@ using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
-
+using System.Xml;
+using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Forms;
 using XrmToolBox.New;
-using XrmToolBox.PluginsStore;
-
+using XrmToolBox.ToolLibrary.AppCode;
 using PluginUpdates = XrmToolBox.AppCode.PluginUpdates;
 
 namespace XrmToolBox
@@ -150,23 +150,6 @@ Please start XrmToolBox again to fix this problem",
                 }
             }
             while (tries < 3);
-        }
-
-        private static void TryWaitingForOldProcess(int previousProcessId)
-        {
-            try
-            {
-                using (var currentProcess = Process.GetCurrentProcess())
-                using (var oldProcess = Process.GetProcessById(previousProcessId))
-                {
-                    // process IDs can be reused, so check the name
-                    if (oldProcess.ProcessName == currentProcess.ProcessName)
-                    {
-                        oldProcess.WaitForExit();
-                    }
-                }
-            }
-            catch { }
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -318,15 +301,13 @@ Please start XrmToolBox again to fix this problem",
             InitializePluginsFolder();
             CopyUpdatedPlugins();
             RemovePlugins();
+            RunCommandIfAny();
 
-            RedirectAssembly("NuGet.Common");
-            RedirectAssembly("NuGet.Packaging");
-            RedirectAssembly("NuGet.Protocol");
             RedirectAssembly("Newtonsoft.Json");
             RedirectAssembly("McTools.Xrm.Connection");
             RedirectAssembly("McTools.Xrm.Connection.WinForms");
             RedirectAssembly("XrmToolBox.Extensibility");
-            RedirectAssembly("XrmToolBox.PluginsStore");
+            RedirectAssembly("XrmToolBox.ToolLibrary");
             RedirectAssembly("Microsoft.Xrm.Sdk");
             RedirectAssembly("Microsoft.Xrm.Sdk.Workflow");
             RedirectAssembly("Microsoft.Crm.Sdk.Proxy");
@@ -341,6 +322,7 @@ Please start XrmToolBox again to fix this problem",
             RedirectAssembly("Microsoft.Web.WebView2.WinForms");
 
             OptimizeConnectionSettings();
+            SetProxy();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -417,6 +399,115 @@ Please start XrmToolBox again to fix this problem",
                     RemovePlugins();
                 }
             }
+        }
+
+        private static void RunCommandIfAny()
+        {
+            try
+            {
+                var xtbExecutionPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+                foreach (var file in Directory.GetFiles(xtbExecutionPath, "*.command.xml"))
+                {
+                    var doc = new XmlDocument();
+                    doc.Load(file);
+
+                    var commandsNodes = doc.SelectNodes("//Command");
+                    if (commandsNodes?.Count > 0)
+                    {
+                        foreach (XmlNode commandNode in commandsNodes)
+                        {
+                            if (bool.Parse(commandNode.Attributes["Processed"].Value)) continue;
+
+                            var continueAfterPreCheck = false;
+                            foreach (XmlElement preCheck in commandNode.SelectNodes("//PreCheck"))
+                            {
+                                switch (preCheck.Attributes["type"].Value)
+                                {
+                                    case "FileExists":
+                                        continueAfterPreCheck = continueAfterPreCheck || File.Exists(preCheck.InnerText);
+                                        break;
+                                }
+                            }
+
+                            if (!continueAfterPreCheck)
+                            {
+                                continue;
+                            }
+
+                            var description = commandNode.SelectSingleNode("Description").InnerText;
+                            var dr = MessageBox.Show("The following command need to be run before XrmToolBox:\n\n" + description, "XrmToolBox pre run command", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                            if (dr == DialogResult.OK)
+                            {
+                                try
+                                {
+                                    var actions = commandNode.SelectSingleNode("Actions");
+                                    foreach (XmlNode actionNode in actions.SelectNodes("Action"))
+                                    {
+                                        if (!string.IsNullOrEmpty(actionNode.InnerText))
+                                        {
+                                            var proc = new Process();
+                                            proc.StartInfo.WorkingDirectory = xtbExecutionPath;
+                                            proc.StartInfo.FileName = "cmd.exe";
+                                            proc.StartInfo.Arguments = "/c " + actionNode.InnerText.Replace("{{XTBPATH}}", Paths.XrmToolBoxPath);
+                                            proc.StartInfo.CreateNoWindow = true;
+                                            proc.StartInfo.UseShellExecute = false;
+                                            proc.Start();
+                                            proc.Close();
+                                        }
+                                    }
+                                }
+                                catch (Exception error)
+                                {
+                                }
+                                finally
+                                {
+                                    commandNode.Attributes["Processed"].Value = "true";
+
+                                    if (commandNode.Attributes["ProcessDate"] != null)
+                                    {
+                                        commandNode.Attributes["ProcessDate"].Value = DateTime.Now.ToString();
+                                    }
+                                    else
+                                    {
+                                        var attr = commandNode.OwnerDocument.CreateAttribute("ProcessDate");
+                                        attr.Value = DateTime.Now.ToString();
+                                        commandNode.Attributes.Append(attr);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    doc.Save(file);
+                }
+            }
+            catch (Exception error)
+            {
+                // Do nothing if something went wrong here
+            }
+        }
+
+        private static void SetProxy()
+        {
+            WebProxyHelper.ApplyProxy();
+        }
+
+        private static void TryWaitingForOldProcess(int previousProcessId)
+        {
+            try
+            {
+                using (var currentProcess = Process.GetCurrentProcess())
+                using (var oldProcess = Process.GetProcessById(previousProcessId))
+                {
+                    // process IDs can be reused, so check the name
+                    if (oldProcess.ProcessName == currentProcess.ProcessName)
+                    {
+                        oldProcess.WaitForExit();
+                    }
+                }
+            }
+            catch { }
         }
     }
 }
