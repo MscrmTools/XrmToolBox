@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox.Extensibility", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox.AutoUpdater", "XrmToolBox.AutoUpdater\XrmToolBox.AutoUpdater.csproj", "{564C72C8-586E-4218-B6B3-F464F7C3903A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XrmToolBox.PluginsStore", "XrmToolBox.PluginsStore\XrmToolBox.PluginsStore.csproj", "{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LicenseChecker", "LicenseChecker", "{08305693-A5D7-41FA-B476-20874647809B}"
 	ProjectSection(SolutionItems) = preProject
 		LicenseChecker\McTools.StopAdvertisement.dll = LicenseChecker\McTools.StopAdvertisement.dll
@@ -73,18 +71,6 @@ Global
 		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Release|x86.ActiveCfg = Release|Any CPU
 		{564C72C8-586E-4218-B6B3-F464F7C3903A}.Release|x86.Build.0 = Release|Any CPU
-		{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}.Debug|x86.Build.0 = Debug|Any CPU
-		{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}.Release|x86.ActiveCfg = Release|Any CPU
-		{EBCB3D22-03F2-40D2-B949-05CAE575F2EA}.Release|x86.Build.0 = Release|Any CPU
 		{626AEBA8-4315-4D82-B8B9-B94200FD7589}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{626AEBA8-4315-4D82-B8B9-B94200FD7589}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{626AEBA8-4315-4D82-B8B9-B94200FD7589}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -105,8 +91,8 @@ Global
 		{5BF1E228-F898-40CF-B8FB-8412D8C81CFF} = {1A7814D2-1185-484E-92CC-7DD71DDE6488}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_ConfigurationName = Release
 		SolutionGuid = {5CC3AFE2-F092-40F3-A540-539389A045B6}
+		BuildVersion_ConfigurationName = Release
 	EndGlobalSection
 	GlobalSection(CodealikeProperties) = postSolution
 		SolutionGuid = 2bf66b53-ea6f-433b-b455-00e70ee33cd0

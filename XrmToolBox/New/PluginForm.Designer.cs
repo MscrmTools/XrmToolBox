@@ -73,7 +73,7 @@ namespace XrmToolBox.New
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(761, 27);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(915, 27);
             this.toolStripStatusLabel.Spring = true;
             this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -268,6 +268,7 @@ namespace XrmToolBox.New
             this.pnlMain.ResumeLayout(false);
             this.tlpHighlight.ResumeLayout(false);
             this.pnlHighlight.ResumeLayout(false);
+            this.pnlHighlight.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbEnvLogo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

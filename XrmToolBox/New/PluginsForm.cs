@@ -15,7 +15,6 @@ using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Interfaces;
 using XrmToolBox.Extensibility.UserControls;
 using XrmToolBox.New.EventArgs;
-using XrmToolBox.PluginsStore;
 
 namespace XrmToolBox.New
 {
@@ -29,7 +28,7 @@ namespace XrmToolBox.New
         private string filterText;
         private Thread searchThread;
         private PluginModel selectedPluginModel;
-        private StoreFromPortal store;
+        private ToolLibrary.ToolLibrary store;
 
         #endregion Variables
 
@@ -551,7 +550,7 @@ namespace XrmToolBox.New
             {
                 if (store == null)
                 {
-                    store = new StoreFromPortal(Options.Instance.ConnectionControlsAllowPreReleaseUpdates);
+                    store = new ToolLibrary.ToolLibrary(Options.Instance, new Dictionary<string, string>());
                 }
 
                 if (store.XrmToolBoxPlugins == null)
