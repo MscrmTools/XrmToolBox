@@ -228,6 +228,7 @@ namespace XrmToolBox.New
             {
                 Padding = new Padding(0, 0, 0, 0);
                 lblEnvInfo.Visible = false;
+                pnlHighlight.Visible = false;
             }
 
             Invalidate();
