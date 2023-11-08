@@ -165,6 +165,7 @@ namespace XrmToolBox.Controls
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.Controls.Add(this.LblConnectivityTest);
             this.Controls.Add(this.btnApply);
             this.Controls.Add(this.sscBypassLocal);
