@@ -641,6 +641,8 @@ Would you like to reinstall last stable release of connection controls?";
                     {
                         StartPluginWithConnection();
                     }
+
+                    break;
                 }
             }
 
