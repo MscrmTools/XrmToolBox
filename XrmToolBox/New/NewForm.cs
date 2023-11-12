@@ -940,8 +940,8 @@ Would you like to reinstall last stable release of connection controls?";
         {
             switch (e.Action)
             {
-                case PluginsListAction.OpenPluginsStore:
-                    tsddbTools_DropDownItemClicked(sender, new ToolStripItemClickedEventArgs(pluginsStoreToolStripMenuItem));
+                case OpenPluginsStoreAction openStore:
+                    OpenPluginsStore(false, openStore.SearchTerm);
                     break;
             }
         }
@@ -1788,7 +1788,7 @@ Would you like to reinstall last stable release of connection controls?";
             worker.RunWorkerAsync();
         }
 
-        private void OpenPluginsStore(bool showUpdateOnly = false)
+        private void OpenPluginsStore(bool showUpdateOnly = false, string defaultSearchTerm = null)
         {
             if (pluginsForm == null)
             {
@@ -1858,6 +1858,10 @@ Would you like to reinstall last stable release of connection controls?";
                 }
             }
 
+            if (defaultSearchTerm != null)
+            {
+                libraryForm.SetSearchTerm(defaultSearchTerm);
+            } 
             libraryForm.Show(dpMain, DockState.Document);
         }
 

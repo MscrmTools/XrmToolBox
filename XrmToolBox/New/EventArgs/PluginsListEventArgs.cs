@@ -16,9 +16,19 @@ namespace XrmToolBox.New.EventArgs
         public PluginsListAction Action { get; }
     }
 
-    public enum PluginsListAction
+
+    public abstract class PluginsListAction { }
+
+    public class OpenPluginsStoreAction : PluginsListAction
     {
-        OpenPluginsStore,
-        ResetSearchFilter,
+        public OpenPluginsStoreAction(string searchTerm)
+        {
+            SearchTerm = searchTerm;
+        }
+
+        public string SearchTerm { get; }
     }
+
+    public class ResetSearchFilterAction : PluginsListAction { }
+
 }
