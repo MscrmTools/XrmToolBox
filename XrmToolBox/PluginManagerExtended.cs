@@ -23,9 +23,10 @@ namespace XrmToolBox
         private static PluginManagerExtended instance;
         private CompositionContainer container;
         private DirectoryCatalog directoryCatalog;
-
+        
         private PluginManagerExtended()
         {
+            AppDomain.CurrentDomain.AssemblyResolve += LookupAssembly;
             if (!Directory.Exists(PluginPath))
             {
                 Directory.CreateDirectory(PluginPath);
@@ -45,7 +46,7 @@ namespace XrmToolBox
         /// <summary>
         /// [DEPRECATED] This property should not be used anymore; it was replace by <see cref="PluginsExt"/>.
         /// </summary>
-        [Obsolete]
+        [Obsolete("This property should not be used anymore; it was replace by PluginsExt", true)]
         [ImportMany(AllowRecomposition = true)]
         public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> Plugins { get; set; }
 
@@ -57,6 +58,7 @@ namespace XrmToolBox
         /// <summary>
         /// [DEPRECATED] This property should not be used anymore; it was replace by <see cref="ValidatedPluginsExt"/>.
         /// </summary>
+        [Obsolete("This property should not be used anymore; it was replace by ValidatedPluginsExt", true)]
         public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> ValidatedPlugins
         {
             get { return Plugins?.Where(p => !ValidationErrors.ContainsKey(p.Metadata.Name)); }
@@ -168,16 +170,11 @@ namespace XrmToolBox
 
         private void LoadParts(bool isRetry = false)
         {
-            if (!isRetry)
-            {
-                AppDomain.CurrentDomain.AssemblyResolve += LookupAssembly;
-            }
-
             try
             {
                 container.ComposeParts(this);
 
-                Manifest = ManifestLoader.CreateManifest(Plugins.ToArray(), directoryCatalog);
+                Manifest = ManifestLoader.CreateManifest(PluginsExt.ToArray(), directoryCatalog);
                 ManifestLoader.SaveManifest(Manifest);
                 PluginsExt = ManifestLoader.LoadPlugins(Manifest);
 
@@ -192,10 +189,6 @@ namespace XrmToolBox
 
                 // rarely, an 'empty stack' error is thrown; let's rescan
                 LoadParts(true);
-            }
-            finally
-            {
-                AppDomain.CurrentDomain.AssemblyResolve -= LookupAssembly;
             }
         }
 
@@ -236,9 +229,9 @@ namespace XrmToolBox
                 LoadParts();
             }
 
-            if (Plugins == null)
+            if (PluginsExt == null)
             {
-                Plugins = ManifestLoader.LoadPlugins<IPluginMetadata>(Manifest);
+                PluginsExt = ManifestLoader.LoadPlugins(Manifest);
             }
         }
 
@@ -256,7 +249,6 @@ namespace XrmToolBox
         {
             var assemblyTypesByPath = new Dictionary<string, string>();
             var pluginDirectory = new DirectoryInfo(Paths.PluginsPath);
-
             foreach (var subDirectory in pluginDirectory.EnumerateDirectories())
             {
                 foreach (var file in subDirectory.GetFiles("*.dll"))
@@ -272,7 +264,6 @@ namespace XrmToolBox
                     }
                 }
             }
-
             return assemblyTypesByPath;
         }
 

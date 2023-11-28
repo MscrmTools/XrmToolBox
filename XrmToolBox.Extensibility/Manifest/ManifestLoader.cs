@@ -35,6 +35,45 @@ namespace XrmToolBox.Extensibility.Manifest
             return new Manifest();
         }
 
+        public static Manifest CreateManifest(IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginMetadataExt>> composition,
+            DirectoryCatalog catalogue)
+        {
+            // TODO - use a lightweight auto-mapper to quickly map similarly named properties without the need for maintaining this part of the code
+            var pluginMetadata = composition.AsParallel()
+                .Select(p =>
+                    new PluginMetadata
+                    {
+                        BackgroundColor = p.Metadata.BackgroundColor,
+                        BigImageBase64 = p.Metadata.BigImageBase64,
+                        Description = p.Metadata.Description,
+                        Name = p.Metadata.Name,
+                        PrimaryFontColor = p.Metadata.PrimaryFontColor,
+                        SecondaryFontColor = p.Metadata.SecondaryFontColor,
+                        SmallImageBase64 = p.Metadata.SmallImageBase64,
+                        Company = p.Value.GetCompany(),
+                        Version = p.Value.GetVersion(),
+                        Id = p.Value is PluginBase pb ? pb.GetId() : Guid.Empty,
+                        PluginType = p.Value.GetType().FullName,
+                        AssemblyQualifiedName = p.Value.GetType().Assembly.FullName,
+                        AssemblyFilename = p.Value.GetType().Assembly.Location,
+                        Interfaces = p.Value.GetType().GetInterfaces().Select(i => i.Name).ToArray()
+                    }).ToArray();
+
+            return
+                new Manifest
+                {
+                    ScannedAssemblies = catalogue.LoadedFiles
+                        .Select(f =>
+                            new AssemblyInfo
+                            {
+                                Name = f,
+                                Version = AssemblyName.GetAssemblyName(f).Version.ToString()
+                            }).ToArray(),
+                    PluginMetadata = pluginMetadata
+                };
+        }
+
+        [Obsolete("Use IPluginMetadataExt Overload", true)]
         public static Manifest CreateManifest(IReadOnlyCollection<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> composition,
             DirectoryCatalog catalogue)
         {
