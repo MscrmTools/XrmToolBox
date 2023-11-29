@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -105,6 +105,11 @@ namespace XrmToolBox.ToolLibrary.Forms
             chkShowInstalled.Checked = (filters & PackageInstallAction.None) == PackageInstallAction.None;
             chkShowUpdates.Checked = (filters & PackageInstallAction.Update) == PackageInstallAction.Update;
             chkToInstall.Checked = (filters & PackageInstallAction.Install) == PackageInstallAction.Install;
+        }
+
+        public void SetSearchTerm(string searchTerm)
+        {
+            txtSearch.Text = searchTerm;
         }
 
         public void ShowUpdatesOnly()

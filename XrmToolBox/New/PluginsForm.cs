@@ -681,7 +681,7 @@ namespace XrmToolBox.New
 
         private void pbOpenPluginsStore_Click(object sender, System.EventArgs e)
         {
-            ActionRequested?.Invoke(this, new PluginsListEventArgs(PluginsListAction.OpenPluginsStore));
+            ActionRequested?.Invoke(this, new PluginsListEventArgs(new OpenPluginsStoreAction(txtSearch.Text)));
         }
 
         private void PluginsForm_FormClosing(object sender, FormClosingEventArgs e)
