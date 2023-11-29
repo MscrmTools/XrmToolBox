@@ -80,6 +80,8 @@ namespace XrmToolBox.ToolLibrary.Forms
 
             tssClearPackageCache.ToolTipText = $"Clean XrmToolBox Tool Library cache folder\n\nCurrent cache folder size: {CalculateCacheFolderSize()}MB";
 
+            cbbToolSort.SelectedIndex = 0;
+
             ShowRestartButton();
         }
 
@@ -131,6 +133,13 @@ namespace XrmToolBox.ToolLibrary.Forms
             base.OnResizeEnd(e);
         }
 
+        private void cbbToolSort_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            searchThread?.Abort();
+            searchThread = new Thread(Filter);
+            searchThread.Start();
+        }
+
         private void Filter()
         {
             Thread.Sleep(500);
@@ -151,9 +160,16 @@ namespace XrmToolBox.ToolLibrary.Forms
                        && ((((XtbPlugin)i.Tag).Compatibilty != CompatibleState.Compatible) && chkIncompatible.Checked
                        || (((XtbPlugin)i.Tag).Action == PackageInstallAction.None) && chkShowInstalled.Checked
                        || (((XtbPlugin)i.Tag).Action == PackageInstallAction.Update) && chkShowUpdates.Checked
-                       || (((XtbPlugin)i.Tag).Action == PackageInstallAction.Install) && chkToInstall.Checked))
-                       .OrderBy(t => ((XtbPlugin)t.Tag).CleanedName)
-                       .ToList();
+                       || (((XtbPlugin)i.Tag).Action == PackageInstallAction.Install) && chkToInstall.Checked));
+
+                if (cbbToolSort.SelectedIndex == 0)
+                {
+                    filteredTools = filteredTools.OrderBy(t => ((XtbPlugin)t.Tag).CleanedName);
+                }
+                else
+                {
+                    filteredTools = filteredTools.OrderByDescending(t => ((XtbPlugin)t.Tag).LatestReleaseDate);
+                }
 
                 if (IsHandleCreated)
                 {
@@ -375,8 +391,8 @@ namespace XrmToolBox.ToolLibrary.Forms
         {
             chContent.Width = lvTools.Width - chCheckbox.Width - 26;
 
-            if(lblLoading.Parent != null)
-            lblLoading.Location = new Point(Width / 2 - lblLoading.Width / 2, lblLoading.Parent.Height / 2 - lblLoading.Height / 2);
+            if (lblLoading.Parent != null)
+                lblLoading.Location = new Point(Width / 2 - lblLoading.Width / 2, lblLoading.Parent.Height / 2 - lblLoading.Height / 2);
         }
 
         private void lvTools_SelectedIndexChanged(object sender, EventArgs e)

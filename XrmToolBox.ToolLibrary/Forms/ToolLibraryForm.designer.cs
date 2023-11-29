@@ -43,13 +43,6 @@
             this.pnlToolProperties = new System.Windows.Forms.Panel();
             this.pnlCustomRepoWarning = new System.Windows.Forms.Panel();
             this.lblCustomRepoWarning = new System.Windows.Forms.Label();
-            this.lblToolsSearch = new System.Windows.Forms.Label();
-            this.pnlToolsSearch = new System.Windows.Forms.Panel();
-            this.txtSearch = new System.Windows.Forms.TextBox();
-            this.lblFilterCategory = new System.Windows.Forms.Label();
-            this.pnlFilterCategory = new System.Windows.Forms.Panel();
-            this.cbbCategories = new System.Windows.Forms.ComboBox();
-            this.lblSeparator1 = new System.Windows.Forms.Label();
             this.pnlToolsTop = new System.Windows.Forms.Panel();
             this.llRepoMoreInfo = new System.Windows.Forms.LinkLabel();
             this.pnlFilterRepository = new System.Windows.Forms.Panel();
@@ -60,10 +53,20 @@
             this.chkShowUpdates = new System.Windows.Forms.CheckBox();
             this.chkShowInstalled = new System.Windows.Forms.CheckBox();
             this.chkToInstall = new System.Windows.Forms.CheckBox();
+            this.lblSeparator1 = new System.Windows.Forms.Label();
             this.chkFilterNew = new System.Windows.Forms.CheckBox();
             this.chkFilterTopRating = new System.Windows.Forms.CheckBox();
             this.chkFilterMvp = new System.Windows.Forms.CheckBox();
             this.chkFilterOpenSource = new System.Windows.Forms.CheckBox();
+            this.pnlFilterCategory = new System.Windows.Forms.Panel();
+            this.cbbCategories = new System.Windows.Forms.ComboBox();
+            this.lblFilterCategory = new System.Windows.Forms.Label();
+            this.pnlToolSort = new System.Windows.Forms.Panel();
+            this.cbbToolSort = new System.Windows.Forms.ComboBox();
+            this.lblSortFilter = new System.Windows.Forms.Label();
+            this.pnlToolsSearch = new System.Windows.Forms.Panel();
+            this.txtSearch = new System.Windows.Forms.TextBox();
+            this.lblToolsSearch = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbRefresh = new System.Windows.Forms.ToolStripButton();
             this.tssRefresh = new System.Windows.Forms.ToolStripSeparator();
@@ -90,10 +93,11 @@
             this.pnlToolsMain.SuspendLayout();
             this.pnlLoading.SuspendLayout();
             this.pnlCustomRepoWarning.SuspendLayout();
-            this.pnlToolsSearch.SuspendLayout();
-            this.pnlFilterCategory.SuspendLayout();
             this.pnlToolsTop.SuspendLayout();
             this.pnlFilterRepository.SuspendLayout();
+            this.pnlFilterCategory.SuspendLayout();
+            this.pnlToolSort.SuspendLayout();
+            this.pnlToolsSearch.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.pnlFilterUpdateInfo.SuspendLayout();
             this.SuspendLayout();
@@ -189,7 +193,6 @@
             this.lvTools.OwnerDraw = true;
             this.lvTools.Size = new System.Drawing.Size(1806, 1097);
             this.lvTools.SmallImageList = this.imageList1;
-            this.lvTools.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.lvTools.TabIndex = 3;
             this.lvTools.UseCompatibleStateImageBehavior = false;
             this.lvTools.View = System.Windows.Forms.View.Details;
@@ -258,81 +261,6 @@
             this.lblCustomRepoWarning.Text = "This tool comes from a custom repository. XrmToolBox cannot validate that the inf" +
     "ormation displayed are accurate.";
             // 
-            // lblToolsSearch
-            // 
-            this.lblToolsSearch.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lblToolsSearch.Location = new System.Drawing.Point(0, 0);
-            this.lblToolsSearch.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblToolsSearch.Name = "lblToolsSearch";
-            this.lblToolsSearch.Size = new System.Drawing.Size(70, 55);
-            this.lblToolsSearch.TabIndex = 0;
-            this.lblToolsSearch.Text = "Search";
-            this.lblToolsSearch.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // pnlToolsSearch
-            // 
-            this.pnlToolsSearch.Controls.Add(this.txtSearch);
-            this.pnlToolsSearch.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnlToolsSearch.Location = new System.Drawing.Point(70, 0);
-            this.pnlToolsSearch.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.pnlToolsSearch.Name = "pnlToolsSearch";
-            this.pnlToolsSearch.Size = new System.Drawing.Size(340, 55);
-            this.pnlToolsSearch.TabIndex = 2;
-            // 
-            // txtSearch
-            // 
-            this.txtSearch.Location = new System.Drawing.Point(8, 16);
-            this.txtSearch.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(320, 26);
-            this.txtSearch.TabIndex = 1;
-            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
-            // 
-            // lblFilterCategory
-            // 
-            this.lblFilterCategory.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lblFilterCategory.Location = new System.Drawing.Point(410, 0);
-            this.lblFilterCategory.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblFilterCategory.Name = "lblFilterCategory";
-            this.lblFilterCategory.Size = new System.Drawing.Size(94, 55);
-            this.lblFilterCategory.TabIndex = 7;
-            this.lblFilterCategory.Text = "in category";
-            this.lblFilterCategory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // pnlFilterCategory
-            // 
-            this.pnlFilterCategory.Controls.Add(this.cbbCategories);
-            this.pnlFilterCategory.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnlFilterCategory.Location = new System.Drawing.Point(504, 0);
-            this.pnlFilterCategory.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.pnlFilterCategory.Name = "pnlFilterCategory";
-            this.pnlFilterCategory.Size = new System.Drawing.Size(250, 55);
-            this.pnlFilterCategory.TabIndex = 8;
-            // 
-            // cbbCategories
-            // 
-            this.cbbCategories.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbbCategories.FormattingEnabled = true;
-            this.cbbCategories.Location = new System.Drawing.Point(8, 13);
-            this.cbbCategories.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.cbbCategories.Name = "cbbCategories";
-            this.cbbCategories.Size = new System.Drawing.Size(230, 28);
-            this.cbbCategories.TabIndex = 9;
-            this.cbbCategories.SelectedIndexChanged += new System.EventHandler(this.cbbCategories_SelectedIndexChanged);
-            // 
-            // lblSeparator1
-            // 
-            this.lblSeparator1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lblSeparator1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSeparator1.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.lblSeparator1.Location = new System.Drawing.Point(1102, 0);
-            this.lblSeparator1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblSeparator1.Name = "lblSeparator1";
-            this.lblSeparator1.Size = new System.Drawing.Size(24, 55);
-            this.lblSeparator1.TabIndex = 9;
-            this.lblSeparator1.Text = "| ";
-            this.lblSeparator1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // pnlToolsTop
             // 
             this.pnlToolsTop.Controls.Add(this.llRepoMoreInfo);
@@ -350,6 +278,8 @@
             this.pnlToolsTop.Controls.Add(this.chkFilterOpenSource);
             this.pnlToolsTop.Controls.Add(this.pnlFilterCategory);
             this.pnlToolsTop.Controls.Add(this.lblFilterCategory);
+            this.pnlToolsTop.Controls.Add(this.pnlToolSort);
+            this.pnlToolsTop.Controls.Add(this.lblSortFilter);
             this.pnlToolsTop.Controls.Add(this.pnlToolsSearch);
             this.pnlToolsTop.Controls.Add(this.lblToolsSearch);
             this.pnlToolsTop.Dock = System.Windows.Forms.DockStyle.Top;
@@ -362,7 +292,7 @@
             // llRepoMoreInfo
             // 
             this.llRepoMoreInfo.Dock = System.Windows.Forms.DockStyle.Left;
-            this.llRepoMoreInfo.Location = new System.Drawing.Point(1771, 0);
+            this.llRepoMoreInfo.Location = new System.Drawing.Point(1810, 0);
             this.llRepoMoreInfo.Name = "llRepoMoreInfo";
             this.llRepoMoreInfo.Size = new System.Drawing.Size(105, 55);
             this.llRepoMoreInfo.TabIndex = 17;
@@ -375,7 +305,7 @@
             // 
             this.pnlFilterRepository.Controls.Add(this.cbbRepositories);
             this.pnlFilterRepository.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pnlFilterRepository.Location = new System.Drawing.Point(1521, 0);
+            this.pnlFilterRepository.Location = new System.Drawing.Point(1560, 0);
             this.pnlFilterRepository.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pnlFilterRepository.Name = "pnlFilterRepository";
             this.pnlFilterRepository.Size = new System.Drawing.Size(250, 55);
@@ -394,7 +324,7 @@
             // lblFilterRepository
             // 
             this.lblFilterRepository.Dock = System.Windows.Forms.DockStyle.Left;
-            this.lblFilterRepository.Location = new System.Drawing.Point(1429, 0);
+            this.lblFilterRepository.Location = new System.Drawing.Point(1468, 0);
             this.lblFilterRepository.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblFilterRepository.Name = "lblFilterRepository";
             this.lblFilterRepository.Size = new System.Drawing.Size(92, 55);
@@ -407,7 +337,7 @@
             this.lblSeparator2.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblSeparator2.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSeparator2.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.lblSeparator2.Location = new System.Drawing.Point(1407, 0);
+            this.lblSeparator2.Location = new System.Drawing.Point(1446, 0);
             this.lblSeparator2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSeparator2.Name = "lblSeparator2";
             this.lblSeparator2.Size = new System.Drawing.Size(22, 55);
@@ -420,7 +350,7 @@
             this.chkIncompatible.Dock = System.Windows.Forms.DockStyle.Left;
             this.chkIncompatible.Image = global::XrmToolBox.ToolLibrary.Resource.Incompatible;
             this.chkIncompatible.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.chkIncompatible.Location = new System.Drawing.Point(1339, 0);
+            this.chkIncompatible.Location = new System.Drawing.Point(1378, 0);
             this.chkIncompatible.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkIncompatible.Name = "chkIncompatible";
             this.chkIncompatible.Size = new System.Drawing.Size(68, 55);
@@ -435,7 +365,7 @@
             this.chkShowUpdates.Dock = System.Windows.Forms.DockStyle.Left;
             this.chkShowUpdates.Image = global::XrmToolBox.ToolLibrary.Resource.Update;
             this.chkShowUpdates.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.chkShowUpdates.Location = new System.Drawing.Point(1271, 0);
+            this.chkShowUpdates.Location = new System.Drawing.Point(1310, 0);
             this.chkShowUpdates.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkShowUpdates.Name = "chkShowUpdates";
             this.chkShowUpdates.Size = new System.Drawing.Size(68, 55);
@@ -450,7 +380,7 @@
             this.chkShowInstalled.Dock = System.Windows.Forms.DockStyle.Left;
             this.chkShowInstalled.Image = global::XrmToolBox.ToolLibrary.Resource.Success32;
             this.chkShowInstalled.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.chkShowInstalled.Location = new System.Drawing.Point(1194, 0);
+            this.chkShowInstalled.Location = new System.Drawing.Point(1233, 0);
             this.chkShowInstalled.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkShowInstalled.Name = "chkShowInstalled";
             this.chkShowInstalled.Size = new System.Drawing.Size(77, 55);
@@ -465,7 +395,7 @@
             this.chkToInstall.Dock = System.Windows.Forms.DockStyle.Left;
             this.chkToInstall.Image = global::XrmToolBox.ToolLibrary.Resource.NewToInstall;
             this.chkToInstall.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.chkToInstall.Location = new System.Drawing.Point(1126, 0);
+            this.chkToInstall.Location = new System.Drawing.Point(1165, 0);
             this.chkToInstall.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkToInstall.Name = "chkToInstall";
             this.chkToInstall.Size = new System.Drawing.Size(68, 55);
@@ -473,12 +403,25 @@
             this.chkToInstall.UseVisualStyleBackColor = true;
             this.chkToInstall.CheckedChanged += new System.EventHandler(this.chkFilter_CheckedChanged);
             // 
+            // lblSeparator1
+            // 
+            this.lblSeparator1.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblSeparator1.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSeparator1.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.lblSeparator1.Location = new System.Drawing.Point(1141, 0);
+            this.lblSeparator1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblSeparator1.Name = "lblSeparator1";
+            this.lblSeparator1.Size = new System.Drawing.Size(24, 55);
+            this.lblSeparator1.TabIndex = 9;
+            this.lblSeparator1.Text = "| ";
+            this.lblSeparator1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // chkFilterNew
             // 
             this.chkFilterNew.Dock = System.Windows.Forms.DockStyle.Left;
             this.chkFilterNew.Image = global::XrmToolBox.ToolLibrary.Resource.New;
             this.chkFilterNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.chkFilterNew.Location = new System.Drawing.Point(1015, 0);
+            this.chkFilterNew.Location = new System.Drawing.Point(1054, 0);
             this.chkFilterNew.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkFilterNew.Name = "chkFilterNew";
             this.chkFilterNew.Size = new System.Drawing.Size(87, 55);
@@ -491,7 +434,7 @@
             this.chkFilterTopRating.Dock = System.Windows.Forms.DockStyle.Left;
             this.chkFilterTopRating.Image = global::XrmToolBox.ToolLibrary.Resource.star;
             this.chkFilterTopRating.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.chkFilterTopRating.Location = new System.Drawing.Point(928, 0);
+            this.chkFilterTopRating.Location = new System.Drawing.Point(967, 0);
             this.chkFilterTopRating.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkFilterTopRating.Name = "chkFilterTopRating";
             this.chkFilterTopRating.Size = new System.Drawing.Size(87, 55);
@@ -504,7 +447,7 @@
             this.chkFilterMvp.Dock = System.Windows.Forms.DockStyle.Left;
             this.chkFilterMvp.Image = global::XrmToolBox.ToolLibrary.Resource.mvp;
             this.chkFilterMvp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.chkFilterMvp.Location = new System.Drawing.Point(841, 0);
+            this.chkFilterMvp.Location = new System.Drawing.Point(880, 0);
             this.chkFilterMvp.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkFilterMvp.Name = "chkFilterMvp";
             this.chkFilterMvp.Size = new System.Drawing.Size(87, 55);
@@ -517,13 +460,112 @@
             this.chkFilterOpenSource.Dock = System.Windows.Forms.DockStyle.Left;
             this.chkFilterOpenSource.Image = global::XrmToolBox.ToolLibrary.Resource.github;
             this.chkFilterOpenSource.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.chkFilterOpenSource.Location = new System.Drawing.Point(754, 0);
+            this.chkFilterOpenSource.Location = new System.Drawing.Point(793, 0);
             this.chkFilterOpenSource.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.chkFilterOpenSource.Name = "chkFilterOpenSource";
             this.chkFilterOpenSource.Size = new System.Drawing.Size(87, 55);
             this.chkFilterOpenSource.TabIndex = 3;
             this.chkFilterOpenSource.UseVisualStyleBackColor = true;
             this.chkFilterOpenSource.CheckedChanged += new System.EventHandler(this.chkFilter_CheckedChanged);
+            // 
+            // pnlFilterCategory
+            // 
+            this.pnlFilterCategory.Controls.Add(this.cbbCategories);
+            this.pnlFilterCategory.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlFilterCategory.Location = new System.Drawing.Point(543, 0);
+            this.pnlFilterCategory.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.pnlFilterCategory.Name = "pnlFilterCategory";
+            this.pnlFilterCategory.Size = new System.Drawing.Size(250, 55);
+            this.pnlFilterCategory.TabIndex = 8;
+            // 
+            // cbbCategories
+            // 
+            this.cbbCategories.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbCategories.FormattingEnabled = true;
+            this.cbbCategories.Location = new System.Drawing.Point(8, 13);
+            this.cbbCategories.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cbbCategories.Name = "cbbCategories";
+            this.cbbCategories.Size = new System.Drawing.Size(230, 28);
+            this.cbbCategories.TabIndex = 9;
+            this.cbbCategories.SelectedIndexChanged += new System.EventHandler(this.cbbCategories_SelectedIndexChanged);
+            // 
+            // lblFilterCategory
+            // 
+            this.lblFilterCategory.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblFilterCategory.Location = new System.Drawing.Point(449, 0);
+            this.lblFilterCategory.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblFilterCategory.Name = "lblFilterCategory";
+            this.lblFilterCategory.Size = new System.Drawing.Size(94, 55);
+            this.lblFilterCategory.TabIndex = 7;
+            this.lblFilterCategory.Text = "in category";
+            this.lblFilterCategory.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // pnlToolSort
+            // 
+            this.pnlToolSort.Controls.Add(this.cbbToolSort);
+            this.pnlToolSort.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlToolSort.Location = new System.Drawing.Point(347, 0);
+            this.pnlToolSort.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.pnlToolSort.Name = "pnlToolSort";
+            this.pnlToolSort.Size = new System.Drawing.Size(102, 55);
+            this.pnlToolSort.TabIndex = 19;
+            // 
+            // cbbToolSort
+            // 
+            this.cbbToolSort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbbToolSort.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbToolSort.FormattingEnabled = true;
+            this.cbbToolSort.Items.AddRange(new object[] {
+            "Name",
+            "Date"});
+            this.cbbToolSort.Location = new System.Drawing.Point(8, 14);
+            this.cbbToolSort.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.cbbToolSort.Name = "cbbToolSort";
+            this.cbbToolSort.Size = new System.Drawing.Size(86, 28);
+            this.cbbToolSort.TabIndex = 9;
+            this.cbbToolSort.SelectedIndexChanged += new System.EventHandler(this.cbbToolSort_SelectedIndexChanged);
+            // 
+            // lblSortFilter
+            // 
+            this.lblSortFilter.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblSortFilter.Location = new System.Drawing.Point(283, 0);
+            this.lblSortFilter.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblSortFilter.Name = "lblSortFilter";
+            this.lblSortFilter.Size = new System.Drawing.Size(64, 55);
+            this.lblSortFilter.TabIndex = 18;
+            this.lblSortFilter.Text = "Sort by";
+            this.lblSortFilter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // pnlToolsSearch
+            // 
+            this.pnlToolsSearch.Controls.Add(this.txtSearch);
+            this.pnlToolsSearch.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pnlToolsSearch.Location = new System.Drawing.Point(70, 0);
+            this.pnlToolsSearch.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.pnlToolsSearch.Name = "pnlToolsSearch";
+            this.pnlToolsSearch.Size = new System.Drawing.Size(213, 55);
+            this.pnlToolsSearch.TabIndex = 2;
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.Location = new System.Drawing.Point(8, 16);
+            this.txtSearch.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(196, 26);
+            this.txtSearch.TabIndex = 1;
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            // 
+            // lblToolsSearch
+            // 
+            this.lblToolsSearch.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblToolsSearch.Location = new System.Drawing.Point(0, 0);
+            this.lblToolsSearch.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblToolsSearch.Name = "lblToolsSearch";
+            this.lblToolsSearch.Size = new System.Drawing.Size(70, 55);
+            this.lblToolsSearch.TabIndex = 0;
+            this.lblToolsSearch.Text = "Search";
+            this.lblToolsSearch.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // toolStrip1
             // 
@@ -719,11 +761,12 @@
             this.pnlToolsMain.ResumeLayout(false);
             this.pnlLoading.ResumeLayout(false);
             this.pnlCustomRepoWarning.ResumeLayout(false);
-            this.pnlToolsSearch.ResumeLayout(false);
-            this.pnlToolsSearch.PerformLayout();
-            this.pnlFilterCategory.ResumeLayout(false);
             this.pnlToolsTop.ResumeLayout(false);
             this.pnlFilterRepository.ResumeLayout(false);
+            this.pnlFilterCategory.ResumeLayout(false);
+            this.pnlToolSort.ResumeLayout(false);
+            this.pnlToolsSearch.ResumeLayout(false);
+            this.pnlToolsSearch.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.pnlFilterUpdateInfo.ResumeLayout(false);
@@ -743,20 +786,7 @@
         private System.Windows.Forms.ListView lvTools;
         private System.Windows.Forms.ColumnHeader chContent;
         private System.Windows.Forms.ImageList imageList1;
-        private System.Windows.Forms.Label lblToolsSearch;
-        private System.Windows.Forms.Panel pnlToolsSearch;
-        private System.Windows.Forms.TextBox txtSearch;
-        private System.Windows.Forms.Label lblFilterCategory;
-        private System.Windows.Forms.Panel pnlFilterCategory;
-        private System.Windows.Forms.ComboBox cbbCategories;
-        private System.Windows.Forms.CheckBox chkFilterOpenSource;
-        private System.Windows.Forms.CheckBox chkFilterMvp;
-        private System.Windows.Forms.CheckBox chkFilterTopRating;
-        private System.Windows.Forms.CheckBox chkFilterNew;
-        private System.Windows.Forms.Label lblSeparator1;
         private System.Windows.Forms.Panel pnlToolsTop;
-        private System.Windows.Forms.CheckBox chkShowUpdates;
-        private System.Windows.Forms.CheckBox chkShowInstalled;
         private System.Windows.Forms.ColumnHeader chCheckbox;
         private System.Windows.Forms.Panel pnlLoading;
         private System.Windows.Forms.Label lblLoading;
@@ -765,22 +795,15 @@
         private System.Windows.Forms.ToolStripSeparator tssRefresh;
         private System.Windows.Forms.ToolStripButton tsbBulkInstall;
         private System.Windows.Forms.ToolStripButton tsbBulkDelete;
-        private System.Windows.Forms.CheckBox chkIncompatible;
         private System.Windows.Forms.ToolStripSeparator tssDelete;
         private System.Windows.Forms.ToolStripDropDownButton tsddActions;
         private System.Windows.Forms.ToolStripMenuItem tssReloadImageCache;
         private System.Windows.Forms.ToolStripMenuItem tssClearPackageCache;
-        private System.Windows.Forms.CheckBox chkToInstall;
         private System.Windows.Forms.ToolStripSeparator tssSettings;
         private System.Windows.Forms.ToolStripButton tsbRestart;
-        private System.Windows.Forms.Panel pnlFilterRepository;
-        private System.Windows.Forms.ComboBox cbbRepositories;
-        private System.Windows.Forms.Label lblFilterRepository;
-        private System.Windows.Forms.Label lblSeparator2;
         private System.Windows.Forms.Panel pnlToolProperties;
         private System.Windows.Forms.Panel pnlCustomRepoWarning;
         private System.Windows.Forms.Label lblCustomRepoWarning;
-        private System.Windows.Forms.LinkLabel llRepoMoreInfo;
         private System.Windows.Forms.Panel pnlFilterUpdateInfo;
         private System.Windows.Forms.LinkLabel llApplyUserFilter;
         private System.Windows.Forms.Label lblFilterUpdateInfo;
@@ -788,6 +811,29 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenToolLibraryAlways;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenToolLibraryOnlyIfUpdatesAreAvailable;
         private System.Windows.Forms.ToolStripMenuItem tsmiOpenToolLibraryNever;
+        private System.Windows.Forms.Panel pnlToolSort;
+        private System.Windows.Forms.ComboBox cbbToolSort;
+        private System.Windows.Forms.Label lblSortFilter;
+        private System.Windows.Forms.LinkLabel llRepoMoreInfo;
+        private System.Windows.Forms.Panel pnlFilterRepository;
+        private System.Windows.Forms.ComboBox cbbRepositories;
+        private System.Windows.Forms.Label lblFilterRepository;
+        private System.Windows.Forms.Label lblSeparator2;
+        private System.Windows.Forms.CheckBox chkIncompatible;
+        private System.Windows.Forms.CheckBox chkShowUpdates;
+        private System.Windows.Forms.CheckBox chkShowInstalled;
+        private System.Windows.Forms.CheckBox chkToInstall;
+        private System.Windows.Forms.Label lblSeparator1;
+        private System.Windows.Forms.CheckBox chkFilterNew;
+        private System.Windows.Forms.CheckBox chkFilterTopRating;
+        private System.Windows.Forms.CheckBox chkFilterMvp;
+        private System.Windows.Forms.CheckBox chkFilterOpenSource;
+        private System.Windows.Forms.Panel pnlFilterCategory;
+        private System.Windows.Forms.ComboBox cbbCategories;
+        private System.Windows.Forms.Label lblFilterCategory;
+        private System.Windows.Forms.Panel pnlToolsSearch;
+        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.Label lblToolsSearch;
     }
 }
 
