@@ -980,7 +980,11 @@ namespace XrmToolBox.New
             if (e.KeyData == Keys.Enter)
             {
                 var name = ((TextBox)sender).Text.ToLower();
-                var plugin = pluginsManager.ValidatedPluginsExt.FirstOrDefault(p => p.Metadata.Name.ToLower().Contains(name));
+                var plugin = pluginsManager.ValidatedPluginsExt.FirstOrDefault(p => p.Metadata.Name.ToLower() == name);
+                if (plugin == null)
+                {
+                    plugin = pluginsManager.ValidatedPluginsExt.FirstOrDefault(p => p.Metadata.Name.ToLower().Contains(name));
+                }
 
                 if (plugin != null)
                 {
