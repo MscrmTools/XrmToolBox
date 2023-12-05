@@ -46,7 +46,8 @@ namespace XrmToolBox
         /// <summary>
         /// [DEPRECATED] This property should not be used anymore; it was replace by <see cref="PluginsExt"/>.
         /// </summary>
-        [Obsolete("This property should not be used anymore; it was replace by PluginsExt", true)]
+        /// <remarks>Actually, it looks like this is required since this is populated when calling ComposeParts. - Daryl LaBar</remarks>
+        [Obsolete]
         [ImportMany(AllowRecomposition = true)]
         public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> Plugins { get; set; }
 
@@ -58,7 +59,6 @@ namespace XrmToolBox
         /// <summary>
         /// [DEPRECATED] This property should not be used anymore; it was replace by <see cref="ValidatedPluginsExt"/>.
         /// </summary>
-        [Obsolete("This property should not be used anymore; it was replace by ValidatedPluginsExt", true)]
         public IEnumerable<Lazy<IXrmToolBoxPlugin, IPluginMetadata>> ValidatedPlugins
         {
             get { return Plugins?.Where(p => !ValidationErrors.ContainsKey(p.Metadata.Name)); }
@@ -174,7 +174,7 @@ namespace XrmToolBox
             {
                 container.ComposeParts(this);
 
-                Manifest = ManifestLoader.CreateManifest(PluginsExt.ToArray(), directoryCatalog);
+                Manifest = ManifestLoader.CreateManifest(Plugins.ToArray(), directoryCatalog);
                 ManifestLoader.SaveManifest(Manifest);
                 PluginsExt = ManifestLoader.LoadPlugins(Manifest);
 
@@ -229,9 +229,9 @@ namespace XrmToolBox
                 LoadParts();
             }
 
-            if (PluginsExt == null)
+            if (Plugins == null)
             {
-                PluginsExt = ManifestLoader.LoadPlugins(Manifest);
+                Plugins = ManifestLoader.LoadPlugins<IPluginMetadata>(Manifest);
             }
         }
 
