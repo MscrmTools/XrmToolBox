@@ -49,6 +49,7 @@ namespace XrmToolBox.ToolLibrary.Forms
             lblFilterUpdateInfo.SetAutoWidth();
             llRepoMoreInfo.SetAutoWidth();
             lblLoading.Location = new Point(lblLoading.Parent.Width / 2 - lblLoading.Width / 2, lblLoading.Parent.Height / 2 - lblLoading.Height / 2);
+            cbbToolSort.SetAutoWidth();
 
             tsmiOpenToolLibraryAlways.Checked = settings.DisplayPluginsStoreOnStartup && !settings.DisplayPluginsStoreOnlyIfUpdates;
             tsmiOpenToolLibraryOnlyIfUpdatesAreAvailable.Checked = settings.DisplayPluginsStoreOnStartup && settings.DisplayPluginsStoreOnlyIfUpdates;
