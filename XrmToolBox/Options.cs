@@ -204,12 +204,6 @@ namespace XrmToolBox
         [PropertyOrder(1)]
         public string RepositoryUrl { get; set; } = "https://www.xrmtoolbox.com/_odata/plugins";
 
-        [Category("Tool Library")]
-        [DisplayName("Use legacy Tool Library")]
-        [Description("True to use the previous version of Tool Library")]
-        [PropertyOrder(5)]
-        public bool UseLegacyToolLibrary { get; set; }
-
         #endregion ToolLibrary
 
         #region Startup
@@ -758,7 +752,6 @@ namespace XrmToolBox
                 Size = Size,
                 ThemeValue = ThemeValue,
                 BringToTop = BringToTop,
-                UseLegacyToolLibrary = UseLegacyToolLibrary,
                 MostRatedMinNumberOfVotes = MostRatedMinNumberOfVotes,
                 MostRatedMinRatingAverage = MostRatedMinRatingAverage,
                 RepositoryUrl = RepositoryUrl,
