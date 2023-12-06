@@ -272,6 +272,12 @@ namespace XrmToolBox.ToolLibrary.Forms
             };
             bw.RunWorkerCompleted += (s, evt) =>
             {
+                if (evt.Error != null)
+                {
+                    MessageBox.Show(this, $"An error occured while loading tools: {evt.Error.ToString()}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 lvTools.Visible = true;
 
                 cbbRepositories.SelectedIndexChanged -= cbbCategories_SelectedIndexChanged;
