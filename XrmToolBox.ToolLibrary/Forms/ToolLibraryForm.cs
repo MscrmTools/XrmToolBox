@@ -312,6 +312,18 @@ namespace XrmToolBox.ToolLibrary.Forms
             bw.RunWorkerAsync();
         }
 
+        private void ResetFilterChechboxes()
+        {
+            // If all filters are unchecked, then check all
+            if (!chkToInstall.Checked && !chkShowInstalled.Checked && !chkShowUpdates.Checked && !chkIncompatible.Checked)
+            {
+                chkToInstall.Checked = true;
+                chkShowInstalled.Checked = true;
+                chkShowUpdates.Checked = true;
+                chkIncompatible.Checked = true;
+            }
+        }
+
         private void SetState(bool isWorking)
         {
             lblLoading.Location = new Point(Width / 2 - lblLoading.Width / 2, lblLoading.Parent.Height / 2 - lblLoading.Height / 2);
@@ -360,6 +372,8 @@ namespace XrmToolBox.ToolLibrary.Forms
                 chkShowUpdates.Checked = settings.LibraryShowUpdates;
                 chkToInstall.Checked = settings.LibraryShowNotInstalled;
                 chkIncompatible.Checked = settings.LibraryShowIncompatible;
+
+                ResetFilterChechboxes();
 
                 SetCheckboxEventForSettings();
             }
