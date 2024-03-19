@@ -39,7 +39,6 @@ namespace XrmToolBox.New
             {
                 mcp.AdditionalConnectionDetails.CollectionChanged += AdditionalConnectionDetails_CollectionChanged;
             }
-            DisplayHighlight(pluginControlBase.ConnectionDetail);
 
             if (pluginControlBase is IStatusBarMessenger statusBarMessenger)
             {
@@ -56,6 +55,10 @@ namespace XrmToolBox.New
                             pluginControlBase.ConnectionDetail.ImpersonatedUserName));
                 }
             }
+
+            CustomTheme.Instance.ApplyTheme(this);
+            DisplayHighlight(pluginControlBase.ConnectionDetail);
+
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;

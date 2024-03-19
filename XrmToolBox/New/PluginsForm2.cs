@@ -70,6 +70,24 @@ namespace XrmToolBox.New
             SetCategoriesBottomButtonsDisplay();
             menuWidth = CalculateLeftMenuWidth();
             SetCategoriesDisplay();
+
+            if (CustomTheme.Instance.IsActive)
+            {
+                CustomTheme.Instance.ApplyTheme(this);
+
+                pnlNavLeftMain.BackColor = CustomTheme.Instance.Background1;
+                pnlNavLeft.BackColor = CustomTheme.Instance.Background1;
+                pnlLeftBottom.BackColor = CustomTheme.Instance.Background1;
+                pnlNavMain.BackColor = CustomTheme.Instance.Background1;
+
+                pnlTop.BackColor = CustomTheme.Instance.Background2;
+                pnlTopSearch.BackColor = CustomTheme.Instance.Background1;
+                //txtSearch.BackColor = CustomTheme.Instance.Background1;
+                //txtSearch.ForeColor = CustomTheme.Instance.ForeColor1;
+
+                btnChangeSize.ForeColor = CustomTheme.Instance.ForeColor1;
+                btnFilterOperator.ForeColor = CustomTheme.Instance.ForeColor1;
+            }
         }
 
         public void DisplayCategories(Dictionary<string, List<string>> categories)
@@ -651,6 +669,12 @@ namespace XrmToolBox.New
             var logo = GetImage(Options.Instance.DisplayLargeIcons ? ti.Metadata.BigImageBase64 : ti.Metadata.BigImageBase64, !Options.Instance.DisplayLargeIcons);
             var time = new FileInfo(ti.Metadata.AssemblyFilename).CreationTime;
 
+            if (CustomTheme.Instance.IsActive)
+            {
+                pnlToolsList.BackColor = CustomTheme.Instance.Background1;
+                lvTools.BackColor = CustomTheme.Instance.Background1;
+            }
+
             int myOffSet = 0;
             if (e.Item.Selected)
             {
@@ -671,9 +695,9 @@ namespace XrmToolBox.New
             {
                 if (Options.Instance.DoNotUseToolColors)
                 {
-                    backColor = Color.White;
-                    primaryColor = Color.Black;
-                    secondaryColor = Color.Gray;
+                    backColor = CustomTheme.Instance.IsActive ? CustomTheme.Instance.Background1 : Color.White;
+                    primaryColor = CustomTheme.Instance.IsActive ? CustomTheme.Instance.ForeColor1 : Color.Black;
+                    secondaryColor = CustomTheme.Instance.IsActive ? CustomTheme.Instance.ForeColor3 : Color.Gray;
                 }
                 e.Graphics.FillRectangle(new SolidBrush(backColor), new Rectangle(new Point(e.Bounds.X, e.Bounds.Y), new Size(e.Bounds.Width, e.Bounds.Height - 4)));
             }
@@ -980,11 +1004,7 @@ namespace XrmToolBox.New
             if (e.KeyData == Keys.Enter)
             {
                 var name = ((TextBox)sender).Text.ToLower();
-                var plugin = pluginsManager.ValidatedPluginsExt.FirstOrDefault(p => p.Metadata.Name.ToLower() == name);
-                if (plugin == null)
-                {
-                    plugin = pluginsManager.ValidatedPluginsExt.FirstOrDefault(p => p.Metadata.Name.ToLower().Contains(name));
-                }
+                var plugin = pluginsManager.ValidatedPluginsExt.FirstOrDefault(p => p.Metadata.Name.ToLower().Contains(name));
 
                 if (plugin != null)
                 {

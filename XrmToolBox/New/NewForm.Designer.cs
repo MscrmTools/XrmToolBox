@@ -118,6 +118,7 @@ namespace XrmToolBox.New
             this.llCloseToolLibraryNotAvailPanel = new System.Windows.Forms.LinkLabel();
             this.pbToolLibraryError = new System.Windows.Forms.PictureBox();
             this.checkForUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.tsMain.SuspendLayout();
             this.pnlSupport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -143,7 +144,8 @@ namespace XrmToolBox.New
             this.tssOpenOrg,
             this.tsbOpenOrg,
             this.tsbOpenMaker,
-            this.tsbImpersonate});
+            this.tsbImpersonate,
+            this.toolStripButton1});
             this.tsMain.Location = new System.Drawing.Point(0, 0);
             this.tsMain.Name = "tsMain";
             this.tsMain.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
@@ -186,7 +188,7 @@ namespace XrmToolBox.New
             // 
             this.tsmiNameWindowLabel.Enabled = false;
             this.tsmiNameWindowLabel.Name = "tsmiNameWindowLabel";
-            this.tsmiNameWindowLabel.Size = new System.Drawing.Size(295, 22);
+            this.tsmiNameWindowLabel.Size = new System.Drawing.Size(352, 34);
             this.tsmiNameWindowLabel.Text = "Name top level window:";
             // 
             // tsmiNameTopLevelWindow
@@ -194,13 +196,13 @@ namespace XrmToolBox.New
             this.tsmiNameTopLevelWindow.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.tsmiNameTopLevelWindow.MaxLength = 255;
             this.tsmiNameTopLevelWindow.Name = "tsmiNameTopLevelWindow";
-            this.tsmiNameTopLevelWindow.Size = new System.Drawing.Size(235, 23);
+            this.tsmiNameTopLevelWindow.Size = new System.Drawing.Size(235, 31);
             this.tsmiNameTopLevelWindow.TextChanged += new System.EventHandler(this.tsmiNameTopLevelWindow_TextChanged);
             // 
             // tssWindowsTopLevel
             // 
             this.tssWindowsTopLevel.Name = "tssWindowsTopLevel";
-            this.tssWindowsTopLevel.Size = new System.Drawing.Size(292, 6);
+            this.tssWindowsTopLevel.Size = new System.Drawing.Size(349, 6);
             // 
             // closeCurrentWindowToolStripMenuItem
             // 
@@ -927,6 +929,16 @@ namespace XrmToolBox.New
             this.checkForUpdateToolStripMenuItem.Text = "Check for update";
             this.checkForUpdateToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdateToolStripMenuItem_Click);
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(34, 29);
+            this.toolStripButton1.Text = "toolStripButton1";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
             // NewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1061,5 +1073,6 @@ namespace XrmToolBox.New
         private ToolStripMenuItem tsmiNameWindowLabel;
         private ToolStripTextBox tsmiNameTopLevelWindow;
         private ToolStripSeparator tssWindowsTopLevel;
+        private ToolStripButton toolStripButton1;
     }
 }

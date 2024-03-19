@@ -565,6 +565,9 @@ Would you like to reinstall last stable release of connection controls?";
                         {
                             var theme = new VS2015DarkTheme();
                             dpMain.Theme = theme;
+
+                            CustomTheme.Instance.SetTheme(new DarkTheme());
+                            CustomTheme.Instance.ApplyTheme(this);
                         }
                         break;
                 }
@@ -1863,7 +1866,7 @@ Would you like to reinstall last stable release of connection controls?";
             if (defaultSearchTerm != null)
             {
                 libraryForm.SetSearchTerm(defaultSearchTerm);
-            } 
+            }
             libraryForm.Show(dpMain, DockState.Document);
         }
 
@@ -2190,6 +2193,11 @@ Would you like to reinstall last stable release of connection controls?";
         {
             pnlPluginsUpdate.Visible = false;
             OpenPluginsStore(true);
+        }
+
+        private void toolStripButton1_Click(object sender, System.EventArgs e)
+        {
+            CustomTheme.Instance.ApplyTheme(this);
         }
     }
 }

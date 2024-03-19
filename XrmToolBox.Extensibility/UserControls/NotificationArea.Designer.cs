@@ -91,6 +91,7 @@
             this.lblMessage.Size = new System.Drawing.Size(82, 20);
             this.lblMessage.TabIndex = 6;
             this.lblMessage.Text = "[Message]";
+            this.lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // NotificationArea
             // 

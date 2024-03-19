@@ -177,6 +177,8 @@
     <Compile Include="Args\DuplicateToolArgs.cs" />
     <Compile Include="Args\DuplicateToolWithConnectionArgs.cs" />
     <Compile Include="Args\StatusBarMessageEventArgs.cs" />
+    <Compile Include="DarkTheme.cs" />
+    <Compile Include="CustomTheme.cs" />
     <Compile Include="Extensions.cs">
       <SubType>Code</SubType>
     </Compile>
