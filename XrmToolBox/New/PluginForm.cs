@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.Controls;
@@ -39,7 +40,6 @@ namespace XrmToolBox.New
             {
                 mcp.AdditionalConnectionDetails.CollectionChanged += AdditionalConnectionDetails_CollectionChanged;
             }
-            DisplayHighlight(pluginControlBase.ConnectionDetail);
 
             if (pluginControlBase is IStatusBarMessenger statusBarMessenger)
             {
@@ -56,6 +56,19 @@ namespace XrmToolBox.New
                             pluginControlBase.ConnectionDetail.ImpersonatedUserName));
                 }
             }
+
+            CustomTheme.Instance.ApplyTheme(this);
+            DisplayHighlight(pluginControlBase.ConnectionDetail);
+
+            Task.Factory.StartNew(() =>
+			{
+				System.Threading.Thread.Sleep(TimeSpan.FromSeconds(5));
+
+				this.Invoke((MethodInvoker)delegate
+				{
+					CustomTheme.Instance.ApplyTheme(this);
+				});
+			});
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;

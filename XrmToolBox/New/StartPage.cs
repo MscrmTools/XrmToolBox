@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.AppCode;
+using XrmToolBox.Extensibility;
 using XrmToolBox.Forms;
 using XrmToolBox.New.EventArgs;
 
@@ -24,6 +25,8 @@ namespace XrmToolBox.New
 
             this.pManager = pManager;
             chkDoNotShowAtStartup.Checked = Options.Instance.DoNotShowStartPage;
+
+            CustomTheme.Instance.ApplyTheme(this);
         }
 
         public event EventHandler OpenConnectionsManagementRequested;
