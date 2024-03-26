@@ -169,6 +169,8 @@ Please start XrmToolBox again to fix this problem",
         /// </summary>
         private static void InitializePluginsFolder()
         {
+            //TODO: don't early return. Somehow optionally run this in debug mode? (If XRM Toolbox is open elsewhere)
+            return;
             if (!Directory.Exists(Paths.PluginsPath))
             {
                 Directory.CreateDirectory(Paths.PluginsPath);
