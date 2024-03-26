@@ -67,7 +67,7 @@ namespace XrmToolBox.Extensibility
 
             //Update plugins that have custom controls + extra logic
             UpdateSql4CDSTheme(control);
-            UpdateFetchXmlTheme(control);
+            UpdateFetchXmlBuilderTheme(control);
             UpdatePluginRegistrationTheme(control);
             //TODO - support more plugins here...
 
@@ -143,8 +143,17 @@ namespace XrmToolBox.Extensibility
                 }
             }
         }
+        //TODO: Use more properties from subclass (ex: 'DarkTheme')
         private void UpdateSql4CDSTheme(Control control)
         {
+            //No need to update theme if not in dark mode.
+            //TODO: More checks for other types of themes?
+            if (GetType() != typeof(DarkTheme))
+            {
+                return;
+            }
+
+            //Theme main editor
             if (control is Scintilla scintilla)
             {
                 var darkGrey = Background1;
@@ -205,8 +214,10 @@ namespace XrmToolBox.Extensibility
                 scintilla.Styles[Style.Sql.Operator].ForeColor = lightBlueGreen;
                 scintilla.Styles[Style.Sql.Operator].BackColor = darkGrey;
             }
+
+            //TODO: Theme result set window
         }
-        private void UpdateFetchXmlTheme(Control control)
+        private void UpdateFetchXmlBuilderTheme(Control control)
         {
             //TODO
         }
