@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScintillaNET;
+using System;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -63,6 +64,12 @@ namespace XrmToolBox.Extensibility
         {
             control.ForeColor = ForeColor1;
             control.BackColor = Background1;
+
+            //Update plugins that have custom controls + extra logic
+            UpdateSql4CDSTheme(control);
+            UpdateFetchXmlTheme(control);
+            UpdatePluginRegistrationTheme(control);
+            //TODO - support more plugins here...
 
             if (control is TextBox
                 || control is ComboBox
@@ -135,6 +142,77 @@ namespace XrmToolBox.Extensibility
                     UpdateDropdownItemsTheme(tsddb.DropDownItems);
                 }
             }
+        }
+        private void UpdateSql4CDSTheme(Control control)
+        {
+            if (control is Scintilla scintilla)
+            {
+                var darkGrey = Background1;
+                var lightGrey = Color.FromArgb(255, 170, 170, 170);
+                var lightGreen = Color.FromArgb(255, 84, 198, 82);
+                var lightRed = Color.FromArgb(255, 235, 117, 120);
+                var lightPurple = Color.FromArgb(255, 200, 120, 255);
+                var lightBlueGreen = Color.FromArgb(255, 127, 219, 255);
+                var orange = Color.FromArgb(255, 214, 93, 14);
+
+                scintilla.StyleResetDefault();
+
+                scintilla.CaretForeColor = Color.White;
+                scintilla.CaretLineBackColor = darkGrey;
+
+                scintilla.Styles[Style.Default].BackColor = darkGrey;
+                scintilla.Styles[Style.Default].ForeColor = darkGrey;
+
+                scintilla.Styles[Style.LineNumber].ForeColor = lightGrey;
+                scintilla.Styles[Style.LineNumber].BackColor = darkGrey;
+
+                scintilla.Styles[Style.Sql.Default].BackColor = darkGrey;
+                scintilla.Styles[Style.Sql.Default].BackColor = darkGrey;
+
+                scintilla.Styles[Style.Sql.Comment].ForeColor = lightGreen;
+                scintilla.Styles[Style.Sql.Comment].BackColor = darkGrey;
+
+                scintilla.Styles[Style.Sql.CommentLine].ForeColor = lightGreen;
+                scintilla.Styles[Style.Sql.CommentLine].BackColor = darkGrey;
+
+                scintilla.Styles[Style.Sql.CommentLineDoc].ForeColor = lightGreen;
+                scintilla.Styles[Style.Sql.CommentLineDoc].BackColor = darkGrey;
+
+                scintilla.Styles[Style.Sql.Number].ForeColor = lightRed;
+                scintilla.Styles[Style.Sql.Number].BackColor = darkGrey;
+
+                scintilla.Styles[Style.Sql.Word].ForeColor = lightPurple;
+                scintilla.Styles[Style.Sql.Word].BackColor = darkGrey;
+
+                scintilla.Styles[Style.Sql.Word2].ForeColor = lightPurple;
+                scintilla.Styles[Style.Sql.Word2].BackColor = darkGrey;
+
+                scintilla.Styles[Style.Sql.Identifier].ForeColor = Color.White;
+                scintilla.Styles[Style.Sql.Identifier].BackColor = darkGrey;
+
+                scintilla.Styles[Style.Sql.User1].ForeColor = lightGrey;
+                scintilla.Styles[Style.Sql.User1].BackColor = darkGrey;
+
+                scintilla.Styles[Style.Sql.User2].ForeColor = lightBlueGreen;
+                scintilla.Styles[Style.Sql.User2].BackColor = darkGrey;
+
+                scintilla.Styles[Style.Sql.String].ForeColor = orange;
+                scintilla.Styles[Style.Sql.String].BackColor = darkGrey;
+
+                scintilla.Styles[Style.Sql.Character].ForeColor = orange;
+                scintilla.Styles[Style.Sql.Character].BackColor = darkGrey;
+
+                scintilla.Styles[Style.Sql.Operator].ForeColor = lightBlueGreen;
+                scintilla.Styles[Style.Sql.Operator].BackColor = darkGrey;
+            }
+        }
+        private void UpdateFetchXmlTheme(Control control)
+        {
+            //TODO
+        }
+        private void UpdatePluginRegistrationTheme(Control control)
+        {
+            //TODO
         }
     }
 }
