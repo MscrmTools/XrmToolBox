@@ -59,16 +59,6 @@ namespace XrmToolBox.New
 
             CustomTheme.Instance.ApplyTheme(this);
             DisplayHighlight(pluginControlBase.ConnectionDetail);
-
-            Task.Factory.StartNew(() =>
-			{
-				System.Threading.Thread.Sleep(TimeSpan.FromSeconds(5));
-
-				this.Invoke((MethodInvoker)delegate
-				{
-					CustomTheme.Instance.ApplyTheme(this);
-				});
-			});
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;

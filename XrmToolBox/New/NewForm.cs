@@ -2195,7 +2195,7 @@ Would you like to reinstall last stable release of connection controls?";
             OpenPluginsStore(true);
         }
 
-        private void toolStripButton1_Click(object sender, System.EventArgs e)
+        private void darkModeButton_Click(object sender, System.EventArgs e)
         {
             CustomTheme.Instance.ApplyTheme(this);
         }

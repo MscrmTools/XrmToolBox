@@ -196,7 +196,7 @@ namespace XrmToolBox.Extensibility
                 scintilla.Styles[Style.Sql.Word2].ForeColor = lightPurple;
                 scintilla.Styles[Style.Sql.Word2].BackColor = darkGrey;
 
-                scintilla.Styles[Style.Sql.Identifier].ForeColor = Color.White;
+                scintilla.Styles[Style.Sql.Identifier].ForeColor = lightGrey;
                 scintilla.Styles[Style.Sql.Identifier].BackColor = darkGrey;
 
                 scintilla.Styles[Style.Sql.User1].ForeColor = lightGrey;
@@ -220,6 +220,14 @@ namespace XrmToolBox.Extensibility
         private void UpdateFetchXmlBuilderTheme(Control control)
         {
             //TODO
+            if (control is Scintilla scintilla)
+            {
+                var lightGrey = Color.FromArgb(255, 170, 170, 170);
+                scintilla.Styles[Style.Xml.Attribute].BackColor = Background1;
+                scintilla.Styles[Style.Xml.Default].BackColor = Background1;
+                scintilla.Styles[Style.Xml.Other].BackColor = Background1;
+                scintilla.Styles[Style.Xml.Other].ForeColor = lightGrey;
+            }
         }
         private void UpdatePluginRegistrationTheme(Control control)
         {
