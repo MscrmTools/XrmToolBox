@@ -213,9 +213,41 @@ namespace XrmToolBox.Extensibility
 
                 scintilla.Styles[Style.Sql.Operator].ForeColor = lightBlueGreen;
                 scintilla.Styles[Style.Sql.Operator].BackColor = darkGrey;
+
+                scintilla.SetKeywords(0, "select top from where is null");
+
+                scintilla.SetSelectionBackColor(true, Color.FromArgb(50, 50, 50));
             }
 
-            //TODO: Theme result set window
+            if (control is DataGridView dataGridView)
+			{
+				dataGridView.BackgroundColor = Background1;
+
+				dataGridView.GridColor = Color.FromArgb(85, 85, 85);
+
+				dataGridView.DefaultCellStyle.ForeColor = Color.White;
+				dataGridView.DefaultCellStyle.BackColor = Color.FromArgb(44, 44, 44);
+
+				dataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(64, 64, 64);
+				dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+
+				dataGridView.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(64, 64, 64);
+
+				dataGridView.RowsDefaultCellStyle.BackColor = Color.FromArgb(44, 44, 44);
+				dataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(53, 53, 53);
+
+				dataGridView.CellFormatting += (sender, e) =>
+				{
+					if (e.Value == null ||
+						e.Value == DBNull.Value ||
+						e.Value.ToString().Trim() == "NULL")
+					{
+						e.CellStyle.ForeColor = Color.White;
+						e.CellStyle.BackColor = Color.FromArgb(44, 44, 44);
+					}
+
+				};
+			}
         }
         private void UpdateFetchXmlBuilderTheme(Control control)
         {
