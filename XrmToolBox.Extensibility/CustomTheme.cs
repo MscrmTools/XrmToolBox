@@ -214,7 +214,7 @@ namespace XrmToolBox.Extensibility
                 scintilla.Styles[Style.Sql.Operator].ForeColor = lightBlueGreen;
                 scintilla.Styles[Style.Sql.Operator].BackColor = darkGrey;
 
-                scintilla.SetKeywords(0, "select top from where is null");
+                scintilla.SetKeywords(0, "select top from where is null update set count in and max min sum having not left join inner right on or distinct order by delete group desc asc like");
 
                 scintilla.SetSelectionBackColor(true, Color.FromArgb(50, 50, 50));
             }

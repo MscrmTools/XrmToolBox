@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
+using XrmToolBox.AppCode;
 using XrmToolBox.Controls;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
@@ -59,26 +60,9 @@ namespace XrmToolBox.New
 
             CustomTheme.Instance.ApplyTheme(this);
 
-            foreach (Control c in Controls)
-			{
-				c.ControlAdded += RecursiveThemeCallback;
+            var allControls = this.GetAllControls();
 
-				RecursiveThemeAddCallback(c);
-			}
-
-            Task.Factory.StartNew(() =>
-            {
-                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(5));
-                Invoke((MethodInvoker)delegate
-                {
-                    foreach (Control c in Controls)
-                    {
-                        c.ControlAdded += RecursiveThemeCallback;
-
-                        RecursiveThemeAddCallback(c);
-                    }
-                });
-            });
+            ThemeHelpers.ApplyThemeCallbacks(allControls, this);
 
             DisplayHighlight(pluginControlBase.ConnectionDetail);
         }
@@ -430,25 +414,5 @@ namespace XrmToolBox.New
                 Mi();
             }
         }
-        void RecursiveThemeCallback(object sender, ControlEventArgs e)
-		{
-			CustomTheme.Instance.ApplyTheme(this);
-
-			e.Control.ControlAdded += RecursiveThemeCallback;
-
-			foreach (Control c in e.Control.Controls)
-			{
-				c.ControlAdded += RecursiveThemeCallback;
-			}
-		}
-		void RecursiveThemeAddCallback(Control control)
-		{
-			foreach (Control c in control.Controls)
-			{
-				c.ControlAdded += RecursiveThemeCallback;
-
-				RecursiveThemeAddCallback(c);
-			}
-		}
     }
 }

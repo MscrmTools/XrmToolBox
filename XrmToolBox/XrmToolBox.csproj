@@ -260,6 +260,7 @@
     <Compile Include="AppCode\ReleasesDTO.cs" />
     <Compile Include="AppCode\SettingsPropertyEventArgs.cs" />
     <Compile Include="AppCode\SettingsPropertyInfo.cs" />
+    <Compile Include="AppCode\ThemeHelpers.cs" />
     <Compile Include="AppCode\WebProxyHelper.cs" />
     <Compile Include="ConnectionParameterInfo.cs" />
     <Compile Include="Controls\AdvancedControl.cs">
@@ -827,7 +828,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_ConfigurationName="Release" />
+      <UserProperties BuildVersion_ConfigurationName="Release" BuildVersion_BuildVersioningStyle="None.YearStamp.MonthStamp.DayStamp" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

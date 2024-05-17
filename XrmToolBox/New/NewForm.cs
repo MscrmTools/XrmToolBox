@@ -2194,10 +2194,13 @@ Would you like to reinstall last stable release of connection controls?";
             pnlPluginsUpdate.Visible = false;
             OpenPluginsStore(true);
         }
-
-        private void darkModeButton_Click(object sender, System.EventArgs e)
+        private void ApplyThemeButton_Click(object sender, System.EventArgs e)
         {
             CustomTheme.Instance.ApplyTheme(this);
+
+            var allControls = this.GetAllControls();
+
+            ThemeHelpers.ApplyThemeCallbacks(allControls, this);
         }
     }
 }

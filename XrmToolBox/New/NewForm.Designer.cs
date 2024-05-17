@@ -933,10 +933,10 @@ namespace XrmToolBox.New
             // 
             this.darkModeButton.Image = global::XrmToolBox.Properties.Resources.moon;
             this.darkModeButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.darkModeButton.Name = "darkMode";
+            this.darkModeButton.Name = "applyTheme";
             this.darkModeButton.Size = new System.Drawing.Size(34, 29);
-            this.darkModeButton.Text = "Dark Mode";
-            this.darkModeButton.Click += new System.EventHandler(this.darkModeButton_Click);
+            this.darkModeButton.Text = "Apply Theme";
+            this.darkModeButton.Click += new System.EventHandler(this.ApplyThemeButton_Click);
             // 
             // NewForm
             // 

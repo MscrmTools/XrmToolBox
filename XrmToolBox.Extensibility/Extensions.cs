@@ -101,5 +101,21 @@ namespace XrmToolBox.Extensibility
         {
             return assembly.GetCustomAttributes(attributeType, true)[0];
         }
+		public static List<Control> GetAllControls(this Control page)
+		{
+			List<Control> controlList = new List<Control>();
+
+			foreach (Control c in page.Controls)
+			{
+				controlList.Add(c);
+
+				//if (c.HasChildren)
+				//{
+				//	controlList.AddRange(GetAllControls(c));
+				//}
+			}
+
+			return controlList;
+		}
     }
 }
