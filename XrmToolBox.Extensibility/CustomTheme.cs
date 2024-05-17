@@ -153,6 +153,17 @@ namespace XrmToolBox.Extensibility
                 return;
             }
 
+            if (
+                control?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.CompanyName != "MarkMpn.Sql4Cds.XTB" &&
+                control?.Parent?.Parent?.Parent?.CompanyName != "MarkMpn.Sql4Cds.XTB" &&
+                control?.Parent?.Parent?.CompanyName != "MarkMpn.Sql4Cds.XTB" &&
+                control?.Parent?.CompanyName != "MarkMpn.Sql4Cds.XTB" &&
+                control?.CompanyName != "MarkMpn.Sql4Cds.XTB"
+                )
+            {
+                return;
+            }
+
             //Theme main editor
             if (control is Scintilla scintilla)
             {
@@ -251,6 +262,11 @@ namespace XrmToolBox.Extensibility
         }
         private void UpdateFetchXmlBuilderTheme(Control control)
         {
+            if (control?.Parent?.CompanyName != "Jonas Rapp, Sweden" && control?.CompanyName != "Jonas Rapp, Sweden")
+            {
+                return;
+            }
+
             //TODO
             if (control is Scintilla scintilla)
             {
