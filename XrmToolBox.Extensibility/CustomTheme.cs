@@ -402,8 +402,6 @@ namespace XrmToolBox.Extensibility
 				propertyGrid.SelectedItemWithFocusForeColor = selectedItemForegroundColor;
             }
 
-            Debug.WriteLine($"control is: {control.GetType()}");
-
             if (control is DataGridView dataGridView)
 			{
 				dataGridView.BackgroundColor = Background1;
