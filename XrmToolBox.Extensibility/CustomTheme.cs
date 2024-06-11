@@ -1,5 +1,6 @@
 ﻿using ScintillaNET;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -372,7 +373,68 @@ namespace XrmToolBox.Extensibility
         }
         private void UpdatePluginRegistrationTheme(Control control)
         {
-            //TODO
+            if (control?.Parent?.CompanyName != "Microsoft Corporation" && control?.CompanyName != "Microsoft Corporation")
+            {
+                return;
+            }
+
+			var backgroundColor = Color.FromArgb(30, 30, 30);
+			var foregroundColor = Color.FromArgb(220, 220, 220);
+			var lineColor = Color.FromArgb(45, 45, 45); 
+			var categoryForeColor = Color.FromArgb(200, 200, 200);
+			var helpBackgroundColor = Color.FromArgb(30, 30, 30); 
+			var helpForegroundColor = Color.FromArgb(220, 220, 220);
+			var selectedItemBackgroundColor = Color.FromArgb(75, 75, 75);
+			var selectedItemForegroundColor = Color.FromArgb(255, 255, 255); 
+
+            if (control is PropertyGrid propertyGrid)
+            {
+				propertyGrid.BackColor = backgroundColor;
+				propertyGrid.ForeColor = foregroundColor;
+				propertyGrid.ViewBackColor = backgroundColor;
+				propertyGrid.ViewForeColor = foregroundColor;
+				propertyGrid.LineColor = lineColor;
+				propertyGrid.CategoryForeColor = categoryForeColor;
+				propertyGrid.HelpBackColor = helpBackgroundColor;
+				propertyGrid.HelpForeColor = helpForegroundColor;
+				propertyGrid.SelectedItemWithFocusBackColor = selectedItemBackgroundColor;
+				propertyGrid.SelectedItemWithFocusForeColor = selectedItemForegroundColor;
+            }
+
+            Debug.WriteLine($"control is: {control.GetType()}");
+
+            if (control is DataGridView dataGridView)
+			{
+				dataGridView.BackgroundColor = Background1;
+
+				dataGridView.GridColor = Color.FromArgb(85, 85, 85);
+
+				dataGridView.DefaultCellStyle.ForeColor = foregroundColor;
+				dataGridView.DefaultCellStyle.BackColor = Color.FromArgb(44, 44, 44);
+
+				dataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(64, 64, 64);
+				dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+
+				dataGridView.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(64, 64, 64);
+
+				dataGridView.RowsDefaultCellStyle.BackColor = Color.FromArgb(44, 44, 44);
+				dataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(53, 53, 53);
+
+                dataGridView.BorderStyle = BorderStyle.None;
+				dataGridView.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+				dataGridView.EnableHeadersVisualStyles = false;
+
+				dataGridView.CellFormatting += (sender, e) =>
+				{
+					if (e.Value == null ||
+						e.Value == DBNull.Value ||
+						e.Value.ToString().Trim() == "NULL")
+					{
+						e.CellStyle.ForeColor = Color.White;
+						e.CellStyle.BackColor = Color.FromArgb(44, 44, 44);
+					}
+				};
+			}
         }
     }
 }
