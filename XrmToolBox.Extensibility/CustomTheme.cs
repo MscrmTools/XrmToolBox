@@ -256,7 +256,6 @@ namespace XrmToolBox.Extensibility
 						e.CellStyle.ForeColor = Color.White;
 						e.CellStyle.BackColor = Color.FromArgb(44, 44, 44);
 					}
-
 				};
 			}
         }
@@ -267,15 +266,109 @@ namespace XrmToolBox.Extensibility
                 return;
             }
 
-            //TODO
             if (control is Scintilla scintilla)
             {
+                var darkGrey = Background1;
                 var lightGrey = Color.FromArgb(255, 170, 170, 170);
-                scintilla.Styles[Style.Xml.Attribute].BackColor = Background1;
-                scintilla.Styles[Style.Xml.Default].BackColor = Background1;
-                scintilla.Styles[Style.Xml.Other].BackColor = Background1;
+                var background1 = Color.FromArgb(30, 30, 30);
+                var foreground1 = Color.FromArgb(220, 220, 220);  
+                var commentColor = Color.FromArgb(87, 166, 74); 
+                var tagColor = Color.FromArgb(78, 201, 176);
+                var attributeColor = Color.FromArgb(156, 220, 254); 
+                var valueColor = Color.FromArgb(214, 157, 133); 
+
+                scintilla.StyleResetDefault();
+
+                scintilla.CaretForeColor = Color.White;
+                scintilla.CaretLineBackColor = darkGrey;
+
+                scintilla.BackColor = background1;
+
+                scintilla.Styles[Style.Xml.Attribute].BackColor = background1;
+                scintilla.Styles[Style.Xml.Attribute].ForeColor = attributeColor;
+
+                scintilla.Styles[Style.Xml.Default].BackColor = background1;
+                scintilla.Styles[Style.Xml.Default].ForeColor = foreground1;
+
+                scintilla.Styles[Style.Xml.Comment].BackColor = background1;
+                scintilla.Styles[Style.Xml.Comment].ForeColor = commentColor;
+
+                scintilla.Styles[Style.Xml.Tag].BackColor = background1;
+                scintilla.Styles[Style.Xml.Tag].ForeColor = tagColor;
+
+                scintilla.Styles[Style.Xml.TagUnknown].BackColor = background1;
+                scintilla.Styles[Style.Xml.TagUnknown].ForeColor = tagColor;
+
+                scintilla.Styles[Style.Xml.AttributeUnknown].BackColor = background1;
+                scintilla.Styles[Style.Xml.AttributeUnknown].ForeColor = attributeColor;
+
+                scintilla.Styles[Style.Xml.CData].BackColor = background1;
+                scintilla.Styles[Style.Xml.CData].ForeColor = foreground1;
+
+                scintilla.Styles[Style.Xml.Entity].BackColor = background1;
+                scintilla.Styles[Style.Xml.Entity].ForeColor = foreground1;
+
+                scintilla.Styles[Style.Xml.Other].BackColor = background1;
                 scintilla.Styles[Style.Xml.Other].ForeColor = lightGrey;
+
+                scintilla.Styles[Style.Xml.Comment].BackColor = background1;
+                scintilla.Styles[Style.Xml.Comment].ForeColor = commentColor;
+
+                scintilla.Styles[Style.Xml.Number].BackColor = background1;
+                scintilla.Styles[Style.Xml.Number].ForeColor = valueColor;
+
+                scintilla.Styles[Style.Xml.DoubleString].BackColor = background1;
+                scintilla.Styles[Style.Xml.DoubleString].ForeColor = valueColor;
+
+                scintilla.Styles[Style.Xml.SingleString].BackColor = background1;
+                scintilla.Styles[Style.Xml.SingleString].ForeColor = valueColor;
+
+                scintilla.Styles[Style.Default].BackColor = darkGrey;
+                scintilla.Styles[Style.Default].ForeColor = darkGrey;
+
+                scintilla.Styles[Style.LineNumber].ForeColor = lightGrey;
+                scintilla.Styles[Style.LineNumber].BackColor = darkGrey;
+
+                scintilla.Styles[Style.Xml.TagEnd].BackColor = background1;
+                scintilla.Styles[Style.Xml.TagEnd].ForeColor = tagColor;
+
+                scintilla.SetSelectionBackColor(true, Color.FromArgb(50, 50, 50));
+
+                scintilla.Margins[2].BackColor = background1;
+
+                scintilla.SetFoldMarginColor(true, background1);
+                scintilla.SetFoldMarginHighlightColor(true, background1);
+
             }
+
+            if (control is DataGridView dataGridView)
+			{
+				dataGridView.BackgroundColor = Background1;
+
+				dataGridView.GridColor = Color.FromArgb(85, 85, 85);
+
+				dataGridView.DefaultCellStyle.ForeColor = Color.White;
+				dataGridView.DefaultCellStyle.BackColor = Color.FromArgb(44, 44, 44);
+
+				dataGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(64, 64, 64);
+				dataGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+
+				dataGridView.RowHeadersDefaultCellStyle.BackColor = Color.FromArgb(64, 64, 64);
+
+				dataGridView.RowsDefaultCellStyle.BackColor = Color.FromArgb(44, 44, 44);
+				dataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(53, 53, 53);
+
+				dataGridView.CellFormatting += (sender, e) =>
+				{
+					if (e.Value == null ||
+						e.Value == DBNull.Value ||
+						e.Value.ToString().Trim() == "NULL")
+					{
+						e.CellStyle.ForeColor = Color.White;
+						e.CellStyle.BackColor = Color.FromArgb(44, 44, 44);
+					}
+				};
+			}
         }
         private void UpdatePluginRegistrationTheme(Control control)
         {
