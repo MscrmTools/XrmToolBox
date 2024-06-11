@@ -70,6 +70,7 @@ namespace XrmToolBox.Extensibility
             UpdateSql4CDSTheme(control);
             UpdateFetchXmlBuilderTheme(control);
             UpdatePluginRegistrationTheme(control);
+            UpdatePluginTraceViewerTheme(control);
             //TODO - support more plugins here...
 
             if (control is TextBox
@@ -435,6 +436,9 @@ namespace XrmToolBox.Extensibility
 					}
 				};
 			}
+        }
+        private void UpdatePluginTraceViewerTheme(Control control)
+        {
         }
     }
 }
