@@ -268,7 +268,11 @@ Current cache folder size: {size}MB";
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(llToolProjectUrl.Text);
+            if (Uri.IsWellFormedUriString(llToolProjectUrl.Text, UriKind.Absolute)) 
+            {
+                Process.Start(llToolProjectUrl.Text);
+            }
+            
         }
 
         private void llRatePlugin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
