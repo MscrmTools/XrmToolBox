@@ -156,6 +156,7 @@ namespace XrmToolBox.Extensibility
             }
 
             if (
+                control?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.CompanyName != "MarkMpn.Sql4Cds.XTB" &&
                 control?.Parent?.Parent?.Parent?.Parent?.Parent?.Parent?.CompanyName != "MarkMpn.Sql4Cds.XTB" &&
                 control?.Parent?.Parent?.Parent?.CompanyName != "MarkMpn.Sql4Cds.XTB" &&
                 control?.Parent?.Parent?.CompanyName != "MarkMpn.Sql4Cds.XTB" &&
