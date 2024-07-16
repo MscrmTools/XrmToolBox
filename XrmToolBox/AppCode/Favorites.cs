@@ -13,6 +13,7 @@ namespace XrmToolBox.AppCode
     {
         public Guid ConnectionId { get; set; }
         public string ConnectionName { get; set; }
+        public string ConnectionFileName { get; set; }
         public string PluginName { get; set; }
     }
 

@@ -729,6 +729,7 @@ Would you like to reinstall last stable release of connection controls?";
                 {
                     mruItem.ConnectionId = connectionDetail.ConnectionId ?? Guid.Empty;
                     mruItem.ConnectionName = connectionDetail.ConnectionName;
+                    mruItem.ConnectionFileName = connectionDetail.ParentConnectionFile?.Name;
 
                     if (connectionDetail.IsFromSdkLoginCtrl)
                     {
@@ -1863,7 +1864,7 @@ Would you like to reinstall last stable release of connection controls?";
             if (defaultSearchTerm != null)
             {
                 libraryForm.SetSearchTerm(defaultSearchTerm);
-            } 
+            }
             libraryForm.Show(dpMain, DockState.Document);
         }
 

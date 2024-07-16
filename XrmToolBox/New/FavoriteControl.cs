@@ -47,7 +47,7 @@ namespace XrmToolBox.New
         private void MostRecentlyUsedItemControl_Load(object sender, System.EventArgs e)
         {
             lblPlugin.Text = item.PluginName;
-            lblConnectionName.Text = item.ConnectionName;
+            lblConnectionName.Text = $"{(Options.Instance.ShowConnectionFileNameInMru && item.ConnectionFileName?.Length > 0 ? item.ConnectionFileName + " - " : "")}{item.ConnectionName}";
 
             if (!string.IsNullOrEmpty(base64Image))
             {

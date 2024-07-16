@@ -24,6 +24,14 @@ namespace XrmToolBox.New
 
             this.pManager = pManager;
             chkDoNotShowAtStartup.Checked = Options.Instance.DoNotShowStartPage;
+
+            Options.Instance.OnSettingsChanged += (sender, args) =>
+            {
+                if (args.PropertyName == "ShowConnectionFileNameInMru")
+                {
+                    LoadMru();
+                }
+            };
         }
 
         public event EventHandler OpenConnectionsManagementRequested;
