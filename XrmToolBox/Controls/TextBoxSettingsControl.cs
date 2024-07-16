@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
+using XrmToolBox.Extensibility;
 
 namespace XrmToolBox.Controls
 {
@@ -24,6 +25,8 @@ namespace XrmToolBox.Controls
             InitializeComponent();
 
             Options.Instance.OnSettingsChanged += Instance_OnSettingsChanged;
+
+            CustomTheme.Instance.ApplyTheme(this);
         }
 
         public event EventHandler<SettingsPropertyEventArgs> OnSettingsPropertyChanged;
@@ -80,7 +83,7 @@ namespace XrmToolBox.Controls
                 lblDescription.Height = TextRenderer.MeasureText(lblDescription.Text, lblDescription.Font).Height;
             }
 
-            Height = lblTitle.Height + txtText.Height + lblDescription.Height;
+            Height = lblTitle.Height + txtText.Height + lblDescription.Height + 10;
 
             loaded = true;
         }
@@ -121,7 +124,7 @@ namespace XrmToolBox.Controls
             {
                 rg = new Regex(ValidationRegEx);
 
-                txtText.ForeColor = rg.IsMatch(txtText.Text) ? SystemColors.ControlText : Color.Red;
+                txtText.ForeColor = rg.IsMatch(txtText.Text) ? (CustomTheme.Instance.IsActive ? CustomTheme.Instance.ForeColor2 : SystemColors.ControlText) : Color.Red;
             }
         }
     }

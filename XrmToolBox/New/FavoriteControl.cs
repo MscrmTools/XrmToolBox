@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
+using XrmToolBox.Extensibility;
 using XrmToolBox.New.EventArgs;
 using Timer = System.Timers.Timer;
 
@@ -24,6 +25,8 @@ namespace XrmToolBox.New
 
             this.item = item;
             this.base64Image = base64Image;
+
+            OnMouseLeave(this, new System.EventArgs());
         }
 
         public event EventHandler<OpenFavoritePluginEventArgs> OpenFavoritePluginRequested;
@@ -86,9 +89,24 @@ namespace XrmToolBox.New
 
         private void OnMouseEnter(object sender, System.EventArgs e)
         {
-            pbLogo.BackColor = Color.AliceBlue;
-            lblPlugin.BackColor = Color.AliceBlue;
-            BackColor = Color.AliceBlue;
+            if (CustomTheme.Instance.IsActive)
+            {
+                pbLogo.BackColor = CustomTheme.Instance.HighlightColor;
+                lblPlugin.BackColor = CustomTheme.Instance.HighlightColor;
+                BackColor = CustomTheme.Instance.HighlightColor;
+                lblConnectionName.BackColor = CustomTheme.Instance.HighlightColor;
+                lblConnectionName.ForeColor = CustomTheme.Instance.ForeColor5;
+                lblPlugin.ForeColor = CustomTheme.Instance.ForeColor5;
+            }
+            else
+            {
+                lblConnectionName.BackColor = Color.AliceBlue;
+                pbLogo.BackColor = Color.AliceBlue;
+                lblPlugin.BackColor = Color.AliceBlue;
+                BackColor = Color.AliceBlue;
+                lblConnectionName.ForeColor = Color.Gray;
+                lblPlugin.ForeColor = Color.Black;
+            }
         }
 
         private void OnMouseLeave(object sender, System.EventArgs e)
@@ -96,6 +114,18 @@ namespace XrmToolBox.New
             pbLogo.BackColor = Color.Transparent;
             lblPlugin.BackColor = Color.Transparent;
             BackColor = Color.Transparent;
+            lblConnectionName.BackColor = Color.Transparent;
+
+            if (CustomTheme.Instance.IsActive)
+            {
+                lblConnectionName.ForeColor = CustomTheme.Instance.ForeColor1;
+                lblPlugin.ForeColor = CustomTheme.Instance.ForeColor3;
+            }
+            else
+            {
+                lblConnectionName.ForeColor = Color.Gray;
+                lblPlugin.ForeColor = SystemColors.ControlText;
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using XrmToolBox.Extensibility;
 
 namespace XrmToolBox.Controls
 {
@@ -46,7 +47,7 @@ namespace XrmToolBox.Controls
                 base.OnTextChanged(e);
             }
 
-            ForeColor = SystemColors.ControlText;
+            ForeColor = CustomTheme.Instance.IsActive ? CustomTheme.Instance.ForeColor2 : SystemColors.ControlText;
         }
 
         private void TextBoxWithPlaceholder_Enter(object sender, EventArgs e)
@@ -56,7 +57,7 @@ namespace XrmToolBox.Controls
                 Tag = false;
                 silent = true;
                 Text = "";
-                ForeColor = SystemColors.ControlText;
+                ForeColor = CustomTheme.Instance.IsActive ? CustomTheme.Instance.ForeColor2 : SystemColors.ControlText;
                 silent = false;
             }
         }
@@ -73,7 +74,7 @@ namespace XrmToolBox.Controls
                 Tag = true;
                 silent = true;
                 Text = placeholder;
-                ForeColor = Color.LightGray;
+                ForeColor = CustomTheme.Instance.IsActive ? CustomTheme.Instance.ForeColor1 : Color.LightGray;
                 silent = false;
             }
         }
