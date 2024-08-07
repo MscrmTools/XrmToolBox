@@ -284,7 +284,7 @@ namespace XrmToolBox.ToolLibrary
             }
             else
             {
-                AddFilesToUpdate(cachePackagePath, pus, e.Plugin);
+                AddFilesToUpdate(cachePackagePath, string.Empty, pus, e.Plugin);
             }
         }
 
@@ -657,13 +657,14 @@ namespace XrmToolBox.ToolLibrary
             }
         }
 
-        private void AddFilesToUpdate(string folderPath, PluginUpdates pus, XtbPlugin tool)
+        private void AddFilesToUpdate(string cacheRootPath, string relativePath, PluginUpdates pus, XtbPlugin tool)
         {
+            var folderPath = Path.Combine(cacheRootPath, relativePath);
             foreach (var file in Directory.GetFiles(folderPath))
             {
                 var fileName = new FileInfo(file).Name;
                 var fullPath = Path.Combine(folderPath, fileName);
-                var destinationFile = Path.Combine(Paths.PluginsPath, fileName);
+                var destinationFile = Path.Combine(Paths.PluginsPath, relativePath, fileName);
 
                 // XrmToolBox restart is required when a plugin has to be
                 // updated or when a new plugin shares files with other
@@ -682,7 +683,7 @@ namespace XrmToolBox.ToolLibrary
 
             foreach (var directory in Directory.GetDirectories(folderPath))
             {
-                AddFilesToUpdate(directory, pus, tool);
+                AddFilesToUpdate(cacheRootPath, directory.Substring(cacheRootPath.Length + 1), pus, tool);
             }
         }
 
