@@ -101,7 +101,7 @@ namespace XrmToolBox.ToolLibrary.UserControls
 
                 var registrationData = httpClient.GetAsync(((JArray)jo["data"]).FirstOrDefault()["registration"].ToString()).GetAwaiter().GetResult().Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var rd = JObject.Parse(registrationData);
-                var versions = ((JArray)rd["items"]).SelectMany(va => (JArray)va["items"]);
+                var versions = ((JArray)rd["items"]).SelectMany(va => (JArray)va["items"]).Where(item => ((JObject)item["catalogEntry"])["listed"].Value<bool>() == true);
 
                 plugin.Versions = new List<XtbPluginVersion>();
 
