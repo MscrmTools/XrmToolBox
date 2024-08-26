@@ -2,11 +2,13 @@
 using System.Drawing;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
+using XrmToolBox.Extensibility;
 
 namespace XrmToolBox.Controls
 {
     public partial class NavLeftItem : UserControl
     {
+        private bool _hover;
         private bool _selected;
 
         public NavLeftItem()
@@ -17,6 +19,8 @@ namespace XrmToolBox.Controls
             GotFocus += NavLeftItem_GotFocus;
             LostFocus += NavLeftItem_LostFocus;
             KeyDown += NavLeftItem_KeyDown;
+            MouseHover += NavLeftItem_Enter;
+            MouseLeave += NavLeftItem_Leave;
         }
 
         public event EventHandler OnSelectedChanged;
@@ -43,16 +47,24 @@ namespace XrmToolBox.Controls
         }
 
         public bool SelectedOnFocus { get; set; }
+
         public bool UseCustomHighlightColor { get; set; }
 
         private void NavLeftItem_Click(object sender, EventArgs e)
         {
             Selected = !Selected;
+            Invalidate();
+        }
+
+        private void NavLeftItem_Enter(object sender, EventArgs e)
+        {
+            _hover = true;
+            Invalidate();
         }
 
         private void NavLeftItem_GotFocus(object sender, EventArgs e)
         {
-            BackColor = SystemColors.Highlight;
+            BackColor = CustomTheme.Instance.IsActive ? CustomTheme.Instance.HighlightColor : SystemColors.Highlight;
 
             if (SelectedOnFocus)
             {
@@ -68,16 +80,22 @@ namespace XrmToolBox.Controls
             }
         }
 
+        private void NavLeftItem_Leave(object sender, EventArgs e)
+        {
+            _hover = false;
+            Invalidate();
+        }
+
         private void NavLeftItem_LostFocus(object sender, EventArgs e)
         {
-            BackColor = SystemColors.Control;
+            BackColor = CustomTheme.Instance.IsActive ? CustomTheme.Instance.Background1 : SystemColors.Control;
         }
 
         private void NavLeftItem_Paint(object sender, PaintEventArgs e)
         {
-            var backBrush = new SolidBrush(SystemColors.Control);
-            if (_selected) backBrush.Color = Color.White;
-            if (Focused && !UseCustomHighlightColor) backBrush.Color = SystemColors.Highlight;
+            var backBrush = new SolidBrush(CustomTheme.Instance.IsActive ? CustomTheme.Instance.Background1 : SystemColors.Control);
+            if (_selected || _hover) backBrush.Color = CustomTheme.Instance.IsActive ? CustomTheme.Instance.HighlightColor : Color.White;
+            if (Focused && !UseCustomHighlightColor) backBrush.Color = CustomTheme.Instance.IsActive ? CustomTheme.Instance.HighlightColor : SystemColors.Highlight;
 
             using (backBrush)
             {
@@ -93,7 +111,7 @@ namespace XrmToolBox.Controls
 
                 if (Expanded)
                 {
-                    using (SolidBrush brush = new SolidBrush(Focused && !UseCustomHighlightColor ? Color.White : ForeColor))
+                    using (SolidBrush brush = new SolidBrush(Focused && !UseCustomHighlightColor ? (CustomTheme.Instance.IsActive ? CustomTheme.Instance.ForeColor2 : Color.White) : ForeColor))
                     {
                         StringFormat _stringFlags = new StringFormat();
                         _stringFlags.Alignment = StringAlignment.Near;
