@@ -246,9 +246,13 @@ namespace XrmToolBox.ToolLibrary
                     ms.Write(packageBytes, 0, packageBytes.Length);
                     var package = Package.Open(ms);
 
+                    bool found = false;
+
                     foreach (var part in package.GetParts())
                     {
                         if (part.Uri.ToString().ToLower().IndexOf("/plugins/") < 0) continue;
+
+                        found = true;
 
                         var fileName = part.Uri.ToString().Split(new string[] { "/Plugins/", "/plugins/" }, StringSplitOptions.RemoveEmptyEntries).Last();
                         fullPath = Path.Combine(cachePackagePath, fileName);
@@ -279,6 +283,11 @@ namespace XrmToolBox.ToolLibrary
                                 RequireRestart = e.Plugin.RequiresXtbRestart
                             });
                         }
+                    }
+
+                    if (!found)
+                    {
+                        throw new Exception("No plugin files found in package");
                     }
                 }
             }
