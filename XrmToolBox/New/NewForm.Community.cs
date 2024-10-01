@@ -24,26 +24,17 @@ namespace XrmToolBox.New
 
         private void donateDollarPluginMenuItem_Click(object sender, System.EventArgs e)
         {
-            if (((PluginForm)dpMain.ActiveContent).Control is IPayPalPlugin payPal)
-            {
-                Donate("EN", "USD", payPal.EmailAccount, payPal.DonationDescription);
-            }
+            DonatePlugin("USD");
         }
 
         private void donateEuroPluginMenuItem_Click(object sender, System.EventArgs e)
         {
-            if (((PluginForm)dpMain.ActiveContent).Control is IPayPalPlugin payPal)
-            {
-                Donate("EN", "EUR", payPal.EmailAccount, payPal.DonationDescription);
-            }
+            DonatePlugin("EUR");
         }
 
         private void donateGbpPluginMenuItem_Click(object sender, System.EventArgs e)
         {
-            if (((PluginForm)dpMain.ActiveContent).Control is IPayPalPlugin payPal)
-            {
-                Donate("EN", "GBP", payPal.EmailAccount, payPal.DonationDescription);
-            }
+            DonatePlugin("GBP");
         }
 
         private void donateInEuroToolStripMenuItem_Click(object sender, System.EventArgs e)
@@ -86,7 +77,8 @@ namespace XrmToolBox.New
         private void githubPluginMenuItem_Click(object sender, System.EventArgs e)
         {
             var url = GetGithubBaseUrl("issues/new");
-
+            if (string.IsNullOrEmpty(url))
+                return;
             var additionalInfo = GetAdditionalInfo();
 
             if (currentContent is PluginForm pf)
@@ -107,7 +99,10 @@ namespace XrmToolBox.New
 
         private void HelpSelectedPluginToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            Process.Start(GetHelpUrl());
+            var url = GetHelpUrl();
+            if (string.IsNullOrEmpty(url))
+                return;
+            Process.Start(url);
         }
 
         private void helpToolStripMenuItem_Click(object sender, System.EventArgs e)
@@ -224,16 +219,37 @@ namespace XrmToolBox.New
             Process.Start(url);
         }
 
+        private void DonatePlugin(string currency)
+        {
+            if (dpMain.ActiveContent is PluginForm pluginForm && pluginForm.Control is IPayPalPlugin payPal)
+            {
+                Donate("EN", currency, payPal.EmailAccount, payPal.DonationDescription);
+            }
+            else
+            {
+                MessageBox.Show("There is internal issue, cannot find the PayPal account.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
         private string GetGithubBaseUrl(string page)
         {
-            var plugin = (IGitHubPlugin)((PluginForm)dpMain.ActiveContent).Control;
-            return $"https://github.com/{plugin.UserName}/{plugin.RepositoryName}/{page}";
+            if (dpMain.ActiveContent is PluginForm plugin &&
+                plugin.Control is IGitHubPlugin gitplugin)
+            {
+                return $"https://github.com/{gitplugin.UserName}/{gitplugin.RepositoryName}/{page}";
+            }
+            MessageBox.Show("There is internal issue, cannot find the GitHub repository.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return null;
         }
 
         private string GetHelpUrl()
         {
-            var plugin = (IHelpPlugin)((PluginForm)dpMain.ActiveContent).Control;
-            return plugin.HelpUrl;
+            if (dpMain.ActiveContent is PluginForm pluginForm && pluginForm.Control is IHelpPlugin helpPlugin)
+            {
+                return helpPlugin.HelpUrl;
+            }
+            MessageBox.Show("There is internal issue, cannot find the Help URL.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return null;
         }
 
         private void tsmiAbout_Click(object sender, System.EventArgs e)
@@ -246,8 +262,15 @@ namespace XrmToolBox.New
 
         private void tsmiAboutSelectedPlugin_Click(object sender, System.EventArgs e)
         {
-            var plugin = (IAboutPlugin)((PluginForm)dpMain.ActiveContent).Control;
-            plugin.ShowAboutDialog();
+            if (dpMain.ActiveContent is PluginForm plugin &&
+                plugin.Control is IAboutPlugin aboutPlugin)
+            {
+                aboutPlugin.ShowAboutDialog();
+            }
+            else
+            {
+                MessageBox.Show("There is internal issue, cannot find the About window.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }
