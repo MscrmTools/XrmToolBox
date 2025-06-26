@@ -292,7 +292,7 @@ namespace XrmToolBox.New
         {
             if (Favorites.Instance.Items.All(i => i.PluginName != pluginName || i.PluginName == pluginName && i.ConnectionId != (withCurrentConnection ? ConnectionDetail?.ConnectionId.Value ?? Guid.Empty : Guid.Empty)))
             {
-                Favorites.Instance.Items.Add(new Favorite { PluginName = pluginName, ConnectionId = withCurrentConnection ? ConnectionDetail?.ConnectionId.Value ?? Guid.Empty : Guid.Empty, ConnectionName = withCurrentConnection ? ConnectionDetail?.ConnectionName ?? "" : "" });
+                Favorites.Instance.Items.Add(new Favorite { PluginName = pluginName, ConnectionFileName = (withCurrentConnection ? ConnectionDetail?.ParentConnectionFile?.Name ?? "" : ""), ConnectionId = withCurrentConnection ? ConnectionDetail?.ConnectionId.Value ?? Guid.Empty : Guid.Empty, ConnectionName = withCurrentConnection ? ConnectionDetail?.ConnectionName ?? "" : "" });
                 Favorites.Instance.Save();
             }
         }

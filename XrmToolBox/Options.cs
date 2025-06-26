@@ -512,6 +512,11 @@ namespace XrmToolBox
         [Description("Indicates number of tools to display in Moste Recently Used items section of Start Page")]
         public int MruItemsToDisplay { get; set; } = 10;
 
+        [Category("Start Page")]
+        [DisplayName("Show Connection file name in MRU")]
+        [Description("Indicates if Start page should show the connection file name in Most Recently Used Items")]
+        public bool ShowConnectionFileNameInMru { get; set; }
+
         #endregion Start Page
 
         #region Tools list display
@@ -712,6 +717,7 @@ namespace XrmToolBox
                 CheckUpdateOnStartup = CheckUpdateOnStartup,
                 DisplayLargeIcons = DisplayLargeIcons,
                 DisplayMostUsedFirst = DisplayMostUsedFirst,
+                ShowConnectionFileNameInMru = ShowConnectionFileNameInMru,
                 DisplayRecentlyUpdatedFirst = DisplayRecentlyUpdatedFirst,
                 MostUsedList = MostUsedList,
                 LastAdvertisementDisplay = LastAdvertisementDisplay,

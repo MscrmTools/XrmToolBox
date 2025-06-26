@@ -11,6 +11,7 @@ namespace XrmToolBox.AppCode
 {
     public class MostRecentlyUsedItem
     {
+        public string ConnectionFileName { get; set; }
         public Guid ConnectionId { get; set; }
         public string ConnectionName { get; set; }
         public DateTime Date { get; set; }
