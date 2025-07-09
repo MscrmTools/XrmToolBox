@@ -727,6 +727,7 @@
     <None Include="Resources\Configuration32.png" />
     <None Include="Resources\Connect24.png" />
     <None Include="Resources\CheckForUpdate24.png" />
+    <None Include="Resources\close24.png" />
     <Content Include="Resources\ConnectingDynamics.gif" />
     <None Include="Resources\LoadingConnection.gif" />
     <None Include="Resources\ConnectionControls32.png" />
