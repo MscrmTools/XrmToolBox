@@ -143,16 +143,6 @@ namespace XrmToolBox.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap close32 {
-            get {
-                object obj = ResourceManager.GetObject("close32", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap CloseBehavior32 {
             get {
                 object obj = ResourceManager.GetObject("CloseBehavior32", resourceCulture);
