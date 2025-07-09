@@ -97,6 +97,9 @@
       <HintPath>..\packages\Newtonsoft.Json.13.0.3-beta1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework" />
+    <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.Activities.Presentation" />
@@ -183,6 +186,8 @@
     <Compile Include="Args\DuplicateToolArgs.cs" />
     <Compile Include="Args\DuplicateToolWithConnectionArgs.cs" />
     <Compile Include="Args\StatusBarMessageEventArgs.cs" />
+    <Compile Include="DarkTheme.cs" />
+    <Compile Include="CustomTheme.cs" />
     <Compile Include="Extensions.cs">
       <SubType>Code</SubType>
     </Compile>

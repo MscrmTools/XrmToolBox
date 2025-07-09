@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.AppCode;
+using XrmToolBox.Extensibility;
 using XrmToolBox.Forms;
 using XrmToolBox.New.EventArgs;
 
@@ -32,6 +33,8 @@ namespace XrmToolBox.New
                     LoadMru();
                 }
             };
+
+            CustomTheme.Instance.ApplyTheme(this);
         }
 
         public event EventHandler OpenConnectionsManagementRequested;
