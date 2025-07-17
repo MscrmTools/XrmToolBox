@@ -1396,7 +1396,7 @@ Would you like to reinstall last stable release of connection controls?";
                     connectionDetail = null;
                     service = null;
                     ccsb.SetConnectionStatus(false, null);
-                    ccsb.SetMessage(e.FailureReason);
+                    ccsb.SetMessage(e.FailureReason, true);
 
                     StartPluginWithConnection();
                 }));
