@@ -32,10 +32,10 @@
             this.lblPlugin = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.cmsMru = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.lblConnectionName = new System.Windows.Forms.Label();
             this.tsmiOpenWithConnection = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiRemove = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblConnectionName = new System.Windows.Forms.Label();
             this.pbLogo = new System.Windows.Forms.PictureBox();
             this.cmsMru.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbLogo)).BeginInit();
@@ -70,10 +70,25 @@
             this.cmsMru.Size = new System.Drawing.Size(296, 70);
             this.cmsMru.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsMru_ItemClicked);
             // 
+            // tsmiOpenWithConnection
+            // 
+            this.tsmiOpenWithConnection.Image = global::XrmToolBox.Properties.Resources.Connect24;
+            this.tsmiOpenWithConnection.Name = "tsmiOpenWithConnection";
+            this.tsmiOpenWithConnection.Size = new System.Drawing.Size(295, 30);
+            this.tsmiOpenWithConnection.Text = "Open Tool with new connection";
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(292, 6);
+            // 
+            // tsmiRemove
+            // 
+            this.tsmiRemove.Image = global::XrmToolBox.Properties.Resources.close24;
+            this.tsmiRemove.Name = "tsmiRemove";
+            this.tsmiRemove.Size = new System.Drawing.Size(295, 30);
+            this.tsmiRemove.Text = "Remove from this list";
+            this.tsmiRemove.ToolTipText = "Remove this item from the Favorites items";
             // 
             // lblConnectionName
             // 
@@ -88,21 +103,6 @@
             this.lblConnectionName.Size = new System.Drawing.Size(549, 42);
             this.lblConnectionName.TabIndex = 2;
             this.lblConnectionName.Text = "[Connection Name]";
-            // 
-            // tsmiOpenWithConnection
-            // 
-            this.tsmiOpenWithConnection.Image = global::XrmToolBox.Properties.Resources.Connect24;
-            this.tsmiOpenWithConnection.Name = "tsmiOpenWithConnection";
-            this.tsmiOpenWithConnection.Size = new System.Drawing.Size(295, 30);
-            this.tsmiOpenWithConnection.Text = "Open Tool with new connection";
-            // 
-            // tsmiRemove
-            // 
-            this.tsmiRemove.Image = global::XrmToolBox.Properties.Resources.close24;
-            this.tsmiRemove.Name = "tsmiRemove";
-            this.tsmiRemove.Size = new System.Drawing.Size(295, 30);
-            this.tsmiRemove.Text = "Remove from this list";
-            this.tsmiRemove.ToolTipText = "Remove this item from the Most Recently Used items";
             // 
             // pbLogo
             // 
