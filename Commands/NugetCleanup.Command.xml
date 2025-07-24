@@ -13,7 +13,7 @@
       <Action>IF EXIST "Nuget.Packaging.dll" (DEL "Nuget.Packaging.dll")</Action>
       <Action>IF EXIST "Nuget.Protocol.dll" (DEL "Nuget.Protocol.dll")</Action>
       <Action>IF EXIST "Nuget.Versioning.dll" (DEL "Nuget.Versioning.dll")</Action>
-      <Action>IF EXIST "XrmToolBox.PluginsStore.dll" (DEL "Nuget.Versioning.dll")</Action>
+      <Action>IF EXIST "XrmToolBox.PluginsStore.dll" (DEL "XrmToolBox.PluginsStore.dll")</Action>
     </Actions>
   </Command>
 </Commands>

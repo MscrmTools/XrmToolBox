@@ -118,9 +118,7 @@ namespace XrmToolBox.AutoUpdater
             catch (Exception error)
             {
                 MessageBox.Show(this,
-                    $@"Unable to start XrmToolBox for the following reason: {error.Message}. File not found : {
-                            xtbPath
-                        }", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    $@"Unable to start XrmToolBox for the following reason: {error.Message}. File not found : {xtbPath}", @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -189,6 +187,12 @@ namespace XrmToolBox.AutoUpdater
             var directory = new DirectoryInfo(directoryPath);
             foreach (var fi in directory.GetFiles())
             {
+                if (fi.FullName.ToLower().EndsWith(".command.xml") && File.Exists(Path.Combine(destinationDirectoryPath, fi.Name)))
+                {
+                    // If the file already exists, we skip it
+                    continue;
+                }
+
                 worker.ReportProgress(0, action + " " + fi.Name);
 
                 fi.CopyTo(Path.Combine(destinationDirectoryPath, fi.Name), true);

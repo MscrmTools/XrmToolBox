@@ -674,6 +674,16 @@ namespace XrmToolBox
 
         #endregion Proxy
 
+        #region Logging
+
+        [Browsable(false)]
+        public LogManager.Level LogLevel { get; set; } = LogManager.Level.Warning;
+
+        [Browsable(false)]
+        public int LogRetentionInDays { get; set; } = 0;
+
+        #endregion Logging
+
         #region Methods
 
         public static bool Load(out Options options, out string errorMessage)
@@ -772,7 +782,9 @@ namespace XrmToolBox
                 LibraryShowUpdates = LibraryShowUpdates,
                 UseLegacyToolsList = UseLegacyToolsList,
                 ShowCategoriesExpanded = ShowCategoriesExpanded,
-                DoNotUseToolColors = DoNotUseToolColors
+                DoNotUseToolColors = DoNotUseToolColors,
+                LogLevel = LogLevel,
+                LogRetentionInDays = LogRetentionInDays,
             };
         }
 

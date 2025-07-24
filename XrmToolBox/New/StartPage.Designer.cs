@@ -45,7 +45,7 @@
             this.pnlRightActions = new System.Windows.Forms.Panel();
             this.pnlRightScrollable = new System.Windows.Forms.Panel();
             this.lblDonatePayPal = new System.Windows.Forms.Label();
-            this.lblChatGitter = new System.Windows.Forms.Label();
+            this.lblChatGithub = new System.Windows.Forms.Label();
             this.lblFollowUsTwitter = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.lblDocsForDev = new System.Windows.Forms.Label();
@@ -254,7 +254,7 @@
             this.pnlRightScrollable.AutoSize = true;
             this.pnlRightScrollable.BackColor = System.Drawing.Color.White;
             this.pnlRightScrollable.Controls.Add(this.lblDonatePayPal);
-            this.pnlRightScrollable.Controls.Add(this.lblChatGitter);
+            this.pnlRightScrollable.Controls.Add(this.lblChatGithub);
             this.pnlRightScrollable.Controls.Add(this.lblFollowUsTwitter);
             this.pnlRightScrollable.Controls.Add(this.label9);
             this.pnlRightScrollable.Controls.Add(this.lblDocsForDev);
@@ -290,20 +290,20 @@
             // 
             // lblChatGitter
             // 
-            this.lblChatGitter.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblChatGitter.Font = new System.Drawing.Font("Segoe UI Light", 14F);
-            this.lblChatGitter.Image = global::XrmToolBox.Properties.Resources.Gitter32;
-            this.lblChatGitter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblChatGitter.Location = new System.Drawing.Point(0, 702);
-            this.lblChatGitter.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.lblChatGitter.Name = "lblChatGitter";
-            this.lblChatGitter.Size = new System.Drawing.Size(480, 74);
-            this.lblChatGitter.TabIndex = 23;
-            this.lblChatGitter.Text = "       Chat with us on Gitter";
-            this.lblChatGitter.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.lblChatGitter.Click += new System.EventHandler(this.LabelClick);
-            this.lblChatGitter.MouseEnter += new System.EventHandler(this.LabelMouseEnter);
-            this.lblChatGitter.MouseLeave += new System.EventHandler(this.LabelMouseLeave);
+            this.lblChatGithub.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblChatGithub.Font = new System.Drawing.Font("Segoe UI Light", 14F);
+            this.lblChatGithub.Image = global::XrmToolBox.Properties.Resources.github;
+            this.lblChatGithub.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblChatGithub.Location = new System.Drawing.Point(0, 702);
+            this.lblChatGithub.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lblChatGithub.Name = "lblChatGitter";
+            this.lblChatGithub.Size = new System.Drawing.Size(480, 74);
+            this.lblChatGithub.TabIndex = 23;
+            this.lblChatGithub.Text = "       Chat with us on Github";
+            this.lblChatGithub.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.lblChatGithub.Click += new System.EventHandler(this.LabelClick);
+            this.lblChatGithub.MouseEnter += new System.EventHandler(this.LabelMouseEnter);
+            this.lblChatGithub.MouseLeave += new System.EventHandler(this.LabelMouseLeave);
             // 
             // lblFollowUsTwitter
             // 
@@ -522,7 +522,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel pnlRightScrollable;
         private System.Windows.Forms.Label lblDonatePayPal;
-        private System.Windows.Forms.Label lblChatGitter;
+        private System.Windows.Forms.Label lblChatGithub;
         private System.Windows.Forms.Label lblFollowUsTwitter;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label lblDocsForDev;

@@ -304,6 +304,31 @@ Would you like to reinstall last stable release of connection controls?";
             }
         }
 
+        private async Task CleanLogsFolder()
+        {
+            try
+            {
+                if (Options.Instance.LogRetentionInDays == 0) return;
+
+                var logFiles = Directory.GetFiles(Paths.LogsPath, "*.log");
+                foreach (var file in logFiles)
+                {
+                    var fileInfo = new FileInfo(file);
+                    if (fileInfo.LastWriteTimeUtc <= DateTime.Now.AddDays(-1 * Options.Instance.LogRetentionInDays))
+                    {
+                        try
+                        {
+                            fileInfo.Delete();
+                        }
+                        catch { }
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
+
         private string ExtractSwitchValue(string key, ref string[] args)
         {
             var name = string.Empty;
@@ -393,6 +418,8 @@ Would you like to reinstall last stable release of connection controls?";
             {
                 LaunchVersionCheck()
             };
+
+            new Task(() => CleanLogsFolder()).Start();
 
             if (!string.IsNullOrEmpty(initialConnectionName))
             {
@@ -1213,6 +1240,9 @@ Would you like to reinstall last stable release of connection controls?";
                 Directory.CreateDirectory(Paths.ConnectionsPath);
             }
 
+            LogManager.LogLevel = Options.Instance.LogLevel;
+            McTools.Xrm.Connection.AppCode.Paths.LogsPath = Paths.LogsPath;
+            McTools.Xrm.Connection.AppCode.LogManager.LogLevel = (McTools.Xrm.Connection.AppCode.LogManager.Level)Options.Instance.LogLevel;
             ConnectionsList.ConnectionsListFilePath = Path.Combine(Paths.ConnectionsPath, "MscrmTools.ConnectionsList.xml");
             cManager = ConnectionManager.Instance;
             cManager.FromXrmToolBox = true;
@@ -1396,7 +1426,7 @@ Would you like to reinstall last stable release of connection controls?";
                     connectionDetail = null;
                     service = null;
                     ccsb.SetConnectionStatus(false, null);
-                    ccsb.SetMessage(e.FailureReason);
+                    ccsb.SetMessage(e.FailureReason, true);
 
                     StartPluginWithConnection();
                 }));
