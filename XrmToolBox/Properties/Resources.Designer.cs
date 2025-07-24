@@ -383,26 +383,23 @@ namespace XrmToolBox.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap github {
+            get {
+                object obj = ResourceManager.GetObject("github", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Gitter32 {
             get {
                 object obj = ResourceManager.GetObject("Gitter32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-
-
-        /// <summary>
-        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap github
-        {
-            get
-            {
-                object obj = ResourceManager.GetObject("github", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-
+        
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
@@ -569,6 +566,16 @@ namespace XrmToolBox.Properties {
         internal static System.Drawing.Bitmap LogoDyn365 {
             get {
                 object obj = ResourceManager.GetObject("LogoDyn365", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Logs32 {
+            get {
+                object obj = ResourceManager.GetObject("Logs32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -949,6 +956,16 @@ namespace XrmToolBox.Properties {
         internal static System.Drawing.Bitmap Tools24 {
             get {
                 object obj = ResourceManager.GetObject("Tools24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ToolsListDisplay32 {
+            get {
+                object obj = ResourceManager.GetObject("ToolsListDisplay32", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

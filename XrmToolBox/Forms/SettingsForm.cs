@@ -84,7 +84,10 @@ namespace XrmToolBox.Forms
                 {
                     if (menu != sender)
                     {
+                        menu.OnSelectedChanged -= Menu_OnSelectedChanged;
                         menu.Selected = false;
+                        menu.OnSelectedChanged += Menu_OnSelectedChanged;
+
                     }
                 }
 
@@ -116,7 +119,7 @@ namespace XrmToolBox.Forms
                     Options.Instance.OrderForSettingsTab.Add(a.Category);
             }
 
-            foreach (var category in new[] { "Proxy", "Paths", "Credits", "Application Protocol", "Assemblies", "Hidden Tools" })
+            foreach (var category in new[] { "Proxy", "Paths", "Credits", "Application Protocol", "Assemblies", "Hidden Tools", "Logs" })
                 if (!Options.Instance.OrderForSettingsTab.Contains(category))
                     Options.Instance.OrderForSettingsTab.Add(category);
 

@@ -78,11 +78,11 @@
     <Reference Include="McTools.StopAdvertisement">
       <HintPath>..\LicenseChecker\McTools.StopAdvertisement.dll</HintPath>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection, Version=1.2025.7.61, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
-      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2025.7.61\lib\net48\McTools.Xrm.Connection.dll</HintPath>
+    <Reference Include="McTools.Xrm.Connection, Version=1.2025.7.63, Culture=neutral, PublicKeyToken=96037217801d9658, processorArchitecture=MSIL">
+      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2025.7.63\lib\net48\McTools.Xrm.Connection.dll</HintPath>
     </Reference>
-    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2025.7.61, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
-      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2025.7.61\lib\net48\McTools.Xrm.Connection.WinForms.dll</HintPath>
+    <Reference Include="McTools.Xrm.Connection.WinForms, Version=1.2025.7.63, Culture=neutral, PublicKeyToken=f1559f79cf894e27, processorArchitecture=MSIL">
+      <HintPath>..\packages\MscrmTools.Xrm.Connection.1.2025.7.63\lib\net48\McTools.Xrm.Connection.WinForms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.7, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.7\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -247,6 +247,9 @@
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.6.3\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="System.ValueTuple">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Extensions" />
@@ -354,6 +357,12 @@
       <DependentUpon>HighlightItem.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ISettingsControl.cs" />
+    <Compile Include="Controls\LogSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\LogSettingsControl.Designer.cs">
+      <DependentUpon>LogSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NavLeftItem.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -577,6 +586,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\HighlightItem.resx">
       <DependentUpon>HighlightItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\LogSettingsControl.resx">
+      <DependentUpon>LogSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\NavLeftItem.resx">
       <DependentUpon>NavLeftItem.cs</DependentUpon>
@@ -810,6 +822,7 @@
     <None Include="Resources\Eraser24.png" />
     <None Include="Resources\Refresh24.png" />
     <Content Include="Resources\github.png" />
+    <None Include="Resources\Logs32.png" />
     <Content Include="Resources\three_tags.png" />
     <None Include="Resources\www_page.png" />
     <None Include="Resources\ToolsListDisplay32.png" />
@@ -818,9 +831,6 @@
     <None Include="Resources\Uninstall24.png" />
     <None Include="Resources\Web24.png" />
     <None Include="Resources\Tools24.png" />
-    <Content Include="Startup\NugetCleanup.Command.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="XrmToolBox201512.ico" />
     <EmbeddedResource Include="Images\nologo32.png" />
     <EmbeddedResource Include="Images\nologo.png" />
@@ -869,7 +879,7 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>Copy "$(ProjectDir)Startup\*.Command.xml" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>Copy "$(SolutionDir)Commands\*.Command.xml" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Microsoft.Web.WebView2.1.0.3351.48\build\Microsoft.Web.WebView2.targets" Condition="Exists('..\packages\Microsoft.Web.WebView2.1.0.3351.48\build\Microsoft.Web.WebView2.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
