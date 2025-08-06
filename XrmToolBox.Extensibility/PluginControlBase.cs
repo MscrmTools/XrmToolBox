@@ -391,6 +391,16 @@ namespace XrmToolBox.Extensibility
         }
 
         /// <summary>
+        /// Writes a verbose message in the log
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void LogVerbose(string message, params object[] args)
+        {
+            logManager.LogVerbose(message, args);
+        }
+
+        /// <summary>
         /// Writes a warning message in the log
         /// </summary>
         /// <param name="message">Message</param>
