@@ -138,7 +138,7 @@ namespace XrmToolBox.Extensibility
             {
                 using (StreamWriter writer = new StreamWriter(_filePath, true))
                 {
-                    writer.WriteLine("{0:yyyy-MM-dd hh:mm:ss.fff tt}\t{1}\t{2}\t{3}", DateTime.Now,
+                    writer.WriteLine("{0:yyyy-MM-dd HH:mm:ss.fff}\t{1}\t{2}\t{3}", DateTime.Now,
                         _connection?.ConnectionName, level, message);
                 }
             }
