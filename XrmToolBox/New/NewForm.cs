@@ -758,14 +758,14 @@ Would you like to reinstall last stable release of connection controls?";
                     mruItem.ConnectionName = connectionDetail.ConnectionName;
                     mruItem.ConnectionFileName = connectionDetail.ParentConnectionFile?.Name;
 
+                    var crmSvcClient = connectionDetail.GetCrmServiceClient();
+
                     if (connectionDetail.IsFromSdkLoginCtrl)
                     {
-                        ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(service, connectionDetail);
+                        ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(crmSvcClient, connectionDetail);
                     }
                     else
                     {
-                        var crmSvcClient = connectionDetail.GetCrmServiceClient();
-
                         ((IXrmToolBoxPluginControl)pluginControl).UpdateConnection(crmSvcClient, connectionDetail);
                     }
 
@@ -1071,7 +1071,7 @@ Would you like to reinstall last stable release of connection controls?";
                 return;
             }
 
-            if (service == null && e.MruInfo == null)
+            if (connectionDetail == null && e.MruInfo == null)
             {
                 var result = MessageBox.Show(new Form { TopMost = true }, @"Do you want to connect to an organization first?", $@"Opening {e.Plugin.Metadata.Name}",
                     MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
@@ -1699,6 +1699,7 @@ Would you like to reinstall last stable release of connection controls?";
                         {
                             ccsb.SetConnectionStatus(pcb.ConnectionDetail != null, pcb.ConnectionDetail);
                             connectionDetail = pcb.ConnectionDetail;
+                            service = pcb.ConnectionDetail.GetCrmServiceClient();
                             pluginsForm.ConnectionDetail = pcb.ConnectionDetail;
                         }
                     }
