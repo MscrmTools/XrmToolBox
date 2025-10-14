@@ -318,7 +318,9 @@ namespace XrmToolBox.ToolLibrary
                     versions.Add(subItem);
             }
 
-            var latestVersion = versions.OrderBy(t => DateTime.Parse(t["commitTimeStamp"].ToString())).Last();
+            var latestVersion = versions
+                .Where(t => t["catalogEntry"]["listed"] != null && (bool)t["catalogEntry"]["listed"] == true)
+                .OrderBy(t => DateTime.Parse(t["commitTimeStamp"].ToString())).Last();
 
             var pv = await GetSpecificPackageVersion(packageName, latestVersion);
             while (pv.IsPrerelease && (!AllowConnectionControlPreRelease || packageName != "MscrmTools.Xrm.Connection"))

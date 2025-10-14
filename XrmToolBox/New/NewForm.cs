@@ -475,7 +475,10 @@ Would you like to reinstall last stable release of connection controls?";
 
             try
             {
-                await CheckForConnectionControlsUpdate();
+                if (!hasANewXtbVersion)
+                {
+                    await CheckForConnectionControlsUpdate();
+                }
 
                 if (store.PluginsCount == 0)
                 {
@@ -1614,8 +1617,12 @@ Would you like to reinstall last stable release of connection controls?";
 
         #region Check for update
 
+        private bool hasANewXtbVersion = false;
+
         private Task LaunchVersionCheck()
         {
+            hasANewXtbVersion = false;
+
             return new Task(() =>
             {
                 if (Options.Instance.DoNotCheckForUpdates || new ItSecurityChecker().IsCheckForUpdateDisabled())
@@ -1653,6 +1660,8 @@ Would you like to reinstall last stable release of connection controls?";
                         if (lastReleaseVersion > currentVersion &&
                             Options.Instance.LastUpdateCheck.Date != DateTime.Now.Date)
                         {
+                            hasANewXtbVersion = true;
+
                             var release =
                             releases.Items.FirstOrDefault(r => r.Version == lastReleaseVersion.ToString());
 
@@ -1699,7 +1708,7 @@ Would you like to reinstall last stable release of connection controls?";
                         {
                             ccsb.SetConnectionStatus(pcb.ConnectionDetail != null, pcb.ConnectionDetail);
                             connectionDetail = pcb.ConnectionDetail;
-                            service = pcb.ConnectionDetail.GetCrmServiceClient();
+                            service = pcb.ConnectionDetail?.GetCrmServiceClient();
                             pluginsForm.ConnectionDetail = pcb.ConnectionDetail;
                         }
                     }
@@ -1768,6 +1777,8 @@ Would you like to reinstall last stable release of connection controls?";
                 return;
             }
 
+            hasANewXtbVersion = false;
+
             var worker = new BackgroundWorker();
             worker.DoWork += (s, evt) =>
             {
@@ -1796,6 +1807,8 @@ Would you like to reinstall last stable release of connection controls?";
                     var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
                     if (lastReleaseVersion > currentVersion)
                     {
+                        hasANewXtbVersion = true;
+
                         var release = releases.Items.FirstOrDefault(r => r.Version == lastReleaseVersion.ToString());
 
                         Invoke(new Action(() =>

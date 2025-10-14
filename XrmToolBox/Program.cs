@@ -490,7 +490,14 @@ Please start XrmToolBox again to fix this problem",
 
         private static void SetProxy()
         {
-            WebProxyHelper.ApplyProxy();
+            try
+            {
+                WebProxyHelper.ApplyProxy();
+            }
+            catch
+            {
+                // Ignore any error
+            }
         }
 
         private static void TryWaitingForOldProcess(int previousProcessId)
