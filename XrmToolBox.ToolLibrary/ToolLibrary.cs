@@ -180,8 +180,8 @@ namespace XrmToolBox.ToolLibrary
 
                         existingFileVersion = existingFileVersion.Simplify();
 
-                        if (targetVersion == null && !existingFileVersion.Equals(new Version(plugin.Version).Simplify())
-                            || targetVersion != null && !existingFileVersion.Equals(targetVersion))
+                        if (targetVersion == null && existingFileVersion < new Version(plugin.Version).Simplify()
+                            || targetVersion != null && existingFileVersion < targetVersion.Simplify())
                         {
                             update = true;
                         }
