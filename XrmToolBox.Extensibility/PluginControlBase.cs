@@ -4,12 +4,15 @@
 // BLOG: http://www.dotnetdust.blogspot.com/
 
 using McTools.Xrm.Connection;
+using Microsoft.Toolkit.Uwp.Notifications;
 using Microsoft.Xrm.Sdk;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.Drawing;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using XrmToolBox.Extensibility.Forms;
 using XrmToolBox.Extensibility.Interfaces;
@@ -31,15 +34,31 @@ namespace XrmToolBox.Extensibility
         public PluginControlBase()
         {
             logManager = new LogManager(GetType());
+
+            Tag = PluginControlId;
+
+            ToastNotificationManagerCompat.OnActivated += toastArgs =>
+            {
+                ToastArguments args = ToastArguments.Parse(toastArgs.Argument);
+                if (args.Contains("PluginControlId") && Guid.TryParse(args["PluginControlId"], out Guid id) && id == PluginControlId)
+                {
+                    Invoke(new Action(() =>
+                    {
+                        HandleToastActivation(toastArgs);
+                    }));
+                }
+            };
         }
 
         public ConnectionDetail ConnectionDetail { get; set; }
+        public Guid PluginControlId { get; } = Guid.NewGuid();
 
         [Category("Tool Control Properties")]
         [Description("Icon")]
         public Icon PluginIcon { get; set; }
 
         public Image TabIcon { get; set; }
+
         public string ToolName { get; set; }
 
         public void CloseTool()
@@ -52,6 +71,36 @@ namespace XrmToolBox.Extensibility
         {
             CloseTool();
         }
+
+        public virtual void HandleToastActivation(ToastNotificationActivatedEventArgsCompat args)
+        {
+            var toastArgs = ToastArguments.Parse(args.Argument);
+            if (!toastArgs.Contains("action") || toastArgs["action"] != "showXrmToolBox")
+            {
+                return;
+            }
+            string pid = toastArgs["pid"];
+
+            try
+            {
+                // Get the process by ID
+                Process process = Process.GetProcessById(int.Parse(pid));
+
+                // Check if the process has a main window
+                if (process.MainWindowHandle != IntPtr.Zero)
+                {
+                    // Bring the process to the foreground
+                    SetForegroundWindow(process.MainWindowHandle);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Do not fail on notification click
+            }
+        }
+
+        [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
 
         #region IMsCrmToolsPluginUserControl Members
 

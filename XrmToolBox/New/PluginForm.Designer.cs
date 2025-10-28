@@ -62,10 +62,10 @@ namespace XrmToolBox.New
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel,
             this.toolStripProgressBar});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 483);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 386);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 21, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(938, 34);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 19, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(834, 27);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip";
             this.statusStrip1.Visible = false;
@@ -73,14 +73,14 @@ namespace XrmToolBox.New
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(915, 27);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(813, 21);
             this.toolStripStatusLabel.Spring = true;
             this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // toolStripProgressBar
             // 
             this.toolStripProgressBar.Name = "toolStripProgressBar";
-            this.toolStripProgressBar.Size = new System.Drawing.Size(150, 26);
+            this.toolStripProgressBar.Size = new System.Drawing.Size(133, 19);
             this.toolStripProgressBar.Visible = false;
             // 
             // lblEnvInfo
@@ -88,10 +88,10 @@ namespace XrmToolBox.New
             this.lblEnvInfo.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblEnvInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEnvInfo.ForeColor = System.Drawing.Color.White;
-            this.lblEnvInfo.Location = new System.Drawing.Point(8, 42);
+            this.lblEnvInfo.Location = new System.Drawing.Point(7, 34);
             this.lblEnvInfo.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblEnvInfo.Name = "lblEnvInfo";
-            this.lblEnvInfo.Size = new System.Drawing.Size(972, 42);
+            this.lblEnvInfo.Size = new System.Drawing.Size(864, 34);
             this.lblEnvInfo.TabIndex = 3;
             this.lblEnvInfo.Text = "!!! PRODUCTION !!!";
             this.lblEnvInfo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -104,7 +104,7 @@ namespace XrmToolBox.New
             this.NotifPanel.Location = new System.Drawing.Point(0, 0);
             this.NotifPanel.Margin = new System.Windows.Forms.Padding(2);
             this.NotifPanel.Name = "NotifPanel";
-            this.NotifPanel.Size = new System.Drawing.Size(972, 47);
+            this.NotifPanel.Size = new System.Drawing.Size(864, 38);
             this.NotifPanel.TabIndex = 1;
             this.NotifPanel.Visible = false;
             // 
@@ -116,21 +116,21 @@ namespace XrmToolBox.New
             this.pnlImpersonate.Controls.Add(this.btnResetImpersonate);
             this.pnlImpersonate.Controls.Add(this.pbImpersonate);
             this.pnlImpersonate.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlImpersonate.Location = new System.Drawing.Point(0, 47);
+            this.pnlImpersonate.Location = new System.Drawing.Point(0, 38);
             this.pnlImpersonate.Margin = new System.Windows.Forms.Padding(2);
             this.pnlImpersonate.Name = "pnlImpersonate";
-            this.pnlImpersonate.Padding = new System.Windows.Forms.Padding(4);
-            this.pnlImpersonate.Size = new System.Drawing.Size(972, 47);
+            this.pnlImpersonate.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.pnlImpersonate.Size = new System.Drawing.Size(864, 38);
             this.pnlImpersonate.TabIndex = 2;
             this.pnlImpersonate.Visible = false;
             // 
             // lblImpersonation
             // 
             this.lblImpersonation.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblImpersonation.Location = new System.Drawing.Point(38, 4);
+            this.lblImpersonation.Location = new System.Drawing.Point(34, 3);
             this.lblImpersonation.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblImpersonation.Name = "lblImpersonation";
-            this.lblImpersonation.Size = new System.Drawing.Size(733, 37);
+            this.lblImpersonation.Size = new System.Drawing.Size(651, 30);
             this.lblImpersonation.TabIndex = 2;
             this.lblImpersonation.Tag = "You are currently impersonated as user {0} ({1})";
             this.lblImpersonation.Text = "You are currently impersonated as user {0} ({1})";
@@ -139,10 +139,10 @@ namespace XrmToolBox.New
             // btnResetImpersonate
             // 
             this.btnResetImpersonate.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnResetImpersonate.Location = new System.Drawing.Point(771, 4);
+            this.btnResetImpersonate.Location = new System.Drawing.Point(685, 3);
             this.btnResetImpersonate.Margin = new System.Windows.Forms.Padding(2);
             this.btnResetImpersonate.Name = "btnResetImpersonate";
-            this.btnResetImpersonate.Size = new System.Drawing.Size(195, 37);
+            this.btnResetImpersonate.Size = new System.Drawing.Size(173, 30);
             this.btnResetImpersonate.TabIndex = 1;
             this.btnResetImpersonate.Text = "Cancel Impersonation";
             this.btnResetImpersonate.UseVisualStyleBackColor = true;
@@ -153,10 +153,10 @@ namespace XrmToolBox.New
             this.pbImpersonate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pbImpersonate.Dock = System.Windows.Forms.DockStyle.Left;
             this.pbImpersonate.Image = global::XrmToolBox.Properties.Resources.mask;
-            this.pbImpersonate.Location = new System.Drawing.Point(4, 4);
+            this.pbImpersonate.Location = new System.Drawing.Point(4, 3);
             this.pbImpersonate.Margin = new System.Windows.Forms.Padding(2);
             this.pbImpersonate.Name = "pbImpersonate";
-            this.pbImpersonate.Size = new System.Drawing.Size(34, 37);
+            this.pbImpersonate.Size = new System.Drawing.Size(30, 30);
             this.pbImpersonate.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pbImpersonate.TabIndex = 0;
             this.pbImpersonate.TabStop = false;
@@ -167,10 +167,10 @@ namespace XrmToolBox.New
             this.pnlMain.Controls.Add(this.pnlImpersonate);
             this.pnlMain.Controls.Add(this.NotifPanel);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlMain.Location = new System.Drawing.Point(8, 143);
+            this.pnlMain.Location = new System.Drawing.Point(7, 115);
             this.pnlMain.Margin = new System.Windows.Forms.Padding(2);
             this.pnlMain.Name = "pnlMain";
-            this.pnlMain.Size = new System.Drawing.Size(972, 366);
+            this.pnlMain.Size = new System.Drawing.Size(864, 293);
             this.pnlMain.TabIndex = 4;
             // 
             // tlpHighlight
@@ -181,11 +181,12 @@ namespace XrmToolBox.New
             this.tlpHighlight.Controls.Add(this.lblTargetConnections, 1, 0);
             this.tlpHighlight.Controls.Add(this.lblSourceConnection, 0, 0);
             this.tlpHighlight.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tlpHighlight.Location = new System.Drawing.Point(8, 0);
+            this.tlpHighlight.Location = new System.Drawing.Point(7, 0);
+            this.tlpHighlight.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tlpHighlight.Name = "tlpHighlight";
             this.tlpHighlight.RowCount = 1;
             this.tlpHighlight.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpHighlight.Size = new System.Drawing.Size(972, 42);
+            this.tlpHighlight.Size = new System.Drawing.Size(864, 34);
             this.tlpHighlight.TabIndex = 6;
             this.tlpHighlight.Visible = false;
             // 
@@ -193,9 +194,9 @@ namespace XrmToolBox.New
             // 
             this.lblTargetConnections.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lblTargetConnections.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTargetConnections.Location = new System.Drawing.Point(489, 0);
+            this.lblTargetConnections.Location = new System.Drawing.Point(435, 0);
             this.lblTargetConnections.Name = "lblTargetConnections";
-            this.lblTargetConnections.Size = new System.Drawing.Size(480, 42);
+            this.lblTargetConnections.Size = new System.Drawing.Size(426, 34);
             this.lblTargetConnections.TabIndex = 0;
             this.lblTargetConnections.Text = "Target connections";
             this.lblTargetConnections.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -206,7 +207,7 @@ namespace XrmToolBox.New
             this.lblSourceConnection.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSourceConnection.Location = new System.Drawing.Point(3, 0);
             this.lblSourceConnection.Name = "lblSourceConnection";
-            this.lblSourceConnection.Size = new System.Drawing.Size(480, 42);
+            this.lblSourceConnection.Size = new System.Drawing.Size(426, 34);
             this.lblSourceConnection.TabIndex = 1;
             this.lblSourceConnection.Text = "Source connection";
             this.lblSourceConnection.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -216,9 +217,10 @@ namespace XrmToolBox.New
             this.pnlHighlight.Controls.Add(this.lblEnvName);
             this.pnlHighlight.Controls.Add(this.pbEnvLogo);
             this.pnlHighlight.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlHighlight.Location = new System.Drawing.Point(8, 84);
+            this.pnlHighlight.Location = new System.Drawing.Point(7, 68);
+            this.pnlHighlight.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pnlHighlight.Name = "pnlHighlight";
-            this.pnlHighlight.Size = new System.Drawing.Size(972, 59);
+            this.pnlHighlight.Size = new System.Drawing.Size(864, 47);
             this.pnlHighlight.TabIndex = 7;
             this.pnlHighlight.Visible = false;
             // 
@@ -228,7 +230,7 @@ namespace XrmToolBox.New
             this.lblEnvName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEnvName.Location = new System.Drawing.Point(62, 0);
             this.lblEnvName.Name = "lblEnvName";
-            this.lblEnvName.Size = new System.Drawing.Size(910, 59);
+            this.lblEnvName.Size = new System.Drawing.Size(802, 47);
             this.lblEnvName.TabIndex = 1;
             this.lblEnvName.Text = "Env";
             this.lblEnvName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -238,25 +240,27 @@ namespace XrmToolBox.New
             this.pbEnvLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pbEnvLogo.Dock = System.Windows.Forms.DockStyle.Left;
             this.pbEnvLogo.Location = new System.Drawing.Point(0, 0);
+            this.pbEnvLogo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pbEnvLogo.Name = "pbEnvLogo";
-            this.pbEnvLogo.Size = new System.Drawing.Size(62, 59);
+            this.pbEnvLogo.Size = new System.Drawing.Size(62, 47);
             this.pbEnvLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pbEnvLogo.TabIndex = 0;
             this.pbEnvLogo.TabStop = false;
             // 
             // PluginForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(988, 517);
+            this.ClientSize = new System.Drawing.Size(878, 414);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlHighlight);
             this.Controls.Add(this.lblEnvInfo);
             this.Controls.Add(this.tlpHighlight);
             this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "PluginForm";
-            this.Padding = new System.Windows.Forms.Padding(8, 0, 8, 8);
+            this.Padding = new System.Windows.Forms.Padding(7, 0, 7, 6);
             this.Text = "Tool Form";
             this.DockStateChanged += new System.EventHandler(this.PluginForm_DockStateChanged);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PluginForm_FormClosing);

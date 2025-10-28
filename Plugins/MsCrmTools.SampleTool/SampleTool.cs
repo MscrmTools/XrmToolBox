@@ -4,6 +4,7 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Toolkit.Uwp.Notifications;
 using Microsoft.Xrm.Sdk.Query;
 using System;
 using System.Linq;
@@ -241,6 +242,11 @@ namespace MsCrmTools.SampleTool
 
         #endregion IAboutPlugin implementation
 
+        public override void HandleToastActivation(ToastNotificationActivatedEventArgsCompat args)
+        {
+            MessageBox.Show(this, "Toast activated!\n\n" + args.Argument, "Toast Activated", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private void btnCheckMultiSample_Click(object sender, EventArgs e)
         {
             var expectedPlugin = PluginManagerExtended.Instance.PluginsExt.FirstOrDefault(p =>
@@ -271,6 +277,15 @@ namespace MsCrmTools.SampleTool
                 }
             };
             WorkAsync(asyncinfo);
+        }
+
+        private void btnOpenNotif_Click(object sender, EventArgs e)
+        {
+            new ToastContentBuilder()
+                .AddArgument("PluginControlId", PluginControlId.ToString())
+                .AddHeader(ToolName, txtHeader.Text, "")
+                .AddText(textBox1.Text)
+                .Show();
         }
 
         private void button1_Click(object sender, EventArgs e)

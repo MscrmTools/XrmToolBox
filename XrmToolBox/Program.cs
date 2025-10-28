@@ -320,6 +320,7 @@ Please start XrmToolBox again to fix this problem",
             RedirectAssembly("ScintillaNET");
             RedirectAssembly("Microsoft.Web.WebView2.Core");
             RedirectAssembly("Microsoft.Web.WebView2.WinForms");
+            RedirectAssembly("Microsoft.Toolkit.Uwp.Notifications");
 
             OptimizeConnectionSettings();
             SetProxy();

@@ -729,7 +729,6 @@ Would you like to reinstall last stable release of connection controls?";
                 return null;
             }
 
-            Guid pluginControlInstanceId = Guid.NewGuid();
             UserControl pluginControl = null;
             try
             {
@@ -740,7 +739,6 @@ Would you like to reinstall last stable release of connection controls?";
                 };
 
                 pluginControl = (UserControl)plugin.Value.GetControl();
-                pluginControl.Tag = pluginControlInstanceId;
 
                 if (pluginControl is PluginControlBase pcb)
                 {
