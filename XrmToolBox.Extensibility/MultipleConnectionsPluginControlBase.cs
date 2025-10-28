@@ -1,10 +1,11 @@
-﻿using System;
+﻿using McTools.Xrm.Connection;
+using Microsoft.Xrm.Sdk;
+using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using McTools.Xrm.Connection;
-using Microsoft.Xrm.Sdk;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace XrmToolBox.Extensibility
@@ -50,7 +51,7 @@ namespace XrmToolBox.Extensibility
         {
             if (actionName == "AdditionalOrganization")
             {
-                if (!AdditionalConnectionDetails.Contains(detail))
+                if (!AdditionalConnectionDetails.Any(d => d.ConnectionId == detail.ConnectionId))
                 {
                     AdditionalConnectionDetails.Add(detail);
                 }
