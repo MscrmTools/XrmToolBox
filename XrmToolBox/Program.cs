@@ -244,14 +244,19 @@ Please start XrmToolBox again to fix this problem",
                         continue;
                     }
 
-                    var fiSourceVersion = new Version(FileVersionInfo.GetVersionInfo(fi.FullName).FileVersion);
-                    var fiTargetVersion = new Version(FileVersionInfo.GetVersionInfo(targetFile).FileVersion);
-
-                    if (fiSourceVersion > fiTargetVersion)
+                    Version source;
+                    Version target;
+                    if (Version.TryParse(FileVersionInfo.GetVersionInfo(fi.FullName).FileVersion, out source))
                     {
-                        // If version to deploy is newer than current version
-                        // Delete current version and copy the new one
-                        File.Copy(fi.FullName, targetFile, true);
+                        if (Version.TryParse(FileVersionInfo.GetVersionInfo(targetFile).FileVersion, out target))
+                        {
+                            if (source > target)
+                            {
+                                // If version to deploy is newer than current version
+                                // Delete current version and copy the new one
+                                File.Copy(fi.FullName, targetFile, true);
+                            }
+                        }
                     }
                 }
                 else
