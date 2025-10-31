@@ -41,6 +41,7 @@ namespace XrmToolBox.New
             this.btnResetImpersonate = new System.Windows.Forms.Button();
             this.pbImpersonate = new System.Windows.Forms.PictureBox();
             this.pnlMain = new System.Windows.Forms.Panel();
+            this.NotifControlTop = new XrmToolBox.Extensibility.UserControls.NotificationControl();
             this.tlpHighlight = new System.Windows.Forms.TableLayoutPanel();
             this.lblTargetConnections = new System.Windows.Forms.Label();
             this.lblSourceConnection = new System.Windows.Forms.Label();
@@ -73,7 +74,7 @@ namespace XrmToolBox.New
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(813, 21);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(678, 21);
             this.toolStripStatusLabel.Spring = true;
             this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -101,7 +102,7 @@ namespace XrmToolBox.New
             this.NotifPanel.BackColor = System.Drawing.SystemColors.Info;
             this.NotifPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.NotifPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.NotifPanel.Location = new System.Drawing.Point(0, 0);
+            this.NotifPanel.Location = new System.Drawing.Point(0, 36);
             this.NotifPanel.Margin = new System.Windows.Forms.Padding(2);
             this.NotifPanel.Name = "NotifPanel";
             this.NotifPanel.Size = new System.Drawing.Size(864, 38);
@@ -116,7 +117,7 @@ namespace XrmToolBox.New
             this.pnlImpersonate.Controls.Add(this.btnResetImpersonate);
             this.pnlImpersonate.Controls.Add(this.pbImpersonate);
             this.pnlImpersonate.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlImpersonate.Location = new System.Drawing.Point(0, 38);
+            this.pnlImpersonate.Location = new System.Drawing.Point(0, 74);
             this.pnlImpersonate.Margin = new System.Windows.Forms.Padding(2);
             this.pnlImpersonate.Name = "pnlImpersonate";
             this.pnlImpersonate.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
@@ -166,12 +167,28 @@ namespace XrmToolBox.New
             this.pnlMain.BackColor = System.Drawing.Color.WhiteSmoke;
             this.pnlMain.Controls.Add(this.pnlImpersonate);
             this.pnlMain.Controls.Add(this.NotifPanel);
+            this.pnlMain.Controls.Add(this.NotifControlTop);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMain.Location = new System.Drawing.Point(7, 115);
             this.pnlMain.Margin = new System.Windows.Forms.Padding(2);
             this.pnlMain.Name = "pnlMain";
             this.pnlMain.Size = new System.Drawing.Size(864, 293);
             this.pnlMain.TabIndex = 4;
+            // 
+            // NotifControlTop
+            // 
+            this.NotifControlTop.Action = XrmToolBox.Extensibility.UserControls.NotificationAction.None;
+            this.NotifControlTop.ButtonText = "Action";
+            this.NotifControlTop.CanBeClosed = true;
+            this.NotifControlTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.NotifControlTop.LinkText = "Learn more";
+            this.NotifControlTop.Location = new System.Drawing.Point(0, 0);
+            this.NotifControlTop.Message = "Message";
+            this.NotifControlTop.Name = "NotifControlTop";
+            this.NotifControlTop.Padding = new System.Windows.Forms.Padding(4);
+            this.NotifControlTop.Size = new System.Drawing.Size(864, 36);
+            this.NotifControlTop.TabIndex = 3;
+            this.NotifControlTop.Type = XrmToolBox.Extensibility.UserControls.NotificationType.Info;
             // 
             // tlpHighlight
             // 
@@ -296,5 +313,6 @@ namespace XrmToolBox.New
         private Panel pnlHighlight;
         private Label lblEnvName;
         private PictureBox pbEnvLogo;
+        private Extensibility.UserControls.NotificationControl NotifControlTop;
     }
 }

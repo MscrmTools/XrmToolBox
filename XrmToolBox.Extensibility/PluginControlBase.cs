@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -51,6 +52,7 @@ namespace XrmToolBox.Extensibility
         }
 
         public ConnectionDetail ConnectionDetail { get; set; }
+        public NotificationControl Notification => ParentForm.Controls.OfType<Panel>().FirstOrDefault(p => p.Name == "pnlMain")?.Controls.OfType<NotificationControl>().FirstOrDefault();
         public Guid PluginControlId { get; } = Guid.NewGuid();
 
         [Category("Tool Control Properties")]
@@ -461,6 +463,7 @@ namespace XrmToolBox.Extensibility
 
         #region Noticiation zone
 
+        [Obsolete("Use new Notification control. https://www.xrmtoolbox.com/documentation/for-developers/Use-Notifications/")]
         protected void HideNotification()
         {
             if (Parent == null)
@@ -475,6 +478,7 @@ namespace XrmToolBox.Extensibility
             }
         }
 
+        [Obsolete("Use new Notification control. https://www.xrmtoolbox.com/documentation/for-developers/Use-Notifications/")]
         protected void ShowErrorNotification(string message, Uri moreInfoUri, int height = 32)
         {
             if (Parent == null)
@@ -493,6 +497,7 @@ namespace XrmToolBox.Extensibility
             }
         }
 
+        [Obsolete("Use new Notification control. https://www.xrmtoolbox.com/documentation/for-developers/Use-Notifications/")]
         protected void ShowInfoNotification(string message, Uri moreInfoUri, int height = 32)
         {
             if (Parent == null)
@@ -511,6 +516,7 @@ namespace XrmToolBox.Extensibility
             }
         }
 
+        [Obsolete("Use new Notification control. https://www.xrmtoolbox.com/documentation/for-developers/Use-Notifications/")]
         protected void ShowWarningNotification(string message, Uri moreInfoUri, int height = 32)
         {
             if (Parent == null)

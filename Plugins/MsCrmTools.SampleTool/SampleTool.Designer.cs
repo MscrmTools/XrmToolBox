@@ -52,16 +52,37 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.lblMessage = new System.Windows.Forms.Label();
             this.gbErrorHandling = new System.Windows.Forms.GroupBox();
+            this.btnShowNotif = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.gbNotification = new System.Windows.Forms.GroupBox();
+            this.lblNotifType = new System.Windows.Forms.Label();
+            this.cbbNotifType = new System.Windows.Forms.ComboBox();
+            this.lblNotifMessage = new System.Windows.Forms.Label();
+            this.txtNotifMessage = new System.Windows.Forms.TextBox();
+            this.lblNotifAction = new System.Windows.Forms.Label();
+            this.cbbNotifActions = new System.Windows.Forms.ComboBox();
+            this.lblNotifButtonText = new System.Windows.Forms.Label();
+            this.txtNotifButton = new System.Windows.Forms.TextBox();
+            this.txtNotifLink = new System.Windows.Forms.TextBox();
+            this.lblNotifLinkText = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.chkNotifCanBeClosed = new System.Windows.Forms.CheckBox();
+            this.notificationControl1 = new XrmToolBox.Extensibility.UserControls.NotificationControl();
+            this.lblNotifAutoClose = new System.Windows.Forms.Label();
+            this.nudNotif = new System.Windows.Forms.NumericUpDown();
             this.gbOptions.SuspendLayout();
             this.toolStripMenu.SuspendLayout();
             this.gbToast.SuspendLayout();
             this.gbErrorHandling.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.gbNotification.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudNotif)).BeginInit();
             this.SuspendLayout();
             // 
             // gbOptions
             // 
             this.gbOptions.Controls.Add(this.cbMultipleCalls);
-            this.gbOptions.Location = new System.Drawing.Point(21, 53);
+            this.gbOptions.Location = new System.Drawing.Point(3, 7);
             this.gbOptions.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.gbOptions.Name = "gbOptions";
             this.gbOptions.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -83,7 +104,6 @@
             // 
             // toolStripMenu
             // 
-            this.toolStripMenu.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbClose,
             this.toolStripSeparator2,
@@ -96,7 +116,7 @@
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
             this.toolStripMenu.Padding = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.toolStripMenu.Size = new System.Drawing.Size(1238, 31);
+            this.toolStripMenu.Size = new System.Drawing.Size(1238, 27);
             this.toolStripMenu.TabIndex = 4;
             this.toolStripMenu.Text = "toolStrip1";
             // 
@@ -106,21 +126,21 @@
             this.tsbClose.Image = ((System.Drawing.Image)(resources.GetObject("tsbClose.Image")));
             this.tsbClose.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(29, 28);
+            this.tsbClose.Size = new System.Drawing.Size(29, 24);
             this.tsbClose.Text = "Close this tool";
             this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 31);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
             // 
             // tsbWhoAmI
             // 
             this.tsbWhoAmI.Image = ((System.Drawing.Image)(resources.GetObject("tsbWhoAmI.Image")));
             this.tsbWhoAmI.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbWhoAmI.Name = "tsbWhoAmI";
-            this.tsbWhoAmI.Size = new System.Drawing.Size(101, 28);
+            this.tsbWhoAmI.Size = new System.Drawing.Size(93, 24);
             this.tsbWhoAmI.Text = "Who am I";
             this.tsbWhoAmI.ToolTipText = "Perfomrs a Who I Am request";
             this.tsbWhoAmI.Click += new System.EventHandler(this.tsbWhoAmI_Click);
@@ -128,7 +148,7 @@
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 31);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
             // 
             // tsbCancel
             // 
@@ -136,7 +156,7 @@
             this.tsbCancel.Image = ((System.Drawing.Image)(resources.GetObject("tsbCancel.Image")));
             this.tsbCancel.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbCancel.Name = "tsbCancel";
-            this.tsbCancel.Size = new System.Drawing.Size(81, 28);
+            this.tsbCancel.Size = new System.Drawing.Size(73, 24);
             this.tsbCancel.Text = "Cancel";
             this.tsbCancel.ToolTipText = "Cancel the current request";
             this.tsbCancel.Click += new System.EventHandler(this.tsbCancel_Click);
@@ -144,25 +164,25 @@
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 31);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 27);
             // 
             // tsbDuplicate
             // 
             this.tsbDuplicate.Image = ((System.Drawing.Image)(resources.GetObject("tsbDuplicate.Image")));
             this.tsbDuplicate.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbDuplicate.Name = "tsbDuplicate";
-            this.tsbDuplicate.Size = new System.Drawing.Size(101, 28);
+            this.tsbDuplicate.Size = new System.Drawing.Size(93, 24);
             this.tsbDuplicate.Text = "Duplicate";
             this.tsbDuplicate.Click += new System.EventHandler(this.tsbDuplicate_Click);
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 31);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 27);
             // 
             // txtState
             // 
-            this.txtState.Location = new System.Drawing.Point(452, 141);
+            this.txtState.Location = new System.Drawing.Point(434, 95);
             this.txtState.Margin = new System.Windows.Forms.Padding(2);
             this.txtState.Name = "txtState";
             this.txtState.Size = new System.Drawing.Size(217, 22);
@@ -171,7 +191,7 @@
             // lblState
             // 
             this.lblState.AutoSize = true;
-            this.lblState.Location = new System.Drawing.Point(449, 117);
+            this.lblState.Location = new System.Drawing.Point(431, 71);
             this.lblState.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblState.Name = "lblState";
             this.lblState.Size = new System.Drawing.Size(38, 16);
@@ -180,7 +200,7 @@
             // 
             // btnCheckMultiSample
             // 
-            this.btnCheckMultiSample.Location = new System.Drawing.Point(452, 65);
+            this.btnCheckMultiSample.Location = new System.Drawing.Point(434, 19);
             this.btnCheckMultiSample.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnCheckMultiSample.Name = "btnCheckMultiSample";
             this.btnCheckMultiSample.Size = new System.Drawing.Size(386, 30);
@@ -220,7 +240,7 @@
             this.btnOpenNotif.Name = "btnOpenNotif";
             this.btnOpenNotif.Size = new System.Drawing.Size(363, 36);
             this.btnOpenNotif.TabIndex = 10;
-            this.btnOpenNotif.Text = "Open Notification";
+            this.btnOpenNotif.Text = "Open Toast Notification";
             this.btnOpenNotif.UseVisualStyleBackColor = true;
             this.btnOpenNotif.Click += new System.EventHandler(this.btnOpenNotif_Click);
             // 
@@ -231,7 +251,7 @@
             this.gbToast.Controls.Add(this.lblMessage);
             this.gbToast.Controls.Add(this.txtHeader);
             this.gbToast.Controls.Add(this.lblHeader);
-            this.gbToast.Location = new System.Drawing.Point(21, 246);
+            this.gbToast.Location = new System.Drawing.Point(3, 200);
             this.gbToast.Name = "gbToast";
             this.gbToast.Padding = new System.Windows.Forms.Padding(6);
             this.gbToast.Size = new System.Drawing.Size(375, 185);
@@ -279,7 +299,7 @@
             // 
             this.gbErrorHandling.Controls.Add(this.button1);
             this.gbErrorHandling.Controls.Add(this.btnDoSomethingWrong);
-            this.gbErrorHandling.Location = new System.Drawing.Point(21, 120);
+            this.gbErrorHandling.Location = new System.Drawing.Point(3, 74);
             this.gbErrorHandling.Name = "gbErrorHandling";
             this.gbErrorHandling.Padding = new System.Windows.Forms.Padding(6);
             this.gbErrorHandling.Size = new System.Drawing.Size(375, 123);
@@ -287,21 +307,223 @@
             this.gbErrorHandling.TabStop = false;
             this.gbErrorHandling.Text = "Error management";
             // 
+            // btnShowNotif
+            // 
+            this.btnShowNotif.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnShowNotif.Location = new System.Drawing.Point(3, 566);
+            this.btnShowNotif.Name = "btnShowNotif";
+            this.btnShowNotif.Size = new System.Drawing.Size(357, 49);
+            this.btnShowNotif.TabIndex = 14;
+            this.btnShowNotif.Text = "Show Notification (New)";
+            this.btnShowNotif.UseVisualStyleBackColor = true;
+            this.btnShowNotif.Click += new System.EventHandler(this.btnShowNotif_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.gbNotification);
+            this.panel1.Controls.Add(this.btnCheckMultiSample);
+            this.panel1.Controls.Add(this.gbOptions);
+            this.panel1.Controls.Add(this.txtState);
+            this.panel1.Controls.Add(this.gbErrorHandling);
+            this.panel1.Controls.Add(this.lblState);
+            this.panel1.Controls.Add(this.gbToast);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 63);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1238, 682);
+            this.panel1.TabIndex = 15;
+            // 
+            // gbNotification
+            // 
+            this.gbNotification.Controls.Add(this.nudNotif);
+            this.gbNotification.Controls.Add(this.lblNotifAutoClose);
+            this.gbNotification.Controls.Add(this.chkNotifCanBeClosed);
+            this.gbNotification.Controls.Add(this.label1);
+            this.gbNotification.Controls.Add(this.txtNotifLink);
+            this.gbNotification.Controls.Add(this.lblNotifLinkText);
+            this.gbNotification.Controls.Add(this.txtNotifButton);
+            this.gbNotification.Controls.Add(this.lblNotifButtonText);
+            this.gbNotification.Controls.Add(this.cbbNotifActions);
+            this.gbNotification.Controls.Add(this.lblNotifAction);
+            this.gbNotification.Controls.Add(this.txtNotifMessage);
+            this.gbNotification.Controls.Add(this.lblNotifMessage);
+            this.gbNotification.Controls.Add(this.cbbNotifType);
+            this.gbNotification.Controls.Add(this.lblNotifType);
+            this.gbNotification.Controls.Add(this.btnShowNotif);
+            this.gbNotification.Location = new System.Drawing.Point(849, 7);
+            this.gbNotification.Name = "gbNotification";
+            this.gbNotification.Size = new System.Drawing.Size(363, 618);
+            this.gbNotification.TabIndex = 15;
+            this.gbNotification.TabStop = false;
+            this.gbNotification.Text = "Notification";
+            // 
+            // lblNotifType
+            // 
+            this.lblNotifType.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblNotifType.Location = new System.Drawing.Point(3, 18);
+            this.lblNotifType.Name = "lblNotifType";
+            this.lblNotifType.Size = new System.Drawing.Size(357, 41);
+            this.lblNotifType.TabIndex = 15;
+            this.lblNotifType.Text = "Type";
+            this.lblNotifType.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbbNotifType
+            // 
+            this.cbbNotifType.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbbNotifType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbNotifType.FormattingEnabled = true;
+            this.cbbNotifType.Location = new System.Drawing.Point(3, 59);
+            this.cbbNotifType.Name = "cbbNotifType";
+            this.cbbNotifType.Size = new System.Drawing.Size(357, 24);
+            this.cbbNotifType.TabIndex = 16;
+            // 
+            // lblNotifMessage
+            // 
+            this.lblNotifMessage.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblNotifMessage.Location = new System.Drawing.Point(3, 83);
+            this.lblNotifMessage.Name = "lblNotifMessage";
+            this.lblNotifMessage.Size = new System.Drawing.Size(357, 41);
+            this.lblNotifMessage.TabIndex = 17;
+            this.lblNotifMessage.Text = "Message";
+            this.lblNotifMessage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // txtNotifMessage
+            // 
+            this.txtNotifMessage.Dock = System.Windows.Forms.DockStyle.Top;
+            this.txtNotifMessage.Location = new System.Drawing.Point(3, 124);
+            this.txtNotifMessage.Multiline = true;
+            this.txtNotifMessage.Name = "txtNotifMessage";
+            this.txtNotifMessage.Size = new System.Drawing.Size(357, 66);
+            this.txtNotifMessage.TabIndex = 18;
+            this.txtNotifMessage.Text = "A sample notification";
+            // 
+            // lblNotifAction
+            // 
+            this.lblNotifAction.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblNotifAction.Location = new System.Drawing.Point(3, 190);
+            this.lblNotifAction.Name = "lblNotifAction";
+            this.lblNotifAction.Size = new System.Drawing.Size(357, 41);
+            this.lblNotifAction.TabIndex = 19;
+            this.lblNotifAction.Text = "Actions";
+            this.lblNotifAction.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbbNotifActions
+            // 
+            this.cbbNotifActions.Dock = System.Windows.Forms.DockStyle.Top;
+            this.cbbNotifActions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbbNotifActions.FormattingEnabled = true;
+            this.cbbNotifActions.Location = new System.Drawing.Point(3, 231);
+            this.cbbNotifActions.Name = "cbbNotifActions";
+            this.cbbNotifActions.Size = new System.Drawing.Size(357, 24);
+            this.cbbNotifActions.TabIndex = 20;
+            // 
+            // lblNotifButtonText
+            // 
+            this.lblNotifButtonText.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblNotifButtonText.Location = new System.Drawing.Point(3, 255);
+            this.lblNotifButtonText.Name = "lblNotifButtonText";
+            this.lblNotifButtonText.Size = new System.Drawing.Size(357, 41);
+            this.lblNotifButtonText.TabIndex = 21;
+            this.lblNotifButtonText.Text = "Button text";
+            this.lblNotifButtonText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // txtNotifButton
+            // 
+            this.txtNotifButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.txtNotifButton.Location = new System.Drawing.Point(3, 296);
+            this.txtNotifButton.Name = "txtNotifButton";
+            this.txtNotifButton.Size = new System.Drawing.Size(357, 22);
+            this.txtNotifButton.TabIndex = 22;
+            this.txtNotifButton.Text = "Click me";
+            // 
+            // txtNotifLink
+            // 
+            this.txtNotifLink.Dock = System.Windows.Forms.DockStyle.Top;
+            this.txtNotifLink.Location = new System.Drawing.Point(3, 359);
+            this.txtNotifLink.Name = "txtNotifLink";
+            this.txtNotifLink.Size = new System.Drawing.Size(357, 22);
+            this.txtNotifLink.TabIndex = 24;
+            this.txtNotifLink.Text = "Read more";
+            // 
+            // lblNotifLinkText
+            // 
+            this.lblNotifLinkText.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblNotifLinkText.Location = new System.Drawing.Point(3, 318);
+            this.lblNotifLinkText.Name = "lblNotifLinkText";
+            this.lblNotifLinkText.Size = new System.Drawing.Size(357, 41);
+            this.lblNotifLinkText.TabIndex = 23;
+            this.lblNotifLinkText.Text = "Link text";
+            this.lblNotifLinkText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label1
+            // 
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Location = new System.Drawing.Point(3, 381);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(357, 41);
+            this.label1.TabIndex = 25;
+            this.label1.Text = "Can be closed";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // chkNotifCanBeClosed
+            // 
+            this.chkNotifCanBeClosed.Dock = System.Windows.Forms.DockStyle.Top;
+            this.chkNotifCanBeClosed.Location = new System.Drawing.Point(3, 422);
+            this.chkNotifCanBeClosed.Name = "chkNotifCanBeClosed";
+            this.chkNotifCanBeClosed.Size = new System.Drawing.Size(357, 38);
+            this.chkNotifCanBeClosed.TabIndex = 26;
+            this.chkNotifCanBeClosed.UseVisualStyleBackColor = true;
+            // 
+            // notificationControl1
+            // 
+            this.notificationControl1.Action = XrmToolBox.Extensibility.UserControls.NotificationAction.None;
+            this.notificationControl1.ButtonText = "Action";
+            this.notificationControl1.CanBeClosed = true;
+            this.notificationControl1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.notificationControl1.LinkText = "Learn more";
+            this.notificationControl1.Location = new System.Drawing.Point(0, 27);
+            this.notificationControl1.Message = "Message";
+            this.notificationControl1.Name = "notificationControl1";
+            this.notificationControl1.Padding = new System.Windows.Forms.Padding(4);
+            this.notificationControl1.Size = new System.Drawing.Size(1238, 36);
+            this.notificationControl1.TabIndex = 13;
+            this.notificationControl1.Type = XrmToolBox.Extensibility.UserControls.NotificationType.Info;
+            this.notificationControl1.Visible = false;
+            // 
+            // lblNotifAutoClose
+            // 
+            this.lblNotifAutoClose.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lblNotifAutoClose.Location = new System.Drawing.Point(3, 460);
+            this.lblNotifAutoClose.Name = "lblNotifAutoClose";
+            this.lblNotifAutoClose.Size = new System.Drawing.Size(357, 41);
+            this.lblNotifAutoClose.TabIndex = 27;
+            this.lblNotifAutoClose.Text = "Delay before auto close (s)";
+            this.lblNotifAutoClose.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // nudNotif
+            // 
+            this.nudNotif.Dock = System.Windows.Forms.DockStyle.Top;
+            this.nudNotif.Location = new System.Drawing.Point(3, 501);
+            this.nudNotif.Name = "nudNotif";
+            this.nudNotif.Size = new System.Drawing.Size(357, 22);
+            this.nudNotif.TabIndex = 28;
+            this.nudNotif.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
             // SampleTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.gbErrorHandling);
-            this.Controls.Add(this.gbToast);
-            this.Controls.Add(this.btnCheckMultiSample);
-            this.Controls.Add(this.lblState);
-            this.Controls.Add(this.txtState);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.notificationControl1);
             this.Controls.Add(this.toolStripMenu);
-            this.Controls.Add(this.gbOptions);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "SampleTool";
             this.PluginIcon = ((System.Drawing.Icon)(resources.GetObject("$this.PluginIcon")));
-            this.Size = new System.Drawing.Size(1238, 584);
+            this.Size = new System.Drawing.Size(1238, 745);
             this.Load += new System.EventHandler(this.SampleTool_Load);
             this.gbOptions.ResumeLayout(false);
             this.gbOptions.PerformLayout();
@@ -310,6 +532,11 @@
             this.gbToast.ResumeLayout(false);
             this.gbToast.PerformLayout();
             this.gbErrorHandling.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.gbNotification.ResumeLayout(false);
+            this.gbNotification.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudNotif)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -339,5 +566,23 @@
         private System.Windows.Forms.TextBox txtHeader;
         private System.Windows.Forms.Label lblHeader;
         private System.Windows.Forms.GroupBox gbErrorHandling;
+        private XrmToolBox.Extensibility.UserControls.NotificationControl notificationControl1;
+        private System.Windows.Forms.Button btnShowNotif;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.GroupBox gbNotification;
+        private System.Windows.Forms.ComboBox cbbNotifType;
+        private System.Windows.Forms.Label lblNotifType;
+        private System.Windows.Forms.ComboBox cbbNotifActions;
+        private System.Windows.Forms.Label lblNotifAction;
+        private System.Windows.Forms.TextBox txtNotifMessage;
+        private System.Windows.Forms.Label lblNotifMessage;
+        private System.Windows.Forms.TextBox txtNotifLink;
+        private System.Windows.Forms.Label lblNotifLinkText;
+        private System.Windows.Forms.TextBox txtNotifButton;
+        private System.Windows.Forms.Label lblNotifButtonText;
+        private System.Windows.Forms.CheckBox chkNotifCanBeClosed;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NumericUpDown nudNotif;
+        private System.Windows.Forms.Label lblNotifAutoClose;
     }
 }

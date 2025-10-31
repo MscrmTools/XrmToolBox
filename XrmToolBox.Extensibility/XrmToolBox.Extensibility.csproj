@@ -86,6 +86,7 @@
     <Compile Include="Args\DuplicateToolArgs.cs" />
     <Compile Include="Args\DuplicateToolWithConnectionArgs.cs" />
     <Compile Include="Args\StatusBarMessageEventArgs.cs" />
+    <Compile Include="DrawExtensions.cs" />
     <Compile Include="Extensions.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -168,6 +169,12 @@
     <Compile Include="UserControls\NotificationArea.Designer.cs">
       <DependentUpon>NotificationArea.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\NotificationControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\NotificationControl.Designer.cs">
+      <DependentUpon>NotificationControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PluginModel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -203,6 +210,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\NotificationArea.resx">
       <DependentUpon>NotificationArea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\NotificationControl.resx">
+      <DependentUpon>NotificationControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\PluginModel.resx">
       <DependentUpon>PluginModel.cs</DependentUpon>
@@ -313,6 +323,18 @@
     <PackageReference Include="System.ValueTuple">
       <Version>4.6.1</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Error32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Success.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
