@@ -42,8 +42,9 @@
             this.pbNotif.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pbNotif.Dock = System.Windows.Forms.DockStyle.Left;
             this.pbNotif.Location = new System.Drawing.Point(0, 0);
+            this.pbNotif.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.pbNotif.Name = "pbNotif";
-            this.pbNotif.Size = new System.Drawing.Size(32, 47);
+            this.pbNotif.Size = new System.Drawing.Size(28, 38);
             this.pbNotif.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pbNotif.TabIndex = 1;
             this.pbNotif.TabStop = false;
@@ -54,7 +55,7 @@
             this.llLearMore.Dock = System.Windows.Forms.DockStyle.Top;
             this.llLearMore.Location = new System.Drawing.Point(0, 0);
             this.llLearMore.Name = "llLearMore";
-            this.llLearMore.Size = new System.Drawing.Size(84, 20);
+            this.llLearMore.Size = new System.Drawing.Size(71, 16);
             this.llLearMore.TabIndex = 4;
             this.llLearMore.TabStop = true;
             this.llLearMore.Text = "learn more";
@@ -65,18 +66,19 @@
             this.panel1.Controls.Add(this.llDismiss);
             this.panel1.Controls.Add(this.llLearMore);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel1.Location = new System.Drawing.Point(582, 0);
+            this.panel1.Location = new System.Drawing.Point(517, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(89, 47);
+            this.panel1.Size = new System.Drawing.Size(79, 38);
             this.panel1.TabIndex = 5;
             // 
             // llDismiss
             // 
             this.llDismiss.AutoSize = true;
             this.llDismiss.Dock = System.Windows.Forms.DockStyle.Top;
-            this.llDismiss.Location = new System.Drawing.Point(0, 20);
+            this.llDismiss.Location = new System.Drawing.Point(0, 16);
             this.llDismiss.Name = "llDismiss";
-            this.llDismiss.Size = new System.Drawing.Size(61, 20);
+            this.llDismiss.Size = new System.Drawing.Size(53, 16);
             this.llDismiss.TabIndex = 5;
             this.llDismiss.TabStop = true;
             this.llDismiss.Text = "dismiss";
@@ -86,23 +88,24 @@
             // 
             this.lblMessage.AutoSize = true;
             this.lblMessage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblMessage.Location = new System.Drawing.Point(32, 0);
+            this.lblMessage.Location = new System.Drawing.Point(28, 0);
             this.lblMessage.Name = "lblMessage";
-            this.lblMessage.Size = new System.Drawing.Size(82, 20);
+            this.lblMessage.Size = new System.Drawing.Size(72, 16);
             this.lblMessage.TabIndex = 6;
             this.lblMessage.Text = "[Message]";
             // 
             // NotificationArea
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Info;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.lblMessage);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pbNotif);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "NotificationArea";
-            this.Size = new System.Drawing.Size(671, 47);
+            this.Size = new System.Drawing.Size(596, 38);
             ((System.ComponentModel.ISupportInitialize)(this.pbNotif)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

@@ -124,7 +124,7 @@ namespace XrmToolBox
         }
     }
 
-    public class Options : ICloneable, IToolLibrarySettings, IConnectionControlSettings
+    public class Options : ICloneable, IToolLibrarySettings, IConnectionControlSettings2
     {
         private static Options innerOptions;
 
@@ -417,6 +417,12 @@ namespace XrmToolBox
                 OnSettingsChanged?.Invoke(this, new SettingsPropertyEventArgs(nameof(UseDetailsViewForConnectionSelector), value));
             }
         }
+
+        [Category("Connection controls")]
+        [DisplayName("Use filter for additional connections")]
+        [Description("Indicates if connection selector should display the connection from the same file when adding an additionnal connection")]
+        [PropertyOrder(10)]
+        public bool UseFilterForAdditionalConnection { get; set; } = true;
 
         #endregion Connection controls
 

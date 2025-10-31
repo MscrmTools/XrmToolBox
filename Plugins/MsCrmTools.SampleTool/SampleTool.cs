@@ -4,14 +4,17 @@
 // BLOG: http://mscrmtools.blogspot.com
 
 using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Toolkit.Uwp.Notifications;
 using Microsoft.Xrm.Sdk.Query;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using XrmToolBox;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Args;
 using XrmToolBox.Extensibility.Interfaces;
+using XrmToolBox.Extensibility.UserControls;
 
 namespace MsCrmTools.SampleTool
 {
@@ -40,6 +43,11 @@ namespace MsCrmTools.SampleTool
             LogInfo("An information message");
             LogWarning("A warning message");
             LogError("An error message");
+
+            cbbNotifType.DataSource = Enum.GetValues(typeof(NotificationType));
+            cbbNotifType.SelectedIndex = 0;
+            cbbNotifActions.DataSource = Enum.GetValues(typeof(NotificationAction));
+            cbbNotifActions.SelectedIndex = 0;
         }
 
         public event EventHandler<StatusBarMessageEventArgs> SendMessageToStatusBar;
@@ -241,6 +249,11 @@ namespace MsCrmTools.SampleTool
 
         #endregion IAboutPlugin implementation
 
+        public override void HandleToastActivation(ToastNotificationActivatedEventArgsCompat args)
+        {
+            MessageBox.Show(this, "Toast activated!\n\n" + args.Argument, "Toast Activated", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private void btnCheckMultiSample_Click(object sender, EventArgs e)
         {
             var expectedPlugin = PluginManagerExtended.Instance.PluginsExt.FirstOrDefault(p =>
@@ -273,14 +286,68 @@ namespace MsCrmTools.SampleTool
             WorkAsync(asyncinfo);
         }
 
+        private void btnOpenNotif_Click(object sender, EventArgs e)
+        {
+            new ToastContentBuilder()
+                .AddArgument("PluginControlId", PluginControlId.ToString())
+                .AddHeader(ToolName, txtHeader.Text, "")
+                .AddText(textBox1.Text)
+                .Show();
+        }
+
+        private void btnShowNotif_Click(object sender, EventArgs e)
+        {
+            Enum.TryParse(cbbNotifType.SelectedValue.ToString(), out NotificationType status);
+            Enum.TryParse(cbbNotifActions.SelectedValue.ToString(), out NotificationAction action);
+
+            notificationControl1.Type = status;
+            notificationControl1.Message = txtNotifMessage.Text;
+            notificationControl1.Action = action;
+            notificationControl1.ButtonText = txtNotifButton.Text;
+
+            notificationControl1.ButtonClicked -= NotificationControl1_ButtonClicked;
+            notificationControl1.ButtonClicked += NotificationControl1_ButtonClicked;
+
+            notificationControl1.CanBeClosed = chkNotifCanBeClosed.Checked;
+            notificationControl1.LinkText = txtNotifLink.Text;
+            notificationControl1.LinkClicked -= NotificationControl1_LinkClicked;
+            notificationControl1.LinkClicked += NotificationControl1_LinkClicked;
+
+            notificationControl1.SetVisible(true, Convert.ToInt32(nudNotif.Value) * 1000);
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             throw new Exception("I wasn't expected this exception");
         }
 
+        private void NotificationControl1_ButtonClicked(object sender, EventArgs e)
+        {
+            MessageBox.Show("Button clicked!");
+        }
+
+        private void NotificationControl1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            MessageBox.Show("Link clicked!");
+        }
+
+        private void NotificationControl2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("http://github.com/MscrmTools/XrmToolBox");
+        }
+
         private void SampleTool_Load(object sender, EventArgs e)
         {
-            ShowInfoNotification("This is a notification that can lead to XrmToolBox repository", new Uri("http://github.com/MscrmTools/XrmToolBox"));
+            //ShowInfoNotification("This is a notification that can lead to XrmToolBox repository", new Uri("http://github.com/MscrmTools/XrmToolBox"));
+
+            Notification.Message = "This is a notification that can lead to XrmToolBox repository!";
+            Notification.Type = NotificationType.Info;
+            Notification.Action = NotificationAction.Link;
+            Notification.LinkText = "Go to repository";
+            Notification.LinkClicked -= NotificationControl2_LinkClicked;
+            Notification.LinkClicked += NotificationControl2_LinkClicked;
+            Notification.SetVisible(true, 10);
+            Notification.CanBeClosed = true;
         }
 
         #region IMessageBusHost
