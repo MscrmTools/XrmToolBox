@@ -63,7 +63,7 @@ namespace XrmToolBox.New
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel,
             this.toolStripProgressBar});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 386);
+            this.statusStrip1.Location = new System.Drawing.Point(6931, 7057);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 19, 0);
             this.statusStrip1.Size = new System.Drawing.Size(834, 27);
@@ -74,7 +74,7 @@ namespace XrmToolBox.New
             // toolStripStatusLabel
             // 
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(678, 21);
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(813, 21);
             this.toolStripStatusLabel.Spring = true;
             this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -189,6 +189,7 @@ namespace XrmToolBox.New
             this.NotifControlTop.Size = new System.Drawing.Size(864, 36);
             this.NotifControlTop.TabIndex = 3;
             this.NotifControlTop.Type = XrmToolBox.Extensibility.UserControls.NotificationType.Info;
+            this.NotifControlTop.Visible = false;
             // 
             // tlpHighlight
             // 
