@@ -226,69 +226,88 @@ namespace XrmToolBox.ToolLibrary
             {
                 Directory.CreateDirectory(cachePackagePath);
 
-                Uri pathUri = new Uri(e.Plugin.DownloadUrl);
-                byte[] packageBytes;
-                if (pathUri.Scheme == "http" || pathUri.Scheme == "https")
+                try
                 {
-                    packageBytes = HttpClient.GetByteArrayAsync(e.DownloadUrl).GetAwaiter().GetResult();
-                }
-                else if (pathUri.Scheme == "file")
-                {
-                    packageBytes = File.ReadAllBytes(e.DownloadUrl);
-                }
-                else
-                {
-                    throw new Exception($"Unsupported file path scheme {pathUri.Scheme}");
-                }
-
-                using (var ms = new MemoryStream())
-                {
-                    ms.Write(packageBytes, 0, packageBytes.Length);
-                    var package = Package.Open(ms);
-
-                    bool found = false;
-
-                    foreach (var part in package.GetParts())
+                    Uri pathUri = new Uri(e.Plugin.DownloadUrl);
+                    byte[] packageBytes;
+                    if (pathUri.Scheme == "http" || pathUri.Scheme == "https")
                     {
-                        if (part.Uri.ToString().ToLower().IndexOf("/plugins/") < 0) continue;
+                        packageBytes = HttpClient.GetByteArrayAsync(e.DownloadUrl).GetAwaiter().GetResult();
+                    }
+                    else if (pathUri.Scheme == "file")
+                    {
+                        packageBytes = File.ReadAllBytes(e.DownloadUrl);
+                    }
+                    else
+                    {
+                        throw new Exception($"Unsupported file path scheme {pathUri.Scheme}");
+                    }
 
-                        found = true;
+                    using (var ms = new MemoryStream())
+                    {
+                        ms.Write(packageBytes, 0, packageBytes.Length);
+                        var package = Package.Open(ms);
 
-                        var fileName = part.Uri.ToString().Split(new string[] { "/Plugins/", "/plugins/" }, StringSplitOptions.RemoveEmptyEntries).Last();
-                        fullPath = Path.Combine(cachePackagePath, fileName);
-                        destinationFile = Path.Combine(Paths.PluginsPath, fileName);
+                        bool found = false;
 
-                        var directory = Path.GetDirectoryName(fullPath);
-                        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
-
-                        using (var partStream = part.GetStream())
+                        foreach (var part in package.GetParts())
                         {
-                            using (var fileStream = File.Create(fullPath))
+                            if (part.Uri.ToString().ToLower().IndexOf("/plugins/") < 0) continue;
+
+                            found = true;
+
+                            var fileName = part.Uri.ToString().Split(new string[] { "/Plugins/", "/plugins/" }, StringSplitOptions.RemoveEmptyEntries).Last();
+                            fullPath = Path.Combine(cachePackagePath, fileName);
+                            destinationFile = Path.Combine(Paths.PluginsPath, fileName);
+
+                            var directory = Path.GetDirectoryName(fullPath);
+                            if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+
+                            using (var partStream = part.GetStream())
                             {
-                                partStream.Seek(0, SeekOrigin.Begin);
-                                partStream.CopyTo(fileStream);
+                                using (var fileStream = File.Create(fullPath))
+                                {
+                                    partStream.Seek(0, SeekOrigin.Begin);
+                                    partStream.CopyTo(fileStream);
+                                }
+                            }
+
+                            // XrmToolBox restart is required when a plugin has to be
+                            // updated or when a new plugin shares files with other
+                            // plugin(s) already installed
+                            if (e.Plugin.RequiresXtbRestart || e.Plugin.Action == PackageInstallAction.Install)
+                            {
+                                pus.Plugins.Add(new PluginUpdate
+                                {
+                                    Name = e.Plugin.Name,
+                                    Source = fullPath,
+                                    Destination = destinationFile,
+                                    RequireRestart = e.Plugin.RequiresXtbRestart
+                                });
                             }
                         }
 
-                        // XrmToolBox restart is required when a plugin has to be
-                        // updated or when a new plugin shares files with other
-                        // plugin(s) already installed
-                        if (e.Plugin.RequiresXtbRestart || e.Plugin.Action == PackageInstallAction.Install)
+                        if (!found)
                         {
-                            pus.Plugins.Add(new PluginUpdate
-                            {
-                                Name = e.Plugin.Name,
-                                Source = fullPath,
-                                Destination = destinationFile,
-                                RequireRestart = e.Plugin.RequiresXtbRestart
-                            });
+                            throw new Exception("No plugin files found in package");
                         }
                     }
-
-                    if (!found)
+                }
+                catch
+                {
+                    // Clean up partially extracted package folder on failure
+                    if (Directory.Exists(cachePackagePath))
                     {
-                        throw new Exception("No plugin files found in package");
+                        try
+                        {
+                            Directory.Delete(cachePackagePath, true);
+                        }
+                        catch
+                        {
+                            // Best effort cleanup - ignore errors during cleanup
+                        }
                     }
+                    throw;
                 }
             }
             else
