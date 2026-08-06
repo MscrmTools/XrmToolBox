@@ -55,6 +55,11 @@ namespace XrmToolBox.ToolLibrary
             {
                 if (!string.IsNullOrEmpty(settings.RepositoryUrl))
                 {
+                    if (settings.RepositoryUrl == "https://www.xrmtoolbox.com/_odata/plugins")
+                    {
+                        settings.RepositoryUrl = "https://www.xrmtoolbox.com/_api/mctools_plugins";
+                    }
+
                     Repositories.Add("Default", settings.RepositoryUrl);
                 }
 
@@ -78,7 +83,7 @@ namespace XrmToolBox.ToolLibrary
 
             try
             {
-                WebRequestHelper.MakeGet("https://www.xrmtoolbox.com/_odata/categories");
+                WebRequestHelper.MakeGet("https://www.xrmtoolbox.com/_api/mctools_categories");
             }
             catch
             {
@@ -429,6 +434,11 @@ namespace XrmToolBox.ToolLibrary
                 string url = Repositories[repository];
                 bool isCustomRepo = !url.StartsWith("https://www.xrmtoolbox.com/") && !url.StartsWith("https://xrmtoolboxdev.microsoftcrmportals.com/");
 
+                if (url == "https://www.xrmtoolbox.com/_odata/plugins")
+                {
+                    url = "https://www.xrmtoolbox.com/_api/mctools_plugins";
+                }
+
                 Uri pathUri = new Uri(url);
 
                 if (pathUri.Scheme == "http" || pathUri.Scheme == "https")
@@ -748,7 +758,7 @@ namespace XrmToolBox.ToolLibrary
                             new DataContractJsonSerializerSettings
                             {
                                 UseSimpleDictionaryFormat = true,
-                                DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ss", new DateTimeFormatInfo { FullDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss" })
+                                DateTimeFormat = new DateTimeFormat("yyyy-MM-dd'T'HH:mm:ssZ", new DateTimeFormatInfo { FullDateTimePattern = "yyyy-MM-dd'T'HH:mm:ss" })
                             });
 
                         return (T)serializer.ReadObject(dataStream);

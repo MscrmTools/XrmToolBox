@@ -202,7 +202,7 @@ namespace XrmToolBox
         [DisplayName("Repository Url")]
         [Description("Repository Url for tools list. You can use your own if needed")]
         [PropertyOrder(1)]
-        public string RepositoryUrl { get; set; } = "https://www.xrmtoolbox.com/_odata/plugins";
+        public string RepositoryUrl { get; set; } = "https://www.xrmtoolbox.com/_api/mctools_plugins";
 
         #endregion ToolLibrary
 

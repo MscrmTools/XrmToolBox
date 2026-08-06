@@ -359,6 +359,7 @@ Would you like to reinstall last stable release of connection controls?";
                     throw new Exception("Unable to connect to load tools. Please check your network settings");
                 }
 
+                pnlNoToolLibraryAccess.Visible = false;
                 return true;
             }
             catch (Exception error)
@@ -1633,7 +1634,8 @@ Would you like to reinstall last stable release of connection controls?";
                 var currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
                 try
                 {
-                    var request = WebRequest.CreateHttp("https://www.xrmtoolbox.com/_odata/releases");
+                    //var request = WebRequest.CreateHttp("https://www.xrmtoolbox.com/_odata/releases");
+                    var request = WebRequest.CreateHttp("https://www.xrmtoolbox.com/_api/mctools_releases");
                     var response = request.GetResponse();
                     Releases releases = null;
                     using (Stream dataStream = response.GetResponseStream())
@@ -1780,7 +1782,7 @@ Would you like to reinstall last stable release of connection controls?";
             var worker = new BackgroundWorker();
             worker.DoWork += (s, evt) =>
             {
-                var request = WebRequest.CreateHttp("https://www.xrmtoolbox.com/_odata/releases");
+                var request = WebRequest.CreateHttp("https://www.xrmtoolbox.com/_api/mctools_releases");
                 var response = request.GetResponse();
                 using (Stream dataStream = response.GetResponseStream())
                 {
@@ -2221,6 +2223,7 @@ Would you like to reinstall last stable release of connection controls?";
             {
                 await LoadStore();
                 await store.LoadTools(false);
+                pnlNoToolLibraryAccess.Visible = false;
             }
             catch (Exception error)
             {
