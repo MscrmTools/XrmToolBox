@@ -12,6 +12,7 @@ using System.Xml;
 using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Forms;
+using XrmToolBox.Forms;
 using XrmToolBox.New;
 using XrmToolBox.ToolLibrary.AppCode;
 using PluginUpdates = XrmToolBox.AppCode.PluginUpdates;
@@ -308,6 +309,11 @@ Please start XrmToolBox again to fix this problem",
             RemovePlugins();
             RunCommandIfAny();
 
+            // Must be called before the first window is created
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            WelcomeDialog.ShowSplashScreen();
+
             RedirectAssembly("Newtonsoft.Json");
             RedirectAssembly("McTools.Xrm.Connection");
             RedirectAssembly("McTools.Xrm.Connection.WinForms");
@@ -330,8 +336,6 @@ Please start XrmToolBox again to fix this problem",
             OptimizeConnectionSettings();
             SetProxy();
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new NewForm(args));
         }
 

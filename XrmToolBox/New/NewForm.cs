@@ -67,8 +67,6 @@ namespace XrmToolBox.New
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 
-            WelcomeDialog.ShowSplashScreen();
-
             SetTheme();
             dpMain.Theme.Extender.FloatWindowFactory = new CustomFloatWindowFactory();
 
