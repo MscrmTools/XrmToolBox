@@ -397,7 +397,7 @@ Would you like to reinstall last stable release of connection controls?";
             Options.Instance.Save();
         }
 
-        private async void NewForm_Load(object sender, System.EventArgs e)
+        private void NewForm_Load(object sender, System.EventArgs e)
         {
             if (!Options.Instance.DoNotShowStartPage && startPage != null)
             {
@@ -409,6 +409,32 @@ Would you like to reinstall last stable release of connection controls?";
                 ((DockContent)pluginsForm).Show(dpMain, DockState.Document);
             }
 
+            // Adapt size of current form
+            if (Options.Instance.Size.IsMaximized)
+            {
+                WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                Options.Instance.Size.ApplyFormSize(this);
+            }
+
+            // Hide & remove Welcome screen
+            WelcomeDialog.CloseForm();
+            Opacity = 100;
+            BringToTop();
+
+            CheckForEarlyBoundEntities();
+
+            LoadStartupData(sender);
+        }
+
+        /// <summary>
+        /// Startup work that queries web services. Runs after the main window is displayed so that
+        /// a slow or unavailable network does not delay it.
+        /// </summary>
+        private async void LoadStartupData(object sender)
+        {
             WebProxyHelper.ApplyProxy();
 
             await LoadStore();
@@ -448,29 +474,6 @@ Would you like to reinstall last stable release of connection controls?";
 
             tasks.ForEach(x => x.Start());
             await Task.WhenAll(tasks.ToArray());
-
-            // Adapt size of current form
-            if (Options.Instance.Size.IsMaximized)
-            {
-                Invoke(new Action(() =>
-                {
-                    WindowState = FormWindowState.Maximized;
-                }));
-            }
-            else
-            {
-                Options.Instance.Size.ApplyFormSize(this);
-            }
-
-            // Hide & remove Welcome screen
-            WelcomeDialog.CloseForm();
-            Invoke(new Action(() =>
-            {
-                Opacity = 100;
-                BringToTop();
-
-                CheckForEarlyBoundEntities();
-            }));
 
             try
             {
