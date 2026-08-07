@@ -248,12 +248,12 @@ namespace XrmToolBox.ToolLibrary.Forms
             {
                 ((BackgroundWorker)s).ReportProgress(0, "Loading tools...");
 
-                if (toolLibrary.XrmToolBoxPlugins.Plugins.Count == 0 || isRefresh)
+                if (toolLibrary.XrmToolBoxPlugins == null || toolLibrary.XrmToolBoxPlugins.Plugins.Count == 0 || isRefresh)
                 {
                     toolLibrary.LoadTools().Wait();
                 }
 
-                if (imageCache.Cache.Count == 0)
+                if (imageCache.Cache.Count == 0 && toolLibrary.XrmToolBoxPlugins != null)
                 {
                     ((BackgroundWorker)s).ReportProgress(0, "Caching tools logo for first use. Please wait...");
 
@@ -274,7 +274,14 @@ namespace XrmToolBox.ToolLibrary.Forms
             {
                 if (evt.Error != null)
                 {
+                    lblLoading.Text = "Unable to load the tool library. Please check your network settings.";
                     MessageBox.Show(this, $"An error occured while loading tools: {evt.Error.ToString()}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (toolLibrary.XrmToolBoxPlugins == null || toolLibrary.Categories == null)
+                {
+                    lblLoading.Text = "No tools were returned by the tool library.";
                     return;
                 }
 
