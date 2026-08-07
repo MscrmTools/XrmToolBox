@@ -27,8 +27,8 @@ using System.Net.Http;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
-using System.Text;
 using XrmToolBox.AppCode.AppInsights;
+using XrmToolBox.Extensibility;
 
 public static class Extensions
 {
@@ -82,6 +82,7 @@ public class AiConfig
 
 public class AppInsights
 {
+    private readonly PluginControlBase _tool;
     private readonly AiConfig _aiConfig;
     private int seq = 1;
 
@@ -93,6 +94,21 @@ public class AppInsights
     /// <param name="ikey">Instrumentation Key for the AppInsights instance in the Azure portal</param>
     /// <param name="loggingassembly">Assembly info to include in logging, usually pass Assembly.GetExecutingAssembly()</param>
     /// <param name="toolname">Override name of the tool, defaults to last part of the logging assembly name</param>
+    public AppInsights(PluginControlBase tool, string endpoint, string ikey, Assembly loggingassembly, string toolname = null)
+    {
+        _tool = tool;
+        _aiConfig = new AiConfig(endpoint, ikey, loggingassembly, toolname);
+    }
+
+    /// <summary>
+    /// Initializes Application Insights instance.
+    /// When called from a tool, make sure to pass Assembly.GetExecutingAssembly() as loggingassembly parameter!!
+    /// </summary>
+    /// <param name="endpoint">AppInsights endpoint, usually https://dc.services.visualstudio.com/v2/track</param>
+    /// <param name="ikey">Instrumentation Key for the AppInsights instance in the Azure portal</param>
+    /// <param name="loggingassembly">Assembly info to include in logging, usually pass Assembly.GetExecutingAssembly()</param>
+    /// <param name="toolname">Override name of the tool, defaults to last part of the logging assembly name</param>
+    [Obsolete("Use constructor accepting PluginControlBase tool, endpoint, ikey, loggingassembly and toolname instead.", false)]
     public AppInsights(string endpoint, string ikey, Assembly loggingassembly, string toolname = null)
     {
         _aiConfig = new AiConfig(endpoint, ikey, loggingassembly, toolname);
@@ -110,6 +126,7 @@ public class AppInsights
 
     public void WriteEvent(string eventName, double? count = null, double? duration = null, Action<string> resultHandler = null)
     {
+        _tool?.LogVerbose($"{eventName}{(count != null ? $" Count: {count}" : "")}{(duration != null ? $" Duration: {duration}" : "")}");
         if (!_aiConfig.LogEvents) return;
         var logRequest = GetLogRequest("Event");
         logRequest.Data.BaseData.Name = eventName;
