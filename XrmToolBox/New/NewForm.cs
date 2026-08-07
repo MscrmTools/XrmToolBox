@@ -437,6 +437,7 @@ Would you like to reinstall last stable release of connection controls?";
         {
             WebProxyHelper.ApplyProxy();
 
+            ccsb.SetMessage("Connecting to the Tool Library...");
             await LoadStore();
 
             var tasks = new List<Task>
@@ -472,6 +473,8 @@ Would you like to reinstall last stable release of connection controls?";
                 StartPluginWithoutConnection();
             }
 
+            ccsb.SetMessage("Checking for updates...");
+
             tasks.ForEach(x => x.Start());
             await Task.WhenAll(tasks.ToArray());
 
@@ -484,6 +487,7 @@ Would you like to reinstall last stable release of connection controls?";
 
                 if (store.PluginsCount == 0)
                 {
+                    ccsb.SetMessage("Loading the list of available tools...");
                     await store.LoadTools(false);
                 }
 
@@ -519,6 +523,7 @@ Would you like to reinstall last stable release of connection controls?";
                 }
 
                 // Prepare Categories
+                ccsb.SetMessage("Preparing categories...");
                 PrepareCategories();
             }
             catch (Exception error)
@@ -533,6 +538,8 @@ Would you like to reinstall last stable release of connection controls?";
             if (ctrls.Any()) Controls.Remove(ctrls.First());
             var ctrls2 = Controls.OfType<ConnectingCdsControl>();
             if (ctrls2.Any()) Controls.Remove(ctrls2.First());
+
+            ccsb.SetMessage(string.Empty);
         }
 
         private void PrepareCategories()
