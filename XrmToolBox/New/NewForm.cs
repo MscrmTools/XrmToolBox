@@ -1852,13 +1852,6 @@ Would you like to reinstall last stable release of connection controls?";
                     ItSecurityChecker isc = new ItSecurityChecker();
                     isc.LoadRepositories();
                     store = new ToolLibrary.ToolLibrary(Options.Instance, isc.Repositories);
-                    store.LoadTools().GetAwaiter().GetResult();
-                }
-
-                if (store.PluginsCount == 0 || store.Categories == null)
-                {
-                    MessageBox.Show(this, "Tool Library is not yet initialzed, please wait few seconds", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
                 }
 
                 libraryForm = new ToolLibraryForm((ToolLibrary.ToolLibrary)store, Options.Instance);
