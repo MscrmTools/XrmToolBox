@@ -324,6 +324,8 @@ namespace XrmToolBox.PluginsStore
                 return false;
             }
 
+            var copiedFiles = new List<string>();
+
             foreach (var pu in updates.Plugins)
             {
                 try
@@ -340,9 +342,26 @@ namespace XrmToolBox.PluginsStore
                         Directory.CreateDirectory(destinationDirectory);
                     }
                     File.Copy(pu.Source, pu.Destination, true);
+                    copiedFiles.Add(pu.Destination);
                 }
                 catch (Exception error)
                 {
+                    // Clean up files that were copied before the failure
+                    foreach (var copiedFile in copiedFiles)
+                    {
+                        try
+                        {
+                            if (File.Exists(copiedFile))
+                            {
+                                File.Delete(copiedFile);
+                            }
+                        }
+                        catch
+                        {
+                            // Best effort cleanup - ignore errors during cleanup
+                        }
+                    }
+
                     MessageBox.Show("An error occured while copying files: " + error.Message +
                                     "\r\n\r\nCopy has been aborted", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
@@ -399,57 +418,76 @@ namespace XrmToolBox.PluginsStore
 
                     var packageFolder = Path.Combine(nugetPluginsFolder, $"{plugin.NugetId}.{version.Version}");
 
-                    using (PackageArchiveReader packageReader = new PackageArchiveReader(packageStream))
+                    try
                     {
-                        foreach (var packageFile in await packageReader.GetFilesAsync(cancellationToken))
+                        using (PackageArchiveReader packageReader = new PackageArchiveReader(packageStream))
                         {
-                            if (packageFile.ToLower().IndexOf("plugins/") >= 0)
+                            foreach (var packageFile in await packageReader.GetFilesAsync(cancellationToken))
                             {
-                                if (!Directory.Exists(packageFolder))
+                                if (packageFile.ToLower().IndexOf("plugins/") >= 0)
                                 {
-                                    Directory.CreateDirectory(packageFolder);
-                                }
-
-                                var relativeFilePath = packageFile.Remove(0, packageFile.ToLower().IndexOf("plugins/") + 8);
-                                var filePath = Path.Combine(packageFolder, relativeFilePath);
-                                var fi = new FileInfo(filePath);
-
-                                if (!Directory.Exists(fi.Directory.FullName))
-                                {
-                                    Directory.CreateDirectory(fi.Directory.FullName);
-                                }
-
-                                using (var fileStream = File.OpenWrite(filePath))
-                                using (var stream = await packageReader.GetStreamAsync(packageFile, cancellationToken))
-                                {
-                                    await stream.CopyToAsync(fileStream);
-                                }
-
-                                var destinationFile = Path.Combine(Paths.PluginsPath, relativeFilePath);
-
-                                // XrmToolBox restart is required when a plugin has to be
-                                // updated or when a new plugin shares files with other
-                                // plugin(s) already installed
-                                if (plugin.RequiresXtbRestart)
-                                {
-                                    pus.Plugins.Add(new PluginUpdate
+                                    if (!Directory.Exists(packageFolder))
                                     {
-                                        Source = filePath,
-                                        Destination = destinationFile,
-                                        RequireRestart = true
-                                    });
-                                }
-                                else if (plugin.Action == PackageInstallAction.Install)
-                                {
-                                    pus.Plugins.Add(new PluginUpdate
+                                        Directory.CreateDirectory(packageFolder);
+                                    }
+
+                                    var relativeFilePath = packageFile.Remove(0, packageFile.ToLower().IndexOf("plugins/") + 8);
+                                    var filePath = Path.Combine(packageFolder, relativeFilePath);
+                                    var fi = new FileInfo(filePath);
+
+                                    if (!Directory.Exists(fi.Directory.FullName))
                                     {
-                                        Source = filePath,
-                                        Destination = destinationFile,
-                                        RequireRestart = false
-                                    });
+                                        Directory.CreateDirectory(fi.Directory.FullName);
+                                    }
+
+                                    using (var fileStream = File.OpenWrite(filePath))
+                                    using (var stream = await packageReader.GetStreamAsync(packageFile, cancellationToken))
+                                    {
+                                        await stream.CopyToAsync(fileStream);
+                                    }
+
+                                    var destinationFile = Path.Combine(Paths.PluginsPath, relativeFilePath);
+
+                                    // XrmToolBox restart is required when a plugin has to be
+                                    // updated or when a new plugin shares files with other
+                                    // plugin(s) already installed
+                                    if (plugin.RequiresXtbRestart)
+                                    {
+                                        pus.Plugins.Add(new PluginUpdate
+                                        {
+                                            Source = filePath,
+                                            Destination = destinationFile,
+                                            RequireRestart = true
+                                        });
+                                    }
+                                    else if (plugin.Action == PackageInstallAction.Install)
+                                    {
+                                        pus.Plugins.Add(new PluginUpdate
+                                        {
+                                            Source = filePath,
+                                            Destination = destinationFile,
+                                            RequireRestart = false
+                                        });
+                                    }
                                 }
                             }
                         }
+                    }
+                    catch
+                    {
+                        // Clean up partially extracted package folder on failure
+                        if (Directory.Exists(packageFolder))
+                        {
+                            try
+                            {
+                                Directory.Delete(packageFolder, true);
+                            }
+                            catch
+                            {
+                                // Best effort cleanup - ignore errors during cleanup
+                            }
+                        }
+                        throw;
                     }
                 }
             }
