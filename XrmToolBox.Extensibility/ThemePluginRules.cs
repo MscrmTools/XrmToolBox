@@ -6,8 +6,15 @@ using System.Windows.Forms;
 
 namespace XrmToolBox.Extensibility
 {
+    /// <summary>
+    /// Applies specialized styling to controls hosted by known plugins. Plugin company metadata
+    /// selects a set of reusable rules that map common component types to their theme handlers.
+    /// </summary>
     internal static class ThemePluginRules
     {
+        private const int MaxPluginParentTraversalDepth = 1000;
+
+        // Company names identify the hosted plugin without relying on its concrete control types.
         private const string FetchXmlBuilderCompany = "Jonas Rapp, Sweden";
         private const string PluginRegistrationCompany = "Microsoft Corporation";
         private const string Sql4CdsCompany = "MarkMpn.Sql4Cds.XTB";
@@ -20,7 +27,7 @@ namespace XrmToolBox.Extensibility
                     new[]
                     {
                         For<Scintilla>(ApplySqlEditorTheme),
-                        For<DataGridView>(ApplyDataGridViewTheme)
+                        For<DataGridView>(ApplyDataGridViewTheme),
                     }
                 },
                 {
@@ -28,7 +35,7 @@ namespace XrmToolBox.Extensibility
                     new[]
                     {
                         For<Scintilla>(ApplyXmlEditorTheme),
-                        For<DataGridView>(ApplyDataGridViewTheme)
+                        For<DataGridView>(ApplyDataGridViewTheme),
                     }
                 },
                 {
@@ -36,13 +43,15 @@ namespace XrmToolBox.Extensibility
                     new[]
                     {
                         For<PropertyGrid>(ApplyPropertyGridTheme),
-                        For<DataGridView>((grid, theme) => ApplyDataGridViewTheme(grid, theme, true))
+                        For<DataGridView>((grid, theme) => ApplyDataGridViewTheme(grid, theme, true)),
                     }
                 }
             };
 
         public static void Apply(Control control, CustomTheme theme)
         {
+            // Resolve identity from the plugin root; child framework controls
+            // often report Microsoft or another component vendor as their company.
             var pluginRoot = FindPluginRoot(control);
             var pluginCompany = pluginRoot?.CompanyName;
             if (string.IsNullOrWhiteSpace(pluginCompany) ||
@@ -86,6 +95,7 @@ namespace XrmToolBox.Extensibility
                 grid.EnableHeadersVisualStyles = false;
             }
 
+            // Reapplying a theme must not accumulate formatting handlers.
             grid.CellFormatting -= DataGridViewCellFormatting;
             grid.CellFormatting += DataGridViewCellFormatting;
         }
@@ -181,7 +191,11 @@ namespace XrmToolBox.Extensibility
 
         private static PluginControlBase FindPluginRoot(Control control)
         {
-            for (var current = control; current != null; current = current.Parent)
+            // Allow deeply nested plugin controls while guarding against a malformed parent chain.
+            var depth = 0;
+            for (var current = control;
+                current != null && depth < MaxPluginParentTraversalDepth;
+                current = current.Parent, depth++)
             {
                 if (current is PluginControlBase pluginRoot)
                 {

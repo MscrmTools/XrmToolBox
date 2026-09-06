@@ -65,6 +65,7 @@ namespace XrmToolBox.Extensibility
             control.ForeColor = ForeColor1;
             control.BackColor = Background1;
 
+            // Specialized rules fill the gaps left by standard WinForms colors.
             ThemePluginRules.Apply(control, this);
 
             if (control is TextBox || control is ComboBox || control is RichTextBox)
