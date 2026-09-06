@@ -58,11 +58,7 @@ namespace XrmToolBox.New
                 }
             }
 
-            CustomTheme.Instance.ApplyTheme(this);
-
-            var allControls = this.GetAllControls();
-
-            ThemeHelpers.ApplyThemeCallbacks(allControls, this);
+            ThemeHelpers.ApplyThemeAndWatch(this);
 
             DisplayHighlight(pluginControlBase.ConnectionDetail);
         }
