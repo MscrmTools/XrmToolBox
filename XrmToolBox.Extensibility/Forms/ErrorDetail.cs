@@ -18,6 +18,14 @@ namespace XrmToolBox.Extensibility.Forms
 
         public ErrorDetail(PluginControlBase owner, Exception exception, string heading, string extrainfo, bool allownewissue)
         {
+            if (exception == null)
+            {   // Just in case...
+                return;
+            }
+            if (owner != null)
+            {   // Log error with details and stack trace
+                owner.LogError(exception.ExceptionDetails() + "\r\n" + exception.StackTrace);
+            }
             this.owner = owner;
             this.exception = exception?.InnerException ?? exception;
             this.extrainfo = extrainfo;
@@ -168,5 +176,11 @@ namespace XrmToolBox.Extensibility.Forms
         {
             Height = panButton.Height + panInfo.Height + (panDetails.Visible ? panDetails.Height : 0) + 50;
         }
+    }
+
+    public static class ExceptionExtensions
+    {
+        public static string ExceptionDetails(this Exception ex, int level = 0) => ex == null ? string.Empty :
+             $"{new string(' ', level * 2)}{ex.Message}{Environment.NewLine}{ex.InnerException.ExceptionDetails(level + 1)}".Trim();
     }
 }

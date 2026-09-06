@@ -196,9 +196,9 @@ namespace XrmToolBox.New
             {
                 Process.Start("https://twitter.com/XrmToolBox");
             }
-            else if (sender == lblChatGitter)
+            else if (sender == lblChatGithub)
             {
-                Process.Start("https://gitter.im/MscrmTools/XrmToolBox");
+                Process.Start("https://github.com/MscrmTools/XrmToolBox/discussions");
             }
             else if (sender == lblDonatePayPal)
             {

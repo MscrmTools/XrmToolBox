@@ -54,13 +54,11 @@ namespace XrmToolBox.Extensibility.UserControls
             ctrl.BackColorChanged += NotificationArea_BackColorChanged;
         }
 
-        private void Initialize(string message, Uri infoUri, int height = 30)
+        public void ShowErrorNotification(string message, Uri infoUri, int height = 30)
         {
-            lblMessage.Text = message;
-            Height = height;
-            llLearMore.Visible = infoUri != null;
-            moreInfoUri = infoUri;
-            Visible = true;
+            Initialize(message, infoUri, height);
+
+            pbNotif.Image = Icons.notif_icn_crit16;
         }
 
         public void ShowInfoNotification(string message, Uri infoUri, int height = 30)
@@ -77,11 +75,13 @@ namespace XrmToolBox.Extensibility.UserControls
             pbNotif.Image = Icons.notif_icn_alert16;
         }
 
-        public void ShowErrorNotification(string message, Uri infoUri, int height = 30)
+        private void Initialize(string message, Uri infoUri, int height = 30)
         {
-            Initialize(message, infoUri, height);
-
-            pbNotif.Image = Icons.notif_icn_crit16;
+            lblMessage.Text = message;
+            Height = height;
+            llLearMore.Visible = infoUri != null;
+            moreInfoUri = infoUri;
+            Visible = true;
         }
 
         private void llDismiss_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -91,7 +91,7 @@ namespace XrmToolBox.Extensibility.UserControls
 
         private void llLearnMore_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(moreInfoUri.AbsoluteUri); 
+            Process.Start(moreInfoUri.AbsoluteUri);
         }
     }
 }

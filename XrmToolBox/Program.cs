@@ -12,6 +12,7 @@ using System.Xml;
 using XrmToolBox.AppCode;
 using XrmToolBox.Extensibility;
 using XrmToolBox.Extensibility.Forms;
+using XrmToolBox.Forms;
 using XrmToolBox.New;
 using XrmToolBox.ToolLibrary.AppCode;
 using PluginUpdates = XrmToolBox.AppCode.PluginUpdates;
@@ -246,14 +247,19 @@ Please start XrmToolBox again to fix this problem",
                         continue;
                     }
 
-                    var fiSourceVersion = new Version(FileVersionInfo.GetVersionInfo(fi.FullName).FileVersion);
-                    var fiTargetVersion = new Version(FileVersionInfo.GetVersionInfo(targetFile).FileVersion);
-
-                    if (fiSourceVersion > fiTargetVersion)
+                    Version source;
+                    Version target;
+                    if (Version.TryParse(FileVersionInfo.GetVersionInfo(fi.FullName).FileVersion, out source))
                     {
-                        // If version to deploy is newer than current version
-                        // Delete current version and copy the new one
-                        File.Copy(fi.FullName, targetFile, true);
+                        if (Version.TryParse(FileVersionInfo.GetVersionInfo(targetFile).FileVersion, out target))
+                        {
+                            if (source > target)
+                            {
+                                // If version to deploy is newer than current version
+                                // Delete current version and copy the new one
+                                File.Copy(fi.FullName, targetFile, true);
+                            }
+                        }
                     }
                 }
                 else
@@ -305,6 +311,11 @@ Please start XrmToolBox again to fix this problem",
             RemovePlugins();
             RunCommandIfAny();
 
+            // Must be called before the first window is created
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            WelcomeDialog.ShowSplashScreen();
+
             RedirectAssembly("Newtonsoft.Json");
             RedirectAssembly("McTools.Xrm.Connection");
             RedirectAssembly("McTools.Xrm.Connection.WinForms");
@@ -322,12 +333,11 @@ Please start XrmToolBox again to fix this problem",
             RedirectAssembly("ScintillaNET");
             RedirectAssembly("Microsoft.Web.WebView2.Core");
             RedirectAssembly("Microsoft.Web.WebView2.WinForms");
+            RedirectAssembly("Microsoft.Toolkit.Uwp.Notifications");
 
             OptimizeConnectionSettings();
             SetProxy();
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new NewForm(args));
         }
 
@@ -492,7 +502,14 @@ Please start XrmToolBox again to fix this problem",
 
         private static void SetProxy()
         {
-            WebProxyHelper.ApplyProxy();
+            try
+            {
+                WebProxyHelper.ApplyProxy();
+            }
+            catch
+            {
+                // Ignore any error
+            }
         }
 
         private static void TryWaitingForOldProcess(int previousProcessId)

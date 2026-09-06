@@ -124,7 +124,7 @@ namespace XrmToolBox
         }
     }
 
-    public class Options : ICloneable, IToolLibrarySettings, IConnectionControlSettings
+    public class Options : ICloneable, IToolLibrarySettings, IConnectionControlSettings2
     {
         private static Options innerOptions;
 
@@ -202,7 +202,7 @@ namespace XrmToolBox
         [DisplayName("Repository Url")]
         [Description("Repository Url for tools list. You can use your own if needed")]
         [PropertyOrder(1)]
-        public string RepositoryUrl { get; set; } = "https://www.xrmtoolbox.com/_odata/plugins";
+        public string RepositoryUrl { get; set; } = "https://www.xrmtoolbox.com/_api/mctools_plugins";
 
         #endregion ToolLibrary
 
@@ -417,6 +417,12 @@ namespace XrmToolBox
                 OnSettingsChanged?.Invoke(this, new SettingsPropertyEventArgs(nameof(UseDetailsViewForConnectionSelector), value));
             }
         }
+
+        [Category("Connection controls")]
+        [DisplayName("Use filter for additional connections")]
+        [Description("Indicates if connection selector should display the connection from the same file when adding an additionnal connection")]
+        [PropertyOrder(10)]
+        public bool UseFilterForAdditionalConnection { get; set; } = true;
 
         #endregion Connection controls
 
@@ -674,6 +680,16 @@ namespace XrmToolBox
 
         #endregion Proxy
 
+        #region Logging
+
+        [Browsable(false)]
+        public LogManager.Level LogLevel { get; set; } = LogManager.Level.Warning;
+
+        [Browsable(false)]
+        public int LogRetentionInDays { get; set; } = 0;
+
+        #endregion Logging
+
         #region Methods
 
         public static bool Load(out Options options, out string errorMessage)
@@ -772,7 +788,9 @@ namespace XrmToolBox
                 LibraryShowUpdates = LibraryShowUpdates,
                 UseLegacyToolsList = UseLegacyToolsList,
                 ShowCategoriesExpanded = ShowCategoriesExpanded,
-                DoNotUseToolColors = DoNotUseToolColors
+                DoNotUseToolColors = DoNotUseToolColors,
+                LogLevel = LogLevel,
+                LogRetentionInDays = LogRetentionInDays,
             };
         }
 

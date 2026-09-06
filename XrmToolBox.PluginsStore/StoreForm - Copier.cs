@@ -374,10 +374,30 @@ namespace XrmToolBox.PluginsStore
                     }
                     continue;
                 }
-                manager.InstallPackage(xtbPackage.Package, true, false);
 
                 var packageFolder = Path.Combine(nugetPluginsFolder,
                     xtbPackage.Package.Id + "." + xtbPackage.Package.Version);
+
+                try
+                {
+                    manager.InstallPackage(xtbPackage.Package, true, false);
+                }
+                catch
+                {
+                    // Clean up partially extracted package folder on failure
+                    if (Directory.Exists(packageFolder))
+                    {
+                        try
+                        {
+                            Directory.Delete(packageFolder, true);
+                        }
+                        catch
+                        {
+                            // Best effort cleanup - ignore errors during cleanup
+                        }
+                    }
+                    throw;
+                }
 
                 foreach (var fi in xtbPackage.Package.GetFiles())
                 {
@@ -425,6 +445,8 @@ namespace XrmToolBox.PluginsStore
             }
             else
             {
+                var copiedFiles = new List<string>();
+
                 foreach (var pu in updates.Plugins)
                 {
                     try
@@ -436,9 +458,26 @@ namespace XrmToolBox.PluginsStore
                             Directory.CreateDirectory(destinationDirectory);
                         }
                         File.Copy(pu.Source, pu.Destination, true);
+                        copiedFiles.Add(pu.Destination);
                     }
                     catch (Exception error)
                     {
+                        // Clean up files that were copied before the failure
+                        foreach (var copiedFile in copiedFiles)
+                        {
+                            try
+                            {
+                                if (File.Exists(copiedFile))
+                                {
+                                    File.Delete(copiedFile);
+                                }
+                            }
+                            catch
+                            {
+                                // Best effort cleanup - ignore errors during cleanup
+                            }
+                        }
+
                         MessageBox.Show(this,
                             "An error occured while copying files: " + error.Message +
                             "\r\n\r\nCopy has been aborted", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);

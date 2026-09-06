@@ -24,13 +24,15 @@ namespace XrmToolBox.Extensibility
             _filePath = Path.Combine(Paths.LogsPath, $"{pluginType.Assembly.FullName.Split(',')[0]}.log");
         }
 
-        private enum Level
+        public enum Level
         {
+            Verbose,
             Info,
             Warning,
             Error
         }
 
+        public static Level LogLevel { get; set; } = Level.Warning;
         public string FilePath => _filePath;
 
         /// <summary>

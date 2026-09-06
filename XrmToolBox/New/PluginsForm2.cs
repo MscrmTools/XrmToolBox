@@ -96,7 +96,8 @@ namespace XrmToolBox.New
             {
                 if (categories == null)
                 {
-                    var result = WebRequestHelper.MakeGet("https://www.xrmtoolbox.com/_odata/categories");
+                    //var result = WebRequestHelper.MakeGet("https://www.xrmtoolbox.com/_odata/categories");
+                    var result = WebRequestHelper.MakeGet("https://www.xrmtoolbox.com/_api/mctools_categories");
                     var data = JObject.Parse(result);
                     categories = new Dictionary<string, List<string>>();
                     foreach (JToken jo in (JArray)data["value"])
