@@ -120,6 +120,14 @@ namespace XrmToolBox.Extensibility
 
             HighlightColor = ColorTranslator.FromHtml("#007ACC");
 
+            AttributeColor = ColorTranslator.FromHtml("#9CDCFE");
+            CommentColor = ColorTranslator.FromHtml("#57A64A");
+            KeywordColor = ColorTranslator.FromHtml("#C878FF");
+            NumberColor = ColorTranslator.FromHtml("#EB7578");
+            OperatorColor = ColorTranslator.FromHtml("#7FDBFF");
+            StringColor = ColorTranslator.FromHtml("#D69D85");
+            TagColor = ColorTranslator.FromHtml("#4EC9B0");
+
             MenuColorTable = new DarkProfessionalColors(this);
         }
     }
