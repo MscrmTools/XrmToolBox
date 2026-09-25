@@ -67,6 +67,16 @@ namespace XrmToolBox.Extensibility
         }
 
         /// <summary>
+        /// Writes a verbose message in the log
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="args"></param>
+        public void LogVerbose(string message, params object[] args)
+        {
+            Log(Level.Verbose, args.Length == 0 ? message : string.Format(message, args));
+        }
+
+        /// <summary>
         /// Writes a warning message in the log
         /// </summary>
         /// <param name="message">Message</param>
@@ -112,6 +122,10 @@ namespace XrmToolBox.Extensibility
         /// <param name="message">Content of the message</param>
         private void Log(Level level, string message)
         {
+            if (LogLevel > level)
+            {   // No logging for this level since it's less than the settings level
+                return;
+            }
             var parentFolder = Path.GetDirectoryName(_filePath);
             if (parentFolder != null && !Directory.Exists(parentFolder))
             {
@@ -124,7 +138,7 @@ namespace XrmToolBox.Extensibility
             {
                 using (StreamWriter writer = new StreamWriter(_filePath, true))
                 {
-                    writer.WriteLine("{0:yyyy-MM-dd hh:mm:ss.fff tt}\t{1}\t{2}\t{3}", DateTime.Now,
+                    writer.WriteLine("{0:yyyy-MM-dd HH:mm:ss.fff}\t{1}\t{2}\t{3}", DateTime.Now,
                         _connection?.ConnectionName, level, message);
                 }
             }
