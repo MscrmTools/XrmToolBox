@@ -17,6 +17,7 @@ namespace XrmToolBox.Extensibility.Interfaces
         bool LibraryShowUpdates { get; set; }
         int MostRatedMinNumberOfVotes { get; set; }
         decimal MostRatedMinRatingAverage { get; set; }
+        string NugetSourceUrl { get; set; }
         string RepositoryUrl { get; set; }
 
         #region Proxy

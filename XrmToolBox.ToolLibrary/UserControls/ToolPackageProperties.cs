@@ -96,7 +96,7 @@ namespace XrmToolBox.ToolLibrary.UserControls
             bw.DoWork += (s, evt) =>
             {
                 var httpClient = new HttpClient();
-                var data = httpClient.GetAsync($"https://api-v2v3search-0.nuget.org/query?q={plugin.NugetId}").GetAwaiter().GetResult().Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                var data = httpClient.GetAsync($"{library.ToolLibrarySettings.NugetSourceUrl}/query?q={plugin.NugetId}").GetAwaiter().GetResult().Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var jo = JObject.Parse(data);
 
                 var registrationData = httpClient.GetAsync(((JArray)jo["data"]).FirstOrDefault()["registration"].ToString()).GetAwaiter().GetResult().Content.ReadAsStringAsync().GetAwaiter().GetResult();

@@ -1,5 +1,4 @@
-﻿using System;
-using XrmToolBox.Extensibility.Interfaces;
+﻿using XrmToolBox.Extensibility.Interfaces;
 
 namespace XrmToolBox.ToolLibrary.AppCode
 {
@@ -19,6 +18,7 @@ namespace XrmToolBox.ToolLibrary.AppCode
         public bool LibraryShowUpdates { get; set; } = true;
         public int MostRatedMinNumberOfVotes { get; set; }
         public decimal MostRatedMinRatingAverage { get; set; }
+        public string NugetSourceUrl { get; set; }
         public string Password { get; set; }
         public string ProxyAddress { get; set; }
         public string RepositoryUrl { get; set; }

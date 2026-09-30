@@ -189,14 +189,20 @@ namespace XrmToolBox
         [Category("Tool Library")]
         [DisplayName("Most Rated - Minimum number of votes")]
         [Description("Indicates the minimum number of votes for a tool to be considered as a most rated tool")]
-        [PropertyOrder(3)]
+        [PropertyOrder(4)]
         public int MostRatedMinNumberOfVotes { get; set; } = 10;
 
         [Category("Tool Library")]
         [DisplayName("Most Rated - Minimum average rate")]
         [Description("Indicates the minimum average rate for a tool to be considered as a most rated tool")]
-        [PropertyOrder(4)]
+        [PropertyOrder(5)]
         public decimal MostRatedMinRatingAverage { get; set; } = (decimal)4.5;
+
+        [Category("Tool Library")]
+        [DisplayName("Nuget source Url")]
+        [Description("Nuget source Url for searching and downloading packages. You can use your own if needed")]
+        [PropertyOrder(3)]
+        public string NugetSourceUrl { get; set; } = "https://api-v2v3search-0.nuget.org";
 
         [Category("Tool Library")]
         [DisplayName("Repository Url")]

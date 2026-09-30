@@ -109,8 +109,8 @@ namespace XrmToolBox.ToolLibrary
         public int PluginsCount => XrmToolBoxPlugins?.Plugins.Count ?? 0;
         public int PluginsUpdatesCount => XrmToolBoxPlugins?.Plugins.Count(p => p.Action == PackageInstallAction.Update) ?? 0;
         public Dictionary<string, string> Repositories { get; private set; }
+        public IToolLibrarySettings ToolLibrarySettings => settings;
         public List<IXrmToolBoxLibraryTool> Tools => XrmToolBoxPlugins.Plugins.Select(p => (IXrmToolBoxLibraryTool)p).ToList();
-
         public XtbPlugins XrmToolBoxPlugins { get; set; }
 
         #endregion Properties
@@ -323,7 +323,7 @@ namespace XrmToolBox.ToolLibrary
 
         public async Task<PackageVersion> GetPackageVersion(string packageName)
         {
-            var response = await HttpClient.GetAsync($"https://api-v2v3search-0.nuget.org/query?q={packageName}").ConfigureAwait(false);
+            var response = await HttpClient.GetAsync($"{settings.NugetSourceUrl}/query?q={packageName}").ConfigureAwait(false);
             var data = await response.Content.ReadAsStringAsync();
 
             var jo = JObject.Parse(data);
