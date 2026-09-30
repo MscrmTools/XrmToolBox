@@ -27,6 +27,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
+using System.Text;
 using XrmToolBox.AppCode.AppInsights;
 using XrmToolBox.Extensibility;
 
