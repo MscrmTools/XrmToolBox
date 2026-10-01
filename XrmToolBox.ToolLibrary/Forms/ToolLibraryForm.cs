@@ -84,6 +84,8 @@ namespace XrmToolBox.ToolLibrary.Forms
             cbbToolSort.SelectedIndex = 0;
 
             ShowRestartButton();
+
+            CustomTheme.Instance.ApplyTheme(this);
         }
 
         public event EventHandler PluginsClosingRequested;

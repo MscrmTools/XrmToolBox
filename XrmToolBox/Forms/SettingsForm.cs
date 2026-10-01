@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 using XrmToolBox.AppCode;
 using XrmToolBox.Controls;
+using XrmToolBox.Extensibility;
 using XrmToolBox.Properties;
 
 namespace XrmToolBox.Forms
@@ -27,6 +28,13 @@ namespace XrmToolBox.Forms
                true);
 
             PrepareTabsAndContent();
+
+            CustomTheme.Instance.ApplyTheme(this);
+            if (CustomTheme.Instance.IsActive)
+            {
+                pnlNavLeft.BackColor = CustomTheme.Instance.Background1;
+                pnlNavMain.BackColor = CustomTheme.Instance.Background2;
+            }
         }
 
         public event EventHandler OnProxySettingsChanged;

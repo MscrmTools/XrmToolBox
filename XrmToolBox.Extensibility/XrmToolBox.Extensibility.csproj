@@ -86,7 +86,10 @@
     <Compile Include="Args\DuplicateToolArgs.cs" />
     <Compile Include="Args\DuplicateToolWithConnectionArgs.cs" />
     <Compile Include="Args\StatusBarMessageEventArgs.cs" />
+    <Compile Include="DarkTheme.cs" />
+    <Compile Include="CustomTheme.cs" />
     <Compile Include="DrawExtensions.cs" />
+    <Compile Include="ThemePluginRules.cs" />
     <Compile Include="Extensions.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -257,6 +260,9 @@
     <None Include="Resources\progress_new.gif" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="jacobslusser.ScintillaNET">
+      <Version>3.6.3</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.CrmSdk.CoreAssemblies">
       <Version>9.0.2.59</Version>
     </PackageReference>

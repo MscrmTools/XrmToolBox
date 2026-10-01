@@ -89,7 +89,7 @@ namespace XrmToolBox.Controls
         private void pnlLegend_Paint(object sender, PaintEventArgs e)
         {
             var x = (long)e.ClipRectangle.X + 10;
-            var blackBrush = new SolidBrush(Color.Black);
+            var textBrush = new SolidBrush(CustomTheme.Instance.IsActive ? CustomTheme.Instance.ForeColor1 : Color.Black);
             foreach (var subFolder in subFolders)
             {
                 if (!sizes.ContainsKey(subFolder)) continue;
@@ -101,7 +101,7 @@ namespace XrmToolBox.Controls
                 {
                     e.Graphics.FillRectangle(brush, x, e.ClipRectangle.Y + 8, 10, 16);
                     x += 20;
-                    e.Graphics.DrawString(text, Font, blackBrush, x, 10);
+                    e.Graphics.DrawString(text, Font, textBrush, x, 10);
                     x += textSize.Width + 20;
                 }
             }
