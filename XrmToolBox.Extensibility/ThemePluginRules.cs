@@ -2,6 +2,7 @@ using ScintillaNET;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace XrmToolBox.Extensibility
@@ -137,6 +138,116 @@ namespace XrmToolBox.Extensibility
             SetStyle(editor, Style.Sql.Operator, theme.OperatorColor, theme.Background1);
 
             editor.SetSelectionBackColor(true, theme.Background2);
+            ApplySqlAutocompleteTheme(editor, theme);
+        }
+
+        private static void ApplySqlAutocompleteTheme(Scintilla editor, CustomTheme theme)
+        {
+            // SQL 4 CDS uses its own component for suggestions, separate from Scintilla.
+            // Its menu is stored on the query control rather than in the control tree.
+            var depth = 0;
+            for (var current = editor.Parent;
+                current != null && depth < MaxPluginParentTraversalDepth;
+                current = current.Parent, depth++)
+            {
+                if (current.GetType().FullName != "MarkMpn.Sql4Cds.XTB.SqlQueryControl")
+                {
+                    continue;
+                }
+
+                var tooltip = current.GetType()
+                    .GetField("_tooltip", BindingFlags.Instance | BindingFlags.NonPublic)
+                    ?.GetValue(current) as ToolTip;
+                ApplySqlTooltipTheme(tooltip, theme);
+
+                var menu = current.GetType()
+                    .GetField("_autocomplete", BindingFlags.Instance | BindingFlags.NonPublic)
+                    ?.GetValue(current);
+                if (menu == null)
+                {
+                    return;
+                }
+
+                var colors = menu.GetType().GetProperty("Colors")?.GetValue(menu);
+                if (colors == null)
+                {
+                    return;
+                }
+
+                SetColor(colors, "ForeColor", theme.ForeColor2);
+                SetColor(colors, "BackColor", theme.Background1);
+                SetColor(colors, "SelectedForeColor", theme.ForeColor5);
+                SetColor(colors, "SelectedBackColor", theme.HighlightColor);
+                SetColor(colors, "SelectedBackColor2", theme.Background3);
+                SetColor(colors, "HighlightingColor", theme.HighlightColor);
+
+                var listView = menu.GetType().GetProperty("ListView")?.GetValue(menu) as Control;
+                if (listView != null)
+                {
+                    listView.BackColor = theme.Background1;
+                    listView.ForeColor = theme.ForeColor2;
+                    listView.Invalidate();
+
+                    // Item descriptions are displayed by a separate WinForms ToolTip.
+                    var itemTooltip = listView.GetType()
+                        .GetField("toolTip", BindingFlags.Instance | BindingFlags.NonPublic)
+                        ?.GetValue(listView) as ToolTip;
+                    ApplySqlTooltipTheme(itemTooltip, theme);
+                }
+
+                return;
+            }
+        }
+
+        private static void SetColor(object target, string propertyName, Color color)
+        {
+            target.GetType().GetProperty(propertyName)?.SetValue(target, color);
+        }
+
+        private static void ApplySqlTooltipTheme(ToolTip tooltip, CustomTheme theme)
+        {
+            if (tooltip == null)
+            {
+                return;
+            }
+
+            tooltip.BackColor = theme.Background2;
+            tooltip.ForeColor = theme.ForeColor2;
+            tooltip.OwnerDraw = true;
+            tooltip.Draw -= DrawSqlTooltip;
+            tooltip.Draw += DrawSqlTooltip;
+        }
+
+        private static void DrawSqlTooltip(object sender, DrawToolTipEventArgs e)
+        {
+            var tooltip = sender as ToolTip;
+            var backColor = tooltip?.BackColor ?? SystemColors.Info;
+            var foreColor = tooltip?.ForeColor ?? SystemColors.InfoText;
+            using (var background = new SolidBrush(backColor))
+            using (var border = new Pen(ControlPaint.Light(backColor)))
+            {
+                e.Graphics.FillRectangle(background, e.Bounds);
+                e.Graphics.DrawRectangle(border, e.Bounds.Left, e.Bounds.Top,
+                    e.Bounds.Width - 1, e.Bounds.Height - 1);
+            }
+
+            var textBounds = Rectangle.Inflate(e.Bounds, -4, -3);
+            if (!string.IsNullOrEmpty(tooltip?.ToolTipTitle))
+            {
+                using (var titleFont = new Font(e.Font, FontStyle.Bold))
+                {
+                    var titleHeight = TextRenderer.MeasureText(tooltip.ToolTipTitle, titleFont).Height;
+                    var titleBounds = new Rectangle(textBounds.Left, textBounds.Top,
+                        textBounds.Width, titleHeight);
+                    TextRenderer.DrawText(e.Graphics, tooltip.ToolTipTitle, titleFont,
+                        titleBounds, foreColor, TextFormatFlags.NoPrefix);
+                    textBounds.Y += titleHeight;
+                    textBounds.Height -= titleHeight;
+                }
+            }
+
+            TextRenderer.DrawText(e.Graphics, e.ToolTipText, e.Font,
+                textBounds, foreColor, TextFormatFlags.NoPrefix | TextFormatFlags.WordBreak);
         }
 
         private static void ApplyXmlEditorTheme(Scintilla editor, CustomTheme theme)
