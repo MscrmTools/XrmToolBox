@@ -28,7 +28,6 @@ namespace XrmToolBox.Extensibility
                     new[]
                     {
                         For<Scintilla>(ApplySqlEditorTheme),
-                        For<DataGridView>(ApplyDataGridViewTheme),
                     }
                 },
                 {
@@ -36,7 +35,6 @@ namespace XrmToolBox.Extensibility
                     new[]
                     {
                         For<Scintilla>(ApplyXmlEditorTheme),
-                        For<DataGridView>(ApplyDataGridViewTheme),
                     }
                 },
                 {
@@ -44,13 +42,19 @@ namespace XrmToolBox.Extensibility
                     new[]
                     {
                         For<PropertyGrid>(ApplyPropertyGridTheme),
-                        For<DataGridView>((grid, theme) => ApplyDataGridViewTheme(grid, theme, true)),
+                        For<DataGridView>(ApplyRegistrationGridTheme),
                     }
                 }
             };
 
         public static void Apply(Control control, CustomTheme theme)
         {
+            // All hosted grids need readable cells; plugin rules only add exceptions.
+            if (control is DataGridView grid)
+            {
+                ApplyDataGridViewTheme(grid, theme);
+            }
+
             // Resolve identity from the plugin root; child framework controls
             // often report Microsoft or another component vendor as their company.
             var pluginRoot = FindPluginRoot(control);
@@ -69,36 +73,31 @@ namespace XrmToolBox.Extensibility
 
         private static void ApplyDataGridViewTheme(DataGridView grid, CustomTheme theme)
         {
-            ApplyDataGridViewTheme(grid, theme, false);
-        }
-
-        private static void ApplyDataGridViewTheme(
-            DataGridView grid,
-            CustomTheme theme,
-            bool useFlatBorders)
-        {
             var alternatingRowColor = Blend(theme.Background1, theme.Background2, 35);
 
             grid.BackgroundColor = theme.Background1;
             grid.GridColor = theme.Background3;
             grid.DefaultCellStyle.ForeColor = theme.ForeColor2;
             grid.DefaultCellStyle.BackColor = theme.Background1;
+            grid.DefaultCellStyle.SelectionBackColor = theme.HighlightColor;
+            grid.DefaultCellStyle.SelectionForeColor = theme.ForeColor5;
             grid.ColumnHeadersDefaultCellStyle.BackColor = theme.Background2;
             grid.ColumnHeadersDefaultCellStyle.ForeColor = theme.ForeColor4;
             grid.RowHeadersDefaultCellStyle.BackColor = theme.Background2;
+            grid.RowHeadersDefaultCellStyle.ForeColor = theme.ForeColor4;
             grid.RowsDefaultCellStyle.BackColor = theme.Background1;
             grid.AlternatingRowsDefaultCellStyle.BackColor = alternatingRowColor;
-
-            if (useFlatBorders)
-            {
-                grid.BorderStyle = BorderStyle.None;
-                grid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-                grid.EnableHeadersVisualStyles = false;
-            }
+            grid.EnableHeadersVisualStyles = false;
 
             // Reapplying a theme must not accumulate formatting handlers.
             grid.CellFormatting -= DataGridViewCellFormatting;
             grid.CellFormatting += DataGridViewCellFormatting;
+        }
+
+        private static void ApplyRegistrationGridTheme(DataGridView grid, CustomTheme theme)
+        {
+            grid.BorderStyle = BorderStyle.None;
+            grid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
         }
 
         private static void ApplyPropertyGridTheme(PropertyGrid grid, CustomTheme theme)
@@ -126,16 +125,28 @@ namespace XrmToolBox.Extensibility
             SetStyle(editor, Style.Sql.Default, theme.ForeColor2, theme.Background1);
             SetStyle(editor, Style.Sql.Comment, theme.CommentColor, theme.Background1);
             SetStyle(editor, Style.Sql.CommentLine, theme.CommentColor, theme.Background1);
+            SetStyle(editor, Style.Sql.CommentDoc, theme.CommentColor, theme.Background1);
             SetStyle(editor, Style.Sql.CommentLineDoc, theme.CommentColor, theme.Background1);
+            SetStyle(editor, Style.Sql.CommentDocKeyword, theme.CommentColor, theme.Background1);
+            SetStyle(editor, Style.Sql.CommentDocKeywordError, theme.CommentColor, theme.Background1);
             SetStyle(editor, Style.Sql.Number, theme.NumberColor, theme.Background1);
+            // SQL 4 CDS puts SQL keywords, built-in functions, and join/boolean
+            // operators in Scintilla's Word, Word2, and User1 lists respectively.
             SetStyle(editor, Style.Sql.Word, theme.KeywordColor, theme.Background1);
             SetStyle(editor, Style.Sql.Word2, theme.KeywordColor, theme.Background1);
+            SetStyle(editor, Style.Sql.User1, theme.KeywordColor, theme.Background1);
             SetStyle(editor, Style.Sql.Identifier, theme.ForeColor1, theme.Background1);
-            SetStyle(editor, Style.Sql.User1, theme.ForeColor1, theme.Background1);
+            SetStyle(editor, Style.Sql.QuotedIdentifier, theme.ForeColor1, theme.Background1);
             SetStyle(editor, Style.Sql.User2, theme.OperatorColor, theme.Background1);
+            SetStyle(editor, Style.Sql.User3, theme.ForeColor2, theme.Background1);
+            SetStyle(editor, Style.Sql.User4, theme.ForeColor2, theme.Background1);
             SetStyle(editor, Style.Sql.String, theme.StringColor, theme.Background1);
             SetStyle(editor, Style.Sql.Character, theme.StringColor, theme.Background1);
             SetStyle(editor, Style.Sql.Operator, theme.OperatorColor, theme.Background1);
+            SetStyle(editor, Style.Sql.QOperator, theme.OperatorColor, theme.Background1);
+            SetStyle(editor, Style.Sql.SqlPlus, theme.ForeColor2, theme.Background1);
+            SetStyle(editor, Style.Sql.SqlPlusPrompt, theme.ForeColor2, theme.Background1);
+            SetStyle(editor, Style.Sql.SqlPlusComment, theme.CommentColor, theme.Background1);
 
             editor.SetSelectionBackColor(true, theme.Background2);
             ApplySqlAutocompleteTheme(editor, theme);
