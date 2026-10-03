@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using XrmToolBox.ToolLibrary.AppCode;
@@ -93,17 +92,18 @@ namespace XrmToolBox.ToolLibrary.UserControls
         private void GetVersions()
         {
             var bw = new BackgroundWorker();
+            plugin.Versions = new List<XtbPluginVersion>();
             bw.DoWork += (s, evt) =>
             {
-                var httpClient = new HttpClient();
-                var data = httpClient.GetAsync($"{library.ToolLibrarySettings.NugetSourceUrl}/query?q={plugin.NugetId}").GetAwaiter().GetResult().Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                var jo = JObject.Parse(data);
-
-                var registrationData = httpClient.GetAsync(((JArray)jo["data"]).FirstOrDefault()["registration"].ToString()).GetAwaiter().GetResult().Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                var searchResult = library.GetNugetPackageSearchResultAsync(plugin.NugetId).GetAwaiter().GetResult();
+                var registrationUrl = library.GetNugetPackageRegistrationUrlAsync(plugin.NugetId, searchResult).GetAwaiter().GetResult();
+                var registrationResponse = library.HttpClient.GetAsync(registrationUrl).GetAwaiter().GetResult();
+                registrationResponse.EnsureSuccessStatusCode();
+                var registrationData = registrationResponse.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 var rd = JObject.Parse(registrationData);
-                var versions = ((JArray)rd["items"]).SelectMany(va => (JArray)va["items"]).Where(item => ((JObject)item["catalogEntry"])["listed"].Value<bool>() == true);
-
-                plugin.Versions = new List<XtbPluginVersion>();
+                var versions = (rd["items"] as JArray ?? new JArray())
+                    .SelectMany(page => page["items"] as JArray ?? new JArray())
+                    .Where(item => item["catalogEntry"]?["listed"]?.Value<bool>() == true);
 
                 foreach (var versionInfo in versions)
                 {
@@ -138,6 +138,12 @@ namespace XrmToolBox.ToolLibrary.UserControls
             bw.RunWorkerCompleted += (s, evt) =>
             {
                 cbbVersions.Items.Clear();
+                if (evt.Error != null)
+                {
+                    MessageBox.Show(this, $"Unable to load package versions: {evt.Error.GetBaseException().Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 cbbVersions.Items.AddRange(plugin.Versions.OrderByDescending(v => v.Version).ToArray());
 
                 if (cbbVersions.Items.Count != 0)
