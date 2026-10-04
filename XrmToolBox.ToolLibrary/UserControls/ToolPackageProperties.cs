@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using XrmToolBox.Extensibility;
 using XrmToolBox.ToolLibrary.AppCode;
 
 namespace XrmToolBox.ToolLibrary.UserControls
@@ -37,6 +38,8 @@ namespace XrmToolBox.ToolLibrary.UserControls
             InitializeComponent();
             SetControlsDisplay();
             GetVersions();
+
+            CustomTheme.Instance.ApplyTheme(this);
         }
 
         public event EventHandler OnToolOpenRequested;

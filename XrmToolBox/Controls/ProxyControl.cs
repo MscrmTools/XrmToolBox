@@ -1,10 +1,10 @@
-﻿using McTools.Xrm.Connection;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Net.Http;
 using System.Windows.Forms;
 using XrmToolBox.AppCode;
+using XrmToolBox.Extensibility;
 using XrmToolBox.Forms;
 
 namespace XrmToolBox.Controls
@@ -34,6 +34,8 @@ namespace XrmToolBox.Controls
             txtscCustomProxyAddress.Text = Options.Instance.ProxyAddress;
             txtscUserName.Text = Options.Instance.UserName;
             txtscPassword.Text = Options.Instance.Password;
+
+            CustomTheme.Instance.ApplyTheme(this);
         }
 
         public event EventHandler OnProxySettingsChanged;
@@ -116,12 +118,43 @@ namespace XrmToolBox.Controls
             txtscCustomProxyAddress.Enabled = ddscSelection.Value.ToString() == ProxySelection.UseCustomProxy.ToString();
             sscCustomAuth.Enabled = ddscSelection.Value.ToString() == ProxySelection.UseCustomProxy.ToString();
             sscBypassLocal.Enabled = ddscSelection.Value.ToString() == ProxySelection.UseCustomProxy.ToString();
-        }
+
+            txtscCustomProxyAddress.Visible = ddscSelection.Value.ToString() == ProxySelection.UseCustomProxy.ToString();
+            sscCustomAuth.Visible = ddscSelection.Value.ToString() == ProxySelection.UseCustomProxy.ToString();
+            sscBypassLocal.Visible = ddscSelection.Value.ToString() == ProxySelection.UseCustomProxy.ToString();
+
+            txtscUserName.Enabled = sscCustomAuth.Checked && ddscSelection.Value.ToString() == ProxySelection.UseCustomProxy.ToString();
+            txtscPassword.Enabled = sscCustomAuth.Checked && ddscSelection.Value.ToString() == ProxySelection.UseCustomProxy.ToString();
+            txtscUserName.Visible = sscCustomAuth.Checked && ddscSelection.Value.ToString() == ProxySelection.UseCustomProxy.ToString();
+            txtscPassword.Visible = sscCustomAuth.Checked && ddscSelection.Value.ToString() == ProxySelection.UseCustomProxy.ToString();
+
+     
+
+                Controls.SetChildIndex(LblConnectivityTest, 0);
+                Controls.SetChildIndex(btnApply, 1);
+                Controls.SetChildIndex(txtscPassword, 2);
+                Controls.SetChildIndex(txtscUserName, 3);
+                Controls.SetChildIndex(sscCustomAuth, 4);
+                Controls.SetChildIndex(sscBypassLocal, 5);
+            Controls.SetChildIndex(txtscCustomProxyAddress, 6);
+            Controls.SetChildIndex(ddscSelection, 7);
+                       }
 
         private void sscCustomAuth_OnSettingsPropertyChanged(object sender, SettingsPropertyEventArgs e)
         {
             txtscUserName.Enabled = sscCustomAuth.Checked;
             txtscPassword.Enabled = sscCustomAuth.Checked;
+            txtscUserName.Visible = sscCustomAuth.Checked;
+            txtscPassword.Visible = sscCustomAuth.Checked;
+
+            Controls.SetChildIndex(LblConnectivityTest, 0);
+            Controls.SetChildIndex(btnApply, 1);
+            Controls.SetChildIndex(txtscPassword, 2);
+            Controls.SetChildIndex(txtscUserName, 3);
+            Controls.SetChildIndex(sscCustomAuth, 4);
+            Controls.SetChildIndex(sscBypassLocal, 5);
+            Controls.SetChildIndex(txtscCustomProxyAddress, 6);
+            Controls.SetChildIndex(ddscSelection, 7);
         }
     }
 }

@@ -185,3 +185,6 @@ UpgradeLog*.htm
 # Microsoft Fakes
 FakesAssemblies/
 /.vs/*
+
+# Local Agent Tools
+.github/copilot-instructions.md

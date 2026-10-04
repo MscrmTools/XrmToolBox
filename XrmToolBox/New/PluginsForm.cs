@@ -319,6 +319,13 @@ namespace XrmToolBox.New
                 var primaryColor = ColorTranslator.FromHtml(plugin.Metadata.PrimaryFontColor);
                 var secondaryColor = ColorTranslator.FromHtml(plugin.Metadata.SecondaryFontColor);
 
+                if (CustomTheme.Instance.IsActive)
+                {
+                    backColor = CustomTheme.Instance.Background2;
+                    primaryColor = CustomTheme.Instance.ForeColor1;
+                    secondaryColor = CustomTheme.Instance.ForeColor2;
+                }
+
                 var args = new[]
                 {
                     typeof(Image),

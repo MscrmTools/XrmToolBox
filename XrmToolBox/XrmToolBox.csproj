@@ -300,6 +300,7 @@
     <Compile Include="AppCode\ReleasesDTO.cs" />
     <Compile Include="AppCode\SettingsPropertyEventArgs.cs" />
     <Compile Include="AppCode\SettingsPropertyInfo.cs" />
+    <Compile Include="AppCode\ThemeHelpers.cs" />
     <Compile Include="AppCode\WebProxyHelper.cs" />
     <Compile Include="ConnectionParameterInfo.cs" />
     <Compile Include="Controls\AdvancedControl.cs">
@@ -821,6 +822,7 @@
     <None Include="Resources\Hide32.png" />
     <None Include="Resources\Eraser24.png" />
     <None Include="Resources\Refresh24.png" />
+    <Content Include="Resources\moon.png" />
     <Content Include="Resources\github.png" />
     <None Include="Resources\Logs32.png" />
     <Content Include="Resources\three_tags.png" />

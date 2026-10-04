@@ -6,11 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text.RegularExpressions;
@@ -32,6 +34,10 @@ namespace XrmToolBox.New
 {
     public partial class NewForm : Form
     {
+        private const int DwmUseImmersiveDarkMode = 20;
+        private const int DwmBorderColor = 34;
+        private const int DwmCaptionColor = 35;
+        private const int DwmTextColor = 36;
         private const string AiEndpoint = "https://dc.services.visualstudio.com/v2/track";
         private const string AiKey = "77a2080e-f82c-4b2f-bb77-eb407236b729";
         private readonly Dictionary<PluginForm, ConnectionDetail> pluginConnections = new Dictionary<PluginForm, ConnectionDetail>();
@@ -68,6 +74,7 @@ namespace XrmToolBox.New
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
 
             SetTheme();
+            MruTabSwitcher.Track(dpMain);
             dpMain.Theme.Extender.FloatWindowFactory = new CustomFloatWindowFactory();
 
             // Connection Management
@@ -154,7 +161,49 @@ namespace XrmToolBox.New
             }
 
             Options.Instance.OnSettingsChanged += Instance_OnSettingsChanged;
+            ThemeHelpers.ApplyThemeAndWatch(this);
         }
+
+        protected override void OnHandleCreated(System.EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            ApplyWindowFrameTheme();
+        }
+
+        private void ApplyWindowFrameTheme()
+        {
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
+            var dark = Options.Instance.Theme != null && Options.Instance.ThemeValue == ThemeName.Dark;
+            var darkValue = dark ? 1 : 0;
+            var captionColor = dark ? ColorTranslator.ToWin32(CustomTheme.Instance.Background1) : -1;
+            var textColor = dark ? ColorTranslator.ToWin32(CustomTheme.Instance.ForeColor4) : -1;
+            var borderColor = dark ? ColorTranslator.ToWin32(CustomTheme.Instance.Background3) : -1;
+
+            try
+            {
+                // DWM owns the non-client title bar; unsupported attributes are ignored.
+                DwmSetWindowAttribute(Handle, DwmUseImmersiveDarkMode, ref darkValue, sizeof(int));
+                DwmSetWindowAttribute(Handle, DwmBorderColor, ref borderColor, sizeof(int));
+                DwmSetWindowAttribute(Handle, DwmCaptionColor, ref captionColor, sizeof(int));
+                DwmSetWindowAttribute(Handle, DwmTextColor, ref textColor, sizeof(int));
+            }
+            catch (DllNotFoundException)
+            {
+                // Older Windows installations keep their normal system title bar.
+            }
+            catch (EntryPointNotFoundException)
+            {
+                // Older Windows installations keep their normal system title bar.
+            }
+        }
+
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmSetWindowAttribute(
+            IntPtr window, int attribute, ref int value, int valueSize);
 
         public override sealed string Text
         {
@@ -604,10 +653,15 @@ Would you like to reinstall last stable release of connection controls?";
                         {
                             var theme = new VS2015DarkTheme();
                             dpMain.Theme = theme;
+
+                            CustomTheme.Instance.SetTheme(new DarkTheme());
+                            CustomTheme.Instance.ApplyTheme(this);
                         }
                         break;
                 }
             }
+
+            ApplyWindowFrameTheme();
         }
 
         #endregion Form management
@@ -2149,6 +2203,16 @@ Would you like to reinstall last stable release of connection controls?";
 
         #region Key Shortcuts
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (Options.Instance.CycleTabsInRecentlyUsedOrder && MruTabSwitcher.HandleShortcut(dpMain, keyData))
+            {
+                return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         private void NewForm_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Control && e.Shift && e.KeyCode == Keys.C)
@@ -2168,6 +2232,11 @@ Would you like to reinstall last stable release of connection controls?";
 
         private void NewForm_KeyUp(object sender, KeyEventArgs e)
         {
+            if (!e.Control)
+            {
+                MruTabSwitcher.Complete(dpMain);
+            }
+
             if (!(e.Control && e.Shift && e.KeyCode == Keys.C))
             {
                 ((dpMain.ActiveContent as PluginForm)?.Control as IShortcutReceiver)?.ReceiveKeyUpShortcut(e);
@@ -2237,6 +2306,10 @@ Would you like to reinstall last stable release of connection controls?";
         {
             pnlPluginsUpdate.Visible = false;
             OpenPluginsStore(true);
+        }
+        private void ApplyThemeButton_Click(object sender, System.EventArgs e)
+        {
+            ThemeHelpers.ApplyThemeAndWatch(this);
         }
     }
 }

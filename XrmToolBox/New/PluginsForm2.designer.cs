@@ -36,10 +36,17 @@ namespace XrmToolBox.New
             this.btnFilterOperator = new System.Windows.Forms.Button();
             this.ch1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.cmsOnePlugin = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.tsmiOpenWithNewConection = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiOpenProjectHomePage = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiShortcutTool = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiShortcutToolConnection = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiHidePlugin = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUninstallPlugin = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiAddToFavorites = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.label3 = new System.Windows.Forms.Label();
             this.lblPluginsNotFoundText = new System.Windows.Forms.Label();
@@ -49,26 +56,19 @@ namespace XrmToolBox.New
             this.lvTools = new System.Windows.Forms.ListView();
             this.pnlHelp = new System.Windows.Forms.Panel();
             this.pnlLeftBottom = new System.Windows.Forms.Panel();
+            this.btnChangeSize = new System.Windows.Forms.Button();
             this.pnlLeftNavTop = new System.Windows.Forms.Panel();
             this.pnlNavLeft = new System.Windows.Forms.Panel();
             this.pnlNavLeftMain = new System.Windows.Forms.Panel();
             this.pnlNavMain = new System.Windows.Forms.Panel();
             this.pnlToolsList = new System.Windows.Forms.Panel();
             this.pnlNoPluginFound = new System.Windows.Forms.Panel();
-            this.pnlTopSearch = new System.Windows.Forms.Panel();
-            this.pnlTop = new System.Windows.Forms.Panel();
             this.pbOpenPluginsStore = new System.Windows.Forms.PictureBox();
-            this.tsmiOpenWithNewConection = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiOpenProjectHomePage = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiShortcutTool = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiShortcutToolConnection = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiHidePlugin = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiUninstallPlugin = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiAddToFavorites = new System.Windows.Forms.ToolStripMenuItem();
+            this.pnlTopSearch = new System.Windows.Forms.Panel();
             this.txtSearch = new XrmToolBox.Controls.TextBoxWithPlaceholder();
             this.pbRefreshList = new System.Windows.Forms.PictureBox();
             this.pbClearSearch = new System.Windows.Forms.PictureBox();
-            this.btnChangeSize = new System.Windows.Forms.Button();
+            this.pnlTop = new System.Windows.Forms.Panel();
             this.cmsOnePlugin.SuspendLayout();
             this.pnlHelp.SuspendLayout();
             this.pnlLeftBottom.SuspendLayout();
@@ -76,8 +76,8 @@ namespace XrmToolBox.New
             this.pnlNavMain.SuspendLayout();
             this.pnlToolsList.SuspendLayout();
             this.pnlNoPluginFound.SuspendLayout();
-            this.pnlTopSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbOpenPluginsStore)).BeginInit();
+            this.pnlTopSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbRefreshList)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbClearSearch)).BeginInit();
             this.SuspendLayout();
@@ -97,7 +97,7 @@ namespace XrmToolBox.New
             this.btnFilterOperator.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnFilterOperator.Location = new System.Drawing.Point(4, -32768);
             this.btnFilterOperator.Name = "btnFilterOperator";
-            this.btnFilterOperator.Size = new System.Drawing.Size(208, 22617);
+            this.btnFilterOperator.Size = new System.Drawing.Size(136, 22617);
             this.btnFilterOperator.TabIndex = 0;
             this.btnFilterOperator.Text = "Use OR";
             this.btnFilterOperator.UseVisualStyleBackColor = true;
@@ -128,25 +128,74 @@ namespace XrmToolBox.New
             this.cmsOnePlugin.Size = new System.Drawing.Size(414, 284);
             this.cmsOnePlugin.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.cmsOnePlugin_ItemClicked);
             // 
+            // tsmiOpenWithNewConection
+            // 
+            this.tsmiOpenWithNewConection.Image = global::XrmToolBox.Properties.Resources.Connect24;
+            this.tsmiOpenWithNewConection.Name = "tsmiOpenWithNewConection";
+            this.tsmiOpenWithNewConection.Size = new System.Drawing.Size(413, 32);
+            this.tsmiOpenWithNewConection.Text = "Open Tool with new connection";
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(410, 6);
+            // 
+            // tsmiOpenProjectHomePage
+            // 
+            this.tsmiOpenProjectHomePage.Image = global::XrmToolBox.Properties.Resources.Web24;
+            this.tsmiOpenProjectHomePage.Name = "tsmiOpenProjectHomePage";
+            this.tsmiOpenProjectHomePage.Size = new System.Drawing.Size(413, 32);
+            this.tsmiOpenProjectHomePage.Text = "Open project home page";
             // 
             // toolStripSeparator9
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
             this.toolStripSeparator9.Size = new System.Drawing.Size(410, 6);
             // 
+            // tsmiShortcutTool
+            // 
+            this.tsmiShortcutTool.Image = global::XrmToolBox.Properties.Resources.Shortcut24;
+            this.tsmiShortcutTool.Name = "tsmiShortcutTool";
+            this.tsmiShortcutTool.Size = new System.Drawing.Size(413, 32);
+            this.tsmiShortcutTool.Text = "Create shortcut (Tool)";
+            // 
+            // tsmiShortcutToolConnection
+            // 
+            this.tsmiShortcutToolConnection.Image = global::XrmToolBox.Properties.Resources.Shortcut24;
+            this.tsmiShortcutToolConnection.Name = "tsmiShortcutToolConnection";
+            this.tsmiShortcutToolConnection.Size = new System.Drawing.Size(413, 32);
+            this.tsmiShortcutToolConnection.Text = "Create shortcut (Tool and Connection)";
+            // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
             this.toolStripSeparator7.Size = new System.Drawing.Size(410, 6);
             // 
+            // tsmiHidePlugin
+            // 
+            this.tsmiHidePlugin.Image = global::XrmToolBox.Properties.Resources.Hide24;
+            this.tsmiHidePlugin.Name = "tsmiHidePlugin";
+            this.tsmiHidePlugin.Size = new System.Drawing.Size(413, 32);
+            this.tsmiHidePlugin.Text = "Hide";
+            // 
+            // tsmiUninstallPlugin
+            // 
+            this.tsmiUninstallPlugin.Image = global::XrmToolBox.Properties.Resources.Uninstall24;
+            this.tsmiUninstallPlugin.Name = "tsmiUninstallPlugin";
+            this.tsmiUninstallPlugin.Size = new System.Drawing.Size(413, 32);
+            this.tsmiUninstallPlugin.Text = "Uninstall";
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(410, 6);
+            // 
+            // tsmiAddToFavorites
+            // 
+            this.tsmiAddToFavorites.Image = global::XrmToolBox.Properties.Resources.Favorite24;
+            this.tsmiAddToFavorites.Name = "tsmiAddToFavorites";
+            this.tsmiAddToFavorites.Size = new System.Drawing.Size(413, 32);
+            this.tsmiAddToFavorites.Text = "Add to Favorites";
             // 
             // imageList1
             // 
@@ -236,7 +285,7 @@ namespace XrmToolBox.New
             this.lvTools.OwnerDraw = true;
             this.lvTools.ShowGroups = false;
             this.lvTools.ShowItemToolTips = true;
-            this.lvTools.Size = new System.Drawing.Size(1718, 888);
+            this.lvTools.Size = new System.Drawing.Size(1718, 921);
             this.lvTools.SmallImageList = this.imageList1;
             this.lvTools.TabIndex = 0;
             this.lvTools.UseCompatibleStateImageBehavior = false;
@@ -255,7 +304,7 @@ namespace XrmToolBox.New
             this.pnlHelp.Location = new System.Drawing.Point(4, 4);
             this.pnlHelp.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.pnlHelp.Name = "pnlHelp";
-            this.pnlHelp.Size = new System.Drawing.Size(1718, 888);
+            this.pnlHelp.Size = new System.Drawing.Size(1718, 921);
             this.pnlHelp.TabIndex = 25;
             this.pnlHelp.Visible = false;
             // 
@@ -264,27 +313,42 @@ namespace XrmToolBox.New
             this.pnlLeftBottom.Controls.Add(this.btnFilterOperator);
             this.pnlLeftBottom.Controls.Add(this.btnChangeSize);
             this.pnlLeftBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlLeftBottom.Location = new System.Drawing.Point(0, 2075);
+            this.pnlLeftBottom.Location = new System.Drawing.Point(0, 405);
             this.pnlLeftBottom.Name = "pnlLeftBottom";
             this.pnlLeftBottom.Padding = new System.Windows.Forms.Padding(4, 10, 4, 10);
-            this.pnlLeftBottom.Size = new System.Drawing.Size(216, 2934);
+            this.pnlLeftBottom.Size = new System.Drawing.Size(144, 2934);
             this.pnlLeftBottom.TabIndex = 2;
+            // 
+            // btnChangeSize
+            // 
+            this.btnChangeSize.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.btnChangeSize.FlatAppearance.BorderSize = 0;
+            this.btnChangeSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChangeSize.Image = global::XrmToolBox.Properties.Resources.Expand32;
+            this.btnChangeSize.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnChangeSize.Location = new System.Drawing.Point(4, -12973);
+            this.btnChangeSize.Name = "btnChangeSize";
+            this.btnChangeSize.Size = new System.Drawing.Size(136, 15897);
+            this.btnChangeSize.TabIndex = 1;
+            this.btnChangeSize.Text = "Use big";
+            this.btnChangeSize.UseVisualStyleBackColor = true;
+            this.btnChangeSize.Click += new System.EventHandler(this.btnChangeSize_Click);
             // 
             // pnlLeftNavTop
             // 
             this.pnlLeftNavTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlLeftNavTop.Location = new System.Drawing.Point(0, 0);
             this.pnlLeftNavTop.Name = "pnlLeftNavTop";
-            this.pnlLeftNavTop.Size = new System.Drawing.Size(216, 405);
+            this.pnlLeftNavTop.Size = new System.Drawing.Size(144, 405);
             this.pnlLeftNavTop.TabIndex = 0;
             // 
             // pnlNavLeft
             // 
             this.pnlNavLeft.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlNavLeft.Font = new System.Drawing.Font("Segoe UI Variable Text", 12F);
-            this.pnlNavLeft.Location = new System.Drawing.Point(0, 608);
+            this.pnlNavLeft.Location = new System.Drawing.Point(0, 405);
             this.pnlNavLeft.Name = "pnlNavLeft";
-            this.pnlNavLeft.Size = new System.Drawing.Size(216, 0);
+            this.pnlNavLeft.Size = new System.Drawing.Size(144, 0);
             this.pnlNavLeft.TabIndex = 1;
             // 
             // pnlNavLeftMain
@@ -296,7 +360,7 @@ namespace XrmToolBox.New
             this.pnlNavLeftMain.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlNavLeftMain.Location = new System.Drawing.Point(0, 40);
             this.pnlNavLeftMain.Name = "pnlNavLeftMain";
-            this.pnlNavLeftMain.Size = new System.Drawing.Size(170, 949);
+            this.pnlNavLeftMain.Size = new System.Drawing.Size(170, 982);
             this.pnlNavLeftMain.TabIndex = 1;
             this.pnlNavLeftMain.Visible = false;
             // 
@@ -308,7 +372,7 @@ namespace XrmToolBox.New
             this.pnlNavMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlNavMain.Location = new System.Drawing.Point(170, 40);
             this.pnlNavMain.Name = "pnlNavMain";
-            this.pnlNavMain.Size = new System.Drawing.Size(1726, 949);
+            this.pnlNavMain.Size = new System.Drawing.Size(1726, 982);
             this.pnlNavMain.TabIndex = 0;
             // 
             // pnlToolsList
@@ -320,7 +384,7 @@ namespace XrmToolBox.New
             this.pnlToolsList.Location = new System.Drawing.Point(0, 53);
             this.pnlToolsList.Name = "pnlToolsList";
             this.pnlToolsList.Padding = new System.Windows.Forms.Padding(4);
-            this.pnlToolsList.Size = new System.Drawing.Size(1726, 896);
+            this.pnlToolsList.Size = new System.Drawing.Size(1726, 929);
             this.pnlToolsList.TabIndex = 1;
             // 
             // pnlNoPluginFound
@@ -334,31 +398,9 @@ namespace XrmToolBox.New
             this.pnlNoPluginFound.Location = new System.Drawing.Point(4, 4);
             this.pnlNoPluginFound.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.pnlNoPluginFound.Name = "pnlNoPluginFound";
-            this.pnlNoPluginFound.Size = new System.Drawing.Size(1718, 888);
+            this.pnlNoPluginFound.Size = new System.Drawing.Size(1718, 921);
             this.pnlNoPluginFound.TabIndex = 26;
             this.pnlNoPluginFound.Visible = false;
-            // 
-            // pnlTopSearch
-            // 
-            this.pnlTopSearch.BackColor = System.Drawing.Color.White;
-            this.pnlTopSearch.Controls.Add(this.txtSearch);
-            this.pnlTopSearch.Controls.Add(this.pbRefreshList);
-            this.pnlTopSearch.Controls.Add(this.pbClearSearch);
-            this.pnlTopSearch.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlTopSearch.Location = new System.Drawing.Point(0, 0);
-            this.pnlTopSearch.Name = "pnlTopSearch";
-            this.pnlTopSearch.Padding = new System.Windows.Forms.Padding(4);
-            this.pnlTopSearch.Size = new System.Drawing.Size(1726, 53);
-            this.pnlTopSearch.TabIndex = 0;
-            // 
-            // pnlTop
-            // 
-            this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlTop.Location = new System.Drawing.Point(0, 0);
-            this.pnlTop.Name = "pnlTop";
-            this.pnlTop.Size = new System.Drawing.Size(1896, 40);
-            this.pnlTop.TabIndex = 4;
-            this.pnlTop.Visible = false;
             // 
             // pbOpenPluginsStore
             // 
@@ -374,54 +416,18 @@ namespace XrmToolBox.New
             this.pbOpenPluginsStore.TabStop = false;
             this.pbOpenPluginsStore.Click += new System.EventHandler(this.pbOpenPluginsStore_Click);
             // 
-            // tsmiOpenWithNewConection
+            // pnlTopSearch
             // 
-            this.tsmiOpenWithNewConection.Image = global::XrmToolBox.Properties.Resources.Connect24;
-            this.tsmiOpenWithNewConection.Name = "tsmiOpenWithNewConection";
-            this.tsmiOpenWithNewConection.Size = new System.Drawing.Size(413, 32);
-            this.tsmiOpenWithNewConection.Text = "Open Tool with new connection";
-            // 
-            // tsmiOpenProjectHomePage
-            // 
-            this.tsmiOpenProjectHomePage.Image = global::XrmToolBox.Properties.Resources.Web24;
-            this.tsmiOpenProjectHomePage.Name = "tsmiOpenProjectHomePage";
-            this.tsmiOpenProjectHomePage.Size = new System.Drawing.Size(413, 32);
-            this.tsmiOpenProjectHomePage.Text = "Open project home page";
-            // 
-            // tsmiShortcutTool
-            // 
-            this.tsmiShortcutTool.Image = global::XrmToolBox.Properties.Resources.Shortcut24;
-            this.tsmiShortcutTool.Name = "tsmiShortcutTool";
-            this.tsmiShortcutTool.Size = new System.Drawing.Size(413, 32);
-            this.tsmiShortcutTool.Text = "Create shortcut (Tool)";
-            // 
-            // tsmiShortcutToolConnection
-            // 
-            this.tsmiShortcutToolConnection.Image = global::XrmToolBox.Properties.Resources.Shortcut24;
-            this.tsmiShortcutToolConnection.Name = "tsmiShortcutToolConnection";
-            this.tsmiShortcutToolConnection.Size = new System.Drawing.Size(413, 32);
-            this.tsmiShortcutToolConnection.Text = "Create shortcut (Tool and Connection)";
-            // 
-            // tsmiHidePlugin
-            // 
-            this.tsmiHidePlugin.Image = global::XrmToolBox.Properties.Resources.Hide24;
-            this.tsmiHidePlugin.Name = "tsmiHidePlugin";
-            this.tsmiHidePlugin.Size = new System.Drawing.Size(413, 32);
-            this.tsmiHidePlugin.Text = "Hide";
-            // 
-            // tsmiUninstallPlugin
-            // 
-            this.tsmiUninstallPlugin.Image = global::XrmToolBox.Properties.Resources.Uninstall24;
-            this.tsmiUninstallPlugin.Name = "tsmiUninstallPlugin";
-            this.tsmiUninstallPlugin.Size = new System.Drawing.Size(413, 32);
-            this.tsmiUninstallPlugin.Text = "Uninstall";
-            // 
-            // tsmiAddToFavorites
-            // 
-            this.tsmiAddToFavorites.Image = global::XrmToolBox.Properties.Resources.Favorite24;
-            this.tsmiAddToFavorites.Name = "tsmiAddToFavorites";
-            this.tsmiAddToFavorites.Size = new System.Drawing.Size(413, 32);
-            this.tsmiAddToFavorites.Text = "Add to Favorites";
+            this.pnlTopSearch.BackColor = System.Drawing.Color.White;
+            this.pnlTopSearch.Controls.Add(this.txtSearch);
+            this.pnlTopSearch.Controls.Add(this.pbRefreshList);
+            this.pnlTopSearch.Controls.Add(this.pbClearSearch);
+            this.pnlTopSearch.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTopSearch.Location = new System.Drawing.Point(0, 0);
+            this.pnlTopSearch.Name = "pnlTopSearch";
+            this.pnlTopSearch.Padding = new System.Windows.Forms.Padding(4);
+            this.pnlTopSearch.Size = new System.Drawing.Size(1726, 53);
+            this.pnlTopSearch.TabIndex = 0;
             // 
             // txtSearch
             // 
@@ -466,26 +472,20 @@ namespace XrmToolBox.New
             this.pbClearSearch.Visible = false;
             this.pbClearSearch.Click += new System.EventHandler(this.pbClearSearch_Click);
             // 
-            // btnChangeSize
+            // pnlTop
             // 
-            this.btnChangeSize.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.btnChangeSize.FlatAppearance.BorderSize = 0;
-            this.btnChangeSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnChangeSize.Image = global::XrmToolBox.Properties.Resources.Expand32;
-            this.btnChangeSize.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnChangeSize.Location = new System.Drawing.Point(4, -12973);
-            this.btnChangeSize.Name = "btnChangeSize";
-            this.btnChangeSize.Size = new System.Drawing.Size(208, 15897);
-            this.btnChangeSize.TabIndex = 1;
-            this.btnChangeSize.Text = "Use big";
-            this.btnChangeSize.UseVisualStyleBackColor = true;
-            this.btnChangeSize.Click += new System.EventHandler(this.btnChangeSize_Click);
+            this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlTop.Location = new System.Drawing.Point(0, 0);
+            this.pnlTop.Name = "pnlTop";
+            this.pnlTop.Size = new System.Drawing.Size(1896, 40);
+            this.pnlTop.TabIndex = 4;
+            this.pnlTop.Visible = false;
             // 
             // PluginsForm2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1896, 989);
+            this.ClientSize = new System.Drawing.Size(1896, 1022);
             this.Controls.Add(this.pnlNavMain);
             this.Controls.Add(this.pnlNavLeftMain);
             this.Controls.Add(this.pnlTop);
@@ -501,9 +501,9 @@ namespace XrmToolBox.New
             this.pnlNavMain.ResumeLayout(false);
             this.pnlToolsList.ResumeLayout(false);
             this.pnlNoPluginFound.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbOpenPluginsStore)).EndInit();
             this.pnlTopSearch.ResumeLayout(false);
             this.pnlTopSearch.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbOpenPluginsStore)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbRefreshList)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbClearSearch)).EndInit();
             this.ResumeLayout(false);
