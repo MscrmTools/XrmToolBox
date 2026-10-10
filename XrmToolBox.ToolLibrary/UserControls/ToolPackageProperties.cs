@@ -7,7 +7,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using XrmToolBox.ToolLibrary.AppCode;
@@ -93,25 +92,28 @@ namespace XrmToolBox.ToolLibrary.UserControls
         private void GetVersions()
         {
             var bw = new BackgroundWorker();
+            plugin.Versions = new List<XtbPluginVersion>();
             bw.DoWork += (s, evt) =>
             {
-                var httpClient = new HttpClient();
-                var data = httpClient.GetAsync($"{library.ToolLibrarySettings.NugetSourceUrl}/query?q={plugin.NugetId}").GetAwaiter().GetResult().Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                var jo = JObject.Parse(data);
-
-                var registrationData = httpClient.GetAsync(((JArray)jo["data"]).FirstOrDefault()["registration"].ToString()).GetAwaiter().GetResult().Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                var rd = JObject.Parse(registrationData);
-                var versions = ((JArray)rd["items"]).SelectMany(va => (JArray)va["items"]).Where(item => ((JObject)item["catalogEntry"])["listed"].Value<bool>() == true);
-
-                plugin.Versions = new List<XtbPluginVersion>();
-
+                var versions = library.GetNugetPackageVersionsAsync(plugin.NugetId).GetAwaiter().GetResult();
                 foreach (var versionInfo in versions)
                 {
-                    var catalogEntry = versionInfo["catalogEntry"];
+                    var catalogEntry = versionInfo["catalogEntry"] as JObject;
+                    if (catalogEntry == null || catalogEntry["listed"]?.Value<bool>() == false)
+                    {
+                        continue;
+                    }
 
-                    var version = new Version(catalogEntry["version"]?.ToString().Split('-')[0]);
+                    var versionText = catalogEntry["version"]?.ToString();
+                    if (string.IsNullOrWhiteSpace(versionText))
+                    {
+                        continue;
+                    }
+
+                    var versionValue = versionText.Split('-')[0];
+                    var version = new Version(versionValue);
                     var infoUrl = versionInfo["@id"]?.ToString();
-                    var isCurrentVersion = plugin.CurrentVersion?.Simplify().Equals(new Version(catalogEntry["version"]?.ToString() ?? "0.0.0.0").Simplify()) ?? false;
+                    var isCurrentVersion = plugin.CurrentVersion?.Simplify().Equals(new Version(versionValue).Simplify()) ?? false;
 
                     try
                     {
@@ -121,6 +123,10 @@ namespace XrmToolBox.ToolLibrary.UserControls
                         }
 
                         var xtbDependency = catalogEntry["dependencyGroups"].SelectMany(dp => dp["dependencies"]).FirstOrDefault(d => d["id"]?.ToString().ToLower() == "xrmtoolbox" || d["id"]?.ToString().ToLower() == "xrmtoolboxpackage")?["range"].ToString();
+                        if (string.IsNullOrWhiteSpace(xtbDependency))
+                        {
+                            continue;
+                        }
 
                         xtbDependency = xtbDependency.StartsWith("[") ? xtbDependency.Remove(0, 1) : xtbDependency;
                         xtbDependency = xtbDependency.Split(',')[0];
@@ -138,6 +144,12 @@ namespace XrmToolBox.ToolLibrary.UserControls
             bw.RunWorkerCompleted += (s, evt) =>
             {
                 cbbVersions.Items.Clear();
+                if (evt.Error != null)
+                {
+                    MessageBox.Show(this, $"Unable to load package versions: {evt.Error.GetBaseException().Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
                 cbbVersions.Items.AddRange(plugin.Versions.OrderByDescending(v => v.Version).ToArray());
 
                 if (cbbVersions.Items.Count != 0)

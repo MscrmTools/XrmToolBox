@@ -40,6 +40,8 @@ namespace XrmToolBox.ToolLibrary
         private readonly PluginDeletions pendingDeletions;
         private readonly PluginUpdates pendingUpdates;
         private readonly IToolLibrarySettings settings;
+        private readonly object nugetServiceIndexLock = new object();
+        private Task<NugetServiceIndex> nugetServiceIndexTask;
         private PackageVersion connectionControlsPackage;
         private FileInfo[] plugins;
         public HttpClient HttpClient { get; private set; }
@@ -323,38 +325,278 @@ namespace XrmToolBox.ToolLibrary
 
         public async Task<PackageVersion> GetPackageVersion(string packageName)
         {
-            var response = await HttpClient.GetAsync($"{settings.NugetSourceUrl}/query?q={packageName}").ConfigureAwait(false);
-            var data = await response.Content.ReadAsStringAsync();
-
-            var jo = JObject.Parse(data);
-
-            var cc = ((JArray)jo["data"]).FirstOrDefault(d => d["id"].ToString() == packageName);
-
-            var rResponse = await HttpClient.GetAsync(cc["registration"].ToString()).ConfigureAwait(false);
-            var rData = await rResponse.Content.ReadAsStringAsync();
-
-            var jor = JObject.Parse(rData);
-
-            var versions = new List<JToken>();
-            foreach (var item in (JArray)jor["items"])
-            {
-                foreach (var subItem in (JArray)item["items"])
-                    versions.Add(subItem);
-            }
-
+            var versions = await GetNugetPackageVersionsAsync(packageName).ConfigureAwait(false);
+            var allowPrerelease = AllowConnectionControlPreRelease && packageName == "MscrmTools.Xrm.Connection";
             var latestVersion = versions
-                .Where(t => t["catalogEntry"]["listed"] != null && (bool)t["catalogEntry"]["listed"] == true)
-                .OrderBy(t => DateTime.Parse(t["commitTimeStamp"].ToString())).Last();
+                .Where(IsListed)
+                .Where(version => allowPrerelease || !IsPrerelease(version))
+                .OrderBy(version => version, NugetRegistrationVersionComparer.Instance)
+                .LastOrDefault();
 
-            var pv = await GetSpecificPackageVersion(packageName, latestVersion);
-            while (pv.IsPrerelease && (!AllowConnectionControlPreRelease || packageName != "MscrmTools.Xrm.Connection"))
+            if (latestVersion == null)
             {
-                latestVersion = latestVersion.Previous;
-
-                pv = await GetSpecificPackageVersion(packageName, latestVersion);
+                throw new InvalidOperationException($"No listed versions were found for NuGet package '{packageName}'.");
             }
 
-            return pv;
+            return await GetSpecificPackageVersion(packageName, latestVersion).ConfigureAwait(false);
+        }
+
+        public async Task<IReadOnlyCollection<JToken>> GetNugetPackageVersionsAsync(string packageName)
+        {
+            var searchResult = await GetNugetPackageSearchResultAsync(packageName).ConfigureAwait(false);
+            var registrationUrl = await GetNugetPackageRegistrationUrlAsync(packageName, searchResult).ConfigureAwait(false);
+            var response = await HttpClient.GetAsync(registrationUrl).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            var registration = JObject.Parse(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var versions = new List<JToken>();
+
+            foreach (var page in registration["items"] as JArray ?? new JArray())
+            {
+                var pageItems = page["items"] as JArray;
+                if (pageItems == null)
+                {
+                    var pageUrl = page["@id"]?.ToString();
+                    if (string.IsNullOrWhiteSpace(pageUrl))
+                    {
+                        throw new InvalidOperationException($"The NuGet registration for '{packageName}' contains a page without items or a URL.");
+                    }
+
+                    var pageResponse = await HttpClient.GetAsync(pageUrl).ConfigureAwait(false);
+                    pageResponse.EnsureSuccessStatusCode();
+                    var pageData = JObject.Parse(await pageResponse.Content.ReadAsStringAsync().ConfigureAwait(false));
+                    pageItems = pageData["items"] as JArray;
+                }
+
+                if (pageItems == null)
+                {
+                    throw new InvalidOperationException($"The NuGet registration page for '{packageName}' does not contain package versions.");
+                }
+
+                versions.AddRange(pageItems);
+            }
+
+            return versions;
+        }
+
+        public async Task<JObject> GetNugetPackageSearchResultAsync(string packageName)
+        {
+            var serviceIndex = await GetNugetServiceIndexAsync().ConfigureAwait(false);
+            var searchUri = new UriBuilder(serviceIndex.SearchQueryService);
+            var query = searchUri.Query.TrimStart('?');
+            searchUri.Query = $"{(string.IsNullOrEmpty(query) ? string.Empty : query + "&")}q={Uri.EscapeDataString(packageName)}";
+
+            var response = await HttpClient.GetAsync(searchUri.Uri).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            var result = JObject.Parse(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var package = (result["data"] as JArray)?.OfType<JObject>()
+                .FirstOrDefault(item => string.Equals(item["id"]?.ToString(), packageName, StringComparison.OrdinalIgnoreCase));
+
+            if (package == null)
+            {
+                throw new InvalidOperationException($"NuGet package '{packageName}' was not found in the configured source.");
+            }
+
+            return package;
+        }
+
+        public async Task<string> GetNugetPackageRegistrationUrlAsync(string packageName, JObject searchResult)
+        {
+            var serviceIndex = await GetNugetServiceIndexAsync().ConfigureAwait(false);
+            if (!string.IsNullOrEmpty(serviceIndex.RegistrationsBaseUrl))
+            {
+                return new Uri(new Uri(serviceIndex.RegistrationsBaseUrl.TrimEnd('/') + "/"),
+                    $"{Uri.EscapeDataString(packageName.ToLowerInvariant())}/index.json").AbsoluteUri;
+            }
+
+            var registrationUrl = searchResult["registration"]?.ToString();
+            if (string.IsNullOrWhiteSpace(registrationUrl))
+            {
+                throw new InvalidOperationException($"The NuGet source did not provide registration metadata for package '{packageName}'.");
+            }
+
+            return registrationUrl;
+        }
+
+        private Task<NugetServiceIndex> GetNugetServiceIndexAsync()
+        {
+            lock (nugetServiceIndexLock)
+            {
+                if (nugetServiceIndexTask == null || nugetServiceIndexTask.IsFaulted || nugetServiceIndexTask.IsCanceled)
+                {
+                    nugetServiceIndexTask = LoadNugetServiceIndexAsync();
+                }
+
+                return nugetServiceIndexTask;
+            }
+        }
+
+        private async Task<NugetServiceIndex> LoadNugetServiceIndexAsync()
+        {
+            var source = settings.NugetSourceUrl?.Trim().TrimEnd('/');
+            if (string.IsNullOrWhiteSpace(source))
+            {
+                throw new InvalidOperationException("The NuGet source URL is not configured.");
+            }
+
+            if (!source.EndsWith("/index.json", StringComparison.OrdinalIgnoreCase))
+            {
+                return new NugetServiceIndex
+                {
+                    SearchQueryService = source.EndsWith("/query", StringComparison.OrdinalIgnoreCase)
+                        ? source
+                        : source + "/query"
+                };
+            }
+
+            var indexUri = new Uri(source, UriKind.Absolute);
+            var response = await HttpClient.GetAsync(indexUri).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            var index = JObject.Parse(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+            var resources = index["resources"] as JArray;
+            var searchService = FindNugetResource(resources, "SearchQueryService");
+            if (searchService == null || string.IsNullOrWhiteSpace(searchService["@id"]?.ToString()))
+            {
+                throw new InvalidOperationException("The configured NuGet v3 service index does not contain a SearchQueryService.");
+            }
+
+            var registrationService = FindNugetResource(resources, "RegistrationsBaseUrl");
+            var packageContentService = FindNugetResource(resources, "PackageBaseAddress");
+            return new NugetServiceIndex
+            {
+                SearchQueryService = new Uri(indexUri, searchService["@id"].ToString()).AbsoluteUri,
+                RegistrationsBaseUrl = registrationService == null || string.IsNullOrWhiteSpace(registrationService["@id"]?.ToString())
+                    ? null
+                    : new Uri(indexUri, registrationService["@id"].ToString()).AbsoluteUri,
+                PackageBaseAddress = packageContentService == null || string.IsNullOrWhiteSpace(packageContentService["@id"]?.ToString())
+                    ? null
+                    : new Uri(indexUri, packageContentService["@id"].ToString()).AbsoluteUri
+            };
+        }
+
+        private static JObject FindNugetResource(JArray resources, string resourceType)
+        {
+            return resources?.OfType<JObject>().FirstOrDefault(resource =>
+            {
+                var type = resource["@type"];
+                var types = type as JArray;
+                return types != null
+                    ? types.Any(value => value.ToString().StartsWith(resourceType, StringComparison.OrdinalIgnoreCase))
+                    : type != null && type.ToString().StartsWith(resourceType, StringComparison.OrdinalIgnoreCase);
+            });
+        }
+
+        private static JObject GetCatalogEntry(JToken version)
+        {
+            var catalogEntry = version["catalogEntry"] as JObject;
+            if (catalogEntry == null)
+            {
+                throw new InvalidOperationException("The NuGet registration version does not contain inline catalog metadata.");
+            }
+
+            return catalogEntry;
+        }
+
+        private static Version GetVersion(JToken version)
+        {
+            var fullVersion = GetCatalogEntry(version)["version"]?.ToString();
+            Version parsedVersion;
+            if (string.IsNullOrWhiteSpace(fullVersion) || !Version.TryParse(fullVersion.Split('-')[0], out parsedVersion))
+            {
+                throw new InvalidOperationException($"The NuGet registration contains an invalid package version '{fullVersion}'.");
+            }
+
+            return new Version(
+                parsedVersion.Major,
+                parsedVersion.Minor,
+                Math.Max(parsedVersion.Build, 0),
+                Math.Max(parsedVersion.Revision, 0));
+        }
+
+        private static bool IsListed(JToken version)
+        {
+            var listed = GetCatalogEntry(version)["listed"];
+            return listed == null || listed.Value<bool>();
+        }
+
+        private static bool IsPrerelease(JToken version)
+        {
+            return GetCatalogEntry(version)["version"]?.ToString().IndexOf("-", StringComparison.Ordinal) >= 0;
+        }
+
+        private static string GetPrereleaseLabel(JToken version)
+        {
+            var fullVersion = GetCatalogEntry(version)["version"]?.ToString() ?? string.Empty;
+            var separatorIndex = fullVersion.IndexOf("-", StringComparison.Ordinal);
+            return separatorIndex < 0 ? string.Empty : fullVersion.Substring(separatorIndex + 1);
+        }
+
+        private sealed class NugetRegistrationVersionComparer : IComparer<JToken>
+        {
+            public static readonly NugetRegistrationVersionComparer Instance = new NugetRegistrationVersionComparer();
+
+            public int Compare(JToken x, JToken y)
+            {
+                var versionComparison = GetVersion(x).CompareTo(GetVersion(y));
+                if (versionComparison != 0)
+                {
+                    return versionComparison;
+                }
+
+                var xPrerelease = GetPrereleaseLabel(x);
+                var yPrerelease = GetPrereleaseLabel(y);
+                if (string.IsNullOrEmpty(xPrerelease))
+                {
+                    return string.IsNullOrEmpty(yPrerelease) ? 0 : 1;
+                }
+
+                if (string.IsNullOrEmpty(yPrerelease))
+                {
+                    return -1;
+                }
+
+                var xParts = xPrerelease.Split('.');
+                var yParts = yPrerelease.Split('.');
+                var count = Math.Min(xParts.Length, yParts.Length);
+                for (var index = 0; index < count; index++)
+                {
+                    long xNumber;
+                    long yNumber;
+                    var xIsNumber = long.TryParse(xParts[index], out xNumber);
+                    var yIsNumber = long.TryParse(yParts[index], out yNumber);
+                    int comparison;
+
+                    if (xIsNumber && yIsNumber)
+                    {
+                        comparison = xNumber.CompareTo(yNumber);
+                    }
+                    else if (xIsNumber)
+                    {
+                        comparison = -1;
+                    }
+                    else if (yIsNumber)
+                    {
+                        comparison = 1;
+                    }
+                    else
+                    {
+                        comparison = string.Compare(xParts[index], yParts[index], StringComparison.OrdinalIgnoreCase);
+                    }
+
+                    if (comparison != 0)
+                    {
+                        return comparison;
+                    }
+                }
+
+                return xParts.Length.CompareTo(yParts.Length);
+            }
+        }
+
+        private sealed class NugetServiceIndex
+        {
+            public string SearchQueryService { get; set; }
+            public string RegistrationsBaseUrl { get; set; }
+            public string PackageBaseAddress { get; set; }
         }
 
         public XtbPlugin GetPluginByFileName(string filename)
@@ -809,27 +1051,34 @@ namespace XrmToolBox.ToolLibrary
 
         private async Task<PackageVersion> GetSpecificPackageVersion(string packageName, JToken jo)
         {
-            var content = await HttpClient.GetByteArrayAsync(jo["packageContent"].ToString()).ConfigureAwait(false);
+            var catalogEntry = GetCatalogEntry(jo);
+            var fullVersion = catalogEntry["version"]?.ToString();
+            if (string.IsNullOrWhiteSpace(fullVersion))
+            {
+                throw new InvalidOperationException($"The NuGet source did not provide a version for package '{packageName}'.");
+            }
 
-            var versionInfoResponse = await HttpClient.GetAsync(jo["@id"].ToString()).ConfigureAwait(false);
-            var versionInfoData = await versionInfoResponse.Content.ReadAsStringAsync();
-            var jov = JObject.Parse(versionInfoData);
+            var serviceIndex = await GetNugetServiceIndexAsync().ConfigureAwait(false);
+            var packageContentUrl = jo["packageContent"]?.ToString();
+            if (!string.IsNullOrEmpty(serviceIndex.PackageBaseAddress))
+            {
+                var packageId = packageName.ToLowerInvariant();
+                var packageVersion = fullVersion.ToLowerInvariant();
+                packageContentUrl = new Uri(new Uri(serviceIndex.PackageBaseAddress.TrimEnd('/') + "/"),
+                    $"{packageId}/{packageVersion}/{packageId}.{packageVersion}.nupkg").AbsoluteUri;
+            }
 
-            var ceUrl = jov["catalogEntry"].ToString();
-            var ceResponse = await HttpClient.GetAsync(ceUrl).ConfigureAwait(false);
-            var ceData = await ceResponse.Content.ReadAsStringAsync();
-            var ceo = JObject.Parse(ceData);
+            if (string.IsNullOrWhiteSpace(packageContentUrl))
+            {
+                throw new InvalidOperationException($"The NuGet source did not provide package content for '{packageName} {fullVersion}'.");
+            }
 
-            var fullVersion = ceo["version"].ToString();
+            var packageResponse = await HttpClient.GetAsync(packageContentUrl).ConfigureAwait(false);
+            packageResponse.EnsureSuccessStatusCode();
+            var content = await packageResponse.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+            var releaseNotes = catalogEntry["releaseNotes"]?.ToString() ?? string.Empty;
 
-            var nugetVersion = new Version(fullVersion.Split('-')[0]);
-            var release = fullVersion.IndexOf("-") > 0 ? fullVersion.Split('-')[1] : "";
-            var isPreRelease = (bool)ceo["isPrerelease"];
-            var releasenotes = ceo["releaseNotes"].ToString();
-
-            string version = fullVersion;
-
-            return new PackageVersion(packageName, version, releasenotes, content);
+            return new PackageVersion(packageName, fullVersion, releaseNotes, content);
         }
 
         private CompatibleState IsPluginDependencyCompatible(Version xtbDependencyVersion)
